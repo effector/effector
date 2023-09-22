@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, sample, Event, EventCallable} from 'effector'
+import {createStore, createEvent, sample, EventCallable} from 'effector'
 const typecheck = '{global}'
 
 test('wide union (should fail)', () => {
@@ -104,7 +104,7 @@ test('unknown type in source (should fail)', () => {
     "
     Argument of type '{ clock: EventCallable<unknown>; filter: StoreWritable<boolean>; target: EventCallable<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
-    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, __can_be_used_in_target__
+    Type 'Event<unknown>' is not assignable to type 'EventCallable<string>'.
     Argument of type '{ clock: EventCallable<unknown>; filter: StoreWritable<boolean>; target: EventCallable<string>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
     Type 'Event<unknown>' is not assignable to type '[EventCallable<string>]'.
@@ -137,9 +137,9 @@ test('unknown type in target (should pass)', () => {
 })
 
 test('optional props (should fail)', () => {
-  const trigger: Event<{a: 1; b?: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1; b?: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1; b: 2}> = createEvent()
+  const target: EventCallable<{a: 1; b: 2}> = createEvent()
 
   sample({
     //@ts-expect-error
@@ -169,16 +169,12 @@ test('optional props (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; }>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>; }'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Event<{ a: 1; b: 2; }>'.
-      Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
-        Types of property 'b' are incompatible.
-          Type '2 | undefined' is not assignable to type '2'.
-            Type 'undefined' is not assignable to type '2'.
-    Argument of type '{ clock: Event<{ a: 1; b?: 2 | undefined; }>; filter: StoreWritable<boolean>; target: Event<{ a: 1; b: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>[]; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<{ a: 1; b: 2; }>[]; }'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[Event<{ a: 1; b: 2; }>]'.
+    Argument of type '{ clock: EventCallable<{ a: 1; b?: 2 | undefined; }>; filter: StoreWritable<boolean>; target: EventCallable<{ a: 1; b: 2; }>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
+    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, __can_be_used_in_target__
+    Argument of type '{ clock: EventCallable<{ a: 1; b?: 2 | undefined; }>; filter: StoreWritable<boolean>; target: EventCallable<{ a: 1; b: 2; }>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
+    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; }>]'.
     "
   `)
 })
@@ -357,7 +353,7 @@ test('wide union in array (should fail)', () => {
     "
     Argument of type '{ clock: EventCallable<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: EventCallable<(string | number)[]>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
-    Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, __can_be_used_in_target__
+    Type 'Event<(string | number | boolean)[]>' is not assignable to type 'EventCallable<(string | number)[]>'.
     Argument of type '{ clock: EventCallable<(string | number | boolean)[]>; filter: StoreWritable<boolean>; target: EventCallable<(string | number)[]>[]; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type '[EventCallable<(string | number)[]>]'.

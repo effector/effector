@@ -6,11 +6,11 @@ import {
   restore,
   combine,
   Store,
-  Event,
   CompositeName,
   kind,
   sample,
   StoreWritable,
+  EventCallable,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -263,7 +263,7 @@ test('#subscribe', () => {
 })
 
 test('#watch', () => {
-  const event: Event<number> = createEvent()
+  const event: EventCallable<number> = createEvent()
   const store = createStore(0)
   store.watch((state, payload) => {
     const store_watch_check1: number = state

@@ -756,7 +756,7 @@ describe('clock without source', () => {
 })
 describe('sample + .map', () => {
   test('directly assign `.map` result to `source` (should pass)', () => {
-    const event: Event<[{foo: string}]> = createEvent()
+    const event: EventCallable<[{foo: string}]> = createEvent()
     const target = createStore('yes')
 
     sample({
@@ -771,7 +771,7 @@ describe('sample + .map', () => {
     `)
   })
   test('directly assign `.map` result to `source` without losing inference in `fn` (should pass)', () => {
-    const event: Event<[{foo: 'payload'}]> = createEvent()
+    const event: EventCallable<[{foo: 'payload'}]> = createEvent()
     const a = createStore(0)
     const b = createEvent<number | string>()
 

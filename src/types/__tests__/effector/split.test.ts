@@ -7,6 +7,7 @@ import {
   split,
   attach,
   sample,
+  EventCallable,
 } from 'effector'
 
 const consoleError = console.error
@@ -25,7 +26,7 @@ afterAll(() => {
 const typecheck = '{global}'
 
 it('infer type by given predicate (should pass)', () => {
-  const event: Event<number | string> = createEvent()
+  const event: EventCallable<number | string> = createEvent()
   const {onlyNumbers} = split(event, {
     onlyNumbers: (value): value is number => typeof value === 'number',
   })
@@ -38,11 +39,11 @@ it('infer type by given predicate (should pass)', () => {
 })
 
 test('matcher stores / matcher functions (should pass)', () => {
-  const source: Event<number | string> = createEvent()
+  const source: EventCallable<number | string> = createEvent()
   const firstBool = createStore(true)
-  const firstTarget: Event<number | string> = createEvent()
-  const secondTarget: Event<number | string> = createEvent()
-  const defaultarget: Event<number | string> = createEvent()
+  const firstTarget: EventCallable<number | string> = createEvent()
+  const secondTarget: EventCallable<number | string> = createEvent()
+  const defaultarget: EventCallable<number | string> = createEvent()
   split({
     source,
     match: {
@@ -63,11 +64,11 @@ test('matcher stores / matcher functions (should pass)', () => {
 })
 
 test('case store (should pass)', () => {
-  const source: Event<number> = createEvent()
+  const source: EventCallable<number> = createEvent()
   const caseStore = createStore<'a' | 'b'>('a')
-  const firstTarget: Event<number> = createEvent()
-  const secondTarget: Event<number> = createEvent()
-  const defaultarget: Event<number> = createEvent()
+  const firstTarget: EventCallable<number> = createEvent()
+  const secondTarget: EventCallable<number> = createEvent()
+  const defaultarget: EventCallable<number> = createEvent()
   split({
     source,
     match: caseStore,
@@ -85,11 +86,11 @@ test('case store (should pass)', () => {
 })
 
 test('case store case mismatch (should fail)', () => {
-  const source: Event<number> = createEvent()
+  const source: EventCallable<number> = createEvent()
   const caseStore = createStore<'a' | 'c'>('a')
-  const firstTarget: Event<number> = createEvent()
-  const secondTarget: Event<number> = createEvent()
-  const defaultarget: Event<number> = createEvent()
+  const firstTarget: EventCallable<number> = createEvent()
+  const secondTarget: EventCallable<number> = createEvent()
+  const defaultarget: EventCallable<number> = createEvent()
   split({
     //@ts-expect-error
     source,
@@ -102,17 +103,17 @@ test('case store case mismatch (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<number>; match: StoreWritable<\\"a\\" | \\"c\\">; cases: { a: Event<number>; b: Event<number>; __: Event<number>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+    Argument of type '{ source: EventCallable<number>; match: StoreWritable<\\"a\\" | \\"c\\">; cases: { a: EventCallable<number>; b: EventCallable<number>; __: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
     "
   `)
 })
 
 test('case function (should pass)', () => {
-  const source: Event<number> = createEvent()
-  const firstTarget: Event<number> = createEvent()
-  const secondTarget: Event<number> = createEvent()
-  const defaultarget: Event<number> = createEvent()
+  const source: EventCallable<number> = createEvent()
+  const firstTarget: EventCallable<number> = createEvent()
+  const secondTarget: EventCallable<number> = createEvent()
+  const defaultarget: EventCallable<number> = createEvent()
   split({
     source,
     match: x => (x > 0 ? 'a' : 'b'),
@@ -130,10 +131,10 @@ test('case function (should pass)', () => {
 })
 
 test('case function case mismatch (should fail)', () => {
-  const source: Event<number> = createEvent()
-  const firstTarget: Event<number> = createEvent()
-  const secondTarget: Event<number> = createEvent()
-  const defaultarget: Event<number> = createEvent()
+  const source: EventCallable<number> = createEvent()
+  const firstTarget: EventCallable<number> = createEvent()
+  const secondTarget: EventCallable<number> = createEvent()
+  const defaultarget: EventCallable<number> = createEvent()
   split({
     //@ts-expect-error
     source,
@@ -146,7 +147,7 @@ test('case function case mismatch (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<number>; match: (x: number) => \\"a\\" | \\"c\\"; cases: { a: Event<number>; b: Event<number>; __: Event<number>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+    Argument of type '{ source: EventCallable<number>; match: (x: number) => \\"a\\" | \\"c\\"; cases: { a: EventCallable<number>; b: EventCallable<number>; __: EventCallable<number>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
     "
   `)
@@ -270,11 +271,11 @@ describe('any to void', () => {
 
 describe('union type in source', () => {
   test('case store (should pass)', () => {
-    const source: Event<number | string> = createEvent()
+    const source: EventCallable<number | string> = createEvent()
     const $case = createStore<'a' | 'b'>('a')
-    const firstTarget: Event<number | string> = createEvent()
-    const secondTarget: Event<number | string> = createEvent()
-    const defaultarget: Event<number | string> = createEvent()
+    const firstTarget: EventCallable<number | string> = createEvent()
+    const secondTarget: EventCallable<number | string> = createEvent()
+    const defaultarget: EventCallable<number | string> = createEvent()
     split({
       source,
       match: $case,
@@ -291,10 +292,10 @@ describe('union type in source', () => {
     `)
   })
   test('case function (should pass)', () => {
-    const source: Event<number | string> = createEvent()
-    const firstTarget: Event<number | string> = createEvent()
-    const secondTarget: Event<number | string> = createEvent()
-    const defaultarget: Event<number | string> = createEvent()
+    const source: EventCallable<number | string> = createEvent()
+    const firstTarget: EventCallable<number | string> = createEvent()
+    const secondTarget: EventCallable<number | string> = createEvent()
+    const defaultarget: EventCallable<number | string> = createEvent()
     split({
       source,
       match: (src): 'a' | 'b' => 'a',
@@ -311,11 +312,11 @@ describe('union type in source', () => {
     `)
   })
   test('matcher object (should pass)', () => {
-    const source: Event<number | string> = createEvent()
+    const source: EventCallable<number | string> = createEvent()
     const firstBool = createStore(true)
-    const firstTarget: Event<number | string> = createEvent()
-    const secondTarget: Event<number | string> = createEvent()
-    const defaultarget: Event<number | string> = createEvent()
+    const firstTarget: EventCallable<number | string> = createEvent()
+    const secondTarget: EventCallable<number | string> = createEvent()
+    const defaultarget: EventCallable<number | string> = createEvent()
     split({
       source,
       match: {
@@ -2104,11 +2105,11 @@ describe('array cases', () => {
     })
   })
   test('case store case mismatch (should fail)', () => {
-    const source: Event<number> = createEvent()
+    const source: EventCallable<number> = createEvent()
     const caseStore = createStore<'a' | 'c'>('a')
-    const firstTarget: Event<number> = createEvent()
-    const secondTarget: Event<number> = createEvent()
-    const defaultarget: Event<number> = createEvent()
+    const firstTarget: EventCallable<number> = createEvent()
+    const secondTarget: EventCallable<number> = createEvent()
+    const defaultarget: EventCallable<number> = createEvent()
     split({
       //@ts-expect-error
       source,
@@ -2121,16 +2122,16 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; match: StoreWritable<\\"a\\" | \\"c\\">; cases: { a: Event<number>[]; b: Event<number>[]; __: Event<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Argument of type '{ source: EventCallable<number>; match: StoreWritable<\\"a\\" | \\"c\\">; cases: { a: EventCallable<number>[]; b: EventCallable<number>[]; __: EventCallable<...>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })
   test('case function case mismatch (should fail)', () => {
-    const source: Event<number> = createEvent()
-    const firstTarget: Event<number> = createEvent()
-    const secondTarget: Event<number> = createEvent()
-    const defaultarget: Event<number> = createEvent()
+    const source: EventCallable<number> = createEvent()
+    const firstTarget: EventCallable<number> = createEvent()
+    const secondTarget: EventCallable<number> = createEvent()
+    const defaultarget: EventCallable<number> = createEvent()
     split({
       //@ts-expect-error
       source,
@@ -2143,16 +2144,16 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; match: (src: number) => \\"a\\" | \\"c\\"; cases: { a: Event<number>[]; b: Event<number>[]; __: Event<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Argument of type '{ source: EventCallable<number>; match: (src: number) => \\"a\\" | \\"c\\"; cases: { a: EventCallable<number>[]; b: EventCallable<number>[]; __: EventCallable<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })
   test('matcher function case mismatch (should fail)', () => {
-    const source: Event<number> = createEvent()
-    const firstTarget: Event<number> = createEvent()
-    const secondTarget: Event<number> = createEvent()
-    const defaultarget: Event<number> = createEvent()
+    const source: EventCallable<number> = createEvent()
+    const firstTarget: EventCallable<number> = createEvent()
+    const secondTarget: EventCallable<number> = createEvent()
+    const defaultarget: EventCallable<number> = createEvent()
     split({
       //@ts-expect-error
       source,
@@ -2168,7 +2169,7 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: Event<number>; match: { a: (src: number) => true; c: (src: number) => true; }; cases: { a: Event<number>[]; b: Event<number>[]; __: Event<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Argument of type '{ source: EventCallable<number>; match: { a: (src: number) => true; c: (src: number) => true; }; cases: { a: EventCallable<number>[]; b: EventCallable<number>[]; __: EventCallable<...>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)

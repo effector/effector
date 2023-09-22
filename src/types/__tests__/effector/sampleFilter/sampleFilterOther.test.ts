@@ -6,11 +6,12 @@ import {
   sample,
   Store,
   Event,
+  EventCallable,
 } from 'effector'
 const typecheck = '{global}'
 
 test('clock param name in the function', () => {
-  const trigger: Event<number> = createEvent()
+  const trigger: EventCallable<number> = createEvent()
   const allow: Store<string> = createStore('no')
 
   const result1 = sample({
@@ -32,11 +33,11 @@ test('clock param name in the function', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ source: EventCallable<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ source: Event<number>; clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ source: EventCallable<number>; clock: EventCallable<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ clock: EventCallable<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
     "
   `)

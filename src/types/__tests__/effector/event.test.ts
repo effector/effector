@@ -4,9 +4,10 @@ import {createEvent, Event, CompositeName, kind, EventCallable} from 'effector'
 const typecheck = '{global}'
 
 test('createEvent', () => {
-  const createEvent_event1: Event<number> = createEvent()
-  const createEvent_event2: Event<number> = createEvent('event name [1]')
-  const createEvent_event3: Event<number> = createEvent({
+  const createEvent_event1: EventCallable<number> = createEvent()
+  const createEvent_event2: EventCallable<number> =
+    createEvent('event name [1]')
+  const createEvent_event3: EventCallable<number> = createEvent({
     name: 'event name [2]',
   })
   expect(typecheck).toMatchInlineSnapshot(`
@@ -32,7 +33,7 @@ test('#(properties)', () => {
   `)
 })
 test('#map', () => {
-  const event: Event<number> = createEvent()
+  const event: EventCallable<number> = createEvent()
   const computed = event.map(() => 'foo')
 
   //const check1: Event<string> = computed
@@ -43,13 +44,11 @@ test('#map', () => {
     "
     Type 'Event<string>' is not assignable to type 'Event<number>'.
       Type 'string' is not assignable to type 'number'.
-    This expression is not callable.
-      Type 'Event<number>' has no call signatures.
     "
   `)
 })
 test('#watch', () => {
-  const event: Event<number> = createEvent()
+  const event: EventCallable<number> = createEvent()
   event.watch(state => {
     const check1: number = state
     return state
@@ -65,7 +64,7 @@ test('#watch', () => {
 })
 describe('#filterMap', () => {
   test('#filterMap ok', () => {
-    const event: Event<number> = createEvent()
+    const event: EventCallable<number> = createEvent()
     const filteredEvent_ok: Event<string> = event.filterMap(n => {
       if (n % 2) return n.toString()
     })
@@ -76,7 +75,7 @@ describe('#filterMap', () => {
     `)
   })
   test('#filterMap incorrect', () => {
-    const event: Event<number> = createEvent()
+    const event: EventCallable<number> = createEvent()
     //@ts-expect-error
     const filteredEvent_error: Event<number> = event.filterMap(n => {
       if (n % 2) return n.toString()

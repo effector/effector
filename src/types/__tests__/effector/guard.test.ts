@@ -7,6 +7,7 @@ import {
   Event,
   Unit,
   StoreWritable,
+  EventCallable,
 } from 'effector'
 const typecheck = '{global}'
 
@@ -163,7 +164,7 @@ describe('explicit generics', () => {
 describe('guard(source, config)', () => {
   describe('guard(source, {filter: store})', () => {
     it('return new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow = createStore<boolean>(false)
 
       const result: Event<number> = guard(trigger, {filter: allow})
@@ -187,7 +188,7 @@ describe('guard(source, config)', () => {
       `)
     })
     test('store is not boolean (should fail)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
       //@ts-expect-error
@@ -204,7 +205,7 @@ describe('guard(source, config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
       //@ts-expect-error
@@ -222,7 +223,7 @@ describe('guard(source, config)', () => {
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: StoreWritable<number> = createStore(0)
 
@@ -237,7 +238,7 @@ describe('guard(source, config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: StoreWritable<string> = createStore('no')
 
@@ -258,7 +259,7 @@ describe('guard(source, config)', () => {
   })
   describe('guard(source, {filter: fn})', () => {
     it('returns new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const result: Event<number> = guard(trigger, {filter: n => n > 0})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -268,7 +269,7 @@ describe('guard(source, config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
       //@ts-expect-error
@@ -283,7 +284,7 @@ describe('guard(source, config)', () => {
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const target: StoreWritable<number> = createStore(0)
 
         guard(trigger, {
@@ -297,7 +298,7 @@ describe('guard(source, config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const target: StoreWritable<string> = createStore('no')
 
         guard(trigger, {
@@ -318,7 +319,7 @@ describe('guard(source, config)', () => {
   describe('guard(source, {filter: Boolean})', () => {
     it('returns new event (should pass)', () => {
       type User = {name: string}
-      const trigger: Event<User | null> = createEvent()
+      const trigger: EventCallable<User | null> = createEvent()
       const result: Event<User> = guard(trigger, {filter: Boolean})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -329,7 +330,7 @@ describe('guard(source, config)', () => {
     })
     test('result type mismatch (should fail)', () => {
       type User = {name: string}
-      const trigger: Event<User | null> = createEvent()
+      const trigger: EventCallable<User | null> = createEvent()
 
       //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: Boolean})
@@ -344,7 +345,7 @@ describe('guard(source, config)', () => {
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
         type User = {name: string}
-        const trigger: Event<User | null> = createEvent()
+        const trigger: EventCallable<User | null> = createEvent()
         const target = createStore<User>({name: 'alice'})
 
         guard(trigger, {
@@ -359,7 +360,7 @@ describe('guard(source, config)', () => {
       })
       test('type mismatch (should fail)', () => {
         type User = {name: string}
-        const trigger: Event<User | null> = createEvent()
+        const trigger: EventCallable<User | null> = createEvent()
         const target: StoreWritable<string> = createStore('no')
 
         guard(trigger, {
@@ -382,7 +383,7 @@ describe('guard(source, config)', () => {
 describe('guard(config)', () => {
   describe('guard({source, filter: store})', () => {
     it('return new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow = createStore<boolean>(false)
 
       const result: Event<number> = guard({
@@ -412,7 +413,7 @@ describe('guard(config)', () => {
       `)
     })
     test('store is not boolean (should fail)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
       guard({
@@ -431,7 +432,7 @@ describe('guard(config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
       guard({
@@ -450,7 +451,7 @@ describe('guard(config)', () => {
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: StoreWritable<number> = createStore(0)
 
@@ -466,7 +467,7 @@ describe('guard(config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: StoreWritable<string> = createStore('no')
 
@@ -488,7 +489,7 @@ describe('guard(config)', () => {
   })
   describe('guard({source, filter: fn})', () => {
     it('returns new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const result: Event<number> = guard({
         source: trigger,
         filter: n => n > 0,
@@ -501,7 +502,7 @@ describe('guard(config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow: Store<string> = createStore('no')
 
       //@ts-expect-error
@@ -518,7 +519,7 @@ describe('guard(config)', () => {
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const target: StoreWritable<number> = createStore(0)
 
         guard({
@@ -533,7 +534,7 @@ describe('guard(config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const target: StoreWritable<string> = createStore('no')
 
         guard({
@@ -588,7 +589,7 @@ describe('guard(config)', () => {
   describe('guard({source, filter: Boolean})', () => {
     it('returns new event (should pass)', () => {
       type User = {name: string}
-      const trigger: Event<User | null> = createEvent()
+      const trigger: EventCallable<User | null> = createEvent()
       const result: Event<User> = guard({
         source: trigger,
         filter: Boolean,
@@ -602,7 +603,7 @@ describe('guard(config)', () => {
     })
     test('result type mismatch (should fail)', () => {
       type User = {name: string}
-      const trigger: Event<User> = createEvent()
+      const trigger: EventCallable<User> = createEvent()
 
       //@ts-expect-error
       const result: Event<string> = guard({
@@ -620,7 +621,7 @@ describe('guard(config)', () => {
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
         type User = {name: string}
-        const trigger: Event<User | null> = createEvent()
+        const trigger: EventCallable<User | null> = createEvent()
         const target: StoreWritable<User> = createStore({name: 'alice'})
 
         guard({
@@ -636,7 +637,7 @@ describe('guard(config)', () => {
       })
       test('type mismatch (should fail)', () => {
         type User = {name: string}
-        const trigger: Event<User> = createEvent()
+        const trigger: EventCallable<User> = createEvent()
         const target: StoreWritable<string> = createStore('no')
 
         guard({
@@ -673,7 +674,7 @@ describe('guard(config)', () => {
 })
 
 test('guard return type supports union types (should pass)', () => {
-  const trigger: Event<{a: 1} | {a: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1} | {a: 2}> = createEvent()
   const allow = createStore<boolean>(false)
 
   const result: Event<{a: 1} | {a: 2}> = guard(trigger, {filter: allow})

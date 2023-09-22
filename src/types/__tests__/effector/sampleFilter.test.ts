@@ -6,6 +6,7 @@ import {
   Store,
   Event,
   StoreWritable,
+  EventCallable,
 } from 'effector'
 const typecheck = '{global}'
 
@@ -77,7 +78,7 @@ describe('sample(config)', () => {
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target: StoreWritable<number> = createStore(0)
 
@@ -93,7 +94,7 @@ describe('sample(config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target = createStore<string>('no')
 
@@ -105,7 +106,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ source: Event<number>; filter: StoreWritable<boolean>; target: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
+          Argument of type '{ source: EventCallable<number>; filter: StoreWritable<boolean>; target: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
             Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
           "
         `)

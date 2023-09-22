@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, guard, Event} from 'effector'
+import {createStore, createEvent, guard, EventCallable} from 'effector'
 const consoleError = console.error
 
 beforeAll(() => {
@@ -15,9 +15,9 @@ afterAll(() => {
 const typecheck = '{global}'
 
 test('wide union (should fail)', () => {
-  const trigger: Event<{a: 1} | {a: 2} | {a: 3}> = createEvent()
+  const trigger: EventCallable<{a: 1} | {a: 2} | {a: 3}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1} | {a: 2}> = createEvent()
+  const target: EventCallable<{a: 1} | {a: 2}> = createEvent()
 
   guard({
     clock: trigger,
@@ -49,26 +49,20 @@ test('wide union (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '[any?, ...any[]]'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Event<{ a: 1; } | { a: 2; }>'.
-      Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-        Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
-          Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
-            Types of property 'a' are incompatible.
-              Type '3' is not assignable to type '2'.
+        Type 'EventCallable<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, __can_be_used_in_target__
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"non-unit item in target\\"'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[Event<{ a: 1; } | { a: 2; }>]'.
+        Type 'EventCallable<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[EventCallable<{ a: 1; } | { a: 2; }>]'.
     "
   `)
 })
 
 test('narrow union (should pass)', () => {
-  const trigger: Event<{a: 1} | {a: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1} | {a: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1} | {a: 2} | {a: 3}> = createEvent()
+  const target: EventCallable<{a: 1} | {a: 2} | {a: 3}> = createEvent()
 
   guard({
     clock: trigger,
@@ -84,21 +78,15 @@ test('narrow union (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[any?, ...any[]]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '\\"non-unit item in target\\"'.
+    no errors
     "
   `)
 })
 
 test('unknown type in source (should fail)', () => {
-  const trigger: Event<unknown> = createEvent()
+  const trigger: EventCallable<unknown> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<string> = createEvent()
+  const target: EventCallable<string> = createEvent()
 
   guard({
     clock: trigger,
@@ -130,22 +118,20 @@ test('unknown type in source (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<string>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<string>' is not assignable to type '[any?, ...any[]]'.
-    Type 'Event<unknown>' is not assignable to type 'Event<string>'.
-      Type 'unknown' is not assignable to type 'string'.
+        Type 'EventCallable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, __can_be_used_in_target__
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<string>' is not assignable to type '\\"non-unit item in target\\"'.
-    Type 'Event<unknown>' is not assignable to type '[Event<string>]'.
+        Type 'EventCallable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<unknown>' is not assignable to type '[EventCallable<string>]'.
     "
   `)
 })
 
 test('unknown type in target (should pass)', () => {
-  const trigger: Event<string> = createEvent()
+  const trigger: EventCallable<string> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<unknown> = createEvent()
+  const target: EventCallable<unknown> = createEvent()
 
   guard({
     clock: trigger,
@@ -161,21 +147,15 @@ test('unknown type in target (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<unknown>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<unknown>' is not assignable to type '[any?, ...any[]]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<unknown>' is not assignable to type '\\"non-unit item in target\\"'.
+    no errors
     "
   `)
 })
 
 test('optional props (should fail)', () => {
-  const trigger: Event<{a: 1; b?: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1; b?: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1; b: 2}> = createEvent()
+  const target: EventCallable<{a: 1; b: 2}> = createEvent()
 
   guard({
     clock: trigger,
@@ -207,25 +187,20 @@ test('optional props (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[any?, ...any[]]'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Event<{ a: 1; b: 2; }>'.
-      Type '{ a: 1; b?: 2 | undefined; }' is not assignable to type '{ a: 1; b: 2; }'.
-        Types of property 'b' are incompatible.
-          Type '2 | undefined' is not assignable to type '2'.
-            Type 'undefined' is not assignable to type '2'.
+        Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, __can_be_used_in_target__
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '\\"non-unit item in target\\"'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[Event<{ a: 1; b: 2; }>]'.
+        Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; }>]'.
     "
   `)
 })
 
 test('wide object (should pass)', () => {
-  const trigger: Event<{a: 1; b: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1; b: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1}> = createEvent()
+  const target: EventCallable<{a: 1}> = createEvent()
 
   guard({
     clock: trigger,
@@ -241,21 +216,15 @@ test('wide object (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<{ a: 1; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<{ a: 1; }>' is not assignable to type '[any?, ...any[]]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<{ a: 1; }>' is not assignable to type '\\"non-unit item in target\\"'.
+    no errors
     "
   `)
 })
 
 test('narrow object (should fail)', () => {
-  const trigger: Event<{a: 1; b: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1; b: 2}> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<{a: 1; b: 2; c: 3}> = createEvent()
+  const target: EventCallable<{a: 1; b: 2; c: 3}> = createEvent()
 
   guard({
     clock: trigger,
@@ -287,14 +256,12 @@ test('narrow object (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '[any?, ...any[]]'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type 'Event<{ a: 1; b: 2; c: 3; }>'.
-      Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
+        Type 'EventCallable<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, __can_be_used_in_target__
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"non-unit item in target\\"'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[Event<{ a: 1; b: 2; c: 3; }>]'.
+        Type 'EventCallable<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
 })
@@ -320,9 +287,9 @@ test('narrow object combined (should fail)', () => {
 })
 
 test('wide tuple (should pass)', () => {
-  const trigger: Event<[1, 2, 3]> = createEvent()
+  const trigger: EventCallable<[1, 2, 3]> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<[1, 2]> = createEvent()
+  const target: EventCallable<[1, 2]> = createEvent()
 
   guard({
     source: trigger,
@@ -338,21 +305,15 @@ test('wide tuple (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<[1, 2]>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<[1, 2]>' is not assignable to type '[any?, ...any[]]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<[1, 2]>' is not assignable to type '\\"non-unit item in target\\"'.
+    no errors
     "
   `)
 })
 
 test('narrow tuple (should fail)', () => {
-  const trigger: Event<[1, 2]> = createEvent()
+  const trigger: EventCallable<[1, 2]> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<[1, 2, 3]> = createEvent()
+  const target: EventCallable<[1, 2, 3]> = createEvent()
 
   guard({
     source: trigger,
@@ -372,19 +333,18 @@ test('narrow tuple (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<[1, 2, 3]>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<[1, 2, 3]>' is not assignable to type '[any?, ...any[]]'.
+        Type 'EventCallable<[1, 2, 3]>' is not assignable to type '\\"incompatible unit in target\\"'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<[1, 2, 3]>' is not assignable to type '\\"non-unit item in target\\"'.
+        Type 'EventCallable<[1, 2, 3]>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
 
 test('wide union in array (should fail)', () => {
-  const trigger: Event<Array<number | string | boolean>> = createEvent()
+  const trigger: EventCallable<Array<number | string | boolean>> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<Array<number | string>> = createEvent()
+  const target: EventCallable<Array<number | string>> = createEvent()
 
   guard({
     clock: trigger,
@@ -416,24 +376,20 @@ test('wide union in array (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<(string | number)[]>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<(string | number)[]>' is not assignable to type '[any?, ...any[]]'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
-      Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
-        Type 'string | number | boolean' is not assignable to type 'string | number'.
-          Type 'boolean' is not assignable to type 'string | number'.
+        Type 'EventCallable<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, __can_be_used_in_target__
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<(string | number)[]>' is not assignable to type '\\"non-unit item in target\\"'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type '[Event<(string | number)[]>]'.
+        Type 'EventCallable<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
+    Type 'Event<(string | number | boolean)[]>' is not assignable to type '[EventCallable<(string | number)[]>]'.
     "
   `)
 })
 
 test('narrow union in array (should pass)', () => {
-  const trigger: Event<Array<number | string>> = createEvent()
+  const trigger: EventCallable<Array<number | string>> = createEvent()
   const allow = createStore<boolean>(true)
-  const target: Event<Array<number | string | boolean>> = createEvent()
+  const target: EventCallable<Array<number | string | boolean>> = createEvent()
 
   guard({
     clock: trigger,
@@ -449,13 +405,7 @@ test('narrow union in array (should pass)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<(string | number | boolean)[]>' is not assignable to type 'UnitTargetable<any> | [any?, ...any[]]'.
-          Type 'Event<(string | number | boolean)[]>' is not assignable to type '[any?, ...any[]]'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'Event<(string | number | boolean)[]>' is not assignable to type '\\"non-unit item in target\\"'.
+    no errors
     "
   `)
 })

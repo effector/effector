@@ -7,6 +7,7 @@ import {
   guard,
   Store,
   Event,
+  EventCallable,
 } from 'effector'
 const consoleError = console.error
 
@@ -23,7 +24,7 @@ afterAll(() => {
 const typecheck = '{global}'
 
 test('clock param name in the function', () => {
-  const trigger: Event<number> = createEvent()
+  const trigger: EventCallable<number> = createEvent()
   const allow: Store<string> = createStore('no')
 
   const result1 = guard({
