@@ -22,11 +22,8 @@ test('createStore', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'StoreWritable<number>' is not assignable to type 'StoreWritable<string>'.
-      Types of property 'on' are incompatible.
-        Type '{ <E>(trigger: Unit<E>, reducer: (state: number, payload: E) => number | void): StoreWritable<number>; <E>(triggers: Unit<E>[], reducer: (state: number, payload: E) => number | void): StoreWritable<...>; <E extends Tuple<...>>(triggers: E, reducer: (state: number, payload: InferValueFromTupleOfUnits<...>) => number ...' is not assignable to type '{ <E>(trigger: Unit<E>, reducer: (state: string, payload: E) => string | void): StoreWritable<string>; <E>(triggers: Unit<E>[], reducer: (state: string, payload: E) => string | void): StoreWritable<...>; <E extends Tuple<...>>(triggers: E, reducer: (state: string, payload: InferValueFromTupleOfUnits<...>) => string ...'.
-          Types of parameters 'reducer' and 'reducer' are incompatible.
-            Types of parameters 'state' and 'state' are incompatible.
-              Type 'number' is not assignable to type 'string'.
+      The types of '____._' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -305,9 +302,9 @@ test('unsafe widening (should fail)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'StoreWritable<{ page: number; limit: number; id: number; }>' is not assignable to type 'StoreWritable<{ [key: string]: any; page: number; limit: number; }>'.
-      Types of property 'x__fake_field_to_make_ts_guard_against_unsafe_widening_x' are incompatible.
-        Type 'EventCallable<{ page: number; limit: number; id: number; }>' is not assignable to type 'EventCallable<{ [key: string]: any; page: number; limit: number; }>'.
-          Types of parameters 'payload' and 'payload' are incompatible.
+      Types of property '____' are incompatible.
+        Type 'StoreValueType<{ page: number; limit: number; id: number; }>' is not assignable to type 'StoreValueType<{ [key: string]: any; page: number; limit: number; }>'.
+          Types of parameters 'type' and 'type' are incompatible.
             Type '{ [key: string]: any; page: number; limit: number; }' is not assignable to type '{ page: number; limit: number; id: number; }'.
     "
   `)

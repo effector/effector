@@ -45,8 +45,6 @@ test('#map', () => {
       Type 'string' is not assignable to type 'number'.
     This expression is not callable.
       Type 'Event<number>' has no call signatures.
-    This expression is not callable.
-      Type 'Event<string>' has no call signatures.
     "
   `)
 })

@@ -238,7 +238,17 @@ export interface Store<State> extends Unit<State> {
   sid: string | null
 }
 
+/**
+ * Hacky way to force TS perform checks against unsafe widening
+ */
+interface StoreValueType<X> {
+  _: X
+  (type: X): void
+}
+
 export interface StoreWritable<State> extends Store<State>, UnitTargetable<State> {
+  readonly ____: StoreValueType<State>
+
   on<E>(
     trigger: Unit<E>,
     reducer: (state: State, payload: E) => State | void,
@@ -254,8 +264,6 @@ export interface StoreWritable<State> extends Store<State>, UnitTargetable<State
   off(trigger: Unit<any>): this
   reset(...triggers: Array<Unit<any>>): this
   reset(triggers: Array<Unit<any>>): this
-
-  x__fake_field_to_make_ts_guard_against_unsafe_widening_x: EventCallable<State>
 
   reinit: EventCallable<void>
 }

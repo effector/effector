@@ -357,9 +357,16 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
-                Types of property '__' are incompatible.
-                  Type 'number' is not assignable to type 'string'.
+              Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+                Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+                  Types of property '__' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+                Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+                  Types of property '__' are incompatible.
+                    Type 'string' is not assignable to type 'number'.
           "
         `)
       })
@@ -411,7 +418,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type '(EventCallable<string> | EventCallable<number>)[]' is missing the following properties from type 'Unit<string>': kind, __
+              Type '(EventCallable<number> | EventCallable<string>)[]' is missing the following properties from type 'Unit<string>': kind, __
           "
         `)
       })
