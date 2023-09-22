@@ -4,7 +4,7 @@ import {
   createEvent,
   createEffect,
   sample,
-  Store,
+  StoreWritable,
   Event,
   EventCallable,
 } from 'effector'
@@ -12,7 +12,7 @@ const typecheck = '{global}'
 
 test('clock param name in the function', () => {
   const trigger: EventCallable<number> = createEvent()
-  const allow: Store<string> = createStore('no')
+  const allow: StoreWritable<string> = createStore('no')
 
   const result1 = sample({
     //@ts-expect-error
@@ -33,11 +33,11 @@ test('clock param name in the function', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: EventCallable<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ source: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ source: EventCallable<number>; clock: EventCallable<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ source: EventCallable<number>; clock: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ clock: EventCallable<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ clock: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
     "
   `)

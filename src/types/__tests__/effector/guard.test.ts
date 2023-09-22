@@ -176,7 +176,7 @@ describe('guard(source, config)', () => {
       `)
     })
     it('support any unit (should pass)', () => {
-      const trigger: Store<number[]> = createStore([1])
+      const trigger: StoreWritable<number[]> = createStore([1])
       const allow = createStore<boolean>(false)
 
       const result: Event<number[]> = guard(trigger, {filter: allow})
@@ -189,7 +189,7 @@ describe('guard(source, config)', () => {
     })
     test('store is not boolean (should fail)', () => {
       const trigger: EventCallable<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       guard(trigger, {filter: allow})
@@ -198,15 +198,19 @@ describe('guard(source, config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
-              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
-                Type 'string' is not assignable to type 'boolean'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+              Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+                Types of property 'map' are incompatible.
+                  Type '{ <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<T>; }' is not assignable to type '{ <T>(fn: (state: boolean, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: boolean, lastState: T) => T, firstState: T): Store<T>; }'.
+                    Types of parameters 'fn' and 'fn' are incompatible.
+                      Types of parameters 'state' and 'state' are incompatible.
+                        Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
     test('result type mismatch (should fail)', () => {
       const trigger: EventCallable<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: allow})
@@ -217,7 +221,7 @@ describe('guard(source, config)', () => {
           Type 'UnitTargetable<any>' is missing the following properties from type 'Event<string>': map, filter, filterMap, watch, and 5 more.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
         "
       `)
     })
@@ -270,7 +274,7 @@ describe('guard(source, config)', () => {
     })
     test('result type mismatch (should fail)', () => {
       const trigger: EventCallable<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: x => x > 0})
@@ -398,7 +402,7 @@ describe('guard(config)', () => {
       `)
     })
     it('support any unit (should pass)', () => {
-      const trigger: Store<number[]> = createStore([1])
+      const trigger: StoreWritable<number[]> = createStore([1])
       const allow = createStore<boolean>(false)
 
       const result: Event<number[]> = guard({
@@ -414,7 +418,7 @@ describe('guard(config)', () => {
     })
     test('store is not boolean (should fail)', () => {
       const trigger: EventCallable<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const allow: StoreWritable<string> = createStore('no')
 
       guard({
         source: trigger,
@@ -426,14 +430,14 @@ describe('guard(config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
-              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+              Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
     })
     test('result type mismatch (should fail)', () => {
       const trigger: EventCallable<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const allow: StoreWritable<string> = createStore('no')
 
       guard({
         source: trigger,
@@ -445,7 +449,7 @@ describe('guard(config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
         "
       `)
     })
@@ -503,7 +507,7 @@ describe('guard(config)', () => {
     })
     test('result type mismatch (should fail)', () => {
       const trigger: EventCallable<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       const result: Event<string> = guard({

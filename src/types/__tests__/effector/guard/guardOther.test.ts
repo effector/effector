@@ -5,7 +5,7 @@ import {
   createEffect,
   sample,
   guard,
-  Store,
+  StoreWritable,
   Event,
   EventCallable,
 } from 'effector'
@@ -25,7 +25,7 @@ const typecheck = '{global}'
 
 test('clock param name in the function', () => {
   const trigger: EventCallable<number> = createEvent()
-  const allow: Store<string> = createStore('no')
+  const allow: StoreWritable<string> = createStore('no')
 
   const result1 = guard({
     source: trigger,
@@ -48,15 +48,15 @@ test('clock param name in the function', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+        Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number, clock: number) => boolean)'.
-          Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+        Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number, clock: number) => boolean)'.
+          Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<string>' is not assignable to type 'Store<boolean> | ((clock: number) => boolean)'.
-          Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+        Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((clock: number) => boolean)'.
+          Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
     "
   `)
 })
