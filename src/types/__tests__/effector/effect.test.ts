@@ -295,11 +295,10 @@ describe('#filterMap', () => {
     `)
   })
 
-  it('should return correct event type (should fail)', () => {
+  it('should return correct event type (should pass)', () => {
     const fx = createEffect<string, string, any>()
     fx.use(params => String(params))
 
-    //@ts-expect-error
     const filteredEvent: Event<number | void> = fx.filterMap(params => {
       if (params.length > 0) {
         return params.length

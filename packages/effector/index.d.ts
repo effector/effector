@@ -3067,7 +3067,7 @@ export interface Scope extends Unit<any> {
   getState<T>(store: Store<T>): T
 }
 
-export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: string]: any}
+export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>, any]> | {[sid: string]: any}
 
 /**
  * Fill stores with given values in provided scope or domain
