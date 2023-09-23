@@ -115,11 +115,11 @@ describe('params type mismatch', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Effect<number, string, { message: string; }>' is not assignable to type 'Effect<string, string, { message: string; }>'.
-        The types of 'done.watch' are incompatible between these types.
-          Type '(watcher: (payload: { params: number; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription'.
-            Types of parameters 'watcher' and 'watcher' are incompatible.
-              Types of parameters 'payload' and 'payload' are incompatible.
-                Type '{ params: number; result: string; }' is not assignable to type '{ params: string; result: string; }'.
+        Types of property 'done' are incompatible.
+          Type 'Event<{ params: number; result: string; }>' is not assignable to type 'Event<{ params: string; result: string; }>'.
+            Type '{ params: number; result: string; }' is not assignable to type '{ params: string; result: string; }'.
+              Types of property 'params' are incompatible.
+                Type 'number' is not assignable to type 'string'.
       No overload matches this call.
         The last overload gave the following error.
           Type '(text: number) => { foo: number; }' is not assignable to type '(params: any, source: any) => { foo: string; }'.

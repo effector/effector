@@ -77,19 +77,19 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -125,16 +125,16 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -208,34 +208,34 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -285,28 +285,28 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -390,64 +390,64 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -519,52 +519,52 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -724,124 +724,124 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -969,100 +969,100 @@ describe('unit source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1112,28 +1112,28 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1181,28 +1181,28 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1282,52 +1282,52 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1407,52 +1407,52 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1496,22 +1496,22 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1546,16 +1546,16 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1627,40 +1627,40 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<ABN>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<AB>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1714,34 +1714,34 @@ describe('object source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<{ a: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1791,28 +1791,28 @@ describe('tuple source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1892,52 +1892,52 @@ describe('tuple source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -1977,16 +1977,16 @@ describe('tuple source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })
@@ -2050,28 +2050,28 @@ describe('tuple source', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
+            Type 'EventCallable<[number, number]>' is not assignable to type '\\"incompatible unit in target\\"'.
         "
       `)
     })

@@ -106,6 +106,10 @@ export interface Unit<T> {
   readonly __: T
 }
 
+export interface UnitTargetable<T> extends Unit<T> {
+  readonly __can_be_used_in_target__: true
+}
+
 export type CompositeName = {
   shortName: string
   fullName: string
@@ -121,36 +125,46 @@ export type CompositeName = {
  * as the return type we won't see any problems.
  */
 type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
+type EventCallableAsReturnType<Payload> = any extends Payload ? EventCallable<Payload> : never
 
 /**
- * Function you can subscribe to.
- * It can be an intention to change the store, indication of something happening in the application, a command to be executed, aggregated analytics trigger and so on
+ * Event you can subscribe to.
+ * It represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things.
  */
 export interface Event<Payload> extends Unit<Payload> {
-  (payload: Payload): Payload
-   (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
-  watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
   filter<T extends Payload>(config: {
     fn(payload: Payload): payload is T
   }): EventAsReturnType<T>
   filter(config: {fn(payload: Payload): boolean}): EventAsReturnType<Payload>
   filterMap<T>(fn: (payload: Payload) => T | undefined): EventAsReturnType<T>
-  prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
+
+  watch(watcher: (payload: Payload) => any): Subscription
   subscribe(observer: Observer<Payload>): Subscription
   /**
    * @deprecated use .compositeName.fullName instead
    */
   getType(): string
+
   compositeName: CompositeName
   sid: string | null
   shortName: string
 }
 
 /**
+ * The function you can call to trigger an event.
+ */
+export interface EventCallable<Payload> extends Event<Payload>, UnitTargetable<Payload> {
+  (payload: Payload): Payload
+   (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
+
+  prepend<Before = void>(fn: (_: Before) => Payload): EventCallable<Before>
+}
+
+/**
  * Container for (possibly async) side effects
  */
-export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
+export interface Effect<Params, Done, Fail = Error> extends UnitTargetable<Params> {
   (params: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
   readonly doneData: Event<Done>
@@ -185,7 +199,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   filter(config: {fn(payload: Params): boolean}): EventAsReturnType<Params>
   filterMap<T>(fn: (payload: Params) => T | undefined): EventAsReturnType<T>
   map<T>(fn: (params: Params) => T): EventAsReturnType<T>
-  prepend<Before>(fn: (_: Before) => Params): Event<Before>
+  prepend<Before>(fn: (_: Before) => Params): EventCallable<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
   compositeName: CompositeName
@@ -194,12 +208,47 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
 }
 type InferValueFromTupleOfUnits<T extends Tuple<Unit<any>>> =
   T[number] extends Unit<infer R> ? R : never
+type InferValueFromTupleOfUnitTargetables<T extends Tuple<UnitTargetable<any>>> =
+  T[number] extends UnitTargetable<infer R>? R : never
 
 export interface Store<State> extends Unit<State> {
-  reset(...triggers: Array<Unit<any>>): this
-  reset(triggers: Array<Unit<any>>): this
+  map<T>(fn: (state: State, lastState?: T) => T): Store<T>
+  /**
+   * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
+   */
+  map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
+
+  updates: Event<State>
+
   getState(): State
-  map<T>(fn: (state: State) => T): Store<T>
+  subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
+  watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
+  watch<E>(
+    trigger: Unit<E>,
+    watcher: (state: State, payload: E) => any,
+  ): Subscription
+  /**
+   * @deprecated use js pipe instead
+   */
+  thru<U>(fn: (store: Store<State>) => U): U
+
+  defaultState: State
+  compositeName: CompositeName
+  shortName: string
+  sid: string | null
+}
+
+/**
+ * Hacky way to force TS perform checks against unsafe widening
+ */
+interface StoreValueType<X> {
+  _: X
+  (type: X): void
+}
+
+export interface StoreWritable<State> extends Store<State>, UnitTargetable<State> {
+  readonly ____: StoreValueType<State>
+
   on<E>(
     trigger: Unit<E>,
     reducer: (state: State, payload: E) => State | void,
@@ -213,32 +262,24 @@ export interface Store<State> extends Unit<State> {
     reducer: (state: State, payload: InferValueFromTupleOfUnits<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
-  subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
-  updates: Event<State>
-  watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
-  watch<E>(
-    trigger: Unit<E>,
-    watcher: (state: State, payload: E) => any,
-  ): Subscription
-  defaultState: State
-  compositeName: CompositeName
-  shortName: string
-  sid: string | null
-  reinit?: Event<void>
+  reset(...triggers: Array<Unit<any>>): this
+  reset(triggers: Array<Unit<any>>): this
+
+  reinit: EventCallable<void>
+}
+
+interface InternalStore<State> extends StoreWritable<State> {
+  setState(state: State): void
 }
 
 export const is: {
   unit(obj: unknown): obj is Unit<any>
-  store(obj: unknown): obj is Store<any>
-  event(obj: unknown): obj is Event<any>
+  store(obj: unknown): obj is Store<any> | StoreWritable<any>
+  event(obj: unknown): obj is Event<any> | EventCallable<any>
   effect(obj: unknown): obj is Effect<any, any, any>
   domain(obj: unknown): obj is Domain
   scope(obj: unknown): obj is Scope
   attached(obj: unknown): obj is Effect<any, any, any>
-}
-
-interface InternalStore<State> extends Store<State> {
-  setState(state: State): void
 }
 
 /**
@@ -248,7 +289,7 @@ interface InternalStore<State> extends Store<State> {
 export class Domain implements Unit<any> {
   readonly kind: kind
   readonly __: any
-  onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
+  onCreateEvent(hook: (newEvent: EventCallable<unknown>) => any): Subscription
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
   ): Subscription
@@ -256,13 +297,13 @@ export class Domain implements Unit<any> {
     hook: (newStore: InternalStore<unknown>) => any,
   ): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
-  event<Payload = void>(name?: string): Event<Payload>
-  event<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
-  createEvent<Payload = void>(name?: string): Event<Payload>
+  event<Payload = void>(name?: string): EventCallable<Payload>
+  event<Payload = void>(config: {name?: string; sid?: string}): EventCallable<Payload>
+  createEvent<Payload = void>(name?: string): EventCallable<Payload>
   createEvent<Payload = void>(config: {
     name?: string
     sid?: string
-  }): Event<Payload>
+  }): EventCallable<Payload>
   effect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
   effect<Params, Done, Fail = Error>(
     handler: (params: Params) => Done | Promise<Done>,
@@ -317,7 +358,7 @@ export class Domain implements Unit<any> {
           read: (json: SerializedState) => State
         }
     },
-  ): Store<State>
+  ): StoreWritable<State>
   createStore<State, SerializedState extends Json = Json>(
     defaultState: State,
     config?: {
@@ -331,16 +372,16 @@ export class Domain implements Unit<any> {
             read: (json: SerializedState) => State
           }
     },
-  ): Store<State>
+  ): StoreWritable<State>
   sid: string | null
   compositeName: CompositeName
   shortName: string
   getType(): string
   history: {
     domains: Set<Domain>
-    stores: Set<Store<any>>
+    stores: Set<StoreWritable<any>>
     effects: Set<Effect<any, any, any>>
-    events: Set<Event<any>>
+    events: Set<EventCallable<any>>
   }
 }
 
@@ -471,11 +512,37 @@ export const step: {
   }): Mov
 }
 
+/* `forward` types */
+type ForwardTarget = UnitTargetable<unknown> | ReadonlyArray<UnitTargetable<unknown>>
+
+type CleanSingleTarget<
+  Target extends UnitTargetable<unknown>,
+  Clock,
+> = Target extends UnitTargetable<infer T>
+  ? T extends void
+    ? UnitTargetable<unknown>
+    : T extends Clock
+    ? UnitTargetable<T>
+    // Needed to force typecheck
+    : UnitTargetable<Clock>
+  : never
+
+  type CleanTarget<
+    Target extends ForwardTarget,
+    From,
+  > = Target extends UnitTargetable<any>
+    ? CleanSingleTarget<Target, From>
+    : {
+        [K in keyof Target]: Target[K] extends UnitTargetable<unknown>
+          ? CleanSingleTarget<Target[K], From>
+          : never
+      }
+
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  * @deprecated use `sample({clock, target})` instead
  */
-export function forward<T>(opts: {
+export function forward<From, T extends ForwardTarget>(opts: {
   /**
    * By default TS picks "best common type" `T` between `from` and `to` arguments.
    * This lets us forward from `string | number` to `string` for instance, and
@@ -490,8 +557,8 @@ export function forward<T>(opts: {
    *
    * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
    */
-  from: Unit<T & {}>
-  to: Unit<T> | ReadonlyArray<Unit<T>>
+  from: Unit<From & {}>
+  to: CleanTarget<T, From>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
@@ -499,7 +566,7 @@ export function forward<T>(opts: {
  */
 export function forward(opts: {
   from: Unit<any>
-  to: ReadonlyArray<Unit<void>>
+  to: ReadonlyArray<UnitTargetable<void>>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
@@ -507,7 +574,7 @@ export function forward(opts: {
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
-  to: ReadonlyArray<Unit<void>>
+  to: ReadonlyArray<UnitTargetable<void>>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
@@ -515,7 +582,7 @@ export function forward(opts: {
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
-  to: Unit<void>
+  to: UnitTargetable<void>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
@@ -523,14 +590,14 @@ export function forward(opts: {
  */
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
-  to: Unit<To> | ReadonlyArray<Unit<To>>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
 }): Subscription
 // Allow `* -> void` forwarding (e.g. `string -> void`).
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
  * @deprecated use `sample({clock, target})` instead
  */
-export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
+export function forward(opts: {from: Unit<any>; to: UnitTargetable<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
@@ -538,7 +605,7 @@ export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
  */
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
-  to: Unit<To> | ReadonlyArray<Unit<To>>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
 }): Subscription
 
 /**
@@ -614,7 +681,7 @@ export function fromObservable<T>(observable: unknown): Event<T>
 /**
  * Creates an event
  */
-export function createEvent<E = void>(eventName?: string): Event<E>
+export function createEvent<E = void>(eventName?: string): EventCallable<E>
 /**
  * Creates an event
  */
@@ -622,7 +689,7 @@ export function createEvent<E = void>(config: {
   name?: string
   sid?: string
   domain?: Domain
-}): Event<E>
+}): EventCallable<E>
 
 /**
  * Creates an effect
@@ -698,7 +765,7 @@ export function createStore<State, SerializedState extends Json = Json>(
       }
     domain?: Domain;
   },
-): Store<State>
+): StoreWritable<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
 
 /**
@@ -856,15 +923,15 @@ export function createApi<
   S,
   Api extends {[name: string]: ((store: S, e: any) => (S | void))}
 >(
-  store: Store<S>,
+  store: StoreWritable<S>,
   api: Api,
 ): {
   [K in keyof Api]: ((store: S, e: void) => (S | void)) extends Api[K]
-    ? Event<void>
+    ? EventCallable<void>
     : Api[K] extends ((store: S) => (S | void))
-    ? Event<void>
+    ? EventCallable<void>
     : Api[K] extends ((store: S, e: infer E) => (S | void))
-    ? Event<E extends void ? Exclude<E, undefined> | void : E>
+    ? EventCallable<E extends void ? Exclude<E, undefined> | void : E>
     : any
 }
 
@@ -877,7 +944,7 @@ export function createApi<
 export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: Done,
-): Store<Done>
+): StoreWritable<Done>
 /**
  * Creates a Store out of successful results of Effect.
  * It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
@@ -887,29 +954,29 @@ export function restore<Done>(
 export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: null,
-): Store<Done | null>
+): StoreWritable<Done | null>
 /**
  * Creates a Store from Event.
  * It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
  * @param event source event
  * @param defaultState initial state of new store
  */
-export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+export function restore<E>(event: Event<E>, defaultState: E): StoreWritable<E>
 /**
  * Creates a Store from Event.
  * It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
  * @param event source event
  * @param defaultState initial state of new store
  */
-export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
+export function restore<E>(event: Event<E>, defaultState: null): StoreWritable<E | null>
 export function restore<T extends Event<any>>(event: T): never
 export function restore<T extends Effect<any, any, any>>(effect: T): never
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {
   [K in keyof State]: State[K] extends Store<infer S>
-    ? Store<S>
-    : Store<State[K]>
+    ? StoreWritable<S>
+    : StoreWritable<State[K]>
 }
 
 /**
@@ -1003,7 +1070,7 @@ type IfAssignable<T, U, Y, N> =
 
 type Source<A> = Unit<A> | Combinable
 type Clock<B> = Unit<B> | Tuple<Unit<any>>
-type Target = Unit<any> | Tuple<any>
+type Target = UnitTargetable<any> | Tuple<any>
 
 type GetTupleWithoutAny<T> = T extends Array<infer U>
   ? U extends Unit<infer Value>
@@ -1028,12 +1095,12 @@ type ReplaceUnit<Target, Result, Value> = IfAssignable<Result, Value,
 
 // [...T] is used to show sample result as a tuple (not array)
 type TargetTuple<Target extends Array<unknown>, Result> = [...{
-  [Index in keyof Target]: Target[Index] extends Unit<infer Value>
+  [Index in keyof Target]: Target[Index] extends UnitTargetable<infer Value>
     ? ReplaceUnit<Target[Index], Result, Value>
     : 'non-unit item in target'
 }]
 
-type MultiTarget<Target, Result> = Target extends Unit<infer Value>
+type MultiTarget<Target, Result> = Target extends UnitTargetable<infer Value>
   ? ReplaceUnit<Target, Result, Value>
   : Target extends Tuple<unknown>
     ? TargetTuple<Target, Result>
@@ -1109,7 +1176,7 @@ type SampleImpl<
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
       : [message: {error: 'source should be unit or object with stores'; got: Source}]
   // has target
-  : Target extends Units | ReadonlyArray<Unit<any>>
+  : Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>
       // has target, no source
     ? unknown extends Source
       ? unknown extends Clock
@@ -1155,7 +1222,7 @@ type SampleImpl<
               >
             : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : [message: {error: 'source should be unit or object with stores'; got: Source}]
-    : [message: {error: 'target should be unit or array of units'; got: Target}]
+    : Target extends InvalidUnitsTarget ? [message: {error: 'derived units are not allowed in target'; got: Target}] : [message: {error: 'target should be unit or array of units'; got: Target}]
 
 type ModeSelector<
   FilterAndFN,
@@ -1563,7 +1630,7 @@ type Mode_Flt_Fn = `${string} | filter | fn | ${string}`;
 
 type TargetFilterFnConfig<
   Mode extends Mode_Flt_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FilterFun,
@@ -1584,7 +1651,7 @@ type TargetFilterFnConfig<
 
 type TargetConfigCheck<
   Mode extends Mode_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FN,
@@ -1648,7 +1715,7 @@ type InferredType<Source, Clock, FilterFN> =
 
 type SampleFilterTargetDef<
   Mode extends Mode_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FLUnit,
@@ -1861,7 +1928,7 @@ type SampleFilterTargetDef<
 type TargetOrError<
   MatchingValue,
   Mode extends 'fnRet' | 'src' | 'clk',
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   ResultConfig
 > = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
     ? [config: ResultConfig]
@@ -2034,8 +2101,8 @@ type DataSourceFunction<Source, Clock> =
     : never
 
 type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
-  Target extends Unit<any>
-    ? Target extends Unit<infer TargetType>
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
@@ -2052,7 +2119,7 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
     : {
       [
         K in keyof Target
-      ]: Target[K] extends Unit<infer TargetType>
+      ]: Target[K] extends UnitTargetable<infer TargetType>
         ? [SourceType] extends [Readonly<TargetType>]
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
@@ -2068,9 +2135,9 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
         : never
     }
 
-type TypeOfTarget<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
-  Target extends Unit<any>
-    ? Target extends Unit<infer TargetType>
+type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
@@ -2084,7 +2151,7 @@ type TypeOfTarget<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, M
     : {
       [
         K in keyof Target
-      ]: Target[K] extends Unit<infer TargetType>
+      ]: Target[K] extends UnitTargetable<infer TargetType>
         ? [SourceType] extends [Readonly<TargetType>]
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
@@ -2136,6 +2203,8 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
 type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
 type Units = Unit<any> | Tuple<Unit<any>>
+type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
+type InvalidUnitsTarget = Unit<any> | Tuple<Unit<any>> | ReadonlyArray<Unit<any>>
 
 /* guard types */
 
@@ -3007,7 +3076,7 @@ export interface Scope extends Unit<any> {
   getState<T>(store: Store<T>): T
 }
 
-export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: string]: any}
+export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>, any]> | {[sid: string]: any}
 
 /**
  * Fill stores with given values in provided scope or domain
@@ -3032,7 +3101,7 @@ export function serialize(
  * @param unit event to bind
  * @returns function which will trigger an event in a given scope
  */
-export function scopeBind<T>(unit: Event<T>, opts?: {scope?: Scope; safe?: boolean}): (payload: T) => void
+export function scopeBind<T>(unit: EventCallable<T>, opts?: {scope?: Scope; safe?: boolean}): (payload: T) => void
 /**
  * Bind effect to a scope to be called later.
  *
@@ -3094,7 +3163,7 @@ export function allSettled<FX extends Effect<void, any, any>>(
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled<T>(
-  unit: Unit<T>,
+  unit: UnitTargetable<T>,
   config: {scope: Scope; params: T},
 ): Promise<void>
 /**
@@ -3103,7 +3172,7 @@ export function allSettled<T>(
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled(
-  unit: Unit<void>,
+  unit: UnitTargetable<void>,
   config: {scope: Scope},
 ): Promise<void>
 /**

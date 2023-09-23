@@ -271,11 +271,7 @@ describe('#filter', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<number>' is not assignable to type 'Event<boolean>'.
-        Types of property 'watch' are incompatible.
-          Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: boolean) => any) => Subscription'.
-            Types of parameters 'watcher' and 'watcher' are incompatible.
-              Types of parameters 'payload' and 'payload' are incompatible.
-                Type 'number' is not assignable to type 'boolean'.
+        Type 'number' is not assignable to type 'boolean'.
       "
     `)
   })
@@ -299,11 +295,10 @@ describe('#filterMap', () => {
     `)
   })
 
-  it('should return correct event type (should fail)', () => {
+  it('should return correct event type (should pass)', () => {
     const fx = createEffect<string, string, any>()
     fx.use(params => String(params))
 
-    //@ts-expect-error
     const filteredEvent: Event<number | void> = fx.filterMap(params => {
       if (params.length > 0) {
         return params.length
@@ -312,10 +307,7 @@ describe('#filterMap', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<number>' is not assignable to type 'Event<number | void>'.
-        Types of parameters 'payload' and 'payload' are incompatible.
-          Type 'number | void' is not assignable to type 'number'.
-            Type 'void' is not assignable to type 'number'.
+      no errors
       "
     `)
   })
@@ -477,11 +469,11 @@ describe('nested effects', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Effect<string, string, Error>' is not assignable to type 'Effect<number, number, Error>'.
-          The types of 'done.watch' are incompatible between these types.
-            Type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: number; result: number; }) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type '{ params: string; result: string; }' is not assignable to type '{ params: number; result: number; }'.
+          Types of property 'done' are incompatible.
+            Type 'Event<{ params: string; result: string; }>' is not assignable to type 'Event<{ params: number; result: number; }>'.
+              Type '{ params: string; result: string; }' is not assignable to type '{ params: number; result: number; }'.
+                Types of property 'params' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
         "
       `)
     })

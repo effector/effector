@@ -1,4 +1,4 @@
-import {Store, Event, Scope} from 'effector'
+import {Store, Scope, EventCallable} from 'effector'
 
 export type StoreOrData<T> = Store<T> | T
 export type DOMProperty = string | number | null | boolean
@@ -12,7 +12,7 @@ export type ClassListMap = {[cssClass: string]: StoreOrData<boolean>}
 export type ClassListArray = Array<Store<string | null> | string>
 
 export type HandlerMap =
-  | Partial<{[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}>
+  | Partial<{[K in keyof HTMLElementEventMap]: EventCallable<HTMLElementEventMap[K]>}>
   | {
       config?: {
         passive?: boolean
@@ -21,7 +21,7 @@ export type HandlerMap =
         stop?: boolean
       }
       on: Partial<
-        {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
+        {[K in keyof HTMLElementEventMap]: EventCallable<HTMLElementEventMap[K]>}
       >
     }
 
@@ -69,7 +69,7 @@ export function spec(spec: {
 }): void
 export function handler(
   map: Partial<
-    {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
+    {[K in keyof HTMLElementEventMap]: EventCallable<HTMLElementEventMap[K]>}
   >,
 ): void
 export function handler(
@@ -80,7 +80,7 @@ export function handler(
     prevent?: boolean
   },
   map: Partial<
-    {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
+    {[K in keyof HTMLElementEventMap]: EventCallable<HTMLElementEventMap[K]>}
   >,
 ): void
 

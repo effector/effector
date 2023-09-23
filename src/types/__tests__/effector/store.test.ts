@@ -6,22 +6,23 @@ import {
   restore,
   combine,
   Store,
-  Event,
   CompositeName,
   kind,
   sample,
+  StoreWritable,
+  EventCallable,
 } from 'effector'
 
 const typecheck = '{global}'
 
 test('createStore', () => {
-  const createStore_store1: Store<number> = createStore(0)
+  const createStore_store1: StoreWritable<number> = createStore(0)
   //@ts-expect-error
-  const createStore_store2: Store<string> = createStore(0)
+  const createStore_store2: StoreWritable<string> = createStore(0)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Store<number>' is not assignable to type 'Store<string>'.
-      The types returned by 'getState()' are incompatible between these types.
+    Type 'StoreWritable<number>' is not assignable to type 'StoreWritable<string>'.
+      The types of '____._' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
     "
   `)
@@ -31,9 +32,7 @@ test('combine', () => {
   const a = createStore('')
   const b = createStore(0)
   const c = combine(a, b, (a, b) => a + b)
-  c.on(ev, (state, payload) => state)
-  c.reset(ev)
-  c.off(ev)
+  const check: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -101,9 +100,6 @@ describe('#reset', () => {
     const event = createEvent()
     const store = createStore(0)
     store.reset(event)
-    const computed = store.map(() => 'hello')
-
-    computed.reset(event)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
@@ -134,40 +130,54 @@ describe('#reset', () => {
   })
 })
 
-describe("#reinit", () => {
-  test("simple case", () => {
-    const $store = createStore<Array<number>>([]);
-    const eventPush = createEvent<number>();
-    $store.on(eventPush, (store, item) => [...store, item]);
-    eventPush(1);
-    eventPush(2);
-    eventPush(3);
-    const before = $store.getState().length;
-    expect(before).toBe(3);
-    $store.reinit?.();
+describe('#reinit', () => {
+  test('simple case', () => {
+    const $store = createStore<Array<number>>([])
+    const eventPush = createEvent<number>()
+    $store.on(eventPush, (store, item) => [...store, item])
+    eventPush(1)
+    eventPush(2)
+    eventPush(3)
+    const before = $store.getState().length
+    expect(before).toBe(3)
+    $store.reinit()
 
-    const after = $store.getState().length;
-    expect(after).toBe(0);
+    const after = $store.getState().length
+    expect(after).toBe(0)
 
-    $store.off(eventPush);
+    $store.off(eventPush)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
       "
-    `);
+    `)
   })
-});
+})
 
-test('#on', () => {
+test('StoreWritable#on (should pass)', () => {
+  const event = createEvent()
+  const store = createStore(0)
+  store.on(event, (state, payload) => state)
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
+test('Store#on (should fail)', () => {
   const event = createEvent()
   const store = createStore(0)
   store.on(event, (state, payload) => state)
   const computed = store.map(() => 'hello')
 
+  //@ts-expect-error
   computed.on(event, (state, payload) => state)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Property 'on' does not exist on type 'Store<string>'.
+    Parameter 'state' implicitly has an 'any' type.
+    Parameter 'payload' implicitly has an 'any' type.
     "
   `)
 })
@@ -213,13 +223,10 @@ test('.on(sample()) inline (should pass)', () => {
   `)
 })
 
-test('#off', () => {
+test('StoreWritable#off (should pass)', () => {
   const event = createEvent()
   const store = createStore(0)
   store.off(event)
-  const computed = store.map(() => 'hello')
-
-  computed.off(event)
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
@@ -227,13 +234,26 @@ test('#off', () => {
   `)
 })
 
+test('Store#off (should fail)', () => {
+  const event = createEvent()
+  const store = createStore(0)
+  const computed = store.map(() => 'hello')
+  // @ts-expect-error
+  computed.off(event)
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Property 'off' does not exist on type 'Store<string>'.
+    "
+  `)
+})
+
 test('#subscribe', () => {
   const event = createEvent()
   const store = createStore(0)
-  // @ts-ignore I don't know type
+
   store.subscribe(() => {})
   const computed = store.map(() => 'hello')
-  // @ts-ignore I don't know type
+
   computed.subscribe(() => {})
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -243,7 +263,7 @@ test('#subscribe', () => {
 })
 
 test('#watch', () => {
-  const event: Event<number> = createEvent()
+  const event: EventCallable<number> = createEvent()
   const store = createStore(0)
   store.watch((state, payload) => {
     const store_watch_check1: number = state
@@ -270,8 +290,10 @@ test('#watch', () => {
 })
 
 test('unsafe widening (should fail)', () => {
+  const $v = createStore({page: 0, limit: 0, id: 1})
+
   //@ts-expect-error
-  const $values: Store<{
+  const $values: StoreWritable<{
     page: number
     limit: number
     [key: string]: any
@@ -279,10 +301,10 @@ test('unsafe widening (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Store<{ page: number; limit: number; id: number; }>' is not assignable to type 'Store<{ [key: string]: any; page: number; limit: number; }>'.
-      Types of property 'updates' are incompatible.
-        Type 'Event<{ page: number; limit: number; id: number; }>' is not assignable to type 'Event<{ [key: string]: any; page: number; limit: number; }>'.
-          Types of parameters 'payload' and 'payload' are incompatible.
+    Type 'StoreWritable<{ page: number; limit: number; id: number; }>' is not assignable to type 'StoreWritable<{ [key: string]: any; page: number; limit: number; }>'.
+      Types of property '____' are incompatible.
+        Type 'StoreValueType<{ page: number; limit: number; id: number; }>' is not assignable to type 'StoreValueType<{ [key: string]: any; page: number; limit: number; }>'.
+          Types of parameters 'type' and 'type' are incompatible.
             Type '{ [key: string]: any; page: number; limit: number; }' is not assignable to type '{ page: number; limit: number; id: number; }'.
     "
   `)

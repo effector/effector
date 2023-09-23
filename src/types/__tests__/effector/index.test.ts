@@ -1,5 +1,11 @@
 /* eslint-disable no-unused-vars */
-import {step, createNode, createEvent, Event, launch, split} from 'effector'
+import {
+  createNode,
+  createEvent,
+  Event,
+  split,
+  EventCallable,
+} from 'effector'
 
 const typecheck = '{global}'
 
@@ -26,7 +32,7 @@ describe('split', () => {
   describe('split infer result', () => {
     describe('split result no false-negative', () => {
       it('works with user-defined event', () => {
-        const source: Event<string[]> = createEvent()
+        const source: EventCallable<string[]> = createEvent()
         const {
           emptyList,
           oneElement,
@@ -43,7 +49,7 @@ describe('split', () => {
         `)
       })
       it('works with default event', () => {
-        const source: Event<string[]> = createEvent()
+        const source: EventCallable<string[]> = createEvent()
         const {emptyList, oneElement, __} = split(source, {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
@@ -58,7 +64,7 @@ describe('split', () => {
     })
     describe('split result no false-positive', () => {
       test('split result no false-positive user-defined', () => {
-        const source: Event<string[]> = createEvent()
+        const source: EventCallable<string[]> = createEvent()
         const {emptyList, oneElement} = split(source, {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
@@ -70,17 +76,13 @@ describe('split', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           Type 'Event<string[]>' is not assignable to type 'Event<number>'.
-            Types of property 'watch' are incompatible.
-              Type '(watcher: (payload: string[]) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-                Types of parameters 'watcher' and 'watcher' are incompatible.
-                  Types of parameters 'payload' and 'payload' are incompatible.
-                    Type 'string[]' is not assignable to type 'number'.
+            Type 'string[]' is not assignable to type 'number'.
           Type 'Event<string[]>' is not assignable to type 'null'.
           "
         `)
       })
       test('split result no false-positive defaults 1', () => {
-        const source: Event<string[]> = createEvent()
+        const source: EventCallable<string[]> = createEvent()
         const {__} = split(source, {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
@@ -94,7 +96,7 @@ describe('split', () => {
         `)
       })
       test('split result no false-positive defaults 2', () => {
-        const source: Event<string[]> = createEvent()
+        const source: EventCallable<string[]> = createEvent()
         const {__} = split(source, {
           emptyList: list => list.length === 0,
           oneElement: list => list.length === 1,
@@ -111,7 +113,7 @@ describe('split', () => {
   })
 
   test('split arguments no false-positive', () => {
-    const source: Event<string[]> = createEvent()
+    const source: EventCallable<string[]> = createEvent()
     split(source, {
       //@ts-expect-error
       wrongResult: list => null,
