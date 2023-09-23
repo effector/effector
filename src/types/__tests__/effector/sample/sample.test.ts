@@ -807,3 +807,41 @@ test('from unknown to known type (should fail)', () => {
     "
   `)
 })
+
+describe('derived unit in target', () => {
+  test('should not allow derived unit in target (should fail)', () => {
+    const start = createEvent()
+    const started = start.map(() => true)
+    const $store = createStore(false)
+    const $storeMap = $store.map(() => true)
+
+    const trigger = createEvent()
+
+    sample({
+      clock: trigger,
+      target: started,
+    })
+
+    sample({
+      clock: trigger,
+      target: $storeMap,
+    })
+
+    sample({
+      clock: trigger,
+      fn: () => true,
+      target: [started, $store, $storeMap],
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ clock: EventCallable<void>; target: Event<boolean>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<boolean>; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<boolean>; }'.
+      Argument of type '{ clock: EventCallable<void>; target: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Store<boolean>; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Store<boolean>; }'.
+      Argument of type '{ clock: EventCallable<void>; fn: () => boolean; target: (Store<boolean> | Event<boolean>)[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
+      "
+    `)
+  })
+})
