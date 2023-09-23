@@ -835,12 +835,12 @@ describe('derived unit in target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: EventCallable<void>; target: Event<boolean>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Event<boolean>; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Event<boolean>; }'.
-      Argument of type '{ clock: EventCallable<void>; target: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: Store<boolean>; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: Store<boolean>; }'.
-      Argument of type '{ clock: EventCallable<void>; fn: () => boolean; target: (Store<boolean> | Event<boolean>)[]; }' is not assignable to parameter of type '{ error: \\"target should be unit or array of units\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
+      Argument of type '{ clock: EventCallable<void>; target: Event<boolean>; }' is not assignable to parameter of type '{ error: \\"derived units are not allowed in target\\"; got: Event<boolean>; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Event<boolean>; }'.
+      Argument of type '{ clock: EventCallable<void>; target: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"derived units are not allowed in target\\"; got: Store<boolean>; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Store<boolean>; }'.
+      Argument of type '{ clock: EventCallable<void>; fn: () => boolean; target: (Store<boolean> | Event<boolean>)[]; }' is not assignable to parameter of type '{ error: \\"derived units are not allowed in target\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
       "
     `)
   })

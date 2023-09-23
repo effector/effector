@@ -1222,7 +1222,7 @@ type SampleImpl<
               >
             : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : [message: {error: 'source should be unit or object with stores'; got: Source}]
-    : [message: {error: 'target should be unit or array of units'; got: Target}]
+    : Target extends InvalidUnitsTarget ? [message: {error: 'derived units are not allowed in target'; got: Target}] : [message: {error: 'target should be unit or array of units'; got: Target}]
 
 type ModeSelector<
   FilterAndFN,
@@ -2204,6 +2204,7 @@ type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
 type Units = Unit<any> | Tuple<Unit<any>>
 type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
+type InvalidUnitsTarget = Unit<any> | Tuple<Unit<any>> | ReadonlyArray<Unit<any>>
 
 /* guard types */
 
