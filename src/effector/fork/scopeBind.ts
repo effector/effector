@@ -12,7 +12,7 @@ export function scopeBind(
 ) {
   assert(
     scope || forkPage || safe,
-    'scopeBind cannot be called outside of forked .watch',
+    'scopeBind: scope not found',
   )
   const savedForkPage = scope || forkPage!
   return is.effect(unit)
