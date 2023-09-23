@@ -9,6 +9,7 @@ import {
   fork,
   allSettled,
   serialize,
+  hydrate,
   Scope,
 } from 'effector'
 import {
@@ -56,6 +57,63 @@ async function request(url: string) {
   await new Promise(rs => setTimeout(rs, 30))
   return result
 }
+
+test('computed values support', async () => {
+  const app = createDomain()
+
+  const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
+    async user => await request(`https://ssr.effector.dev/api/${user}`),
+  )
+  const start = app.createEvent<string>()
+  forward({from: start, to: fetchUser})
+  const name = app
+    .createStore('guest')
+    .on(fetchUser.done, (_, {result}) => result.name)
+
+  const friends = app
+    .createStore<string[]>([])
+    .on(fetchUser.done, (_, {result}) => result.friends)
+  const friendsTotal = friends.map(list => list.length)
+
+  const Total = () => <small>Total:{useUnit(friendsTotal)()}</small>
+  const User = () => <b>User:{useUnit(name)()}</b>
+  const App = (props: {root: Scope}) => (
+    <Provider value={props.root}>
+      <section>
+        <User />
+        <Total />
+      </section>
+    </Provider>
+  )
+
+  const serverScope = fork(app)
+  await allSettled(start, {
+    scope: serverScope,
+    params: 'alice',
+  })
+  const serialized = serialize(serverScope)
+
+  hydrate(app, {
+    values: serialized,
+  })
+
+  const clientScope = fork(app)
+
+  const {container} = await render(() => <App root={clientScope} />)
+
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <section>
+      <b>
+        User:
+        guest
+      </b>
+      <small>
+        Total:
+        0
+      </small>
+    </section>
+  `)
+})
 
 test('useGate support', async () => {
   const getMessagesFx = createEffect<{chatId: string}, string[]>(
