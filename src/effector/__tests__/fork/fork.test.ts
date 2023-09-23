@@ -63,6 +63,25 @@ test('usage without domain', async () => {
   expect(scope.getState($count)).toBe(15)
   expect($count.getState()).toBe(0)
 })
+describe('getState cases', () => {
+  test('getState on default value works', () => {
+    const $store = createStore("default value")
+  
+    const scope = fork();
+  
+    expect(scope.getState($store)).toBe("default value")
+  })
+
+  test('getState on default value (store with serialize ignore)', () => {
+    const $store = createStore("default value", {
+      serialize: "ignore"
+    })
+  
+    const scope = fork();
+  
+    expect(scope.getState($store)).toBe("default value")
+  })
+})
 describe('units without sids support', () => {
   test('store without sid should be supported', () => {
     //@ts-expect-error
