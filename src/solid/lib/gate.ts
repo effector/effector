@@ -3,22 +3,33 @@ import {createEvent, createStore, Domain, launch} from 'effector'
 import {onCleanup, onMount, createEffect} from 'solid-js'
 import {flattenConfig, processArgsToConfig} from '../../effector/config'
 import {isObject} from '../../effector/is'
+import {useUnitBase} from './base'
+import {getScope} from './get-scope'
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
   props: Props = {} as any,
 ) {
-  onMount(() => {
-    GateComponent.open(props)
+  const {open, close, set} = useUnitBase(
+    {
+      open: GateComponent.open,
+      close: GateComponent.close,
+      set: GateComponent.set,
+    },
+    getScope(false),
+  )
 
-    onCleanup(() => GateComponent.close(props))
+  onMount(() => {
+    open(props)
+
+    onCleanup(() => close(props))
   })
 
   createEffect(() => {
     // read every getter in props to subscribe
     for (const _ of Object.values(props)) {
     }
-    GateComponent.set(props)
+    set(props)
   })
 }
 

@@ -28,23 +28,7 @@ export function useGate<Props>(
   GateComponent: Gate<Props>,
   props: Accessor<Props> = () => ({} as any),
 ) {
-  const events = useUnit([
-    GateComponent.open,
-    GateComponent.close,
-    GateComponent.set,
-  ])
-
-  const ForkedGate = createMemo(() => {
-    const [open, close, set] = events
-
-    return {
-      open,
-      close,
-      set,
-    } as Gate<Props>
-  })
-
-  createEffect(() => commonUseGate(ForkedGate(), props))
+  return commonUseGate(GateComponent, props as any)
 }
 export function useUnit(shape) {
   const scope = getScope()
