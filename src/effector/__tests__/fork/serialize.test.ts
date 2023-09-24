@@ -327,30 +327,13 @@ describe('onlyChanges: true', () => {
       await allSettled(trigger, {scope})
       expect(serialize(scope)).toEqual({foo: 1, bar: 1})
     })
-    it('should serialize combine when it updated by on', async () => {
-      const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-      const trigger = createEvent()
-      const foo = createStore(0, {sid: 'foo'})
-      const bar = createStore(0, {sid: 'bar'})
-      const combined = combine({foo, bar}).on(trigger, ({foo, bar}) => ({
-        foo: foo + 1,
-        bar: bar + 1,
-      }))
-      warn.mockRestore()
-      const sid = String(combined.sid)
-      const scope = fork()
-      await allSettled(trigger, {scope})
-      expect(serialize(scope)).toEqual({
-        [sid]: {foo: 1, bar: 1},
-      })
-    })
     describe('don`t reuse values from user', () => {
       test('with sample (more convenient)', async () => {
         const triggerA = createEvent()
         const triggerB = createEvent()
         const foo = createStore(0, {sid: 'foo'})
         const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = combine({foo, bar})
+        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
         sample({
           clock: triggerA,
           source: combined,
@@ -379,7 +362,7 @@ describe('onlyChanges: true', () => {
         const triggerB = createEvent()
         const foo = createStore(0, {sid: 'foo'})
         const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = combine({foo, bar})
+        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
         combined.on(triggerA, ({foo, bar}) => ({
           foo: foo + 1,
           bar: bar + 1,
@@ -498,26 +481,6 @@ describe('onlyChanges: false', () => {
       await allSettled(trigger, {scope})
       expect(serialize(scope, {onlyChanges: false})).toEqual({foo: 1, bar: 1})
     })
-    it('should serialize combine when it updated by on', async () => {
-      const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-      const app = createDomain()
-      const trigger = app.createEvent()
-      const foo = app.createStore(0, {sid: 'foo'})
-      const bar = app.createStore(0, {sid: 'bar'})
-      const combined = combine({foo, bar}).on(trigger, ({foo, bar}) => ({
-        foo: foo + 1,
-        bar: bar + 1,
-      }))
-      warn.mockRestore()
-      const sid = String(combined.sid)
-      const scope = fork(app)
-      await allSettled(trigger, {scope})
-      expect(serialize(scope, {onlyChanges: false})).toEqual({
-        foo: 0,
-        bar: 0,
-        [sid]: {foo: 1, bar: 1},
-      })
-    })
     describe('don`t reuse values from user', () => {
       test('with sample (more convenient)', async () => {
         const app = createDomain()
@@ -525,7 +488,7 @@ describe('onlyChanges: false', () => {
         const triggerB = app.createEvent()
         const foo = app.createStore(0, {sid: 'foo'})
         const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = combine({foo, bar})
+        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
         sample({
           clock: triggerA,
           source: combined,
@@ -571,7 +534,7 @@ describe('onlyChanges: false', () => {
         const triggerB = app.createEvent()
         const foo = app.createStore(0, {sid: 'foo'})
         const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = combine({foo, bar})
+        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
         combined.on(triggerA, ({foo, bar}) => ({
           foo: foo + 1,
           bar: bar + 1,

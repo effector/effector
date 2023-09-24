@@ -23,6 +23,113 @@ function getWarning() {
   return warn.mock.calls.map(([msg]) => msg)[0]
 }
 
+describe('basic checks for that the derived untis in target are forbidden', () => {
+  const trigger = createEvent()
+  const mappedEv = trigger.map(() => {})
+  const $store = createStore(0)
+  const $map = $store.map(() => 42)
+  const $combined = combine({store: $store, map: $map})
+
+  test('targetable field works', () => {
+    expect(trigger.targetable).toBe(true)
+    // @ts-expect-error
+    expect(mappedEv.targetable).toBe(false)
+    expect($store.targetable).toBe(true)
+    // @ts-expect-error
+    expect($map.targetable).toBe(false)
+    // @ts-expect-error
+    expect($combined.targetable).toBe(false)
+  })
+
+  test('event()', () => {
+    expect(() => {
+      // @ts-expect-error
+      mappedEv()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
+    )
+  })
+
+  test('event.prepend', () => {
+    expect(() => {
+      // @ts-expect-error
+      mappedEv.prepend(() => {})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `".prepend of derived event is not supported, call source event instead"`,
+    )
+  })
+
+  test('store.on', () => {
+    expect(() =>
+      // @ts-expect-error
+      $map.on(trigger, () => 52),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `".on of derived store is not supported"`,
+    )
+  })
+  test('store.reset', () => {
+    expect(() =>
+      // @ts-expect-error
+      $map.reset(trigger),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `".reset of derived store is not supported"`,
+    )
+  })
+  test('store.reinit', () => {
+    expect(() =>
+      // @ts-expect-error
+      $map.reinit(),
+    ).toThrowErrorMatchingInlineSnapshot(`"$map.reinit is not a function"`)
+  })
+  test('forward', () => {
+    expect(() =>
+      // @ts-expect-error
+      forward({from: trigger, to: mappedEv}),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"forward: derived unit in \\"to is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('split', () => {
+    expect(() => {
+      split({
+        source: trigger,
+        match: {
+          a: () => true,
+        },
+
+        cases: {
+          a: mappedEv,
+        },
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('guard', () => {
+    expect(() => {
+      guard({
+        source: trigger,
+        filter: Boolean,
+        // @ts-expect-error
+        target: mappedEv,
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"guard: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('sample', () => {
+    expect(() => {
+      sample({
+        // @ts-expect-error
+        clock: trigger,
+        target: mappedEv,
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+})
+
 describe('call of derived events', () => {
   test('usage with .map throw error', () => {
     const a = createEvent()
@@ -123,9 +230,10 @@ describe('call of derived events', () => {
 test('createApi', () => {
   const $a = createStore(0)
   const $derived = $a.map(x => x)
-  createApi($derived, {x: () => 0})
-  expect(getWarning()).toMatchInlineSnapshot(
-    `".on in derived store is deprecated, use .on in store created via createStore instead"`,
+  expect(() => {
+    createApi($derived, {x: () => 0})
+  }).toThrowErrorMatchingInlineSnapshot(
+    `".on of derived store is not supported"`,
   )
 })
 
@@ -134,45 +242,50 @@ describe('.on/.reset with derived stores', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = $a.map(x => x)
-    $b.on(trigger, x => x)
-    expect(getWarning()).toMatchInlineSnapshot(
-      `".on in derived store is deprecated, use .on in store created via createStore instead"`,
+    expect(() => {
+      $b.on(trigger, x => x)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `".on of derived store is not supported"`,
     )
   })
   test('.reset usage with .map is deprecated', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = $a.map(x => x)
-    $b.reset(trigger)
-    expect(getWarning()).toMatchInlineSnapshot(
-      `".reset in derived store is deprecated, use .reset in store created via createStore instead"`,
+    expect(() => {
+      $b.reset(trigger)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `".reset of derived store is not supported"`,
     )
   })
   test('.on usage with combine is deprecated', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = combine({a: $a})
-    $b.on(trigger, x => x)
-    expect(getWarning()).toMatchInlineSnapshot(
-      `".on in derived store is deprecated, use .on in store created via createStore instead"`,
+    expect(() => {
+      $b.on(trigger, x => x)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `".on of derived store is not supported"`,
     )
   })
   test('.reset usage with combine is deprecated', () => {
     const trigger = createEvent()
     const $a = createStore(0)
     const $b = combine({a: $a})
-    $b.reset(trigger)
-    expect(getWarning()).toMatchInlineSnapshot(
-      `".reset in derived store is deprecated, use .reset in store created via createStore instead"`,
+    expect(() => {
+      $b.reset(trigger)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `".reset of derived store is not supported"`,
     )
   })
   describe('internal stores', () => {
     test('usage with effect.inFlight is warned', () => {
       const trigger = createEvent()
       const fx = createEffect(() => {})
-      fx.inFlight.on(trigger, s => s + 1)
-      expect(getWarning()).toMatchInlineSnapshot(
-        `".on in derived store is deprecated, use .on in store created via createStore instead"`,
+      expect(() => {
+        fx.inFlight.on(trigger, s => s + 1)
+      }).toThrowErrorMatchingInlineSnapshot(
+        `".on of derived store is not supported"`,
       )
     })
   })
@@ -183,36 +296,41 @@ describe('split cases', () => {
     const trigger = createEvent<number>()
     const $a = createStore(0)
     const $derived = $a.map(x => x)
-    split({
-      source: trigger,
-      match: () => 'a',
-      cases: {
-        a: $derived,
-      },
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
+    expect(() => {
+      split({
+        source: trigger,
+        match: () => 'a',
+        cases: {
+          a: $derived,
+        },
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('with derived event', () => {
     const trigger = createEvent<number>()
     const a = createEvent<number>()
     const derived = a.map(x => x)
-    split({
-      source: trigger,
-      match: () => 'a',
-      cases: {
-        a: derived,
-      },
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
+    expect(() => {
+      split({
+        source: trigger,
+        match: () => 'a',
+        cases: {
+          a: derived,
+        },
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
     )
   })
-  describe('interal events', () => {
-    test('usage with effect.finally is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
+})
+describe('interal events', () => {
+  test('usage with effect.finally is warned', () => {
+    const trigger = createEvent<any>()
+    const fx = createEffect(() => {})
+
+    expect(() => {
       split({
         source: trigger,
         match: () => 'a',
@@ -220,13 +338,14 @@ describe('split cases', () => {
           a: fx.finally,
         },
       })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
-    test('usage with effect.done is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('usage with effect.done is warned', () => {
+    const trigger = createEvent<any>()
+    const fx = createEffect(() => {})
+    expect(() => {
       split({
         source: trigger,
         match: () => 'a',
@@ -234,13 +353,14 @@ describe('split cases', () => {
           a: fx.done,
         },
       })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
-    test('usage with effect.fail is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('usage with effect.fail is warned', () => {
+    const trigger = createEvent<any>()
+    const fx = createEffect(() => {})
+    expect(() => {
       split({
         source: trigger,
         match: () => 'a',
@@ -248,13 +368,14 @@ describe('split cases', () => {
           a: fx.fail,
         },
       })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
-    test('usage with effect.doneData is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('usage with effect.doneData is warned', () => {
+    const trigger = createEvent<any>()
+    const fx = createEffect(() => {})
+    expect(() => {
       split({
         source: trigger,
         match: () => 'a',
@@ -262,13 +383,14 @@ describe('split cases', () => {
           a: fx.doneData,
         },
       })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
-    test('usage with effect.failData is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('usage with effect.failData is warned', () => {
+    const trigger = createEvent<any>()
+    const fx = createEffect(() => {})
+    expect(() => {
       split({
         source: trigger,
         match: () => 'a',
@@ -276,13 +398,14 @@ describe('split cases', () => {
           a: fx.failData,
         },
       })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
-    test('usage with store.updates is warned', () => {
-      const trigger = createEvent<any>()
-      const $store = createStore(0)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
+  })
+  test('usage with store.updates is warned', () => {
+    const trigger = createEvent<any>()
+    const $store = createStore(0)
+    expect(() => {
       split({
         source: trigger,
         match: () => 'a',
@@ -290,15 +413,16 @@ describe('split cases', () => {
           a: $store.updates,
         },
       })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
   })
-  describe('internal stores', () => {
-    test('usage with effect.inFlight is warned', () => {
-      const trigger = createEvent<number>()
-      const fx = createEffect(() => {})
+})
+describe('internal stores', () => {
+  test('usage with effect.inFlight is warned', () => {
+    const trigger = createEvent<number>()
+    const fx = createEffect(() => {})
+    expect(() => {
       split({
         source: trigger,
         match: () => 'a',
@@ -306,10 +430,9 @@ describe('split cases', () => {
           a: fx.inFlight,
         },
       })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"split: derived unit in \\"cases.a\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
   })
 })
 
@@ -318,91 +441,99 @@ describe('sample target', () => {
     const trigger = createEvent<number>()
     const $a = createStore(0)
     const $derived = $a.map(x => x)
-    sample({
-      clock: trigger,
-      target: $derived,
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+    expect(() => {
+      sample({
+        clock: trigger,
+        target: $derived,
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('with derived event', () => {
     const trigger = createEvent<number>()
     const a = createEvent<number>()
     const derived = a.map(x => x)
-    sample({
-      clock: trigger,
-      target: derived,
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+    expect(() => {
+      sample({
+        clock: trigger,
+        target: derived,
+      })
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
     )
   })
   describe('interal events', () => {
     test('usage with effect.finally is warned', () => {
       const trigger = createEvent<any>()
       const fx = createEffect(() => {})
-      sample({
-        clock: trigger,
-        target: fx.finally,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      expect(() => {
+        sample({
+          clock: trigger,
+          target: fx.finally,
+        })
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.done is warned', () => {
       const trigger = createEvent<any>()
       const fx = createEffect(() => {})
-      sample({
-        clock: trigger,
-        target: fx.done,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      expect(() => {
+        sample({
+          clock: trigger,
+          target: fx.done,
+        })
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.fail is warned', () => {
       const trigger = createEvent<any>()
       const fx = createEffect(() => {})
-      sample({
-        clock: trigger,
-        target: fx.fail,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      expect(() => {
+        sample({
+          clock: trigger,
+          target: fx.fail,
+        })
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.doneData is warned', () => {
       const trigger = createEvent<any>()
       const fx = createEffect(() => {})
-      sample({
-        clock: trigger,
-        target: fx.doneData,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      expect(() => {
+        sample({
+          clock: trigger,
+          target: fx.doneData,
+        })
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.failData is warned', () => {
       const trigger = createEvent<any>()
       const fx = createEffect(() => {})
-      sample({
-        clock: trigger,
-        target: fx.failData,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      expect(() => {
+        sample({
+          clock: trigger,
+          target: fx.failData,
+        })
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with store.updates is warned', () => {
       const trigger = createEvent<any>()
       const $store = createStore(0)
-      sample({
-        clock: trigger,
-        target: $store.updates,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
+      expect(() => {
+        sample({
+          clock: trigger,
+          target: $store.updates,
+        })
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
       )
     })
   })
@@ -410,237 +541,13 @@ describe('sample target', () => {
     test('usage with effect.inFlight is warned', () => {
       const trigger = createEvent<number>()
       const fx = createEffect(() => {})
-      sample({
-        clock: trigger,
-        target: fx.inFlight,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"sample: derived unit in \\"target\\" is deprecated, use createEvent/createStore instead"`,
-      )
-    })
-  })
-})
-
-describe('guard target', () => {
-  test('with derived store', () => {
-    const trigger = createEvent<number>()
-    const $a = createStore(0)
-    const $derived = $a.map(x => x)
-    guard({
-      clock: trigger,
-      filter: () => true,
-      target: $derived,
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"guard is deprecated, use sample instead"`,
-    )
-  })
-  test('with derived event', () => {
-    const trigger = createEvent<number>()
-    const a = createEvent<number>()
-    const derived = a.map(x => x)
-    guard({
-      clock: trigger,
-      filter: () => true,
-      target: derived,
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"guard is deprecated, use sample instead"`,
-    )
-  })
-  describe('interal events', () => {
-    test('usage with effect.finally is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      guard({
-        clock: trigger,
-        filter: () => true,
-        target: fx.finally,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"guard is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.done is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      guard({
-        clock: trigger,
-        filter: () => true,
-        target: fx.done,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"guard is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.fail is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      guard({
-        clock: trigger,
-        filter: () => true,
-        target: fx.fail,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"guard is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.doneData is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      guard({
-        clock: trigger,
-        filter: () => true,
-        target: fx.doneData,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"guard is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.failData is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      guard({
-        clock: trigger,
-        filter: () => true,
-        target: fx.failData,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"guard is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with store.updates is warned', () => {
-      const trigger = createEvent<any>()
-      const $store = createStore(0)
-      guard({
-        clock: trigger,
-        filter: () => true,
-        target: $store.updates,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"guard is deprecated, use sample instead"`,
-      )
-    })
-  })
-  describe('internal stores', () => {
-    test('usage with effect.inFlight is warned', () => {
-      const trigger = createEvent<number>()
-      const fx = createEffect(() => {})
-      guard({
-        clock: trigger,
-        filter: () => true,
-        target: fx.inFlight,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"guard is deprecated, use sample instead"`,
-      )
-    })
-  })
-})
-
-describe('forward to', () => {
-  test('with derived store', () => {
-    const trigger = createEvent<number>()
-    const $a = createStore(0)
-    const $derived = $a.map(x => x)
-    forward({
-      from: trigger,
-      to: $derived,
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"forward is deprecated, use sample instead"`,
-    )
-  })
-  test('with derived event', () => {
-    const trigger = createEvent<number>()
-    const a = createEvent<number>()
-    const derived = a.map(x => x)
-    forward({
-      from: trigger,
-      to: derived,
-    })
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"forward is deprecated, use sample instead"`,
-    )
-  })
-  describe('interal events', () => {
-    test('usage with effect.finally is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      forward({
-        from: trigger,
-        to: fx.finally,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"forward is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.done is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      forward({
-        from: trigger,
-        to: fx.done,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"forward is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.fail is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      forward({
-        from: trigger,
-        to: fx.fail,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"forward is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.doneData is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      forward({
-        from: trigger,
-        to: fx.doneData,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"forward is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with effect.failData is warned', () => {
-      const trigger = createEvent<any>()
-      const fx = createEffect(() => {})
-      forward({
-        from: trigger,
-        to: fx.failData,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"forward is deprecated, use sample instead"`,
-      )
-    })
-    test('usage with store.updates is warned', () => {
-      const trigger = createEvent<any>()
-      const $store = createStore(0)
-      forward({
-        from: trigger,
-        to: $store.updates,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"forward is deprecated, use sample instead"`,
-      )
-    })
-  })
-  describe('internal stores', () => {
-    test('usage with effect.inFlight is warned', () => {
-      const trigger = createEvent<number>()
-      const fx = createEffect(() => {})
-      forward({
-        from: trigger,
-        to: fx.inFlight,
-      })
-      expect(getWarning()).toMatchInlineSnapshot(
-        `"forward is deprecated, use sample instead"`,
+      expect(() => {
+        sample({
+          clock: trigger,
+          target: fx.inFlight,
+        })
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
       )
     })
   })

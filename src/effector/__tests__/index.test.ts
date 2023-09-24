@@ -7,6 +7,7 @@ import {
   createEvent,
   createEffect,
   Event,
+  EventCallable,
   forward,
   split,
   guard,
@@ -19,7 +20,7 @@ import {argumentHistory} from 'effector/fixtures'
 test('graphite', () => {
   const fn = jest.fn()
   const fn1 = jest.fn()
-  const foo: Event<number> = createEvent('foo')
+  const foo: EventCallable<number> = createEvent('foo')
   const bar = foo.map(x => (fn(x), x + 1))
   const store1: Store<string> = createStore('foo').on(bar, (state, bar) =>
     [state, bar].join(' | '),
@@ -186,45 +187,6 @@ test('createStore', () => {
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
 })
 
-describe('store.on', () => {
-  test('store.on(event)', () => {
-    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-    const counter = createStore(0)
-    const text = createStore('')
-    const store = combine({counter, text, foo: 'bar'})
-
-    const e1 = createEvent<string>()
-    store.on(e1, (state, payload) => ({
-      ...state,
-      foo: payload,
-    }))
-    warn.mockRestore()
-
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
-    e1('baz')
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
-  })
-  test('store.on(effect)', async () => {
-    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-    const counter = createStore(0)
-    const text = createStore('')
-    const store = combine({counter, text, foo: 0})
-    const e1 = createEffect<number, number>(
-      n => new Promise(_ => setTimeout(_, n, n)),
-    )
-    store.on(e1.done, (state, {result}) => ({
-      ...state,
-      foo: result,
-    }))
-    warn.mockRestore()
-
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
-    const result = await e1(50)
-    expect(result).toBe(50)
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 50})
-  })
-})
-
 test('store.watch', () => {
   const click = createEvent<string | void>()
   const store1 = createStore(-1)
@@ -247,111 +209,4 @@ test('store.watch', () => {
     [-1, 'b'],
   ])
   expect(argumentHistory(fn1)).toEqual([-1])
-})
-
-describe('derived untis in target are forbidden', () => {
-  const trigger = createEvent()
-  const mappedEv = trigger.map(() => {})
-  const $store = createStore(0)
-  const $map = $store.map(() => 42)
-  const $combined = combine({store: $store, map: $map})
-
-  test('targetable field works', () => {
-    expect(trigger.targetable).toBe(true)
-    // @ts-expect-error
-    expect(mappedEv.targetable).toBe(false)
-    expect($store.targetable).toBe(true)
-    // @ts-expect-error
-    expect($map.targetable).toBe(false)
-    // @ts-expect-error
-    expect($combined.targetable).toBe(false)
-  })
-
-  test('event()', () => {
-    expect(() => {
-      // @ts-expect-error
-      mappedEv()
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"call of derived event is not supported, use createEvent instead"`,
-    )
-  })
-
-  test('event.prepend', () => {
-    expect(() => {
-      // @ts-expect-error
-      mappedEv.prepend(() => {})
-    }).toThrowErrorMatchingInlineSnapshot(
-      `".prepend of derived event is not supported, call source event instead"`,
-    )
-  })
-
-  test('store.on', () => {
-    expect(() =>
-      // @ts-expect-error
-      $map.on(trigger, () => 52),
-    ).toThrowErrorMatchingInlineSnapshot(
-      `".on of derived store is not supported"`,
-    )
-  })
-  test('store.reset', () => {
-    expect(() =>
-      // @ts-expect-error
-      $map.reset(trigger),
-    ).toThrowErrorMatchingInlineSnapshot(
-      `".reset of derived store is not supported"`,
-    )
-  })
-  test('store.reinit', () => {
-    expect(() =>
-      // @ts-expect-error
-      $map.reinit(),
-    ).toThrowErrorMatchingInlineSnapshot(`"$map.reinit is not a function"`)
-  })
-  test('forward', () => {
-    expect(() =>
-      // @ts-expect-error
-      forward({from: trigger, to: mappedEv}),
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"forward: derived unit in \\"to is not supported, use createStore/createEvent instead\\""`,
-    )
-  })
-  test('split', () => {
-    expect(() => {
-      split({
-        source: trigger,
-        match: {
-          a: () => true,
-        },
-
-        cases: {
-          a: mappedEv,
-        },
-      })
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
-    )
-  })
-  test('guard', () => {
-    expect(() => {
-      guard({
-        source: trigger,
-        filter: Boolean,
-        // @ts-expect-error
-        target: mappedEv,
-      })
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"guard: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
-    )
-  })
-  test('sample', () => {
-    expect(() => {
-      sample({
-        // @ts-expect-error
-        clock: trigger,
-        target: mappedEv,
-      })
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
-    )
-  })
 })
