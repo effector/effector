@@ -120,7 +120,11 @@ describe('restore cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<string>'.
+            Types of property 'kind' are incompatible.
+              Type '\\"effect\\"' is not assignable to type '\\"event\\"'.
       "
     `)
   })

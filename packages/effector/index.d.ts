@@ -132,6 +132,7 @@ type EventCallableAsReturnType<Payload> = any extends Payload ? EventCallable<Pa
  * It represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things.
  */
 export interface Event<Payload> extends Unit<Payload> {
+  kind: "event"
   map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
   filter<T extends Payload>(config: {
     fn(payload: Payload): payload is T
@@ -155,6 +156,7 @@ export interface Event<Payload> extends Unit<Payload> {
  * The function you can call to trigger an event.
  */
 export interface EventCallable<Payload> extends Event<Payload>, UnitTargetable<Payload> {
+  kind: "event"
   (payload: Payload): Payload
    (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
 
@@ -165,6 +167,7 @@ export interface EventCallable<Payload> extends Event<Payload>, UnitTargetable<P
  * Container for (possibly async) side effects
  */
 export interface Effect<Params, Done, Fail = Error> extends UnitTargetable<Params> {
+  kind: "effect"
   (params: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
   readonly doneData: Event<Done>
@@ -212,6 +215,7 @@ type InferValueFromTupleOfUnitTargetables<T extends Tuple<UnitTargetable<any>>> 
   T[number] extends UnitTargetable<infer R>? R : never
 
 export interface Store<State> extends Unit<State> {
+  kind: "store"
   map<T>(fn: (state: State, lastState?: T) => T): Store<T>
   /**
    * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
@@ -247,6 +251,7 @@ interface StoreValueType<X> {
 }
 
 export interface StoreWritable<State> extends Store<State>, UnitTargetable<State> {
+  kind: "store"
   readonly ____: StoreValueType<State>
 
   on<E>(
