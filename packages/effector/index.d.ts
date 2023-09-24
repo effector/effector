@@ -282,8 +282,8 @@ export const is: {
     : Store<any> | StoreWritable<any>
 
   event<O, T>(
-    obj: O | Unit<T> | UnitTargetable<T> | Effect<any, any, any>
-  ): obj is typeof obj extends Effect<any, any, any> ? never : typeof obj extends Unit<T>
+    obj: O | Unit<T> | UnitTargetable<T>
+  ): obj is typeof obj extends Unit<T>
     ? Event<T> | EventCallable<T>
     : Event<any> | EventCallable<any>
 
