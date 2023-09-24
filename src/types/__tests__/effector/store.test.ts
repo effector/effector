@@ -171,8 +171,11 @@ test('Store#on (should fail)', () => {
   store.on(event, (state, payload) => state)
   const computed = store.map(() => 'hello')
 
-  //@ts-expect-error
-  computed.on(event, (state, payload) => state)
+  function wrap() {
+    //@ts-expect-error
+    computed.on(event, (state, payload) => state)
+  }
+
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Property 'on' does not exist on type 'Store<string>'.

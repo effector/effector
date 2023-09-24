@@ -5,6 +5,8 @@ import {
   Event,
   split,
   EventCallable,
+  Unit,
+  UnitTargetable,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -132,6 +134,25 @@ describe('split', () => {
         Types of parameters 'list' and 'payload' are incompatible.
           Type 'string[]' is not assignable to type 'number[]'.
             Type 'string' is not assignable to type 'number'.
+      "
+    `)
+  })
+})
+
+describe('targetable units', () => {
+  test('targetable check works', () => {
+    function checkTargetable(unit: Unit<any> | UnitTargetable<any>) {
+      if ('targetable' in unit) {
+        unit.targetable
+      } else {
+        // @ts-expect-error
+        unit.targetable
+      }
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Property 'targetable' does not exist on type 'Unit<any>'.
       "
     `)
   })

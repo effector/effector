@@ -254,32 +254,66 @@ describe('derived untis in target are forbidden', () => {
   const mappedEv = trigger.map(() => {})
   const $store = createStore(0)
   const $map = $store.map(() => 42)
+  const $combined = combine({store: $store, map: $map})
+
+  test('targetable field works', () => {
+    expect(trigger.targetable).toBe(true)
+    // @ts-expect-error
+    expect(mappedEv.targetable).toBe(false)
+    expect($store.targetable).toBe(true)
+    // @ts-expect-error
+    expect($map.targetable).toBe(false)
+    // @ts-expect-error
+    expect($combined.targetable).toBe(false)
+  })
 
   test('event()', () => {
     expect(() => {
       // @ts-expect-error
       mappedEv()
-    }).toThrowErrorMatchingInlineSnapshot()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"call of derived event is not supported, use createEvent instead"`,
+    )
   })
 
   test('event.prepend', () => {
     expect(() => {
       // @ts-expect-error
       mappedEv.prepend(() => {})
-    }).toThrowErrorMatchingInlineSnapshot()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `".prepend of derived event is not supported, call source event instead"`,
+    )
   })
 
   test('store.on', () => {
     expect(() =>
       // @ts-expect-error
       $map.on(trigger, () => 52),
-    ).toThrowErrorMatchingInlineSnapshot()
+    ).toThrowErrorMatchingInlineSnapshot(
+      `".on of derived store is not supported"`,
+    )
+  })
+  test('store.reset', () => {
+    expect(() =>
+      // @ts-expect-error
+      $map.reset(trigger),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `".reset of derived store is not supported"`,
+    )
+  })
+  test('store.reinit', () => {
+    expect(() =>
+      // @ts-expect-error
+      $map.reinit(),
+    ).toThrowErrorMatchingInlineSnapshot(`"$map.reinit is not a function"`)
   })
   test('forward', () => {
     expect(() =>
       // @ts-expect-error
       forward({from: trigger, to: mappedEv}),
-    ).toThrowErrorMatchingInlineSnapshot()
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"forward: derived unit in \\"to is not supported, use createStore/createEvent instead\\""`,
+    )
   })
   test('split', () => {
     expect(() => {
@@ -288,11 +322,14 @@ describe('derived untis in target are forbidden', () => {
         match: {
           a: () => true,
         },
+
         cases: {
           a: mappedEv,
         },
       })
-    }).toThrowErrorMatchingInlineSnapshot()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"split: derived unit in \\"cases.a is not supported, use createStore/createEvent instead\\""`,
+    )
   })
   test('guard', () => {
     expect(() => {
@@ -302,7 +339,9 @@ describe('derived untis in target are forbidden', () => {
         // @ts-expect-error
         target: mappedEv,
       })
-    }).toThrowErrorMatchingInlineSnapshot()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"guard: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
+    )
   })
   test('sample', () => {
     expect(() => {
@@ -311,6 +350,8 @@ describe('derived untis in target are forbidden', () => {
         clock: trigger,
         target: mappedEv,
       })
-    }).toThrowErrorMatchingInlineSnapshot()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"sample: derived unit in \\"target is not supported, use createStore/createEvent instead\\""`,
+    )
   })
 })

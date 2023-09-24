@@ -181,6 +181,11 @@ export function createEvent<Payload = any>(
         calc(value => !isVoid(value), true),
       ]),
     prepend(fn: Function) {
+      assert(
+        // @ts-expect-error
+        event.targetable,
+        '.prepend of derived event is not supported, call source event instead',
+      )
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
       })
@@ -258,12 +263,16 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
+      // @ts-expect-error
+      assert(store.targetable, '.reset of derived store is not supported')
       forEach(units, unit =>
         on(store, '.reset', unit, () => store.defaultState),
       )
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
+      // @ts-expect-error
+      assert(store.targetable, '.on of derived store is not supported')
       return on(store, '.on', nodeSet, fn)
     },
     off(unit: CommonUnit) {
@@ -277,7 +286,7 @@ export function createStore<State>(
     map(fn: (value: any) => any, forbiddenArgument: any) {
       assert(
         isVoid(forbiddenArgument),
-        'second argument of store.map is not supported, use updateFilter instead'
+        'second argument of store.map is not supported, use updateFilter instead',
       )
       let config
       if (isObject(fn)) {

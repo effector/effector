@@ -50,7 +50,7 @@ test('wide union (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, __can_be_used_in_target__
+    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -119,7 +119,7 @@ test('unknown type in source (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, __can_be_used_in_target__
+    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -188,7 +188,7 @@ test('optional props (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, __can_be_used_in_target__
+    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -257,7 +257,7 @@ test('narrow object (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, __can_be_used_in_target__
+    Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
@@ -377,7 +377,7 @@ test('wide union in array (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, __can_be_used_in_target__
+    Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
