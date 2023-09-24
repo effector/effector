@@ -281,7 +281,7 @@ describe('is guards', () => {
       `)
     })
     test('event targetable guard preserves type agains unit entry', () => {
-      function checkEvent(event: Unit<number> | UnitTargetable<number>) {
+      function checkEvent(event: Unit<number>) {
         if (is.event(event)) {
           event.kind
           const correct: Event<number> = event
@@ -371,6 +371,32 @@ describe('is guards', () => {
         "
       `)
     })
+    test('store targetable guard preserves type agains unit entry', () => {
+      function checkStore(store: Unit<number>) {
+        if (is.store(store)) {
+          store.kind
+          if (is.targetable(store)) {
+            store.targetable
+
+            // @ts-expect-error
+            const wrong: Store<string> = store
+            // correct
+            const correct: Store<number> = store
+          }
+        }
+      }
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'StoreWritable<number>' is not assignable to type 'Store<string>'.
+          Types of property 'map' are incompatible.
+            Type '{ <T>(fn: (state: number, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: number, lastState: T) => T, firstState: T): Store<T>; }' is not assignable to type '{ <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<T>; }'.
+              Types of parameters 'fn' and 'fn' are incompatible.
+                Types of parameters 'state' and 'state' are incompatible.
+                  Type 'number' is not assignable to type 'string'.
+        "
+      `)
+    })
   })
   describe('effect guards', () => {
     test('effect guard works', () => {
@@ -408,6 +434,27 @@ describe('is guards', () => {
         no errors
         "
       `)
+    })
+    test('effect targetable guard preserves type agains unit entry', () => {
+      function checkEffect(effect: Unit<number>) {
+        if (is.effect(effect)) {
+          effect.kind
+          if (is.targetable(effect)) {
+            effect.targetable
+
+            // correct
+            effect.done
+
+            effect(42)
+          }
+        }
+      }
+
+      expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
     })
   })
   describe('other guards', () => {
