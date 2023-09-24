@@ -312,7 +312,9 @@ describe('is guards', () => {
     })
 
     test('event guard preserves type against mixed entry', () => {
-      function checkEvent(event: Event<number> | Store<string> | Effect<string, string, string>) {
+      function checkEvent(
+        event: Event<number> | Store<string> | Effect<string, string, string>,
+      ) {
         if (is.event(event)) {
           event.kind
           const correct: Event<number> = event
@@ -413,7 +415,13 @@ describe('is guards', () => {
       `)
     })
     test('store guard preserves type against mixed entry', () => {
-      function checkEvent(store: Event<number> | Store<string> | Event<string> | Effect<string, string, string>) {
+      function checkEvent(
+        store:
+          | Event<number>
+          | Store<string>
+          | Event<string>
+          | Effect<string, string, string>,
+      ) {
         if (is.store(store)) {
           store.kind
           const correct: Store<string> = store
@@ -444,7 +452,7 @@ describe('is guards', () => {
       `)
     })
     test('effect targetable guard preserves type', () => {
-      function checkEffect(effect: Effect<number, string, string>) {
+      function checkEffect(effect: Event<string> | Effect<number, string, string>) {
         if (is.effect(effect)) {
           effect.kind
           if (is.targetable(effect)) {
@@ -486,10 +494,16 @@ describe('is guards', () => {
     `)
     })
     test('effect guard preserves type against mixed entry', () => {
-      function checkEvent(effect: Event<number> | Store<string> | Event<string> | Effect<string, string, string>) {
+      function checkEvent(
+        effect:
+          | Event<number>
+          | Store<string>
+          | Event<string>
+          | Effect<string, string, string>,
+      ) {
         if (is.effect(effect)) {
           effect.kind
-          const correct: Effect<string, string, string> = effect;
+          const correct: Effect<string, string, string> = effect
         }
       }
 
@@ -498,6 +512,17 @@ describe('is guards', () => {
         no errors
         "
       `)
+    })
+
+    test('attached effect guard preserves type', () => {
+      function checkAttachedEffect(effect: Effect<number, string, string>) {
+        if (is.attached(effect)) {
+          // correct
+          effect.done
+
+          effect(42)
+        }
+      }
     })
   })
   describe('other guards', () => {
