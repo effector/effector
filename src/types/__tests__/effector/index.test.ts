@@ -280,6 +280,36 @@ describe('is guards', () => {
         "
       `)
     })
+    test('event targetable guard preserves type agains unit entry', () => {
+      function checkEvent(event: Unit<number> | UnitTargetable<number>) {
+        if (is.event(event)) {
+          event.kind
+          const correct: Event<number> = event
+          // @ts-expect-error
+          const wrong: Event<string> = event
+          if (is.targetable(event)) {
+            event.targetable
+
+            // @ts-expect-error
+            event('kek')
+            // correct
+            event(777)
+          }
+        }
+      }
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'Event<number> | EventCallable<number>' is not assignable to type 'Event<string>'.
+          Type 'Event<number>' is not assignable to type 'Event<string>'.
+        No overload matches this call.
+          Overload 1 of 2, '(payload: number): number', gave the following error.
+            Argument of type 'string' is not assignable to parameter of type 'number'.
+          Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
+            The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+        "
+      `)
+    })
   })
 
   describe('store guards', () => {
