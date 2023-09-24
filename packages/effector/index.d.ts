@@ -275,15 +275,25 @@ interface InternalStore<State> extends StoreWritable<State> {
 export const is: {
   unit(obj: unknown): obj is Unit<any> | UnitTargetable<any>
 
-  store<O, T>(obj: O | Unit<T> | UnitTargetable<T>): obj is typeof obj extends Unit<T> ? Store<T> | StoreWritable<T> : Store<any> | StoreWritable<any>
+  store<O, T>(
+    obj: O | Unit<T> | UnitTargetable<T>,
+  ): obj is typeof obj extends Unit<T>
+    ? Store<T> | StoreWritable<T>
+    : Store<any> | StoreWritable<any>
 
-  event<O, T>(obj: O | Unit<T> | UnitTargetable<T>): obj is typeof obj extends Unit<T> ? Event<T> | EventCallable<T> : Event<any> | EventCallable<any>
+  event<O, T>(
+    obj: O | Unit<T> | UnitTargetable<T> | Effect<any, any, any>
+  ): obj is typeof obj extends Effect<any, any, any> ? never : typeof obj extends Unit<T>
+    ? Event<T> | EventCallable<T>
+    : Event<any> | EventCallable<any>
 
-  effect<O, T>(obj: O | Unit<T> | UnitTargetable<T>): obj is typeof obj extends Unit<T> ? Effect<T, unknown, unknown> : Effect<any, unknown, unknown>
+  effect<O, T, P, F>(
+    obj: O | Effect<T, P, F>
+  ): obj is Effect<T, P, F>
 
   domain(obj: unknown): obj is Domain
   scope(obj: unknown): obj is Scope
-  attached(obj: unknown): obj is Effect<any, any, any>
+  attached<E extends Effect<any, any, any>>(obj: unknown): obj is E
 
   targetable<T>(obj: Unit<T>): obj is UnitTargetable<T>
 }
