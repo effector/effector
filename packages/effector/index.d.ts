@@ -107,7 +107,7 @@ export interface Unit<T> {
 }
 
 export interface UnitTargetable<T> extends Unit<T> {
-  readonly __can_be_used_in_target__: true
+  readonly targetable: true
 }
 
 export type CompositeName = {

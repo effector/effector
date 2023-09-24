@@ -71,6 +71,7 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
     derived: config.derived,
     config,
   }
+  unit.targetable = !config.derived
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
