@@ -255,6 +255,13 @@ describe('derived untis in target are forbidden', () => {
   const $store = createStore(0)
   const $map = $store.map(() => 42)
 
+  test('event call', () => {
+    expect(() => {
+      // @ts-expect-error
+      mappedEv()
+    }).toThrowErrorMatchingInlineSnapshot()
+  })
+
   test('store.on', () => {
     expect(() =>
       // @ts-expect-error
