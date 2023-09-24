@@ -15,7 +15,7 @@ export const event = is(EVENT) as (value: unknown) => value is Event<unknown>
 export const effect = is(EFFECT) as (
   value: unknown,
 ) => value is Effect<unknown, unknown, unknown>
-export const targetable = (obj: unknown): obj is UnitTargetable<unknown> => unit(obj) && (obj as any).targetable
+export const targetable = (obj: unknown): obj is UnitTargetable<unknown> => unit(obj) && !!(obj as any).targetable
 export const domain = is(DOMAIN) as (value: unknown) => value is Domain
 export const scope = is(SCOPE) as (value: unknown) => value is Scope
 export const attached = (unit: unknown) =>
