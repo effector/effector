@@ -7,6 +7,10 @@ import {
   createEvent,
   createEffect,
   Event,
+  forward,
+  split,
+  guard,
+  sample,
 } from 'effector'
 //@ts-expect-error
 import {show} from 'effector/fixtures/showstep'
@@ -243,4 +247,56 @@ test('store.watch', () => {
     [-1, 'b'],
   ])
   expect(argumentHistory(fn1)).toEqual([-1])
+})
+
+describe('derived untis in target are forbidden', () => {
+  const trigger = createEvent()
+  const mappedEv = trigger.map(() => {})
+  const $store = createStore(0)
+  const $map = $store.map(() => 42)
+
+  test('store.on', () => {
+    expect(() =>
+      // @ts-expect-error
+      $map.on(trigger, () => 52),
+    ).toThrowErrorMatchingInlineSnapshot()
+  })
+  test('forward', () => {
+    expect(() =>
+      // @ts-expect-error
+      forward({from: trigger, to: mappedEv}),
+    ).toThrowErrorMatchingInlineSnapshot()
+  })
+  test('split', () => {
+    expect(() => {
+      split({
+        source: trigger,
+        match: {
+          a: () => true,
+        },
+        cases: {
+          a: mappedEv,
+        },
+      })
+    }).toThrowErrorMatchingInlineSnapshot()
+  })
+  test('guard', () => {
+    expect(() => {
+      guard({
+        source: trigger,
+        filter: Boolean,
+        // @ts-expect-error
+        target: mappedEv,
+      })
+    }).toThrowErrorMatchingInlineSnapshot()
+  })
+  test('sample', () => {
+    expect(() => {
+      sample({
+        // @ts-expect-error
+        clock: trigger,
+        target: mappedEv,
+      })
+    }).toThrowErrorMatchingInlineSnapshot()
+  })
 })
