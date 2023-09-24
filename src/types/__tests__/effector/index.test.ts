@@ -406,11 +406,6 @@ describe('is guards', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'StoreWritable<number>' is not assignable to type 'Store<string>'.
-          Types of property 'map' are incompatible.
-            Type '{ <T>(fn: (state: number, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: number, lastState: T) => T, firstState: T): Store<T>; }' is not assignable to type '{ <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<T>; }'.
-              Types of parameters 'fn' and 'fn' are incompatible.
-                Types of parameters 'state' and 'state' are incompatible.
-                  Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -452,7 +447,9 @@ describe('is guards', () => {
       `)
     })
     test('effect targetable guard preserves type', () => {
-      function checkEffect(effect: Event<string> | Effect<number, string, string>) {
+      function checkEffect(
+        effect: Event<string> | Effect<number, string, string>,
+      ) {
         if (is.effect(effect)) {
           effect.kind
           if (is.targetable(effect)) {
@@ -488,10 +485,10 @@ describe('is guards', () => {
       }
 
       expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
+              "
+              no errors
+              "
+          `)
     })
     test('effect guard preserves type against mixed entry', () => {
       function checkEvent(
