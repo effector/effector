@@ -273,13 +273,25 @@ interface InternalStore<State> extends StoreWritable<State> {
 }
 
 export const is: {
-  unit(obj: unknown): obj is Unit<any>
+  unit(obj: unknown): obj is Unit<any> | UnitTargetable<any>
+
   store(obj: unknown): obj is Store<any> | StoreWritable<any>
+  store<T>(obj: Unit<T>): obj is Store<T>
+  store<T>(obj: UnitTargetable<T>): obj is StoreWritable<T>
+
   event(obj: unknown): obj is Event<any> | EventCallable<any>
+  event<T>(obj: Unit<T>): obj is Event<T>
+  event<T>(obj: UnitTargetable<T>): obj is EventCallable<T>
+
   effect(obj: unknown): obj is Effect<any, any, any>
+  effect<P>(obj: UnitTargetable<P>): obj is Effect<P, any, any>
+
   domain(obj: unknown): obj is Domain
   scope(obj: unknown): obj is Scope
   attached(obj: unknown): obj is Effect<any, any, any>
+
+  targetable(obj: unknown): obj is UnitTargetable<unknown>
+  targetable<T>(obj: Unit<T> | UnitTargetable<T>): obj is UnitTargetable<T>
 }
 
 /**
