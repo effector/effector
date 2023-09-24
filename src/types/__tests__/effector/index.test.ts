@@ -310,6 +310,21 @@ describe('is guards', () => {
         "
       `)
     })
+
+    test('event guard preserves type against mixed entry', () => {
+      function checkEvent(event: Event<number> | Store<string> | Effect<string, string, string>) {
+        if (is.event(event)) {
+          event.kind
+          const correct: Event<number> = event
+        }
+      }
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
   })
 
   describe('store guards', () => {
@@ -397,6 +412,20 @@ describe('is guards', () => {
         "
       `)
     })
+    test('store guard preserves type against mixed entry', () => {
+      function checkEvent(store: Event<number> | Store<string> | Event<string> | Effect<string, string, string>) {
+        if (is.store(store)) {
+          store.kind
+          const correct: Store<string> = store
+        }
+      }
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
   })
   describe('effect guards', () => {
     test('effect guard works', () => {
@@ -455,6 +484,20 @@ describe('is guards', () => {
       no errors
       "
     `)
+    })
+    test('effect guard preserves type against mixed entry', () => {
+      function checkEvent(effect: Event<number> | Store<string> | Event<string> | Effect<string, string, string>) {
+        if (is.effect(effect)) {
+          effect.kind
+          const correct: Effect<string, string, string> = effect;
+        }
+      }
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
     })
   })
   describe('other guards', () => {
