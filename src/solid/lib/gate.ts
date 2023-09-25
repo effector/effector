@@ -1,36 +1,51 @@
 import {Gate} from '../index.h'
-import {createEvent, createStore, Domain, launch} from 'effector'
-import {onCleanup, onMount, createEffect} from 'solid-js'
+import {createEvent, createStore, Domain, launch, Scope} from 'effector'
+import {onCleanup, onMount, createEffect, createMemo, Accessor} from 'solid-js'
 import {flattenConfig, processArgsToConfig} from '../../effector/config'
 import {isObject} from '../../effector/is'
-import {useUnitBase} from './base'
-import {getScope} from './get-scope'
+import {useUnit} from "../scope";
+import {useUnitBase} from "./base";
 
-export function useGate<Props>(
+function useGate<Props>(
   GateComponent: Gate<Props>,
   props: Props = {} as any,
 ) {
-  const {open, close, set} = useUnitBase(
-    {
-      open: GateComponent.open,
-      close: GateComponent.close,
-      set: GateComponent.set,
-    },
-    getScope(false),
-  )
-
   onMount(() => {
-    open(props)
+    GateComponent.open(props)
 
-    onCleanup(() => close(props))
+    onCleanup(() => GateComponent.close(props))
   })
 
   createEffect(() => {
     // read every getter in props to subscribe
     for (const _ of Object.values(props)) {
     }
-    set(props)
+    GateComponent.set(props)
   })
+}
+
+export function useGateBase<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+  scope?: Scope,
+) {
+  const events = useUnitBase([
+    GateComponent.open,
+    GateComponent.close,
+    GateComponent.set,
+  ], scope)
+
+  const ForkedGate = createMemo(() => {
+    const [open, close, set] = events
+
+    return {
+      open,
+      close,
+      set,
+    } as Gate<Props>
+  })
+
+  createEffect(() => useGate(ForkedGate(), props))
 }
 
 export function createGateImplementation<State>({
