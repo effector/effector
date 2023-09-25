@@ -21,13 +21,18 @@ export function useStoreMap<
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
   readonly updateFilter?: (update: Result, current: Result) => boolean
+  readonly forceScope?: boolean
 }): Accessor<Result>
 export function useStoreMap<State, Result>(
   store: Store<State>,
   fn: (state: State) => Result,
 ): Accessor<Result>
 
-export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
+export function useGate<Props>(
+  Gate: Gate<Props>,
+  props?: Props,
+  opts?: {forceScope?: boolean}
+): void
 
 export function createGate<Props>(name?: string): Gate<Props>
 export function createGate<Props>(config: {
