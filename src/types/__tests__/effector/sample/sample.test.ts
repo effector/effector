@@ -817,21 +817,23 @@ describe('derived unit in target', () => {
 
     const trigger = createEvent()
 
-    sample({
-      clock: trigger,
-      target: started,
-    })
-
-    sample({
-      clock: trigger,
-      target: $storeMap,
-    })
-
-    sample({
-      clock: trigger,
-      fn: () => true,
-      target: [started, $store, $storeMap],
-    })
+    function wrap() {
+      sample({
+        clock: trigger,
+        target: started,
+      })
+  
+      sample({
+        clock: trigger,
+        target: $storeMap,
+      })
+  
+      sample({
+        clock: trigger,
+        fn: () => true,
+        target: [started, $store, $storeMap],
+      })
+    }
 
     expect(typecheck).toMatchInlineSnapshot(`
       "

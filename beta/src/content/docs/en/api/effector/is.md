@@ -124,6 +124,35 @@ is.effect(null);
 
 [Try it](https://share.effector.dev/ZdZ2N6VG)
 
+## `is.targetable` {#is-targetable} 
+
+Checks if given value can be used in operators target (or be called as a function in case of events)
+
+```js
+import { is, createStore, createEvent, createEffect } from "effector";
+
+const $store = createStore(null);
+const $mapped = $store.map(x => x)
+const event = createEvent();
+const mappedEvent = event.map(x => x)
+const fx = createEffect();
+
+is.targetable($store);
+// => true
+
+is.targetable($mapped);
+// => false
+
+is.targetable(event);
+// => true
+
+is.targetable(mappedEvent);
+// => false
+
+is.targetable(fx);
+// => true
+```
+
 ## `is.domain(value)` {#is-domain}
 
 Checks if given value is [_domain_](/en/api/effector/Domain)

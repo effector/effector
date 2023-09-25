@@ -54,9 +54,8 @@ export const assertTarget = (
   targetField: string = 'target',
 ) =>
   forEach(arrifyNodes(target), item =>
-    deprecate(
+    assert(
       !getMeta(item, 'derived'),
-      `${method}: derived unit in "${targetField}"`,
-      `createEvent/createStore`,
+      `${method}: derived unit in "${targetField}" is not supported, use createStore/createEvent instead"`,
     ),
   )

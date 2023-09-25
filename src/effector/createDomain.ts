@@ -37,7 +37,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
 
   node.meta = initUnit(DOMAIN, domain, {
     parent: config?.domain || config?.parent,
-    or: config,
+    or: {...config, derived: true},
   })
 
   forIn(
