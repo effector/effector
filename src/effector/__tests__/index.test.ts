@@ -7,6 +7,11 @@ import {
   createEvent,
   createEffect,
   Event,
+  EventCallable,
+  forward,
+  split,
+  guard,
+  sample,
 } from 'effector'
 //@ts-expect-error
 import {show} from 'effector/fixtures/showstep'
@@ -15,7 +20,7 @@ import {argumentHistory} from 'effector/fixtures'
 test('graphite', () => {
   const fn = jest.fn()
   const fn1 = jest.fn()
-  const foo: Event<number> = createEvent('foo')
+  const foo: EventCallable<number> = createEvent('foo')
   const bar = foo.map(x => (fn(x), x + 1))
   const store1: Store<string> = createStore('foo').on(bar, (state, bar) =>
     [state, bar].join(' | '),
@@ -180,45 +185,6 @@ test('createStore', () => {
   const text = createStore('')
   const store = combine({counter, text, foo: 'bar'})
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
-})
-
-describe('store.on', () => {
-  test('store.on(event)', () => {
-    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-    const counter = createStore(0)
-    const text = createStore('')
-    const store = combine({counter, text, foo: 'bar'})
-
-    const e1 = createEvent<string>()
-    store.on(e1, (state, payload) => ({
-      ...state,
-      foo: payload,
-    }))
-    warn.mockRestore()
-
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
-    e1('baz')
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
-  })
-  test('store.on(effect)', async () => {
-    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-    const counter = createStore(0)
-    const text = createStore('')
-    const store = combine({counter, text, foo: 0})
-    const e1 = createEffect<number, number>(
-      n => new Promise(_ => setTimeout(_, n, n)),
-    )
-    store.on(e1.done, (state, {result}) => ({
-      ...state,
-      foo: result,
-    }))
-    warn.mockRestore()
-
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
-    const result = await e1(50)
-    expect(result).toBe(50)
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 50})
-  })
 })
 
 test('store.watch', () => {

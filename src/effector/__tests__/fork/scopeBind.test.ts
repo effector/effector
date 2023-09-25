@@ -30,9 +30,7 @@ it('will throw an error when used without watch nor explicit {scope}', () => {
 
   expect(() => {
     scopeBind(trigger)
-  }).toThrowErrorMatchingInlineSnapshot(
-    `"scopeBind cannot be called outside of forked .watch"`,
-  )
+  }).toThrowErrorMatchingInlineSnapshot(`"scopeBind: scope not found"`)
 })
 
 it('support explicit {scope}', async () => {

@@ -2,6 +2,48 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 22.5.4
+
+- Fix for `createWatch` implementation to improve `@effector/next` updates flow
+
+## effector-react 22.5.3
+
+- Fix too frequent `useUnit` updates
+
+## effector 22.8.6
+
+- Follow-up fix for `22.8.2`: now `combine` in tuple-form handles compelx edge-cases with mapped stores correctly. ([PR #902](https://github.com/effector/effector/pull/902))
+
+## effector-react 22.5.2
+
+- Fix bug in `useUnit` during event change ([issue #900](https://github.com/effector/effector/issues/900), [PR #901](https://github.com/effector/effector/pull/901))
+
+## effector 22.8.5
+
+- Follow up fix for `22.8.4`: now fix works for `fork({ handlers })` calls too. [PR #898](https://github.com/effector/effector/pull/898)
+
+## effector 22.8.4
+
+- Fixed an edge case for `fork` calls without sid (function from release `22.8.0`). Some libraries provide built-in sid's in the code, which led to the `duplicated sid found` exception when calling `fork` when trying to use two instances of the same factory in a test and running it without `effector/babel-plugin`.
+  The exception on `fork` calls is no longer thrown, and all sid-related checks and assertions have been moved to `serialize` calls, since sid's are actually only required for `serialize` to work. [PR #897](https://github.com/effector/effector/pull/897)
+
+## effector 22.8.3
+
+- Added missing node and stateRef ids to meta-objects. These are internal changes which are not covered by the types or docs yet.
+
+## effector 22.8.2
+
+- `combine` types now allow primitive values, just like it was stated in the docs. Thanks to @faustienf [PR #884](https://github.com/effector/effector/pull/884)
+- Events, created from split with match-object shape and internal inFlight counters of Effects now have proper metadata to use in the Inspect API. [PR #892](https://github.com/effector/effector/pull/892)
+
+## effector 22.8.1
+
+- Internal state refs now also see meta, if owned by store. [PR #889](https://github.com/effector/effector/pull/889)
+
+## effector 22.8.0
+
+- Sids are no longer required for `fork({ values, handlers })`, which allows to run tests without `effector/babel-plugin`. Note, that plugin and sids are still required for SSR. ([PR #855](https://github.com/effector/effector/pull/855))
+
 ## effector-react 22.5.1
 
 - Fix Gate usage as component. `<Gate />` will also be isomorphic by scope.

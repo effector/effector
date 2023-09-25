@@ -114,7 +114,7 @@ it('supports a list of stores as a source + target forwarding (should pass)', ()
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: (Store<number> | Store<string>)[]; clock: Event<number>; target: Event<[number, string]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+    Argument of type '{ source: (StoreWritable<number> | StoreWritable<string>)[]; clock: EventCallable<number>; target: EventCallable<[number, string]>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
     "
   `)
@@ -169,7 +169,7 @@ it('supports store objects as a source (should pass) [non-config sample overload
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    no errors
     "
   `)
 })
@@ -183,7 +183,7 @@ it('supports a list of stores as a source (should pass) [non-config sample overl
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    no errors
     "
   `)
 })
@@ -201,10 +201,7 @@ it('supports store objects as a source + mapping (should pass) [non-config sampl
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })
@@ -222,10 +219,7 @@ it('supports a list of stores as a source + mapping (should pass) [non-config sa
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Binding element 'a' implicitly has an 'any' type.
-    Binding element 'b' implicitly has an 'any' type.
-    Parameter 'clock' implicitly has an 'any' type.
+    no errors
     "
   `)
 })

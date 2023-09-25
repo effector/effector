@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "22.7.0",
+  "version": "22.8.6",
   "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
@@ -19,12 +19,6 @@
       "types": "./effector.mjs.d.ts",
       "import": "./effector.mjs",
       "default": "./effector.mjs"
-    },
-    "./fork": {
-      "types": "./fork.d.ts",
-      "import": "./fork.mjs",
-      "require": "./fork.js",
-      "default": "./fork.mjs"
     },
     "./compat": {
       "types": "./compat.d.ts",
@@ -50,7 +44,6 @@
     "README.md",
     "LICENSE",
     "index.d.ts",
-    "index.js.flow",
     "effector.mjs",
     "effector.mjs.map",
     "effector.cjs.js",
@@ -59,18 +52,10 @@
     "effector.umd.js.map",
     "compat.js",
     "compat.js.map",
-    "effector.cjs.js.flow",
-    "effector.umd.js.flow",
-    "compat.js.flow",
     "effector.cjs.d.ts",
     "effector.mjs.d.ts",
     "effector.umd.d.ts",
     "compat.d.ts",
-    "fork.js",
-    "fork.js.map",
-    "fork.mjs",
-    "fork.mjs.map",
-    "fork.d.ts",
     "inspect.js",
     "inspect.js.map",
     "inspect.mjs",

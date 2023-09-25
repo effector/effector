@@ -90,6 +90,19 @@ describe('combine cases', () => {
     const store = combine(Color)
     expect(store.getState()).toEqual(['#e95801'])
   })
+  test('combine(...primitives)', () => {
+    const store = combine(1, [false], {value: 'a'})
+    expect(store.getState()).toEqual([1, [false], {value: 'a'}])
+  })
+  test('combine([primitives])', () => {
+    const store = combine([1, [false], {value: 'a'}])
+    expect(store.getState()).toEqual([1, [false], {value: 'a'}])
+  })
+  test('combine(Store, primitive)', () => {
+    const Color = createStore('#e95801')
+    const store = combine(Color, '#e95801')
+    expect(store.getState()).toEqual(['#e95801', '#e95801'])
+  })
 })
 
 it('deduplicate outputs', async () => {
@@ -327,7 +340,7 @@ describe('don`t reuse values from user', () => {
     const triggerB = createEvent()
     const foo = createStore(0)
     const bar = createStore(0).on(triggerB, x => x + 10)
-    const combined = combine({foo, bar})
+    const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
     sample({
       clock: triggerA,
       source: combined,
@@ -353,7 +366,7 @@ describe('don`t reuse values from user', () => {
     const triggerB = createEvent()
     const foo = createStore(0)
     const bar = createStore(0).on(triggerB, x => x + 10)
-    const combined = combine({foo, bar})
+    const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
     combined.on(triggerA, ({foo, bar}) => ({
       foo: foo + 1,
       bar: bar + 1,

@@ -3,7 +3,7 @@ id: createWatch
 title: createWatch
 ---
 
-Creates an subscription on unit (store, event or effect).
+Creates a subscription on unit (store, event or effect).
 
 ```ts
 createWatch<T>(config: {

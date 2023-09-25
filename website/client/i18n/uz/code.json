@@ -1,0 +1,190 @@
+{
+  "landing.companies.using": {
+    "message": "Effector dan foydalanayotkan kompaniyalar",
+    "description": "companies using effector"
+  },
+  "landing.companies.want_to_appear": {
+    "message": "Bu ro'yxatda bolishni istaysizmi?",
+    "description": "Want to appear on this page"
+  },
+  "landing.companies.tell_us": {
+    "message": "Bizga habar bering",
+    "description": "Tell us"
+  },
+  "landing.features": {
+    "message": "Ustunliklari",
+    "description": "Features"
+  },
+  "landing.get_started": {
+    "message": "O'rganishni boshlash",
+    "description": "Get Started"
+  },
+  "landing.try_it": {
+    "message": "Playground",
+    "description": "Playground"
+  },
+  "landing.video_introduction": {
+    "message": "Videodarslik",
+    "description": "Video introduction"
+  },
+  "landing.introduction_article": {
+    "message": "Kirish maqolasi",
+    "description": "Introduction article"
+  },
+  "theme.NotFound.title": {
+    "message": "Sahifa topilmadi",
+    "description": "The title of the 404 page"
+  },
+  "theme.NotFound.p1": {
+    "message": "Afsuski, siz qidiryotkan sahifa topilmadi.",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "Iltimos, ushbu havola egasiga, sayt ishlamayotganligi haqida xabar bering.",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Yopish",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Bloglar roʻyxati sahifalarida navigatsiya",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Keyingi yozmalar",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Oldingi yozmalar",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "{readingTime} min. o'qish",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Teglar:",
+    "description": "The label alongside a tag list"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Keyingi sahifani o'qish",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Blog postlari sahifalarida navigatsiya",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Keyingi post",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Oldingi post",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Teglar",
+    "description": "The title of the tag list page"
+  },
+  "theme.blog.post.plurals": {
+    "message": "{count} yozuv|{count} yozuvlar|{count} yozuvlar",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} \"{tagName}\" tegi bilan",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "Hamma teglarni ko'rish",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Buferga nusxalash",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "Nushalandi",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "nushalash",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Yon panelni kengaytirish",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Yon panelni kengaytirish",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Hujjat sahifalarida navigatsiya",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "Oldingi sahifa",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.paginator.next": {
+    "message": "Keyingi sahifa",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Yon panelni yig‘ish",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Yon panelni yig‘ish",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.responsiveCloseButtonLabel": {
+    "message": "Menyuni yopish",
+    "description": "The ARIA label for close button of mobile doc sidebar"
+  },
+  "theme.docs.sidebar.responsiveOpenButtonLabel": {
+    "message": "Menyuni ochish",
+    "description": "The ARIA label for open button of mobile doc sidebar"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "Bu {siteTitle} {versionLabel} ning kelajakdagi versiyasi uchun hujjatdir.",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "Bu endi qoʻllab-quvvatlanmaydigan {versionLabel} versiyasi uchun {siteTitle} hujjatidir.",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "Oxirgi hujjatlar {latestVersionLink} ({versionLabel}) sahifasida.",
+    "description": "The label userd to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "ohirgi versiya",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.common.editThisPage": {
+    "message": "Sahifani tahrirlash",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Sarlavhaga havola",
+    "description": "Title for link to heading"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " {date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " {user} dan",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Oxirgi yangilangan{atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Asosiy tarkibga o'tish",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  }
+}

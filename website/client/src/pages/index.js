@@ -132,6 +132,47 @@ nextPost()
 // => Loading post...
 // => Post 2 has 5 comments
 `,
+  uz: `import {createEvent, createStore, createEffect, combine, sample} from 'effector'
+
+const nextPost = createEvent()
+
+const getCommentsFx = createEffect(async postId => {
+  const url = \`posts/\${postId}/comments\`
+  const base = 'https://jsonplaceholder.typicode.com'
+  const req = await fetch(\`\${base}\/\${url}\`)
+  return req.json()
+})
+
+const $postComments = createStore([])
+  .on(getCommentsFx.doneData, (_, posts) => posts)
+
+const $currentPost = createStore(1)
+  .on(getCommentsFx.done, (_, {params: postId}) => postId)
+
+const $status = combine(
+  $currentPost, $postComments, getCommentsFx.pending,
+  (postId, comments, isLoading) => isLoading
+    ? 'Post yuklanishi...'
+    : \`Post \${postId} \${comments.length} ta komentariyaga ega\`
+)
+
+sample({
+  source: $currentPost,
+  clock: nextPost,
+  fn: postId => postId + 1,
+  target: getCommentsFx,
+})
+
+$status.watch(status => {
+  console.log(status)
+})
+// => Post 1 0ta komentariyaga ega
+
+nextPost()
+
+// => Post yuklanishi...
+// => Post 2 5ta komentariyaga ega
+`,
 }
 
 const features = [
@@ -150,6 +191,10 @@ const features = [
         title: '类型安全',
         description: '开箱即用的 TypeScript 支持',
       },
+      uz: {
+        title: 'Tipizatsiya',
+        description: 'TypeScript ni to`la ta`minotini qo`llaydi'
+      }
     },
   },
   {
@@ -167,6 +212,10 @@ const features = [
         title: '与框架无关',
         description: '可以使用任何 UI 或 服务器框架',
       },
+      uz: {
+        title: 'Freymvorklardan mustaqil',
+        description: 'Har qanday UI va server freymvorklar bilan ishlay oladi'
+      }
     },
   },
   {
@@ -184,6 +233,10 @@ const features = [
         title: '开发人员友好',
         description: '简单的API 和 有用的社区',
       },
+      uz: {
+        title: 'Dasturchilar uchun qulay',
+        description: 'Mantiqiy API va do`stona hamjamiyat'
+      }
     },
   },
   {
@@ -202,6 +255,10 @@ const features = [
         title: '极致的性能',
         description: '静态初始化可提高运行时的性能',
       },
+      uz: {
+        title: 'Maksimal ishlash',
+        description: 'Statik ishga tushishi ish faoliyatini tezlashtiradi'
+      }
     },
   },
   {
@@ -213,13 +270,16 @@ const features = [
       },
       ru: {
         title: 'Малый размер',
-        description:
-          'Эффектор - компактная библиотека и поддерживает tree-shaking',
+        description: 'Эффектор - компактная библиотека и поддерживает tree-shaking',
       },
       'zh-cn': {
         title: '非常小的 bundle size',
         description: 'Effector 提供 small builds 和 支持 tree-shaking',
       },
+      uz: {
+        title: 'Kichik hajim',
+        description: "Effector TREE SHAKING ni qo`llaydigan ixcham biblioteka"
+      }
     },
   },
   {
@@ -237,6 +297,10 @@ const features = [
         title: '简单、可预测的 JavaScript',
         description: '没有代理，不需要类。只有您和您的数据',
       },
+      uz: {
+        title: 'Oddiy JavaScript',
+        description: 'Hechqanday proksi va klasslarsiz'
+      }
     },
   },
 ]
@@ -250,6 +314,10 @@ const headings = {
     title: 'effector',
     tagline: '轻松实现业务逻辑',
   },
+  uz: {
+    title: 'Effector',
+    tagline: 'Holat menenjeri'
+  }
 }
 
 const users = [

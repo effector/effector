@@ -3,6 +3,7 @@ import {createNode} from './createNode'
 import type {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {assertNodeSet, assertTarget} from './is'
+import {deprecate} from './throw'
 
 export const createLinkNode = (
   parent: NodeUnit | NodeUnit[],
@@ -25,8 +26,9 @@ export const forward = (opts: {
   to: NodeUnit | NodeUnit[]
   meta?: Record<string, any>
 }): Subscription => {
+  deprecate(false, 'forward', 'sample')
   const method = 'forward'
-  const [{from, to}, config] = processArgsToConfig(opts, true)
+  const [[{from, to}], config] = processArgsToConfig([opts])
   assertNodeSet(from, method, '"from"')
   assertNodeSet(to, method, '"to"')
   assertTarget(method, to, 'to')

@@ -69,3 +69,46 @@ describe('useEvent', () => {
     expect(watcher).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('useEvent is deprecated', () => {
+  test('useEvent(event) is deprecated in favor of useUnit(event)', async () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    const event = createEvent('foo')
+
+    function App() {
+      useEvent(event)
+      return null
+    }
+
+    await render(<App />)
+
+    expect(warn).toBeCalledTimes(1)
+    expect(warn.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"useEvent is deprecated, prefer useUnit instead"`,
+    )
+
+    warn.mockRestore()
+  })
+
+  test('useEvent({event, other}) is deprecated in favor of useUnit({event, other})', async () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    const event = createEvent('foo')
+    const other = createEvent('bar')
+
+    function App() {
+      useEvent({event, other})
+      return null
+    }
+
+    await render(<App />)
+
+    expect(warn).toBeCalledTimes(1)
+    expect(warn.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"useEvent is deprecated, prefer useUnit instead"`,
+    )
+
+    warn.mockRestore()
+  })
+})

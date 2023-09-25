@@ -270,7 +270,7 @@ const $a = domain.createStore(null)
 domain.onCreateDomain(domain => {})
 ```
 
-- Function passed to `onCreateDomain` called every time, as sub domain created in `domain`
+- Function passed to `onCreateDomain` called every time, as subdomain created in `domain`
 - Function called with `domain` as first argument
 - Result of function call is ignored
 

@@ -4,8 +4,10 @@ import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './forward'
 import {deprecate} from './throw'
+import {processArgsToConfig} from './config'
 
-export function restore(obj: any, defaultState: any, config?: any) {
+export function restore(...args: [obj: any, defaultState: any]) {
+  const [[obj, defaultState], config] = processArgsToConfig(args)
   if (is.store(obj)) {
     deprecate(false, 'restore($store)')
     return obj

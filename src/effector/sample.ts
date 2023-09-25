@@ -17,7 +17,7 @@ import {
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createNode} from './createNode'
-import {assert} from './throw'
+import {assert, deprecate} from './throw'
 import {forEach} from './collection'
 import {SAMPLE, STACK, VALUE} from './tag'
 import {merge} from './merge'
@@ -46,7 +46,7 @@ export function sample(...args: any[]) {
   let name
   let [[source, clock, fn], metadata] = processArgsToConfig(args)
   let sid
-  let batched = true
+  let batch = true
   let filter
   /** config case */
   if (
@@ -56,7 +56,12 @@ export function sample(...args: any[]) {
   ) {
     clock = source.clock
     fn = source.fn
-    batched = !source.greedy
+    if ('batch' in source) {
+      batch = source.batch
+    } else {
+      deprecate(!('greedy' in source), 'greedy in sample', 'batch')
+      batch = !source.greedy
+    }
     filter = source.filter
     /** optional target & name accepted only from config */
     target = source.target
@@ -73,7 +78,7 @@ export function sample(...args: any[]) {
     fn,
     name,
     metadata,
-    batched,
+    batch,
     true,
     false,
     sid,
@@ -89,7 +94,7 @@ export const createSampling = (
   fn: any,
   name: string | undefined,
   metadata: object | void,
-  batched: boolean,
+  batch: boolean,
   targetMayBeStore: boolean,
   filterRequired: boolean,
   sid?: string | undefined,
@@ -179,7 +184,7 @@ export const createSampling = (
       applyTemplate('sampleSourceLoader'),
       mov({from: STACK, target: clockState}),
       ...readAndFilter(hasSource),
-      read(sourceRef, true, batched),
+      read(sourceRef, true, batch),
       ...filterNodes,
       read(clockState),
       filterType === 'fn' && userFnCall((src, _, {a}) => filter(src, a), true),

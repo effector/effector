@@ -15,6 +15,24 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (
+      String(message).includes('forward') ||
+      String(message).includes('guard') ||
+      String(message).includes('object with handlers')
+    )
+      return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('usage with domain', async () => {
   const app = createDomain()
   const add = app.createEvent<number>()
@@ -45,7 +63,111 @@ test('usage without domain', async () => {
   expect(scope.getState($count)).toBe(15)
   expect($count.getState()).toBe(0)
 })
+describe('getState cases', () => {
+  test('getState on default value works', () => {
+    const $store = createStore("default value")
+  
+    const scope = fork();
+  
+    expect(scope.getState($store)).toBe("default value")
+  })
 
+  test('getState on default value (store with serialize ignore)', () => {
+    const $store = createStore("default value", {
+      serialize: "ignore"
+    })
+  
+    const scope = fork();
+  
+    expect(scope.getState($store)).toBe("default value")
+  })
+})
+describe('units without sids support', () => {
+  test('store without sid should be supported', () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    expect(() => {
+      fork({values: [[$foo, 1]]})
+    }).not.toThrow()
+    const scope = fork({values: [[$foo, 2]]})
+    expect(scope.getState($foo)).toBe(2)
+  })
+  test('mapped stores derived from sidless ones should be supported', () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = $foo.map(x => x)
+    const scope = fork({values: [[$foo, 2]]})
+    expect(scope.getState($bar)).toBe(2)
+  })
+  test('combined stores derived from sidless ones should be supported', () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = combine($foo, x => x)
+    const scope = fork({values: [[$foo, 2]]})
+    expect(scope.getState($bar)).toBe(2)
+  })
+  test('effect without sid should be supported', async () => {
+    const fooFx = createEffect({
+      handler(): any {
+        throw Error('default handler')
+      },
+      //@ts-expect-error
+      sid: null,
+    })
+    expect(() => {
+      fork({handlers: [[fooFx, () => 1]]})
+    }).not.toThrow()
+    const fn = jest.fn()
+    const scope = fork({handlers: [[fooFx, fn]]})
+    await allSettled(fooFx, {scope})
+    expect(fn).toBeCalled()
+  })
+  test('mixed sid and no-sid case should work for tests', async () => {
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = $foo.map(x => x * 2)
+
+    const $sid = createStore(0, {sid: '$sid'})
+    const $sidBar = $sid.map(x => x * 2)
+
+    const scope = fork({
+      values: [
+        [$foo, 1],
+        [$sid, 2],
+      ],
+    })
+
+    expect(scope.getState($bar)).toBe(2)
+    expect(scope.getState($sidBar)).toBe(4)
+  })
+  test('edge-case: mixed sid and no-sid case should work for tests, even there are build-in sids in factory', async () => {
+    const libFactory = () => {
+      return createStore(0, {sid: '$sid'})
+    }
+
+    //@ts-expect-error
+    const $foo = createStore(0, {sid: null})
+    const $bar = $foo.map(x => x * 2)
+
+    const $sid = libFactory()
+    const $sidBar = $sid.map(x => x * 2)
+
+    const $sidOther = libFactory()
+    const $sidBarOther = $sidOther.map(x => x * 2)
+
+    const scope = fork({
+      values: [
+        [$foo, 1],
+        [$sid, 2],
+        [$sidOther, 4],
+      ],
+    })
+
+    expect(scope.getState($bar)).toBe(2)
+    expect(scope.getState($sidBar)).toBe(4)
+    expect(scope.getState($sidBarOther)).toBe(8)
+  })
+})
 describe('fork values support', () => {
   test('values as js Map', async () => {
     const app = createDomain()
@@ -129,13 +251,6 @@ describe('fork values support', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `"Values map can contain only stores as keys"`,
     )
-  })
-  test('store without sid should throw', () => {
-    //@ts-expect-error
-    const $foo = createStore(0, {sid: null})
-    expect(() => {
-      fork({values: [[$foo, 1]]})
-    }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
   })
   describe('consistency simple', () => {
     test('consistency simple with getState', async () => {
@@ -392,6 +507,30 @@ describe('fork handlers support', () => {
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
+  test('handlers as a tuple list, but with sid doubles', async () => {
+    const h1 = jest.fn()
+    const h2 = jest.fn()
+    const fx1 = createEffect({
+      sid: 'fx',
+      handler: () => {},
+    })
+    const fx2 = createEffect({
+      sid: 'fx',
+      handler: () => {},
+    })
+
+    const scope = fork({
+      handlers: [
+        [fx1, h1],
+        [fx2, h2],
+      ],
+    })
+
+    await Promise.all([allSettled(fx1, {scope}), allSettled(fx2, {scope})])
+
+    expect(h1).toBeCalledTimes(1)
+    expect(h2).toBeCalledTimes(1)
+  })
 })
 
 describe('handlers validation', () => {
@@ -424,16 +563,6 @@ describe('handlers validation', () => {
         handlers: new Map().set(attached, () => {}),
       })
     }).not.toThrow()
-  })
-  test('effect without sid should throw', () => {
-    const fx = createEffect({
-      handler() {},
-      //@ts-expect-error
-      sid: null,
-    })
-    expect(() => {
-      fork({handlers: [[fx, () => {}]]})
-    }).toThrowErrorMatchingInlineSnapshot(`"unit should have a sid"`)
   })
 })
 

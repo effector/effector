@@ -3,6 +3,8 @@ import {Store} from 'effector'
 
 import {useStoreMapBase, useUnitBase} from './lib/base'
 import {getScope} from './lib/get-scope'
+import { Gate } from './index.h'
+import {useGateBase} from "./lib/gate";
 
 export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
   configOrStore:
@@ -24,4 +26,12 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
 export function useUnit(shape, opts?: {forceScope?: boolean}) {
   const scope = getScope(opts?.forceScope)
   return useUnitBase(shape, scope)
+}
+
+export function useGate<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+  opts?: {forceScope?: boolean},
+) {
+  return useGateBase(GateComponent, props, getScope(opts?.forceScope))
 }

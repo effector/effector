@@ -1,6 +1,19 @@
 import {createStore, createEvent, forward} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 it('support spread of units', () => {
   const fn = jest.fn()
   const set = createEvent<number>()
@@ -192,7 +205,7 @@ describe('dependencies of resettable stores', () => {
     const run = createEvent<string>()
     const reset = run.map(d => `${d}->reset`)
     const A = createStore('A')
-    const B = A.map(d => `B(${d})`)
+    const B = createStore('B(A)').on(A, (_, d) => `B(${d})`)
 
     A.on(run, (state, d) => `${d}(${state})`).reset(reset)
     B.on(run, (state, d) => `${d}(${state})`).reset(reset)

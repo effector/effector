@@ -1,6 +1,6 @@
 import type {Scope, Store} from '../unit.h'
 import {forIn, includes} from '../collection'
-import {assert} from '../throw'
+import {assert, deprecate} from '../throw'
 import {traverseStores} from './util'
 import {getGraph, getMeta} from '../getter'
 
@@ -17,9 +17,10 @@ export function serialize(
       'There is a store without sid in this scope, its value is omitted',
     )
   }
+  assert(!scope.hasSidDoubles, 'duplicate sid found in this scope')
   const ignoredStores = config.ignore ? config.ignore.map(({sid}) => sid) : []
   const result = {} as Record<string, any>
-  forIn(scope.sidValuesMap, (value, sid) => {
+  forIn(scope.values.sidMap, (value, sid) => {
     if (includes(ignoredStores, sid)) return
     const id = scope.sidIdMap[sid]
     const serializeSettings = scope.sidSerializeSettings.get(sid) ?? {
@@ -35,17 +36,20 @@ export function serialize(
       result[sid] = serializer(value)
     }
   })
-  if ('onlyChanges' in config && !config.onlyChanges) {
-    assert(scope.cloneOf, 'scope should be created from domain')
-    traverseStores(getGraph(scope.cloneOf), (node, sid) => {
-      if (
-        !(sid in result) &&
-        !includes(ignoredStores, sid) &&
-        !getMeta(node, 'isCombine') &&
-        getMeta(node, 'serialize') !== 'ignore'
-      )
-        result[sid] = scope.getState(node as any)
-    })
+  if ('onlyChanges' in config) {
+    deprecate(false, 'onlyChanges')
+    if (!config.onlyChanges) {
+      assert(scope.cloneOf, 'scope should be created from domain')
+      traverseStores(getGraph(scope.cloneOf), (node, sid) => {
+        if (
+          !(sid in result) &&
+          !includes(ignoredStores, sid) &&
+          !getMeta(node, 'isCombine') &&
+          getMeta(node, 'serialize') !== 'ignore'
+        )
+          result[sid] = scope.getState(node as any)
+      })
+    }
   }
   return result
 }

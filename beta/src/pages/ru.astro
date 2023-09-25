@@ -1,0 +1,79 @@
+---
+import IconChevron from "@icons/Chevron.astro";
+import Hero from "@components/Landing/Hero.astro";
+import FeaturesGrid from "@components/Landing/FeaturesGrid.astro";
+import Feature from "@components/Landing/Feature.astro";
+import Stats from "@components/Landing/Stats.astro";
+import Companies from "@components/Landing/Companies.astro";
+
+import Landing from "../layouts/Landing.astro";
+import { SITE } from "../consts";
+
+const features = [
+  {
+    emoji: "☄️",
+    kind: "major",
+    title: "Effector Spacewatch",
+    description:
+      "Оцените мощь effector v23.0, отличающегося улучшенной типизацией, поддержкой универсальных хуков.",
+  },
+  {
+    emoji: "🛡️",
+    title: "Типобезопасен",
+    description: "Отличная поддержка TypeScript из коробки. С тестированием типов в репозитории.",
+  },
+  {
+    emoji: "⚙️",
+    title: "Framework agnostic",
+    description:
+      "Работает с любым UI или серверным фреймворком. Протестировано с React, Solid, Vue.",
+  },
+  {
+    emoji: "⚡️",
+    title: "Производителен",
+    description: "Инициализация всей логики при запуске обеспечивает быструю работу приложения.",
+  },
+  {
+    emoji: "📦",
+    title: "10Kb",
+    description: "Поддерживает tree-shaking и предлагает максимум возможностей в небольшом пакете.",
+  },
+  {
+    emoji: "🫂",
+    title: "Просто JavaScript",
+    description:
+      "Здесь нет Proxy, классов и какой-то магии. Просто JavaScript-код, который работает.",
+  },
+  {
+    emoji: "🧑‍💻",
+    kind: "minor",
+    title: "Дружелюбный",
+    description:
+      "Дружелюбное сообщество всегда поможет найти ответы. Легко писать тесты. Легко поднимать серверный рендеринг",
+  },
+] as { emoji: string; kind?: "minor" | "major"; title: string; description: string }[];
+---
+
+<Landing lang="ru" title="Приветствуем" dir="ltr" description={SITE.description}>
+  <Hero subtitle="Write business logic with ease">
+    Познакомьтесь с новым стандартом для современной разработки на TypeScript.
+    <br />
+    Безопасный для типов, реактивный, не зависящий от фреймворка.
+
+    <a slot="links" class="primary" href="/ru/introduction/installation">
+      <span>Начать изучение</span>
+      <IconChevron />
+    </a>
+  </Hero>
+  <FeaturesGrid>
+    {
+      features.map((feat) => (
+        <Feature title={feat.title} emoji={feat.emoji} kind={feat.kind}>
+          {feat.description}
+        </Feature>
+      ))
+    }
+  </FeaturesGrid>
+  <Stats />
+  <Companies />
+</Landing>
