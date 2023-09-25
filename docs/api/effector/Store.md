@@ -219,6 +219,10 @@ add(3)
 
 ### `watch(trigger, watcher)`
 
+:::note
+Since [effector 23.0.0](https://github.com/effector/effector/releases/tag/effector%4023.0.0) the second argument of `watch` is deprecated, use [`sample`](./sample.md) to run a function after `clock` field trigerred instead.
+:::
+
 Run `watcher` only when `trigger` event triggered. <br/>
 
 #### Formulae
@@ -537,7 +541,7 @@ console.log($store.defaultState === 'DEFAULT')
 Returns current state of store
 
 :::caution You don't need this method!
-`getState()` gives rise to difficult to debug imperative code and kind of race condition.
+`getState()` usage can result in difficult-to-debug imperative code and create a kind of race condition.
 Prefer declarative [sample](sample.md) to pass data from store and [attach](attach.md) for effects
 :::
 

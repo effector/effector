@@ -1,0 +1,34 @@
+{
+  "title": {
+    "message": "Effector",
+    "description": "The title in the navbar"
+  },
+  "item.label.Docs": {
+    "message": "Hujjatlar",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.API": {
+    "message": "API",
+    "description": "Navbar item with label API"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.Playground": {
+    "message": "Onlayn qo`llash",
+    "description": "Navbar item with label Playground"
+  },
+  "item.label.Changelog": {
+    "message": "Yangiliklar",
+    "description": "Navbar item with label Changelog"
+  },
+  "item.label.Twitter": {
+    "message": "Twitter",
+    "description": "Navbar item with label Twitter"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

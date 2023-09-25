@@ -1,6 +1,7 @@
 const importName = 'effector-react'
 
 module.exports = function(babel, options = {}) {
+  console.error('[babel-plugin-react]: this babel-plugin is deprecated, use effector/babel-plugin instead')
   const componentCreators = new Set(
     options.componentCreators || ['createComponent'],
   )

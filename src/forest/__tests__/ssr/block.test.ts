@@ -6,6 +6,19 @@ import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-expect-error
 import {provideGlobals} from 'effector/fixtures/dom'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('block nesting', async () => {
   const scopeName = createStore('--')
   const click = createEvent<MouseEvent>()

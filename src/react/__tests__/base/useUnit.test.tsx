@@ -12,6 +12,7 @@ import {
   fork,
   allSettled,
   serialize,
+  launch,
 } from 'effector'
 import {useUnit} from 'effector-react'
 import {
@@ -472,6 +473,43 @@ describe('useUnit', () => {
         },
       ]
     `)
+  })
+  it('should support dynamic change of event', async () => {
+    const fnL = jest.fn()
+    const fnR = jest.fn()
+    const left = createEvent()
+    const right = createEvent()
+    left.watch(() => fnL())
+    right.watch(() => fnR())
+
+    const View = () => {
+      const [which, setWhich] = React.useState(true)
+      const event = which ? left : right
+      const testUnit = useUnit(event)
+      const onSwitch = () => setWhich(!which)
+      return (
+        <div>
+          <button id="run" onClick={testUnit}>
+            run
+          </button>
+          <button id="switch" onClick={onSwitch}>
+            Switch
+          </button>
+        </div>
+      )
+    }
+    await render(<View />)
+    await act(async () => {
+      container.firstChild.querySelector('#run').click()
+    })
+    await act(async () => {
+      container.firstChild.querySelector('#switch').click()
+    })
+    await act(async () => {
+      container.firstChild.querySelector('#run').click()
+    })
+    expect(fnL).toBeCalledTimes(1)
+    expect(fnR).toBeCalledTimes(1)
   })
   it('should support dynamic change of store positions', async () => {
     const upA = createEvent()
@@ -1149,5 +1187,106 @@ describe('useUnit', () => {
           `)
       })
     })
+  })
+  it('should not trigger too often', async () => {
+    const $value = createStore('initial')
+    const change = createEvent<string>()
+
+    $value.on(change, (_, next) => next)
+
+    const shape = {
+      '@@unitShape': () => ({
+        value: $value,
+        onChange: change,
+      }),
+    }
+    let failed = false
+    let count = 0
+    const App = () => {
+      const {onChange, value} = useUnit(shape)
+      React.useEffect(() => {
+        count += 1
+        if (count >= 100) {
+          failed = true
+          return
+        }
+        onChange('test')
+
+        return () => {
+          onChange('')
+        }
+      }, [onChange])
+      return <div>{value}</div>
+    }
+    const scope = fork()
+    await render(
+      <Provider value={scope}>
+        <App />
+      </Provider>,
+    )
+    expect(failed).toBe(false)
+  })
+})
+
+describe('@effector/next custom hydration triggers hooks', () => {
+  test('useUnit case', async () => {
+    const $count = createStore(0)
+    const $mappedCount = $count.map(x => x + 2)
+
+    const Component = () => {
+      const count = useUnit($mappedCount)
+      return <div>{count}</div>
+    }
+
+    const scope = fork({values: [[$count, 1]]})
+
+    await render(
+      <Provider value={scope}>
+        <Component />
+      </Provider>,
+    )
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        3
+      </div>
+    `)
+
+    /**
+     * @effector/next library now uses custom implementation of `hydrate` under the hood,
+     * which relies on some internals of `Scope` object
+     *
+     * Here is the short test to check that hydration triggers hooks
+     *
+     * More details at `hydrate.test.ts` -> "@effector/next custom hydration works" test
+     */
+    const tscope = scope as any
+    Object.values(tscope.reg).forEach((ref: any) => {
+      if (ref?.meta?.id === ($count as any).graphite.id) {
+        ref.current = 2
+      }
+      if (ref?.meta?.id === ($mappedCount as any).graphite.id) {
+        delete tscope.reg[ref.id]
+      }
+    })
+    await act(() => {
+      Object.values(tscope.additionalLinks).forEach(links => {
+        ;(links as any[]).forEach((link: any) => {
+          if (link.meta.watchOp === 'store') {
+            launch({
+              scope,
+              target: link,
+              params: null,
+            })
+          }
+        })
+      })
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        4
+      </div>
+    `)
   })
 })

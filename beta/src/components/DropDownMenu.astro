@@ -1,0 +1,203 @@
+---
+import { getPathParamsFromId, getTextLocalized, type LText } from "../languages";
+
+interface Link {
+  link: string;
+  text: LText;
+}
+
+interface Group {
+  text: LText;
+  links: Link[];
+}
+
+export interface Props {
+  links: (Group | Link)[];
+  class?: string;
+}
+
+const { links } = Astro.props;
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+---
+
+<div class={`menu ${Astro.props.class}`}>
+  <button type="button" title="Change language" class="menu-button">
+    <div class="button-title">
+      <slot />
+    </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </button>
+  <div class="flyout">
+    <div class="items">
+      <div class="group">
+        {
+          links.map((linkOrGroup) => {
+            if ("links" in linkOrGroup) {
+              return (
+                <div class="group">
+                  <p>{getTextLocalized(linkOrGroup, lang)}</p>
+                  {linkOrGroup.links.map((link) => {
+                    return (
+                      <a
+                        class:list={{
+                          link: true,
+                          active: Astro.url.pathname.startsWith(link.link),
+                        }}
+                        href={link.link}
+                        target={link.link.startsWith("/") ? undefined : "_blank"}
+                      >
+                        {getTextLocalized(link, lang)}
+                        {link.link.startsWith("https://") || link.link.startsWith("http://") ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <line x1="17" y1="7" x2="7" y2="17" />
+                            <polyline points="8 7 17 7 17 16" />
+                          </svg>
+                        ) : null}
+                      </a>
+                    );
+                  })}
+                </div>
+              );
+            }
+            return (
+              <a
+                href={linkOrGroup.link}
+                class:list={{ link: true, active: Astro.url.pathname.startsWith(linkOrGroup.link) }}
+                target={linkOrGroup.link.startsWith("/") ? undefined : "_blank"}
+              >
+                {getTextLocalized(linkOrGroup, lang)}
+                {linkOrGroup.link.startsWith("https://") ||
+                linkOrGroup.link.startsWith("http://") ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="17" y1="7" x2="7" y2="17" />
+                    <polyline points="8 7 17 7 17 16" />
+                  </svg>
+                ) : null}
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    overflow: visible;
+    pointer-events: auto;
+    color: var(--theme-text);
+  }
+
+  .menu :global(svg) {
+    pointer-events: none;
+  }
+
+  .menu button {
+    display: flex;
+    align-items: center;
+    appearance: none;
+    transition: color 0.3s;
+    padding: 0;
+    color: var(--theme-text);
+  }
+
+  .menu:hover button {
+    color: var(--theme-text-light);
+  }
+
+  .menu .flyout {
+    position: absolute;
+    top: 130%;
+    right: 0rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.25s, visibility 0.25s, transform 0.25s;
+  }
+
+  .menu:hover .flyout {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .items {
+    @apply rounded-xl p-3 shadow-xl;
+    border: 1px solid var(--theme-divider);
+    background-color: var(--theme-bg);
+    min-width: 8rem;
+    overflow-y: auto;
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .group p {
+    margin-top: 1rem;
+  }
+
+  .link {
+    @apply rounded-md;
+    display: flex;
+    transition: background-color 0.25s, color 0.25s;
+    padding: 0 0.8rem;
+    color: currentColor;
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  .link:hover {
+    background-color: var(--theme-divider);
+    color: var(--theme-accent);
+  }
+
+  .link.active,
+  .group .link.active {
+    color: var(--theme-accent);
+  }
+</style>

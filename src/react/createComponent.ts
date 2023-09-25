@@ -5,11 +5,13 @@ import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {StoreView} from './index.h'
 import {withDisplayName} from './withDisplayName'
 import {throwError} from './throw'
+import {deprecate} from './deprecate'
 
 export function createComponent<Props, State>(
   shape: Store<State> | {[key: string]: Store<any> | any},
   renderProp: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props> {
+  deprecate('createComponent', '@effector/reflect')
   let store: Store<any>
   if (is.store(shape)) {
     store = shape

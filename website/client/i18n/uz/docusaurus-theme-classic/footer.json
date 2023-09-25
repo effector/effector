@@ -1,0 +1,62 @@
+{
+  "link.title.Docs": {
+    "message": "Hujjatlar",
+    "description": "The title of the footer links column with title=Docs in the footer"
+  },
+  "link.title.Community": {
+    "message": "Jamiyat",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.More": {
+    "message": "Ko'proq",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Docs": {
+    "message": "Hujjatlar",
+    "description": "The label of footer link with label=Docs linking to docs/introduction/installation"
+  },
+  "link.item.label.API": {
+    "message": "API",
+    "description": "The label of footer link with label=API linking to docs/api/effector/effector"
+  },
+  "link.item.label.Changelog": {
+    "message": "Yangiliklar",
+    "description": "The label of footer link with label=Changelog linking to https://changelog.effector.dev"
+  },
+  "link.item.label.Blog": {
+    "message": "Blog",
+    "description": "The label of footer link with label=Blog linking to https://www.patreon.com/zero_bias"
+  },
+  "link.item.label.dev.to": {
+    "message": "dev.to",
+    "description": "The label of footer link with label=dev.to linking to https://dev.to/effector"
+  },
+  "link.item.label.Twitter": {
+    "message": "Twitter",
+    "description": "The label of footer link with label=Twitter linking to https://twitter.com/effectorjs"
+  },
+  "link.item.label.Telegram 🇷🇺": {
+    "message": "Telegram 🇷🇺",
+    "description": "The label of footer link with label=Telegram 🇷🇺 linking to https://t.me/effector_ru"
+  },
+  "link.item.label.Telegram": {
+    "message": "Telegram",
+    "description": "The label of footer link with label=Telegram linking to https://t.me/effector_en"
+  },
+  "link.item.label.Github": {
+    "message": "Github",
+    "description": "The label of footer link with label=Github linking to https://github.com/effector/effector"
+  },
+  "link.item.label.Youtube": {
+    "message": "Youtube",
+    "description": "The label of footer link with label=Youtube linking to https://www.youtube.com/channel/UCm8PRc_yjz3jXHH0JylVw1Q"
+  },
+  "link.item.label.Hosted by Netlify": {
+    "message": "Hosted by Netlify",
+    "description": "The label of footer link with label=Hosted by Netlify linking to https://netlify.com"
+  },
+  "copyright": {
+    "message": "Copyright © 2018-2022 zerobias",
+    "description": "The footer copyright"
+  }
+}

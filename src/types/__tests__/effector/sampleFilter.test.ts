@@ -1,5 +1,13 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, sample, Store, Event} from 'effector'
+import {
+  createStore,
+  createEvent,
+  sample,
+  Store,
+  Event,
+  StoreWritable,
+  EventCallable,
+} from 'effector'
 const typecheck = '{global}'
 
 describe('sample(config)', () => {
@@ -46,7 +54,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+        Argument of type '{ source: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
         "
       `)
@@ -63,16 +71,16 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+        Argument of type '{ source: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
           Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
         "
       `)
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
-        const target: Store<number> = createStore(0)
+        const target: StoreWritable<number> = createStore(0)
 
         sample({
           source: trigger,
@@ -86,7 +94,7 @@ describe('sample(config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
         const target = createStore<string>('no')
 
@@ -98,7 +106,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ source: Event<number>; filter: Store<boolean>; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
+          Argument of type '{ source: EventCallable<number>; filter: StoreWritable<boolean>; target: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
             Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
           "
         `)
@@ -162,7 +170,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ source: Event<number>; filter: (x: number) => boolean; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
+          Argument of type '{ source: EventCallable<number>; filter: (x: number) => boolean; target: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
             Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
           "
         `)
@@ -304,7 +312,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ clock: Event<string>; source: Event<number>; filter: (src: number, clk: string) => boolean; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
+          Argument of type '{ clock: EventCallable<string>; source: EventCallable<number>; filter: (src: number, clk: string) => boolean; target: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
             Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
           "
         `)
@@ -376,11 +384,7 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })
@@ -433,7 +437,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ source: Event<User>; filter: BooleanConstructor; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: User; targetType: string; }; }'.
+          Argument of type '{ source: EventCallable<User>; filter: BooleanConstructor; target: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: User; targetType: string; }; }'.
             Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: User; targetType: string; }; }'.
           "
         `)
@@ -483,11 +487,7 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })
@@ -521,7 +521,7 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Argument of type '{ clock: Event<User>; filter: BooleanConstructor; target: Store<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: User; targetType: string; }; }'.
+          Argument of type '{ clock: EventCallable<User>; filter: BooleanConstructor; target: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: User; targetType: string; }; }'.
             Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: User; targetType: string; }; }'.
           "
         `)
@@ -553,10 +553,10 @@ describe('filter return validation', () => {
       sample({source: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ source: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { source: Event<any>; clock?: undefined; filter: (src: any) => src is any; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { source: Event<any>; filter: () => number; }] | [config: ...]'.
-          Type '[{ source: Event<any>; filter: () => number; }]' is not assignable to type '[config: { source: Event<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { source: Event<any>; filter: () => number; }]'.
-            Type '{ source: Event<any>; filter: () => number; }' is not assignable to type '{ source: Event<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { source: Event<any>; filter: () => number; }'.
-              Type '{ source: Event<any>; filter: () => number; }' is not assignable to type '{ source: Event<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
+        Argument of type '[{ source: EventCallable<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { source: EventCallable<any>; clock?: undefined; filter: (src: any) => src is any; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
+          Type '[{ source: EventCallable<any>; filter: () => number; }]' is not assignable to type '[config: { source: EventCallable<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
+            Type '{ source: EventCallable<any>; filter: () => number; }' is not assignable to type '{ source: EventCallable<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
+              Type '{ source: EventCallable<any>; filter: () => number; }' is not assignable to type '{ source: EventCallable<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
         "
@@ -567,10 +567,10 @@ describe('filter return validation', () => {
       sample({clock: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ clock: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: Event<any>; source?: undefined; filter: (clk: any) => clk is any; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { clock: Event<any>; filter: () => number; }] | [config: ...]'.
-          Type '[{ clock: Event<any>; filter: () => number; }]' is not assignable to type '[config: { clock: Event<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { clock: Event<any>; filter: () => number; }]'.
-            Type '{ clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { clock: Event<any>; filter: () => number; }'.
-              Type '{ clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
+        Argument of type '[{ clock: EventCallable<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: EventCallable<any>; source?: undefined; filter: (clk: any) => clk is any; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
+          Type '[{ clock: EventCallable<any>; filter: () => number; }]' is not assignable to type '[config: { clock: EventCallable<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
+            Type '{ clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
+              Type '{ clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
         "
@@ -581,10 +581,10 @@ describe('filter return validation', () => {
       sample({source: anyt, clock: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ source: Event<any>; clock: Event<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => src is any; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { source: Event<...>; clock: Event<...>; filter: () => number; }] | [config: ...]'.
-          Type '[{ source: Event<any>; clock: Event<any>; filter: () => number; }]' is not assignable to type '[config: { clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { source: Event<...>; clock: Event<...>; filter: () => number; }]'.
-            Type '{ source: Event<any>; clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; } & { source: Event<...>; clock: Event<...>; filter: () => number; }'.
-              Type '{ source: Event<any>; clock: Event<any>; filter: () => number; }' is not assignable to type '{ clock: Event<any>; source: Event<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; name?: string | undefined; }'.
+        Argument of type '[{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => src is any; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
+          Type '[{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }]' is not assignable to type '[config: { clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
+            Type '{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
+              Type '{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
                 The types returned by 'filter(...)' are incompatible between these types.
                   Type 'number' is not assignable to type 'boolean'.
         "
@@ -755,10 +755,10 @@ test('incorrect filter (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '[{ source: Event<void>; filter: null; target: Event<void>; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
-      Type '[{ source: Event<void>; filter: null; target: Event<void>; }]' is not assignable to type '[config: never]'.
-        Type '{ source: Event<void>; filter: null; target: Event<void>; }' is not assignable to type 'never'.
-          The intersection '{ source: Event<void>; clock?: undefined; filter: (src: void) => boolean; target: Event<void>; greedy?: boolean | undefined; } & { source: Event<void>; filter: null; target: Event<...>; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+    Argument of type '[{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+      Type '[{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }]' is not assignable to type '[config: never]'.
+        Type '{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }' is not assignable to type 'never'.
+          The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
     "
   `)
 })
