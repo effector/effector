@@ -205,7 +205,7 @@ describe('dependencies of resettable stores', () => {
     const run = createEvent<string>()
     const reset = run.map(d => `${d}->reset`)
     const A = createStore('A')
-    const B = A.map(d => `B(${d})`)
+    const B = createStore('B(A)').on(A, (_, d) => `B(${d})`)
 
     A.on(run, (state, d) => `${d}(${state})`).reset(reset)
     B.on(run, (state, d) => `${d}(${state})`).reset(reset)

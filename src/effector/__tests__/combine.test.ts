@@ -340,7 +340,7 @@ describe('don`t reuse values from user', () => {
     const triggerB = createEvent()
     const foo = createStore(0)
     const bar = createStore(0).on(triggerB, x => x + 10)
-    const combined = combine({foo, bar})
+    const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
     sample({
       clock: triggerA,
       source: combined,
@@ -366,7 +366,7 @@ describe('don`t reuse values from user', () => {
     const triggerB = createEvent()
     const foo = createStore(0)
     const bar = createStore(0).on(triggerB, x => x + 10)
-    const combined = combine({foo, bar})
+    const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
     combined.on(triggerA, ({foo, bar}) => ({
       foo: foo + 1,
       bar: bar + 1,

@@ -219,7 +219,9 @@ describe('any to void support', () => {
     const from = createEvent<string>()
     const to1 = createEvent<void>()
     const to2 = createEvent<string>()
-    forward({from, to: [to1, to2]})
+    function wrap() {
+      forward({from, to: [to1, to2]})
+    }
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -292,11 +294,13 @@ test('edge case #1 (should fail)', () => {
   const event1 = createEvent<string>()
   const event2 = createEvent<{value: string}>()
 
-  forward({
-    from: event1,
-    //@ts-expect-error
-    to: event2.map(value => ({value})),
-  })
+  function wrap() {
+    forward({
+      from: event1,
+      //@ts-expect-error
+      to: event2.map(value => ({value})),
+    })
+  }
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
