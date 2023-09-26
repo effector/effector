@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.8.7
+
+- Fix `combine` function called twice on first `allSettled` call ([PR #984](https://github.com/effector/effector/pull/984))
+
 ## effector-react 22.5.4
 
 - Fix for `createWatch` implementation to improve `@effector/next` updates flow
