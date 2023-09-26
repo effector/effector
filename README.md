@@ -195,19 +195,19 @@ Your support allows us to improve the developer experience 🧡.
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/egorguscha>
-            <img src=https://avatars.githubusercontent.com/u/22044607?v=4 width="100;"  alt=Egor/>
+        <a href=https://github.com/igorkamyshev>
+            <img src=https://avatars.githubusercontent.com/u/26767722?v=4 width="100;"  alt=Igor Kamyşev/>
             <br />
-            <sub style="font-size:14px"><b>Egor</b></sub>
+            <sub style="font-size:14px"><b>Igor Kamyşev</b></sub>
         </a>
     </td>
 </tr>
 <tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/igorkamyshev>
-            <img src=https://avatars.githubusercontent.com/u/26767722?v=4 width="100;"  alt=Igor Kamyşev/>
+        <a href=https://github.com/egorguscha>
+            <img src=https://avatars.githubusercontent.com/u/22044607?v=4 width="100;"  alt=Egor/>
             <br />
-            <sub style="font-size:14px"><b>Igor Kamyşev</b></sub>
+            <sub style="font-size:14px"><b>Egor</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
@@ -872,9 +872,9 @@ Your support allows us to improve the developer experience 🧡.
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/bonkboykz>
-            <img src=https://avatars.githubusercontent.com/u/4549476?v=4 width="100;"  alt=Yesset Zhussupov/>
+            <img src=https://avatars.githubusercontent.com/u/4549476?v=4 width="100;"  alt=Жусупов Есет/>
             <br />
-            <sub style="font-size:14px"><b>Yesset Zhussupov</b></sub>
+            <sub style="font-size:14px"><b>Жусупов Есет</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
