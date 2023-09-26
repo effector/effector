@@ -109,6 +109,17 @@ const storeCombination = (
    * (thats why order has no "barrierID" field, which assume batching)
    **/
   rawShapeReader.order = {priority: 'barrier'}
+  /**
+   * Soft store reading is required for
+   * setting target store as inited in scope
+   * for preventing retriggering issues
+   **/
+  const softReader = mov({
+    store: storeStateRef,
+    to: 'b',
+    priority: 'read',
+  })
+  softReader.data.softRead = true
   const node = [
     calc((upd, _, stack) => {
       if (stack.scope && !stack.scope.reg[rawShape.id]) {
@@ -138,6 +149,7 @@ const storeCombination = (
     }),
     read(rawShape, true),
     fn && userFnCall(),
+    softReader,
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
