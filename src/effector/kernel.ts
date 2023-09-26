@@ -483,13 +483,13 @@ export const initRefInScope = (
   softRead?: boolean,
 ) => {
   const refsMap = scope.reg
+  if (refsMap[sourceRef.id]) return
   const sid = sourceRef.sid
   const serialize = sourceRef?.meta?.serialize
   const parser =
     scope.fromSerialize && serialize !== 'ignore'
       ? serialize?.read || noopParser
       : noopParser
-  if (refsMap[sourceRef.id]) return
   const ref: StateRef = {
     id: sourceRef.id,
     current: sourceRef.initial!,

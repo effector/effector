@@ -6,6 +6,8 @@ import {
   createEvent,
   EffectResult,
   createDomain,
+  fork,
+  allSettled,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -340,7 +342,10 @@ describe('don`t reuse values from user', () => {
     const triggerB = createEvent()
     const foo = createStore(0)
     const bar = createStore(0).on(triggerB, x => x + 10)
-    const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+    const combined = createStore({foo: 0, bar: 0}).on(
+      combine({foo, bar}),
+      (_, x) => x,
+    )
     sample({
       clock: triggerA,
       source: combined,
@@ -366,7 +371,10 @@ describe('don`t reuse values from user', () => {
     const triggerB = createEvent()
     const foo = createStore(0)
     const bar = createStore(0).on(triggerB, x => x + 10)
-    const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+    const combined = createStore({foo: 0, bar: 0}).on(
+      combine({foo, bar}),
+      (_, x) => x,
+    )
     combined.on(triggerA, ({foo, bar}) => ({
       foo: foo + 1,
       bar: bar + 1,
@@ -381,5 +389,47 @@ describe('don`t reuse values from user', () => {
     expect(combined.getState()).toEqual({foo: 1, bar: 11})
     triggerB()
     expect(combined.getState()).toEqual({foo: 0, bar: 20})
+  })
+})
+
+describe('fn retriggers', () => {
+  test('dont retrigger combine fn on allSettled calls', async () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, a => a + 1)
+    const $comb = combine($a, a => {
+      fn(a)
+      return a
+    })
+
+    const scope = fork({values: [[$a, 10]]})
+    await allSettled(inc, {scope})
+    expect(argumentHistory(fn)).toEqual([0, 11])
+  })
+  test('dont retrigger combine fn on getState calls', () => {
+    const fn = jest.fn()
+    const $a = createStore(0)
+    const $comb = combine($a, a => {
+      fn(a)
+      return a
+    })
+
+    const scope = fork({values: [[$a, 10]]})
+    scope.getState($comb)
+    expect(argumentHistory(fn)).toEqual([0, 10])
+  })
+  test('dont retrigger combine fn on getState + allSettled calls', async () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, a => a + 1)
+    const $comb = combine($a, a => {
+      fn(a)
+      return a
+    })
+
+    const scope = fork({values: [[$a, 10]]})
+    scope.getState($comb)
+    await allSettled(inc, {scope})
+    expect(argumentHistory(fn)).toEqual([0, 10, 11])
   })
 })
