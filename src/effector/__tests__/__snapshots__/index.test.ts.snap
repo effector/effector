@@ -231,7 +231,8 @@ exports[`showcase: event foo 1`] = `
                 mov: a store,
                 mov: value store,
                 mov: value store,
-                mov: store stack
+                mov: store stack,
+                mov: store b
               ],
               next: [
                 Node {
@@ -319,7 +320,8 @@ exports[`showcase: store a 1`] = `
         mov: a store,
         mov: value store,
         mov: value store,
-        mov: store stack
+        mov: store stack,
+        mov: store b
       ],
       next: [
         Node {
