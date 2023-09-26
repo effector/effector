@@ -392,16 +392,44 @@ describe('don`t reuse values from user', () => {
   })
 })
 
-test('dont retrigger combine fn on allSettled calls', async () => {
-  const fn = jest.fn()
-  const inc = createEvent()
-  const $a = createStore(0).on(inc, a => a + 1)
-  const $comb = combine($a, a => {
-    fn()
-    return a
-  })
+describe('fn retriggers', () => {
+  test('dont retrigger combine fn on allSettled calls', async () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, a => a + 1)
+    const $comb = combine($a, a => {
+      fn(a)
+      return a
+    })
 
-  const scope = fork()
-  await allSettled(inc, {scope})
-  expect(fn).toBeCalledTimes(2)
+    const scope = fork({values: [[$a, 10]]})
+    await allSettled(inc, {scope})
+    expect(argumentHistory(fn)).toEqual([0, 11])
+  })
+  test('dont retrigger combine fn on getState calls', () => {
+    const fn = jest.fn()
+    const $a = createStore(0)
+    const $comb = combine($a, a => {
+      fn(a)
+      return a
+    })
+
+    const scope = fork({values: [[$a, 10]]})
+    scope.getState($comb)
+    expect(argumentHistory(fn)).toEqual([0, 10])
+  })
+  test('dont retrigger combine fn on getState + allSettled calls', async () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const $a = createStore(0).on(inc, a => a + 1)
+    const $comb = combine($a, a => {
+      fn(a)
+      return a
+    })
+
+    const scope = fork({values: [[$a, 10]]})
+    scope.getState($comb)
+    await allSettled(inc, {scope})
+    expect(argumentHistory(fn)).toEqual([0, 10, 11])
+  })
 })
