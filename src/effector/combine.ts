@@ -89,7 +89,7 @@ const storeCombination = (
   obj: any,
   config?: Config,
   fn?: (upd: any) => any,
-  extConfig?: {skipVoid?: boolean}
+  extConfig?: {skipVoid?: boolean},
 ) => {
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
@@ -103,7 +103,7 @@ const storeCombination = (
   const store = createStore(stateNew, {
     name: unitObjectName(obj),
     derived: true,
-    skipVoid: extConfig?.skipVoid,
+    ...extConfig,
     and: config,
   })
   const storeStateRef = getStoreState(store)
@@ -191,11 +191,6 @@ const storeCombination = (
   if (!readTemplate()) {
     if (fn) {
       const computedValue = fn(stateNew)
-      const isComputedVoid = isVoid(computedValue)
-      assert(
-        !isComputedVoid || (extConfig && "skipVoid" in extConfig && !extConfig.skipVoid && isComputedVoid),
-        requireExplicitSkipVoidMessage,
-      )
       storeStateRef.current = computedValue
       storeStateRef.initial = computedValue
       store.defaultState = computedValue
