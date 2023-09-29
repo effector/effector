@@ -225,7 +225,7 @@ function on<State>(
   return store
 }
 
-const requireExplicitSkipVoidMessage =
+export const requireExplicitSkipVoidMessage =
   'undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option'
 
 export function createStore<State>(
