@@ -224,6 +224,10 @@ function on<State>(
   })
   return store
 }
+
+const requireExplicitSkipVoidMessage =
+  'undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option'
+
 export function createStore<State>(
   defaultState: State,
   props?: Config,
@@ -233,6 +237,14 @@ export function createStore<State>(
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
+
+  // skipVoid deprecation rules
+  const explicitSkipVoid = 'skipVoid' in config
+  const voidValueAllowed = explicitSkipVoid && !config.skipVoid
+  const skipVoidTrueSet = explicitSkipVoid && config.skipVoid
+
+  deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter')
+
   const store = {
     subscribers: new Map(),
     updates,
@@ -345,7 +357,15 @@ export function createStore<State>(
         return upd
       }),
       read(plainState),
-      calc((upd, _, {a, b}) => !isVoid(upd) && (upd !== a || b), true),
+      calc((upd, _, {a, b}) => {
+        const isVoidUpdate = isVoid(upd)
+
+        if (isVoidUpdate && !explicitSkipVoid) {
+          console.error(requireExplicitSkipVoidMessage)
+        }
+
+        return ((isVoidUpdate && voidValueAllowed) || !isVoidUpdate) && (upd !== a || b)
+      }, true),
       updateFilter && userFnCall(callStackAReg, true),
       mov({from: STACK, target: plainState}),
     ],
@@ -369,17 +389,10 @@ export function createStore<State>(
   if (!sid && !ignored && !derived) {
     setMeta(store, 'warnSerialize', true)
   }
-  const explicitSkipVoid = "skipVoid" in config
-  const voidValueAllowed = isVoid(defaultState) && (explicitSkipVoid && !config.skipVoid)
+  const isVoidDefaultState = isVoid(defaultState)
   assert(
-    derived || !isVoid(defaultState) || voidValueAllowed,
-    "undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option",
-  )
-  const skipVoidTrueSet = explicitSkipVoid && config.skipVoid
-  deprecate(
-    !skipVoidTrueSet,
-    "{skipVoid: true}",
-    "updateFilter"
+    derived || !isVoidDefaultState || (isVoidDefaultState && voidValueAllowed),
+    requireExplicitSkipVoidMessage,
   )
   own(store, [updates])
   if (config?.domain) {
