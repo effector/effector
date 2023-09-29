@@ -57,16 +57,6 @@ describe('.map', () => {
     `)
   })
 
-  test('second argument throw an error', () => {
-    const $a = createStore(10)
-    expect(() => {
-      // @ts-expect-error
-      $a.map((x, y) => x + y, 2)
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"second argument of store.map is not supported, use updateFilter instead"`,
-    )
-  })
-
   it('supports nested mapping with updates skipping', () => {
     const a = createStore(null)
     const f = jest.fn(a => {
@@ -334,7 +324,7 @@ describe('void skip pattern deprecation', () => {
   })
 
   function getWarning() {
-    return warn.mock.calls.map(([msg]) => msg)[0]
+    return warn.mock.calls.map(([msg]) => msg).join('\n')
   }
 
   describe('writable stores', () => {
@@ -361,7 +351,7 @@ describe('void skip pattern deprecation', () => {
     })
     test('createStore does not warn anything, if {skipVoid} and undefined are not presented', () => {
       expect(() => createStore(null)).not.toThrow()
-      expect(getWarning()).toBe(undefined)
+      expect(getWarning()).toBe("")
     })
 
     describe('store.on', () => {
@@ -373,9 +363,12 @@ describe('void skip pattern deprecation', () => {
           `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
         )
       })
-      test('store.on reducer skips updates with undefined, but shows warning, if store has {skipVoid: true}', () => {
+      test('store.on reducer skips updates with undefined and does not warn, if store has {skipVoid: true} (only warning of the store itself is shown)', () => {
         const inc = createEvent()
         const store = createStore(0, {skipVoid: true}).on(inc, () => {})
+        expect(getWarning()).toMatchInlineSnapshot(
+          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        )
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
           `"{skipVoid: true} is deprecated, use updateFilter instead"`,
@@ -385,7 +378,7 @@ describe('void skip pattern deprecation', () => {
         const inc = createEvent()
         const store = createStore(0, {skipVoid: false}).on(inc, () => {})
         inc()
-        expect(getWarning()).toBe(undefined)
+        expect(getWarning()).toBe("")
         expect(store.getState()).toBe(undefined)
       })
     })
@@ -414,7 +407,7 @@ describe('void skip pattern deprecation', () => {
         const store = createStore<number | void>(0, {skipVoid: false})
         sample({clock: inc, fn: () => {}, target: store})
         inc()
-        expect(getWarning()).toBe(undefined)
+        expect(getWarning()).toBe("")
         expect(store.getState()).toBe(undefined)
       })
     })
@@ -482,7 +475,7 @@ describe('void skip pattern deprecation', () => {
         .on(inc, (_, v) => v)
         .map(x => (x > 3 ? undefined : x), {skipVoid: false})
       inc(4)
-      expect(getWarning()).toBe(undefined)
+      expect(getWarning()).toBe("")
       expect(store.getState()).toBe(undefined)
     })
   })
@@ -537,7 +530,7 @@ describe('void skip pattern deprecation', () => {
         {skipVoid: false},
       )
       inc(4)
-      expect(getWarning()).toBe(undefined)
+      expect(getWarning()).toBe("")
       expect(store.getState()).toBe(undefined)
     })
   })
