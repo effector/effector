@@ -50,8 +50,8 @@ test('is.targetable', () => {
   const $store = createStore(0)
   const domain = createDomain()
   const scope = fork()
-  const mappedEvent = event.map(() => {})
-  const $mapped = $store.map(() => {})
+  const mappedEvent = event.map(() => null)
+  const $mapped = $store.map(() => null)
 
   expect(is.targetable(event)).toBe(true)
   expect(is.targetable(fx)).toBe(true)
