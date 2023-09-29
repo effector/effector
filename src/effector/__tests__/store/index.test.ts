@@ -1,4 +1,4 @@
-import {createStore, createEvent, createEffect} from 'effector'
+import {createStore, createEvent, createEffect, sample, combine} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('.map', () => {
@@ -316,6 +316,18 @@ describe('updateFilter', () => {
 })
 
 describe('void skip pattern deprecation', () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  function getWarning() {
+    return warn.mock.calls.map(([msg]) => msg)[0]
+  }
+
   describe('writable stores', () => {
     test('createStore throw on undefined', () => {
       expect(() => createStore(undefined)).toThrowErrorMatchingInlineSnapshot(
@@ -323,7 +335,9 @@ describe('void skip pattern deprecation', () => {
       )
     })
     test('createStore throw on undefined, if used with {skipVoid: true}', () => {
-      expect(() => createStore(undefined, {skipVoid: true})).toThrowErrorMatchingInlineSnapshot(
+      expect(() =>
+        createStore(undefined, {skipVoid: true}),
+      ).toThrowErrorMatchingInlineSnapshot(
         `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
@@ -332,36 +346,179 @@ describe('void skip pattern deprecation', () => {
     })
     test('createStore warns deprecation, if used with {skipVoid: true}', () => {
       expect(() => createStore(null, {skipVoid: true})).not.toThrow()
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+      )
     })
 
     describe('store.on', () => {
-      test('store.on reducer skips updates with undefined, but shows warning')
-      test('store.on reducer skips updates with undefined, but shows warning, if store has {skipVoid: true}')
-      test('store.on reducer allows undefined as a value, if store has {skipVoid: false}')
+      test('store.on reducer skips updates with undefined, but shows warning', () => {
+        const inc = createEvent()
+        const store = createStore(0).on(inc, () => {})
+        inc()
+        expect(getWarning()).toMatchInlineSnapshot(
+          `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        )
+      })
+      test('store.on reducer skips updates with undefined, but shows warning, if store has {skipVoid: true}', () => {
+        const inc = createEvent()
+        const store = createStore(0, {skipVoid: true}).on(inc, () => {})
+        inc()
+        expect(getWarning()).toMatchInlineSnapshot(
+          `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+        )
+      })
+      test('store.on reducer allows undefined as a value, if store has {skipVoid: false}', () => {
+        const inc = createEvent()
+        const store = createStore(0, {skipVoid: false}).on(inc, () => {})
+        inc()
+        expect(getWarning()).toBe(undefined)
+        expect(store.getState()).toBe(undefined)
+      })
     })
-    
+
     describe('sample target', () => {
-      test('sample target skips updates with undefined, but shows warning')
-      test('sample target skips updates with undefined, but shows warning, if store has {skipVoid: true}')
-      test('sample target allows undefined as a value, if store has {skipVoid: false}')
+      test('sample target skips updates with undefined, but shows warning', () => {
+        const inc = createEvent()
+        const store = createStore<number | void>(0)
+        sample({ clock: inc, fn: () => {}, target: store })
+        inc()
+        expect(getWarning()).toMatchInlineSnapshot(
+          `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        )
+      })
+      test(
+        'sample target skips updates with undefined, but shows warning, if store has {skipVoid: true}',
+        () => {
+          const inc = createEvent()
+          const store = createStore<number | void>(0, {skipVoid: true})
+          sample({ clock: inc, fn: () => {}, target: store })
+          inc()
+          expect(getWarning()).toMatchInlineSnapshot(
+            `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+          )
+        }
+      )
+      test(
+        'sample target allows undefined as a value, if store has {skipVoid: false}',
+        () => {
+          const inc = createEvent()
+          const store = createStore<number | void>(0, {skipVoid: false})
+          sample({ clock: inc, fn: () => {}, target: store })
+          inc()
+          expect(getWarning()).toBe(undefined)
+          expect(store.getState()).toBe(undefined)
+        }
+      )
     })
   })
 
   describe('store.map', () => {
-    test('store.map throw on initial undefined')
-    test('store.map throw on initial undefined, if used with {skipVoid: true}')
-    test('store.map skips updates with undefined, but shows warning')
-    test('store.map skips updates with undefined, but shows warning, if used with {skipVoid: true}')
-    test('store.map do not throw on initial undefined, if used with {skipVoid: false}')
-    test('store.map do not warn on update undefined, if used with {skipVoid: false}')
+    test('store.map throw on initial undefined', () => {
+      expect(() => {
+        createStore(null).map(() => {})
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test('store.map throw on initial undefined, if used with {skipVoid: true}',
+    () => {
+      expect(() => {
+        createStore(null, {skipVoid: true}).map(() => {})
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test('store.map skips updates with undefined, but shows warning', () => {
+      const inc = createEvent<number>()
+      const store = createStore(0).on(inc, (_, v) => v).map((x) => x > 3 ? undefined : x)
+      inc(4)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test(
+      'store.map skips updates with undefined, but shows warning, if used with {skipVoid: true}',
+      () => {
+        const inc = createEvent<number>()
+        const store = createStore(0).on(inc, (_, v) => v).map((x) => x > 3 ? undefined : x, {skipVoid: true})
+        inc(4)
+        expect(getWarning()).toMatchInlineSnapshot(
+          `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+        )
+      }
+    )
+    test(
+      'store.map do not throw on initial undefined, if used with {skipVoid: false}',
+      () => {
+        expect(() => {
+          createStore(null).map(() => {}, {skipVoid: false})
+        }).not.toThrow()
+      }
+    )
+    test(
+      'store.map do not warn on update undefined, if used with {skipVoid: false}',
+      () => {
+        const inc = createEvent<number>()
+        const store = createStore(0).on(inc, (_, v) => v).map((x) => x > 3 ? undefined : x, {skipVoid: false})
+        inc(4)
+        expect(getWarning()).toBe(undefined)
+        expect(store.getState()).toBe(undefined)
+      }
+    )
   })
 
   describe('combine', () => {
-    test('combine throw on initial undefined')
-    test('combine throw on initial undefined, if used with {skipVoid: true}')
-    test('combine skips updates with undefined, but shows warning')
-    test('combine skips updates with undefined, but shows warning, if used with {skipVoid: true}')
-    test('combine do not throw on initial undefined, if used with {skipVoid: false}')
-    test('combine do not warn on update undefined, if used with {skipVoid: false}')
+    test('combine throw on initial undefined', () => {
+      expect(() => {
+        combine({a: createStore(null)}, () => {})
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test('combine throw on initial undefined, if used with {skipVoid: true}', () => {
+      expect(() => {
+        combine({a: createStore(null, {skipVoid: true})}, () => {})
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test('combine skips updates with undefined, but shows warning', () => {
+      const inc = createEvent<number>()
+      const store = combine({a: createStore(0).on(inc, (_, v) => v) }, (x) => x.a > 3 ? undefined : x)
+      inc(4)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test(
+      'combine skips updates with undefined, but shows warning, if used with {skipVoid: true}',
+      () => {
+        const inc = createEvent<number>()
+        const store = combine({a: createStore(0).on(inc, (_, v) => v) }, (x) => x.a > 3 ? undefined : x, {skipVoid: true})
+        inc(4)
+        expect(getWarning()).toMatchInlineSnapshot(
+          `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+        )
+      }
+    )
+    test(
+      'combine do not throw on initial undefined, if used with {skipVoid: false}',
+      () => {
+        expect(() => {
+          combine({a: createStore(null)}, () => {}, {skipVoid: false})
+        }).not.toThrow()
+      }
+    )
+    test(
+      'combine do not warn on update undefined, if used with {skipVoid: false}',
+      () => {
+        const inc = createEvent<number>()
+        const store = combine({a: createStore(0).on(inc, (_, v) => v) }, (x) => x.a > 3 ? undefined : x, {skipVoid: false})
+        inc(4)
+        expect(getWarning()).toBe(undefined)
+        expect(store.getState()).toBe(undefined)
+      }
+    )
   })
 })
