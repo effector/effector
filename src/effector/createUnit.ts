@@ -369,9 +369,17 @@ export function createStore<State>(
   if (!sid && !ignored && !derived) {
     setMeta(store, 'warnSerialize', true)
   }
+  const explicitSkipVoid = "skipVoid" in config
+  const voidValueAllowed = isVoid(defaultState) && (explicitSkipVoid && !config.skipVoid)
   assert(
-    derived || !isVoid(defaultState),
-    "current state can't be undefined, use null instead",
+    derived || !isVoid(defaultState) || voidValueAllowed,
+    "undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option",
+  )
+  const skipVoidTrueSet = explicitSkipVoid && config.skipVoid
+  deprecate(
+    !skipVoidTrueSet,
+    "{skipVoid: true}",
+    "updateFilter"
   )
   own(store, [updates])
   if (config?.domain) {

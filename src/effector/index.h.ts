@@ -41,6 +41,7 @@ export type Config = {
   handler?: Function
   derived?: boolean
   serialize?: 'ignore'
+  skipVoid?: boolean
 }
 
 export type Node = {
