@@ -181,3 +181,14 @@ $withFn.watch(console.log);
 ```
 
 [Try it](https://share.effector.dev/XWk1lG4a)
+
+## Optional configuration {#combine-optional-configuration}
+
+All overloads of `combine` with `fn` provided are also supporting optional configuration object, wich includes:
+   - `skipVoid`: (_boolean_): Flag to control, how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will read `undefined` as a "skip update" command and will do nothing.
+
+#### Example
+
+```js
+const $withFn = combine($a, $b, (a, b) => a || b, {skipVoid: false});
+```
