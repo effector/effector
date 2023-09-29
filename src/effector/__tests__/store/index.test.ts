@@ -440,9 +440,9 @@ describe('void skip pattern deprecation', () => {
     test('store.map warn on initial undefined, if used with {skipVoid: true}', () => {
       createStore(null).map(() => {}, {skipVoid: true})
 
-      expect(getWarning()).toMatchInlineSnapshot(`
-        "{skipVoid: true} is deprecated, use updateFilter instead"
-      `)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+      )
     })
     test('store.map skips updates with undefined, but shows warning', () => {
       const inc = createEvent<number>()
@@ -450,9 +450,9 @@ describe('void skip pattern deprecation', () => {
         .on(inc, (_, v) => v)
         .map(x => (x > 3 ? undefined : x))
       inc(4)
-      expect(getWarning()).toMatchInlineSnapshot(`
-        "undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"
-      `)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
     })
     test('store.map skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
       const inc = createEvent<number>()
@@ -462,9 +462,9 @@ describe('void skip pattern deprecation', () => {
       inc(4)
       inc(5)
       inc(6)
-      expect(getWarning()).toMatchInlineSnapshot(`
-        "{skipVoid: true} is deprecated, use updateFilter instead"
-      `)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+      )
     })
     test('store.map do not warn on initial undefined, if used with {skipVoid: false}', () => {
       expect(() => {
@@ -493,9 +493,9 @@ describe('void skip pattern deprecation', () => {
     })
     test('combine throw on initial undefined, if used with {skipVoid: true}', () => {
       combine({a: createStore(null)}, () => {}, {skipVoid: true})
-      expect(getWarning()).toMatchInlineSnapshot(`
-        "{skipVoid: true} is deprecated, use updateFilter instead"
-      `)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+      )
     })
     test('combine skips updates with undefined, but shows warning', () => {
       const inc = createEvent<number>()
@@ -503,9 +503,9 @@ describe('void skip pattern deprecation', () => {
         x.a > 3 ? undefined : x,
       )
       inc(4)
-      expect(getWarning()).toMatchInlineSnapshot(`
-        "undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"
-      `)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
     })
     test('combine skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
       const inc = createEvent<number>()
@@ -517,9 +517,9 @@ describe('void skip pattern deprecation', () => {
       inc(4)
       inc(5)
       inc(6)
-      expect(getWarning()).toMatchInlineSnapshot(`
-        "{skipVoid: true} is deprecated, use updateFilter instead"
-      `)
+      expect(getWarning()).toMatchInlineSnapshot(
+        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+      )
     })
     test('combine do not throw on initial undefined, if used with {skipVoid: false}', () => {
       expect(() => {
