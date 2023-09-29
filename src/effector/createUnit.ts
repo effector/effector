@@ -390,10 +390,14 @@ export function createStore<State>(
     setMeta(store, 'warnSerialize', true)
   }
   const isVoidDefaultState = isVoid(defaultState)
+  const canVoid = (isVoidDefaultState && voidValueAllowed)
   assert(
-    !isVoidDefaultState || (isVoidDefaultState && voidValueAllowed),
+    derived || !isVoidDefaultState || canVoid,
     requireExplicitSkipVoidMessage,
   )
+  if (derived && (isVoidDefaultState && !explicitSkipVoid)) {
+    console.error(requireExplicitSkipVoidMessage)
+  }
   own(store, [updates])
   if (config?.domain) {
     config.domain.hooks.store(store)

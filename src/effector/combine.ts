@@ -191,6 +191,11 @@ const storeCombination = (
   if (!readTemplate()) {
     if (fn) {
       const computedValue = fn(stateNew)
+
+      if (isVoid(computedValue) && (!extConfig || !("skipVoid" in extConfig))) {
+        console.error(requireExplicitSkipVoidMessage)
+      }
+
       storeStateRef.current = computedValue
       storeStateRef.initial = computedValue
       store.defaultState = computedValue
