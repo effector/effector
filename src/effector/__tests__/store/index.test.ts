@@ -491,7 +491,7 @@ describe('void skip pattern deprecation', () => {
         `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
-    test('combine throw on initial undefined, if used with {skipVoid: true}', () => {
+    test('combine warn on initial undefined, if used with {skipVoid: true}', () => {
       combine({a: createStore(null)}, () => {}, {skipVoid: true})
       expect(getWarning()).toMatchInlineSnapshot(
         `"{skipVoid: true} is deprecated, use updateFilter instead"`,
@@ -521,7 +521,7 @@ describe('void skip pattern deprecation', () => {
         `"{skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
-    test('combine do not throw on initial undefined, if used with {skipVoid: false}', () => {
+    test('combine do not warn on initial undefined, if used with {skipVoid: false}', () => {
       expect(() => {
         combine({a: createStore(null)}, () => {}, {skipVoid: false})
       }).not.toThrow()
