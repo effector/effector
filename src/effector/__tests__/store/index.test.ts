@@ -1,12 +1,6 @@
 import {createStore, createEvent, createEffect} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
-test('createStore throw on undefined', () => {
-  expect(() => createStore(undefined)).toThrowErrorMatchingInlineSnapshot(
-    `"current state can't be undefined, use null instead"`,
-  )
-})
-
 describe('.map', () => {
   it('supports basic mapping', () => {
     const fn = jest.fn()
@@ -318,5 +312,56 @@ describe('updateFilter', () => {
         },
       ]
     `)
+  })
+})
+
+describe('void skip pattern deprecation', () => {
+  describe('writable stores', () => {
+    test('createStore throw on undefined', () => {
+      expect(() => createStore(undefined)).toThrowErrorMatchingInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test('createStore throw on undefined, if used with {skipVoid: true}', () => {
+      expect(() => createStore(undefined, {skipVoid: true})).toThrowErrorMatchingInlineSnapshot(
+        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      )
+    })
+    test('createStore do not throw on undefined with skipVoid: false', () => {
+      expect(() => createStore(undefined, {skipVoid: false})).not.toThrow()
+    })
+    test('createStore warns deprecation, if used with {skipVoid: true}', () => {
+      expect(() => createStore(null, {skipVoid: true})).not.toThrow()
+    })
+
+    describe('store.on', () => {
+      test('store.on reducer skips updates with undefined, but shows warning')
+      test('store.on reducer skips updates with undefined, but shows warning, if store has {skipVoid: true}')
+      test('store.on reducer allows undefined as a value, if store has {skipVoid: false}')
+    })
+    
+    describe('sample target', () => {
+      test('sample target skips updates with undefined, but shows warning')
+      test('sample target skips updates with undefined, but shows warning, if store has {skipVoid: true}')
+      test('sample target allows undefined as a value, if store has {skipVoid: false}')
+    })
+  })
+
+  describe('store.map', () => {
+    test('store.map throw on initial undefined')
+    test('store.map throw on initial undefined, if used with {skipVoid: true}')
+    test('store.map skips updates with undefined, but shows warning')
+    test('store.map skips updates with undefined, but shows warning, if used with {skipVoid: true}')
+    test('store.map do not throw on initial undefined, if used with {skipVoid: false}')
+    test('store.map do not warn on update undefined, if used with {skipVoid: false}')
+  })
+
+  describe('combine', () => {
+    test('combine throw on initial undefined')
+    test('combine throw on initial undefined, if used with {skipVoid: true}')
+    test('combine skips updates with undefined, but shows warning')
+    test('combine skips updates with undefined, but shows warning, if used with {skipVoid: true}')
+    test('combine do not throw on initial undefined, if used with {skipVoid: false}')
+    test('combine do not warn on update undefined, if used with {skipVoid: false}')
   })
 })

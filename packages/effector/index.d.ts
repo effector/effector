@@ -216,7 +216,7 @@ type InferValueFromTupleOfUnitTargetables<T extends Tuple<UnitTargetable<any>>> 
 
 export interface Store<State> extends Unit<State> {
   kind: "store"
-  map<T>(fn: (state: State, lastState?: T) => T): Store<T>
+  map<T>(fn: (state: State, lastState?: T) => T, config?: {skipVoid?: boolean}): Store<T>
   /**
    * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
    */
@@ -775,6 +775,7 @@ export function createEffect<Params, Done, Fail = Error>(config: {
 export function createStore<State, SerializedState extends Json = Json>(
   defaultState: State,
   config?: {
+    skipVoid?: boolean;
     name?: string;
     sid?: string
     updateFilter?: (update: State, current: State) => boolean
@@ -2900,7 +2901,7 @@ export function combine<State>(
  * @param fn transformer function, accepts a store value
  * @returns derived store updated upon changes in given one
  */
-export function combine<A, R>(source: Store<A>, fn: (source: A) => R): Store<R>
+export function combine<A, R>(source: Store<A>, fn: (source: A) => R, config?: {skipVoid: boolean}): Store<R>
 /**
  * Convert array of stores into derived store, transforming values using the function
  * @param tuple array of stores
@@ -2912,6 +2913,7 @@ export function combine<State extends Tuple, R>(
   fn: (
     tuple: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
   ) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert object with stores into derived store, transforming values using the function
@@ -2924,6 +2926,7 @@ export function combine<State, R>(
   fn: (
     shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
   ) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2934,6 +2937,7 @@ export function combine<A, B, R>(
   a: A,
   b: B,
   fn: (a: CombVal<A>, b: CombVal<B>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2945,6 +2949,7 @@ export function combine<A, B, C, R>(
   b: B,
   c: C,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2957,6 +2962,7 @@ export function combine<A, B, C, D, R>(
   c: C,
   d: D,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2970,6 +2976,7 @@ export function combine<A, B, C, D, E, R>(
   d: D,
   e: E,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2984,6 +2991,7 @@ export function combine<A, B, C, D, E, F, R>(
   e: E,
   f: F,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2999,6 +3007,7 @@ export function combine<A, B, C, D, E, F, G, R>(
   f: F,
   g: G,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -3018,6 +3027,7 @@ export function combine<A, B, C, D, E, F, G, H, R>(
   g: G,
   h: H,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -3038,6 +3048,7 @@ export function combine<A, B, C, D, E, F, G, H, I, R>(
   h: H,
   i: I,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -3059,6 +3070,7 @@ export function combine<A, B, C, D, E, F, G, H, I, J, R>(
   i: I,
   j: J,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>, j: CombVal<J>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -3081,6 +3093,7 @@ export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
   j: J,
   k: K,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>, j: CombVal<J>, k: CombVal<K>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores to store with array which values updated upon changes in given ones
