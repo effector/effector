@@ -347,8 +347,12 @@ describe('void skip pattern deprecation', () => {
     test('createStore warns deprecation, if used with {skipVoid: true}', () => {
       expect(() => createStore(null, {skipVoid: true})).not.toThrow()
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
       )
+    })
+    test('createStore does not warn anything, if {skipVoid} and undefined are not presented', () => {
+      expect(() => createStore(null)).not.toThrow()
+      expect(getWarning()).toBe(undefined)
     })
 
     describe('store.on', () => {
@@ -365,7 +369,7 @@ describe('void skip pattern deprecation', () => {
         const store = createStore(0, {skipVoid: true}).on(inc, () => {})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
         )
       })
       test('store.on reducer allows undefined as a value, if store has {skipVoid: false}', () => {
@@ -395,7 +399,7 @@ describe('void skip pattern deprecation', () => {
           sample({ clock: inc, fn: () => {}, target: store })
           inc()
           expect(getWarning()).toMatchInlineSnapshot(
-            `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+            `"{skipVoid: true} is deprecated, use updateFilter instead"`,
           )
         }
       )
@@ -458,7 +462,7 @@ describe('void skip pattern deprecation', () => {
         const store = createStore(0).on(inc, (_, v) => v).map((x) => x > 3 ? undefined : x, {skipVoid: true})
         inc(4)
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
         )
       }
     )
@@ -512,7 +516,7 @@ describe('void skip pattern deprecation', () => {
         const store = combine({a: createStore(0).on(inc, (_, v) => v) }, (x) => x.a > 3 ? undefined : x, {skipVoid: true})
         inc(4)
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoud: true} is deprecated, use updateFilter instead"`,
+          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
         )
       }
     )
