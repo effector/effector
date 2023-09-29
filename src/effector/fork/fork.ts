@@ -9,7 +9,6 @@ import {getMeta} from '../getter'
 type ForkConfig = {
   values?: ValuesMap
   handlers?: HandlersMap
-  scope?: Scope
 }
 
 export function fork(
@@ -27,16 +26,11 @@ export function fork(
   const scope = createScope(domain!)
 
   if (config) {
-    const oldScope = config.scope
-    if (oldScope) {
-      const activeEffects = oldScope.activeEffects
-      oldScope.activeEffects = []
-      scope.activeEffects = activeEffects
-      forEach(activeEffects, scopeRef => (scopeRef.ref = scope))
-    }
     if (config.values) {
-      const {sidMap, unitMap, hasSidDoubles} = normalizeValues(config.values, unit =>
-        assert(is.store(unit), 'Values map can contain only stores as keys'),
+      const {sidMap, unitMap, hasSidDoubles} = normalizeValues(
+        config.values,
+        unit =>
+          assert(is.store(unit), 'Values map can contain only stores as keys'),
       )
       Object.assign(scope.values.sidMap, sidMap)
       forEach(unitMap, (value, unit) => {

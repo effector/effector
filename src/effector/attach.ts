@@ -1,6 +1,6 @@
 import type {Domain} from './unit.h'
 import {combine} from './combine'
-import {createEffect, createScopeRef, onSettled, runFn} from './createEffect'
+import {createEffect, onSettled, runFn} from './createEffect'
 import {applyParentHook} from './createUnit'
 import {processArgsToConfig} from './config'
 import {
@@ -36,8 +36,7 @@ export function attach(config: any) {
     (upd, _, stack) => {
       const {params, req, handler} = upd
       const anyway = attached.finally
-      const scopeRef = createScopeRef(stack)
-      const rj = onSettled(params, req, false, anyway, stack, scopeRef)
+      const rj = onSettled(params, req, false, anyway, stack)
       const sourceData = stack.a
       const isEffectHandler = is.effect(handler)
       let ok = true
@@ -54,7 +53,7 @@ export function attach(config: any) {
             params: {
               params: computedParams,
               req: {
-                rs: onSettled(params, req, true, anyway, stack, scopeRef),
+                rs: onSettled(params, req, true, anyway, stack),
                 rj,
               },
             },
