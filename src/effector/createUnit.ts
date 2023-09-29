@@ -295,30 +295,27 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn: (value: any) => any, forbiddenArgument: any) {
-      assert(
-        isVoid(forbiddenArgument),
-        'second argument of store.map is not supported, use updateFilter instead',
-      )
-      let config
+    map(fn: (value: any) => any, outerConfig: Config) {
+      let mapConfig: Config | undefined
       if (isObject(fn)) {
-        config = fn
+        mapConfig = (fn as any)
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
       let lastResult
       const storeState = store.getState()
+      const parentStateVoid = isVoid(storeState)
       const template = readTemplate()
       if (template) {
         lastResult = null
-      } else if (!isVoid(storeState)) {
+      } else if (!parentStateVoid || (parentStateVoid && voidValueAllowed)) {
         lastResult = fn(storeState)
       }
 
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
         derived: true,
-        // @ts-expect-error some mismatch in config types
-        and: config,
+        skipVoid: outerConfig?.skipVoid,
+        and: mapConfig,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
       addRefOp(getStoreState(innerStore), {
@@ -364,7 +361,10 @@ export function createStore<State>(
           console.error(requireExplicitSkipVoidMessage)
         }
 
-        return ((isVoidUpdate && voidValueAllowed) || !isVoidUpdate) && (upd !== a || b)
+        return (
+          ((isVoidUpdate && voidValueAllowed) || !isVoidUpdate) &&
+          (upd !== a || b)
+        )
       }, true),
       updateFilter && userFnCall(callStackAReg, true),
       mov({from: STACK, target: plainState}),
@@ -391,7 +391,7 @@ export function createStore<State>(
   }
   const isVoidDefaultState = isVoid(defaultState)
   assert(
-    derived || !isVoidDefaultState || (isVoidDefaultState && voidValueAllowed),
+    !isVoidDefaultState || (isVoidDefaultState && voidValueAllowed),
     requireExplicitSkipVoidMessage,
   )
   own(store, [updates])
