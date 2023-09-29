@@ -314,7 +314,7 @@ export function createStore<State>(
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
         derived: true,
-        skipVoid: outerConfig?.skipVoid,
+        ...outerConfig,
         and: mapConfig,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
