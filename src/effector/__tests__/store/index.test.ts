@@ -1,4 +1,4 @@
-import {createStore, createEvent, createEffect, sample, combine} from 'effector'
+import {createStore, createEvent, createEffect, sample, combine, fork, allSettled, serialize} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('.map', () => {
@@ -410,6 +410,20 @@ describe('void skip pattern deprecation', () => {
           expect(store.getState()).toBe(undefined)
         }
       )
+    })
+
+    describe('Fork API', () => {
+      test('undefined as a value is allowed in serialize result, if store has {skipVoid: false}', async () => {
+        const inc = createEvent()
+        const store = createStore(0, {skipVoid: false}).on(inc, () => {})
+
+        const scope = fork()
+
+        await allSettled(inc, {scope})
+
+        expect(scope.getState(store)).toBe(undefined)
+        expect(serialize(scope)).toMatchInlineSnapshot()
+      })
     })
   })
 
