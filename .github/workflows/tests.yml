@@ -51,7 +51,7 @@ jobs:
   publish-canary:
     needs: build-packages
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && github.ref_name == 'master' && !startsWith(github.ref, 'refs/tags/')
     env:
       AWS_DEFAULT_REGION: eu-west-1
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_build_uploader_access_key }}
@@ -63,6 +63,8 @@ jobs:
           name: effector-packages-${{ github.run_id  }}
       - name: upload packages
         run: aws s3 sync ./npm s3://effector--canary/ --acl=public-read --delete --exclude '.git/*'
+      - name: print result
+        run: echo 'uploaded the ${{ github.ref_name }} branch build of effector as canary'
       - name: calculate target dir
         shell: bash
         # 2260 - last build id in semaphore, 824 - corresponding github run
