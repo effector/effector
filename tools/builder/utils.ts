@@ -17,6 +17,11 @@ export function dir(...paths: string[]) {
   return resolve(root, ...paths)
 }
 
+/**
+ * 
+ * @param path target path to output package.json
+ * @param config package.json content
+ */
 export async function outputPackageJSON(
   path: string,
   config: {[key: string]: any},
