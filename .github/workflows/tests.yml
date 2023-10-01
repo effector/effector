@@ -63,6 +63,7 @@ jobs:
           name: effector-packages-${{ github.run_id  }}
       - name: upload packages
         run: aws s3 sync ./npm s3://effector--canary/ --acl=public-read --delete --exclude '.git/*'
+      - name: print result
         run: echo 'uploaded the ${{ github.ref_name }} branch build of effector as canary'
       - name: calculate target dir
         shell: bash

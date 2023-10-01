@@ -19,7 +19,7 @@ export function dir(...paths: string[]) {
 
 /**
  * 
- * @param path target path to output package.json
+ * @param path target path to output package.json contents
  * @param config package.json content
  */
 export async function outputPackageJSON(
