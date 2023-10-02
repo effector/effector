@@ -224,6 +224,10 @@ function on<State>(
   })
   return store
 }
+
+export const requireExplicitSkipVoidMessage =
+  'undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option'
+
 export function createStore<State>(
   defaultState: State,
   props?: Config,
@@ -233,6 +237,14 @@ export function createStore<State>(
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
+
+  // skipVoid deprecation rules
+  const explicitSkipVoid = 'skipVoid' in config
+  const voidValueAllowed = explicitSkipVoid && !config.skipVoid
+  const skipVoidTrueSet = explicitSkipVoid && config.skipVoid
+
+  deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter')
+
   const store = {
     subscribers: new Map(),
     updates,
@@ -283,30 +295,27 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn: (value: any) => any, forbiddenArgument: any) {
-      assert(
-        isVoid(forbiddenArgument),
-        'second argument of store.map is not supported, use updateFilter instead',
-      )
-      let config
+    map(fn: (value: any) => any, outerConfig: Config) {
+      let mapConfig: Config | undefined
       if (isObject(fn)) {
-        config = fn
+        mapConfig = (fn as any)
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
       let lastResult
       const storeState = store.getState()
+      const parentStateVoid = isVoid(storeState)
       const template = readTemplate()
       if (template) {
         lastResult = null
-      } else if (!isVoid(storeState)) {
+      } else if (!parentStateVoid || (parentStateVoid && voidValueAllowed)) {
         lastResult = fn(storeState)
       }
 
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
         derived: true,
-        // @ts-expect-error some mismatch in config types
-        and: config,
+        ...outerConfig,
+        and: mapConfig,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
       addRefOp(getStoreState(innerStore), {
@@ -345,7 +354,18 @@ export function createStore<State>(
         return upd
       }),
       read(plainState),
-      calc((upd, _, {a, b}) => !isVoid(upd) && (upd !== a || b), true),
+      calc((upd, _, {a, b}) => {
+        const isVoidUpdate = isVoid(upd)
+
+        if (isVoidUpdate && !explicitSkipVoid) {
+          console.error(requireExplicitSkipVoidMessage)
+        }
+
+        return (
+          ((isVoidUpdate && voidValueAllowed) || !isVoidUpdate) &&
+          (upd !== a || b)
+        )
+      }, true),
       updateFilter && userFnCall(callStackAReg, true),
       mov({from: STACK, target: plainState}),
     ],
@@ -369,10 +389,15 @@ export function createStore<State>(
   if (!sid && !ignored && !derived) {
     setMeta(store, 'warnSerialize', true)
   }
+  const isVoidDefaultState = isVoid(defaultState)
+  const canVoid = (isVoidDefaultState && voidValueAllowed)
   assert(
-    derived || !isVoid(defaultState),
-    "current state can't be undefined, use null instead",
+    derived || !isVoidDefaultState || canVoid,
+    requireExplicitSkipVoidMessage,
   )
+  if (derived && (isVoidDefaultState && !explicitSkipVoid)) {
+    console.error(requireExplicitSkipVoidMessage)
+  }
   own(store, [updates])
   if (config?.domain) {
     config.domain.hooks.store(store)

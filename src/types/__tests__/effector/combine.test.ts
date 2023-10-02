@@ -355,7 +355,7 @@ test('possibly undefined store error message mismatch (should pass)', () => {
     hasNotActiveFunnels: $hasNotActiveFunnels,
     vacancyId: $vacancyField.map(v => {
       if (v) return v.id
-    }),
+    }, {skipVoid: false}),
   })
 
   const resultType: Store<{

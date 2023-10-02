@@ -1,5 +1,5 @@
 import type {Store} from './unit.h'
-import {createStore} from './createUnit'
+import {createStore, requireExplicitSkipVoidMessage} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
@@ -19,9 +19,13 @@ export function combine(...args: any[]): Store<any> {
   let stores
   let config
   ;[args, config] = processArgsToConfig(args)
-  const rawHandler = args[args.length - 1]
+  // skipVoid support, to be removed in effector 24
+  const maybeExtConfig = args[args.length - 1]
+  const isExtendedConfig = !is.store(maybeExtConfig) && isObject(maybeExtConfig)
+  const extConfig = isExtendedConfig && maybeExtConfig
+  const rawHandler = isExtendedConfig ? args[args.length - 2] : maybeExtConfig
   if (isFunction(rawHandler)) {
-    stores = args.slice(0, -1)
+    stores = args.slice(0, isExtendedConfig ? -2 : -1)
     handler = rawHandler
   } else {
     stores = args
@@ -75,6 +79,7 @@ export function combine(...args: any[]): Store<any> {
     structStoreShape,
     config,
     handler,
+    extConfig,
   )
 }
 
@@ -84,6 +89,7 @@ const storeCombination = (
   obj: any,
   config?: Config,
   fn?: (upd: any) => any,
+  extConfig?: {skipVoid?: boolean},
 ) => {
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
@@ -97,6 +103,7 @@ const storeCombination = (
   const store = createStore(stateNew, {
     name: unitObjectName(obj),
     derived: true,
+    ...extConfig,
     and: config,
   })
   const storeStateRef = getStoreState(store)
@@ -150,7 +157,7 @@ const storeCombination = (
     /**
      * `read` with `sampler` priority is used to prevent cases,
      *  where `combine` triggers are duplicated
-     * 
+     *
      *  basically, this makes `sample` and `combine` priorities equal
      */
     read(rawShape, true, true),
@@ -184,6 +191,11 @@ const storeCombination = (
   if (!readTemplate()) {
     if (fn) {
       const computedValue = fn(stateNew)
+
+      if (isVoid(computedValue) && (!extConfig || !("skipVoid" in extConfig))) {
+        console.error(requireExplicitSkipVoidMessage)
+      }
+
       storeStateRef.current = computedValue
       storeStateRef.initial = computedValue
       store.defaultState = computedValue
