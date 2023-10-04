@@ -1,9 +1,12 @@
 name: effector publish
 
 on:
-  workflow_dispatch:
-      branches:
+  push:
+    branches:
       - release/v23
+    paths:
+      - 'packages/*/package.json'
+      - 'packages/*/*/package.json'
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
