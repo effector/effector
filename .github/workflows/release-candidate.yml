@@ -1,4 +1,4 @@
-name: effector publish
+name: effector release candidate publish
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.npm_token }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: publish packages
-        run: node tools/build publish dry
+        run: node tools/build publish next
         env:
           PRINT_ERRORS: false
   trigger_changelog_generator:
