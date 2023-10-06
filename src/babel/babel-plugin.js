@@ -108,43 +108,106 @@ module.exports = function (babel, options = {}) {
       flag: combines,
       set: combineCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(
+          path,
+          state,
+          id,
+          t,
+          smallConfig,
+          false,
+          name,
+          'combine',
+        ),
     },
     {
       flag: samples,
       set: sampleCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(
+          path,
+          state,
+          id,
+          t,
+          smallConfig,
+          false,
+          name,
+          'sample',
+        ),
     },
     {
       flag: forwards,
       set: forwardCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+        setConfigForConfMethod(
+          path,
+          state,
+          id,
+          t,
+          smallConfig,
+          true,
+          name,
+          'forward',
+        ),
     },
     {
       flag: guards,
       set: guardCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+        setConfigForConfMethod(
+          path,
+          state,
+          id,
+          t,
+          smallConfig,
+          false,
+          name,
+          'guard',
+        ),
     },
     {
       flag: attaches,
       set: attachCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
+        setConfigForConfMethod(
+          path,
+          state,
+          id,
+          t,
+          smallConfig,
+          true,
+          name,
+          'attach',
+        ),
     },
     {
       flag: splits,
       set: splitCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
+        setConfigForConfMethod(
+          path,
+          state,
+          null,
+          t,
+          smallConfig,
+          false,
+          name,
+          'split',
+        ),
     },
     {
       flag: apis,
       set: apiCreators,
       fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, null, t, smallConfig, false, name),
+        setConfigForConfMethod(
+          path,
+          state,
+          null,
+          t,
+          smallConfig,
+          false,
+          name,
+          'createApi',
+        ),
     },
     {
       flag: merges,
@@ -359,11 +422,9 @@ module.exports = function (babel, options = {}) {
   }
   const plugin = {
     name: 'effector/babel-plugin',
-    pre(state) {
+    pre() {
       this.effector_ignoredImports = new Set()
       this.effector_withFactoryName = null
-      state.effector_units = new Map()
-      state.effector_units.set(state.filename, new Map())
     },
     post(state) {
       this.effector_ignoredImports.clear()
@@ -377,10 +438,8 @@ module.exports = function (babel, options = {}) {
       if (this.effector_factoryPaths) {
         delete this.effector_factoryPaths
       }
-      state.effector_units.delete(state.filename)
-      if (state.effector_units.size === 0) {
-        delete state.effector_units
-      }
+
+      delete state.effector_units
     },
     visitor: {
       Program: {
@@ -427,6 +486,8 @@ module.exports = function (babel, options = {}) {
               loc.line,
               loc.column,
               debugSids,
+              state,
+              importedName,
             )
             const factoryConfig = {
               SID: JSON.stringify(sid),
@@ -718,6 +779,8 @@ function setRestoreNameAfter(
         loc.line,
         loc.column,
         debugSids,
+        state,
+        'restore',
       ),
     )
 
@@ -777,6 +840,8 @@ function setStoreNameAfter(
         loc.line,
         loc.column,
         debugSids,
+        state,
+        'store',
       ),
     )
 
@@ -812,6 +877,7 @@ function setConfigForConfMethod(
   singleArgument,
   checkBindingName,
   allowEmptyArguments,
+  method = '',
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   if (isLocalVariable(path, checkBindingName)) return
@@ -843,6 +909,8 @@ function setConfigForConfMethod(
         loc.line,
         loc.column,
         debugSids,
+        state,
+        method,
       ),
     )
 
@@ -905,6 +973,8 @@ function setEventNameAfter(
         loc.line,
         loc.column,
         debugSids,
+        state,
+        'event',
       ),
     )
 
@@ -953,12 +1023,22 @@ function generateStableID(
   line,
   column,
   debugSids,
+  state,
+  method,
 ) {
   const normalizedPath = stripRoot(babelRoot, fileName, false)
-  const appendix = debugSids ? `:${normalizedPath}:${varName}` : ''
-  return (
-    hashCode(`${varName} ${normalizedPath} [${line}, ${column}]`) + appendix
-  )
+
+  const key = `${normalizedPath}:${varName}:${method}`
+
+  const unitsMap = getUnitsMap(state)
+  const count = unitsMap.get(key) || 0
+  const nextCount = count + 1
+  unitsMap.set(key, nextCount)
+
+  const raw = `${key}-${nextCount}`
+
+  const appendix = debugSids ? `${raw} [${line}:${column}]` : ''
+  return hashCode(raw) + appendix
 }
 function hashCode(s) {
   let h = 0
@@ -974,4 +1054,11 @@ function property(t, field, content) {
 
 function stringProperty(t, field, value) {
   return property(t, field, t.stringLiteral(value))
+}
+
+function getUnitsMap(state) {
+  if (!state.effector_units) {
+    state.effector_units = new Map()
+  }
+  return state.effector_units
 }
