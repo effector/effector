@@ -426,8 +426,9 @@ module.exports = function (babel, options = {}) {
     pre() {
       this.effector_ignoredImports = new Set()
       this.effector_withFactoryName = null
+      this.effector_units = new Map()
     },
-    post(state) {
+    post() {
       this.effector_ignoredImports.clear()
       this.effector_needFactoryImport = false
       this.effector_factoryImportAdded = false
@@ -439,8 +440,7 @@ module.exports = function (babel, options = {}) {
       if (this.effector_factoryPaths) {
         delete this.effector_factoryPaths
       }
-
-      delete state.effector_units
+      delete this.effector_units
     },
     visitor: {
       Program: {
@@ -450,6 +450,7 @@ module.exports = function (babel, options = {}) {
       },
 
       CallExpression(path, state) {
+        state.effector_units = this.effector_units
         addFileNameIdentifier(addLoc, enableFileName, t, path, state)
 
         if (t.isIdentifier(path.node.callee)) {
@@ -1058,8 +1059,5 @@ function stringProperty(t, field, value) {
 }
 
 function getUnitsMap(state) {
-  if (!state.effector_units) {
-    state.effector_units = new Map()
-  }
   return state.effector_units
 }
