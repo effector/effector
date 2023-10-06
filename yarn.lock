@@ -7405,6 +7405,11 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+"patronum19@npm:patronum@1.19.2":
+  version "1.19.2"
+  resolved "https://registry.yarnpkg.com/patronum/-/patronum-1.19.2.tgz#17ad8d8e4aa3688c11b4fa2860799deccee5d7d3"
+  integrity sha512-pK0uZ1nLewzEibVxdWkiLRT87h7lwozurmn4+shm4q/9PJRW6nGdWlHKBszMK9R2EdMIv1jDg/1VQlqkGbkvzQ==
+
 patronum@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/patronum/-/patronum-1.1.0.tgz#6c56f334bfff46042a597cf68deb1540e8134949"
