@@ -359,11 +359,13 @@ module.exports = function (babel, options = {}) {
   }
   const plugin = {
     name: 'effector/babel-plugin',
-    pre() {
+    pre(state) {
       this.effector_ignoredImports = new Set()
       this.effector_withFactoryName = null
+      state.effector_units = new Map()
+      state.effector_units.set(state.filename, new Map())
     },
-    post() {
+    post(state) {
       this.effector_ignoredImports.clear()
       this.effector_needFactoryImport = false
       this.effector_factoryImportAdded = false
@@ -374,6 +376,10 @@ module.exports = function (babel, options = {}) {
       }
       if (this.effector_factoryPaths) {
         delete this.effector_factoryPaths
+      }
+      state.effector_units.delete(state.filename)
+      if (state.effector_units.size === 0) {
+        delete state.effector_units
       }
     },
     visitor: {
