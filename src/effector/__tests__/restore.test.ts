@@ -54,3 +54,12 @@ test('all together', () => {
   calculate.use(n => Promise.resolve((n * n).toString()))
   expect(shape.index.getState()).toBe(0)
 })
+
+test('babel plugin naming', () => {
+  const event = createEvent()
+  const foo = restore(event, null)
+  //@ts-expect-error
+  const bar = restore(event, null, {name: 'baz'})
+  expect(foo.shortName).toBe('foo')
+  expect(bar.shortName).toBe('baz')
+})
