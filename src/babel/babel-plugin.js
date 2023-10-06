@@ -109,6 +109,7 @@ module.exports = function (babel, options = {}) {
       set: combineCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'combine',
           path,
           state,
           id,
@@ -116,7 +117,6 @@ module.exports = function (babel, options = {}) {
           smallConfig,
           false,
           name,
-          'combine',
         ),
     },
     {
@@ -124,6 +124,7 @@ module.exports = function (babel, options = {}) {
       set: sampleCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'sample',
           path,
           state,
           id,
@@ -131,7 +132,6 @@ module.exports = function (babel, options = {}) {
           smallConfig,
           false,
           name,
-          'sample',
         ),
     },
     {
@@ -139,6 +139,7 @@ module.exports = function (babel, options = {}) {
       set: forwardCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'forward',
           path,
           state,
           id,
@@ -146,7 +147,6 @@ module.exports = function (babel, options = {}) {
           smallConfig,
           true,
           name,
-          'forward',
         ),
     },
     {
@@ -154,6 +154,7 @@ module.exports = function (babel, options = {}) {
       set: guardCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'guard',
           path,
           state,
           id,
@@ -161,7 +162,6 @@ module.exports = function (babel, options = {}) {
           smallConfig,
           false,
           name,
-          'guard',
         ),
     },
     {
@@ -169,6 +169,7 @@ module.exports = function (babel, options = {}) {
       set: attachCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'attach',
           path,
           state,
           id,
@@ -176,7 +177,6 @@ module.exports = function (babel, options = {}) {
           smallConfig,
           true,
           name,
-          'attach',
         ),
     },
     {
@@ -184,6 +184,7 @@ module.exports = function (babel, options = {}) {
       set: splitCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'split',
           path,
           state,
           null,
@@ -191,7 +192,6 @@ module.exports = function (babel, options = {}) {
           smallConfig,
           false,
           name,
-          'split',
         ),
     },
     {
@@ -199,6 +199,7 @@ module.exports = function (babel, options = {}) {
       set: apiCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'createApi',
           path,
           state,
           null,
@@ -206,7 +207,6 @@ module.exports = function (babel, options = {}) {
           smallConfig,
           false,
           name,
-          'createApi',
         ),
     },
     {
@@ -248,6 +248,7 @@ module.exports = function (babel, options = {}) {
       set: reactMethods.createGate,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(
+          'gate',
           path,
           state,
           id,
@@ -869,6 +870,7 @@ function isLocalVariable(path, checkBindingName) {
   return false
 }
 function setConfigForConfMethod(
+  method,
   path,
   state,
   nameNodeId,
@@ -877,7 +879,6 @@ function setConfigForConfMethod(
   singleArgument,
   checkBindingName,
   allowEmptyArguments,
-  method = '',
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   if (isLocalVariable(path, checkBindingName)) return
@@ -1035,7 +1036,7 @@ function generateStableID(
   const nextCount = count + 1
   unitsMap.set(key, nextCount)
 
-  const raw = `${key}-${nextCount}`
+  const raw = `${nextCount}-${key}`
 
   const appendix = debugSids ? `${raw} [${line}:${column}]` : ''
   return hashCode(raw) + appendix

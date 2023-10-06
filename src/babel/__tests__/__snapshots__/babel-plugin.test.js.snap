@@ -10,7 +10,7 @@ const effect = createEffect({
     column: 15,
   },
   name: 'effect',
-  sid: 'bswcgo',
+  sid: '-vu09ir',
 })
 const foo1 = attach({
   and: {
@@ -24,7 +24,7 @@ const foo1 = attach({
       column: 13,
     },
     name: 'foo1',
-    sid: '-lm7jny',
+    sid: '-tiwbqg',
   },
 })
 attach({
@@ -38,7 +38,7 @@ attach({
       line: 10,
       column: 0,
     },
-    sid: 'tyndxx',
+    sid: 'nqxaub',
   },
 })
 const config = {
@@ -54,7 +54,7 @@ const foo2 = attach({
       column: 13,
     },
     name: 'foo2',
-    sid: '-5raqzc',
+    sid: '-p9uo9',
   },
 })
 
@@ -71,7 +71,7 @@ const f = () =>
         column: 2,
       },
       name: 'f',
-      sid: 'he4rvf',
+      sid: '2cwab9',
     },
   })
 
@@ -105,7 +105,7 @@ const foo = createStore('foo', {
     column: 12,
   },
   name: 'foo',
-  sid: 'v1pf4q',
+  sid: 'l92igv',
 })
 const bar = createStore('h', {
   loc: {
@@ -114,7 +114,7 @@ const bar = createStore('h', {
     column: 12,
   },
   name: 'bar',
-  sid: '-9jmed0',
+  sid: '-5kp0ms',
 })
 const baz1 = combine({
   and: [
@@ -130,7 +130,7 @@ const baz1 = combine({
       column: 13,
     },
     name: 'baz1',
-    sid: '1g4di',
+    sid: '-q4v2dz',
   },
 })
 const baz2 = combine({
@@ -142,7 +142,7 @@ const baz2 = combine({
       column: 13,
     },
     name: 'baz2',
-    sid: '-3gpv6k',
+    sid: 'f04ysq',
   },
 })
 const baz3 = combine({
@@ -154,7 +154,7 @@ const baz3 = combine({
       column: 13,
     },
     name: 'baz3',
-    sid: '-6yvuqm',
+    sid: '-evz1zp',
   },
 })
 const spread = [foo, bar]
@@ -167,7 +167,7 @@ const baz4 = combine({
       column: 13,
     },
     name: 'baz4',
-    sid: '-ddkb7v',
+    sid: 'q90z70',
   },
 })
 const shape = {
@@ -183,7 +183,7 @@ const baz5 = combine({
       column: 13,
     },
     name: 'baz5',
-    sid: '6s8rf7',
+    sid: '-3n31lf',
   },
 })
 combine({
@@ -199,7 +199,7 @@ combine({
       line: 16,
       column: 0,
     },
-    sid: '6ch4b5',
+    sid: 'puoa7n',
   },
 })
 combine({
@@ -210,7 +210,7 @@ combine({
       line: 17,
       column: 0,
     },
-    sid: '6d0wwi',
+    sid: '-qfrkb0',
   },
 })
 
@@ -229,7 +229,7 @@ const f = a =>
         column: 15,
       },
       name: 'f',
-      sid: '-l6wxyg',
+      sid: '-nsf5z7',
     },
   })
 
@@ -262,7 +262,7 @@ const domain = createDomain({
     column: 15,
   },
   name: 'domain',
-  sid: '-rjlanx',
+  sid: 'rrntu0',
 })
 const foo = createDomain('bar', {
   loc: {
@@ -271,7 +271,7 @@ const foo = createDomain('bar', {
     column: 12,
   },
   name: 'foo',
-  sid: '-lfniv1',
+  sid: 'kjh62q',
 })
 const {sid} = createDomain({
   loc: {
@@ -279,7 +279,7 @@ const {sid} = createDomain({
     line: 6,
     column: 14,
   },
-  sid: '-j1w0p7',
+  sid: '-jo1r78',
 })
 const {name} = createDomain('foo', {
   loc: {
@@ -287,7 +287,7 @@ const {name} = createDomain('foo', {
     line: 7,
     column: 15,
   },
-  sid: '-ikuea5',
+  sid: 'febcvf',
 })
 const {shortName} = createDomain(
   {
@@ -299,7 +299,7 @@ const {shortName} = createDomain(
       line: 8,
       column: 20,
     },
-    sid: '-i3sr9k',
+    sid: '-kkfl12',
   },
 )
 createDomain({
@@ -308,7 +308,7 @@ createDomain({
     line: 10,
     column: 0,
   },
-  sid: '-kmjnzf',
+  sid: '9gz7yc',
 })
 createDomain({
   loc: {
@@ -316,7 +316,7 @@ createDomain({
     line: 12,
     column: 0,
   },
-  sid: '-klg2sp',
+  sid: 'kxt16t',
 })
 {
   const incorrect = createDomain()
@@ -343,7 +343,7 @@ const domain = createDomain({
     column: 15,
   },
   name: 'domain',
-  sid: '-k9s1ws',
+  sid: '-ix6i09',
 })
 const foo = domain.domain({
   loc: {
@@ -352,7 +352,7 @@ const foo = domain.domain({
     column: 12,
   },
   name: 'foo',
-  sid: '-vvg548',
+  sid: '-696zhp',
 })
 const bar = domain.domain('baz', {
   loc: {
@@ -361,7 +361,7 @@ const bar = domain.domain('baz', {
     column: 12,
   },
   name: 'bar',
-  sid: 'kbc9j8',
+  sid: '-x2yilc',
 })
 const fooAlias = domain.createDomain({
   loc: {
@@ -370,7 +370,7 @@ const fooAlias = domain.createDomain({
     column: 17,
   },
   name: 'fooAlias',
-  sid: '6ob94k',
+  sid: '-zgfq83',
 })
 const barAlias = domain.createDomain('bazAlias', {
   loc: {
@@ -379,7 +379,7 @@ const barAlias = domain.createDomain('bazAlias', {
     column: 17,
   },
   name: 'barAlias',
-  sid: '-asopga',
+  sid: '1aktg0',
 })
 const {sid} = domain.createDomain({
   loc: {
@@ -387,7 +387,7 @@ const {sid} = domain.createDomain({
     line: 10,
     column: 14,
   },
-  sid: 's50md5',
+  sid: 'yqoljx',
 })
 const {name} = domain.createDomain('foo', {
   loc: {
@@ -395,7 +395,7 @@ const {name} = domain.createDomain('foo', {
     line: 11,
     column: 15,
   },
-  sid: 'sm28s7',
+  sid: 'qqpra6',
 })
 const {shortName} = domain.createDomain(
   {
@@ -407,7 +407,7 @@ const {shortName} = domain.createDomain(
       line: 12,
       column: 20,
     },
-    sid: 't33vss',
+    sid: 'iqqx0f',
   },
 )
 domain.createDomain({
@@ -416,7 +416,7 @@ domain.createDomain({
     line: 14,
     column: 0,
   },
-  sid: 'asf142',
+  sid: 'q3n8pf',
 })
 domain.createDomain({
   loc: {
@@ -424,7 +424,7 @@ domain.createDomain({
     line: 16,
     column: 0,
   },
-  sid: 'atimas',
+  sid: '-3sp7da',
 })
 "
 `;
@@ -439,7 +439,7 @@ const domain = createDomain({
     column: 15,
   },
   name: 'domain',
-  sid: '-gwz5w9',
+  sid: '-1gg7oc',
 })
 const a = domain.effect({
   loc: {
@@ -448,7 +448,7 @@ const a = domain.effect({
     column: 10,
   },
   name: 'a',
-  sid: '-yrcjkp',
+  sid: 'eq5u2p',
 })
 
 const f = () =>
@@ -459,7 +459,7 @@ const f = () =>
       column: 16,
     },
     name: 'f',
-    sid: 'jhjhqd',
+    sid: 'h3177q',
   })
 
 const b = domain.effect('hello', {
@@ -469,7 +469,7 @@ const b = domain.effect('hello', {
     column: 10,
   },
   name: 'b',
-  sid: 'xrlmjq',
+  sid: 'tek4aq',
 })
 
 const g = () =>
@@ -480,7 +480,7 @@ const g = () =>
       column: 16,
     },
     name: 'g',
-    sid: 'gzdlvo',
+    sid: 'vrfhfr',
   })
 
 const aAlias = domain.createEffect({
@@ -490,7 +490,7 @@ const aAlias = domain.createEffect({
     column: 15,
   },
   name: 'aAlias',
-  sid: 'lkzafg',
+  sid: '-sc01v5',
 })
 
 const fAlias = () =>
@@ -501,7 +501,7 @@ const fAlias = () =>
       column: 21,
     },
     name: 'fAlias',
-    sid: '-ywgdjk',
+    sid: '-hnqljq',
   })
 
 const bAlias = domain.createEffect('helloAlias', {
@@ -511,7 +511,7 @@ const bAlias = domain.createEffect('helloAlias', {
     column: 15,
   },
   name: 'bAlias',
-  sid: '-i4te7u',
+  sid: '-q75d02',
 })
 
 const gAlias = () =>
@@ -522,7 +522,7 @@ const gAlias = () =>
       column: 21,
     },
     name: 'gAlias',
-    sid: 'x03ktr',
+    sid: '-fivwon',
   })
 
 const {sid} = domain.createEffect({
@@ -531,7 +531,7 @@ const {sid} = domain.createEffect({
     line: 14,
     column: 14,
   },
-  sid: '-805fjy',
+  sid: 'p1tvsg',
 })
 const {name} = domain.createEffect('foo', {
   loc: {
@@ -539,7 +539,7 @@ const {name} = domain.createEffect('foo', {
     line: 15,
     column: 15,
   },
-  sid: '-7j3t4w',
+  sid: 'h1v1ip',
 })
 const {shortName} = domain.createEffect(
   {
@@ -551,7 +551,7 @@ const {shortName} = domain.createEffect(
       line: 16,
       column: 20,
     },
-    sid: '-72264b',
+    sid: '91w78y',
   },
 )
 domain.createEffect({
@@ -560,7 +560,7 @@ domain.createEffect({
     line: 18,
     column: 0,
   },
-  sid: 'e7f3i1',
+  sid: '-3ksmg0',
 })
 domain.createEffect({
   loc: {
@@ -568,7 +568,7 @@ domain.createEffect({
     line: 20,
     column: 0,
   },
-  sid: 'ek2d5c',
+  sid: '-xh52ip',
 })
 "
 `;
@@ -583,7 +583,7 @@ const domain = createDomain({
     column: 15,
   },
   name: 'domain',
-  sid: '2t180m',
+  sid: 'kcir2t',
 })
 const a = domain.event({
   loc: {
@@ -592,7 +592,7 @@ const a = domain.event({
     column: 10,
   },
   name: 'a',
-  sid: '-hh3210',
+  sid: 'ip0pkg',
 })
 
 const f = () =>
@@ -603,7 +603,7 @@ const f = () =>
       column: 16,
     },
     name: 'f',
-    sid: '-ofjjww',
+    sid: 'l1w2ph',
   })
 
 const b = domain.event('asm', {
@@ -613,7 +613,7 @@ const b = domain.event('asm', {
     column: 10,
   },
   name: 'b',
-  sid: 'olrsnt',
+  sid: 'xdezsh',
 })
 
 const g = () =>
@@ -624,7 +624,7 @@ const g = () =>
       column: 16,
     },
     name: 'g',
-    sid: 'hnbarx',
+    sid: '-zatp1m',
   })
 
 const aAlias = domain.createEvent({
@@ -634,7 +634,7 @@ const aAlias = domain.createEvent({
     column: 15,
   },
   name: 'aAlias',
-  sid: 'p4m37p',
+  sid: '-6j1340',
 })
 
 const fAlias = () =>
@@ -645,7 +645,7 @@ const fAlias = () =>
       column: 21,
     },
     name: 'fAlias',
-    sid: 's9mo4t',
+    sid: '458d7f',
   })
 
 const bAlias = domain.createEvent('asmAlias', {
@@ -655,7 +655,7 @@ const bAlias = domain.createEvent('asmAlias', {
     column: 15,
   },
   name: 'bAlias',
-  sid: '-2t87zp',
+  sid: '-4e6e8x',
 })
 
 const gAlias = () =>
@@ -666,7 +666,7 @@ const gAlias = () =>
       column: 21,
     },
     name: 'gAlias',
-    sid: '1l50ei',
+    sid: '6a322i',
   })
 
 const {sid} = domain.createEvent({
@@ -675,7 +675,7 @@ const {sid} = domain.createEvent({
     line: 14,
     column: 14,
   },
-  sid: '5rhe6j',
+  sid: 'wxlvrz',
 })
 const {name} = domain.createEvent('foo', {
   loc: {
@@ -683,7 +683,7 @@ const {name} = domain.createEvent('foo', {
     line: 15,
     column: 15,
   },
-  sid: '68j0ll',
+  sid: '-mbdqgy',
 })
 const {shortName} = domain.createEvent(
   {
@@ -695,7 +695,7 @@ const {shortName} = domain.createEvent(
       line: 16,
       column: 20,
     },
-    sid: '6pknm6',
+    sid: '-6j9aqr',
   },
 )
 domain.createEvent({
@@ -704,7 +704,7 @@ domain.createEvent({
     line: 18,
     column: 0,
   },
-  sid: '-vajmz4',
+  sid: '5prh5d',
 })
 domain.createEvent({
   loc: {
@@ -712,7 +712,7 @@ domain.createEvent({
     line: 20,
     column: 0,
   },
-  sid: '-uxwdbt',
+  sid: '-dkuvhq',
 })
 domain.createEvent('foo', {
   loc: {
@@ -720,7 +720,7 @@ domain.createEvent('foo', {
     line: 22,
     column: 0,
   },
-  sid: '-uwss53',
+  sid: '-wvh84t',
 })
 "
 `;
@@ -735,7 +735,7 @@ const domain = createDomain({
     column: 15,
   },
   name: 'domain',
-  sid: '-g6jnpt',
+  sid: '-wcigx0',
 })
 const a = domain.store('bar', {
   loc: {
@@ -744,7 +744,7 @@ const a = domain.store('bar', {
     column: 10,
   },
   name: 'a',
-  sid: 'ykg47p',
+  sid: '-2w4c0',
 })
 const b = domain.store('h', {
   and: {
@@ -757,7 +757,7 @@ const b = domain.store('h', {
     column: 10,
   },
   name: 'b',
-  sid: '555aj7',
+  sid: 'eli5w1',
 })
 const c = domain.store('h', {
   and: {
@@ -769,7 +769,7 @@ const c = domain.store('h', {
     column: 10,
   },
   name: 'c',
-  sid: '-oa5j5b',
+  sid: 't9wg42',
 })
 const d = domain.store('h', {
   and: null,
@@ -779,7 +779,7 @@ const d = domain.store('h', {
     column: 10,
   },
   name: 'd',
-  sid: 'hspbji',
+  sid: '-r2tbn1',
 })
 const e = domain.store('h', {
   and: 4234,
@@ -789,7 +789,7 @@ const e = domain.store('h', {
     column: 10,
   },
   name: 'e',
-  sid: '777zke',
+  sid: '-cef1f0',
 })
 const f = domain.store('h', {
   and: {},
@@ -799,7 +799,7 @@ const f = domain.store('h', {
     column: 10,
   },
   name: 'f',
-  sid: '480hbi',
+  sid: '29z8t1',
 })
 const aAlias = domain.createStore('bar', {
   loc: {
@@ -808,7 +808,7 @@ const aAlias = domain.createStore('bar', {
     column: 15,
   },
   name: 'aAlias',
-  sid: '5uenrk',
+  sid: 'c0pspa',
 })
 const bAlias = domain.createStore('h', {
   and: {
@@ -821,7 +821,7 @@ const bAlias = domain.createStore('h', {
     column: 15,
   },
   name: 'bAlias',
-  sid: '-lb4mcy',
+  sid: 'e5khkd',
 })
 const cAlias = domain.createStore('h', {
   and: {
@@ -833,7 +833,7 @@ const cAlias = domain.createStore('h', {
     column: 15,
   },
   name: 'cAlias',
-  sid: 'mkg5ho',
+  sid: 'gaf6fg',
 })
 const dAlias = domain.createStore('h', {
   and: null,
@@ -843,7 +843,7 @@ const dAlias = domain.createStore('h', {
     column: 15,
   },
   name: 'dAlias',
-  sid: '-441i8n',
+  sid: 'if9vaj',
 })
 const eAlias = domain.createStore('h', {
   and: 4234,
@@ -853,7 +853,7 @@ const eAlias = domain.createStore('h', {
     column: 15,
   },
   name: 'eAlias',
-  sid: '-kul3ov',
+  sid: 'kk4k5m',
 })
 const fAlias = domain.createStore('h', {
   and: {},
@@ -863,7 +863,7 @@ const fAlias = domain.createStore('h', {
     column: 15,
   },
   name: 'fAlias',
-  sid: 'n0zo5r',
+  sid: 'moz90p',
 })
 const {sid} = domain.createStore(null, {
   loc: {
@@ -871,7 +871,7 @@ const {sid} = domain.createStore(null, {
     line: 22,
     column: 14,
   },
-  sid: '-wagbv',
+  sid: '-w3s75t',
 })
 const {shortName} = domain.createStore(null, {
   and: {
@@ -882,7 +882,7 @@ const {shortName} = domain.createStore(null, {
     line: 23,
     column: 20,
   },
-  sid: '-f8taf',
+  sid: '-gbnrfm',
 })
 domain.createStore(null, {
   loc: {
@@ -890,7 +890,7 @@ domain.createStore(null, {
     line: 25,
     column: 0,
   },
-  sid: 'l6drvp',
+  sid: '-3ukiap',
 })
 domain.createStore(null, {
   loc: {
@@ -898,7 +898,7 @@ domain.createStore(null, {
     line: 27,
     column: 0,
   },
-  sid: 'l7hd2f',
+  sid: '-n56uxs',
 })
 "
 `;
@@ -913,7 +913,7 @@ const foo = createEffect({
     column: 12,
   },
   name: 'foo',
-  sid: '-ijw98p',
+  sid: '-m4iqp7',
 })
 const bar = createEffect('hello', {
   loc: {
@@ -922,7 +922,7 @@ const bar = createEffect('hello', {
     column: 12,
   },
   name: 'bar',
-  sid: '-zbsahj',
+  sid: 'm2ts6a',
 })
 const baz = createEffect(
   {
@@ -937,7 +937,7 @@ const baz = createEffect(
       column: 12,
     },
     name: 'baz',
-    sid: '-w5vgqo',
+    sid: '-2k81zq',
   },
 )
 const quux = createEffect('nice', {
@@ -952,7 +952,7 @@ const quux = createEffect('nice', {
     column: 13,
   },
   name: 'quux',
-  sid: '-fu1zix',
+  sid: 'jac048',
 })
 
 const f = () =>
@@ -963,7 +963,7 @@ const f = () =>
       column: 16,
     },
     name: 'f',
-    sid: 'x9z3su',
+    sid: '-17v2a3',
   })
 
 const {sid} = createEffect({
@@ -972,7 +972,7 @@ const {sid} = createEffect({
     line: 17,
     column: 14,
   },
-  sid: 'dn0ezs',
+  sid: '-tcwgyp',
 })
 const {name} = createEffect('foo', {
   loc: {
@@ -980,7 +980,7 @@ const {name} = createEffect('foo', {
     line: 18,
     column: 15,
   },
-  sid: 'e421eu',
+  sid: '5pgn3y',
 })
 const {shortName} = createEffect(
   {
@@ -992,7 +992,7 @@ const {shortName} = createEffect(
       line: 19,
       column: 20,
     },
-    sid: 'el3off',
+    sid: '-u9aasj',
   },
 )
 createEffect({
@@ -1001,7 +1001,7 @@ createEffect({
     line: 21,
     column: 0,
   },
-  sid: '-gs5czc',
+  sid: '-k7gn73',
 })
 createEffect({
   loc: {
@@ -1009,7 +1009,7 @@ createEffect({
     line: 23,
     column: 0,
   },
-  sid: '-gr1rsm',
+  sid: '-8qmtym',
 })
 {
   const incorrect = createEffect()
@@ -1036,7 +1036,7 @@ const foo = createEvent({
     column: 12,
   },
   name: 'foo',
-  sid: 'po0ass',
+  sid: 't55c6',
 })
 const bar = createEvent('hello', {
   loc: {
@@ -1045,7 +1045,7 @@ const bar = createEvent('hello', {
     column: 12,
   },
   name: 'bar',
-  sid: 'e4l32w',
+  sid: '-q0mdrh',
 })
 const baz = createEvent(
   {
@@ -1058,7 +1058,7 @@ const baz = createEvent(
       column: 12,
     },
     name: 'baz',
-    sid: 'zb55dr',
+    sid: 'kdfu1n',
   },
 )
 
@@ -1070,7 +1070,7 @@ const f = () =>
       column: 16,
     },
     name: 'f',
-    sid: 'ujzd7p',
+    sid: '4f81ye',
   })
 
 const {sid} = createEvent({
@@ -1079,7 +1079,7 @@ const {sid} = createEvent({
     line: 8,
     column: 14,
   },
-  sid: 'uddyxb',
+  sid: 'ak19w0',
 })
 const {name} = createEvent('foo', {
   loc: {
@@ -1087,7 +1087,7 @@ const {name} = createEvent('foo', {
     line: 9,
     column: 15,
   },
-  sid: 'uuflcd',
+  sid: '73s58x',
 })
 const {shortName} = createEvent(
   {
@@ -1099,7 +1099,7 @@ const {shortName} = createEvent(
       line: 10,
       column: 20,
     },
-    sid: '-bimh5h',
+    sid: '3nj0lu',
   },
 )
 createEvent({
@@ -1108,7 +1108,7 @@ createEvent({
     line: 12,
     column: 0,
   },
-  sid: '-4wemi5',
+  sid: 'yysegw',
 })
 createEvent({
   loc: {
@@ -1116,7 +1116,7 @@ createEvent({
     line: 14,
     column: 0,
   },
-  sid: '-4vb1bf',
+  sid: '-stjl7l',
 })
 {
   const incorrect = createEvent()
@@ -1148,7 +1148,7 @@ const Gate1 = createGate({
       column: 14,
     },
     name: 'Gate1',
-    sid: 'ggz6t4',
+    sid: '-ov388m',
   },
 })
 const Gate2 = createGate({
@@ -1160,7 +1160,7 @@ const Gate2 = createGate({
       column: 14,
     },
     name: 'Gate2',
-    sid: 'o6svhy',
+    sid: '-oe1luf',
   },
 })
 const Gate3 = createGate({
@@ -1176,7 +1176,7 @@ const Gate3 = createGate({
           column: 10,
         },
         name: 'domain',
-        sid: '-c59o1r',
+        sid: '-e7s2y9',
       }),
       name: 'gate3',
     },
@@ -1188,7 +1188,7 @@ const Gate3 = createGate({
       column: 14,
     },
     name: 'Gate3',
-    sid: 'vwmk6s',
+    sid: '-nwzzg8',
   },
 })
 const Gate4 = createGate({
@@ -1205,7 +1205,7 @@ const Gate4 = createGate({
       column: 14,
     },
     name: 'Gate4',
-    sid: '-m3dk75',
+    sid: '-nfyd21',
   },
 })
 const Gate5 = createGate({
@@ -1229,7 +1229,7 @@ const Gate5 = createGate({
       column: 14,
     },
     name: 'Gate5',
-    sid: '-a5i4kh',
+    sid: '-mywqnu',
   },
 })
 const TheGate1 = renamedGate({
@@ -1241,7 +1241,7 @@ const TheGate1 = renamedGate({
       column: 17,
     },
     name: 'TheGate1',
-    sid: 'dx5sg6',
+    sid: '-wij8d7',
   },
 })
 const TheGate2 = renamedGate({
@@ -1253,7 +1253,7 @@ const TheGate2 = renamedGate({
       column: 17,
     },
     name: 'TheGate2',
-    sid: 'pv182u',
+    sid: '-w1hlz0',
   },
 })
 const TheGate3 = renamedGate({
@@ -1269,7 +1269,7 @@ const TheGate3 = renamedGate({
           column: 10,
         },
         name: 'domain',
-        sid: 'h7iweb',
+        sid: '-9kv7lc',
       }),
       name: 'gate3',
     },
@@ -1281,7 +1281,7 @@ const TheGate3 = renamedGate({
       column: 17,
     },
     name: 'TheGate3',
-    sid: '-x87e9m',
+    sid: '-vkfzkt',
   },
 })
 const CompatGate1 = compatGate({
@@ -1293,7 +1293,7 @@ const CompatGate1 = compatGate({
       column: 20,
     },
     name: 'CompatGate1',
-    sid: '-kvdrr4',
+    sid: '-mloe50',
   },
 })
 const CompatGate2 = compatGate({
@@ -1305,7 +1305,7 @@ const CompatGate2 = compatGate({
       column: 20,
     },
     name: 'CompatGate2',
-    sid: '-8xic4g',
+    sid: '-m4mrqt',
   },
 })
 const CompatGate3 = compatGate({
@@ -1321,7 +1321,7 @@ const CompatGate3 = compatGate({
           column: 10,
         },
         name: 'domain',
-        sid: 'kzvvjv',
+        sid: '-4xyc8f',
       }),
       name: 'gate3',
     },
@@ -1333,7 +1333,7 @@ const CompatGate3 = compatGate({
       column: 20,
     },
     name: 'CompatGate3',
-    sid: '30d3i8',
+    sid: '-lnl5cm',
   },
 })
 "
@@ -1349,7 +1349,7 @@ const foo = createStore('foo', {
     column: 12,
   },
   name: 'foo',
-  sid: '6off2d',
+  sid: '86c6na',
 })
 const a = createStore('h', {
   loc: {
@@ -1358,7 +1358,7 @@ const a = createStore('h', {
     column: 10,
   },
   name: 'a',
-  sid: 'oba8ch',
+  sid: '-gpk533',
 })
 const b = createStore('h', {
   and: {},
@@ -1368,7 +1368,7 @@ const b = createStore('h', {
     column: 10,
   },
   name: 'b',
-  sid: '-yrydzz',
+  sid: '-215uv2',
 })
 const c = createStore('h', {
   and: 23020,
@@ -1378,7 +1378,7 @@ const c = createStore('h', {
     column: 10,
   },
   name: 'c',
-  sid: '-mu2ydb',
+  sid: 'cn8fcz',
 })
 const config = {
   option: 0,
@@ -1391,7 +1391,7 @@ const dod = createStore(null, {
     column: 12,
   },
   name: 'dod',
-  sid: '441vf7',
+  sid: '-mgou93',
 })
 
 const f = a =>
@@ -1402,7 +1402,7 @@ const f = a =>
       column: 15,
     },
     name: 'f',
-    sid: '34ig6u',
+    sid: '-ecory2',
   })
 
 const {sid} = createStore(null, {
@@ -1411,7 +1411,7 @@ const {sid} = createStore(null, {
     line: 12,
     column: 14,
   },
-  sid: '-uym4yd',
+  sid: 'gjr8xc',
 })
 const {shortName} = createStore(null, {
   and: {
@@ -1422,7 +1422,7 @@ const {shortName} = createStore(null, {
     line: 13,
     column: 20,
   },
-  sid: '-uhkhwx',
+  sid: 'd3i4a9',
 })
 createStore(null, {
   loc: {
@@ -1430,7 +1430,7 @@ createStore(null, {
     line: 15,
     column: 0,
   },
-  sid: '-nuc4gh',
+  sid: 'pegf0u',
 })
 createStore(null, {
   loc: {
@@ -1438,7 +1438,7 @@ createStore(null, {
     line: 17,
     column: 0,
   },
-  sid: '-nt8j9r',
+  sid: 'wn8hbh',
 })
 {
   const incorrect = createStore(null)
@@ -1465,7 +1465,7 @@ const foo = createStore([], {
     column: 12,
   },
   name: 'foo',
-  sid: '-i3v0at',
+  sid: '1yfg9s',
 })
 const bar = createEvent({
   loc: {
@@ -1474,7 +1474,7 @@ const bar = createEvent({
     column: 12,
   },
   name: 'bar',
-  sid: 'b701d9',
+  sid: '-p304nu',
 })
 const baz1 = createApi({
   and: [
@@ -1489,7 +1489,7 @@ const baz1 = createApi({
       line: 6,
       column: 13,
     },
-    sid: 'hmnu4d',
+    sid: '-74i51r',
   },
 })
 createApi({
@@ -1505,7 +1505,7 @@ createApi({
       line: 7,
       column: 0,
     },
-    sid: '-3zya1g',
+    sid: '4cbo6q',
   },
 })
 const spread = [
@@ -1522,7 +1522,7 @@ const baz4 = createApi({
       line: 10,
       column: 13,
     },
-    sid: '-m0rrok',
+    sid: 'ft5hf7',
   },
 })
 
@@ -1540,7 +1540,7 @@ const f = () =>
         line: 12,
         column: 16,
       },
-      sid: '-l2oitl',
+      sid: 'r9zano',
     },
   })
 
@@ -1573,7 +1573,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 16,
       },
       name: 'Empty',
-      sid: '96s88f',
+      sid: '3k6646',
     },
   })
   const Name = createGate({
@@ -1585,7 +1585,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 15,
       },
       name: 'Name',
-      sid: '-lwgh1v',
+      sid: '-w618uc',
     },
   })
   const ConfigObject = createGate({
@@ -1601,7 +1601,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 23,
       },
       name: 'ConfigObject',
-      sid: 'xd3ucl',
+      sid: 'tnqqu',
     },
   })
   const config = {
@@ -1616,7 +1616,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 25,
       },
       name: 'ConfigVariable',
-      sid: '3xf7ku',
+      sid: '-34vrhz',
     },
   })
 }
@@ -1630,7 +1630,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 16,
       },
       name: 'Empty',
-      sid: 'gizoyq',
+      sid: '3wa2j9',
     },
   })
   const Name = createGateScope({
@@ -1642,7 +1642,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 15,
       },
       name: 'Name',
-      sid: 'wyq1no',
+      sid: '-kp7flv',
     },
   })
   const ConfigObject = createGateScope({
@@ -1658,7 +1658,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 23,
       },
       name: 'ConfigObject',
-      sid: 'r95b1s',
+      sid: '-2mldw9',
     },
   })
   const config = {
@@ -1673,7 +1673,7 @@ import {createGate as createGateScope} from 'effector-react/scope'
         column: 25,
       },
       name: 'ConfigVariable',
-      sid: '9qp1qn',
+      sid: 'ifpx56',
     },
   })
 }
@@ -1691,11 +1691,11 @@ exports[`babel-plugin should debug sids with options 1`] = `
 {
   const domain = createDomain({
     name: 'domain',
-    sid: '-umn61j:/src/babel/__tests__/fixtures/debug-sids.js:domain',
+    sid: 'iv0ize1-/src/babel/__tests__/fixtures/debug-sids.js:domain:event [9:17]',
   })
   const a = domain.store('bar', {
     name: 'a',
-    sid: '-p40n10:/src/babel/__tests__/fixtures/debug-sids.js:a',
+    sid: '-c2jsa61-/src/babel/__tests__/fixtures/debug-sids.js:a:store [11:12]',
   })
   const b = domain.store('h', {
     and: {
@@ -1703,33 +1703,33 @@ exports[`babel-plugin should debug sids with options 1`] = `
       ['na' + 'me']: 'LOL',
     },
     name: 'b',
-    sid: '-he6yc6:/src/babel/__tests__/fixtures/debug-sids.js:b',
+    sid: '2luhxv1-/src/babel/__tests__/fixtures/debug-sids.js:b:store [12:12]',
   })
   const c = domain.store('h', {
     and: {
       name: 'test',
     },
     name: 'c',
-    sid: '-9od9nc:/src/babel/__tests__/fixtures/debug-sids.js:c',
+    sid: 'ha8s5w1-/src/babel/__tests__/fixtures/debug-sids.js:c:store [13:12]',
   })
   const d = domain.store('h', {
     and: null,
     name: 'd',
-    sid: '-1hhykb:/src/babel/__tests__/fixtures/debug-sids.js:d',
+    sid: 'vyn2dx1-/src/babel/__tests__/fixtures/debug-sids.js:d:store [15:12]',
   })
   const e = domain.store('h', {
     and: 4234,
     name: 'e',
-    sid: '6pdciq:/src/babel/__tests__/fixtures/debug-sids.js:e',
+    sid: '-oe2pd61-/src/babel/__tests__/fixtures/debug-sids.js:e:store [17:12]',
   })
   const f = domain.store('h', {
     and: {},
     name: 'f',
-    sid: 'ef717k:/src/babel/__tests__/fixtures/debug-sids.js:f',
+    sid: '-9pof551-/src/babel/__tests__/fixtures/debug-sids.js:f:store [18:12]',
   })
   const aAlias = domain.createStore('bar', {
     name: 'aAlias',
-    sid: '-dri1et:/src/babel/__tests__/fixtures/debug-sids.js:aAlias',
+    sid: '-7sv9dg1-/src/babel/__tests__/fixtures/debug-sids.js:aAlias:store [20:17]',
   })
   const bAlias = domain.createStore('h', {
     and: {
@@ -1737,54 +1737,54 @@ exports[`babel-plugin should debug sids with options 1`] = `
       ['na' + 'me']: 'LOL',
     },
     name: 'bAlias',
-    sid: '-8njjnp:/src/babel/__tests__/fixtures/debug-sids.js:bAlias',
+    sid: '-5o0kid1-/src/babel/__tests__/fixtures/debug-sids.js:bAlias:store [21:17]',
   })
   const cAlias = domain.createStore('h', {
     and: {
       name: 'testAlias',
     },
     name: 'cAlias',
-    sid: '-3jl1wl:/src/babel/__tests__/fixtures/debug-sids.js:cAlias',
+    sid: '-3j5vna1-/src/babel/__tests__/fixtures/debug-sids.js:cAlias:store [22:17]',
   })
   const dAlias = domain.createStore('h', {
     and: null,
     name: 'dAlias',
-    sid: '21f28q:/src/babel/__tests__/fixtures/debug-sids.js:dAlias',
+    sid: '-1eb6s71-/src/babel/__tests__/fixtures/debug-sids.js:dAlias:store [24:17]',
   })
   const eAlias = domain.createStore('h', {
     and: 4234,
     name: 'eAlias',
-    sid: '7mf6e1:/src/babel/__tests__/fixtures/debug-sids.js:eAlias',
+    sid: 'qji2w1-/src/babel/__tests__/fixtures/debug-sids.js:eAlias:store [26:17]',
   })
   const fAlias = domain.createStore('h', {
     and: {},
     name: 'fAlias',
-    sid: 'cqdo55:/src/babel/__tests__/fixtures/debug-sids.js:fAlias',
+    sid: '2ve6xz1-/src/babel/__tests__/fixtures/debug-sids.js:fAlias:store [27:17]',
   })
   const {sid} = domain.createStore(null, {
-    sid: 't2a2nn:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '7hvcu91-/src/babel/__tests__/fixtures/debug-sids.js:undefined:store [28:16]',
   })
   const {shortName} = domain.createStore(null, {
     and: {
       name: 'foo',
     },
-    sid: 'tjbpp3:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '-bsqzsu2-/src/babel/__tests__/fixtures/debug-sids.js:undefined:store [29:22]',
   })
   domain.createStore(null, {
-    sid: '-r418i0:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: '-defzkz1-/src/babel/__tests__/fixtures/debug-sids.js::store [31:2]',
   })
   domain.createStore(null, {
-    sid: '-r2xnba:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: '-oi0782-/src/babel/__tests__/fixtures/debug-sids.js::store [33:2]',
   })
 }
 {
   const foo = createEffect({
     name: 'foo',
-    sid: '-4xbjof:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+    sid: '-8qxjps1-/src/babel/__tests__/fixtures/debug-sids.js:foo:event [37:14]',
   })
   const bar = createEffect('hello', {
     name: 'bar',
-    sid: '-2jqlf1:/src/babel/__tests__/fixtures/debug-sids.js:bar',
+    sid: 'zgez5p1-/src/babel/__tests__/fixtures/debug-sids.js:bar:event [38:14]',
   })
   const baz = createEffect(
     {
@@ -1794,7 +1794,7 @@ exports[`babel-plugin should debug sids with options 1`] = `
     },
     {
       name: 'baz',
-      sid: '-f5kimu:/src/babel/__tests__/fixtures/debug-sids.js:baz',
+      sid: 'atd4zp1-/src/babel/__tests__/fixtures/debug-sids.js:baz:event [39:14]',
     },
   )
   const quux = createEffect('nice', {
@@ -1804,54 +1804,54 @@ exports[`babel-plugin should debug sids with options 1`] = `
       },
     },
     name: 'quux',
-    sid: '-o01o3h:/src/babel/__tests__/fixtures/debug-sids.js:quux',
+    sid: '7sworh1-/src/babel/__tests__/fixtures/debug-sids.js:quux:event [44:15]',
   })
 
   const fa = () =>
     createEffect({
       name: 'fa',
-      sid: '-f4wwm2:/src/babel/__tests__/fixtures/debug-sids.js:fa',
+      sid: 'v0epjl1-/src/babel/__tests__/fixtures/debug-sids.js:fa:event [49:19]',
     })
 
   const {sid} = createEffect({
-    sid: '-18yher:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '7a7b0a1-/src/babel/__tests__/fixtures/debug-sids.js:undefined:event [51:16]',
   })
   const {name} = createEffect('foo', {
-    sid: '-rwuzp:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '-c0f1mt2-/src/babel/__tests__/fixtures/debug-sids.js:undefined:event [52:17]',
   })
   const {shortName} = createEffect(
     {
       name: 'foo',
     },
     {
-      sid: '-av7z4:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+      sid: '-vb1e9w3-/src/babel/__tests__/fixtures/debug-sids.js:undefined:event [53:22]',
     },
   )
   createEffect({
-    sid: '-q3qtc6:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: '-dm41ey1-/src/babel/__tests__/fixtures/debug-sids.js::event [55:2]',
   })
   createEffect({
-    sid: '-q2n85g:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: '-w62172-/src/babel/__tests__/fixtures/debug-sids.js::event [57:2]',
   })
 }
 {
   const foo = createStore('foo', {
     name: 'foo',
-    sid: '-yrihcm:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+    sid: '-8j9hvt1-/src/babel/__tests__/fixtures/debug-sids.js:foo:store [61:14]',
   })
   const a = createStore('h', {
     name: 'a',
-    sid: '-ma3nhs:/src/babel/__tests__/fixtures/debug-sids.js:a',
+    sid: 'r45eoj2-/src/babel/__tests__/fixtures/debug-sids.js:a:store [62:12]',
   })
   const b = createStore('h', {
     and: {},
     name: 'b',
-    sid: '-ek9ysy:/src/babel/__tests__/fixtures/debug-sids.js:b',
+    sid: '-t8kd2k2-/src/babel/__tests__/fixtures/debug-sids.js:b:store [63:12]',
   })
   const c = createStore('h', {
     and: 23020,
     name: 'c',
-    sid: '-6denpx:/src/babel/__tests__/fixtures/debug-sids.js:c',
+    sid: '-ek62uj2-/src/babel/__tests__/fixtures/debug-sids.js:c:store [65:12]',
   })
   const config = {
     option: 0,
@@ -1859,39 +1859,39 @@ exports[`babel-plugin should debug sids with options 1`] = `
   const dod = createStore(null, {
     and: config,
     name: 'dod',
-    sid: 'ts6uvl:/src/babel/__tests__/fixtures/debug-sids.js:dod',
+    sid: 'vutj6y1-/src/babel/__tests__/fixtures/debug-sids.js:dod:store [67:14]',
   })
 
   const f = a =>
     createStore(a, {
       name: 'f',
-      sid: 'h940v3:/src/babel/__tests__/fixtures/debug-sids.js:f',
+      sid: 'th0rtk2-/src/babel/__tests__/fixtures/debug-sids.js:f:store [69:17]',
     })
 
   const {sid} = createStore(null, {
-    sid: 's3u31b:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '-v3dcfx3-/src/babel/__tests__/fixtures/debug-sids.js:undefined:store [71:16]',
   })
   const {shortName} = createStore(null, {
     and: {
       name: 'foo',
     },
-    sid: 'skvq2r:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: 'kn4cw44-/src/babel/__tests__/fixtures/debug-sids.js:undefined:store [72:22]',
   })
   createStore(null, {
-    sid: '-p67d55:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: 'c1fz6j3-/src/babel/__tests__/fixtures/debug-sids.js::store [74:2]',
   })
   createStore(null, {
-    sid: '-p53ryf:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: 'ordyka4-/src/babel/__tests__/fixtures/debug-sids.js::store [76:2]',
   })
 }
 {
   const foo = createEvent({
     name: 'foo',
-    sid: '-5vrjar:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+    sid: '2pw9ip2-/src/babel/__tests__/fixtures/debug-sids.js:foo:event [80:14]',
   })
   const bar = createEvent('hello', {
     name: 'bar',
-    sid: '-3i6l1d:/src/babel/__tests__/fixtures/debug-sids.js:bar',
+    sid: '-o3v9ky2-/src/babel/__tests__/fixtures/debug-sids.js:bar:event [81:14]',
   })
   const baz = createEvent(
     {
@@ -1899,55 +1899,55 @@ exports[`babel-plugin should debug sids with options 1`] = `
     },
     {
       name: 'baz',
-      sid: '-g40i96:/src/babel/__tests__/fixtures/debug-sids.js:baz',
+      sid: 'ma6y862-/src/babel/__tests__/fixtures/debug-sids.js:baz:event [82:14]',
     },
   )
 
   const f = () =>
     createEvent({
       name: 'f',
-      sid: '-r9h70a:/src/babel/__tests__/fixtures/debug-sids.js:f',
+      sid: '-9xcgz41-/src/babel/__tests__/fixtures/debug-sids.js:f:event [83:18]',
     })
 
   const {sid} = createEvent({
-    sid: '-qcp750:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: 'kfgb254-/src/babel/__tests__/fixtures/debug-sids.js:undefined:event [85:16]',
   })
   const {name} = createEvent('foo', {
-    sid: '-pvnkpy:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '14tyf25-/src/babel/__tests__/fixtures/debug-sids.js:undefined:event [86:17]',
   })
   const {shortName} = createEvent(
     {
       name: 'foo',
     },
     {
-      sid: '-pelxpd:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+      sid: '-i5se816-/src/babel/__tests__/fixtures/debug-sids.js:undefined:event [87:22]',
     },
   )
   createEvent({
-    sid: '-omers5:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: 'btrxck3-/src/babel/__tests__/fixtures/debug-sids.js::event [89:2]',
   })
   createEvent({
-    sid: '-o9ri4u:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: 'ojpwqb4-/src/babel/__tests__/fixtures/debug-sids.js::event [91:2]',
   })
 }
 {
   const foo = createEvent({
     name: 'foo',
-    sid: 'b5uuw9:/src/babel/__tests__/fixtures/debug-sids.js:foo',
+    sid: 'e6q2r63-/src/babel/__tests__/fixtures/debug-sids.js:foo:event [95:14]',
   })
   const a = restore(foo, null, {
     name: 'a',
-    sid: 'nn9or3:/src/babel/__tests__/fixtures/debug-sids.js:a',
+    sid: 'rah4zj1-/src/babel/__tests__/fixtures/debug-sids.js:a:restore [96:12]',
   })
   const b = restore(foo, null, {
     and: {},
     name: 'b',
-    sid: 'vd3dfx:/src/babel/__tests__/fixtures/debug-sids.js:b',
+    sid: '-2lmvsw1-/src/babel/__tests__/fixtures/debug-sids.js:b:restore [97:12]',
   })
   const c = restore(foo, null, {
     and: 23020,
     name: 'c',
-    sid: '-vh5dg6:/src/babel/__tests__/fixtures/debug-sids.js:c',
+    sid: '-whqwlb1-/src/babel/__tests__/fixtures/debug-sids.js:c:restore [99:12]',
   })
   const config = {
     option: 0,
@@ -1955,29 +1955,29 @@ exports[`babel-plugin should debug sids with options 1`] = `
   const dod = restore(foo, null, {
     and: config,
     name: 'dod',
-    sid: '-vclm8o:/src/babel/__tests__/fixtures/debug-sids.js:dod',
+    sid: '-mb06jt1-/src/babel/__tests__/fixtures/debug-sids.js:dod:restore [101:14]',
   })
 
   const f = a =>
     restore(foo, null, {
       name: 'f',
-      sid: '-m02imo:/src/babel/__tests__/fixtures/debug-sids.js:f',
+      sid: 'jw54zo1-/src/babel/__tests__/fixtures/debug-sids.js:f:restore [103:17]',
     })
 
   const {sid} = restore(foo, null, {
-    sid: '-m6nww7:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '87ucfi1-/src/babel/__tests__/fixtures/debug-sids.js:undefined:restore [105:16]',
   })
   const {shortName} = restore(foo, null, {
     and: {
       name: 'bar',
     },
-    sid: '-lpm9ur:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
+    sid: '4rl7sf2-/src/babel/__tests__/fixtures/debug-sids.js:undefined:restore [106:22]',
   })
   restore(foo, null, {
-    sid: '-hqr1z7:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: 'rbv93e1-/src/babel/__tests__/fixtures/debug-sids.js::restore [108:2]',
   })
   restore(foo, null, {
-    sid: '-he3sbw:/src/babel/__tests__/fixtures/debug-sids.js:',
+    sid: 'yknbe12-/src/babel/__tests__/fixtures/debug-sids.js::restore [110:2]',
   })
 }
 "
@@ -1989,7 +1989,7 @@ import {withFactory as _withFactory} from 'effector'
 import {createQuery} from '@farfetched/core'
 
 const q = _withFactory({
-  sid: '-9en8j0',
+  sid: '-4l3olk',
   fn: () =>
     createQuery({
       handler: async () => null,
@@ -2022,7 +2022,7 @@ const withFactory = 1
 const _withFactory = 2
 
 const a_val = _withFactory2({
-  sid: 'f933k3',
+  sid: '-wis8ct',
   fn: () => a(0),
   name: 'a_val',
   method: 'a',
@@ -2036,7 +2036,7 @@ const a_val = _withFactory2({
 const a1_val = a1(0)
 
 const b_val = _withFactory2({
-  sid: 'qmj9c2',
+  sid: '-hudy4r',
   fn: () => b(0),
   name: 'b_val',
   method: 'b',
@@ -2048,7 +2048,7 @@ const b_val = _withFactory2({
 })
 
 const c_val = _withFactory2({
-  sid: '-xi699a',
+  sid: '-35znwp',
   fn: () => c(0),
   name: 'c_val',
   method: 'c',
@@ -2060,7 +2060,7 @@ const c_val = _withFactory2({
 })
 
 const e_val = _withFactory2({
-  sid: '-c6esvx',
+  sid: 'q6swjf',
   fn: () => e(0),
   name: 'e_val',
   method: 'e',
@@ -2072,7 +2072,7 @@ const e_val = _withFactory2({
 })
 
 const f_val = _withFactory2({
-  sid: '8nxsry',
+  sid: '-u5wv7n',
   fn: () => f(0),
   name: 'f_val',
   method: 'f',
@@ -2084,7 +2084,7 @@ const f_val = _withFactory2({
 })
 
 const f1_val = _withFactory2({
-  sid: 'zg3bgx',
+  sid: '-5ywm9h',
   fn: () => f1(0),
   name: 'f1_val',
   method: 'default',
@@ -2096,7 +2096,7 @@ const f1_val = _withFactory2({
 })
 
 const g_val = _withFactory2({
-  sid: 'k1dyjx',
+  sid: '-fhikzl',
   fn: () => g(0),
   name: 'g_val',
   method: 'g',
@@ -2108,7 +2108,7 @@ const g_val = _withFactory2({
 })
 
 const g1_val = _withFactory2({
-  sid: '4gqp0u',
+  sid: 'dz3ko1',
   fn: () => g1(0),
   name: 'g1_val',
   method: 'g1',
@@ -2122,7 +2122,7 @@ const g1_val = _withFactory2({
 const g2_val = g2(0)
 
 const {foo, bar} = _withFactory2({
-  sid: '-bpn650',
+  sid: 'vnc5xc',
   fn: () => a(0),
   name: 'none',
   method: 'a',
@@ -2142,19 +2142,19 @@ import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
 
 const longer = _withFactory({
-  sid: 'sxdi9p',
+  sid: 'ofxitr',
   fn: () => itIsALongName(0),
   name: 'longer',
   method: 'itIsALongName',
 })
 
 const arcade = _withFactory({
-  sid: '-rwb2il',
+  sid: '-cbwhq4',
   fn: () =>
     Defaulting({
       source: longer,
       condition: _withFactory({
-        sid: '-6rcqb6',
+        sid: 'yov724',
         fn: () =>
           AnotherImport({
             test: true,
@@ -2168,7 +2168,7 @@ const arcade = _withFactory({
 })
 
 _withFactory({
-  sid: '-dr78v0',
+  sid: '-lga8jj',
   fn: () =>
     Randomizing({
       arcade,
@@ -2178,7 +2178,7 @@ _withFactory({
 })
 
 const result = _withFactory({
-  sid: '-fbu55p',
+  sid: '-km9f2',
   fn: () =>
     splitMap({
       longer,
@@ -2197,17 +2197,17 @@ import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
 
 const longer = _withFactory({
-  sid: 'mn9l4u',
+  sid: '-6nipea',
   fn: () => itIsALongName(0),
 })
 
 const arcade = _withFactory({
-  sid: 'xpbz5w',
+  sid: '1z9ujn',
   fn: () =>
     Defaulting({
       source: longer,
       condition: _withFactory({
-        sid: 'lijhe7',
+        sid: '-rvq05f',
         fn: () =>
           AnotherImport({
             test: true,
@@ -2217,7 +2217,7 @@ const arcade = _withFactory({
 })
 
 _withFactory({
-  sid: '-yfq3bv',
+  sid: 'jnpdpc',
   fn: () =>
     Randomizing({
       arcade,
@@ -2225,7 +2225,7 @@ _withFactory({
 })
 
 const result = _withFactory({
-  sid: 'lwwnia',
+  sid: 'gv5z4j',
   fn: () =>
     splitMap({
       longer,
@@ -2245,7 +2245,7 @@ const foo = createStore('foo', {
     column: 12,
   },
   name: 'foo',
-  sid: 'b2bfdg',
+  sid: '-4327d3',
 })
 const bar = createEvent({
   loc: {
@@ -2254,7 +2254,7 @@ const bar = createEvent({
     column: 12,
   },
   name: 'bar',
-  sid: '-tj0e4a',
+  sid: '-v4hsap',
 })
 const baz1 = forward({
   and: {
@@ -2268,7 +2268,7 @@ const baz1 = forward({
       column: 13,
     },
     name: 'baz1',
-    sid: '-jxxvds',
+    sid: '-ldlh3f',
   },
 })
 const baz2 = forward({
@@ -2283,7 +2283,7 @@ const baz2 = forward({
       column: 13,
     },
     name: 'baz2',
-    sid: '-ng3uxu',
+    sid: 'jrek3a',
   },
 })
 forward({
@@ -2297,7 +2297,7 @@ forward({
       line: 12,
       column: 0,
     },
-    sid: '-dp41tl',
+    sid: 'iqu01r',
   },
 })
 forward({
@@ -2311,7 +2311,7 @@ forward({
       line: 13,
       column: 0,
     },
-    sid: '-dok988',
+    sid: '-xjlugw',
   },
 })
 const config = {
@@ -2327,7 +2327,7 @@ const baz5 = forward({
       column: 13,
     },
     name: 'baz5',
-    sid: '-u8jxfp',
+    sid: '146jp5',
   },
 })
 
@@ -2344,7 +2344,7 @@ const f = () =>
         column: 2,
       },
       name: 'f',
-      sid: '798vsy',
+      sid: '-508tab',
     },
   })
 
@@ -2379,7 +2379,7 @@ const foo = createStore(true, {
     column: 12,
   },
   name: 'foo',
-  sid: 'lecs4',
+  sid: 'ze97ix',
 })
 const bar = createEvent({
   loc: {
@@ -2388,7 +2388,7 @@ const bar = createEvent({
     column: 12,
   },
   name: 'bar',
-  sid: '-45cu8q',
+  sid: '8ctmlb',
 })
 const baz1 = guard({
   and: [
@@ -2404,7 +2404,7 @@ const baz1 = guard({
       column: 13,
     },
     name: 'baz1',
-    sid: 'ajzcsg',
+    sid: '-i7jaq3',
   },
 })
 const baz2 = guard({
@@ -2421,7 +2421,7 @@ const baz2 = guard({
       column: 13,
     },
     name: 'baz2',
-    sid: 'r2agou',
+    sid: '-3j50i2',
   },
 })
 guard({
@@ -2437,7 +2437,7 @@ guard({
       line: 12,
       column: 0,
     },
-    sid: '-ajy521',
+    sid: '-2br2m9',
   },
 })
 guard({
@@ -2453,7 +2453,7 @@ guard({
       line: 13,
       column: 0,
     },
-    sid: '-ajecgo',
+    sid: 'u9p000',
   },
 })
 const spread = [
@@ -2471,7 +2471,7 @@ const baz4 = guard({
       column: 13,
     },
     name: 'baz4',
-    sid: '-ocyuy5',
+    sid: 'ptnjy0',
   },
 })
 const config = {
@@ -2487,7 +2487,7 @@ const baz5 = guard({
       column: 13,
     },
     name: 'baz5',
-    sid: '-b8br2g',
+    sid: '-uj27t3',
   },
 })
 
@@ -2506,7 +2506,7 @@ const f = () =>
         column: 2,
       },
       name: 'f',
-      sid: '-83rmcb',
+      sid: '-g24vnn',
     },
   })
 
@@ -2575,7 +2575,7 @@ import {createStore} from 'redux'
       column: 17,
     },
     name: 'domain',
-    sid: '1vn09w',
+    sid: '4pzx4x',
   })
   const event = createEventEffector({
     loc: {
@@ -2584,7 +2584,7 @@ import {createStore} from 'redux'
       column: 16,
     },
     name: 'event',
-    sid: '-m5d723',
+    sid: '71ddkt',
   })
   const store = createStoreEffector(0, {
     loc: {
@@ -2593,7 +2593,7 @@ import {createStore} from 'redux'
       column: 16,
     },
     name: 'store',
-    sid: '1vy7fv',
+    sid: '-orb9v9',
   })
   const effect = createEffectEffector({
     loc: {
@@ -2602,7 +2602,7 @@ import {createStore} from 'redux'
       column: 17,
     },
     name: 'effect',
-    sid: '-ii0up3',
+    sid: 'lln89a',
   })
   const domainEvent = domain.createEvent({
     loc: {
@@ -2611,7 +2611,7 @@ import {createStore} from 'redux'
       column: 22,
     },
     name: 'domainEvent',
-    sid: 'up7n43',
+    sid: '-d9gejr',
   })
   const scope = forkEffector(domain)
   const node = createNodeEffector()
@@ -2626,7 +2626,7 @@ import {createStore} from 'redux'
         column: 12,
       },
       name: 'a',
-      sid: '-2lozrr',
+      sid: '-dquj8l',
     },
   })
   const b = clearNodeEffector(node)
@@ -2643,7 +2643,7 @@ import {createStore} from 'redux'
         column: 12,
       },
       name: 'c',
-      sid: '-z7de1j',
+      sid: '-wu3m51',
     },
   })
   const d = createApiEffector({
@@ -2654,7 +2654,7 @@ import {createStore} from 'redux'
         line: 40,
         column: 12,
       },
-      sid: '-xc0sb4',
+      sid: 'gpupr5',
     },
   })
   const j = forwardEffector({
@@ -2669,7 +2669,7 @@ import {createStore} from 'redux'
         column: 12,
       },
       name: 'j',
-      sid: '-z6uqpz',
+      sid: 'f4rgs8',
     },
   })
   const l = guardEffector({
@@ -2686,7 +2686,7 @@ import {createStore} from 'redux'
         column: 12,
       },
       name: 'l',
-      sid: '2rjal6',
+      sid: '-t2r6ee',
     },
   })
   const m = launchEffector(event, null)
@@ -2697,7 +2697,7 @@ import {createStore} from 'redux'
       column: 12,
     },
     name: 'n',
-    sid: '-tu53om',
+    sid: 'gmkk8',
   })
   const o = restoreEffector(event, null, {
     loc: {
@@ -2706,7 +2706,7 @@ import {createStore} from 'redux'
       column: 12,
     },
     name: 'o',
-    sid: '-amf9ty',
+    sid: '-xy3ce2',
   })
   const p = sampleEffector({
     and: [
@@ -2722,7 +2722,7 @@ import {createStore} from 'redux'
         column: 12,
       },
       name: 'p',
-      sid: '8lak0q',
+      sid: 'n372p',
     },
   })
   const q = splitEffector({
@@ -2733,7 +2733,7 @@ import {createStore} from 'redux'
         line: 47,
         column: 12,
       },
-      sid: '-u0pfjr',
+      sid: '-z6ylmr',
     },
   })
   const r = withRegionEffector(node, () => {})
@@ -2759,7 +2759,7 @@ function nameClashCheck() {
       column: 22,
     },
     name: 'domainEvent',
-    sid: '2a5kmh',
+    sid: '-bldidk',
   })
   const scope = fork(domain)
   const node = createNode()
@@ -2835,7 +2835,7 @@ const domain = createDomain({
     column: 15,
   },
   name: 'domain',
-  sid: '10o82x',
+  sid: '-8kirks',
 })
 const event = createEvent({
   loc: {
@@ -2844,7 +2844,7 @@ const event = createEvent({
     column: 14,
   },
   name: 'event',
-  sid: 'q4qjpv',
+  sid: '4bg4l6',
 })
 const store = createStore(0, {
   loc: {
@@ -2853,7 +2853,7 @@ const store = createStore(0, {
     column: 14,
   },
   name: 'store',
-  sid: 'iq0y2z',
+  sid: '-rh8iuw',
 })
 const effect = createEffect({
   loc: {
@@ -2862,7 +2862,7 @@ const effect = createEffect({
     column: 15,
   },
   name: 'effect',
-  sid: '-mo4l0n',
+  sid: '8b4jjl',
 })
 const domainEvent = domain.createEvent({
   loc: {
@@ -2871,7 +2871,7 @@ const domainEvent = domain.createEvent({
     column: 20,
   },
   name: 'domainEvent',
-  sid: 't0scbd',
+  sid: '6xdy3a',
 })
 const scope = fork(domain)
 const node = createNode()
@@ -2886,7 +2886,7 @@ const a = attach({
       column: 10,
     },
     name: 'a',
-    sid: '-27a7xz',
+    sid: '9hp3i6',
   },
 })
 const b = clearNode(node)
@@ -2903,7 +2903,7 @@ const c = combine({
       column: 10,
     },
     name: 'c',
-    sid: '-vtehbg',
+    sid: '-msbkuw',
   },
 })
 const d = createApi({
@@ -2914,7 +2914,7 @@ const d = createApi({
       line: 12,
       column: 10,
     },
-    sid: '6v1ads',
+    sid: '-qwkge4',
   },
 })
 const e = forward({
@@ -2929,7 +2929,7 @@ const e = forward({
       column: 10,
     },
     name: 'e',
-    sid: '-llhht8',
+    sid: 'wkvi28',
   },
 })
 const f = guard({
@@ -2946,7 +2946,7 @@ const f = guard({
       column: 10,
     },
     name: 'f',
-    sid: '-ghj024',
+    sid: 'l33lld',
   },
 })
 const g = launch(event, null)
@@ -2957,7 +2957,7 @@ const h = merge([event], {
     column: 10,
   },
   name: 'h',
-  sid: '-69m0jw',
+  sid: '-kempf5',
 })
 const i = restore(event, null, {
   loc: {
@@ -2966,7 +2966,7 @@ const i = restore(event, null, {
     column: 10,
   },
   name: 'i',
-  sid: '-15niss',
+  sid: 'de4pod',
 })
 const j = sample({
   and: [
@@ -2982,7 +2982,7 @@ const j = sample({
       column: 10,
     },
     name: 'j',
-    sid: '3yayyc',
+    sid: '-6zvwli',
   },
 })
 const k = split({
@@ -2993,7 +2993,7 @@ const k = split({
       line: 19,
       column: 10,
     },
-    sid: 'a6cn55',
+    sid: 'xf7nog',
   },
 })
 const l = withRegion(node, () => {})
@@ -3023,7 +3023,7 @@ function B() {
       line: 8,
       column: 9,
     },
-    sid: '2wwj9e',
+    sid: '-x1zwzh',
   })
 }
 "
@@ -3039,7 +3039,7 @@ const foo = createEvent({
     column: 12,
   },
   name: 'foo',
-  sid: 'wn2htt',
+  sid: '4d42n3',
 })
 const a = merge([foo], {
   loc: {
@@ -3048,7 +3048,7 @@ const a = merge([foo], {
     column: 10,
   },
   name: 'a',
-  sid: 'g0hdc6',
+  sid: 'dt92rl',
 })
 const b = merge([foo], {
   and: {},
@@ -3058,7 +3058,7 @@ const b = merge([foo], {
     column: 10,
   },
   name: 'b',
-  sid: 'wish8k',
+  sid: 'shnczm',
 })
 const {sid} = merge([foo], {
   loc: {
@@ -3066,7 +3066,7 @@ const {sid} = merge([foo], {
     line: 7,
     column: 14,
   },
-  sid: '-g39k5r',
+  sid: 'p2ot80',
 })
 merge([foo], {
   loc: {
@@ -3074,7 +3074,7 @@ merge([foo], {
     line: 9,
     column: 0,
   },
-  sid: '-1h8qvs',
+  sid: '3h0ydq',
 })
 const args = [[foo]]
 const c = merge(...args, {
@@ -3084,7 +3084,7 @@ const c = merge(...args, {
     column: 10,
   },
   name: 'c',
-  sid: 'er2f95',
+  sid: '-rv2erh',
 })
 {
   const incorrect = merge([foo])
@@ -3140,7 +3140,7 @@ function outerScope() {
         column: 24,
       },
       name: 'domainEvent',
-      sid: 'pmdftk',
+      sid: '-e37g89',
     })
     const scope = fork(domain)
     const node = createNode()
@@ -3196,7 +3196,7 @@ const foo = createEvent({
     column: 12,
   },
   name: 'foo',
-  sid: 'uhrqqz',
+  sid: '-dwt0l3',
 })
 const a = restore(foo, null, {
   loc: {
@@ -3205,7 +3205,7 @@ const a = restore(foo, null, {
     column: 10,
   },
   name: 'a',
-  sid: '-nnytgv',
+  sid: 'm4lo48',
 })
 const b = restore(foo, null, {
   and: {},
@@ -3215,7 +3215,7 @@ const b = restore(foo, null, {
     column: 10,
   },
   name: 'b',
-  sid: '-r64t0x',
+  sid: '-7rico7',
 })
 const c = restore(foo, null, {
   and: 23020,
@@ -3225,7 +3225,7 @@ const c = restore(foo, null, {
     column: 10,
   },
   name: 'c',
-  sid: '-uoaskz',
+  sid: 'xdhoii',
 })
 const config = {
   option: 0,
@@ -3238,7 +3238,7 @@ const dod = restore(foo, null, {
     column: 12,
   },
   name: 'dod',
-  sid: '-juogjx',
+  sid: '-by5nyo',
 })
 
 const f = a =>
@@ -3249,7 +3249,7 @@ const f = a =>
       column: 15,
     },
     name: 'f',
-    sid: 'sesimo',
+    sid: 'eq9o4d',
   })
 
 const {sid} = restore(foo, null, {
@@ -3258,7 +3258,7 @@ const {sid} = restore(foo, null, {
     line: 12,
     column: 14,
   },
-  sid: 'cwg5ax',
+  sid: '-5gftmh',
 })
 const {shortName} = restore(foo, null, {
   and: {
@@ -3269,7 +3269,7 @@ const {shortName} = restore(foo, null, {
     line: 13,
     column: 20,
   },
-  sid: 'ddhscd',
+  sid: '-3scxga',
 })
 restore(foo, null, {
   loc: {
@@ -3277,7 +3277,7 @@ restore(foo, null, {
     line: 15,
     column: 0,
   },
-  sid: '5rznc1',
+  sid: 'b4gjpt',
 })
 restore(foo, null, {
   loc: {
@@ -3285,7 +3285,7 @@ restore(foo, null, {
     line: 17,
     column: 0,
   },
-  sid: '5t38ir',
+  sid: 'tv4r6a',
 })
 {
   const incorrect = restore(foo, null)
@@ -3312,7 +3312,7 @@ const foo = createStore('foo', {
     column: 12,
   },
   name: 'foo',
-  sid: '-4vbj4l',
+  sid: 'v1d24s',
 })
 const bar = createEvent({
   loc: {
@@ -3321,7 +3321,7 @@ const bar = createEvent({
     column: 12,
   },
   name: 'bar',
-  sid: '-o1v4q1',
+  sid: '3zxh76',
 })
 const baz1 = sample({
   and: [foo, bar],
@@ -3332,7 +3332,7 @@ const baz1 = sample({
       column: 13,
     },
     name: 'baz1',
-    sid: '-mtqqy1',
+    sid: 'bsgoy5',
   },
 })
 const baz2 = sample({
@@ -3349,7 +3349,7 @@ const baz2 = sample({
       column: 13,
     },
     name: 'baz2',
-    sid: '-mhbfpl',
+    sid: '-uf0vys',
   },
 })
 sample({
@@ -3360,7 +3360,7 @@ sample({
       line: 12,
       column: 0,
     },
-    sid: 'u64ez6',
+    sid: 'w5joxv',
   },
 })
 sample({
@@ -3376,7 +3376,7 @@ sample({
       line: 13,
       column: 0,
     },
-    sid: 'u6o7kj',
+    sid: 'w0xds4',
   },
 })
 const spread = [foo, bar]
@@ -3389,7 +3389,7 @@ const baz4 = sample({
       column: 13,
     },
     name: 'baz4',
-    sid: '-59j5hm',
+    sid: 'r8825m',
   },
 })
 const config = {
@@ -3405,7 +3405,7 @@ const baz5 = sample({
       column: 13,
     },
     name: 'baz5',
-    sid: '40inll',
+    sid: '-ez9irb',
   },
 })
 
@@ -3424,7 +3424,7 @@ const f = () =>
         column: 2,
       },
       name: 'f',
-      sid: 'hnsza4',
+      sid: 'g2pvun',
     },
   })
 
@@ -3453,7 +3453,7 @@ const foo = createStore([], {
     column: 12,
   },
   name: 'foo',
-  sid: '-qfptup',
+  sid: '-f4bu9o',
 })
 const bar = createEvent({
   loc: {
@@ -3462,7 +3462,7 @@ const bar = createEvent({
     column: 12,
   },
   name: 'bar',
-  sid: '-v6h0vj',
+  sid: 'svcmru',
 })
 const baz1 = split({
   and: [
@@ -3477,7 +3477,7 @@ const baz1 = split({
       line: 6,
       column: 13,
     },
-    sid: '-zbcafz',
+    sid: '3uu2eh',
   },
 })
 split({
@@ -3493,7 +3493,7 @@ split({
       line: 7,
       column: 0,
     },
-    sid: '-14glo8',
+    sid: '-yktwye',
   },
 })
 const baz2 = split({
@@ -3514,7 +3514,7 @@ const baz2 = split({
       line: 8,
       column: 13,
     },
-    sid: '-yd91nl',
+    sid: '-1zduc5',
   },
 })
 split({
@@ -3535,7 +3535,7 @@ split({
       line: 14,
       column: 0,
     },
-    sid: 'xh5bh0',
+    sid: 'um28a4',
   },
 })
 const spread = [
@@ -3552,7 +3552,7 @@ const baz4 = split({
       line: 21,
       column: 13,
     },
-    sid: '-efuj54',
+    sid: '-7tlr2r',
   },
 })
 const config = {
@@ -3572,7 +3572,7 @@ const baz5 = split({
       line: 29,
       column: 13,
     },
-    sid: '-anhjzk',
+    sid: 'orubji',
   },
 })
 
@@ -3590,7 +3590,7 @@ const f = () =>
         line: 31,
         column: 16,
       },
-      sid: '8jr5i',
+      sid: '-dntntd',
     },
   })
 
@@ -3635,86 +3635,86 @@ exports[`babel-plugin should units without name with options 1`] = `
 } from 'effector'
 {
   const domain = createDomain({
-    sid: '-nzaa7a',
+    sid: '-q3kak7',
   })
   const a = domain.store('bar', {
-    sid: '-r4da5h',
+    sid: 'ik51kz',
   })
   const b = domain.store('h', {
     and: {
       option: 'test',
       ['na' + 'me']: 'LOL',
     },
-    sid: 'ehfy55',
+    sid: 'x8jbt0',
   })
   const c = domain.store('h', {
     and: {
       name: 'test',
     },
-    sid: '-exuvjd',
+    sid: '-n46fy3',
   })
   const d = domain.store('h', {
     and: null,
-    sid: 'r4zz5g',
+    sid: '-8fs5q2',
   })
   const e = domain.store('h', {
     and: 4234,
-    sid: '-1t984v',
+    sid: '68m4hz',
   })
   const f = domain.store('h', {
     and: {},
-    sid: '-v8k1td',
+    sid: 'kx0eq0',
   })
   const aAlias = domain.createStore('bar', {
-    sid: 'rsi1ca',
+    sid: 'i9nz23',
   })
   const bAlias = domain.createStore('h', {
     and: {
       option: 'test',
       ['na' + 'me']: 'LOL',
     },
-    sid: 'i7igmi',
+    sid: 'keinx6',
   })
   const cAlias = domain.createStore('h', {
     and: {
       name: 'testAlias',
     },
-    sid: '8mivwq',
+    sid: 'mjdcs9',
   })
   const dAlias = domain.createStore('h', {
     and: null,
-    sid: '-hf2ev',
+    sid: 'oo81nc',
   })
   const eAlias = domain.createStore('h', {
     and: 4234,
-    sid: '-9ld0qg',
+    sid: 'qt2qif',
   })
   const fAlias = domain.createStore('h', {
     and: {},
-    sid: '-j6clg8',
+    sid: 'sxxfdi',
   })
   const {sid} = domain.createStore(null, {
-    sid: '-ls4ila',
+    sid: 'ir5khe',
   })
   const {shortName} = domain.createStore(null, {
     and: {
       name: 'foo',
     },
-    sid: '-lb2vju',
+    sid: 'eoi837',
   })
   domain.createStore(null, {
-    sid: 'tgv4rt',
+    sid: 'lyft1o',
   })
   domain.createStore(null, {
-    sid: 'thypyj',
+    sid: 'nmip7v',
   })
 }
 {
   const foo = createEffect({
-    sid: '9vguxc',
+    sid: 'k58yqp',
   })
   const bar = createEffect('hello', {
-    sid: '-t87e9q',
+    sid: '-6oikcy',
   })
   const baz = createEffect(
     {
@@ -3723,7 +3723,7 @@ exports[`babel-plugin should units without name with options 1`] = `
       },
     },
     {
-      sid: 'g6ivfd',
+      sid: '-vbkeiy',
     },
   )
   const quux = createEffect('nice', {
@@ -3732,163 +3732,163 @@ exports[`babel-plugin should units without name with options 1`] = `
         return 0
       },
     },
-    sid: '-26njv2',
+    sid: '-jvy4qc',
   })
 
   const fa = () =>
     createEffect({
-      sid: 'nsvob9',
+      sid: '-dvscao',
     })
 
   const {sid} = createEffect({
-    sid: 'ixqzbg',
+    sid: 'ijhinf',
   })
   const {name} = createEffect('foo', {
-    sid: 'jeslqi',
+    sid: 'egu698',
   })
   const {shortName} = createEffect(
     {
       name: 'foo',
     },
     {
-      sid: 'jvu8r3',
+      sid: 'ae6tv1',
     },
   )
   createEffect({
-    sid: 'uh5jxn',
+    sid: 'lqrr7p',
   })
   createEffect({
-    sid: 'ui954d',
+    sid: 'neundw',
   })
 }
 {
   const foo = createStore('foo', {
-    sid: '-jyq2qv',
+    sid: 'kcx0ko',
   })
   const a = createStore('h', {
-    sid: '-oagam9',
+    sid: '-qhb24',
   })
   const b = createStore('h', {
     and: {},
-    sid: 'hbcxod',
+    sid: 'dxwz5x',
   })
   const c = createStore('h', {
     and: 23020,
-    sid: '-bmw9ly',
+    sid: 'smb9dy',
   })
   const config = {
     option: 0,
   }
   const dod = createStore(null, {
     and: config,
-    sid: 'sja6dc',
+    sid: '-aa40bp',
   })
 
   const f = a =>
     createStore(a, {
-      sid: '-sen25u',
+      sid: '1me22x',
     })
 
   const {sid} = createStore(null, {
-    sid: '-mqki7m',
+    sid: 'aluvp0',
   })
   const {shortName} = createStore(null, {
     and: {
       name: 'foo',
     },
-    sid: '-m9iv66',
+    sid: '6j7jat',
   })
   createStore(null, {
-    sid: 'vep04o',
+    sid: 'palle2',
   })
   createStore(null, {
-    sid: 'vfslbe',
+    sid: 'qyohk9',
   })
 }
 {
   const foo = createEvent({
-    sid: '8x0vb0',
+    sid: 'gozu3m',
   })
   const bar = createEvent('hello', {
-    sid: '-u6ndw2',
+    sid: '-a4rp01',
   })
   const baz = createEvent(
     {
       name: 'nice',
     },
     {
-      sid: 'f82vt1',
+      sid: '-yrtj61',
     },
   )
 
   const f = () =>
     createEvent({
-      sid: '-1w4823',
+      sid: 'kpccw1',
     })
 
   const {sid} = createEvent({
-    sid: '-65zqet',
+    sid: '6bjhgu',
   })
   const {name} = createEvent('foo', {
-    sid: '-5oy3zr',
+    sid: '28w52n',
   })
   const {shortName} = createEvent(
     {
       name: 'foo',
     },
     {
-      sid: '-57wgz6',
+      sid: '-1tr7bk',
     },
   )
   createEvent({
-    sid: 'vyhlho',
+    sid: 'p2xjk3',
   })
   createEvent({
-    sid: 'wb4v4z',
+    sid: 'qr0fqa',
   })
 }
 {
   const foo = createEvent({
-    sid: 'pyn9i0',
+    sid: 'd8qpgj',
   })
   const a = restore(foo, null, {
-    sid: 'lmx1mm',
+    sid: '-eugej4',
   })
   const b = restore(foo, null, {
     and: {},
-    sid: '-7sds1w',
+    sid: 'qajmnl',
   })
   const c = restore(foo, null, {
     and: 23020,
-    sid: 'yah2mx',
+    sid: '-3lke4u',
   })
   const config = {
     option: 0,
   }
   const dod = restore(foo, null, {
     and: config,
-    sid: '10dc0p',
+    sid: '-sc6x6g',
   })
 
   const f = a =>
     restore(foo, null, {
-      sid: '-gu50wv',
+      sid: '-m8seiz',
     })
 
   const {sid} = restore(foo, null, {
-    sid: 'zcd1uy',
+    sid: 'ucc0v3',
   })
   const {shortName} = restore(foo, null, {
     and: {
       name: 'bar',
     },
-    sid: '-z7pd2q',
+    sid: 'mcd6lc',
   })
   restore(foo, null, {
-    sid: 'vif224',
+    sid: '-hkbsqv',
   })
   restore(foo, null, {
-    sid: 'vv2bpf',
+    sid: 'nkft5k',
   })
 }
 "
@@ -3924,7 +3924,7 @@ const korben = attach({
         column: 15,
       },
       name: 'korben',
-      sid: '-5ddctg',
+      sid: 'jiikdl',
     },
   },
   or: {
@@ -3934,7 +3934,7 @@ const korben = attach({
       column: 15,
     },
     name: 'korben',
-    sid: '-5ddctg',
+    sid: 'jiikdl',
   },
 })
 const dallas = combine({
@@ -3948,7 +3948,7 @@ const dallas = combine({
           column: 15,
         },
         name: 'dallas',
-        sid: '-2wtc0j',
+        sid: 'rpkq19',
       },
     },
   ],
@@ -3959,7 +3959,7 @@ const dallas = combine({
       column: 15,
     },
     name: 'dallas',
-    sid: '-2wtc0j',
+    sid: 'rpkq19',
   },
 })
 const c = createDomain(
@@ -3970,7 +3970,7 @@ const c = createDomain(
       column: 10,
     },
     name: 'c',
-    sid: 't890l',
+    sid: '-fighh2',
   },
   {
     loc: {
@@ -3979,7 +3979,7 @@ const c = createDomain(
       column: 10,
     },
     name: 'c',
-    sid: 't890l',
+    sid: '-fighh2',
   },
 )
 const d = createEffect(
@@ -3990,7 +3990,7 @@ const d = createEffect(
       column: 10,
     },
     name: 'd',
-    sid: '-km6xbk',
+    sid: '-u2791',
   },
   {
     loc: {
@@ -3999,7 +3999,7 @@ const d = createEffect(
       column: 10,
     },
     name: 'd',
-    sid: '-km6xbk',
+    sid: '-u2791',
   },
 )
 const e = createEvent(
@@ -4010,7 +4010,7 @@ const e = createEvent(
       column: 10,
     },
     name: 'e',
-    sid: 'j1jw1c',
+    sid: 'duc2z0',
   },
   {
     loc: {
@@ -4019,7 +4019,7 @@ const e = createEvent(
       column: 10,
     },
     name: 'e',
-    sid: 'j1jw1c',
+    sid: 'duc2z0',
   },
 )
 const f = createStore(null, {
@@ -4030,7 +4030,7 @@ const f = createStore(null, {
       column: 10,
     },
     name: 'f',
-    sid: '-cbtckw',
+    sid: 'sqef10',
   },
   loc: {
     file: _effectorFileName2,
@@ -4038,7 +4038,7 @@ const f = createStore(null, {
     column: 10,
   },
   name: 'f',
-  sid: '-cbtckw',
+  sid: 'sqef10',
 })
 const g = createApi({
   and: [
@@ -4050,7 +4050,7 @@ const g = createApi({
           line: 23,
           column: 10,
         },
-        sid: '-v3udvb',
+        sid: 'd3ww9p',
       },
     },
   ],
@@ -4060,7 +4060,7 @@ const g = createApi({
       line: 23,
       column: 10,
     },
-    sid: '-v3udvb',
+    sid: 'd3ww9p',
   },
 })
 const h = forward({
@@ -4076,7 +4076,7 @@ const h = forward({
         column: 10,
       },
       name: 'h',
-      sid: '-41fru8',
+      sid: 'cxmray',
     },
   },
   or: {
@@ -4086,7 +4086,7 @@ const h = forward({
       column: 10,
     },
     name: 'h',
-    sid: '-41fru8',
+    sid: 'cxmray',
   },
 })
 const i = guard({
@@ -4105,7 +4105,7 @@ const i = guard({
           column: 10,
         },
         name: 'i',
-        sid: '-zet0gg',
+        sid: '1jw17f',
       },
     },
   ],
@@ -4116,7 +4116,7 @@ const i = guard({
       column: 10,
     },
     name: 'i',
-    sid: '-zet0gg',
+    sid: '1jw17f',
   },
 })
 const j = merge([e], {
@@ -4127,7 +4127,7 @@ const j = merge([e], {
       column: 10,
     },
     name: 'j',
-    sid: '48xswg',
+    sid: 'gevhy0',
   },
   loc: {
     file: _effectorFileName2,
@@ -4135,7 +4135,7 @@ const j = merge([e], {
     column: 10,
   },
   name: 'j',
-  sid: '48xswg',
+  sid: 'gevhy0',
 })
 const k = restore(d, null, {
   and: {
@@ -4145,7 +4145,7 @@ const k = restore(d, null, {
       column: 10,
     },
     name: 'k',
-    sid: '-r4ffps',
+    sid: 'nmzzpi',
   },
   loc: {
     file: _effectorFileName2,
@@ -4153,7 +4153,7 @@ const k = restore(d, null, {
     column: 10,
   },
   name: 'k',
-  sid: '-r4ffps',
+  sid: 'nmzzpi',
 })
 const m = sample({
   and: [
@@ -4171,7 +4171,7 @@ const m = sample({
           column: 10,
         },
         name: 'm',
-        sid: '-jb3hdb',
+        sid: 'qqm168',
       },
     },
   ],
@@ -4182,7 +4182,7 @@ const m = sample({
       column: 10,
     },
     name: 'm',
-    sid: '-jb3hdb',
+    sid: 'qqm168',
   },
 })
 const n = split({
@@ -4195,7 +4195,7 @@ const n = split({
           line: 29,
           column: 10,
         },
-        sid: '-s9kni5',
+        sid: '-5aen47',
       },
     },
   ],
@@ -4205,7 +4205,7 @@ const n = split({
       line: 29,
       column: 10,
     },
-    sid: '-s9kni5',
+    sid: '-5aen47',
   },
 })
 "
