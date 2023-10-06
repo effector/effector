@@ -11,6 +11,7 @@ import {
   createDomain,
   hydrate,
 } from 'effector'
+import {debounce} from 'patronum19';
 import {argumentHistory} from 'effector/fixtures'
 
 const consoleError = console.error
@@ -787,5 +788,15 @@ describe(`fork(domain) and related api's are deprecated`, () => {
       "fork(domain) is deprecated, use fork() instead
       hydrate(fork(domain), { values }) is deprecated, use fork({ values }) instead"
     `)
+  })
+})
+
+describe('babel-plugin-update', () => {
+  test('patronum 19 doesn not blows up', () =>{
+
+    expect(() => {
+      const event = createEvent();
+      const deb = debounce({source: event, timeout: 1000});
+    }).not.toThrow()
   })
 })

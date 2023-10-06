@@ -1,13 +1,21 @@
 import {forIn} from './collection'
 import {assertObject, isObject, isVoid} from './is'
 
-export function processArgsToConfig(args: any[]): [any[], any | void] {
-  const rawConfig = args[0]
+export function processArgsToConfig(
+  arg: any,
+  singleArgument: true,
+): [any, any | void]
+export function processArgsToConfig(args: any[]): [any[], any | void]
+export function processArgsToConfig(
+  args: any[],
+  singleArgument?: boolean,
+): [any[], any | void] {
+  const rawConfig = singleArgument ? args : args[0]
   assertObject(rawConfig)
   let metadata = rawConfig.or
   const childConfig = rawConfig.and
   if (childConfig) {
-    const unwrappedNestedValue = childConfig[0]
+    const unwrappedNestedValue = singleArgument ? childConfig : childConfig[0]
     /**
      * if there is no "and" field then we reached the leaf of the tree
      * and this is an original user-defined argument
@@ -17,7 +25,8 @@ export function processArgsToConfig(args: any[]): [any[], any | void] {
     if (!isObject(unwrappedNestedValue) || !('and' in unwrappedNestedValue)) {
       args = childConfig
     } else {
-      const nested = processArgsToConfig(childConfig)
+      //@ts-expect-error
+      const nested = processArgsToConfig(childConfig, singleArgument)
 
       args = nested[0]
       metadata = {...metadata, ...nested[1]}
@@ -26,6 +35,19 @@ export function processArgsToConfig(args: any[]): [any[], any | void] {
   return [args, metadata]
 }
 
+/**
+processed fields:
+
+'name',
+'sid',
+'loc',
+'handler',
+'updateFilter',
+'parent',
+'serialize',
+'named',
+'derived',
+*/
 export const flattenConfig = (part: any, config: Record<string, any> = {}) => {
   if (isObject(part)) {
     flattenConfig(part.or, config)
