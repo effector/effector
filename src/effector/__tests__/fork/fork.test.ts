@@ -65,21 +65,21 @@ test('usage without domain', async () => {
 })
 describe('getState cases', () => {
   test('getState on default value works', () => {
-    const $store = createStore("default value")
-  
-    const scope = fork();
-  
-    expect(scope.getState($store)).toBe("default value")
+    const $store = createStore('default value')
+
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe('default value')
   })
 
   test('getState on default value (store with serialize ignore)', () => {
-    const $store = createStore("default value", {
-      serialize: "ignore"
+    const $store = createStore('default value', {
+      serialize: 'ignore',
     })
-  
-    const scope = fork();
-  
-    expect(scope.getState($store)).toBe("default value")
+
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe('default value')
   })
 })
 describe('units without sids support', () => {
@@ -249,7 +249,7 @@ describe('fork values support', () => {
         values: new Map().set(unit, 0),
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"Values map can contain only stores as keys"`,
+      `"Values map can contain only writable stores as keys"`,
     )
   })
   describe('consistency simple', () => {
@@ -900,4 +900,27 @@ describe('scope watch calls', () => {
     })
     store.updates.watch(upd => fnB(upd))
   }
+})
+
+describe('derived units are not allowed in values', () => {
+  test('store.map', () => {
+    const $store = createStore(0)
+    const $map = $store.map(x => x)
+
+    expect(() => {
+      fork({values: [[$map, 1]]})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Values map can contain only writable stores as keys"`,
+    )
+  })
+  test('combine', () => {
+    const $store = createStore(0)
+    const $map = combine($store, x => x)
+
+    expect(() => {
+      fork({values: [[$map, 1]]})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Values map can contain only writable stores as keys"`,
+    )
+  })
 })

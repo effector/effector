@@ -29,8 +29,8 @@ export function fork(
     if (config.values) {
       const {sidMap, unitMap, hasSidDoubles} = normalizeValues(
         config.values,
-        unit =>
-          assert(is.store(unit), 'Values map can contain only stores as keys'),
+        unit => 
+          assert(is.store(unit) && is.targetable(unit), 'Values map can contain only writable stores as keys'),
       )
       Object.assign(scope.values.sidMap, sidMap)
       forEach(unitMap, (value, unit) => {
