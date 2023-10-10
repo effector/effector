@@ -3143,7 +3143,7 @@ export function scopeBind<T>(unit: EventCallable<T>, opts?: {scope?: Scope; safe
  * @param unit effect to bind
  * @returns function which will trigger an effect in a given scope and returns a promise with a result
  */
-export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope?: Scope; safe?: boolean}): (params: P) => Promise<D>
+export function scopeBind<P, D, F = Error>(unit: Effect<P, D, F>, opts?: {scope?: Scope; safe?: boolean}): (params: P) => Promise<D>
 
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
