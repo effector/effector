@@ -54,7 +54,7 @@ test('allSettled(scope)', async () => {
   await allSettled(scope)
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "el2wwt": true,
+      "ks3996": true,
     }
   `)
 })
@@ -209,20 +209,20 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-ec3clm": Array [
+        "-pv078j": Array [
           "a",
         ],
-        "-ywmq49": "a",
+        "-y1jhzv": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-36m1ni": "b",
-        "-ec3clm": Array [
+        "-pv078j": Array [
           "b",
         ],
-        "-ywmq49": "b",
-        "rsx11i": Array [
+        "-temmmy": "b",
+        "-y1jhzv": "b",
+        "pvhi3i": Array [
           "b",
         ],
       }
