@@ -4,6 +4,7 @@ const defaultFactories = [
   '@effector/reflect/ssr',
   '@effector/reflect/scope',
   'atomic-router',
+  '@withease/factories'
 ]
 
 module.exports = function (babel, options = {}) {
