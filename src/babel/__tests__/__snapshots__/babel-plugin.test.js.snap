@@ -2022,10 +2022,21 @@ _withFactory({
   },
 })
 
-delay({
-  source: q,
-  timeout: 100,
-  target: q.refresh,
+_withFactory({
+  sid: 'e9kkk1',
+  fn: () =>
+    delay({
+      source: q,
+      timeout: 100,
+      target: q.refresh,
+    }),
+  name: 'none',
+  method: 'delay',
+  loc: {
+    file: _effectorFileName,
+    line: 13,
+    column: 0,
+  },
 })
 "
 `;

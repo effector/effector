@@ -5,7 +5,7 @@ const defaultFactories = [
   '@effector/reflect/scope',
   'atomic-router',
   '@withease/factories',
-  'patronum'
+  'patronum' // there is also custom handling for patronum/{method} imports
 ]
 
 module.exports = function (babel, options = {}) {
@@ -331,7 +331,11 @@ module.exports = function (babel, options = {}) {
           normalizedSource = stripRoot(rootPath, resolvedImport, true)
         }
         normalizedSource = stripExtension(normalizedSource)
-        if (this.effector_factoryPaths.includes(normalizedSource)) {
+        if (
+          this.effector_factoryPaths.includes(normalizedSource)
+          // custom handling for patronum/{method} imports
+          || normalizedSource.startsWith('patronum/')
+          ) {
           this.effector_needFactoryImport = true
           createFactoryTemplate()
 
