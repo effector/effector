@@ -60,10 +60,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '23.0.0-rc.3',
-  'effector-react': '23.0.0-rc.3',
+  effector: '23.0.0-rc.4',
+  'effector-react': '23.0.0-rc.4',
   'effector-vue': '22.2.0',
-  'effector-solid': '0.23.0-rc.3',
+  'effector-solid': '0.23.0-rc.4',
   forest: '0.21.2',
 }
 
