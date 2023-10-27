@@ -142,20 +142,10 @@ const items66 = useCompatList($store, {fn: () => 1, keys: []}, {})
 // ## useStoreMap
 
 useStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0,
-  forceScope: false
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0, forceScope: false
 })
 const value110 = useStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0,
-  forceScope: false
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0, forceScope: false
 })
 const value112 = useStoreMap({store: $store, keys: [b, c], fn: (a) => 1, defaultValue: 0, forceScope: false})
 const value113 = useStoreMap({store: $store, keys: [b, c], fn: (a) => 1, forceScope: false})
@@ -166,11 +156,7 @@ useScopedStoreMap({store: $store, keys: [b, c], fn})
 const value114 = useScopedStoreMap({store: $store, keys: [b, c], fn: (a) => 1})
 const value115 = useScopedStoreMap({store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false})
 const value116 = useScopedStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0
 })
 const value117 = useScopedStoreMap({store: $store, keys: [b, c], fn: (a, k) => 1})
 const value118 = useScopedStoreMap({store: $store, keys: [b, c], fn: (a, [b, c]) => 1})
@@ -199,40 +185,20 @@ const value126 = useScopedStoreMap($store, function demo(a, [b, c]) {
 })
 
 useScopedStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0,
-  forceScope: false
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0, forceScope: false
 })
 const value127 = useScopedStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0,
-  forceScope: false
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0, forceScope: false
 })
 const value128 = useScopedStoreMap({store: $store, keys: [b, c], fn: (a) => 1, defaultValue: 0, forceScope: false})
 const value129 = useScopedStoreMap({store: $store, keys: [b, c], fn: (a) => 1, forceScope: false})
 useScopedStoreMap({store: $store, keys: [b, c], fn, updateFilter: (u, c) => false, defaultValue: 0, forceScope: false})
 
 useCompatStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0,
-  forceScope: false
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0, forceScope: false
 })
 const value130 = useCompatStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0,
-  forceScope: false
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0, forceScope: false
 })
 const value131 = useCompatStoreMap({store: $store, keys: [b, c], fn: (a) => 1, defaultValue: 0, forceScope: false})
 const value132 = useCompatStoreMap({store: $store, keys: [b, c], fn: (a) => 1, forceScope: false})

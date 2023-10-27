@@ -1,5 +1,5 @@
 import {useStoreMap} from 'effector-react'
-import { useStoreMap as useCompatStoreMap } from 'effector-react/compat'
+import {useStoreMap as useCompatStoreMap} from 'effector-react/compat'
 
 // ## useStoreMap
 

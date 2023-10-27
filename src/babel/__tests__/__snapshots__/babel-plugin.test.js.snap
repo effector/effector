@@ -2282,14 +2282,6 @@ import {
   useUnit,
 } from 'effector-react'
 import {
-  useEvent as useScopedEvent,
-  useGate as useScopedGate,
-  useList as useScopedList,
-  useStore as useScopedStore,
-  useStoreMap as useScopedStoreMap,
-  useUnit as useScopedUnit,
-} from 'effector-react/scope'
-import {
   useEvent as useCompatEvent,
   useGate as useCompatGate,
   useList as useCompatList,

@@ -1,13 +1,5 @@
 import {useEvent, useGate, useList, useStore, useStoreMap, useUnit} from 'effector-react'
 import {
-  useEvent as useScopedEvent,
-  useGate as useScopedGate,
-  useList as useScopedList,
-  useStore as useScopedStore,
-  useStoreMap as useScopedStoreMap,
-  useUnit as useScopedUnit
-} from 'effector-react/scope'
-import {
   useEvent as useCompatEvent,
   useGate as useCompatGate,
   useList as useCompatList,
@@ -104,11 +96,7 @@ useCompatStoreMap({store: $store, keys: [b, c], fn})
 const value81 = useCompatStoreMap({store: $store, keys: [b, c], fn: (a) => 1})
 const value82 = useCompatStoreMap({store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false})
 const value83 = useCompatStoreMap({
-  store: $store,
-  keys: [b, c],
-  fn: (a) => 1,
-  updateFilter: (u, c) => false,
-  defaultValue: 0
+  store: $store, keys: [b, c], fn: (a) => 1, updateFilter: (u, c) => false, defaultValue: 0
 })
 const value84 = useCompatStoreMap({store: $store, keys: [b, c], fn: (a, k) => 1})
 const value85 = useCompatStoreMap({store: $store, keys: [b, c], fn: (a, [b, c]) => 1})
