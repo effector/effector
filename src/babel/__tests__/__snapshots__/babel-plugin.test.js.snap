@@ -2289,105 +2289,247 @@ import {
   useUnit as useCompatUnit,
 } from 'effector-react/compat' // ## useEvent
 
-const event = useEvent(some)
-useEvent(another)
-useEvent(some)
-const event1 = useCompatEvent(some)
-useCompatEvent(another)
-useCompatEvent(some) // ## useStore
-
-const value1 = useStore($store)
-useStore($store)
-useStore($store)
-const value2 = useCompatStore($store)
-useCompatStore($store)
-useCompatStore($store) // ## useUnit
-
-const value4 = useUnit({})
-const value5 = useUnit({
-  a: $foo,
+const event = useEvent(some, {
+  forceScope: true,
 })
-const value6 = useUnit([])
-const value7 = useUnit([$foo])
-const value8 = useUnit([$foo])
-useUnit([$foo])
-const value9 = useUnit(some)
-const value10 = useUnit($another)
-const value11 = useCompatUnit({})
-const value12 = useCompatUnit({
-  a: $foo,
+useEvent(another, {
+  forceScope: true,
 })
-const value13 = useCompatUnit([])
-const value14 = useCompatUnit([$foo])
-const value15 = useCompatUnit([$foo])
-useCompatUnit([$foo])
-const value16 = useCompatUnit(some)
-const value17 = useCompatUnit($another) // ## useList
+useEvent(some, {
+  forceScope: true,
+})
+const event1 = useCompatEvent(some, {
+  forceScope: true,
+})
+useCompatEvent(another, {
+  forceScope: true,
+})
+useCompatEvent(some, {
+  forceScope: true,
+}) // ## useStore
 
-const items25 = useList($store, fn)
-const items26 = useList($store, a => 1)
-const items27 = useList($store, {
-  fn: () => 1,
+const value1 = useStore($store, {
+  forceScope: true,
 })
-const items28 = useList($store, {
-  fn() {
-    return 1
+useStore($store, {
+  forceScope: true,
+})
+useStore($store, {
+  forceScope: true,
+})
+const value2 = useCompatStore($store, {
+  forceScope: true,
+})
+useCompatStore($store, {
+  forceScope: true,
+})
+useCompatStore($store, {
+  forceScope: true,
+}) // ## useUnit
+
+const value4 = useUnit(
+  {},
+  {
+    forceScope: true,
   },
-})
-const items29 = useList($store, {
-  fn: () => 1,
-  keys: [],
-})
-const items30 = useList($store, a => 1)
-const items31 = useList($store, {
-  fn: () => 1,
-})
-const items32 = useList($store, {
-  fn: () => 1,
-  keys: [],
-})
-const items33 = useCompatList($store, a => 1)
-const items34 = useCompatList($store, {
-  fn: () => 1,
-})
-const items35 = useCompatList($store, {
-  fn() {
-    return 1
+)
+const value5 = useUnit(
+  {
+    a: $foo,
   },
+  {
+    forceScope: true,
+  },
+)
+const value6 = useUnit([], {
+  forceScope: true,
 })
-const items36 = useCompatList($store, {
-  fn: () => 1,
-  keys: [],
+const value7 = useUnit([$foo], {
+  forceScope: true,
 })
-const items37 = useCompatList($store, a => 1)
-const items38 = useCompatList($store, {
-  fn: () => 1,
+const value8 = useUnit([$foo], {
+  forceScope: true,
 })
-const items39 = useCompatList($store, {
-  fn: () => 1,
-  keys: [],
-}) // ## useStoreMap
+useUnit([$foo], {
+  forceScope: true,
+})
+const value9 = useUnit(some, {
+  forceScope: true,
+})
+const value10 = useUnit($another, {
+  forceScope: true,
+})
+const value11 = useCompatUnit(
+  {},
+  {
+    forceScope: true,
+  },
+)
+const value12 = useCompatUnit(
+  {
+    a: $foo,
+  },
+  {
+    forceScope: true,
+  },
+)
+const value13 = useCompatUnit([], {
+  forceScope: true,
+})
+const value14 = useCompatUnit([$foo], {
+  forceScope: true,
+})
+const value15 = useCompatUnit([$foo], {
+  forceScope: true,
+})
+useCompatUnit([$foo], {
+  forceScope: true,
+})
+const value16 = useCompatUnit(some, {
+  forceScope: true,
+})
+const value17 = useCompatUnit($another, {
+  forceScope: true,
+}) // ## useList
+
+const items25 = useList($store, fn, {
+  forceScope: true,
+})
+const items26 = useList($store, a => 1, {
+  forceScope: true,
+})
+const items27 = useList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items28 = useList(
+  $store,
+  {
+    fn() {
+      return 1
+    },
+  },
+  {
+    forceScope: true,
+  },
+)
+const items29 = useList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+)
+const items30 = useList($store, a => 1, {
+  forceScope: true,
+})
+const items31 = useList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items32 = useList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+)
+const items33 = useCompatList($store, a => 1, {
+  forceScope: true,
+})
+const items34 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items35 = useCompatList(
+  $store,
+  {
+    fn() {
+      return 1
+    },
+  },
+  {
+    forceScope: true,
+  },
+)
+const items36 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+)
+const items37 = useCompatList($store, a => 1, {
+  forceScope: true,
+})
+const items38 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items39 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+) // ## useStoreMap
 
 useStoreMap({
   store: $store,
   keys: [b, c],
   fn: a => 1,
+  forceScope: true,
 })
 useStoreMap({
   store: $store,
   keys: [b, c],
   fn,
+  forceScope: true,
 })
 const value71 = useStoreMap({
   store: $store,
   keys: [b, c],
   fn: a => 1,
+  forceScope: true,
 })
 const value72 = useStoreMap({
   store: $store,
   keys: [b, c],
   fn: a => 1,
   updateFilter: (u, c) => false,
+  forceScope: true,
 })
 const value73 = useStoreMap({
   store: $store,
@@ -2395,16 +2537,19 @@ const value73 = useStoreMap({
   fn: a => 1,
   updateFilter: (u, c) => false,
   defaultValue: 0,
+  forceScope: true,
 })
 const value74 = useStoreMap({
   store: $store,
   keys: [b, c],
   fn: (a, k) => 1,
+  forceScope: true,
 })
 const value75 = useStoreMap({
   store: $store,
   keys: [b, c],
   fn: (a, [b, c]) => 1,
+  forceScope: true,
 })
 const value76 = useStoreMap({
   store: $store,
@@ -2412,6 +2557,7 @@ const value76 = useStoreMap({
   fn: function (a, [b, c]) {
     return 1
   },
+  forceScope: true,
 })
 const value77 = useStoreMap({
   store: $store,
@@ -2420,27 +2566,33 @@ const value77 = useStoreMap({
   fn(a, [b, c]) {
     return 1
   },
+
+  forceScope: true,
 })
 useCompatStoreMap({
   store: $store,
   keys: [b, c],
   fn: a => 1,
+  forceScope: true,
 })
 useCompatStoreMap({
   store: $store,
   keys: [b, c],
   fn,
+  forceScope: true,
 })
 const value81 = useCompatStoreMap({
   store: $store,
   keys: [b, c],
   fn: a => 1,
+  forceScope: true,
 })
 const value82 = useCompatStoreMap({
   store: $store,
   keys: [b, c],
   fn: a => 1,
   updateFilter: (u, c) => false,
+  forceScope: true,
 })
 const value83 = useCompatStoreMap({
   store: $store,
@@ -2448,16 +2600,19 @@ const value83 = useCompatStoreMap({
   fn: a => 1,
   updateFilter: (u, c) => false,
   defaultValue: 0,
+  forceScope: true,
 })
 const value84 = useCompatStoreMap({
   store: $store,
   keys: [b, c],
   fn: (a, k) => 1,
+  forceScope: true,
 })
 const value85 = useCompatStoreMap({
   store: $store,
   keys: [b, c],
   fn: (a, [b, c]) => 1,
+  forceScope: true,
 })
 const value86 = useCompatStoreMap({
   store: $store,
@@ -2465,6 +2620,7 @@ const value86 = useCompatStoreMap({
   fn: function (a, [b, c]) {
     return 1
   },
+  forceScope: true,
 })
 const value87 = useCompatStoreMap({
   store: $store,
@@ -2473,53 +2629,199 @@ const value87 = useCompatStoreMap({
   fn(a, [b, c]) {
     return 1
   },
+
+  forceScope: true,
 }) // Should convert to object with forceScope: true
 
-useStoreMap($store, a => 1)
-useStoreMap($store, fn)
-const value91 = useStoreMap($store, fn)
-const value92 = useStoreMap($store, a => 1)
-const value93 = useStoreMap($store, (a, b) => 1)
-const value94 = useStoreMap($store, (a, [b, c]) => 1)
-const value95 = useStoreMap($store, function (a, [b, c]) {
-  return 1
+useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
 })
-const value96 = useStoreMap($store, function demo(a, [b, c]) {
-  return 1
+useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
 })
-useCompatStoreMap($store, a => 1)
-useCompatStoreMap($store, fn)
-const value100 = useCompatStoreMap($store, fn)
-const value101 = useCompatStoreMap($store, a => 1)
-const value102 = useCompatStoreMap($store, (a, b) => 1)
-const value103 = useCompatStoreMap($store, (a, [b, c]) => 1)
-const value104 = useCompatStoreMap($store, function (a, [b, c]) {
-  return 1
+const value91 = useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
 })
-const value105 = useCompatStoreMap($store, function demo(a, [b, c]) {
-  return 1
+const value92 = useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value93 = useStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value94 = useStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value95 = useStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value96 = useStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value100 = useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value101 = useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value102 = useCompatStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value103 = useCompatStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value104 = useCompatStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value105 = useCompatStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
 }) // ## useGate
 
-useGate(Gate)
-useGate(Gate, {})
-useGate(Gate, 1)
-useGate(Gate, {
-  a: 1,
+useGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useGate(Gate, 1, {
+  forceScope: true,
 })
-useGate(Gate)
-useGate(Gate, {
-  a: 1,
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+useGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(Gate, 1, {
+  forceScope: true,
 })
-useCompatGate(Gate)
-useCompatGate(Gate, {})
-useCompatGate(Gate, 1)
-useCompatGate(Gate, {
-  a: 1,
-})
-useCompatGate(Gate)
-useCompatGate(Gate, {
-  a: 1,
-})
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
 "
 `;
 
@@ -2527,29 +2829,109 @@ exports[`babel-plugin should forceScope shouldConvertAndAdd with options 1`] = `
 "import {useStoreMap} from 'effector-react'
 import {useStoreMap as useCompatStoreMap} from 'effector-react/compat' // ## useStoreMap
 
-useStoreMap($store, a => 1)
-useStoreMap($store, fn)
-const value91 = useStoreMap($store, fn)
-const value92 = useStoreMap($store, a => 1)
-const value93 = useStoreMap($store, (a, b) => 1)
-const value94 = useStoreMap($store, (a, [b, c]) => 1)
-const value95 = useStoreMap($store, function (a, [b, c]) {
-  return 1
+useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
 })
-const value96 = useStoreMap($store, function demo(a, [b, c]) {
-  return 1
+useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
 })
-useCompatStoreMap($store, a => 1)
-useCompatStoreMap($store, fn)
-const value100 = useCompatStoreMap($store, fn)
-const value101 = useCompatStoreMap($store, a => 1)
-const value102 = useCompatStoreMap($store, (a, b) => 1)
-const value103 = useCompatStoreMap($store, (a, [b, c]) => 1)
-const value104 = useCompatStoreMap($store, function (a, [b, c]) {
-  return 1
+const value91 = useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
 })
-const value105 = useCompatStoreMap($store, function demo(a, [b, c]) {
-  return 1
+const value92 = useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value93 = useStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value94 = useStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value95 = useStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value96 = useStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value100 = useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value101 = useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value102 = useCompatStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value103 = useCompatStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value104 = useCompatStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value105 = useCompatStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
 })
 "
 `;
