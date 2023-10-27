@@ -2271,9 +2271,8 @@ const result = _withFactory({
 "
 `;
 
-exports[`babel-plugin should forceScope shouldAdd 1`] = `
-"var _effectorFileName = '/src/babel/__tests__/fixtures/forceScope-shouldAdd.js'
-import {
+exports[`babel-plugin should forceScope shouldAdd with options 1`] = `
+"import {
   useEvent,
   useGate,
   useList,
@@ -2524,10 +2523,8 @@ useCompatGate(Gate, {
 "
 `;
 
-exports[`babel-plugin should forceScope shouldConvertAndAdd 1`] = `
-"var _effectorFileName =
-  '/src/babel/__tests__/fixtures/forceScope-shouldConvertAndAdd.js'
-import {useStoreMap} from 'effector-react'
+exports[`babel-plugin should forceScope shouldConvertAndAdd with options 1`] = `
+"import {useStoreMap} from 'effector-react'
 import {useStoreMap as useCompatStoreMap} from 'effector-react/compat' // ## useStoreMap
 
 useStoreMap($store, a => 1)
@@ -2557,10 +2554,8 @@ const value105 = useCompatStoreMap($store, function demo(a, [b, c]) {
 "
 `;
 
-exports[`babel-plugin should forceScope shouldNotAdd 1`] = `
-"var _effectorFileName =
-  '/src/babel/__tests__/fixtures/forceScope-shouldNotAdd.js'
-import {
+exports[`babel-plugin should forceScope shouldNotAdd with options 1`] = `
+"import {
   useEvent,
   useGate,
   useList,
