@@ -644,7 +644,7 @@ const normalizeOptions = options => {
     options,
     properties: {
       reactSsr: false,
-      forceScope: true,
+      forceScope: false,
       filename: true,
       stores: true,
       events: true,
