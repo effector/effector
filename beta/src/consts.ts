@@ -74,7 +74,7 @@ export const ANNOUNCEMENT: Announcement | null = {
   text: {
     en: "This documentation is for the as yet unreleased version of effector Spacewatch 23.0.",
     ru: "Эта версия документации предназначена для еще не вышедшего релиза effector Spacewatch 23.0.",
-    uz: "Bu hujjat hali chiqmagan effector Spacewatch 23.0. versiyasiga tegishli"
+    uz: "Bu hujjat hali chiqmagan effector Spacewatch 23.x versiyasiga tegishli"
   },
   button: {
     text: { en: "View actual documentation", ru: "Посмотреть актуальную документацию", uz: "Aktual hujjatni ko'rish" },

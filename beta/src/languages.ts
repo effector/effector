@@ -82,14 +82,14 @@ export const translations = {
     text: {
       en: "To add new translation open Pull Request",
       ru: "Чтобы добавить перевод, откройте Pull Request",
-      uz: "Tarjima qoshish uchun Pull Request oching"
+      uz: "Tarjima qoshish uchun havola boyicha o'tib Pull Request oching"
     },
   },
   usingThisLink: {
     text: {
       en: "using this link",
       ru: "по этой ссылке",
-      uz: "havola boyicha"
+      uz: "(havolaga o'tish)"
     },
   },
   ShowingContentForDefaultLanguage: {
@@ -169,7 +169,7 @@ export const translations = {
         text: {
           en: "Tell us",
           ru: "Расскажите нам",
-          uz: "Bizga ayting"
+          uz: "Bizga habar bering"
         },
       }
     }
