@@ -25,6 +25,7 @@ Effector binginds for Vue.
 
 ### Hooks
 
+- [useUnit(shape)](/en/api/effector-vue/useUnit)
 - [useStore(store)](/en/api/effector-vue/useStore)
 - [useStoreMap({store, keys, fn})](/en/api/effector-vue/useStoreMap)
 - [useVModel(store)](/en/api/effector-vue/useVModel)
