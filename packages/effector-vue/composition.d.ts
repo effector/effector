@@ -1,6 +1,5 @@
-import {Scope} from '@babel/traverse'
 import {ComputedRef, DeepReadonly, Ref, UnwrapRef} from '@vue/reactivity'
-import {Domain, Store, Event, Effect} from 'effector'
+import {Domain, Store, Event, Effect, Scope} from 'effector'
 
 type GateConfig<T> = {
   name?: string
