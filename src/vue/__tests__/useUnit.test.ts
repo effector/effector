@@ -63,9 +63,7 @@ describe('useUnit', () => {
       const listener = jest.fn()
       const unwatch = createWatch({unit: someEvent, fn: listener})
 
-      wrapper.find('[data-test="btn"]').trigger('click')
-
-      await wrapper.vm.$nextTick()
+      await wrapper.find('[data-test="btn"]').trigger('click')
 
       expect(listener).toBeCalledTimes(1)
 
@@ -137,20 +135,47 @@ describe('useUnit', () => {
       const listener2 = jest.fn()
       const unwatch2 = createWatch({unit: someOtherEvent, fn: listener2})
 
-      wrapper.find('[data-test="btn-1"]').trigger('click')
-
-      await wrapper.vm.$nextTick()
+      await wrapper.find('[data-test="btn-1"]').trigger('click')
 
       expect(listener1).toBeCalledTimes(1)
       expect(listener2).toBeCalledTimes(0)
 
-      wrapper.find('[data-test="btn-2"]').trigger('click')
+      await wrapper.find('[data-test="btn-2"]').trigger('click')
 
       expect(listener1).toBeCalledTimes(1)
       expect(listener2).toBeCalledTimes(1)
 
       unwatch1()
       unwatch2()
+    })
+
+    it('supports object with stores AND events', async () => {
+      const userAdded = createEvent()
+      const $users = createStore([{name: 'John', surname: 'Doe'}])
+
+      $users.on(userAdded, state => [...state, {name: 'Alan', surname: 'Doe'}])
+
+      const wrapper = shallowMount({
+        template: `
+            <div>
+                <button data-test="btn" @click="add">Add</button>
+                <ul id="app">
+                    <li v-for="(item, key) in users" :key="key" data-test="item">{{item.name}}</li>
+                </ul>
+            </div>
+            `,
+        setup() {
+          const {users, add} = useUnit({users: $users, add: userAdded})
+          return {users, add}
+        },
+      })
+
+      expect(wrapper.findAll('[data-test="item"]')).toHaveLength(1)
+
+      await wrapper.find('[data-test="btn"]').trigger('click')
+
+      expect($users.getState()).toHaveLength(2)
+      expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)
     })
   })
 })
