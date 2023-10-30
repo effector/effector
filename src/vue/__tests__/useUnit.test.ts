@@ -285,5 +285,38 @@ describe('useUnit', () => {
       expect($users.getState()).toHaveLength(2)
       expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)
     })
+
+    it('supports @@unitShape', async () => {
+      const userAdded = createEvent()
+      const $users = createStore([{name: 'John', surname: 'Doe'}])
+
+      $users.on(userAdded, state => [...state, {name: 'Alan', surname: 'Doe'}])
+
+      const customEntity = {
+        '@@unitShape': () => ({users: $users, add: userAdded}),
+      }
+
+      const wrapper = shallowMount({
+        template: `
+                <div>
+                    <button data-test="btn" @click="add">Add</button>
+                    <ul id="app">
+                        <li v-for="(item, key) in users" :key="key" data-test="item">{{item.name}}</li>
+                    </ul>
+                </div>
+                `,
+        setup() {
+          const {users, add} = useUnit(customEntity)
+          return {users, add}
+        },
+      })
+
+      expect(wrapper.findAll('[data-test="item"]')).toHaveLength(1)
+
+      await wrapper.find('[data-test="btn"]').trigger('click')
+
+      expect($users.getState()).toHaveLength(2)
+      expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)
+    })
   })
 })
