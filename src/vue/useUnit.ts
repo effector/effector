@@ -11,6 +11,7 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   const {scope} = getScope()
 
   const isSingleUnit = is.unit(config)
+
   let normShape: {[key: string]: Unit<any>} = {}
   if (isSingleUnit) {
     normShape = {unit: config}
@@ -23,43 +24,38 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   } else {
     normShape = config
   }
+
   const isList = Array.isArray(normShape)
 
-  const shape = isList ? [] : ({} as any)
   const storeKeys: string[] = []
-  const storeValues: Array<Store<any>> = []
   const eventKeys: string[] = []
-  const eventValues: Array<Unit<any>> = []
+
   for (const key in normShape) {
     const unit = normShape[key]
     if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
     if (is.event(unit) || is.effect(unit)) {
-      shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
       eventKeys.push(key)
-      eventValues.push(unit)
     } else {
-      shape[key] = null
       storeKeys.push(key)
-      storeValues.push(unit as Store<any>)
     }
   }
 
   const states: Record<string, any> = {}
   for (const key of storeKeys) {
+    // @ts-expect-error TS can't infer that normShape[key] is a Store
     const state = stateReader(normShape[key])
-    const _ = shallowRef(state)
+    const ref = shallowRef(state)
     const stop = createWatch({
       unit: normShape[key],
       fn: value => {
-        _.value = shallowRef(value).value
+        ref.value = shallowRef(value).value
       },
       scope,
     })
 
     states[key] = {
-      state,
       stop,
-      _,
+      ref,
     }
   }
 
@@ -70,29 +66,22 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   })
 
   if (isSingleUnit && is.store(config)) {
-    return readonly(states.unit._)
+    return readonly(states.unit.ref)
   }
 
   if (isSingleUnit && is.event(config)) {
-    if (scope) {
-      return scopeBind(config, {scope})
-    } else {
-      return config
-    }
+    // @ts-expect-error TS can't infer that normShape.unit is a Effect/Event
+    return scopeBind(normShape.unit, {scope, safe: true})
   }
 
   const result: Record<string, any> = {}
 
   for (const key of eventKeys) {
-    if (scope) {
-      result[key] = scopeBind(normShape[key], {scope})
-    } else {
-      result[key] = normShape[key]
-    }
+    // @ts-expect-error TS can't infer that normShape[key] is a Effect/Event
+    result[key] = scopeBind(normShape[key], {scope, safe: true})
   }
-
   for (const [key, value] of Object.entries(states)) {
-    result[key] = readonly(value._)
+    result[key] = readonly(value.ref)
   }
 
   if (isList) {
