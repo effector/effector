@@ -114,5 +114,43 @@ describe('useUnit', () => {
         'World',
       )
     })
+
+    it('supports objects with events', async () => {
+      const someEvent = createEvent()
+      const someOtherEvent = createEvent()
+
+      const wrapper = shallowMount({
+        template: `
+            <div>
+                <button data-test="btn-1" @click="greet">Click me 1</button>
+                <button data-test="btn-2" @click="bye">Click me 2</button>
+            </div>
+          `,
+        setup() {
+          const {greet, bye} = useUnit({greet: someEvent, bye: someOtherEvent})
+          return {greet, bye}
+        },
+      })
+      const listener1 = jest.fn()
+      const unwatch1 = createWatch({unit: someEvent, fn: listener1})
+
+      const listener2 = jest.fn()
+      const unwatch2 = createWatch({unit: someOtherEvent, fn: listener2})
+
+      wrapper.find('[data-test="btn-1"]').trigger('click')
+
+      await wrapper.vm.$nextTick()
+
+      expect(listener1).toBeCalledTimes(1)
+      expect(listener2).toBeCalledTimes(0)
+
+      wrapper.find('[data-test="btn-2"]').trigger('click')
+
+      expect(listener1).toBeCalledTimes(1)
+      expect(listener2).toBeCalledTimes(1)
+
+      unwatch1()
+      unwatch2()
+    })
   })
 })
