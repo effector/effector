@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {shallowMount} from 'vue-test-utils-next'
+import {VueSSRPlugin} from 'effector-vue/ssr'
 import {useUnit} from 'effector-vue/composition'
-import {createEvent, createStore, createWatch} from 'effector'
+import {createEvent, createStore, createWatch, fork} from 'effector'
 
 jest.mock('vue', () => require('vue-next'))
 
@@ -316,6 +317,88 @@ describe('useUnit', () => {
       await wrapper.find('[data-test="btn"]').trigger('click')
 
       expect($users.getState()).toHaveLength(2)
+      expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)
+    })
+  })
+
+  describe('scopefull', () => {
+    it('returns bound event', async () => {
+      const correnctScope = fork()
+      const incorrectScope = fork()
+
+      const someEvent = createEvent()
+
+      const wrapper = shallowMount(
+        {
+          template: `
+            <button data-test="btn" @click="greet">Click me</button>
+          `,
+          setup() {
+            const greet = useUnit(someEvent)
+            return {greet}
+          },
+        },
+        {global: {plugins: [VueSSRPlugin({scope: correnctScope})]}},
+      )
+
+      const correctListener = jest.fn()
+      const unwatch1 = createWatch({
+        unit: someEvent,
+        fn: correctListener,
+        scope: correnctScope,
+      })
+
+      const incorrectListener = jest.fn()
+      const unwatch2 = createWatch({
+        unit: someEvent,
+        fn: incorrectListener,
+        scope: incorrectScope,
+      })
+
+      await wrapper.find('[data-test="btn"]').trigger('click')
+
+      expect(correctListener).toBeCalledTimes(1)
+      expect(incorrectListener).toBeCalledTimes(0)
+
+      unwatch1()
+      unwatch2()
+    })
+    it('uses state from scope', async () => {
+      const correnctScope = fork()
+      const incorrectScope = fork()
+
+      const someEvent = createEvent()
+
+      const userAdded = createEvent()
+      const $users = createStore([{name: 'John', surname: 'Doe'}])
+
+      $users.on(userAdded, state => [...state, {name: 'Alan', surname: 'Doe'}])
+
+      const wrapper = shallowMount(
+        {
+          template: `
+                <div>
+                    <button data-test="btn" @click="add">Add</button>
+                    <ul id="app">
+                        <li v-for="(item, key) in users" :key="key" data-test="item">{{item.name}}</li>
+                    </ul>
+                </div>
+                `,
+          setup() {
+            const [users, add] = useUnit([$users, userAdded])
+            return {users, add}
+          },
+        },
+        {global: {plugins: [VueSSRPlugin({scope: correnctScope})]}},
+      )
+
+      expect(wrapper.findAll('[data-test="item"]')).toHaveLength(1)
+
+      await wrapper.find('[data-test="btn"]').trigger('click')
+
+      expect(correnctScope.getState($users)).toHaveLength(2)
+      expect(incorrectScope.getState($users)).toHaveLength(1)
+
       expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)
     })
   })
