@@ -95,5 +95,9 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
     result[key] = readonly(value._)
   }
 
+  if (isList) {
+    return Object.values(result)
+  }
+
   return result
 }
