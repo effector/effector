@@ -1,4 +1,4 @@
-import {is, Store, createWatch, Unit, Event, scopeBind} from 'effector'
+import {is, createWatch, Unit, scopeBind} from 'effector'
 import {onUnmounted, readonly, shallowRef} from 'vue-next'
 
 import {stateReader} from './lib/state-reader'
