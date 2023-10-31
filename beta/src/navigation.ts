@@ -378,6 +378,10 @@ const effectorVue = [
     text: { en: "Hooks" },
     items: [
       {
+        text: { en: "useUnit" },
+        link: "/api/effector-vue/useUnit",
+      },
+      {
         text: { en: "useStore" },
         link: "/api/effector-vue/useStore",
       },

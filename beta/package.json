@@ -34,7 +34,6 @@
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
     "astro": "^2.9.0",
-    "astro-compress": "^1.1.49",
     "clsx": "^1.2.1",
     "html-escaper": "^3.0.3",
     "nanoid": "^4.0.2",

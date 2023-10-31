@@ -3,7 +3,7 @@ id: useUnit
 title: useUnit
 ---
 
-Bind [_Stores_](../effector/Store.md) to Vue reactivity system or, in the case of [_Events_](../effector/Event.md)/[_Effects_](../effector//Effect.md) - bind to current [_Scope_](../effector/Scope.md) to use in DOM event handlers.
+Bind [_Stores_](../effector/Store.md) to Vue reactivity system or, in the case of [_Events_](../effector/Event.md)/[_Effects_](../effector/Effect.md) - bind to current [_Scope_](../effector/Scope.md) to use in DOM event handlers.
 
 **Designed for Vue 3 and Composition API exclusively.**
 

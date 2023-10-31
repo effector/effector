@@ -2,7 +2,8 @@ import "dotenv/config";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
-import compress from "astro-compress";
+// TODO:  WARN  GET https://registry.npmjs.org/astro-compress/-/astro-compress-1.1.49.tgz error (ERR_PNPM_FETCH_404). Will retry in 10 seconds. 2 retries left.
+// import compress from "astro-compress";
 import prefetch from "@astrojs/prefetch";
 import preact from "@astrojs/preact";
 import tailwind from "@astrojs/tailwind";
@@ -26,7 +27,7 @@ export default defineConfig({
     react(),
     mdx(),
     prefetch(),
-    process.env.COMPRESS !== "false" && compress(),
+    // process.env.COMPRESS !== "false" && compress(),
   ],
   base: "/",
   build: {
