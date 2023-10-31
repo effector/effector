@@ -37,7 +37,7 @@ const inc = createEvent()
 const $count = createStore(0).on(inc, x => x + 1)
 ```
 
-```vue
+```html
 // App.vue
 
 <script setup>
@@ -73,7 +73,7 @@ const inc = createEvent()
 const $count = createStore(0).on(inc, x => x + 1)
 ```
 
-```vue
+```html
 // App.vue
 
 <script setup>
@@ -112,7 +112,7 @@ const inc = createEvent()
 const $count = createStore(0).on(inc, x => x + 1)
 ```
 
-```vue
+```html
 // App.vue
 
 <script setup>
