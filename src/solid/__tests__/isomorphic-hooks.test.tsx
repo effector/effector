@@ -1,7 +1,6 @@
 import {render} from 'solid-testing-library'
 import {argumentHistory} from 'effector/fixtures'
 import {
-  createDomain,
   createEvent,
   createStore,
   createEffect,
@@ -9,16 +8,16 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   Scope,
 } from 'effector'
 import {
   Provider,
   useUnit,
   useGate,
+  useStoreMap,
   createGate,
-} from 'effector-solid/scope'
-import {createSignal} from 'solid-js'
+} from 'effector-solid'
+import {createSignal, createMemo, For} from 'solid-js'
 
 const consoleError = console.error
 
@@ -57,63 +56,6 @@ async function request(url: string) {
   await new Promise(rs => setTimeout(rs, 30))
   return result
 }
-
-test('computed values support', async () => {
-  const app = createDomain()
-
-  const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
-    async user => await request(`https://ssr.effector.dev/api/${user}`),
-  )
-  const start = app.createEvent<string>()
-  forward({from: start, to: fetchUser})
-  const name = app
-    .createStore('guest')
-    .on(fetchUser.done, (_, {result}) => result.name)
-
-  const friends = app
-    .createStore<string[]>([])
-    .on(fetchUser.done, (_, {result}) => result.friends)
-  const friendsTotal = friends.map(list => list.length)
-
-  const Total = () => <small>Total:{useUnit(friendsTotal)()}</small>
-  const User = () => <b>User:{useUnit(name)()}</b>
-  const App = (props: {root: Scope}) => (
-    <Provider value={props.root}>
-      <section>
-        <User />
-        <Total />
-      </section>
-    </Provider>
-  )
-
-  const serverScope = fork(app)
-  await allSettled(start, {
-    scope: serverScope,
-    params: 'alice',
-  })
-  const serialized = serialize(serverScope)
-
-  hydrate(app, {
-    values: serialized,
-  })
-
-  const clientScope = fork(app)
-
-  const {container} = await render(() => <App root={clientScope} />)
-
-  expect(container.firstChild).toMatchInlineSnapshot(`
-    <section>
-      <b>
-        User:
-        guest
-      </b>
-      <small>
-        Total:
-        0
-      </small>
-    </section>
-  `)
-})
 
 test('useGate support', async () => {
   const getMessagesFx = createEffect<{chatId: string}, string[]>(
@@ -460,5 +402,174 @@ describe('useUnit', () => {
     await Promise.resolve()
     expect(count.getState()).toBe(0)
     expect(scope.getState(count)).toBe(101)
+  })
+})
+
+describe('useStoreMap', () => {
+  it('should render', async () => {
+    const removeUser = createEvent<string>()
+    const changeUserAge = createEvent<{nickname: string; age: number}>()
+    const users = createStore<Record<string, {age: number; name: string}>>({
+      alex: {age: 20, name: 'Alex'},
+      john: {age: 30, name: 'John'},
+    })
+    const userNames = createStore(['alex', 'john']).on(
+      removeUser,
+      (list, username) => list.filter(item => item !== username),
+    )
+    users.on(removeUser, (users, nickname) => {
+      const upd = {...users}
+      delete upd[nickname]
+      return upd
+    })
+    users.on(changeUserAge, (users, {nickname, age}) => ({
+      ...users,
+      [nickname]: {...users[nickname], age},
+    }))
+
+    const Card = ({nickname}: {nickname: string}) => {
+      const user = useStoreMap({
+        store: users,
+        keys: [nickname],
+        fn: (users, [nickname]) => users[nickname],
+      })
+      return (
+        <li>
+          {user().name}: {user().age}
+        </li>
+      )
+    }
+
+    const Cards = () => {
+      const userList = useUnit(userNames)
+      return (
+        <ul>
+          <For each={userList()}>{name => <Card nickname={name} />}</For>
+        </ul>
+      )
+    }
+    const scope = fork()
+    const {container} = await render(() => (
+      <Provider value={scope}>
+        <Cards />
+      </Provider>
+    ))
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <ul>
+          <li>
+            Alex
+            : 
+            20
+          </li>
+          <li>
+            John
+            : 
+            30
+          </li>
+        </ul>
+      `)
+
+    allSettled(changeUserAge, {
+      scope,
+      params: {nickname: 'alex', age: 21},
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <ul>
+          <li>
+            Alex
+            : 
+            21
+          </li>
+          <li>
+            John
+            : 
+            30
+          </li>
+        </ul>
+      `)
+    allSettled(removeUser, {scope, params: 'alex'})
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <ul>
+          <li>
+            John
+            : 
+            30
+          </li>
+        </ul>
+      `)
+  })
+  test('updateFilter support', async () => {
+    const update = createEvent<number>()
+    const store = createStore(0).on(update, (_, x) => x)
+
+    const View = () => {
+      const x = useStoreMap({
+        store,
+        keys: [],
+        fn: x => x,
+        updateFilter: (x: number, y) => x % 2 === 0,
+      })
+      return <div>{x}</div>
+    }
+    const App = () => <View />
+    const scope = fork()
+    const {container} = await render(() => (
+      <Provider value={scope}>
+        <App />
+      </Provider>
+    ))
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          0
+        </div>
+      `)
+    allSettled(update, {scope, params: 2})
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          2
+        </div>
+      `)
+    allSettled(update, {scope, params: 3})
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          2
+        </div>
+      `)
+  })
+  test('issue #643: should return the same result as useStore, when used with the same mapper', async () => {
+    const update = createEvent<number>()
+    const store = createStore(0).on(update, (_, x) => x)
+    const mapper = (x: number) => x + 1
+
+    const View = () => {
+      const baseX = createMemo(() => mapper(useUnit(store)()))
+      const x = useStoreMap(store, mapper)
+      return <div>{x() === baseX() ? 'equal' : 'not_equal'}</div>
+    }
+    const scope = fork()
+    const App = () => <View />
+    const {container} = await render(() => (
+      <Provider value={scope}>
+        <App />
+      </Provider>
+    ))
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          equal
+        </div>
+      `)
+    allSettled(update, {scope, params: 2})
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          equal
+        </div>
+      `)
+    allSettled(update, {scope, params: 3})
+    expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          equal
+        </div>
+      `)
   })
 })

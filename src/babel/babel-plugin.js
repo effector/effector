@@ -4,6 +4,8 @@ const defaultFactories = [
   '@effector/reflect/ssr',
   '@effector/reflect/scope',
   'atomic-router',
+  '@withease/factories',
+  'patronum' // there is also custom handling for patronum/{method} imports
 ]
 
 module.exports = function (babel, options = {}) {
@@ -46,6 +48,11 @@ module.exports = function (babel, options = {}) {
     importReactNames,
     reactSsr,
   } = normalizeOptions(options)
+  if (reactSsr) {
+    console.error(
+      '[effector/babel-plugin]: reactSsr option is deprecated, use imports from "effector-react" without aliases or /scope',
+    )
+  }
   const factoriesUsed = factories.length > 0
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
@@ -324,7 +331,11 @@ module.exports = function (babel, options = {}) {
           normalizedSource = stripRoot(rootPath, resolvedImport, true)
         }
         normalizedSource = stripExtension(normalizedSource)
-        if (this.effector_factoryPaths.includes(normalizedSource)) {
+        if (
+          this.effector_factoryPaths.includes(normalizedSource)
+          // custom handling for patronum/{method} imports
+          || normalizedSource.startsWith('patronum/')
+          ) {
           this.effector_needFactoryImport = true
           createFactoryTemplate()
 

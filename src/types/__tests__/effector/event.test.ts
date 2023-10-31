@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, Event, CompositeName, kind} from 'effector'
+import {createEvent, Event, CompositeName, kind, EventCallable} from 'effector'
 
 const typecheck = '{global}'
 
 test('createEvent', () => {
-  const createEvent_event1: Event<number> = createEvent()
-  const createEvent_event2: Event<number> = createEvent('event name [1]')
-  const createEvent_event3: Event<number> = createEvent({
+  const createEvent_event1: EventCallable<number> = createEvent()
+  const createEvent_event2: EventCallable<number> =
+    createEvent('event name [1]')
+  const createEvent_event3: EventCallable<number> = createEvent({
     name: 'event name [2]',
   })
   expect(typecheck).toMatchInlineSnapshot(`
@@ -32,27 +33,22 @@ test('#(properties)', () => {
   `)
 })
 test('#map', () => {
-  const event: Event<number> = createEvent()
+  const event: EventCallable<number> = createEvent()
   const computed = event.map(() => 'foo')
 
   //const check1: Event<string> = computed
   //@ts-expect-error
   const event_map_check2: Event<number> = computed
   event(2)
-  computed('')
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<string>' is not assignable to type 'Event<number>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
     "
   `)
 })
 test('#watch', () => {
-  const event: Event<number> = createEvent()
+  const event: EventCallable<number> = createEvent()
   event.watch(state => {
     const check1: number = state
     return state
@@ -68,7 +64,7 @@ test('#watch', () => {
 })
 describe('#filterMap', () => {
   test('#filterMap ok', () => {
-    const event: Event<number> = createEvent()
+    const event: EventCallable<number> = createEvent()
     const filteredEvent_ok: Event<string> = event.filterMap(n => {
       if (n % 2) return n.toString()
     })
@@ -79,7 +75,7 @@ describe('#filterMap', () => {
     `)
   })
   test('#filterMap incorrect', () => {
-    const event: Event<number> = createEvent()
+    const event: EventCallable<number> = createEvent()
     //@ts-expect-error
     const filteredEvent_error: Event<number> = event.filterMap(n => {
       if (n % 2) return n.toString()
@@ -178,7 +174,7 @@ describe('#prepend', () => {
     `)
   })
   test('void target event edge case', () => {
-    const event: Event<void> = createEvent()
+    const event: EventCallable<void> = createEvent()
     const prepended = event.prepend((arg: number) => 'foo') // returns string
     prepended(1)
     expect(typecheck).toMatchInlineSnapshot(`
@@ -259,7 +255,7 @@ test('assign event to a function (should fail)', () => {
   const fn1: (event: number) => unknown = createEvent<string>()
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'Event<string>' is not assignable to type '(event: number) => unknown'.
+    Type 'EventCallable<string>' is not assignable to type '(event: number) => unknown'.
       Types of parameters 'payload' and 'event' are incompatible.
         Type 'number' is not assignable to type 'string'.
     "
@@ -273,7 +269,7 @@ describe('event as function argument', () => {
     fn(event)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'Event<string>' is not assignable to parameter of type '(_: number) => number'.
+      Argument of type 'EventCallable<string>' is not assignable to parameter of type '(_: number) => number'.
         Types of parameters 'payload' and '_' are incompatible.
           Type 'number' is not assignable to type 'string'.
       "

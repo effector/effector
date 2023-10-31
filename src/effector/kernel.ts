@@ -492,7 +492,7 @@ export const initRefInScope = (
       : noopParser
   const ref: StateRef = {
     id: sourceRef.id,
-    current: sourceRef.current,
+    current: sourceRef.initial!,
     meta: sourceRef.meta,
   }
 

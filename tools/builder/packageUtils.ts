@@ -15,18 +15,11 @@ export function getFiles(name: string) {
     'README.md',
     'LICENSE',
     'index.d.ts',
-    'index.js.flow',
     //js files
     ...esmFile(name),
     ...compiledFile(`${name}.cjs`),
     ...compiledFile(`${name}.umd`),
     ...compiledFile('compat'),
-    //flow typings
-    `${name}.cjs.js.flow`,
-    // `${name}.es.js.flow`,
-    `${name}.umd.js.flow`,
-    'compat.js.flow',
-    //ts typings
     `${name}.cjs.d.ts`,
     `${name}.mjs.d.ts`,
     `${name}.umd.d.ts`,

@@ -71,14 +71,14 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
     derived: config.derived,
     config,
   }
+  unit.targetable = !config.derived
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.thru = (fn: Function) => {
-    deprecate(false, 'thru', 'js pipe')
-    return fn(unit)
+  unit.getType = () => {
+    deprecate(false, 'getType', 'compositeName.fullName')
+    return compositeName.fullName
   }
-  unit.getType = () => compositeName.fullName
   if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {
       assertObject(observer)
@@ -145,12 +145,14 @@ export function createEvent<Payload = any>(
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
   const event = ((payload: Payload, ...args: unknown[]) => {
-    deprecate(
+    assert(
       !getMeta(event, 'derived'),
-      'call of derived event',
-      'createEvent',
+      'call of derived event is not supported, use createEvent instead',
     )
-    deprecate(!isPure, 'unit call from pure function', 'operators like sample')
+    assert(
+      !isPure,
+      'unit call from pure function is not supported, use operators like sample instead',
+    )
     if (currentPage) {
       return callCreate(event, template, payload, args)
     }
@@ -179,6 +181,11 @@ export function createEvent<Payload = any>(
         calc(value => !isVoid(value), true),
       ]),
     prepend(fn: Function) {
+      assert(
+        // @ts-expect-error
+        event.targetable,
+        '.prepend of derived event is not supported, call source event instead',
+      )
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
       })
@@ -217,6 +224,10 @@ function on<State>(
   })
   return store
 }
+
+export const requireExplicitSkipVoidMessage =
+  'undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option'
+
 export function createStore<State>(
   defaultState: State,
   props?: Config,
@@ -226,6 +237,14 @@ export function createStore<State>(
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
+
+  // skipVoid deprecation rules
+  const explicitSkipVoid = 'skipVoid' in config
+  const voidValueAllowed = explicitSkipVoid && !config.skipVoid
+  const skipVoidTrueSet = explicitSkipVoid && config.skipVoid
+
+  deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter')
+
   const store = {
     subscribers: new Map(),
     updates,
@@ -256,12 +275,16 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
+      // @ts-expect-error
+      assert(store.targetable, '.reset of derived store is not supported')
       forEach(units, unit =>
         on(store, '.reset', unit, () => store.defaultState),
       )
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
+      // @ts-expect-error
+      assert(store.targetable, '.on of derived store is not supported')
       return on(store, '.on', nodeSet, fn)
     },
     off(unit: CommonUnit) {
@@ -272,33 +295,29 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn: (value: any, prevArg?: any) => any, firstState?: any) {
-      let config
+    map(fn: (value: any) => any, outerConfig: Config) {
+      let mapConfig: Config | undefined
       if (isObject(fn)) {
-        config = fn
+        mapConfig = (fn as any)
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
-      deprecate(
-        isVoid(firstState),
-        'second argument of store.map',
-        'updateFilter',
-      )
       let lastResult
       const storeState = store.getState()
+      const parentStateVoid = isVoid(storeState)
       const template = readTemplate()
       if (template) {
         lastResult = null
-      } else if (!isVoid(storeState)) {
-        lastResult = fn(storeState, firstState)
+      } else if (!parentStateVoid || (parentStateVoid && voidValueAllowed)) {
+        lastResult = fn(storeState)
       }
 
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
         derived: true,
-        // @ts-expect-error some mismatch in config types
-        and: config,
+        ...outerConfig,
+        and: mapConfig,
       })
-      const linkNode = updateStore(store, innerStore, MAP, callStackAReg, fn)
+      const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
       addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
@@ -309,6 +328,7 @@ export function createStore<State>(
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
+      deprecate(!fn, 'watch second argument', 'sample')
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
@@ -334,7 +354,18 @@ export function createStore<State>(
         return upd
       }),
       read(plainState),
-      calc((upd, _, {a, b}) => !isVoid(upd) && (upd !== a || b), true),
+      calc((upd, _, {a, b}) => {
+        const isVoidUpdate = isVoid(upd)
+
+        if (isVoidUpdate && !explicitSkipVoid) {
+          console.error(requireExplicitSkipVoidMessage)
+        }
+
+        return (
+          ((isVoidUpdate && voidValueAllowed) || !isVoidUpdate) &&
+          (upd !== a || b)
+        )
+      }, true),
       updateFilter && userFnCall(callStackAReg, true),
       mov({from: STACK, target: plainState}),
     ],
@@ -358,10 +389,15 @@ export function createStore<State>(
   if (!sid && !ignored && !derived) {
     setMeta(store, 'warnSerialize', true)
   }
+  const isVoidDefaultState = isVoid(defaultState)
+  const canVoid = (isVoidDefaultState && voidValueAllowed)
   assert(
-    derived || !isVoid(defaultState),
-    "current state can't be undefined, use null instead",
+    derived || !isVoidDefaultState || canVoid,
+    requireExplicitSkipVoidMessage,
   )
+  if (derived && (isVoidDefaultState && !explicitSkipVoid)) {
+    console.error(requireExplicitSkipVoidMessage)
+  }
   own(store, [updates])
   if (config?.domain) {
     config.domain.hooks.store(store)
@@ -394,6 +430,11 @@ const updateStore = (
     to: REG_A,
     priority: 'read',
   })
+  /**
+   * Store reading is not needed for store.map anymore
+   * but there is a fine tuning of "wire lengths"
+   * lack of which leads to a lot of reordering and retriggering issues
+   **/
   if (op === MAP) reader.data.softRead = true
   const node = [reader, userFnCall(caller)]
   applyTemplate(

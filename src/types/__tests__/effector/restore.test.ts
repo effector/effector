@@ -1,5 +1,12 @@
 /* eslint-disable no-unused-vars */
-import {restore, createEvent, createEffect, createStore, Store} from 'effector'
+import {
+  restore,
+  createEvent,
+  createEffect,
+  createStore,
+  Store,
+  StoreWritable,
+} from 'effector'
 
 const typecheck = '{global}'
 
@@ -8,7 +15,7 @@ describe('restore cases (should pass)', () => {
     const ev = createEvent<number>()
 
     let restored = restore(ev, 0)
-    let store: Store<number>
+    let store: StoreWritable<number>
 
     store = restored
     restored = store
@@ -23,7 +30,7 @@ describe('restore cases (should pass)', () => {
     const ev = createEvent<number>()
 
     let restored = restore(ev, null)
-    let store: Store<number | null>
+    let store: StoreWritable<number | null>
 
     store = restored
     restored = store
@@ -38,7 +45,7 @@ describe('restore cases (should pass)', () => {
     const eff = createEffect<any, number, Error>()
 
     let restored = restore(eff, 0)
-    let store: Store<number>
+    let store: StoreWritable<number>
 
     store = restored
     restored = store
@@ -53,7 +60,7 @@ describe('restore cases (should pass)', () => {
     const eff = createEffect<any, number, Error>()
 
     let restored = restore(eff, null)
-    let store: Store<number | null>
+    let store: StoreWritable<number | null>
 
     store = restored
     restored = store
@@ -75,10 +82,10 @@ describe('restore cases (should pass)', () => {
     let restored = restore(dictionary)
 
     let shape: {
-      n: Store<number>
-      s: Store<string>
-      b: Store<boolean>
-      l: Store<string>
+      n: StoreWritable<number>
+      s: StoreWritable<string>
+      b: StoreWritable<boolean>
+      l: StoreWritable<string>
     }
 
     shape = restored
@@ -116,7 +123,8 @@ describe('restore cases (should fail)', () => {
       No overload matches this call.
         The last overload gave the following error.
           Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<string>'.
-            Property 'thru' is missing in type 'Effect<any, number, Error>' but required in type 'Event<string>'.
+            Types of property 'kind' are incompatible.
+              Type '\\"effect\\"' is not assignable to type '\\"event\\"'.
       "
     `)
   })
@@ -125,7 +133,7 @@ describe('restore cases (should fail)', () => {
       const ev = createEvent<number>()
 
       let restored = restore(ev)
-      let store: Store<number>
+      let store: StoreWritable<number>
 
       store = restored
       //@ts-expect-error
@@ -134,7 +142,7 @@ describe('restore cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Store<number>' is not assignable to type 'never'.
+      Type 'StoreWritable<number>' is not assignable to type 'never'.
       "
     `)
   })
@@ -143,7 +151,7 @@ describe('restore cases (should fail)', () => {
       const eff = createEffect<any, number, Error>()
 
       let restored = restore(eff)
-      let store: Store<number>
+      let store: StoreWritable<number>
 
       store = restored
       //@ts-expect-error
@@ -152,7 +160,7 @@ describe('restore cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Store<number>' is not assignable to type 'never'.
+      Type 'StoreWritable<number>' is not assignable to type 'never'.
       "
     `)
   })

@@ -979,3 +979,25 @@ describe('useStoreMap', () => {
     )
   })
 })
+
+describe('useStore is deprecated', () => {
+  test('useStore($store) is deprecated in favor of useUnit($store)', async () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    const $store = createStore('foo')
+
+    function App() {
+      useStore($store)
+      return null
+    }
+
+    await render(<App />)
+
+    expect(warn).toBeCalledTimes(1)
+    expect(warn.mock.calls[0][0]).toMatchInlineSnapshot(
+      `"useStore is deprecated, prefer useUnit instead"`,
+    )
+
+    warn.mockRestore()
+  })
+})

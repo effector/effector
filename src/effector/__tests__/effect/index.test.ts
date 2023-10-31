@@ -13,6 +13,19 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 describe('createEffect(handler) support', () => {
   test('with babel plugin', async () => {
     const fx = createEffect(async (str: string) => str.length)

@@ -1,7 +1,6 @@
 import {render} from 'solid-testing-library'
 import {createStore, createEvent, createDomain, fork} from 'effector'
-import {useUnit, useStoreMap} from 'effector-solid'
-import {Provider} from 'effector-solid/scope'
+import {useUnit, useStoreMap, Provider} from 'effector-solid'
 import {createEffect as createSolidEffect, createMemo, For} from 'solid-js'
 import {argumentHistory} from 'effector/fixtures'
 

@@ -1,4 +1,4 @@
-import {Store, Event, Effect, Domain, Scope} from 'effector'
+import {Store, Event, Effect, Domain, Scope, EventCallable} from 'effector'
 import {Accessor, Component, FlowComponent} from 'solid-js'
 
 export const Provider: FlowComponent<{
@@ -21,13 +21,18 @@ export function useStoreMap<
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
   readonly updateFilter?: (update: Result, current: Result) => boolean
+  readonly forceScope?: boolean
 }): Accessor<Result>
 export function useStoreMap<State, Result>(
   store: Store<State>,
   fn: (state: State) => Result,
 ): Accessor<Result>
 
-export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
+export function useGate<Props>(
+  Gate: Gate<Props>,
+  props?: Props,
+  opts?: {forceScope?: boolean}
+): void
 
 export function createGate<Props>(name?: string): Gate<Props>
 export function createGate<Props>(config: {
@@ -52,11 +57,11 @@ export function useUnit<State>(
   opts?: {forceScope?: boolean},
 ): Accessor<State>
 export function useUnit(
-  event: Event<void>,
+  event: EventCallable<void>,
   opts?: {forceScope?: boolean},
 ): () => void
 export function useUnit<T>(
-  event: Event<T>,
+  event: EventCallable<T>,
   opts?: {forceScope?: boolean},
 ): (payload: T) => T
 export function useUnit<R>(
@@ -68,12 +73,12 @@ export function useUnit<T, R>(
   opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
 export function useUnit<
-  List extends (Event<any> | Effect<any, any> | Store<any>)[],
+  List extends (EventCallable<any> | Effect<any, any> | Store<any>)[],
 >(
   list: [...List],
   opts?: {forceScope?: boolean},
 ): {
-  [Key in keyof List]: List[Key] extends Event<infer T>
+  [Key in keyof List]: List[Key] extends EventCallable<infer T>
     ? Equal<T, void> extends true
       ? () => void
       : (payload: T) => T
@@ -86,12 +91,12 @@ export function useUnit<
     : never
 }
 export function useUnit<
-  Shape extends Record<string, Event<any> | Effect<any, any, any> | Store<any>>,
+  Shape extends Record<string, EventCallable<any> | Effect<any, any, any> | Store<any>>,
 >(
   shape: Shape | {'@@unitShape': () => Shape},
   opts?: {forceScope?: boolean},
 ): {
-  [Key in keyof Shape]: Shape[Key] extends Event<infer T>
+  [Key in keyof Shape]: Shape[Key] extends EventCallable<infer T>
     ? Equal<T, void> extends true
       ? () => void
       : (payload: T) => T

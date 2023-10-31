@@ -10,7 +10,7 @@ import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {assert} from './throw'
 import {EFFECT} from './tag'
-import {add, removeItem} from './collection'
+import {add} from './collection'
 import {flattenConfig} from './config'
 import {nextEffectID} from './id'
 
@@ -122,23 +122,8 @@ export function createEffect<Params, Done, Fail = Error>(
           _,
           stack,
         ) => {
-          const scopeRef = createScopeRef(stack)
-          const onResolve = onSettled(
-            params,
-            req,
-            true,
-            anyway,
-            stack,
-            scopeRef,
-          )
-          const onReject = onSettled(
-            params,
-            req,
-            false,
-            anyway,
-            stack,
-            scopeRef,
-          )
+          const onResolve = onSettled(params, req, true, anyway, stack)
+          const onReject = onSettled(params, req, false, anyway, stack)
           const [ok, result] = runFn(handler, onReject, args)
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
@@ -157,27 +142,23 @@ export function createEffect<Params, Done, Fail = Error>(
   node.scope.runner = runner
   add(
     node.seq,
-    calc(
-      (params, {runner}, stack) => {
-        const upd: RunnerData<Params, Done, Fail> = getParent(stack)
-          ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
-          : /** empty stack means that this node was launched directly */
-            params
-        if (!stack.meta) {
-          stack.meta = {fxID: nextEffectID()}
-        }
-        launch({
-          target: runner,
-          params: upd,
-          defer: true,
-          scope: getForkPage(stack),
-          meta: stack.meta,
-        })
-        return upd.params
-      },
-      false,
-      true,
-    ),
+    calc((params, {runner}, stack) => {
+      const upd: RunnerData<Params, Done, Fail> = getParent(stack)
+        ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
+        : /** empty stack means that this node was launched directly */
+          params
+      if (!stack.meta) {
+        stack.meta = {fxID: nextEffectID()}
+      }
+      launch({
+        target: runner,
+        params: upd,
+        defer: true,
+        scope: getForkPage(stack),
+        meta: stack.meta,
+      })
+      return upd.params
+    }),
   )
   //@ts-expect-error
   instance.create = (params: Params) => {
@@ -239,13 +220,6 @@ export const runFn = (
   }
 }
 
-export const createScopeRef = (stack: Stack) => {
-  const scope = getForkPage(stack)
-  const scopeRef = {ref: scope}
-  if (scope) add(scope.activeEffects, scopeRef)
-  return scopeRef
-}
-
 export const onSettled =
   (
     params: any,
@@ -256,10 +230,8 @@ export const onSettled =
     ok: boolean,
     anyway: Unit,
     stack: Stack,
-    scopeRef: {ref: Scope | void},
   ) =>
   (data: any) => {
-    if (scopeRef.ref) removeItem(scopeRef.ref.activeEffects, scopeRef)
     launch({
       target: [anyway, sidechain],
       params: [
@@ -271,7 +243,7 @@ export const onSettled =
       defer: true,
       // WARN! Will broke forest pages as they arent moved to new scope
       page: stack.page,
-      scope: scopeRef.ref,
+      scope: stack.scope,
       meta: stack.meta,
     })
   }

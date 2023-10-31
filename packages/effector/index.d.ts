@@ -106,6 +106,10 @@ export interface Unit<T> {
   readonly __: T
 }
 
+export interface UnitTargetable<T> extends Unit<T> {
+  readonly targetable: true
+}
+
 export type CompositeName = {
   shortName: string
   fullName: string
@@ -121,37 +125,49 @@ export type CompositeName = {
  * as the return type we won't see any problems.
  */
 type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
+type EventCallableAsReturnType<Payload> = any extends Payload ? EventCallable<Payload> : never
 
 /**
- * Function you can subscribe to.
- * It can be an intention to change the store, indication of something happening in the application, a command to be executed, aggregated analytics trigger and so on
+ * Event you can subscribe to.
+ * It represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things.
  */
 export interface Event<Payload> extends Unit<Payload> {
-  (payload: Payload): Payload
-   (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
-  watch(watcher: (payload: Payload) => any): Subscription
+  kind: "event"
   map<T>(fn: (payload: Payload) => T): EventAsReturnType<T>
   filter<T extends Payload>(config: {
     fn(payload: Payload): payload is T
   }): EventAsReturnType<T>
   filter(config: {fn(payload: Payload): boolean}): EventAsReturnType<Payload>
   filterMap<T>(fn: (payload: Payload) => T | undefined): EventAsReturnType<T>
-  prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
+
+  watch(watcher: (payload: Payload) => any): Subscription
   subscribe(observer: Observer<Payload>): Subscription
   /**
-   * @deprecated use js pipe instead
+   * @deprecated use .compositeName.fullName instead
    */
-  thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
+
   compositeName: CompositeName
   sid: string | null
   shortName: string
 }
 
 /**
+ * The function you can call to trigger an event.
+ */
+export interface EventCallable<Payload> extends Event<Payload>, UnitTargetable<Payload> {
+  kind: "event"
+  (payload: Payload): Payload
+   (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
+
+  prepend<Before = void>(fn: (_: Before) => Payload): EventCallable<Before>
+}
+
+/**
  * Container for (possibly async) side effects
  */
-export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
+export interface Effect<Params, Done, Fail = Error> extends UnitTargetable<Params> {
+  kind: "effect"
   (params: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
   readonly doneData: Event<Done>
@@ -186,7 +202,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   filter(config: {fn(payload: Params): boolean}): EventAsReturnType<Params>
   filterMap<T>(fn: (payload: Params) => T | undefined): EventAsReturnType<T>
   map<T>(fn: (params: Params) => T): EventAsReturnType<T>
-  prepend<Before>(fn: (_: Before) => Params): Event<Before>
+  prepend<Before>(fn: (_: Before) => Params): EventCallable<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
   compositeName: CompositeName
@@ -195,16 +211,49 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
 }
 type InferValueFromTupleOfUnits<T extends Tuple<Unit<any>>> =
   T[number] extends Unit<infer R> ? R : never
+type InferValueFromTupleOfUnitTargetables<T extends Tuple<UnitTargetable<any>>> =
+  T[number] extends UnitTargetable<infer R>? R : never
 
 export interface Store<State> extends Unit<State> {
-  reset(...triggers: Array<Unit<any>>): this
-  reset(triggers: Array<Unit<any>>): this
-  getState(): State
-  map<T>(fn: (state: State, lastState?: T) => T): Store<T>
+  kind: "store"
+  map<T>(fn: (state: State, lastState?: T) => T, config?: {skipVoid?: boolean}): Store<T>
   /**
    * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
    */
   map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
+
+  updates: Event<State>
+
+  getState(): State
+  subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
+  watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
+  watch<E>(
+    trigger: Unit<E>,
+    watcher: (state: State, payload: E) => any,
+  ): Subscription
+  /**
+   * @deprecated use js pipe instead
+   */
+  thru<U>(fn: (store: Store<State>) => U): U
+
+  defaultState: State
+  compositeName: CompositeName
+  shortName: string
+  sid: string | null
+}
+
+/**
+ * Hacky way to force TS perform checks against unsafe widening
+ */
+interface StoreValueType<X> {
+  _: X
+  (type: X): void
+}
+
+export interface StoreWritable<State> extends Store<State>, UnitTargetable<State> {
+  kind: "store"
+  readonly ____: StoreValueType<State>
+
   on<E>(
     trigger: Unit<E>,
     reducer: (state: State, payload: E) => State | void,
@@ -218,36 +267,40 @@ export interface Store<State> extends Unit<State> {
     reducer: (state: State, payload: InferValueFromTupleOfUnits<E>) => State | void,
   ): this
   off(trigger: Unit<any>): this
-  subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
-  updates: Event<State>
-  watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
-  watch<E>(
-    trigger: Unit<E>,
-    watcher: (state: State, payload: E) => any,
-  ): Subscription
-  /**
-   * @deprecated use js pipe instead
-   */
-  thru<U>(fn: (store: Store<State>) => U): U
-  defaultState: State
-  compositeName: CompositeName
-  shortName: string
-  sid: string | null
-  reinit?: Event<void>
+  reset(...triggers: Array<Unit<any>>): this
+  reset(triggers: Array<Unit<any>>): this
+
+  reinit: EventCallable<void>
+}
+
+interface InternalStore<State> extends StoreWritable<State> {
+  setState(state: State): void
 }
 
 export const is: {
-  unit(obj: unknown): obj is Unit<any>
-  store(obj: unknown): obj is Store<any>
-  event(obj: unknown): obj is Event<any>
-  effect(obj: unknown): obj is Effect<any, any, any>
+  unit(obj: unknown): obj is Unit<any> | UnitTargetable<any>
+
+  store<O, T>(
+    obj: O | Unit<T> | UnitTargetable<T>,
+  ): obj is typeof obj extends Unit<T>
+    ? Store<T> | StoreWritable<T>
+    : Store<any> | StoreWritable<any>
+
+  event<O, T>(
+    obj: O | Unit<T> | UnitTargetable<T>
+  ): obj is typeof obj extends Unit<T>
+    ? Event<T> | EventCallable<T>
+    : Event<any> | EventCallable<any>
+
+  effect<O, T, P, F>(
+    obj: O | Effect<T, P, F>
+  ): obj is Effect<T, P, F>
+
   domain(obj: unknown): obj is Domain
   scope(obj: unknown): obj is Scope
-  attached(obj: unknown): obj is Effect<any, any, any>
-}
+  attached<E extends Effect<any, any, any>>(obj: unknown): obj is E
 
-interface InternalStore<State> extends Store<State> {
-  setState(state: State): void
+  targetable<T>(obj: Unit<T>): obj is UnitTargetable<T>
 }
 
 /**
@@ -257,7 +310,7 @@ interface InternalStore<State> extends Store<State> {
 export class Domain implements Unit<any> {
   readonly kind: kind
   readonly __: any
-  onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
+  onCreateEvent(hook: (newEvent: EventCallable<unknown>) => any): Subscription
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
   ): Subscription
@@ -265,13 +318,13 @@ export class Domain implements Unit<any> {
     hook: (newStore: InternalStore<unknown>) => any,
   ): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
-  event<Payload = void>(name?: string): Event<Payload>
-  event<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
-  createEvent<Payload = void>(name?: string): Event<Payload>
+  event<Payload = void>(name?: string): EventCallable<Payload>
+  event<Payload = void>(config: {name?: string; sid?: string}): EventCallable<Payload>
+  createEvent<Payload = void>(name?: string): EventCallable<Payload>
   createEvent<Payload = void>(config: {
     name?: string
     sid?: string
-  }): Event<Payload>
+  }): EventCallable<Payload>
   effect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
   effect<Params, Done, Fail = Error>(
     handler: (params: Params) => Done | Promise<Done>,
@@ -326,7 +379,7 @@ export class Domain implements Unit<any> {
           read: (json: SerializedState) => State
         }
     },
-  ): Store<State>
+  ): StoreWritable<State>
   createStore<State, SerializedState extends Json = Json>(
     defaultState: State,
     config?: {
@@ -340,16 +393,16 @@ export class Domain implements Unit<any> {
             read: (json: SerializedState) => State
           }
     },
-  ): Store<State>
+  ): StoreWritable<State>
   sid: string | null
   compositeName: CompositeName
   shortName: string
   getType(): string
   history: {
     domains: Set<Domain>
-    stores: Set<Store<any>>
+    stores: Set<StoreWritable<any>>
     effects: Set<Effect<any, any, any>>
-    events: Set<Event<any>>
+    events: Set<EventCallable<any>>
   }
 }
 
@@ -480,10 +533,37 @@ export const step: {
   }): Mov
 }
 
+/* `forward` types */
+type ForwardTarget = UnitTargetable<unknown> | ReadonlyArray<UnitTargetable<unknown>>
+
+type CleanSingleTarget<
+  Target extends UnitTargetable<unknown>,
+  Clock,
+> = Target extends UnitTargetable<infer T>
+  ? T extends void
+    ? UnitTargetable<unknown>
+    : T extends Clock
+    ? UnitTargetable<T>
+    // Needed to force typecheck
+    : UnitTargetable<Clock>
+  : never
+
+  type CleanTarget<
+    Target extends ForwardTarget,
+    From,
+  > = Target extends UnitTargetable<any>
+    ? CleanSingleTarget<Target, From>
+    : {
+        [K in keyof Target]: Target[K] extends UnitTargetable<unknown>
+          ? CleanSingleTarget<Target[K], From>
+          : never
+      }
+
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
-export function forward<T>(opts: {
+export function forward<From, T extends ForwardTarget>(opts: {
   /**
    * By default TS picks "best common type" `T` between `from` and `to` arguments.
    * This lets us forward from `string | number` to `string` for instance, and
@@ -498,49 +578,55 @@ export function forward<T>(opts: {
    *
    * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
    */
-  from: Unit<T & {}>
-  to: Unit<T> | ReadonlyArray<Unit<T>>
+  from: Unit<From & {}>
+  to: CleanTarget<T, From>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: Unit<any>
-  to: ReadonlyArray<Unit<void>>
+  to: ReadonlyArray<UnitTargetable<void>>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
-  to: ReadonlyArray<Unit<void>>
+  to: ReadonlyArray<UnitTargetable<void>>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
-  to: Unit<void>
+  to: UnitTargetable<void>
 }): Subscription
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
-  to: Unit<To> | ReadonlyArray<Unit<To>>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
 }): Subscription
 // Allow `* -> void` forwarding (e.g. `string -> void`).
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
-export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
+export function forward(opts: {from: Unit<any>; to: UnitTargetable<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 /**
  * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
  */
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
-  to: Unit<To> | ReadonlyArray<Unit<To>>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
 }): Subscription
 
 /**
@@ -616,7 +702,7 @@ export function fromObservable<T>(observable: unknown): Event<T>
 /**
  * Creates an event
  */
-export function createEvent<E = void>(eventName?: string): Event<E>
+export function createEvent<E = void>(eventName?: string): EventCallable<E>
 /**
  * Creates an event
  */
@@ -624,7 +710,7 @@ export function createEvent<E = void>(config: {
   name?: string
   sid?: string
   domain?: Domain
-}): Event<E>
+}): EventCallable<E>
 
 /**
  * Creates an effect
@@ -689,6 +775,7 @@ export function createEffect<Params, Done, Fail = Error>(config: {
 export function createStore<State, SerializedState extends Json = Json>(
   defaultState: State,
   config?: {
+    skipVoid?: boolean;
     name?: string;
     sid?: string
     updateFilter?: (update: State, current: State) => boolean
@@ -700,15 +787,8 @@ export function createStore<State, SerializedState extends Json = Json>(
       }
     domain?: Domain;
   },
-): Store<State>
+): StoreWritable<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
-
-/**
- * @deprecated use combine() instead
- */
-export function createStoreObject<State>(
-  defaultState: State,
-): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
@@ -865,15 +945,15 @@ export function createApi<
   S,
   Api extends {[name: string]: ((store: S, e: any) => (S | void))}
 >(
-  store: Store<S>,
+  store: StoreWritable<S>,
   api: Api,
 ): {
   [K in keyof Api]: ((store: S, e: void) => (S | void)) extends Api[K]
-    ? Event<void>
+    ? EventCallable<void>
     : Api[K] extends ((store: S) => (S | void))
-    ? Event<void>
+    ? EventCallable<void>
     : Api[K] extends ((store: S, e: infer E) => (S | void))
-    ? Event<E extends void ? Exclude<E, undefined> | void : E>
+    ? EventCallable<E extends void ? Exclude<E, undefined> | void : E>
     : any
 }
 
@@ -886,7 +966,7 @@ export function createApi<
 export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: Done,
-): Store<Done>
+): StoreWritable<Done>
 /**
  * Creates a Store out of successful results of Effect.
  * It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
@@ -896,29 +976,29 @@ export function restore<Done>(
 export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: null,
-): Store<Done | null>
+): StoreWritable<Done | null>
 /**
  * Creates a Store from Event.
  * It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
  * @param event source event
  * @param defaultState initial state of new store
  */
-export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+export function restore<E>(event: Event<E>, defaultState: E): StoreWritable<E>
 /**
  * Creates a Store from Event.
  * It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
  * @param event source event
  * @param defaultState initial state of new store
  */
-export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
+export function restore<E>(event: Event<E>, defaultState: null): StoreWritable<E | null>
 export function restore<T extends Event<any>>(event: T): never
 export function restore<T extends Effect<any, any, any>>(effect: T): never
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {
   [K in keyof State]: State[K] extends Store<infer S>
-    ? Store<S>
-    : Store<State[K]>
+    ? StoreWritable<S>
+    : StoreWritable<State[K]>
 }
 
 /**
@@ -1012,7 +1092,7 @@ type IfAssignable<T, U, Y, N> =
 
 type Source<A> = Unit<A> | Combinable
 type Clock<B> = Unit<B> | Tuple<Unit<any>>
-type Target = Unit<any> | Tuple<any>
+type Target = UnitTargetable<any> | Tuple<any>
 
 type GetTupleWithoutAny<T> = T extends Array<infer U>
   ? U extends Unit<infer Value>
@@ -1037,12 +1117,12 @@ type ReplaceUnit<Target, Result, Value> = IfAssignable<Result, Value,
 
 // [...T] is used to show sample result as a tuple (not array)
 type TargetTuple<Target extends Array<unknown>, Result> = [...{
-  [Index in keyof Target]: Target[Index] extends Unit<infer Value>
+  [Index in keyof Target]: Target[Index] extends UnitTargetable<infer Value>
     ? ReplaceUnit<Target[Index], Result, Value>
     : 'non-unit item in target'
 }]
 
-type MultiTarget<Target, Result> = Target extends Unit<infer Value>
+type MultiTarget<Target, Result> = Target extends UnitTargetable<infer Value>
   ? ReplaceUnit<Target, Result, Value>
   : Target extends Tuple<unknown>
     ? TargetTuple<Target, Result>
@@ -1118,7 +1198,7 @@ type SampleImpl<
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
       : [message: {error: 'source should be unit or object with stores'; got: Source}]
   // has target
-  : Target extends Units | ReadonlyArray<Unit<any>>
+  : Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>
       // has target, no source
     ? unknown extends Source
       ? unknown extends Clock
@@ -1164,7 +1244,7 @@ type SampleImpl<
               >
             : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : [message: {error: 'source should be unit or object with stores'; got: Source}]
-    : [message: {error: 'target should be unit or array of units'; got: Target}]
+    : Target extends InvalidUnitsTarget ? [message: {error: 'derived units are not allowed in target'; got: Target}] : [message: {error: 'target should be unit or array of units'; got: Target}]
 
 type ModeSelector<
   FilterAndFN,
@@ -1572,28 +1652,28 @@ type Mode_Flt_Fn = `${string} | filter | fn | ${string}`;
 
 type TargetFilterFnConfig<
   Mode extends Mode_Flt_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FilterFun,
   FN,
 > = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
+  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean}
+  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
+  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean}
+  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean}
+  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
   : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean}
+  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
   : never
 
 type TargetConfigCheck<
   Mode extends Mode_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FN,
@@ -1657,7 +1737,7 @@ type InferredType<Source, Clock, FilterFN> =
 
 type SampleFilterTargetDef<
   Mode extends Mode_Trg,
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
   FLUnit,
@@ -1684,17 +1764,17 @@ type SampleFilterTargetDef<
         ? TargetConfigCheck<
             Mode, Target, Source, Clock, FN,
             Mode extends 'clock | source | filter | fn | target'
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends 'clock | source | filter |    | target'
-            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean}
+            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends '      | source | filter | fn | target'
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends '      | source | filter |    | target'
-            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean}
+            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends 'clock |        | filter | fn | target'
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean}
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
             : Mode extends 'clock |        | filter |    | target'
-            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean}
+            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
             : never,
             SomeFN
           >
@@ -1850,17 +1930,17 @@ type SampleFilterTargetDef<
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
           Mode extends 'clock | source |        | fn | target'
-          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends 'clock | source |        |    | target'
-          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends '      | source |        | fn | target'
-          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean}
+          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends '      | source |        |    | target'
-          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean}
+          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends 'clock |        |        | fn | target'
-          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
           : Mode extends 'clock |        |        |    | target'
-          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
           : never,
           SomeFN
         >
@@ -1870,7 +1950,7 @@ type SampleFilterTargetDef<
 type TargetOrError<
   MatchingValue,
   Mode extends 'fnRet' | 'src' | 'clk',
-  Target extends Units | ReadonlyArray<Unit<any>>,
+  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   ResultConfig
 > = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
     ? [config: ResultConfig]
@@ -1912,17 +1992,17 @@ type SampleFilterDef<
     ? boolean extends UnitValue<FLUnit>
       ? [config: (
             Mode extends 'clock | source | filter | fn |       '
-          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock | source | filter |    |       '
-          ? {clock: Clock; source: Source; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source: Source; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source | filter | fn |       '
-          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
+          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source | filter |    |       '
-          ? {source: Source; clock?: never; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
+          ? {source: Source; clock?: never; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        | filter | fn |       '
-          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        | filter |    |       '
-          ? {clock: Clock; source?: never; filter: FLUnit; target?: never; greedy?: boolean; name?: string}
+          ? {clock: Clock; source?: never; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : never
         ) & SomeFN]
       : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
@@ -1930,20 +2010,20 @@ type SampleFilterDef<
       ? Mode extends Mode_Flt_Fn
         ? [config: (
               Mode extends 'clock | source | filter | fn |       '
-            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter | fn |       '
-            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
+            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter | fn |       '
-            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : never
           ) & SomeFN]
         : [config: (
               Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FLBool; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source: Source; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FLBool; target?: never; greedy?: boolean; name?: string}
+            ? {source: Source; clock?: never; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FLBool; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source?: never; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : never
           ) & SomeFN]
       : FilterFun extends (
@@ -1967,11 +2047,11 @@ type SampleFilterDef<
             )
             ? [config: (
                   Mode extends 'clock | source | filter | fn |       '
-                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
+                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
                 : Mode extends '      | source | filter | fn |       '
-                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
+                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
                 : Mode extends 'clock |        | filter | fn |       '
-                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; name?: string}
+                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
                 : never
               ) & SomeFN]
             : [message: {
@@ -1981,11 +2061,11 @@ type SampleFilterDef<
               }]
           : [config: (
               Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+            ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+            ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
             : never
           ) & SomeFN]
       : FilterFun extends (
@@ -2000,17 +2080,17 @@ type SampleFilterDef<
         ? ReturnType<FilterFun> extends boolean
           ? [config: (
                 Mode extends 'clock | source | filter | fn |       '
-              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends 'clock | source | filter |    |       '
-              ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends '      | source | filter | fn |       '
-              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
+              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends '      | source | filter |    |       '
-              ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+              ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends 'clock |        | filter | fn |       '
-              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : Mode extends 'clock |        | filter |    |       '
-              ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; name?: string}
+              ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
               : never
             ) & SomeFN]
           : [message: {error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
@@ -2018,17 +2098,17 @@ type SampleFilterDef<
   : Mode extends Mode_NoFlt
   ? [config: (
         Mode extends 'clock | source |        | fn |       '
-      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends 'clock | source |        |    |       '
-      ? {clock: Clock; source: Source; filter?: never; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source: Source; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends '      | source |        | fn |       '
-      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
+      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends '      | source |        |    |       '
-      ? {source: Source; clock?: never; filter?: never; target?: never; greedy?: boolean; name?: string}
+      ? {source: Source; clock?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends 'clock |        |        | fn |       '
-      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : Mode extends 'clock |        |        |    |       '
-      ? {clock: Clock; source?: never; filter?: never; target?: never; greedy?: boolean; name?: string}
+      ? {clock: Clock; source?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
       : never
     ) & SomeFN]
   : never
@@ -2043,8 +2123,8 @@ type DataSourceFunction<Source, Clock> =
     : never
 
 type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
-  Target extends Unit<any>
-    ? Target extends Unit<infer TargetType>
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
@@ -2061,7 +2141,7 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
     : {
       [
         K in keyof Target
-      ]: Target[K] extends Unit<infer TargetType>
+      ]: Target[K] extends UnitTargetable<infer TargetType>
         ? [SourceType] extends [Readonly<TargetType>]
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
@@ -2077,9 +2157,9 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
         : never
     }
 
-type TypeOfTarget<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
-  Target extends Unit<any>
-    ? Target extends Unit<infer TargetType>
+type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
@@ -2093,7 +2173,7 @@ type TypeOfTarget<SourceType, Target extends Units | ReadonlyArray<Unit<any>>, M
     : {
       [
         K in keyof Target
-      ]: Target[K] extends Unit<infer TargetType>
+      ]: Target[K] extends UnitTargetable<infer TargetType>
         ? [SourceType] extends [Readonly<TargetType>]
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
@@ -2145,6 +2225,8 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
 type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
 type Units = Unit<any> | Tuple<Unit<any>>
+type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
+type InvalidUnitsTarget = Unit<any> | Tuple<Unit<any>> | ReadonlyArray<Unit<any>>
 
 /* guard types */
 
@@ -2174,7 +2256,7 @@ type GetGuardClock<C, F> = F extends BooleanConstructor
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2191,7 +2273,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
@@ -2206,7 +2288,7 @@ export function guard<A, X extends GetSource<S>,
 // СT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter, target})` instead
  */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>,
@@ -2223,7 +2305,7 @@ export function guard<B, X extends GetClock<C>,
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2238,7 +2320,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -2251,7 +2333,7 @@ export function guard<A, X extends GetSource<S>,
 // C
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B, X extends GetClock<C>,
   C extends Clock<B> = Clock<B>
@@ -2267,7 +2349,7 @@ export function guard<B, X extends GetClock<C>,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2285,7 +2367,7 @@ export function guard<A = any, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2301,7 +2383,7 @@ export function guard<A = any,
 // СT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter, target})` instead
  */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -2319,7 +2401,7 @@ export function guard<B = any,
 // SC (units: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
@@ -2331,7 +2413,7 @@ export function guard<A = any, B = any>(config: {
 // SC (units: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(config: {
   source: Unit<A>,
@@ -2343,7 +2425,7 @@ export function guard<A = any, B = any>(config: {
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2359,7 +2441,7 @@ export function guard<A = any, B = any,
 // S (unit: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(config: {
   source: Unit<A>,
@@ -2370,7 +2452,7 @@ export function guard<A = any>(config: {
 // S (unit - boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(config: {
   source: Unit<A>,
@@ -2381,7 +2463,7 @@ export function guard<A = any>(config: {
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2395,7 +2477,7 @@ export function guard<A = any,
 // C (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any>(config: {
   clock: Unit<B>,
@@ -2406,7 +2488,7 @@ export function guard<B = any>(config: {
 // C (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any>(config: {
   clock: Unit<B>,
@@ -2417,7 +2499,7 @@ export function guard<B = any>(config: {
 // C
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, filter})` instead
  */
 export function guard<B = any,
   C extends Clock<B> = Clock<B>,
@@ -2437,7 +2519,7 @@ export function guard<B = any,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2453,7 +2535,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>,
@@ -2469,7 +2551,7 @@ export function guard<A, X extends GetSource<S>,
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>, B = any,
   S extends Source<A> = Source<A>,
@@ -2483,7 +2565,7 @@ export function guard<A, X extends GetSource<S>, B = any,
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A, X extends GetSource<S>,
   S extends Source<A> = Source<A>
@@ -2498,7 +2580,7 @@ export function guard<A, X extends GetSource<S>,
 // SСT
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2515,7 +2597,7 @@ export function guard<A = any, B = any,
 // ST
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter, target})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2532,7 +2614,7 @@ export function guard<A = any,
 // SC (units: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
@@ -2543,7 +2625,7 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
 // SC (units: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any>(source: Unit<A>, config: {
   clock: Unit<B>,
@@ -2554,7 +2636,7 @@ export function guard<A = any, B = any>(source: Unit<A>, config: {
 // SC
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter})` instead
  */
 export function guard<A = any, B = any,
   S extends Source<A> = Source<A>,
@@ -2569,7 +2651,7 @@ export function guard<A = any, B = any,
 // S (unit: BooleanConstructor)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: BooleanConstructor,
@@ -2579,7 +2661,7 @@ export function guard<A = any>(source: Unit<A>, config: {
 // S (unit: boolean fn or store)
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any>(source: Unit<A>, config: {
   filter: ((source: A) => boolean) | Store<boolean>,
@@ -2589,7 +2671,7 @@ export function guard<A = any>(source: Unit<A>, config: {
 // S
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({source, filter})` instead
  */
 export function guard<A = any,
   S extends Source<A> = Source<A>,
@@ -2603,7 +2685,7 @@ export function guard<A = any,
 // guard's last overload for `guard(source, config)`
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<
   S extends Source<unknown>,
@@ -2629,7 +2711,7 @@ export function guard<
 // guard's last overload for `guard(config)`
 /**
  * Method for conditional event routing.
- * > Superseded by `sample({clock, source, filter, fn, target})`
+ * @deprecated use `sample({clock, source, filter, target})` instead
  */
 export function guard<
   S extends Source<unknown>,
@@ -2730,6 +2812,7 @@ export function attach<
 >(config: {
   source: States
   effect: FX
+  domain?: Domain
   name?: string
 }): FX extends (source: any, ...args: infer Args) => infer Done
   ? Effect<OptionalParams<Args>, AsyncResult<Done>>
@@ -2818,7 +2901,7 @@ export function combine<State>(
  * @param fn transformer function, accepts a store value
  * @returns derived store updated upon changes in given one
  */
-export function combine<A, R>(source: Store<A>, fn: (source: A) => R): Store<R>
+export function combine<A, R>(source: Store<A>, fn: (source: A) => R, config?: {skipVoid: boolean}): Store<R>
 /**
  * Convert array of stores into derived store, transforming values using the function
  * @param tuple array of stores
@@ -2830,6 +2913,7 @@ export function combine<State extends Tuple, R>(
   fn: (
     tuple: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
   ) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert object with stores into derived store, transforming values using the function
@@ -2842,6 +2926,7 @@ export function combine<State, R>(
   fn: (
     shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
   ) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2852,6 +2937,7 @@ export function combine<A, B, R>(
   a: A,
   b: B,
   fn: (a: CombVal<A>, b: CombVal<B>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2863,6 +2949,7 @@ export function combine<A, B, C, R>(
   b: B,
   c: C,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2875,6 +2962,7 @@ export function combine<A, B, C, D, R>(
   c: C,
   d: D,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2888,6 +2976,7 @@ export function combine<A, B, C, D, E, R>(
   d: D,
   e: E,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2902,6 +2991,7 @@ export function combine<A, B, C, D, E, F, R>(
   e: E,
   f: F,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2917,6 +3007,7 @@ export function combine<A, B, C, D, E, F, G, R>(
   f: F,
   g: G,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2936,6 +3027,7 @@ export function combine<A, B, C, D, E, F, G, H, R>(
   g: G,
   h: H,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2956,6 +3048,7 @@ export function combine<A, B, C, D, E, F, G, H, I, R>(
   h: H,
   i: I,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2977,6 +3070,7 @@ export function combine<A, B, C, D, E, F, G, H, I, J, R>(
   i: I,
   j: J,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>, j: CombVal<J>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores into derived store, transforming values using the function
@@ -2999,6 +3093,7 @@ export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
   j: J,
   k: K,
   fn: (a: CombVal<A>, b: CombVal<B>, c: CombVal<C>, d: CombVal<D>, e: CombVal<E>, f: CombVal<F>, g: CombVal<G>, h: CombVal<H>, i: CombVal<I>, j: CombVal<J>, k: CombVal<K>) => R,
+  config?: {skipVoid: boolean}
 ): Store<R>
 /**
  * Convert given stores to store with array which values updated upon changes in given ones
@@ -3015,10 +3110,12 @@ export interface Scope extends Unit<any> {
   getState<T>(store: Store<T>): T
 }
 
-export type ValueMap = Map<Store<any>, any> | Array<[Store<any>, any]> | {[sid: string]: any}
+export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>, any]> | {[sid: string]: any}
 
 /**
  * Fill stores with given values in provided scope or domain
+ * 
+ * @deprecated use `fork({values})` instead
  */
 export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
 
@@ -3038,7 +3135,7 @@ export function serialize(
  * @param unit event to bind
  * @returns function which will trigger an event in a given scope
  */
-export function scopeBind<T>(unit: Event<T>, opts?: {scope?: Scope; safe?: boolean}): (payload: T) => void
+export function scopeBind<T>(unit: EventCallable<T>, opts?: {scope?: Scope; safe?: boolean}): (payload: T) => void
 /**
  * Bind effect to a scope to be called later.
  *
@@ -3046,10 +3143,13 @@ export function scopeBind<T>(unit: Event<T>, opts?: {scope?: Scope; safe?: boole
  * @param unit effect to bind
  * @returns function which will trigger an effect in a given scope and returns a promise with a result
  */
-export function scopeBind<P, D>(unit: Effect<P, D>, opts?: {scope?: Scope; safe?: boolean}): (params: P) => Promise<D>
+export function scopeBind<P, D, F = Error>(unit: Effect<P, D, F>, opts?: {scope?: Scope; safe?: boolean}): (params: P) => Promise<D>
 
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * 
+ * @deprecated use `fork({values, handlers})` instead
+ * 
  * @param domain optional root domain
  * @param config optional configuration object with initial store values and effect handlers
  * @returns new scope
@@ -3097,7 +3197,7 @@ export function allSettled<FX extends Effect<void, any, any>>(
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled<T>(
-  unit: Unit<T>,
+  unit: UnitTargetable<T>,
   config: {scope: Scope; params: T},
 ): Promise<void>
 /**
@@ -3106,7 +3206,7 @@ export function allSettled<T>(
  * @returns void promise, will resolve when there will be no pending effects in given scope
  */
 export function allSettled(
-  unit: Unit<void>,
+  unit: UnitTargetable<void>,
   config: {scope: Scope},
 ): Promise<void>
 /**
@@ -3120,8 +3220,10 @@ export function createWatch<T>({
   unit,
   fn,
   scope,
+  batch,
 }: {
-  unit: Unit<T>
+  unit: Unit<T> | Unit<T>[]
   fn: (value: T) => any
   scope?: Scope
+  batch?: boolean
 }): Subscription

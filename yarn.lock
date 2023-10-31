@@ -7405,6 +7405,11 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+"patronum19@npm:patronum@1.19.2":
+  version "1.19.2"
+  resolved "https://registry.yarnpkg.com/patronum/-/patronum-1.19.2.tgz#17ad8d8e4aa3688c11b4fa2860799deccee5d7d3"
+  integrity sha512-pK0uZ1nLewzEibVxdWkiLRT87h7lwozurmn4+shm4q/9PJRW6nGdWlHKBszMK9R2EdMIv1jDg/1VQlqkGbkvzQ==
+
 patronum@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/patronum/-/patronum-1.1.0.tgz#6c56f334bfff46042a597cf68deb1540e8134949"
@@ -9286,10 +9291,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@4.9.4:
-  version "4.9.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
-  integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
+typescript@5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.2.tgz#5ebb5e5a5b75f085f22bc3f8460fba308310fa78"
+  integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
 
 typescript@^3.2.1, typescript@^3.9.3:
   version "3.9.7"
