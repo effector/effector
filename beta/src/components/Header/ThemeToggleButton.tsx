@@ -1,4 +1,3 @@
-/** @jsxImportSource preact */
 import type { FunctionalComponent } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import "./ThemeToggleButton.css";

@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { defineConfig } from "astro/config";
-import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import compress from "astro-compress";
 import prefetch from "@astrojs/prefetch";
@@ -22,8 +21,7 @@ export default defineConfig({
     process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://beta.effector.dev`,
   integrations: [
     tailwind({ applyBaseStyles: false }),
-    preact(),
-    react(),
+    preact({ compat: true }),
     mdx(),
     prefetch(),
     process.env.COMPRESS !== "false" && compress(),
@@ -32,13 +30,11 @@ export default defineConfig({
   build: {
     assets: "assets",
   },
+  scopedStyleStrategy: "where",
   markdown: {
     syntaxHighlight: "prism",
     remarkPlugins: [directive, admonitions, github, remarkHeadingId],
     rehypePlugins: [[rehypeAutolinkHeadings, { behavior: "prepend" }]],
-  },
-  experimental: {
-    viewTransitions: true,
   },
   vite: {
     server: {
@@ -49,5 +45,8 @@ export default defineConfig({
         },
       },
     },
+  },
+  experimental: {
+    devOverlay: false,
   },
 });
