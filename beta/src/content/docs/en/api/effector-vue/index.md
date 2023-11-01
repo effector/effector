@@ -17,12 +17,6 @@ Effector binginds for Vue.
 - [ComponentOptions\<V\>](/en/api/effector-vue/ComponentOptions)
   - [effector](/en/api/effector-vue/ComponentOptions#effector)
 
-### Vue API
-
-- [Vue](/en/api/effector-vue/Vue)
-- [$watchAsStore](/en/api/effector-vue/Vue#$watchAsStore) _(deprecated)_
-- [$store](/en/api/effector-vue/Vue#$store) _(deprecated)_
-
 ### Hooks
 
 - [useStore(store)](/en/api/effector-vue/useStore)
