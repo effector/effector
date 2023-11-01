@@ -15,6 +15,7 @@ title: API Reference
 
 ### Hooks
 
+- [useUnit(shape)](./useUnit.md) 
 - [useStore(store)](./useStore.md)
 - [useStoreMap({store, keys, fn})](./useStoreMap.md)
 - [useVModel(store)](./useVModel.md)

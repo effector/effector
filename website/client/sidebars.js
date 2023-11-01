@@ -146,6 +146,7 @@ const sidebar = {
         'api/effector-vue/component-options',
         'api/effector-vue/gate',
         'api/effector-vue/createGate',
+        'api/effector-vue/useUnit',
         'api/effector-vue/useGate',
         'api/effector-vue/useStore',
         'api/effector-vue/useVModel',
