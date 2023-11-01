@@ -2,7 +2,7 @@ name: Beta Docs CI
 
 on:
   push:
-    branches: [master]
+    branches: ['release/v23']
     paths:
       - 'beta/**'
   workflow_dispatch:
@@ -33,7 +33,7 @@ jobs:
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: '8.2.0'
+          package_json_file: 'beta/package.json'
 
       - name: 🐧 Use Node.js v18.x
         uses: actions/setup-node@v3

@@ -401,11 +401,7 @@ const effectorVue = [
       {
         text: { en: "useEvent" },
         link: "/api/effector-vue/useEvent",
-      },
-      {
-        text: { en: "VueSSRPlugin" },
-        link: "/api/effector-vue/VueSSRPlugin",
-      },
+      }
     ],
   },
 ];

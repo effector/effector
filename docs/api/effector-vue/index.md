@@ -13,12 +13,6 @@ title: API Reference
 - [ComponentOptions\<V\>](ComponentOptions.md)
   - [effector](ComponentOptions.md#effector)
 
-### Vue API
-
-- [Vue](Vue.md)
-  - [$watchAsStore](Vue.md#$watchAsStore) _(deprecated)_
-  - [$store](Vue.md#$store) _(deprecated)_
-
 ### Hooks
 
 - [useUnit(shape)](./useUnit.md) 

@@ -156,7 +156,6 @@ const sidebar = {
           label: 'Scoped (SSR)',
           items: ['api/effector-vue/useEvent', 'api/effector-vue/VueSSRPlugin'],
         },
-        'api/effector-vue/vue',
       ],
     },
   ],
