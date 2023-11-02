@@ -35,4 +35,5 @@ Effector binginds for Vue.
 
 Package `effector-vue` provides couple different entry points for different purposes:
 
+- [effector-vue/composition](/en/api/effector-vue/module/composition)
 - [effector-vue/ssr](/en/api/effector-vue/module/ssr)

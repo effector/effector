@@ -1,5 +1,5 @@
 ---
-title: effector-vue/sst
+title: effector-vue/ssr
 description: Deprecated separate module of effector-vue that enforces library to use Scope
 ---
 

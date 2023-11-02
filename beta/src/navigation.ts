@@ -412,6 +412,10 @@ const effectorVue = [
     text: { en: "Import map" },
     items: [
       {
+        text: { en: "effector-vue/composition" },
+        link: "/api/effector-vue/module/composition",
+      },
+      {
         text: { en: "effector-vue/ssr" },
         link: "/api/effector-vue/module/ssr",
       },
