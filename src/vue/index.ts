@@ -109,3 +109,5 @@ export function createComponent<S>(options: any, store?: S) {
     ),
   )
 }
+
+export {EffectorScopePlugin} from './EffectorScopePlugin'
