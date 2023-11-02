@@ -408,6 +408,15 @@ const effectorVue = [
       }
     ],
   },
+  {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector-vue/ssr" },
+        link: "/api/effector-vue/module/ssr",
+      },
+    ],
+  },
 ];
 
 const effector = [
