@@ -48,7 +48,7 @@ export function useGate<Props>(
 export function useUnit<State>(
   store: Store<State>,
   opts?: {forceScope?: boolean},
-): State
+): DeepReadonly<Ref<State>>
 export function useUnit(
   event: Event<void>,
   opts?: {forceScope?: boolean},
@@ -80,7 +80,7 @@ export function useUnit<
       ? () => Promise<D>
       : (payload: P) => Promise<D>
     : List[Key] extends Store<infer V>
-    ? V
+    ? DeepReadonly<Ref<V>>
     : never
 }
 export function useUnit<
@@ -98,7 +98,7 @@ export function useUnit<
       ? () => Promise<D>
       : (payload: P) => Promise<D>
     : Shape[Key] extends Store<infer V>
-    ? V
+    ? DeepReadonly<Ref<V>>
     : never
 }
 

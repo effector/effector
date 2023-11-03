@@ -3,6 +3,8 @@ import {shallowMount} from 'vue-test-utils-next'
 import {VueSSRPlugin} from 'effector-vue/ssr'
 import {useUnit} from 'effector-vue/composition'
 import {createEvent, createStore, createWatch, fork} from 'effector'
+import {watchEffect} from 'vue-next'
+import {argumentHistory} from 'effector/fixtures'
 
 jest.mock('vue', () => require('vue-next'))
 
@@ -401,5 +403,71 @@ describe('useUnit', () => {
 
       expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)
     })
+  })
+
+  test('batching', async () => {
+    const $a = createStore(1)
+    const $b = createStore(2)
+
+    const inc = createEvent()
+
+    $a.on(inc, v => v + 1)
+    $b.on(inc, v => v + 1)
+
+    const listener = jest.fn()
+
+    const wrapper = shallowMount({
+      template: `
+              <div>
+                  <ul id="app">
+                      <p data-test="a">{{a}}</p>
+                      <p data-test="b">{{b}}</p>
+                  </ul>
+              </div>
+              `,
+      setup() {
+        const [a, b] = useUnit([$a, $b])
+
+        watchEffect(() => {
+          listener([a.value, b.value])
+        })
+
+        return {a, b}
+      },
+    })
+
+    expect(listener).toBeCalledTimes(1)
+    expect(argumentHistory(listener)).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          1,
+          2,
+        ],
+      ]
+    `)
+
+    expect(wrapper.find('[data-test="a"]').element.textContent).toBe('1')
+    expect(wrapper.find('[data-test="b"]').element.textContent).toBe('2')
+
+    inc()
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('[data-test="a"]').element.textContent).toBe('2')
+    expect(wrapper.find('[data-test="b"]').element.textContent).toBe('3')
+
+    expect(listener).toBeCalledTimes(2)
+    expect(argumentHistory(listener)).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          1,
+          2,
+        ],
+        Array [
+          2,
+          3,
+        ],
+      ]
+    `)
   })
 })
