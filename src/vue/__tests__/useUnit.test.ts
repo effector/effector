@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {shallowMount} from 'vue-test-utils-next'
-import {VueSSRPlugin} from 'effector-vue/ssr'
+import {EffectorScopePlugin} from 'effector-vue'
 import {useUnit} from 'effector-vue/composition'
 import {createEvent, createStore, createWatch, fork} from 'effector'
 import {watchEffect} from 'vue-next'
@@ -340,7 +340,7 @@ describe('useUnit', () => {
             return {greet}
           },
         },
-        {global: {plugins: [VueSSRPlugin({scope: correnctScope})]}},
+        {global: {plugins: [EffectorScopePlugin({scope: correnctScope})]}},
       )
 
       const correctListener = jest.fn()
@@ -369,8 +369,6 @@ describe('useUnit', () => {
       const correnctScope = fork()
       const incorrectScope = fork()
 
-      const someEvent = createEvent()
-
       const userAdded = createEvent()
       const $users = createStore([{name: 'John', surname: 'Doe'}])
 
@@ -391,7 +389,7 @@ describe('useUnit', () => {
             return {users, add}
           },
         },
-        {global: {plugins: [VueSSRPlugin({scope: correnctScope})]}},
+        {global: {plugins: [EffectorScopePlugin({scope: correnctScope})]}},
       )
 
       expect(wrapper.findAll('[data-test="item"]')).toHaveLength(1)

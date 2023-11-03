@@ -43,7 +43,7 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   const states: Record<string, any> = {}
   for (const key of storeKeys) {
     // @ts-expect-error TS can't infer that normShape[key] is a Store
-    const state = stateReader(normShape[key])
+    const state = stateReader(normShape[key], scope)
     const ref = shallowRef(state)
     const stop = createWatch({
       unit: normShape[key],
