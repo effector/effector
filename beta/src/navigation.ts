@@ -339,6 +339,10 @@ const effectorVue = [
         link: "/api/effector-vue/VueEffector",
       },
       {
+        text: { en: "EffectorScopePlugin" },
+        link: "/api/effector-vue/EffectorScopePlugin",
+      },
+      {
         text: { en: "createComponent" },
         link: "/api/effector-vue/createComponent",
       },
@@ -350,11 +354,7 @@ const effectorVue = [
       {
         text: { en: "ComponentOptions" },
         link: "/api/effector-vue/ComponentOptions",
-      },
-      {
-        text: { en: "Vue" },
-        link: "/api/effector-vue/Vue",
-      },
+      }
     ],
   },
   {
@@ -401,7 +401,24 @@ const effectorVue = [
       {
         text: { en: "useEvent" },
         link: "/api/effector-vue/useEvent",
+      },
+      {
+        text: { en: "VueSSRPlugin" },
+        link: "/api/effector-vue/VueSSRPlugin",
       }
+    ],
+  },
+  {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector-vue/composition" },
+        link: "/api/effector-vue/module/composition",
+      },
+      {
+        text: { en: "effector-vue/ssr" },
+        link: "/api/effector-vue/module/ssr",
+      },
     ],
   },
 ];

@@ -11,6 +11,7 @@ Effector binginds for Vue.
 
 - [VueEffector(Vue, options?)](/en/api/effector-vue/VueEffector)
 - [createComponent(ComponentOptions, store?)](/en/api/effector-vue/createComponent)
+- [EffectorScopePlugin({scope, scopeName?})](/en/api/effector-vue/EffectorScopePlugin)
 
 ### ComponentOptions API
 
@@ -29,3 +30,10 @@ Effector binginds for Vue.
 - [Gate](/en/api/effector-vue/Gate)
 - [createGate()](/en/api/effector-vue/createGate)
 - [useGate(GateComponent, props)](/en/api/effector-vue/useGate)
+
+## Import map
+
+Package `effector-vue` provides couple different entry points for different purposes:
+
+- [effector-vue/composition](/en/api/effector-vue/module/composition)
+- [effector-vue/ssr](/en/api/effector-vue/module/ssr)

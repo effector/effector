@@ -5,6 +5,10 @@ redirectFrom:
   - /docs/api/effector-vue/useEvent
 ---
 
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) `useEvent` is deprecated. Use [`useUnit`](./useUnit) instead.
+:::
+
 Bind event to current fork instance to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing
 
 ## `useEvent(unit)` {#useEvent-unit}
