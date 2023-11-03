@@ -65,10 +65,6 @@ function createVModel<T>(
   return _ as Ref<T>
 }
 
-function isStore<T>(arg: Store<T> | Record<string, unknown>): arg is Store<T> {
-  return is.store(arg)
-}
-
 // @ts-expect-error
 export const useVModel: UseVModel = <
   T,
@@ -76,7 +72,7 @@ export const useVModel: UseVModel = <
 >(
   vm: Store<T> | Record<K, Store<T>>,
 ) => {
-  if (isStore(vm)) {
+  if (is.store(vm)) {
     return createVModel(vm)
   }
 
