@@ -369,9 +369,9 @@ test('interaction with watch and parallel updates', async () => {
 
   expect(argumentHistory(fn)).toEqual([
     {n: 10, tag: 'a'},
-    {n: 10, tag: 'a'},
+    {n: 11, tag: 'a'},
     {n: 22, tag: 'b'},
-    {n: 22, tag: 'b'},
+    {n: 23, tag: 'b'},
   ])
 })
 
