@@ -92,7 +92,11 @@ export function createEffect<Params, Done, Fail = Error>(
     scope: {
       handler:
         instance.defaultConfig.handler ||
-        (() => assert(false, `no handler used in ${instance.getType()}`)),
+        (() =>
+          assert(
+            false,
+            `no handler used in ${instance.compositeName.fullName}`,
+          )),
     },
     node: [
       calc(
