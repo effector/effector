@@ -412,7 +412,7 @@ it('should not allow domain for effects', () => {
   )
 })
 
-it('shoould read actual store value', () => {
+it('should read actual store value', () => {
   const fn = jest.fn()
 
   const set = createEvent()
