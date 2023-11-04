@@ -22,6 +22,7 @@ type Layer = {
   stack: Stack
   type: PriorityTag
   id: number
+  effectBody: boolean | null
 }
 
 /** Queue as linked list or skew heap */
@@ -120,8 +121,9 @@ const pushFirstHeapItem = (
   value: any,
   scope?: Scope | null | void,
   meta?: Record<string, any> | void,
-) =>
-  pushHeap(
+  effectBody?: boolean | null,
+) => {
+  const item = pushHeap(
     0,
     {
       a: null,
@@ -135,6 +137,10 @@ const pushFirstHeapItem = (
     },
     type,
   )
+  if (typeof effectBody === 'boolean') {
+    item.v.effectBody = effectBody
+  }
+}
 const pushHeap = (
   idx: number,
   stack: Stack,
@@ -149,6 +155,7 @@ const pushHeap = (
       stack,
       type,
       id,
+      effectBody: null,
     },
     l: null,
     r: null,
@@ -168,6 +175,7 @@ const pushHeap = (
     bucket.last = item
   }
   bucket.size += 1
+  return item
 }
 
 const getPriority = (t: PriorityTag) => {
@@ -207,8 +215,13 @@ export const setCurrentPage = (newPage: Leaf | null) => {
   currentPage = newPage
 }
 
-let sharedStackMeta: Record<string, any> | void
-export const getSharedStackMeta = () => sharedStackMeta
+export let sharedStackMeta: Record<string, any> | void
+export const getSharedStackMeta = () => {
+  if (isRoot && !isEffectBody) {
+    sharedStackMeta = undefined
+  }
+  return sharedStackMeta
+}
 export const setSharedStackMeta = (meta: Record<string, any> | void) => {
   sharedStackMeta = meta
 }
@@ -282,6 +295,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         payload[i],
         forkPageForLaunch,
         meta,
+        isEffectBody,
       )
     }
   } else {
@@ -293,6 +307,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       payload,
       forkPageForLaunch,
       meta,
+      isEffectBody,
     )
   }
   if (upsert && !isRoot) return
@@ -312,7 +327,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let page: Leaf | null
   let reg: Record<string, StateRef> | void
   kernelLoop: while ((value = deleteMin())) {
-    const {idx, stack, type} = value
+    const {idx, stack, type, effectBody} = value
+    const prevEffectBody = isEffectBody
+    if (effectBody !== null) {
+      isEffectBody = effectBody
+    }
     node = stack.node
     currentPage = page = stack.page
     forkPage = getForkPage(stack)
@@ -339,10 +358,15 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(stepn, stack, priority, barrierID)
+              const item = pushHeap(stepn, stack, priority, barrierID)
+              item.v.effectBody = effectBody
             }
           } else {
-            pushHeap(stepn, stack, priority)
+            const item = pushHeap(stepn, stack, priority)
+            item.v.effectBody = effectBody
+          }
+          if (effectBody !== null) {
+            isEffectBody = prevEffectBody
           }
           continue kernelLoop
         }
@@ -440,6 +464,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           finalValue,
           forkPage,
           meta,
+          effectBody,
         )
       })
       if (forkPage) {
@@ -485,6 +510,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           })
         }
       }
+    }
+    if (effectBody !== null) {
+      isEffectBody = prevEffectBody
     }
   }
   isRoot = lastStartedState.isRoot

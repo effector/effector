@@ -12,6 +12,7 @@ import {
   setSharedStackMeta,
   isEffectBody,
   setIsEffectBody,
+  sharedStackMeta,
 } from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
@@ -222,6 +223,15 @@ export function createEffect<Params, Done, Fail = Error>(
           })
           .catch(() => {})
       }
+    }
+    if (isEffectBody) {
+      const meta = sharedStackMeta
+      req.req
+        .finally(() => {
+          setIsEffectBody(true)
+          setSharedStackMeta(meta)
+        })
+        .catch(() => {})
     }
     launch({
       target: instance,
