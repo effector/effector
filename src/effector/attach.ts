@@ -90,7 +90,24 @@ export function attach(config: any) {
      * we delete priority, as we already in effect queue
      * so additional delay is not needed
      *
-     * curiously, presence of effect here leads to stale values, idk why
+     * curiously, presence of effect here leads to stale values
+     * because if effect step is not first in a sequence
+     * it will be placed in queue
+     * to prevent data races: effects should be called in order,
+     * but before we run effect in a queue, we should run
+     * more important tasks at first, so it should execute like this:
+     *
+     *    pure queue: [node [mov foo reg_a, effect a]]
+     *    effect queue: [node [effect b]]
+     *
+     *    order: mov foo reg_a, effect b, effect a
+     *
+     * but when node is executed, everything in it will run sequentially
+     * so kernel will find "effect a" earlier than already queued "effect b"
+     *
+     * this behavior leads to state reading happened before another effect handlers
+     * execution and in this case we dont want that, as it leads
+     * to reading values which are going to change
      */
     delete runner.seq[1].order
   } else {
