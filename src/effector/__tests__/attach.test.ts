@@ -369,9 +369,9 @@ test('interaction with watch and parallel updates', async () => {
 
   expect(argumentHistory(fn)).toEqual([
     {n: 10, tag: 'a'},
-    {n: 10, tag: 'a'},
+    {n: 11, tag: 'a'},
     {n: 22, tag: 'b'},
-    {n: 22, tag: 'b'},
+    {n: 23, tag: 'b'},
   ])
 })
 
@@ -410,4 +410,46 @@ it('should not allow domain for effects', () => {
   }).toThrowErrorMatchingInlineSnapshot(
     `"\`domain\` can only be used with a plain function"`,
   )
+})
+
+it('should read actual store value', () => {
+  const fn = jest.fn()
+
+  const set = createEvent()
+  const $store = createStore(0).on(set, () => 1)
+
+  const fx = attach({
+    source: $store,
+    effect(value) {
+      fn([value, $store.getState()])
+      set()
+    },
+  })
+
+  const trigger = createEvent()
+  const t1 = createEvent()
+  const t2 = createEvent()
+
+  sample({
+    clock: trigger,
+    target: [t1, t2],
+  })
+
+  sample({
+    clock: t1,
+    target: t2,
+  })
+
+  sample({
+    clock: t2,
+    target: fx,
+    batch: false,
+  })
+
+  trigger()
+
+  expect(argumentHistory(fn)).toEqual([
+    [0, 0],
+    [1, 1],
+  ])
 })

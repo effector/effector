@@ -92,7 +92,11 @@ export function createEffect<Params, Done, Fail = Error>(
     scope: {
       handler:
         instance.defaultConfig.handler ||
-        (() => assert(false, `no handler used in ${instance.getType()}`)),
+        (() =>
+          assert(
+            false,
+            `no handler used in ${instance.compositeName.fullName}`,
+          )),
     },
     node: [
       calc(
@@ -113,15 +117,16 @@ export function createEffect<Params, Done, Fail = Error>(
       ),
       calc(
         (
-          {
-            params,
-            req,
-            handler,
-            args = [params],
-          }: RunnerData<Params, Done, Fail> & {handler: Function},
+          upd: RunnerData<Params, Done, Fail> & {handler: Function},
           _,
           stack,
         ) => {
+          if (_.runnerFn) {
+            const needToContinue = _.runnerFn(upd, null, stack)
+            if (!needToContinue) return
+          }
+          /** upd.args could be changed by runnerFn */
+          const {params, req, handler, args = [params]} = upd
           const onResolve = onSettled(params, req, true, anyway, stack)
           const onReject = onSettled(params, req, false, anyway, stack)
           const [ok, result] = runFn(handler, onReject, args)
