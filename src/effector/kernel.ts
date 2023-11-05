@@ -119,11 +119,11 @@ const pushFirstHeapItem = (
   node: Node,
   parent: Stack | null,
   value: any,
+  effectBody: boolean | null,
   scope?: Scope | null | void,
   meta?: Record<string, any> | void,
-  effectBody?: boolean | null,
-) => {
-  const item = pushHeap(
+) =>
+  pushHeap(
     0,
     {
       a: null,
@@ -136,15 +136,13 @@ const pushFirstHeapItem = (
       meta,
     },
     type,
+    effectBody,
   )
-  if (typeof effectBody === 'boolean') {
-    item.v.effectBody = effectBody
-  }
-}
 const pushHeap = (
   idx: number,
   stack: Stack,
   type: PriorityTag,
+  effectBody: boolean | null,
   id: number = 0,
 ) => {
   const priority = getPriority(type)
@@ -155,7 +153,7 @@ const pushHeap = (
       stack,
       type,
       id,
-      effectBody: null,
+      effectBody,
     },
     l: null,
     r: null,
@@ -175,7 +173,6 @@ const pushHeap = (
     bucket.last = item
   }
   bucket.size += 1
-  return item
 }
 
 const getPriority = (t: PriorityTag) => {
@@ -293,9 +290,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         getGraph(unit[i]),
         stackForLaunch,
         payload[i],
+        isEffectBody,
         forkPageForLaunch,
         meta,
-        isEffectBody,
       )
     }
   } else {
@@ -305,9 +302,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       getGraph(unit),
       stackForLaunch,
       payload,
+      isEffectBody,
       forkPageForLaunch,
       meta,
-      isEffectBody,
     )
   }
   if (upsert && !isRoot) return
@@ -358,12 +355,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              const item = pushHeap(stepn, stack, priority, barrierID)
-              item.v.effectBody = effectBody
+              pushHeap(stepn, stack, priority, effectBody, barrierID)
             }
           } else {
-            const item = pushHeap(stepn, stack, priority)
-            item.v.effectBody = effectBody
+            pushHeap(stepn, stack, priority, effectBody)
           }
           if (effectBody !== null) {
             isEffectBody = prevEffectBody
@@ -462,9 +457,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           nextNode,
           stack,
           finalValue,
+          effectBody,
           forkPage,
           meta,
-          effectBody,
         )
       })
       if (forkPage) {
@@ -475,6 +470,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             forkPage.fxCount,
             stack,
             finalValue,
+            effectBody,
             forkPage,
           )
         if (getMeta(node, 'storeChange'))
@@ -484,6 +480,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             forkPage.storeChange,
             stack,
             finalValue,
+            effectBody,
             forkPage,
           )
         if (getMeta(node, 'warnSerialize'))
@@ -493,6 +490,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             forkPage.warnSerializeNode,
             stack,
             finalValue,
+            effectBody,
             forkPage,
           )
         const additionalLinks = forkPage.additionalLinks[node.id]
@@ -504,6 +502,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               nextNode,
               stack,
               finalValue,
+              effectBody,
               forkPage,
               meta,
             )
