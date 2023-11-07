@@ -6,6 +6,7 @@ import type {
   StateRef,
   Unit,
   Config,
+  LazyConfig,
 } from './index.h'
 import type {CompositeName} from './naming'
 
@@ -191,6 +192,14 @@ export interface Scope extends Unit {
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
   warnSerialize?: boolean
   warnSerializeNode: Node
+  /** enriched lazy info for nodes, ids are Node ids */
+  lazy: Record<
+    string,
+    {
+      usedBy: number
+      config: LazyConfig
+    }
+  >
 }
 
 export type CommonUnit<T = any> = Event<T> | Effect<T, any, any> | Store<T>

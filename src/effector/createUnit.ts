@@ -195,6 +195,12 @@ export function createEvent<Payload = any>(
       return contramapped
     },
   })
+  finalEvent.graphite.lazy = {
+    alwaysActive: false,
+    active: false,
+    usedBy: 0,
+    activate: [],
+  }
   if (config?.domain) {
     config.domain.hooks.event(finalEvent)
   }

@@ -5,7 +5,10 @@ import {step} from './step'
 import {Scope} from './unit.h'
 import {addUnsubscribe} from './subscription'
 import {is} from './is'
-import {traverseIncrementActivations} from './lazy'
+import {
+  traverseDecrementActivations,
+  traverseIncrementActivations,
+} from './lazy'
 
 export function createWatch<T>({
   unit,
@@ -53,16 +56,19 @@ export function createWatch<T>({
       unsubs.push(() => {
         const idx = links.indexOf(node)
         if (idx !== -1) links.splice(idx, 1)
+        /** note that watch node is not in scope.lazy map */
+        traverseDecrementActivations(u.graphite, scope)
         clearNode(node)
       })
 
-      if (is.store(u)) {
-        traverseIncrementActivations(u.graphite)
+      if (is.store(u) || is.event(u)) {
+        /** note that watch node is not in scope.lazy map */
+        traverseIncrementActivations(u.graphite, scope)
         node.lazy = {
           alwaysActive: true,
           active: true,
           usedBy: 0,
-          activate: [u.graphite],
+          activate: [],
         }
       }
     })
@@ -76,9 +82,11 @@ export function createWatch<T>({
       family: {owners: units},
     })
     const activateList = units
-      .filter(unit => is.store(unit))
+      .filter(unit => is.store(unit) || is.event(unit))
       .map(unit => unit.graphite)
-    activateList.forEach(traverseIncrementActivations)
+    activateList.forEach(currentNode =>
+      traverseIncrementActivations(currentNode),
+    )
     node.lazy = {
       alwaysActive: true,
       active: true,

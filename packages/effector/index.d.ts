@@ -508,7 +508,9 @@ export type Node = {
     owners: Node[]
   }
   lazy?: {
+    alwaysActive: boolean
     active: boolean
+    usedBy: number
   }
 }
 
@@ -3111,6 +3113,13 @@ export function combine<T extends Tuple<Store<any> | any>>(
  */
 export interface Scope extends Unit<any> {
   getState<T>(store: Store<T>): T
+  lazy: Record<
+    string,
+    {
+      usedBy: number
+      config: NonNullable<Node['lazy']>
+    }
+  >
 }
 
 export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>, any]> | {[sid: string]: any}

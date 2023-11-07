@@ -1,5 +1,5 @@
 import type {Cmd, StateRef} from './index.h'
-import type {CommonUnit, DataCarrier} from './unit.h'
+import type {CommonUnit, DataCarrier, Event, Store} from './unit.h'
 import {combine} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
@@ -24,6 +24,7 @@ import {merge} from './merge'
 import {applyTemplate} from './template'
 import {own} from './own'
 import {createLinkNode} from './forward'
+import {traverseSetAlwaysActive} from './lazy'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -197,6 +198,36 @@ export const createSampling = (
   // @ts-expect-error
   own(source, [jointNode])
   Object.assign(jointNode.meta, metadata, {joint: true})
+  jointNode.lazy = {
+    active: false,
+    alwaysActive: false,
+    usedBy: 0,
+    activate: [],
+  }
+  const jointLazy = jointNode.lazy!
+  if (is.store(source) || is.event(source)) {
+    jointLazy.activate.push(source.graphite)
+  }
+  if (source !== clock && (is.store(clock) || is.event(clock))) {
+    jointLazy.activate.push(clock.graphite)
+  }
+  const targets = Array.isArray(target) ? target : [target]
+  const targetsStores = targets.filter(
+    (unit): unit is Store<any> | Event<any> => is.store(unit) || is.event(unit),
+  )
+  if (targetsStores.some(store => store.graphite.lazy!.alwaysActive)) {
+    traverseSetAlwaysActive(jointNode)
+  } else {
+    targetsStores.forEach(unit => {
+      const unitLazy = unit.graphite.lazy!
+      /**
+       * if some activator appeared in graph twice,
+       * it will appear in usedBy twice too
+       **/
+      jointLazy.usedBy += unitLazy.usedBy
+      unitLazy.activate.push(jointNode)
+    })
+  }
   return target
 }
 

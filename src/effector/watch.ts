@@ -20,7 +20,7 @@ export const watchUnit = (
     family: {owners: unit},
     regional: true,
   })
-  if (is.store(unit)) {
+  if (is.store(unit) || is.event(unit)) {
     traverseIncrementActivations(unit.graphite)
     node.lazy = {
       alwaysActive: true,

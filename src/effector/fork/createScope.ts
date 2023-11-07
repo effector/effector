@@ -134,6 +134,7 @@ export function createScope(unit?: Domain): Scope {
     fxCount: forkInFlightCounter,
     storeChange,
     warnSerializeNode,
+    lazy: {},
   }
   return resultScope
 }
