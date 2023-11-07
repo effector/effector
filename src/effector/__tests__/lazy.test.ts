@@ -12,6 +12,7 @@ import {
   sample,
   merge,
   forward,
+  restore,
 } from 'effector'
 
 function getNode(unit: Store<any> | Event<any> | Effect<any, any, any>): Node {
@@ -283,4 +284,24 @@ describe('forward support', () => {
     unwatchFwd()
     expect(isActiveGlobal(from)).toBe(false)
   })
+})
+
+/**
+ * WARN! This test assumes that restore is derived (in terms of lazy)
+ * This is not a final decision!
+ **/
+test('restore support', () => {
+  const trigger = createEvent<number>()
+  const $store = restore(trigger, 0)
+
+  expect(isActiveGlobal(trigger)).toBe(false)
+  expect(isActiveGlobal($store)).toBe(false)
+
+  const unwatch = $store.watch(() => {})
+
+  expect(isActiveGlobal(trigger)).toBe(true)
+  expect(isActiveGlobal($store)).toBe(true)
+  unwatch()
+  expect(isActiveGlobal(trigger)).toBe(false)
+  expect(isActiveGlobal($store)).toBe(false)
 })

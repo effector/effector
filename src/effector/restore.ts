@@ -4,6 +4,7 @@ import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './forward'
 import {deprecate} from './throw'
+import {addActivator} from './lazy'
 
 export function restore(obj: any, defaultState: any, config?: any) {
   if (is.store(obj)) {
@@ -17,7 +18,15 @@ export function restore(obj: any, defaultState: any, config?: any) {
       name: obj.shortName,
       and: config,
     })
-    createLinkNode(is.effect(obj) ? obj.doneData : obj, result)
+    const clock = is.effect(obj) ? obj.doneData : obj
+    createLinkNode(clock, result)
+    /**
+     * WARN! This essentialy makes this store derived
+     * This is not a final decision!
+     **/
+    result.graphite.lazy!.alwaysActive = false
+    result.graphite.lazy!.active = false
+    addActivator(result, [clock])
     if (domain) domain.hooks.store(result)
     return result
   }
