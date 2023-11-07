@@ -1,5 +1,19 @@
-import {Node} from './index.h'
-import {Scope} from './unit.h'
+import {getGraph} from './getter'
+import {Node, NodeUnit} from './index.h'
+import {is} from './is'
+import {Event, Scope, Store} from './unit.h'
+
+export function addActivator(activator: NodeUnit, toActivate: any[]) {
+  const activatorNode = getGraph(activator)
+  ;[...new Set(toActivate)]
+    .filter(
+      (item): item is Store<any> | Event<any> =>
+        is.store(item) || is.event(item),
+    )
+    .forEach(unit => {
+      activatorNode.lazy!.activate.push(unit.graphite)
+    })
+}
 
 export function traverseSetAlwaysActive(node: Node) {
   const lazy = node.lazy

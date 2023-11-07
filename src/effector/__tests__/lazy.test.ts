@@ -10,6 +10,7 @@ import {
   createWatch,
   Scope,
   sample,
+  merge,
 } from 'effector'
 
 function getNode(unit: Store<any> | Event<any> | Effect<any, any, any>): Node {
@@ -156,4 +157,48 @@ describe('sample support', () => {
     unwatch()
     expect(isActiveGlobal($bar)).toBe(false)
   })
+
+  test('array in clock support', () => {
+    const triggerA = createEvent()
+    const target = createEvent()
+    const $foo = createStore(0)
+    const $bar = combine($foo, n => n)
+    const $baz = combine($bar, n => n > 0)
+
+    sample({
+      clock: [triggerA, $baz],
+      target,
+    })
+
+    expect(isActiveGlobal($bar)).toBe(false)
+    expect(isActiveGlobal(triggerA)).toBe(false)
+
+    const unwatch = target.watch(() => {})
+
+    expect(isActiveGlobal($bar)).toBe(true)
+    expect(isActiveGlobal(triggerA)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal($bar)).toBe(false)
+    expect(isActiveGlobal(triggerA)).toBe(false)
+  })
+})
+
+test('merge support', () => {
+  const triggerA = createEvent()
+  const $foo = createStore(0)
+  const $bar = combine($foo, n => n)
+  const $baz = combine($bar, n => n > 0)
+
+  const target = merge([triggerA, $baz])
+
+  expect(isActiveGlobal($bar)).toBe(false)
+  expect(isActiveGlobal(triggerA)).toBe(false)
+
+  const unwatch = target.watch(() => {})
+
+  expect(isActiveGlobal($bar)).toBe(true)
+  expect(isActiveGlobal(triggerA)).toBe(true)
+  unwatch()
+  expect(isActiveGlobal($bar)).toBe(false)
+  expect(isActiveGlobal(triggerA)).toBe(false)
 })
