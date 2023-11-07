@@ -14,6 +14,7 @@ import {
   forward,
   restore,
   split,
+  createEffect,
 } from 'effector'
 
 function getNode(unit: Store<any> | Event<any> | Effect<any, any, any>): Node {
@@ -183,6 +184,20 @@ describe('sample support', () => {
     unwatch()
     expect(isActiveGlobal($bar)).toBe(false)
     expect(isActiveGlobal(triggerA)).toBe(false)
+  })
+
+  test('effects should turn everything to alwaysActive', () => {
+    const targetFx = createEffect(() => {})
+    const $foo = createStore(0)
+    const $bar = combine($foo, n => n)
+    const $baz = combine($bar, n => n)
+
+    sample({
+      clock: $baz,
+      target: targetFx,
+    })
+
+    expect(isActiveGlobal($bar)).toBe(true)
   })
 })
 

@@ -61,15 +61,13 @@ export function createWatch<T>({
         clearNode(node)
       })
 
-      if (is.store(u) || is.event(u)) {
-        /** note that watch node is not in scope.lazy map */
-        traverseIncrementActivations(u.graphite, scope)
-        node.lazy = {
-          alwaysActive: true,
-          active: true,
-          usedBy: 0,
-          activate: [],
-        }
+      /** note that watch node is not in scope.lazy map */
+      traverseIncrementActivations(u.graphite, scope)
+      node.lazy = {
+        alwaysActive: true,
+        active: true,
+        usedBy: 0,
+        activate: [],
       }
     })
     return addUnsubscribe(() => {
@@ -81,9 +79,7 @@ export function createWatch<T>({
       parent: units,
       family: {owners: units},
     })
-    const activateList = units
-      .filter(unit => is.store(unit) || is.event(unit))
-      .map(unit => unit.graphite)
+    const activateList = units.map(unit => unit.graphite)
     activateList.forEach(currentNode =>
       traverseIncrementActivations(currentNode),
     )

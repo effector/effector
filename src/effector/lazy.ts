@@ -10,19 +10,13 @@ export function addActivator(
   const activatorsList = [
     ...new Set(Array.isArray(activator) ? activator : [activator]),
   ].map(getGraph)
-  ;[...new Set(toActivate)]
-    .filter(Boolean)
-    .filter(
-      (item): item is Store<any> | Event<any> =>
-        is.store(item) || is.event(item) || 'seq' in item,
-    )
-    .forEach(unit => {
-      const toActivateNode = getGraph(unit)
-      activatorsList.forEach(activatorNode => {
-        toActivateNode.lazy!.usedBy += activatorNode.lazy?.usedBy ?? 0
-        activatorNode.lazy!.activate.push(toActivateNode)
-      })
+  ;[...new Set(toActivate)].filter(Boolean).forEach(unit => {
+    const toActivateNode = getGraph(unit)
+    activatorsList.forEach(activatorNode => {
+      toActivateNode.lazy!.usedBy += activatorNode.lazy?.usedBy ?? 0
+      activatorNode.lazy!.activate.push(toActivateNode)
     })
+  })
 }
 
 export function traverseSetAlwaysActive(node: Node) {

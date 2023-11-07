@@ -206,14 +206,12 @@ export const createSampling = (
   }
   addActivator(jointNode, [source, clock, filter])
   const targets = Array.isArray(target) ? target : [target]
-  const targetsStores = targets.filter(
-    (unit): unit is Store<any> | Event<any> => is.store(unit) || is.event(unit),
-  )
-  if (targetsStores.some(store => store.graphite.lazy!.alwaysActive)) {
+  const targetNodes = targets.map(getGraph).filter(node => node.lazy)
+  if (targetNodes.some(node => node.lazy!.alwaysActive)) {
     traverseSetAlwaysActive(jointNode)
   } else {
-    targetsStores.forEach(unit => {
-      const unitLazy = unit.graphite.lazy!
+    targetNodes.forEach(node => {
+      const unitLazy = node.lazy!
       /**
        * if some activator appeared in graph twice,
        * it will appear in usedBy twice too

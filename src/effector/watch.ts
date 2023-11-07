@@ -6,6 +6,7 @@ import {createSubscription} from './subscription'
 import {assert} from './throw'
 import {isFunction, is} from './is'
 import {traverseIncrementActivations} from './lazy'
+import {getGraph} from './getter'
 
 export const watchUnit = (
   unit: NodeUnit,
@@ -20,14 +21,12 @@ export const watchUnit = (
     family: {owners: unit},
     regional: true,
   })
-  if (is.store(unit) || is.event(unit)) {
-    traverseIncrementActivations(unit.graphite)
-    node.lazy = {
-      alwaysActive: true,
-      active: true,
-      usedBy: 0,
-      activate: [unit.graphite],
-    }
+  traverseIncrementActivations(getGraph(unit))
+  node.lazy = {
+    alwaysActive: true,
+    active: true,
+    usedBy: 0,
+    activate: [getGraph(unit)],
   }
   return createSubscription(node)
 }

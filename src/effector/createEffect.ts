@@ -206,6 +206,9 @@ export function createEffect<Params, Done, Fail = Error>(
     named: 'pending',
   }))
 
+  instance.graphite.lazy!.alwaysActive = true
+  instance.graphite.lazy!.active = true
+
   own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
   if (config?.domain) {
     config.domain.hooks.effect(instance)
