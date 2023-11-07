@@ -298,7 +298,7 @@ export function createStore<State>(
     map(fn: (value: any) => any, outerConfig: Config) {
       let mapConfig: Config | undefined
       if (isObject(fn)) {
-        mapConfig = (fn as any)
+        mapConfig = fn as any
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
       let lastResult
@@ -376,6 +376,12 @@ export function createStore<State>(
     },
     regional: true,
   })
+  store.graphite.lazy = {
+    alwaysActive: true,
+    active: true,
+    usedBy: 0,
+    activate: [],
+  }
   setMeta(store, 'id', store.graphite.id)
   setMeta(store, 'rootStateRefId', plainStateId)
   const serializeMeta = getMeta(store, 'serialize')
@@ -390,12 +396,12 @@ export function createStore<State>(
     setMeta(store, 'warnSerialize', true)
   }
   const isVoidDefaultState = isVoid(defaultState)
-  const canVoid = (isVoidDefaultState && voidValueAllowed)
+  const canVoid = isVoidDefaultState && voidValueAllowed
   assert(
     derived || !isVoidDefaultState || canVoid,
     requireExplicitSkipVoidMessage,
   )
-  if (derived && (isVoidDefaultState && !explicitSkipVoid)) {
+  if (derived && isVoidDefaultState && !explicitSkipVoid) {
     console.error(requireExplicitSkipVoidMessage)
   }
   own(store, [updates])

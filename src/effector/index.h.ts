@@ -56,6 +56,12 @@ export type Node = {
     links: Node[]
     owners: Node[]
   }
+  lazy?: {
+    alwaysActive: boolean
+    active: boolean
+    usedBy: number
+    activate: Node[]
+  }
 }
 
 export type NodeUnit = {graphite: Node} | Node

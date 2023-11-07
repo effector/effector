@@ -507,6 +507,9 @@ export type Node = {
     links: Node[]
     owners: Node[]
   }
+  lazy?: {
+    active: boolean
+  }
 }
 
 export const step: {
