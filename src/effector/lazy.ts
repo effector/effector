@@ -6,12 +6,13 @@ import {Event, Scope, Store} from './unit.h'
 export function addActivator(activator: NodeUnit, toActivate: any[]) {
   const activatorNode = getGraph(activator)
   ;[...new Set(toActivate)]
+    .filter(Boolean)
     .filter(
       (item): item is Store<any> | Event<any> =>
-        is.store(item) || is.event(item),
+        is.store(item) || is.event(item) || 'seq' in item,
     )
     .forEach(unit => {
-      activatorNode.lazy!.activate.push(unit.graphite)
+      activatorNode.lazy!.activate.push(getGraph(unit))
     })
 }
 

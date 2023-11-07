@@ -11,6 +11,7 @@ import {
   Scope,
   sample,
   merge,
+  forward,
 } from 'effector'
 
 function getNode(unit: Store<any> | Event<any> | Effect<any, any, any>): Node {
@@ -246,4 +247,40 @@ test('event.prepend support', () => {
   unwatch()
   expect(isActiveGlobal(bar)).toBe(false)
   expect(isActiveGlobal(baz)).toBe(false)
+})
+
+describe('forward support', () => {
+  const consoleError = console.error
+
+  beforeAll(() => {
+    console.error = (message, ...args) => {
+      if (String(message).includes('forward')) return
+      consoleError(message, ...args)
+    }
+  })
+
+  afterAll(() => {
+    console.error = consoleError
+  })
+
+  test('forward support', () => {
+    const from = createEvent()
+    const to = createEvent()
+
+    const unwatchFwd = forward({from, to})
+
+    expect(isActiveGlobal(from)).toBe(false)
+
+    const unwatch = to.watch(() => {})
+
+    expect(isActiveGlobal(from)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal(from)).toBe(false)
+
+    to.watch(() => {})
+
+    expect(isActiveGlobal(from)).toBe(true)
+    unwatchFwd()
+    expect(isActiveGlobal(from)).toBe(false)
+  })
 })
