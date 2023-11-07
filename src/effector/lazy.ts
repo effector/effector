@@ -3,8 +3,13 @@ import {Node, NodeUnit} from './index.h'
 import {is} from './is'
 import {Event, Scope, Store} from './unit.h'
 
-export function addActivator(activator: NodeUnit, toActivate: any[]) {
-  const activatorNode = getGraph(activator)
+export function addActivator(
+  activator: NodeUnit | NodeUnit[],
+  toActivate: any[],
+) {
+  const activatorsList = [
+    ...new Set(Array.isArray(activator) ? activator : [activator]),
+  ].map(getGraph)
   ;[...new Set(toActivate)]
     .filter(Boolean)
     .filter(
@@ -12,7 +17,11 @@ export function addActivator(activator: NodeUnit, toActivate: any[]) {
         is.store(item) || is.event(item) || 'seq' in item,
     )
     .forEach(unit => {
-      activatorNode.lazy!.activate.push(getGraph(unit))
+      const toActivateNode = getGraph(unit)
+      activatorsList.forEach(activatorNode => {
+        toActivateNode.lazy!.usedBy += activatorNode.lazy?.usedBy ?? 0
+        activatorNode.lazy!.activate.push(toActivateNode)
+      })
     })
 }
 

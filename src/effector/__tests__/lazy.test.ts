@@ -13,6 +13,7 @@ import {
   merge,
   forward,
   restore,
+  split,
 } from 'effector'
 
 function getNode(unit: Store<any> | Event<any> | Effect<any, any, any>): Node {
@@ -304,4 +305,101 @@ test('restore support', () => {
   unwatch()
   expect(isActiveGlobal(trigger)).toBe(false)
   expect(isActiveGlobal($store)).toBe(false)
+})
+
+describe('split support', () => {
+  test('with cases', () => {
+    const clock = createEvent()
+    const target = createEvent<number>()
+    const $matchA = createStore<'target'>('target')
+    const $matchB = combine($matchA, x => x)
+    const $matchC = combine($matchB, x => x)
+    const $sourceA = createStore(0)
+    const $sourceB = combine($sourceA, n => n)
+    const $sourceC = combine($sourceB, n => n)
+
+    split({
+      clock,
+      source: $sourceC,
+      match: $matchC,
+      cases: {
+        target,
+      },
+    })
+
+    expect(isActiveGlobal(clock)).toBe(false)
+    expect(isActiveGlobal($sourceB)).toBe(false)
+    expect(isActiveGlobal($matchB)).toBe(false)
+
+    const unwatch = target.watch(() => {})
+
+    expect(isActiveGlobal(clock)).toBe(true)
+    expect(isActiveGlobal($sourceB)).toBe(true)
+    expect(isActiveGlobal($matchB)).toBe(true)
+
+    unwatch()
+
+    expect(isActiveGlobal(clock)).toBe(false)
+    expect(isActiveGlobal($sourceB)).toBe(false)
+    expect(isActiveGlobal($matchB)).toBe(false)
+  })
+  test('with cases with fork', () => {
+    const clock = createEvent()
+    const target = createEvent<number>()
+    const $matchA = createStore<'target'>('target')
+    const $matchB = combine($matchA, x => x)
+    const $matchC = combine($matchB, x => x)
+    const $sourceA = createStore(0)
+    const $sourceB = combine($sourceA, n => n)
+    const $sourceC = combine($sourceB, n => n)
+
+    split({
+      clock,
+      source: $sourceC,
+      match: $matchC,
+      cases: {
+        target,
+      },
+    })
+
+    const scope = fork()
+
+    expect(isActiveInScope(clock, scope)).toBe(false)
+    expect(isActiveInScope($sourceB, scope)).toBe(false)
+    expect(isActiveInScope($matchB, scope)).toBe(false)
+
+    const unwatch = createWatch({
+      unit: target,
+      fn: () => {},
+      scope,
+    })
+
+    expect(isActiveInScope(clock, scope)).toBe(true)
+    expect(isActiveInScope($sourceB, scope)).toBe(true)
+    expect(isActiveInScope($matchB, scope)).toBe(true)
+
+    expect(isActiveGlobal(clock)).toBe(false)
+    expect(isActiveGlobal($sourceB)).toBe(false)
+    expect(isActiveGlobal($matchB)).toBe(false)
+
+    unwatch()
+
+    expect(isActiveInScope(clock, scope)).toBe(false)
+    expect(isActiveInScope($sourceB, scope)).toBe(false)
+    expect(isActiveInScope($matchB, scope)).toBe(false)
+  })
+  test('without cases', () => {
+    const $sourceA = createStore(0)
+    const $sourceB = combine($sourceA, n => n)
+    const $sourceC = combine($sourceB, n => n)
+    const {target} = split($sourceC, {
+      target: n => n > 0,
+    })
+
+    expect(isActiveGlobal($sourceB)).toBe(false)
+    const unwatch = target.watch(() => {})
+    expect(isActiveGlobal($sourceB)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal($sourceB)).toBe(false)
+  })
 })

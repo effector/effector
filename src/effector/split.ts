@@ -13,6 +13,7 @@ import {assert} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
 import {createSampling} from './sample'
+import {addActivator} from './lazy'
 
 const launchCase = (
   scopeTargets: Record<string, DataCarrier>,
@@ -141,14 +142,18 @@ export function split(...args: any[]) {
   } else {
     assert(false, 'expect match to be unit, function or object')
   }
+  const ownersArray = Array.from(owners)
   const splitterNode = createNode({
     meta: {op: METHOD},
     parent: clock ? [] : source,
     scope: targets,
     node: splitterSeq!,
-    family: {owners: Array.from(owners)},
+    family: {owners: ownersArray},
     regional: true,
   })
+  const targetsArray = Object.values(targets)
+  const incomingUnits = ownersArray.filter(unit => !targetsArray.includes(unit))
+  addActivator(targetsArray, incomingUnits)
   if (clock) {
     createSampling(
       METHOD,

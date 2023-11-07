@@ -49,15 +49,13 @@ export const forward = (opts: {
     usedBy: 0,
     activate: [],
   }
-  addActivator(node, fromNormalized)
   /**
    * WARN! Memory leaks in clearNode here
    * need to implement bidirectional activators links
    * before release
    * */
-  toNormalized.forEach(unit => {
-    node.lazy!.usedBy += getGraph(unit).lazy?.usedBy ?? 0
-    addActivator(unit, [node])
-  })
+  addActivator(node, fromNormalized)
+  addActivator(toNormalized, [node])
+
   return createSubscription(node)
 }
