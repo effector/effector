@@ -30,3 +30,14 @@ export function forEach<T>(list: Set<T>, fn: (item: T) => void): void
 export function forEach(list: any, fn: Function) {
   list.forEach(fn)
 }
+
+export function mapValues<T, R, Key extends string = string>(
+  s: Record<Key, T> | T[],
+  fn: (item: T) => R,
+) {
+  return Array.isArray(s)
+    ? s.map(fn)
+    : Object.fromEntries(
+        Object.entries(s).map(([key, value]) => [key, fn(value as T)]),
+      )
+}

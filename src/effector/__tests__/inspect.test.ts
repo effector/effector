@@ -589,6 +589,29 @@ describe('inspectGraph API', () => {
       `)
     })
   })
+  describe('operators', () => {
+    test('sample and sample-like', () => {
+      /**
+       * guard, forward, merge, etc - their configs are subsets of sample's config
+       */
+    })
+    test('split', () => {
+      /**
+       * split is a bit special and is not a subset of sample (yet?)
+       */
+    })
+    test('store.on', () => {
+      /**
+       * store.on is a shorthand for sample
+       */
+    })
+    test('createApi', () => {
+      /**
+       * It is not clear, how it should look or work, as it is a shortand for store.on,
+       * which currently is a shorthand for sample
+       */
+    })
+  })
 })
 
 describe('real use cases', () => {
@@ -873,6 +896,114 @@ describe('real use cases', () => {
           value: 0,
         },
       ],
+    })
+  })
+  test('trail', () => {
+    const snapshot: Record<string, any> = {
+      samples: [],
+      stores: [],
+      effects: [],
+      domains: [],
+      events: [],
+      attaches: [],
+      storeOns: [],
+    }
+    function parseUnitDeclaration(d: Declaration) {
+      return {
+        id: d.id,
+        name: d.name,
+        kind: d.kind,
+        sid: d.sid,
+        derived: d.derived,
+        createdBy: 'TODO',
+        inDomain: 'TODO',
+        loc: d.loc,
+      }
+    }
+    function unwrapFactory(
+      region: Declaration['region'],
+      mode: 'first' | 'last',
+    ): null | Declaration['region'] {
+      if (!region) {
+        return null
+      }
+      /**
+       * Goes up the region tree until it finds a needed factory
+       */
+
+      let targetFactory
+      let currentRegion = region
+      while (currentRegion) {
+        if (currentRegion.type === 'factory') {
+          if (mode === 'first') {
+            return currentRegion
+          }
+          targetFactory = currentRegion
+        }
+
+        currentRegion = currentRegion.region!
+      }
+
+      return currentRegion
+    }
+    function parseSampleDeclaration(d: Declaration) {
+      if (d.type !== 'operation' || d.kind !== 'sample') {
+        throw Error('sample should be operation')
+      }
+
+      return {
+        ...d.config,
+        isCombinedSource:
+          d.config.source &&
+          (Array.isArray(d.config.source) || d.config.source.type !== 'unit'), // source is present, but is a array or object shape
+        isImplicitClock: !!(d.config.source && !d.config.clock),
+        isImplicitSource: !!(d.config.clock && !d.config.source),
+        // sample always have target
+        // if not provided in config, it is created implicitly
+        isImplicitTarget: 'TODO', // need to add more meta to unit declarations to track "parent" operators
+        parentFactory: unwrapFactory(d.region, 'first'),
+        rootParentFactory: unwrapFactory(d.region, 'last'),
+      }
+    }
+    function parseStoreOnDeclaration(d: Declaration) {
+      if (d.type !== 'operation' || d.kind !== 'on') {
+        throw Error('storeOn should be operation')
+      }
+      // because $store.on(event, handler)
+      // is basically a shorthand for sample({source: $store, clock: event, greedy: true, fn: handler, target: $store})
+      return {
+        source: d.config.source, // $store
+        clock: d.config.clock, // event
+        target: d.config.target, // $store again
+      }
+    }
+    inspectGraph({
+      fn: d => {
+        if (d.kind === 'store') {
+          snapshot.stores.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'event') {
+          snapshot.events.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'effect') {
+          snapshot.effects.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'domain') {
+          snapshot.domains.push(parseUnitDeclaration(d))
+          return
+        }
+        if (d.kind === 'sample') {
+          snapshot.samples.push(parseSampleDeclaration(d))
+          return
+        }
+        if (d.kind === 'on') {
+          snapshot.storeOns.push(parseStoreOnDeclaration(d))
+          return
+        }
+      },
     })
   })
 })
