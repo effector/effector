@@ -134,4 +134,26 @@ describe('sample support', () => {
     unwatch()
     expect(isActiveGlobal($bar)).toBe(false)
   })
+
+  test('store in filter', () => {
+    const clock = createEvent()
+    const target = createEvent()
+    const $foo = createStore(0)
+    const $bar = combine($foo, n => n)
+    const $baz = combine($bar, n => n > 0)
+
+    sample({
+      clock,
+      filter: $baz,
+      target,
+    })
+
+    expect(isActiveGlobal($bar)).toBe(false)
+
+    const unwatch = target.watch(() => {})
+
+    expect(isActiveGlobal($bar)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal($bar)).toBe(false)
+  })
 })

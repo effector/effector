@@ -205,12 +205,14 @@ export const createSampling = (
     activate: [],
   }
   const jointLazy = jointNode.lazy!
-  if (is.store(source) || is.event(source)) {
-    jointLazy.activate.push(source.graphite)
-  }
-  if (source !== clock && (is.store(clock) || is.event(clock))) {
-    jointLazy.activate.push(clock.graphite)
-  }
+  ;[...new Set([source, clock, filter])]
+    .filter(
+      (item): item is Store<any> | Event<any> =>
+        is.store(item) || is.event(item),
+    )
+    .forEach(unit => {
+      jointLazy.activate.push(unit.graphite)
+    })
   const targets = Array.isArray(target) ? target : [target]
   const targetsStores = targets.filter(
     (unit): unit is Store<any> | Event<any> => is.store(unit) || is.event(unit),
