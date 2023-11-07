@@ -9,22 +9,30 @@ export function addActivator(
 ) {
   const activatorsList = [
     ...new Set(Array.isArray(activator) ? activator : [activator]),
-  ].map(getGraph)
+  ]
+    .map(getGraph)
+    .filter(node => node.lazy)
   ;[...new Set(toActivate)].filter(Boolean).forEach(unit => {
     const toActivateNode = getGraph(unit)
+    if (!toActivateNode.lazy) return
     activatorsList.forEach(activatorNode => {
-      toActivateNode.lazy!.usedBy += activatorNode.lazy?.usedBy ?? 0
+      toActivateNode.lazy!.usedBy += activatorNode.lazy!.usedBy
       activatorNode.lazy!.activate.push(toActivateNode)
     })
   })
 }
 
 export function traverseSetAlwaysActive(node: Node) {
-  const lazy = node.lazy
-  if (!lazy) return
-  lazy.active = true
-  lazy.alwaysActive = true
-  lazy.activate.forEach(traverseSetAlwaysActive)
+  const visited = new Set<Node>()
+  ;(function traverse(node: Node) {
+    if (visited.has(node)) return
+    visited.add(node)
+    const lazy = node.lazy
+    if (!lazy) return
+    lazy.active = true
+    lazy.alwaysActive = true
+    lazy.activate.forEach(traverse)
+  })(node)
 }
 
 export function traverseIncrementActivations(node: Node, scope?: Scope) {
