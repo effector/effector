@@ -45,6 +45,7 @@ import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
+import {addActivator} from './lazy'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -113,6 +114,7 @@ const deriveEvent = (
     and: config,
   })
   createLinkNode(event, mapped, node, op, fn)
+  addActivator(mapped, [event])
   return mapped
 }
 
@@ -189,6 +191,7 @@ export function createEvent<Payload = any>(
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
       })
+      addActivator(event, [contramapped])
       applyTemplate('eventPrepend', getGraph(contramapped))
       createLinkNode(contramapped, event, [userFnCall()], 'prepend', fn)
       applyParentHook(event, contramapped)
@@ -330,6 +333,10 @@ export function createStore<State>(
         from: plainState,
       })
       getStoreState(innerStore).noInit = true
+      const resultLazy = innerStore.graphite.lazy!
+      resultLazy.active = false
+      resultLazy.alwaysActive = false
+      addActivator(innerStore, [store])
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },

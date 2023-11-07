@@ -202,3 +202,48 @@ test('merge support', () => {
   expect(isActiveGlobal($bar)).toBe(false)
   expect(isActiveGlobal(triggerA)).toBe(false)
 })
+
+test('store.map support', () => {
+  const $foo = createStore(0)
+  const $bar = $foo.map(n => n)
+  const $baz = $bar.map(n => n)
+
+  expect(isActiveGlobal($bar)).toBe(false)
+
+  const unwatch = $baz.watch(() => {})
+
+  expect(isActiveGlobal($bar)).toBe(true)
+  unwatch()
+  expect(isActiveGlobal($bar)).toBe(false)
+})
+
+test('event.map support', () => {
+  const foo = createEvent()
+  const bar = foo.map(() => {})
+  const baz = bar.map(() => {})
+
+  expect(isActiveGlobal(bar)).toBe(false)
+
+  const unwatch = baz.watch(() => {})
+
+  expect(isActiveGlobal(bar)).toBe(true)
+  unwatch()
+  expect(isActiveGlobal(bar)).toBe(false)
+})
+
+test('event.prepend support', () => {
+  const foo = createEvent()
+  const bar = foo.prepend(() => {})
+  const baz = bar.prepend(() => {})
+
+  expect(isActiveGlobal(bar)).toBe(false)
+  expect(isActiveGlobal(baz)).toBe(false)
+
+  const unwatch = foo.watch(() => {})
+
+  expect(isActiveGlobal(bar)).toBe(true)
+  expect(isActiveGlobal(baz)).toBe(true)
+  unwatch()
+  expect(isActiveGlobal(bar)).toBe(false)
+  expect(isActiveGlobal(baz)).toBe(false)
+})
