@@ -113,8 +113,14 @@ const deriveEvent = (
     derived: true,
     and: config,
   })
-  createLinkNode(event, mapped, node, op, fn)
-  addActivator(mapped, [event])
+  const linkNode = createLinkNode(event, mapped, node, op, fn)
+  linkNode.lazy = {
+    active: false,
+    alwaysActive: false,
+    usedBy: 0,
+    activate: [],
+  }
+  addActivator(mapped, [event, linkNode])
   return mapped
 }
 
@@ -191,9 +197,15 @@ export function createEvent<Payload = any>(
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
       })
-      addActivator(event, [contramapped])
       applyTemplate('eventPrepend', getGraph(contramapped))
-      createLinkNode(contramapped, event, [userFnCall()], 'prepend', fn)
+      const linkNode = createLinkNode(
+        contramapped,
+        event,
+        [userFnCall()],
+        'prepend',
+        fn,
+      )
+      addActivator(event, [contramapped, linkNode])
       applyParentHook(event, contramapped)
       return contramapped
     },
@@ -226,10 +238,14 @@ function on<State>(
   )
   forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
     store.off(trigger)
-    getSubscribers(store).set(
-      trigger,
-      createSubscription(updateStore(trigger, store, 'on', callARegStack, fn)),
-    )
+    const linkNode = updateStore(trigger, store, 'on', callARegStack, fn)
+    linkNode.lazy = {
+      active: true,
+      alwaysActive: true,
+      usedBy: 0,
+      activate: [],
+    }
+    getSubscribers(store).set(trigger, createSubscription(linkNode))
   })
   return store
 }
@@ -336,7 +352,13 @@ export function createStore<State>(
       const resultLazy = innerStore.graphite.lazy!
       resultLazy.active = false
       resultLazy.alwaysActive = false
-      addActivator(innerStore, [store])
+      linkNode.lazy = {
+        active: false,
+        alwaysActive: false,
+        usedBy: 0,
+        activate: [],
+      }
+      addActivator(innerStore, [store, linkNode])
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },

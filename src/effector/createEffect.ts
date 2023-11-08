@@ -145,6 +145,12 @@ export function createEffect<Params, Done, Fail = Error>(
     meta: {op: 'fx', fx: 'runner'},
   })
   node.scope.runner = runner
+  runner.lazy = {
+    active: true,
+    alwaysActive: true,
+    usedBy: 0,
+    activate: [],
+  }
   add(
     node.seq,
     calc((params, {runner}, stack) => {
@@ -259,3 +265,10 @@ const sidechain = createNode({
   node: [run({fn: ({fn, value}) => fn(value)})],
   meta: {op: 'fx', fx: 'sidechain'},
 })
+
+sidechain.lazy = {
+  active: true,
+  alwaysActive: true,
+  usedBy: 0,
+  activate: [],
+}

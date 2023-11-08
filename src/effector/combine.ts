@@ -179,9 +179,15 @@ const storeCombination = (
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    lazy.activate.push(child.graphite)
     const linkNode = createLinkNode(child, store, node, 'combine', fn)
+    lazy.activate.push(child.graphite, linkNode)
     linkNode.scope.key = key
+    linkNode.lazy = {
+      active: false,
+      alwaysActive: false,
+      usedBy: 0,
+      activate: [],
+    }
     const childRef = getStoreState(child)
     addRefOp(rawShape, {type: 'field', field: key, from: childRef})
     applyTemplate('combineField', childRef, linkNode)

@@ -52,6 +52,12 @@ export function createScope(unit?: Domain): Scope {
       ),
     ],
   })
+  forkInFlightCounter.lazy = {
+    active: true,
+    alwaysActive: true,
+    usedBy: 0,
+    activate: [],
+  }
   const page = {} as Record<string, StateRef>
   const storeChange = createNode({
     node: [
@@ -86,6 +92,12 @@ export function createScope(unit?: Domain): Scope {
       }),
     ],
   })
+  storeChange.lazy = {
+    active: true,
+    alwaysActive: true,
+    usedBy: 0,
+    activate: [],
+  }
   const warnSerializeNode = createNode({
     node: [
       calc((_, __, stack) => {
@@ -106,6 +118,12 @@ export function createScope(unit?: Domain): Scope {
       }),
     ],
   })
+  warnSerializeNode.lazy = {
+    active: true,
+    alwaysActive: true,
+    usedBy: 0,
+    activate: [],
+  }
   const resultScope: Scope = {
     cloneOf: unit,
     reg: page,

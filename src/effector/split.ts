@@ -151,9 +151,15 @@ export function split(...args: any[]) {
     family: {owners: ownersArray},
     regional: true,
   })
+  splitterNode.lazy = {
+    active: false,
+    alwaysActive: false,
+    usedBy: 0,
+    activate: [],
+  }
   const targetsArray = Object.values(targets)
   const incomingUnits = ownersArray.filter(unit => !targetsArray.includes(unit))
-  addActivator(targetsArray, incomingUnits)
+  addActivator(targetsArray, [...incomingUnits, splitterNode])
   if (clock) {
     createSampling(
       METHOD,
