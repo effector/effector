@@ -37,6 +37,20 @@ function isActiveInScope(store: Store<any> | Event<any>, scope: Scope) {
   return scopeInfo.usedBy + scopeInfo.config.usedBy > 0
 }
 
+test('.on basic case', () => {
+  const inc = createEvent()
+  const $count = createStore(0)
+  $count.on(inc, x => x + 1)
+  expect(isActiveGlobal(inc)).toBe(true)
+})
+
+test('.reset basic case', () => {
+  const trigger = createEvent()
+  const $count = createStore(0)
+  $count.reset(trigger)
+  expect(isActiveGlobal(trigger)).toBe(true)
+})
+
 test('combine basic case', () => {
   const $foo = createStore(0)
   const $bar = combine($foo, n => n)

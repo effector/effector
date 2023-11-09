@@ -29,6 +29,7 @@ export function traverseSetAlwaysActive(node: Node) {
     visited.add(node)
     const lazy = node.lazy
     if (!lazy) return
+    if (lazy.alwaysActive) return
     lazy.active = true
     lazy.alwaysActive = true
     lazy.activate.forEach(traverse)

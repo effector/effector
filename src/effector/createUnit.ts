@@ -45,7 +45,7 @@ import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
-import {addActivator} from './lazy'
+import {addActivator, traverseSetAlwaysActive} from './lazy'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -236,7 +236,9 @@ function on<State>(
     `${methodName} in derived store`,
     `${methodName} in store created via createStore`,
   )
-  forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
+  const unitsArray = Array.isArray(nodeSet) ? nodeSet : [nodeSet]
+  unitsArray.forEach(unit => traverseSetAlwaysActive(getGraph(unit)))
+  forEach(unitsArray, trigger => {
     store.off(trigger)
     const linkNode = updateStore(trigger, store, 'on', callARegStack, fn)
     linkNode.lazy = {
