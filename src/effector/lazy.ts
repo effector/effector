@@ -2,38 +2,52 @@ import {getGraph} from './getter'
 import {Node, NodeUnit} from './index.h'
 import {is} from './is'
 import {Event, Scope, Store} from './unit.h'
+import {traverse} from './collection'
 
-export function addActivator(
-  activator: NodeUnit | NodeUnit[],
-  toActivate: any[],
-) {
-  const activatorsList = [
-    ...new Set(Array.isArray(activator) ? activator : [activator]),
-  ]
+function normalizeUnitsList(nodeUnit: NodeUnit | NodeUnit[]) {
+  return [...new Set(Array.isArray(nodeUnit) ? nodeUnit : [nodeUnit])]
+    .filter(Boolean)
     .map(getGraph)
     .filter(node => node.lazy)
-  ;[...new Set(toActivate)].filter(Boolean).forEach(unit => {
-    const toActivateNode = getGraph(unit)
-    if (!toActivateNode.lazy) return
-    activatorsList.forEach(activatorNode => {
-      toActivateNode.lazy!.usedBy += activatorNode.lazy!.usedBy
-      activatorNode.lazy!.activate.push(toActivateNode)
+}
+
+export function addActivator(targets: NodeUnit | NodeUnit[], sources: any[]) {
+  const targetsList = normalizeUnitsList(targets)
+  const sourcesList = normalizeUnitsList(sources)
+  if (targetsList.some(node => node.lazy!.alwaysActive)) {
+    sourcesList.forEach(traverseSetAlwaysActive)
+  } else {
+    const usedBySum = targetsList.reduce(
+      (sum, node) => node.lazy!.usedBy + sum,
+      0,
+    )
+    sourcesList.forEach(sourceNode => {
+      traverse(sourceNode, (node, visit) => {
+        const lazy = node.lazy
+        if (!lazy) return
+        if (lazy.alwaysActive) return
+        lazy.usedBy += usedBySum
+        if (lazy.usedBy > 0) {
+          lazy.active = true
+        }
+        lazy.activate.forEach(visit)
+      })
+      targetsList.forEach(targetNode => {
+        targetNode.lazy!.activate.push(sourceNode)
+      })
     })
-  })
+  }
 }
 
 export function traverseSetAlwaysActive(node: Node) {
-  const visited = new Set<Node>()
-  ;(function traverse(node: Node) {
-    if (visited.has(node)) return
-    visited.add(node)
+  traverse(node, (node, visit) => {
     const lazy = node.lazy
     if (!lazy) return
     if (lazy.alwaysActive) return
     lazy.active = true
     lazy.alwaysActive = true
-    lazy.activate.forEach(traverse)
-  })(node)
+    lazy.activate.forEach(visit)
+  })
 }
 
 export function traverseIncrementActivations(node: Node, scope?: Scope) {

@@ -213,6 +213,24 @@ describe('sample support', () => {
 
     expect(isActiveGlobal($bar)).toBe(true)
   })
+
+  test('watch added before sample call', () => {
+    const target = createEvent<number>()
+    const $foo = createStore(0)
+    const $bar = combine($foo, n => n)
+    const $baz = combine($bar, n => n)
+
+    const unwatch = target.watch(() => {})
+
+    sample({
+      clock: $baz,
+      target,
+    })
+
+    expect(isActiveGlobal($bar)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal($bar)).toBe(false)
+  })
 })
 
 test('merge support', () => {
@@ -303,6 +321,25 @@ describe('forward support', () => {
     expect(isActiveGlobal(from)).toBe(false)
 
     const unwatch = to.watch(() => {})
+
+    expect(isActiveGlobal(from)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal(from)).toBe(false)
+
+    to.watch(() => {})
+
+    expect(isActiveGlobal(from)).toBe(true)
+    unwatchFwd()
+    expect(isActiveGlobal(from)).toBe(false)
+  })
+
+  test('watch added before forward call', () => {
+    const from = createEvent()
+    const to = createEvent()
+
+    const unwatch = to.watch(() => {})
+
+    const unwatchFwd = forward({from, to})
 
     expect(isActiveGlobal(from)).toBe(true)
     unwatch()

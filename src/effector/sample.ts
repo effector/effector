@@ -24,7 +24,7 @@ import {merge} from './merge'
 import {applyTemplate} from './template'
 import {own} from './own'
 import {createLinkNode} from './forward'
-import {addActivator, traverseSetAlwaysActive} from './lazy'
+import {addActivator} from './lazy'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -205,21 +205,7 @@ export const createSampling = (
     activate: [],
   }
   addActivator(jointNode, [source, clock, filter])
-  const targets = Array.isArray(target) ? target : [target]
-  const targetNodes = targets.map(getGraph).filter(node => node.lazy)
-  if (targetNodes.some(node => node.lazy!.alwaysActive)) {
-    traverseSetAlwaysActive(jointNode)
-  } else {
-    targetNodes.forEach(node => {
-      const unitLazy = node.lazy!
-      /**
-       * if some activator appeared in graph twice,
-       * it will appear in usedBy twice too
-       **/
-      jointNode.lazy!.usedBy += unitLazy.usedBy
-      unitLazy.activate.push(jointNode)
-    })
-  }
+  addActivator(target, [jointNode])
   return target
 }
 
