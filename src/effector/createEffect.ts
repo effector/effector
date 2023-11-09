@@ -49,6 +49,12 @@ export function createEffect<Params, Done, Fail = Error>(
     named: 'finally',
     derived: true,
   }))
+  anyway.graphite.lazy = {
+    active: true,
+    alwaysActive: true,
+    usedBy: 0,
+    activate: [],
+  }
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
     fn({
