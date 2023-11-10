@@ -27,9 +27,6 @@ export function addActivator(targets: NodeUnit | NodeUnit[], sources: any[]) {
         if (!lazy) return
         if (lazy.alwaysActive) return
         lazy.usedBy += usedBySum
-        if (lazy.usedBy > 0) {
-          lazy.active = true
-        }
         lazy.activate.forEach(visit)
       })
       targetsList.forEach(targetNode => {
@@ -44,7 +41,6 @@ export function traverseSetAlwaysActive(node: Node) {
     const lazy = node.lazy
     if (!lazy) return
     if (lazy.alwaysActive) return
-    lazy.active = true
     lazy.alwaysActive = true
     lazy.activate.forEach(visit)
   })
@@ -61,7 +57,6 @@ export function traverseIncrementActivations(node: Node, scope?: Scope) {
     const scopeInfo = scope.lazy[node.id]
     scopeInfo.usedBy += 1
   } else {
-    lazy.active = true
     lazy.usedBy += 1
   }
   lazy.activate.forEach(currentNode =>
@@ -78,9 +73,6 @@ export function traverseDecrementActivations(node: Node, scope?: Scope) {
     }
   } else {
     lazy.usedBy -= 1
-    if (lazy.usedBy < 1) {
-      lazy.active = false
-    }
   }
   lazy.activate.forEach(currentNode =>
     traverseDecrementActivations(currentNode, scope),

@@ -111,7 +111,6 @@ const storeCombination = (
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
   const lazy = store.graphite.lazy!
-  lazy.active = false
   lazy.alwaysActive = false
   const rawShapeReader = read(rawShape)
   /**
@@ -183,7 +182,6 @@ const storeCombination = (
     lazy.activate.push(child.graphite, linkNode)
     linkNode.scope.key = key
     linkNode.lazy = {
-      active: false,
       alwaysActive: false,
       usedBy: 0,
       activate: [],

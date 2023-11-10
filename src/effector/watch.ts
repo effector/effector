@@ -24,7 +24,6 @@ export const watchUnit = (
   traverseIncrementActivations(getGraph(unit))
   node.lazy = {
     alwaysActive: true,
-    active: true,
     usedBy: 0,
     activate: [getGraph(unit)],
   }

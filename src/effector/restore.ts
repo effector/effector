@@ -25,7 +25,6 @@ export function restore(obj: any, defaultState: any, config?: any) {
      * This is not a final decision!
      **/
     result.graphite.lazy!.alwaysActive = false
-    result.graphite.lazy!.active = false
     addActivator(result, [clock])
     if (domain) domain.hooks.store(result)
     return result

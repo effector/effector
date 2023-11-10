@@ -65,7 +65,6 @@ export function createWatch<T>({
       traverseIncrementActivations(u.graphite, scope)
       node.lazy = {
         alwaysActive: true,
-        active: true,
         usedBy: 0,
         activate: [],
       }
@@ -85,7 +84,6 @@ export function createWatch<T>({
     )
     node.lazy = {
       alwaysActive: true,
-      active: true,
       usedBy: 0,
       activate: activateList,
     }

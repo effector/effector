@@ -199,7 +199,6 @@ export const createSampling = (
   own(source, [jointNode])
   Object.assign(jointNode.meta, metadata, {joint: true})
   jointNode.lazy = {
-    active: false,
     alwaysActive: false,
     usedBy: 0,
     activate: [],

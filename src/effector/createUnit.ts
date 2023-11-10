@@ -115,7 +115,6 @@ const deriveEvent = (
   })
   const linkNode = createLinkNode(event, mapped, node, op, fn)
   linkNode.lazy = {
-    active: false,
     alwaysActive: false,
     usedBy: 0,
     activate: [],
@@ -212,7 +211,6 @@ export function createEvent<Payload = any>(
   })
   finalEvent.graphite.lazy = {
     alwaysActive: false,
-    active: false,
     usedBy: 0,
     activate: [],
   }
@@ -242,7 +240,6 @@ function on<State>(
     store.off(trigger)
     const linkNode = updateStore(trigger, store, 'on', callARegStack, fn)
     linkNode.lazy = {
-      active: true,
       alwaysActive: true,
       usedBy: 0,
       activate: [],
@@ -352,10 +349,8 @@ export function createStore<State>(
       })
       getStoreState(innerStore).noInit = true
       const resultLazy = innerStore.graphite.lazy!
-      resultLazy.active = false
       resultLazy.alwaysActive = false
       linkNode.lazy = {
-        active: false,
         alwaysActive: false,
         usedBy: 0,
         activate: [],
@@ -415,7 +410,6 @@ export function createStore<State>(
   })
   store.graphite.lazy = {
     alwaysActive: true,
-    active: true,
     usedBy: 0,
     activate: [],
   }

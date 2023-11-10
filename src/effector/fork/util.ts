@@ -3,7 +3,7 @@ import {is} from '../is'
 import {assert} from '../throw'
 import type {Store, Effect, ValuesMap, HandlersMap} from '../unit.h'
 import type {Node, Unit} from '../index.h'
-import {add, forEach, includes} from '../collection'
+import {add, forEach, includes, traverse} from '../collection'
 import {STORE} from '../tag'
 
 export function traverseStores(
@@ -20,10 +20,7 @@ export function traverseStores(
   fn: (node: Node, sid: string) => void,
   needSidlessStores?: boolean,
 ) {
-  const list = [] as Node[]
-  ;(function visit(node) {
-    if (includes(list, node)) return
-    add(list, node)
+  traverse(root, (node, visit) => {
     if (getMeta(node, 'op') === STORE) {
       if (needSidlessStores || getMeta(node, 'sid')) {
         fn(node, getMeta(node, 'sid'))
@@ -32,7 +29,7 @@ export function traverseStores(
     forEach(node.next, visit)
     forEach(getOwners(node), visit)
     forEach(getLinks(node), visit)
-  })(root)
+  })
 }
 
 type StoreOrEffect = Store<any> | Effect<any, any, any>

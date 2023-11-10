@@ -509,7 +509,6 @@ export type Node = {
   }
   lazy?: {
     alwaysActive: boolean
-    active: boolean
     usedBy: number
   }
 }

@@ -53,7 +53,6 @@ export function createScope(unit?: Domain): Scope {
     ],
   })
   forkInFlightCounter.lazy = {
-    active: true,
     alwaysActive: true,
     usedBy: 0,
     activate: [],
@@ -93,7 +92,6 @@ export function createScope(unit?: Domain): Scope {
     ],
   })
   storeChange.lazy = {
-    active: true,
     alwaysActive: true,
     usedBy: 0,
     activate: [],
@@ -119,7 +117,6 @@ export function createScope(unit?: Domain): Scope {
     ],
   })
   warnSerializeNode.lazy = {
-    active: true,
     alwaysActive: true,
     usedBy: 0,
     activate: [],

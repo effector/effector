@@ -50,7 +50,6 @@ export function createEffect<Params, Done, Fail = Error>(
     derived: true,
   }))
   anyway.graphite.lazy = {
-    active: true,
     alwaysActive: true,
     usedBy: 0,
     activate: [],
@@ -152,7 +151,6 @@ export function createEffect<Params, Done, Fail = Error>(
   })
   node.scope.runner = runner
   runner.lazy = {
-    active: true,
     alwaysActive: true,
     usedBy: 0,
     activate: [],
@@ -219,7 +217,6 @@ export function createEffect<Params, Done, Fail = Error>(
   }))
 
   instance.graphite.lazy!.alwaysActive = true
-  instance.graphite.lazy!.active = true
 
   own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
   if (config?.domain) {
@@ -273,7 +270,6 @@ const sidechain = createNode({
 })
 
 sidechain.lazy = {
-  active: true,
   alwaysActive: true,
   usedBy: 0,
   activate: [],

@@ -46,7 +46,6 @@ export type Config = {
 
 export type LazyConfig = {
   alwaysActive: boolean
-  active: boolean
   usedBy: number
   activate: Node[]
 }

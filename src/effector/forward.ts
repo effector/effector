@@ -44,7 +44,6 @@ export const forward = (opts: {
     regional: true,
   })
   node.lazy = {
-    active: false,
     alwaysActive: false,
     usedBy: 0,
     activate: [],

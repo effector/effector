@@ -152,7 +152,6 @@ export function split(...args: any[]) {
     regional: true,
   })
   splitterNode.lazy = {
-    active: false,
     alwaysActive: false,
     usedBy: 0,
     activate: [],
