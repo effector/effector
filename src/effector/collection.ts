@@ -37,9 +37,13 @@ export function traverse<T>(
   cb: (item: T, visit: (item: T) => void) => void,
 ) {
   const visited = new Set<T>()
-  ;(function visit(item) {
-    if (visited.has(item)) return
-    visited.add(item)
-    cb(item, visit)
-  })(startItem)
+  const stack = [startItem]
+  const visit = (item: T) => stack.push(item)
+  let item: T | void
+  while ((item = stack.shift())) {
+    if (!visited.has(item)) {
+      visited.add(item)
+      cb(item, visit)
+    }
+  }
 }
