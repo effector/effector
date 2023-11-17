@@ -264,26 +264,28 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   }
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
+      if (isUsed(getGraph(unit[i]), forkPageForLaunch))
+        pushFirstHeapItem(
+          'pure',
+          pageForLaunch,
+          getGraph(unit[i]),
+          stackForLaunch,
+          payload[i],
+          forkPageForLaunch,
+          meta,
+        )
+    }
+  } else {
+    if (isUsed(getGraph(unit), forkPageForLaunch))
       pushFirstHeapItem(
         'pure',
         pageForLaunch,
-        getGraph(unit[i]),
+        getGraph(unit),
         stackForLaunch,
-        payload[i],
+        payload,
         forkPageForLaunch,
         meta,
       )
-    }
-  } else {
-    pushFirstHeapItem(
-      'pure',
-      pageForLaunch,
-      getGraph(unit),
-      stackForLaunch,
-      payload,
-      forkPageForLaunch,
-      meta,
-    )
   }
   if (upsert && !isRoot) return
   /** main execution code */
@@ -393,8 +395,37 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         case 'compute':
           const data = step.data
           if (data.fn) {
+            // const stats = getStats(forkPage)
+
             isWatch = getMeta(node, 'op') === 'watch'
             isPure = data.pure
+            // const lazyInfo = node.lazy
+            // if (lazyInfo) {
+            //   let active: boolean
+            //   if (lazyInfo.alwaysActive) {
+            //     active = true
+            //   } else {
+            //     let usedBy = lazyInfo.usedBy.length
+            //     if (forkPage && forkPage.lazy[node.id]) {
+            //       usedBy += forkPage.lazy[node.id].usedBy.length
+            //     }
+            //     active = usedBy > 0
+            //   }
+            //   if (data.safe) {
+            //     if (active) stats.safeActive += 1
+            //     else stats.safeInactive += 1
+            //   } else {
+            //     if (active) stats.unsafeActive += 1
+            //     else stats.unsafeInactive += 1
+            //   }
+            // } else {
+            //   if (data.safe) {
+            //     console.log(node)
+            //     stats.safeNoInfo += 1
+            //   } else {
+            //     stats.unsafeNoInfo += 1
+            //   }
+            // }
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
               : tryRun(local, data.fn, stack)
@@ -422,7 +453,15 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
       forEach(node.next, nextNode => {
-        pushFirstHeapItem('child', page, nextNode, stack, finalValue, forkPage)
+        if (isUsed(nextNode, forkPage))
+          pushFirstHeapItem(
+            'child',
+            page,
+            nextNode,
+            stack,
+            finalValue,
+            forkPage,
+          )
       })
       if (forkPage) {
         if (getMeta(node, 'needFxCounter'))
@@ -455,6 +494,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         const additionalLinks = forkPage.additionalLinks[node.id]
         if (additionalLinks) {
           forEach(additionalLinks, nextNode => {
+            /** additionalLinks are watchers, always used */
             pushFirstHeapItem(
               'child',
               page,
@@ -474,6 +514,46 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
 }
 
 const noopParser = (x: any) => x
+
+/**
+ * very ineffective implementation
+ * as it lack verification that ref is already active
+ * moreover, there should be a logic for checking
+ * that ref is inactive but has actual state
+ * (for case when dependencies was not changed,
+ * but store recieved .getState calls once or even more times)
+ **/
+export function initRefAfterActivation(ref: StateRef) {
+  if (!ref.before) return
+  let isFresh = false
+  forEach(ref.before, cmd => {
+    switch (cmd.type) {
+      case MAP: {
+        const from = cmd.from
+        if (from || cmd.fn) {
+          if (from) initRefAfterActivation(from)
+          const value = from && from.current
+          ref.current = cmd.fn ? cmd.fn(value) : value
+        }
+        break
+      }
+      case 'field': {
+        if (!isFresh) {
+          isFresh = true
+          if (Array.isArray(ref.current)) {
+            ref.current = [...ref.current]
+          } else {
+            ref.current = {...ref.current}
+          }
+        }
+        const from = cmd.from
+        initRefAfterActivation(from)
+        ref.current[cmd.field] = from.current
+        break
+      }
+    }
+  })
+}
 
 export const initRefInScope = (
   scope: Scope,
@@ -541,6 +621,12 @@ export const initRefInScope = (
   }
   if (sid) scope.sidIdMap[sid] = sourceRef.id
   refsMap[sourceRef.id] = ref
+}
+
+function isUsed(node: Node, scope: Scope | void | null) {
+  if (!node.lazy || node.lazy.alwaysActive) return true
+  if (!scope || !scope.lazy[node.id]) return node.lazy.usedBy.length > 0
+  return scope.lazy[node.id].usedBy.length + node.lazy.usedBy.length > 0
 }
 
 /** try catch for external functions */

@@ -25,6 +25,7 @@ import {
   setCurrentPage,
   initRefInScope,
   isPure,
+  initRefAfterActivation,
 } from './kernel'
 
 import {createName} from './naming'
@@ -289,6 +290,12 @@ export function createStore<State>(
         reachedPage = forkPage
       }
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
+      if (
+        !store.graphite.lazy!.alwaysActive &&
+        store.graphite.lazy!.usedBy.length === 0
+      ) {
+        initRefAfterActivation(targetRef)
+      }
       return readRef(targetRef)
     },
     setState: (state: State) =>

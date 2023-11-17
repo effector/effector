@@ -2,6 +2,7 @@ import {getGraph} from './getter'
 import {Node, NodeUnit} from './index.h'
 import {Scope} from './unit.h'
 import {removeItem, traverse} from './collection'
+import {initRefAfterActivation} from './kernel'
 
 function normalizeUnitsList(nodeUnit: NodeUnit | NodeUnit[]) {
   return [...new Set(Array.isArray(nodeUnit) ? nodeUnit : [nodeUnit])]
@@ -29,6 +30,13 @@ export function addActivator(
         const lazy = node.lazy
         if (!lazy) return
         if (lazy.alwaysActive) return
+        if (
+          lazy.usedBy.length === 0 &&
+          targetsList.length > 0 &&
+          node.scope.stateRef
+        ) {
+          initRefAfterActivation(node.scope.stateRef)
+        }
         usedByDeps.forEach(depNode => {
           depNode.lazy!.activate.push(node)
           node.lazy!.usedBy.push(depNode)
