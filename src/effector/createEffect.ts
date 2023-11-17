@@ -49,11 +49,7 @@ export function createEffect<Params, Done, Fail = Error>(
     named: 'finally',
     derived: true,
   }))
-  anyway.graphite.lazy = {
-    alwaysActive: true,
-    usedBy: [],
-    activate: [],
-  }
+  anyway.graphite.lazy!.alwaysActive = true
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
     fn({
@@ -94,6 +90,7 @@ export function createEffect<Params, Done, Fail = Error>(
   }))
 
   const runner = createNode({
+    alwaysActive: true,
     scope: {
       handler:
         instance.defaultConfig.handler ||
@@ -150,11 +147,6 @@ export function createEffect<Params, Done, Fail = Error>(
     meta: {op: 'fx', fx: 'runner'},
   })
   node.scope.runner = runner
-  runner.lazy = {
-    alwaysActive: true,
-    usedBy: [],
-    activate: [],
-  }
   add(
     node.seq,
     calc((params, {runner}, stack) => {
@@ -265,12 +257,7 @@ export const onSettled =
     })
   }
 const sidechain = createNode({
+  alwaysActive: true,
   node: [run({fn: ({fn, value}) => fn(value)})],
   meta: {op: 'fx', fx: 'sidechain'},
 })
-
-sidechain.lazy = {
-  alwaysActive: true,
-  usedBy: [],
-  activate: [],
-}

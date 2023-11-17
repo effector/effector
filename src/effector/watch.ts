@@ -14,6 +14,8 @@ export const watchUnit = (
 ): Subscription => {
   assert(isFunction(handler), '.watch argument should be a function')
   const node = createNode({
+    alwaysActive: true,
+    activate: [getGraph(unit)],
     scope: {fn: handler},
     node: [run({fn: callStack})],
     parent: unit,
@@ -22,10 +24,5 @@ export const watchUnit = (
     regional: true,
   })
   traverseIncrementActivations(getGraph(unit), node)
-  node.lazy = {
-    alwaysActive: true,
-    usedBy: [],
-    activate: [getGraph(unit)],
-  }
   return createSubscription(node)
 }

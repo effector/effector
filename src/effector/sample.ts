@@ -180,7 +180,8 @@ export const createSampling = (
         traverseDecrementActivations(node, jointNode, scope!)
       })
     }
-    const filterNode = createNode({
+    createNode({
+      alwaysActive: true,
       meta: {op: 'sample', joint: false},
       parent: filter as DataCarrier,
       node: [
@@ -193,11 +194,6 @@ export const createSampling = (
         }),
       ],
     })
-    filterNode.lazy = {
-      alwaysActive: true,
-      usedBy: [],
-      activate: [],
-    }
     const [filterRef, hasFilter] = syncSourceState(
       filter as DataCarrier,
       target,
@@ -233,16 +229,11 @@ export const createSampling = (
     ],
     method,
     fn,
+    false,
   )
   // @ts-expect-error
   own(source, [jointNode])
   Object.assign(jointNode.meta, metadata, {joint: true})
-  jointNode.lazy = {
-    alwaysActive: false,
-    controller: true,
-    usedBy: [],
-    activate: [],
-  }
   addActivator(target, [jointNode], true)
   let needToAddUsedBy = true
   if (is.store(filter) && filter.getState()) {

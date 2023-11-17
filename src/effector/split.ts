@@ -145,6 +145,7 @@ export function split(...args: any[]) {
   }
   const ownersArray = Array.from(owners)
   const splitterNode = createNode({
+    alwaysActive: false,
     meta: {op: METHOD},
     parent: clock ? [] : source,
     scope: targets,
@@ -152,11 +153,6 @@ export function split(...args: any[]) {
     family: {owners: ownersArray},
     regional: true,
   })
-  splitterNode.lazy = {
-    alwaysActive: false,
-    usedBy: [],
-    activate: [],
-  }
   const targetsArray = Object.values(targets)
   const incomingUnits = ownersArray.filter(unit => !targetsArray.includes(unit))
   addActivator(targetsArray, [...incomingUnits, splitterNode], true)

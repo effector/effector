@@ -5,7 +5,6 @@ import {createSubscription} from './subscription'
 import {assertNodeSet, assertTarget} from './is'
 import {deprecate} from './throw'
 import {addActivator} from './lazy'
-import {getGraph} from './getter'
 
 export const createLinkNode = (
   parent: NodeUnit | NodeUnit[],
@@ -13,8 +12,10 @@ export const createLinkNode = (
   node?: Array<Cmd | false | void | null>,
   op?: string,
   scopeFn?: Function,
+  alwaysActive?: boolean,
 ) =>
   createNode({
+    alwaysActive,
     node,
     parent,
     child,
@@ -37,17 +38,13 @@ export const forward = (opts: {
   const fromNormalized = Array.isArray(from) ? from : [from]
   const toNormalized = Array.isArray(to) ? to : [to]
   const node = createNode({
+    alwaysActive: false,
     parent: from,
     child: to,
     meta: {op: method, config},
     family: {},
     regional: true,
   })
-  node.lazy = {
-    alwaysActive: false,
-    usedBy: [],
-    activate: [],
-  }
   /**
    * WARN! Memory leaks in clearNode here
    * need to implement bidirectional activators links

@@ -22,6 +22,8 @@ export function createNode({
   meta = {},
   family: familyRaw = {type: 'regular'},
   regional,
+  alwaysActive,
+  activate,
 }: {
   node?: Array<Cmd | false | void | null>
   from?: NodeUnit | NodeUnit[]
@@ -38,6 +40,8 @@ export function createNode({
     owners?: NodeUnit | Array<NodeUnit | NodeUnit[]>
   }
   regional?: boolean
+  alwaysActive?: boolean
+  activate?: Node[]
 } = {}): Node {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
@@ -55,6 +59,13 @@ export function createNode({
       links,
       owners,
     },
+  }
+  if (alwaysActive !== undefined || activate) {
+    result.lazy = {
+      alwaysActive: !!alwaysActive,
+      usedBy: [],
+      activate: activate || [],
+    }
   }
   forEach(links, link => add(getOwners(link), result))
   forEach(owners, owner => add(getLinks(owner), result))

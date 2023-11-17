@@ -45,17 +45,12 @@ export function createWatch<T>({
       scopeLinks[u.graphite.id] = links
 
       const node = createNode({
+        alwaysActive: true,
         node: prepareSeq(seq, u),
         meta: {
           watchOp: u.kind,
         },
       })
-
-      node.lazy = {
-        alwaysActive: true,
-        usedBy: [],
-        activate: [],
-      }
 
       links.push(node)
 
@@ -74,17 +69,14 @@ export function createWatch<T>({
       unsubs.forEach(u => u())
     })
   } else {
+    const activateList = units.map(unit => unit.graphite)
     const node = createNode({
+      alwaysActive: true,
+      activate: activateList,
       node: seq,
       parent: units,
       family: {owners: units},
     })
-    const activateList = units.map(unit => unit.graphite)
-    node.lazy = {
-      alwaysActive: true,
-      usedBy: [],
-      activate: activateList,
-    }
     activateList.forEach(currentNode =>
       traverseIncrementActivations(currentNode, node),
     )

@@ -169,6 +169,7 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
+      alwaysActive: false,
       meta: initUnit(config.actualOp || EVENT, event, config),
       regional: true,
     }),
@@ -210,11 +211,6 @@ export function createEvent<Payload = any>(
       return contramapped
     },
   })
-  finalEvent.graphite.lazy = {
-    alwaysActive: false,
-    usedBy: [],
-    activate: [],
-  }
   if (config?.domain) {
     config.domain.hooks.event(finalEvent)
   }
@@ -355,8 +351,7 @@ export function createStore<State>(
         from: plainState,
       })
       getStoreState(innerStore).noInit = true
-      const resultLazy = innerStore.graphite.lazy!
-      resultLazy.alwaysActive = false
+      innerStore.graphite.lazy!.alwaysActive = false
       linkNode.lazy = {
         alwaysActive: false,
         usedBy: [],
@@ -384,6 +379,7 @@ export function createStore<State>(
   const meta = initUnit(STORE, store, config)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
+    alwaysActive: true,
     scope: {state: plainState, fn: updateFilter},
     node: [
       calc((upd, _, stack) => {
@@ -415,11 +411,6 @@ export function createStore<State>(
     },
     regional: true,
   })
-  store.graphite.lazy = {
-    alwaysActive: true,
-    usedBy: [],
-    activate: [],
-  }
   setMeta(store, 'id', store.graphite.id)
   setMeta(store, 'rootStateRefId', plainStateId)
   const serializeMeta = getMeta(store, 'serialize')
