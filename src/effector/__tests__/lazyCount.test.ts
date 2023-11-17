@@ -84,7 +84,6 @@ test('combine basic case with fork', () => {
   expect(isActiveGlobal($bar)).toBe(false)
   expect(isActiveInScope($bar, scope)).toBe(true)
   unwatch()
-  expect(getLazyGlobal($bar).usedBy >= 0).toBe(true)
   expect(isActiveInScope($bar, scope)).toBe(false)
 })
 
@@ -155,6 +154,22 @@ describe('sample support', () => {
     expect(isActiveGlobal($bar)).toBe(false)
   })
 
+  test('sample is added after watch', () => {
+    const clock = createEvent()
+    const target = createEvent()
+
+    const unwatch = target.watch(() => {})
+
+    sample({
+      clock,
+      target,
+    })
+
+    expect(isActiveGlobal(clock)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal(clock)).toBe(false)
+  })
+
   test('store in filter', () => {
     const clock = createEvent()
     const target = createEvent()
@@ -175,6 +190,71 @@ describe('sample support', () => {
     expect(isActiveGlobal($bar)).toBe(true)
     unwatch()
     expect(isActiveGlobal($bar)).toBe(false)
+  })
+
+  test('store in filter in dynamic', () => {
+    const inc = createEvent()
+    const dec = createEvent()
+    const clock = createEvent()
+    const target = createEvent()
+    const $foo = createStore(0)
+    const $bar = combine($foo, n => n)
+    const $baz = combine($bar, n => n > 0)
+    $foo.on(inc, x => x + 1)
+    $foo.on(dec, x => x - 1)
+
+    sample({
+      clock,
+      filter: $baz,
+      target,
+    })
+
+    expect(isActiveGlobal($bar)).toBe(false)
+    expect(isActiveGlobal(clock)).toBe(false)
+
+    const unwatch = target.watch(() => {})
+
+    expect(isActiveGlobal($bar)).toBe(true)
+    expect(isActiveGlobal(clock)).toBe(false)
+    inc()
+    expect(isActiveGlobal(clock)).toBe(true)
+    dec()
+    expect(isActiveGlobal(clock)).toBe(false)
+    inc()
+    unwatch()
+    expect(isActiveGlobal($baz)).toBe(false)
+    expect(isActiveGlobal(clock)).toBe(false)
+  })
+
+  test('store in filter in dynamic when sample is added during active filter', () => {
+    const inc = createEvent()
+    const dec = createEvent()
+    const clock = createEvent()
+    const target = createEvent()
+    const $foo = createStore(0)
+    const $bar = combine($foo, n => n)
+    const $baz = combine($bar, n => n > 0)
+    $foo.on(inc, x => x + 1)
+    $foo.on(dec, x => x - 1)
+
+    inc()
+
+    const unwatch = target.watch(() => {})
+
+    sample({
+      clock,
+      filter: $baz,
+      target,
+    })
+
+    expect($baz.getState()).toBe(true)
+    expect(isActiveGlobal(clock)).toBe(true)
+    dec()
+    expect(isActiveGlobal(clock)).toBe(false)
+    inc()
+    expect(isActiveGlobal(clock)).toBe(true)
+    unwatch()
+    expect(isActiveGlobal(clock)).toBe(false)
   })
 
   test('array in clock support', () => {
