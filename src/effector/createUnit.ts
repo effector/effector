@@ -114,12 +114,7 @@ const deriveEvent = (
     derived: true,
     and: config,
   })
-  const linkNode = createLinkNode(event, mapped, node, op, fn)
-  linkNode.lazy = {
-    alwaysActive: false,
-    usedBy: [],
-    activate: [],
-  }
+  const linkNode = createLinkNode(event, mapped, node, op, fn, false)
   addActivator(mapped, [event, linkNode], true)
   return mapped
 }
@@ -235,12 +230,7 @@ function on<State>(
   unitsArray.forEach(unit => traverseSetAlwaysActive(getGraph(unit)))
   forEach(unitsArray, trigger => {
     store.off(trigger)
-    const linkNode = updateStore(trigger, store, 'on', callARegStack, fn)
-    linkNode.lazy = {
-      alwaysActive: true,
-      usedBy: [],
-      activate: [],
-    }
+    const linkNode = updateStore(trigger, store, 'on', callARegStack, fn, true)
     getSubscribers(store).set(trigger, createSubscription(linkNode))
   })
   return store
@@ -344,7 +334,7 @@ export function createStore<State>(
         ...outerConfig,
         and: mapConfig,
       })
-      const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
+      const linkNode = updateStore(store, innerStore, MAP, callStack, fn, false)
       addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
@@ -352,11 +342,6 @@ export function createStore<State>(
       })
       getStoreState(innerStore).noInit = true
       innerStore.graphite.lazy!.alwaysActive = false
-      linkNode.lazy = {
-        alwaysActive: false,
-        usedBy: [],
-        activate: [],
-      }
       addActivator(innerStore, [store, linkNode], true)
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
@@ -458,6 +443,7 @@ const updateStore = (
   op: string,
   caller: typeof callStackAReg,
   fn: Function,
+  alwaysActive: boolean,
 ) => {
   const storeRef = getStoreState(store)
   const reader = mov({
@@ -478,5 +464,5 @@ const updateStore = (
     node,
     is.store(from) && getStoreState(from),
   )
-  return createLinkNode(from, store, node, op, fn)
+  return createLinkNode(from, store, node, op, fn, alwaysActive)
 }
