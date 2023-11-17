@@ -183,7 +183,7 @@ const storeCombination = (
     linkNode.scope.key = key
     linkNode.lazy = {
       alwaysActive: false,
-      usedBy: 0,
+      usedBy: [],
       activate: [],
     }
     const childRef = getStoreState(child)

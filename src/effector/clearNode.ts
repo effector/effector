@@ -24,7 +24,11 @@ const clearNodeNormalized = (
   if (targetNode.lazy) {
     list = targetNode.lazy.activate
     while ((currentNode = list.pop())) {
-      traverseDecrementActivations(currentNode)
+      traverseDecrementActivations(currentNode, targetNode)
+      let dependencyTarget
+      while ((dependencyTarget = targetNode.lazy.usedBy.pop())) {
+        traverseDecrementActivations(currentNode, dependencyTarget)
+      }
     }
   }
   list = getLinks(targetNode)

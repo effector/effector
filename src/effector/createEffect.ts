@@ -51,7 +51,7 @@ export function createEffect<Params, Done, Fail = Error>(
   }))
   anyway.graphite.lazy = {
     alwaysActive: true,
-    usedBy: 0,
+    usedBy: [],
     activate: [],
   }
   const done = (instance.done = (anyway as any).filterMap({
@@ -152,7 +152,7 @@ export function createEffect<Params, Done, Fail = Error>(
   node.scope.runner = runner
   runner.lazy = {
     alwaysActive: true,
-    usedBy: 0,
+    usedBy: [],
     activate: [],
   }
   add(
@@ -271,6 +271,6 @@ const sidechain = createNode({
 
 sidechain.lazy = {
   alwaysActive: true,
-  usedBy: 0,
+  usedBy: [],
   activate: [],
 }

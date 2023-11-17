@@ -1,8 +1,7 @@
 import {getGraph} from './getter'
 import {Node, NodeUnit} from './index.h'
-import {is} from './is'
-import {Event, Scope, Store} from './unit.h'
-import {traverse} from './collection'
+import {Scope} from './unit.h'
+import {removeItem, traverse} from './collection'
 
 function normalizeUnitsList(nodeUnit: NodeUnit | NodeUnit[]) {
   return [...new Set(Array.isArray(nodeUnit) ? nodeUnit : [nodeUnit])]
@@ -11,22 +10,32 @@ function normalizeUnitsList(nodeUnit: NodeUnit | NodeUnit[]) {
     .filter(node => node.lazy)
 }
 
-export function addActivator(targets: NodeUnit | NodeUnit[], sources: any[]) {
+export function addActivator(
+  targets: NodeUnit | NodeUnit[],
+  sources: any[],
+  notUsed?: boolean,
+) {
   const targetsList = normalizeUnitsList(targets)
   const sourcesList = normalizeUnitsList(sources)
   if (targetsList.some(node => node.lazy!.alwaysActive)) {
     sourcesList.forEach(traverseSetAlwaysActive)
   } else {
-    const usedBySum = targetsList.reduce(
-      (sum, node) => node.lazy!.usedBy + sum,
-      0,
-    )
+    const usedByDeps = targetsList
+      .map(node => node.lazy!.usedBy)
+      .flat()
+      .filter(node => node.lazy)
     sourcesList.forEach(sourceNode => {
       traverse(sourceNode, (node, visit) => {
         const lazy = node.lazy
         if (!lazy) return
         if (lazy.alwaysActive) return
-        lazy.usedBy += usedBySum
+        usedByDeps.forEach(depNode => {
+          depNode.lazy!.activate.push(node)
+          node.lazy!.usedBy.push(depNode)
+        })
+        if (!notUsed) {
+          lazy.usedBy.push(...targetsList)
+        }
         lazy.activate.forEach(visit)
       })
       targetsList.forEach(targetNode => {
@@ -46,35 +55,47 @@ export function traverseSetAlwaysActive(node: Node) {
   })
 }
 
-export function traverseIncrementActivations(node: Node, scope?: Scope) {
-  // console.log('increment', node)
+export function traverseIncrementActivations(
+  node: Node,
+  usedBy: Node,
+  scope?: Scope,
+) {
   const lazy = node.lazy
   if (!lazy || lazy.alwaysActive) return
   if (scope) {
     if (!scope.lazy[node.id]) {
-      scope.lazy[node.id] = {usedBy: 0, config: lazy}
+      scope.lazy[node.id] = {usedBy: [], config: lazy}
     }
     const scopeInfo = scope.lazy[node.id]
-    scopeInfo.usedBy += 1
+    scopeInfo.usedBy.push(usedBy)
   } else {
-    lazy.usedBy += 1
+    lazy.usedBy.push(usedBy)
   }
   lazy.activate.forEach(currentNode =>
-    traverseIncrementActivations(currentNode, scope),
+    traverseIncrementActivations(currentNode, usedBy, scope),
   )
 }
 
-export function traverseDecrementActivations(node: Node, scope?: Scope) {
+export function traverseDecrementActivations(
+  node: Node,
+  usedBy: Node,
+  scope?: Scope,
+) {
   const lazy = node.lazy
   if (!lazy || lazy.alwaysActive) return
   if (scope) {
     if (scope.lazy[node.id]) {
-      scope.lazy[node.id].usedBy -= 1
+      removeItem(scope.lazy[node.id].usedBy, usedBy)
     }
   } else {
-    lazy.usedBy -= 1
+    removeItem(lazy.usedBy, usedBy)
+    if (lazy.usedBy.length === 0) {
+      lazy.activate.forEach(currentNode =>
+        traverseDecrementActivations(currentNode, node, scope),
+      )
+    }
   }
   lazy.activate.forEach(currentNode =>
-    traverseDecrementActivations(currentNode, scope),
+    traverseDecrementActivations(currentNode, usedBy, scope),
   )
 }

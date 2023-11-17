@@ -51,23 +51,24 @@ export function createWatch<T>({
         },
       })
 
+      node.lazy = {
+        alwaysActive: true,
+        usedBy: [],
+        activate: [],
+      }
+
       links.push(node)
 
       unsubs.push(() => {
         const idx = links.indexOf(node)
         if (idx !== -1) links.splice(idx, 1)
         /** note that watch node is not in scope.lazy map */
-        traverseDecrementActivations(u.graphite, scope)
+        traverseDecrementActivations(u.graphite, node, scope)
         clearNode(node)
       })
 
       /** note that watch node is not in scope.lazy map */
-      traverseIncrementActivations(u.graphite, scope)
-      node.lazy = {
-        alwaysActive: true,
-        usedBy: 0,
-        activate: [],
-      }
+      traverseIncrementActivations(u.graphite, node, scope)
     })
     return addUnsubscribe(() => {
       unsubs.forEach(u => u())
@@ -79,14 +80,14 @@ export function createWatch<T>({
       family: {owners: units},
     })
     const activateList = units.map(unit => unit.graphite)
-    activateList.forEach(currentNode =>
-      traverseIncrementActivations(currentNode),
-    )
     node.lazy = {
       alwaysActive: true,
-      usedBy: 0,
+      usedBy: [],
       activate: activateList,
     }
+    activateList.forEach(currentNode =>
+      traverseIncrementActivations(currentNode, node),
+    )
     return addUnsubscribe(() => {
       clearNode(node)
     })

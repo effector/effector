@@ -116,10 +116,10 @@ const deriveEvent = (
   const linkNode = createLinkNode(event, mapped, node, op, fn)
   linkNode.lazy = {
     alwaysActive: false,
-    usedBy: 0,
+    usedBy: [],
     activate: [],
   }
-  addActivator(mapped, [event, linkNode])
+  addActivator(mapped, [event, linkNode], true)
   return mapped
 }
 
@@ -204,14 +204,14 @@ export function createEvent<Payload = any>(
         'prepend',
         fn,
       )
-      addActivator(event, [contramapped, linkNode])
+      addActivator(event, [contramapped, linkNode], true)
       applyParentHook(event, contramapped)
       return contramapped
     },
   })
   finalEvent.graphite.lazy = {
     alwaysActive: false,
-    usedBy: 0,
+    usedBy: [],
     activate: [],
   }
   if (config?.domain) {
@@ -241,7 +241,7 @@ function on<State>(
     const linkNode = updateStore(trigger, store, 'on', callARegStack, fn)
     linkNode.lazy = {
       alwaysActive: true,
-      usedBy: 0,
+      usedBy: [],
       activate: [],
     }
     getSubscribers(store).set(trigger, createSubscription(linkNode))
@@ -352,10 +352,10 @@ export function createStore<State>(
       resultLazy.alwaysActive = false
       linkNode.lazy = {
         alwaysActive: false,
-        usedBy: 0,
+        usedBy: [],
         activate: [],
       }
-      addActivator(innerStore, [store, linkNode])
+      addActivator(innerStore, [store, linkNode], true)
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },
@@ -410,7 +410,7 @@ export function createStore<State>(
   })
   store.graphite.lazy = {
     alwaysActive: true,
-    usedBy: 0,
+    usedBy: [],
     activate: [],
   }
   setMeta(store, 'id', store.graphite.id)

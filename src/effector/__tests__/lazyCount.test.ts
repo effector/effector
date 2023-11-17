@@ -27,7 +27,7 @@ function getLazyGlobal(store: Store<any> | Event<any>) {
 
 function isActiveGlobal(store: Store<any> | Event<any>) {
   const lazy = getLazyGlobal(store)
-  return lazy.alwaysActive || lazy.usedBy > 0
+  return lazy.alwaysActive || lazy.usedBy.length > 0
 }
 function isActiveInScope(store: Store<any> | Event<any>, scope: Scope) {
   const node = getNode(store)
@@ -35,7 +35,7 @@ function isActiveInScope(store: Store<any> | Event<any>, scope: Scope) {
   if (lazy?.alwaysActive) return true
   const scopeInfo = scope.lazy[node.id]
   if (!scopeInfo) return false
-  return scopeInfo.usedBy + scopeInfo.config.usedBy > 0
+  return scopeInfo.usedBy.length + scopeInfo.config.usedBy.length > 0
 }
 
 test('.on basic case', () => {

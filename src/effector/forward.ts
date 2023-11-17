@@ -45,7 +45,7 @@ export const forward = (opts: {
   })
   node.lazy = {
     alwaysActive: false,
-    usedBy: 0,
+    usedBy: [],
     activate: [],
   }
   /**
@@ -53,8 +53,8 @@ export const forward = (opts: {
    * need to implement bidirectional activators links
    * before release
    * */
-  addActivator(node, fromNormalized)
-  addActivator(toNormalized, [node])
+  addActivator(node, fromNormalized, true)
+  addActivator(toNormalized, [node], true)
 
   return createSubscription(node)
 }

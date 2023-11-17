@@ -21,10 +21,10 @@ export const watchUnit = (
     family: {owners: unit},
     regional: true,
   })
-  traverseIncrementActivations(getGraph(unit))
+  traverseIncrementActivations(getGraph(unit), node)
   node.lazy = {
     alwaysActive: true,
-    usedBy: 0,
+    usedBy: [],
     activate: [getGraph(unit)],
   }
   return createSubscription(node)

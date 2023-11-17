@@ -71,6 +71,7 @@ export function split(...args: any[]) {
     )
   }
   const owners = new Set(
+    //@ts-expect-error
     ([] as DataCarrier[]).concat(source, clock || [], Object.values(targets)),
   )
   const caseNames = Object.keys(
@@ -153,16 +154,17 @@ export function split(...args: any[]) {
   })
   splitterNode.lazy = {
     alwaysActive: false,
-    usedBy: 0,
+    usedBy: [],
     activate: [],
   }
   const targetsArray = Object.values(targets)
   const incomingUnits = ownersArray.filter(unit => !targetsArray.includes(unit))
-  addActivator(targetsArray, [...incomingUnits, splitterNode])
+  addActivator(targetsArray, [...incomingUnits, splitterNode], true)
   if (clock) {
     createSampling(
       METHOD,
       clock,
+      //@ts-expect-error
       source,
       null,
       splitterNode,

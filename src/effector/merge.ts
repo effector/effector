@@ -16,6 +16,6 @@ export function merge<T>(
     and: config,
   })
   createLinkNode(units, result, [], 'merge')
-  addActivator(result, units)
+  addActivator(result, units, true)
   return result
 }

@@ -196,7 +196,7 @@ export interface Scope extends Unit {
   lazy: Record<
     string,
     {
-      usedBy: number
+      usedBy: Node[]
       config: LazyConfig
     }
   >

@@ -509,7 +509,7 @@ export type Node = {
   }
   lazy?: {
     alwaysActive: boolean
-    usedBy: number
+    usedBy: Node[]
   }
 }
 
@@ -3115,7 +3115,7 @@ export interface Scope extends Unit<any> {
   lazy: Record<
     string,
     {
-      usedBy: number
+      usedBy: Node[]
       config: NonNullable<Node['lazy']>
     }
   >
