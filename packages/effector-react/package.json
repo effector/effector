@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "23.0.0-rc.4",
+  "version": "23.0.0-rc.5",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.mjs",
