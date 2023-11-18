@@ -20,11 +20,6 @@ export function restore(obj: any, defaultState: any, config?: any) {
     })
     const clock = is.effect(obj) ? obj.doneData : obj
     createLinkNode(clock, result)
-    /**
-     * WARN! This essentialy makes this store derived
-     * This is not a final decision!
-     **/
-    result.graphite.lazy!.alwaysActive = false
     addActivator(result, [clock], true)
     if (domain) domain.hooks.store(result)
     return result

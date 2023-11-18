@@ -434,24 +434,20 @@ describe('forward support', () => {
   })
 })
 
-/**
- * WARN! This test assumes that restore is derived (in terms of lazy)
- * This is not a final decision!
- **/
 test('restore support', () => {
   const trigger = createEvent<number>()
   const $store = restore(trigger, 0)
 
-  expect(isActiveGlobal(trigger)).toBe(false)
-  expect(isActiveGlobal($store)).toBe(false)
+  expect(isActiveGlobal(trigger)).toBe(true)
+  expect(isActiveGlobal($store)).toBe(true)
 
   const unwatch = $store.watch(() => {})
 
   expect(isActiveGlobal(trigger)).toBe(true)
   expect(isActiveGlobal($store)).toBe(true)
   unwatch()
-  expect(isActiveGlobal(trigger)).toBe(false)
-  expect(isActiveGlobal($store)).toBe(false)
+  expect(isActiveGlobal(trigger)).toBe(true)
+  expect(isActiveGlobal($store)).toBe(true)
 })
 
 describe('split support', () => {
