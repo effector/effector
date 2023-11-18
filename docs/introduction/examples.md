@@ -29,6 +29,10 @@ To connect react modal with state
 
 To connect custom range input component with state
 
+### [WS messages tracking](https://share.effector.dev/NjJ6ObeT)
+
+Track specific ws messages in dynamic way
+
 ## More examples
 
 - [Snake game (interactive A\* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
