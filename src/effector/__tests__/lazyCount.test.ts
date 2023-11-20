@@ -15,6 +15,7 @@ import {
   restore,
   split,
   createEffect,
+  allSettled,
 } from 'effector'
 
 function getNode(unit: Store<any> | Event<any> | Effect<any, any, any>): Node {
@@ -311,6 +312,47 @@ describe('sample support', () => {
     expect(isActiveGlobal($bar)).toBe(true)
     unwatch()
     expect(isActiveGlobal($bar)).toBe(false)
+  })
+
+  test('test with fork, combine, effect, sample and allSettled', async () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const target = createEvent()
+    const fx = createEffect(async () => {
+      await new Promise(rs => setTimeout(rs, 20))
+    })
+    const $count = createStore(0)
+
+    $count.on(inc, x => x + 1)
+
+    const $countA = combine($count, x => x * 10)
+    const $countB1 = combine($countA, x => x * 10)
+    const $countB2 = combine($countA, x => x * 10)
+
+    sample({
+      clock: fx.doneData,
+      target,
+    })
+
+    sample({
+      clock: $countB1,
+      target: fx,
+    })
+
+    const scope = fork()
+
+    await allSettled(inc, {scope})
+
+    createWatch({
+      unit: target,
+      scope,
+      fn,
+    })
+
+    await allSettled(inc, {scope})
+    expect(scope.getState($countB1)).toBe(200)
+    expect(fn).toBeCalledTimes(1)
+    expect(scope.getState($countB2)).toBe(200)
   })
 })
 
