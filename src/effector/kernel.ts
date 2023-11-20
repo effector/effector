@@ -484,11 +484,6 @@ export const initRefInScope = (
   const refsMap = scope.reg
   if (refsMap[sourceRef.id]) return
   const sid = sourceRef.sid
-  const serialize = sourceRef?.meta?.serialize
-  const parser =
-    scope.fromSerialize && serialize !== 'ignore'
-      ? serialize?.read || noopParser
-      : noopParser
   const ref: StateRef = {
     id: sourceRef.id,
     current: sourceRef.initial!,
@@ -498,6 +493,11 @@ export const initRefInScope = (
   if (ref.id in scope.values.idMap) {
     ref.current = scope.values.idMap[ref.id]
   } else if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
+    const serialize = sourceRef?.meta?.serialize
+    const parser =
+      scope.fromSerialize && serialize !== 'ignore'
+        ? serialize?.read || noopParser
+        : noopParser
     ref.current = parser(scope.values.sidMap[sid])
   } else {
     if (sourceRef.before && !softRead) {
@@ -509,14 +509,15 @@ export const initRefInScope = (
             const from = cmd.from
             if (from || cmd.fn) {
               if (from) initRefInScope(scope, from, isGetState, isKernelCall)
-              const value = from && refsMap[from.id].current
               if (needToAssign) {
+                const value = from && refsMap[from.id].current
                 ref.current = cmd.fn ? cmd.fn(value) : value
               }
             }
             break
           }
           case 'field': {
+            initRefInScope(scope, cmd.from, isGetState, isKernelCall)
             if (!isFresh) {
               isFresh = true
               if (Array.isArray(ref.current)) {
@@ -525,7 +526,6 @@ export const initRefInScope = (
                 ref.current = {...ref.current}
               }
             }
-            initRefInScope(scope, cmd.from, isGetState, isKernelCall)
             if (needToAssign) {
               const from = refsMap[cmd.from.id]
               ref.current[cmd.field] = refsMap[from.id].current
