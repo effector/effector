@@ -175,7 +175,6 @@ describe('inspect API', () => {
         "update of 'undefined' [forward] to value of '[object Object]' (id:string, sid:undefined, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'doneData' [event] to value of 'undefined' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'end' [event] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [guard] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'attachedFnFx.inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
