@@ -158,7 +158,7 @@ export const createSampling = (
   const clockState = createStateRef()
   let filterNodes: Cmd[] = []
   if (filterType === 'unit') {
-    const [filterRef, hasFilter] = syncSourceState(
+    const [filterRef, hasFilter, isFilterStore] = syncSourceState(
       filter as DataCarrier,
       target,
       // @ts-expect-error
@@ -166,16 +166,30 @@ export const createSampling = (
       clockState,
       method,
     )
-    filterNodes = [...readAndFilter(hasFilter), ...readAndFilter(filterRef)]
+    if (!isFilterStore) {
+      filterNodes.push(...readAndFilter(hasFilter))
+    }
+    filterNodes.push(...readAndFilter(filterRef))
   }
-  const [sourceRef, hasSource] = syncSourceState(
-    // @ts-expect-error
-    source,
-    target,
-    clock,
-    clockState,
-    method,
-  )
+  const jointNodeSeq: Cmd[] = []
+  if (sourceIsClock) {
+    if (batch) {
+      jointNodeSeq.push(read(clockState, true, true))
+    }
+  } else {
+    const [sourceRef, hasSource, isSourceStore] = syncSourceState(
+      // @ts-expect-error
+      source,
+      target,
+      clock,
+      clockState,
+      method,
+    )
+    if (!isSourceStore) {
+      jointNodeSeq.push(...readAndFilter(hasSource))
+    }
+    jointNodeSeq.push(read(sourceRef, true, batch))
+  }
   const jointNode = createLinkNode(
     // @ts-expect-error
     clock,
@@ -183,8 +197,7 @@ export const createSampling = (
     [
       applyTemplate('sampleSourceLoader'),
       mov({from: STACK, target: clockState}),
-      ...readAndFilter(hasSource),
-      read(sourceRef, true, batch),
+      ...jointNodeSeq,
       ...filterNodes,
       read(clockState),
       filterType === 'fn' && userFnCall((src, _, {a}) => filter(src, a), true),
@@ -228,5 +241,5 @@ const syncSourceState = (
     })
   }
   applyTemplate('sampleSource', hasSource, sourceRef, clockState)
-  return [sourceRef, hasSource] as const
+  return [sourceRef, hasSource, isSourceStore] as const
 }
