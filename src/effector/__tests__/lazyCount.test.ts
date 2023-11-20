@@ -17,6 +17,7 @@ import {
   createEffect,
   allSettled,
 } from 'effector'
+import {argumentHistory} from 'effector/fixtures'
 
 function getNode(unit: Store<any> | Event<any> | Effect<any, any, any>): Node {
   return (unit as any).graphite
@@ -282,6 +283,34 @@ describe('sample support', () => {
     expect(isActiveGlobal(triggerA)).toBe(false)
   })
 
+  test('array in target support', () => {
+    const fn = jest.fn()
+    const trigger = createEvent<number>()
+    const targetA = createEvent<number>()
+    const targetB = createEvent()
+
+    sample({
+      clock: trigger,
+      target: [targetA, targetB],
+    })
+
+    expect(isActiveGlobal(targetA)).toBe(false)
+    expect(isActiveGlobal(trigger)).toBe(false)
+
+    const unwatchA = targetA.watch(upd => fn(upd))
+    const unwatchB = targetB.watch(() => {})
+
+    expect(isActiveGlobal(targetA)).toBe(true)
+    expect(isActiveGlobal(trigger)).toBe(true)
+    trigger(0)
+    unwatchA()
+    expect(isActiveGlobal(targetA)).toBe(false)
+    expect(isActiveGlobal(trigger)).toBe(true)
+    unwatchB()
+    expect(isActiveGlobal(trigger)).toBe(false)
+    expect(argumentHistory(fn)).toEqual([0])
+  })
+
   test('effects should turn everything to alwaysActive', () => {
     const targetFx = createEffect(() => {})
     const $foo = createStore(0)
@@ -494,6 +523,7 @@ test('restore support', () => {
 
 describe('split support', () => {
   test('with cases', () => {
+    const fn = jest.fn()
     const clock = createEvent()
     const target = createEvent<number>()
     const $matchA = createStore<'target'>('target')
@@ -516,17 +546,21 @@ describe('split support', () => {
     expect(isActiveGlobal($sourceB)).toBe(false)
     expect(isActiveGlobal($matchB)).toBe(false)
 
-    const unwatch = target.watch(() => {})
+    const unwatch = target.watch(upd => fn(upd))
 
     expect(isActiveGlobal(clock)).toBe(true)
     expect(isActiveGlobal($sourceB)).toBe(true)
     expect(isActiveGlobal($matchB)).toBe(true)
+
+    clock()
 
     unwatch()
 
     expect(isActiveGlobal(clock)).toBe(false)
     expect(isActiveGlobal($sourceB)).toBe(false)
     expect(isActiveGlobal($matchB)).toBe(false)
+
+    expect(argumentHistory(fn)).toEqual([0])
   })
   test('with cases with fork', () => {
     const clock = createEvent()
@@ -572,6 +606,55 @@ describe('split support', () => {
     expect(isActiveInScope(clock, scope)).toBe(false)
     expect(isActiveInScope($sourceB, scope)).toBe(false)
     expect(isActiveInScope($matchB, scope)).toBe(false)
+  })
+  test('with cases with match object', () => {
+    const fnA = jest.fn()
+    const fnB = jest.fn()
+    const trigger = createEvent<number>()
+    const chooseCase = createEvent<'a' | 'b'>()
+    const $isCaseA = createStore(true)
+    const $isCaseB = createStore(false)
+    const $isCaseADerived = combine($isCaseA, x => x)
+    const $isCaseBDerived = combine($isCaseB, x => x)
+    const targetA = createEvent<number>()
+    const targetB = createEvent<number>()
+
+    $isCaseA.on(chooseCase, (_, upd) => upd === 'a')
+    $isCaseB.on(chooseCase, (_, upd) => upd === 'b')
+
+    split({
+      source: trigger,
+      match: {
+        a: $isCaseADerived,
+        b: $isCaseBDerived,
+      },
+      cases: {
+        a: [targetA],
+        b: targetB,
+      },
+    })
+
+    expect(isActiveGlobal(trigger)).toBe(false)
+    expect(isActiveGlobal($isCaseADerived)).toBe(false)
+
+    const unwatchA = targetA.watch(upd => fnA(upd))
+
+    expect(isActiveGlobal(trigger)).toBe(true)
+    expect(isActiveGlobal($isCaseADerived)).toBe(true)
+
+    trigger(0)
+    const unwatchB = targetB.watch(upd => fnB(upd))
+    chooseCase('b')
+    trigger(1)
+
+    unwatchA()
+    unwatchB()
+
+    expect(isActiveGlobal(trigger)).toBe(false)
+    expect(isActiveGlobal($isCaseADerived)).toBe(false)
+
+    expect(argumentHistory(fnA)).toEqual([0])
+    expect(argumentHistory(fnA)).toEqual([1])
   })
   test('without cases', () => {
     const $sourceA = createStore(0)
