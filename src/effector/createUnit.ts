@@ -27,7 +27,7 @@ import {
   isPure,
 } from './kernel'
 
-import {createName} from './naming'
+import {createName, generateErrorTitle} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
@@ -144,14 +144,17 @@ export function createEvent<Payload = any>(
     or: maybeConfig,
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
+  const errorTitle = generateErrorTitle('event', config)
   const event = ((payload: Payload, ...args: unknown[]) => {
     assert(
       !getMeta(event, 'derived'),
       'call of derived event is not supported, use createEvent instead',
+      errorTitle,
     )
     assert(
       !isPure,
       'unit call from pure function is not supported, use operators like sample instead',
+      errorTitle,
     )
     if (currentPage) {
       return callCreate(event, template, payload, args)
@@ -185,6 +188,7 @@ export function createEvent<Payload = any>(
         // @ts-expect-error
         event.targetable,
         '.prepend of derived event is not supported, call source event instead',
+        errorTitle,
       )
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
@@ -207,13 +211,15 @@ function on<State>(
   methodName: string,
   nodeSet: CommonUnit | CommonUnit[],
   fn: Function,
+  errorTitle: string,
 ) {
-  assertNodeSet(nodeSet, methodName, 'first argument')
-  assert(isFunction(fn), 'second argument should be a function')
+  assertNodeSet(nodeSet, `${errorTitle} ${methodName}`, 'first argument')
+  assert(isFunction(fn), 'second argument should be a function', errorTitle)
   deprecate(
     !getMeta(store, 'derived'),
     `${methodName} in derived store`,
     `${methodName} in store created via createStore`,
+    errorTitle,
   )
   forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
     store.off(trigger)
@@ -234,6 +240,7 @@ export function createStore<State>(
 ): Store<State> {
   const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
+  const errorTitle = generateErrorTitle('store', config)
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
@@ -243,7 +250,7 @@ export function createStore<State>(
   const voidValueAllowed = explicitSkipVoid && !config.skipVoid
   const skipVoidTrueSet = explicitSkipVoid && config.skipVoid
 
-  deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter')
+  deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter', errorTitle)
 
   const store = {
     subscribers: new Map(),
@@ -275,17 +282,25 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
-      // @ts-expect-error
-      assert(store.targetable, '.reset of derived store is not supported')
+      assert(
+        // @ts-expect-error
+        store.targetable,
+        '.reset of derived store is not supported',
+        errorTitle,
+      )
       forEach(units, unit =>
-        on(store, '.reset', unit, () => store.defaultState),
+        on(store, '.reset', unit, () => store.defaultState, errorTitle),
       )
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
-      // @ts-expect-error
-      assert(store.targetable, '.on of derived store is not supported')
-      return on(store, '.on', nodeSet, fn)
+      assert(
+        // @ts-expect-error
+        store.targetable,
+        '.on of derived store is not supported',
+        errorTitle,
+      )
+      return on(store, '.on', nodeSet, fn, errorTitle)
     },
     off(unit: CommonUnit) {
       const currentSubscription = getSubscribers(store).get(unit)
@@ -298,7 +313,7 @@ export function createStore<State>(
     map(fn: (value: any) => any, outerConfig: Config) {
       let mapConfig: Config | undefined
       if (isObject(fn)) {
-        mapConfig = (fn as any)
+        mapConfig = fn as any
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
       let lastResult
@@ -328,7 +343,7 @@ export function createStore<State>(
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
-      deprecate(!fn, 'watch second argument', 'sample')
+      deprecate(!fn, 'watch second argument', 'sample', errorTitle)
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
@@ -336,7 +351,7 @@ export function createStore<State>(
         }
         return subscription
       }
-      assert(isFunction(fn), 'second argument should be a function')
+      assert(isFunction(fn), 'second argument should be a function', errorTitle)
       return (eventOrFn as CommonUnit).watch((payload: any) =>
         fn(store.getState(), payload),
       )
@@ -358,7 +373,7 @@ export function createStore<State>(
         const isVoidUpdate = isVoid(upd)
 
         if (isVoidUpdate && !explicitSkipVoid) {
-          console.error(requireExplicitSkipVoidMessage)
+          console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
         }
 
         return (
@@ -390,13 +405,14 @@ export function createStore<State>(
     setMeta(store, 'warnSerialize', true)
   }
   const isVoidDefaultState = isVoid(defaultState)
-  const canVoid = (isVoidDefaultState && voidValueAllowed)
+  const canVoid = isVoidDefaultState && voidValueAllowed
   assert(
     derived || !isVoidDefaultState || canVoid,
     requireExplicitSkipVoidMessage,
+    errorTitle,
   )
-  if (derived && (isVoidDefaultState && !explicitSkipVoid)) {
-    console.error(requireExplicitSkipVoidMessage)
+  if (derived && isVoidDefaultState && !explicitSkipVoid) {
+    console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
   }
   own(store, [updates])
   if (config?.domain) {

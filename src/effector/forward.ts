@@ -4,6 +4,7 @@ import type {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {assertNodeSet, assertTarget} from './is'
 import {deprecate} from './throw'
+import {generateErrorTitle} from './naming'
 
 export const createLinkNode = (
   parent: NodeUnit | NodeUnit[],
@@ -26,17 +27,18 @@ export const forward = (opts: {
   to: NodeUnit | NodeUnit[]
   meta?: Record<string, any>
 }): Subscription => {
-  deprecate(false, 'forward', 'sample')
-  const method = 'forward'
+  const METHOD = 'forward'
   const [{from, to}, config] = processArgsToConfig(opts, true)
-  assertNodeSet(from, method, '"from"')
-  assertNodeSet(to, method, '"to"')
-  assertTarget(method, to, 'to')
+  const errorTitle = generateErrorTitle(METHOD, config)
+  deprecate(false, METHOD, 'sample', errorTitle)
+  assertNodeSet(from, errorTitle, '"from"')
+  assertNodeSet(to, errorTitle, '"to"')
+  assertTarget(errorTitle, to, 'to')
   return createSubscription(
     createNode({
       parent: from,
       child: to,
-      meta: {op: method, config},
+      meta: {op: METHOD, config},
       family: {},
       regional: true,
     }),

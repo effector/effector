@@ -438,8 +438,10 @@ describe('execution order', () => {
 
 it('should validate .use argument', () => {
   expect(() => {
-    createEffect().use(null)
-  }).toThrowErrorMatchingInlineSnapshot(`".use argument should be a function"`)
+    const fooFx = createEffect().use(null)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"[effect] unit 'fooFx': .use argument should be a function"`,
+  )
 })
 
 describe('@farfetched/core agreement', () => {

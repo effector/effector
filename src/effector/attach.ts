@@ -15,16 +15,21 @@ import {is, isVoid} from './is'
 import {read, calc} from './step'
 import {launch} from './kernel'
 import {EFFECT} from './tag'
-import {createName} from './naming'
+import {createName, generateErrorTitle} from './naming'
 import {assert} from './throw'
 import {Cmd, Node, Stack} from './index.h'
 
 export function attach(config: any) {
   let injected
   ;[config, injected] = processArgsToConfig(config, true)
+  const errorTitle = generateErrorTitle('attach', injected)
   let {source, effect, mapParams, domain} = config
   if (is.effect(effect)) {
-    assert(isVoid(domain), '`domain` can only be used with a plain function')
+    assert(
+      isVoid(domain),
+      '`domain` can only be used with a plain function',
+      errorTitle,
+    )
   }
   const attached = createEffect(config, injected)
   setMeta(attached, 'attached', true)

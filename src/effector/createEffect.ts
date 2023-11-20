@@ -13,6 +13,7 @@ import {EFFECT} from './tag'
 import {add} from './collection'
 import {flattenConfig} from './config'
 import {nextEffectID} from './id'
+import {generateErrorTitle} from './naming'
 
 type RunnerData<Params, Done, Fail> = {
   params: Params
@@ -32,6 +33,7 @@ export function createEffect<Params, Done, Fail = Error>(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
   )
+  const errorTitle = generateErrorTitle('effect', config)
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     {...maybeConfig, actualOp: EFFECT},
@@ -40,7 +42,7 @@ export function createEffect<Params, Done, Fail = Error>(
   setMeta(node, 'op', (instance.kind = EFFECT))
   //@ts-expect-error
   instance.use = (fn: Function) => {
-    assert(isFunction(fn), '.use argument should be a function')
+    assert(isFunction(fn), '.use argument should be a function', errorTitle)
     runner.scope.handler = fn
     return instance
   }

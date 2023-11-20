@@ -401,14 +401,14 @@ it('should not allow domain for effects', () => {
   const fx = createEffect(() => {})
 
   expect(() => {
-    attach({
+    const fooFx = attach({
       source,
       // @ts-expect-error
       domain,
       effect: fx,
     })
   }).toThrowErrorMatchingInlineSnapshot(
-    `"\`domain\` can only be used with a plain function"`,
+    `"[attach] unit 'fooFx': \`domain\` can only be used with a plain function"`,
   )
 })
 

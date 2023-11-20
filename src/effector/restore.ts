@@ -4,10 +4,12 @@ import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './forward'
 import {deprecate} from './throw'
+import {generateErrorTitle} from './naming'
 
 export function restore(obj: any, defaultState: any, config?: any) {
+  const errorTitle = generateErrorTitle('restore', config)
   if (is.store(obj)) {
-    deprecate(false, 'restore($store)')
+    deprecate(false, 'restore($store)', undefined, errorTitle)
     return obj
   }
   if (is.event(obj) || is.effect(obj)) {
