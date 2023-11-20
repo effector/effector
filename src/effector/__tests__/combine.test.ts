@@ -228,7 +228,7 @@ describe('validations', () => {
   it('validate amount of arguments', () => {
     expect(() => {
       //@ts-expect-error
-      combine()
+      const $foo = combine()
     }).toThrowErrorMatchingInlineSnapshot(
       `"expect first argument be an object"`,
     )
@@ -236,38 +236,44 @@ describe('validations', () => {
 
   it('validate shape', () => {
     expect(() => {
-      combine(null)
-    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+      const $foo = combine(null)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[combine] unit '$foo': shape should be an object"`,
+    )
     expect(() => {
-      combine('text')
-    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+      const $foo = combine('text')
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[combine] unit '$foo': shape should be an object"`,
+    )
     expect(() => {
-      combine(0, () => {})
-    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+      const $foo = combine(0, () => {})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[combine] unit '$foo': shape should be an object"`,
+    )
   })
 
   it('doesn`t allow events or other units in shape', () => {
     expect(() => {
-      combine({a: createEvent()})
+      const $foo = combine({a: createEvent()})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
     expect(() => {
-      combine({a: createEffect()})
+      const $foo = combine({a: createEffect()})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
     expect(() => {
-      combine({a: createDomain()})
+      const $foo = combine({a: createDomain()})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
   })
   it('doesn`t allow undefined in shape', () => {
     expect(() => {
-      combine({a: undefined})
+      const $foo = combine({a: undefined})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
   })
 })

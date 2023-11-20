@@ -329,24 +329,28 @@ describe('void skip pattern deprecation', () => {
 
   describe('writable stores', () => {
     test('createStore throw on undefined', () => {
-      expect(() => createStore(undefined)).toThrowErrorMatchingInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      expect(() => {
+        const $foo = createStore(undefined)
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"[store] unit '$foo': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('createStore throw on undefined, if used with {skipVoid: true}', () => {
-      expect(() =>
-        createStore(undefined, {skipVoid: true}),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      expect(() => {
+        const $foo = createStore(undefined, {skipVoid: true})
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"[store] unit '$foo': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('createStore do not throw on undefined with skipVoid: false', () => {
       expect(() => createStore(undefined, {skipVoid: false})).not.toThrow()
     })
     test('createStore warns deprecation, if used with {skipVoid: true}', () => {
-      expect(() => createStore(null, {skipVoid: true})).not.toThrow()
+      expect(() => {
+        const $foo = createStore(null, {skipVoid: true})
+      }).not.toThrow()
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit '$foo': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('createStore does not warn anything, if {skipVoid} and undefined are not presented', () => {
@@ -360,18 +364,18 @@ describe('void skip pattern deprecation', () => {
         const store = createStore(0).on(inc, () => {})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+          `"[store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
         )
       })
       test('store.on reducer skips updates with undefined and does not warn, if store has {skipVoid: true} (only warning of the store itself is shown)', () => {
         const inc = createEvent()
         const store = createStore(0, {skipVoid: true}).on(inc, () => {})
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+          `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
         )
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+          `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
         )
       })
       test('store.on reducer allows undefined as a value, if store has {skipVoid: false}', () => {
@@ -390,7 +394,7 @@ describe('void skip pattern deprecation', () => {
         sample({clock: inc, fn: () => {}, target: store})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+          `"[store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
         )
       })
       test('sample target skips updates with undefined, but shows warning, if store has {skipVoid: true}', () => {
@@ -399,7 +403,7 @@ describe('void skip pattern deprecation', () => {
         sample({clock: inc, fn: () => {}, target: store})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+          `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
         )
       })
       test('sample target allows undefined as a value, if store has {skipVoid: false}', () => {
@@ -431,17 +435,17 @@ describe('void skip pattern deprecation', () => {
 
   describe('store.map', () => {
     test('store.map warn on initial undefined', () => {
-      createStore(null).map(() => {})
+      const $foo = createStore(null).map(() => {})
 
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"[store] unit '$foo → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('store.map warn on initial undefined, if used with {skipVoid: true}', () => {
-      createStore(null).map(() => {}, {skipVoid: true})
+      const $foo = createStore(null).map(() => {}, {skipVoid: true})
 
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit '$foo → *': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('store.map skips updates with undefined, but shows warning', () => {
@@ -451,7 +455,7 @@ describe('void skip pattern deprecation', () => {
         .map(x => (x > 3 ? undefined : x))
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"[store] unit 'store → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('store.map skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
@@ -463,7 +467,7 @@ describe('void skip pattern deprecation', () => {
       inc(5)
       inc(6)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit 'store → *': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('store.map do not warn on initial undefined, if used with {skipVoid: false}', () => {
@@ -485,16 +489,16 @@ describe('void skip pattern deprecation', () => {
 
   describe('combine', () => {
     test('combine warns on initial undefined', () => {
-      combine({a: createStore(null)}, () => {})
+      const $foo = combine({a: createStore(null)}, () => {})
 
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"[combine] unit '$foo': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('combine warn on initial undefined, if used with {skipVoid: true}', () => {
-      combine({a: createStore(null)}, () => {}, {skipVoid: true})
+      const $foo = combine({a: createStore(null)}, () => {}, {skipVoid: true})
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit '$foo': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('combine skips updates with undefined, but shows warning', () => {
@@ -504,7 +508,7 @@ describe('void skip pattern deprecation', () => {
       )
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"[store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('combine skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
@@ -518,7 +522,7 @@ describe('void skip pattern deprecation', () => {
       inc(5)
       inc(6)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('combine do not warn on initial undefined, if used with {skipVoid: false}', () => {

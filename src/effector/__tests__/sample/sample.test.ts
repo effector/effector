@@ -180,7 +180,9 @@ it('should not accept undefined clocks', () => {
       source: createStore(null),
       clock: undefined,
     })
-  }).toThrowErrorMatchingInlineSnapshot(`"sample: clock should be defined"`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"[sample] (/src/effector/__tests__/sample/sample.test.ts:178:4): clock should be defined"`,
+  )
 })
 
 describe('sample type', () => {
@@ -713,7 +715,9 @@ describe('validation', () => {
     expect(() => {
       //@ts-expect-error
       sample({source: undefined, target})
-    }).toThrowErrorMatchingInlineSnapshot(`"sample: source should be defined"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:717:6): source should be defined"`,
+    )
   })
   test('clock validation', () => {
     const target = createEffect((_: any) => {})
@@ -721,7 +725,9 @@ describe('validation', () => {
     expect(() => {
       //@ts-expect-error
       sample({clock: undefined, target})
-    }).toThrowErrorMatchingInlineSnapshot(`"sample: clock should be defined"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:727:6): clock should be defined"`,
+    )
   })
   test('no source no clock', () => {
     const target = createEffect((_: any) => {})
@@ -730,7 +736,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"sample: either source or clock should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:737:6): either source or clock should be defined"`,
     )
   })
 })
@@ -844,7 +850,7 @@ describe('greedy deprecation', () => {
       greedy: true,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"greedy in sample is deprecated, use batch instead"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:847:4): greedy in sample is deprecated, use batch instead"`,
     )
   })
   test('greedy false is deprecated', () => {
@@ -856,7 +862,7 @@ describe('greedy deprecation', () => {
       greedy: false,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"greedy in sample is deprecated, use batch instead"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:859:4): greedy in sample is deprecated, use batch instead"`,
     )
   })
 })
