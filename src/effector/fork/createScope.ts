@@ -9,6 +9,7 @@ import {DOMAIN, SAMPLER, SCOPE} from '../tag'
 
 export function createScope(unit?: Domain): Scope {
   const forkInFlightCounter = createNode({
+    alwaysActive: true,
     scope: {
       defers: [],
       inFlight: 0,
@@ -54,6 +55,7 @@ export function createScope(unit?: Domain): Scope {
   })
   const page = {} as Record<string, StateRef>
   const storeChange = createNode({
+    alwaysActive: true,
     node: [
       calc((value, __, stack) => {
         const storeStack = getParent(stack)
@@ -87,6 +89,7 @@ export function createScope(unit?: Domain): Scope {
     ],
   })
   const warnSerializeNode = createNode({
+    alwaysActive: true,
     node: [
       calc((_, __, stack) => {
         const forkPage = getForkPage(stack)
@@ -134,6 +137,7 @@ export function createScope(unit?: Domain): Scope {
     fxCount: forkInFlightCounter,
     storeChange,
     warnSerializeNode,
+    lazy: {},
   }
   return resultScope
 }

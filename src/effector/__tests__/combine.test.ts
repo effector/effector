@@ -280,6 +280,7 @@ it('doesn`t leak internal variables to transform function', () => {
     fn(args)
     return 0
   })
+  combined.watch(() => {})
   inc()
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
@@ -401,7 +402,7 @@ describe('fn retriggers', () => {
       fn(a)
       return a
     })
-
+    $comb.watch(() => {})
     const scope = fork({values: [[$a, 10]]})
     await allSettled(inc, {scope})
     expect(argumentHistory(fn)).toEqual([0, 11])

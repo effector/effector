@@ -96,6 +96,7 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
+    target.watch(() => {})
     //@ts-expect-error
     source.setState(1)
     expect(fn).toBeCalledTimes(2)
@@ -111,6 +112,7 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
+    target.watch(() => {})
     source(1)
     expect(fn).toBeCalledTimes(1)
     clearNode(target)
@@ -139,6 +141,7 @@ describe('itermediate steps should not stay', () => {
       clock: trigger,
       fn,
     })
+    result.watch(() => {})
     trigger()
     expect(fn).toBeCalledTimes(1)
     clearNode(result)
@@ -147,13 +150,16 @@ describe('itermediate steps should not stay', () => {
   })
   it('support sample source', () => {
     const fn = jest.fn()
+    const target = createEvent()
     const trigger = createEvent()
     const store = createStore(null)
     sample({
       source: store,
       clock: trigger,
       fn,
+      target,
     })
+    target.watch(() => {})
     trigger()
     expect(fn).toBeCalledTimes(1)
     clearNode(store)

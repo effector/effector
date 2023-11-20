@@ -1,5 +1,5 @@
 import type {Cmd, StateRef} from './index.h'
-import type {CommonUnit, DataCarrier} from './unit.h'
+import type {CommonUnit, DataCarrier, Event, Scope, Store} from './unit.h'
 import {combine} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
@@ -18,12 +18,17 @@ import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createNode} from './createNode'
 import {assert, deprecate} from './throw'
-import {forEach} from './collection'
+import {forEach, removeItem} from './collection'
 import {SAMPLE, STACK, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
 import {own} from './own'
 import {createLinkNode} from './forward'
+import {
+  addActivator,
+  traverseDecrementActivations,
+  traverseIncrementActivations,
+} from './lazy'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -157,7 +162,38 @@ export const createSampling = (
   //   isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
   const clockState = createStateRef()
   let filterNodes: Cmd[] = []
+  let activateSources = (scope?: Scope) => {}
+  let deactivateSources = (scope?: Scope) => {}
   if (filterType === 'unit') {
+    const toActivate = [source, clock]
+      .filter(Boolean)
+      .map(unit => getGraph(unit!))
+    activateSources = (scope?: Scope) => {
+      toActivate.forEach(node => {
+        jointNode.lazy!.activate.push(node)
+        traverseIncrementActivations(node, jointNode, scope)
+      })
+    }
+    deactivateSources = (scope?: Scope) => {
+      toActivate.forEach(node => {
+        removeItem(jointNode.lazy!.activate, node)
+        traverseDecrementActivations(node, jointNode, scope!)
+      })
+    }
+    createNode({
+      alwaysActive: true,
+      meta: {op: 'sample', joint: false},
+      parent: filter as DataCarrier,
+      node: [
+        calc((data, _, stack) => {
+          if (data) {
+            activateSources(stack.scope!)
+          } else {
+            deactivateSources(stack.scope!)
+          }
+        }),
+      ],
+    })
     const [filterRef, hasFilter] = syncSourceState(
       filter as DataCarrier,
       target,
@@ -193,10 +229,22 @@ export const createSampling = (
     ],
     method,
     fn,
+    false,
   )
   // @ts-expect-error
   own(source, [jointNode])
   Object.assign(jointNode.meta, metadata, {joint: true})
+  addActivator(target, [jointNode], true)
+  let needToAddUsedBy = true
+  if (is.store(filter) && filter.getState()) {
+    activateSources()
+    needToAddUsedBy = false
+  }
+  if (filterType === 'unit') {
+    addActivator(jointNode, [filter], needToAddUsedBy)
+  } else {
+    addActivator(jointNode, [source, clock, filter], true)
+  }
   return target
 }
 

@@ -4,6 +4,7 @@ import type {Subscription, NodeUnit, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {assertNodeSet, assertTarget} from './is'
 import {deprecate} from './throw'
+import {addActivator} from './lazy'
 
 export const createLinkNode = (
   parent: NodeUnit | NodeUnit[],
@@ -11,8 +12,10 @@ export const createLinkNode = (
   node?: Array<Cmd | false | void | null>,
   op?: string,
   scopeFn?: Function,
+  alwaysActive?: boolean,
 ) =>
   createNode({
+    alwaysActive,
     node,
     parent,
     child,
@@ -32,13 +35,23 @@ export const forward = (opts: {
   assertNodeSet(from, method, '"from"')
   assertNodeSet(to, method, '"to"')
   assertTarget(method, to, 'to')
-  return createSubscription(
-    createNode({
-      parent: from,
-      child: to,
-      meta: {op: method, config},
-      family: {},
-      regional: true,
-    }),
-  )
+  const fromNormalized = Array.isArray(from) ? from : [from]
+  const toNormalized = Array.isArray(to) ? to : [to]
+  const node = createNode({
+    alwaysActive: false,
+    parent: from,
+    child: to,
+    meta: {op: method, config},
+    family: {},
+    regional: true,
+  })
+  /**
+   * WARN! Memory leaks in clearNode here
+   * need to implement bidirectional activators links
+   * before release
+   * */
+  addActivator(node, fromNormalized, true)
+  addActivator(toNormalized, [node], true)
+
+  return createSubscription(node)
 }

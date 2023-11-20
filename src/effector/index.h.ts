@@ -44,6 +44,12 @@ export type Config = {
   skipVoid?: boolean
 }
 
+export type LazyConfig = {
+  alwaysActive: boolean
+  usedBy: Node[]
+  activate: Node[]
+}
+
 export type Node = {
   id: ID
   next: Array<Node>
@@ -56,6 +62,7 @@ export type Node = {
     links: Node[]
     owners: Node[]
   }
+  lazy?: LazyConfig
 }
 
 export type NodeUnit = {graphite: Node} | Node

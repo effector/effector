@@ -30,3 +30,20 @@ export function forEach<T>(list: Set<T>, fn: (item: T) => void): void
 export function forEach(list: any, fn: Function) {
   list.forEach(fn)
 }
+
+/** generalized visitor with duplicates check */
+export function traverse<T>(
+  startItem: T,
+  cb: (item: T, visit: (item: T) => void) => void,
+) {
+  const visited = new Set<T>()
+  const stack = [startItem]
+  const visit = (item: T) => stack.push(item)
+  let item: T | void
+  while ((item = stack.shift())) {
+    if (!visited.has(item)) {
+      visited.add(item)
+      cb(item, visit)
+    }
+  }
+}

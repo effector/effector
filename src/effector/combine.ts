@@ -79,6 +79,7 @@ export function combine(...args: any[]): Store<any> {
     structStoreShape,
     config,
     handler,
+    //@ts-expect-error
     extConfig,
   )
 }
@@ -109,6 +110,8 @@ const storeCombination = (
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
+  const lazy = store.graphite.lazy!
+  lazy.alwaysActive = false
   const rawShapeReader = read(rawShape)
   /**
    * usual ref reading has very high priority, which leads to data races
@@ -175,7 +178,8 @@ const storeCombination = (
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    const linkNode = createLinkNode(child, store, node, 'combine', fn)
+    const linkNode = createLinkNode(child, store, node, 'combine', fn, false)
+    lazy.activate.push(child.graphite, linkNode)
     linkNode.scope.key = key
     const childRef = getStoreState(child)
     addRefOp(rawShape, {type: 'field', field: key, from: childRef})
@@ -192,7 +196,7 @@ const storeCombination = (
     if (fn) {
       const computedValue = fn(stateNew)
 
-      if (isVoid(computedValue) && (!extConfig || !("skipVoid" in extConfig))) {
+      if (isVoid(computedValue) && (!extConfig || !('skipVoid' in extConfig))) {
         console.error(requireExplicitSkipVoidMessage)
       }
 

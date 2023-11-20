@@ -449,6 +449,7 @@ describe('void skip pattern deprecation', () => {
       const store = createStore(0)
         .on(inc, (_, v) => v)
         .map(x => (x > 3 ? undefined : x))
+      store.watch(() => {})
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
         `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
@@ -459,6 +460,7 @@ describe('void skip pattern deprecation', () => {
       const store = createStore(0)
         .on(inc, (_, v) => v)
         .map(x => (x > 3 ? undefined : x), {skipVoid: true})
+      store.watch(() => {})
       inc(4)
       inc(5)
       inc(6)
@@ -502,6 +504,7 @@ describe('void skip pattern deprecation', () => {
       const store = combine({a: createStore(0).on(inc, (_, v) => v)}, x =>
         x.a > 3 ? undefined : x,
       )
+      store.watch(() => {})
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
         `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,

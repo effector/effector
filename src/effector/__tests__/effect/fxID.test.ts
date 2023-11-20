@@ -56,6 +56,7 @@ describe('plain effect support', () => {
         },
       }),
     )
+    fx.done.watch(() => {})
     await fx()
     expect(typeof fxID).toBe('string')
   })
@@ -72,6 +73,7 @@ describe('plain effect support', () => {
         },
       }),
     )
+    fx.doneData.watch(() => {})
     await fx()
     expect(typeof fxID).toBe('string')
   })
@@ -119,6 +121,7 @@ describe('attach support', () => {
           },
         }),
       )
+      fx.done.watch(() => {})
       await fx()
       expect(typeof fxID).toBe('string')
     })
@@ -135,6 +138,7 @@ describe('attach support', () => {
           },
         }),
       )
+      fx.doneData.watch(() => {})
       await fx()
       expect(typeof fxID).toBe('string')
     })
@@ -183,6 +187,7 @@ describe('attach support', () => {
           },
         }),
       )
+      fx.done.watch(() => {})
       await attached()
       expect(typeof fxID).toBe('string')
     })
@@ -200,6 +205,7 @@ describe('attach support', () => {
           },
         }),
       )
+      fx.doneData.watch(() => {})
       await attached()
       expect(typeof fxID).toBe('string')
     })
@@ -253,6 +259,7 @@ describe('computation chain support', () => {
         },
       }),
     )
+    fx.done.watch(() => {})
     await allSettled(trigger, {scope: fork()})
     expect(typeof fxID).toBe('string')
   })
@@ -271,6 +278,7 @@ describe('computation chain support', () => {
         },
       }),
     )
+    fx.doneData.watch(() => {})
     await allSettled(trigger, {scope: fork()})
     expect(typeof fxID).toBe('string')
   })

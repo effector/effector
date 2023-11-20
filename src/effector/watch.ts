@@ -4,21 +4,25 @@ import {createNode} from './createNode'
 import {Subscription, NodeUnit} from './index.h'
 import {createSubscription} from './subscription'
 import {assert} from './throw'
-import {isFunction} from './is'
+import {isFunction, is} from './is'
+import {traverseIncrementActivations} from './lazy'
+import {getGraph} from './getter'
 
 export const watchUnit = (
   unit: NodeUnit,
   handler: (payload: any) => any,
 ): Subscription => {
   assert(isFunction(handler), '.watch argument should be a function')
-  return createSubscription(
-    createNode({
-      scope: {fn: handler},
-      node: [run({fn: callStack})],
-      parent: unit,
-      meta: {op: 'watch'},
-      family: {owners: unit},
-      regional: true,
-    }),
-  )
+  const node = createNode({
+    alwaysActive: true,
+    activate: [getGraph(unit)],
+    scope: {fn: handler},
+    node: [run({fn: callStack})],
+    parent: unit,
+    meta: {op: 'watch'},
+    family: {owners: unit},
+    regional: true,
+  })
+  traverseIncrementActivations(getGraph(unit), node)
+  return createSubscription(node)
 }

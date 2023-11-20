@@ -110,6 +110,8 @@ test('watch behavior should be consistent', () => {
     parent: [trigger],
   })
 
+  trigger.watch(() => {})
+
   trigger(1)
 
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`

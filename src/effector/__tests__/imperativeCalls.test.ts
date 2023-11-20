@@ -19,6 +19,7 @@ describe('store', () => {
     const $x = createStore(0).on(trigger, x => {
       event()
     })
+    $x.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: unit call from pure function is not supported, use operators like sample instead]`,
@@ -32,6 +33,7 @@ describe('store', () => {
       event()
       return x
     })
+    $y.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: unit call from pure function is not supported, use operators like sample instead]`,
@@ -60,6 +62,7 @@ describe('event', () => {
     const y = x.map(() => {
       event()
     })
+    y.watch(() => {})
     x()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: unit call from pure function is not supported, use operators like sample instead]`,
@@ -71,6 +74,7 @@ describe('event', () => {
     const x = y.prepend(() => {
       event()
     })
+    y.watch(() => {})
     x()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: unit call from pure function is not supported, use operators like sample instead]`,
@@ -82,6 +86,7 @@ describe('event', () => {
     const y = x.filterMap(() => {
       event()
     })
+    y.watch(() => {})
     x()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: unit call from pure function is not supported, use operators like sample instead]`,
@@ -97,6 +102,7 @@ test('combine', () => {
     event()
     return x
   })
+  $comb.watch(() => {})
   trigger()
   expect(getWarning()).toMatchInlineSnapshot(
     `[Error: unit call from pure function is not supported, use operators like sample instead]`,
@@ -106,13 +112,16 @@ test('combine', () => {
 describe('sample', () => {
   test('fn', () => {
     const trigger = createEvent()
+    const target = createEvent()
     const event = createEvent()
     sample({
       clock: trigger,
       fn() {
         event()
       },
+      target,
     })
+    target.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: unit call from pure function is not supported, use operators like sample instead]`,
@@ -120,6 +129,7 @@ describe('sample', () => {
   })
   test('filter', () => {
     const trigger = createEvent()
+    const target = createEvent()
     const event = createEvent()
     sample({
       clock: trigger,
@@ -127,7 +137,9 @@ describe('sample', () => {
         event()
         return true
       },
+      target,
     })
+    target.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: unit call from pure function is not supported, use operators like sample instead]`,

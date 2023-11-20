@@ -25,6 +25,7 @@ import {
   setCurrentPage,
   initRefInScope,
   isPure,
+  initRefAfterActivation,
 } from './kernel'
 
 import {createName} from './naming'
@@ -45,6 +46,7 @@ import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
+import {addActivator, traverseSetAlwaysActive} from './lazy'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -112,7 +114,8 @@ const deriveEvent = (
     derived: true,
     and: config,
   })
-  createLinkNode(event, mapped, node, op, fn)
+  const linkNode = createLinkNode(event, mapped, node, op, fn, false)
+  addActivator(mapped, [event, linkNode], true)
   return mapped
 }
 
@@ -161,6 +164,7 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
+      alwaysActive: false,
       meta: initUnit(config.actualOp || EVENT, event, config),
       regional: true,
     }),
@@ -190,7 +194,14 @@ export function createEvent<Payload = any>(
         parent: getParent(event),
       })
       applyTemplate('eventPrepend', getGraph(contramapped))
-      createLinkNode(contramapped, event, [userFnCall()], 'prepend', fn)
+      const linkNode = createLinkNode(
+        contramapped,
+        event,
+        [userFnCall()],
+        'prepend',
+        fn,
+      )
+      addActivator(event, [contramapped, linkNode], true)
       applyParentHook(event, contramapped)
       return contramapped
     },
@@ -215,12 +226,12 @@ function on<State>(
     `${methodName} in derived store`,
     `${methodName} in store created via createStore`,
   )
-  forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
+  const unitsArray = Array.isArray(nodeSet) ? nodeSet : [nodeSet]
+  unitsArray.forEach(unit => traverseSetAlwaysActive(getGraph(unit)))
+  forEach(unitsArray, trigger => {
     store.off(trigger)
-    getSubscribers(store).set(
-      trigger,
-      createSubscription(updateStore(trigger, store, 'on', callARegStack, fn)),
-    )
+    const linkNode = updateStore(trigger, store, 'on', callARegStack, fn, true)
+    getSubscribers(store).set(trigger, createSubscription(linkNode))
   })
   return store
 }
@@ -265,6 +276,12 @@ export function createStore<State>(
         reachedPage = forkPage
       }
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
+      if (
+        !store.graphite.lazy!.alwaysActive &&
+        store.graphite.lazy!.usedBy.length === 0
+      ) {
+        initRefAfterActivation(targetRef)
+      }
       return readRef(targetRef)
     },
     setState: (state: State) =>
@@ -298,7 +315,7 @@ export function createStore<State>(
     map(fn: (value: any) => any, outerConfig: Config) {
       let mapConfig: Config | undefined
       if (isObject(fn)) {
-        mapConfig = (fn as any)
+        mapConfig = fn as any
         fn = (fn as unknown as {fn: (value: any) => any}).fn
       }
       let lastResult
@@ -317,13 +334,15 @@ export function createStore<State>(
         ...outerConfig,
         and: mapConfig,
       })
-      const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
+      const linkNode = updateStore(store, innerStore, MAP, callStack, fn, false)
       addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
         from: plainState,
       })
       getStoreState(innerStore).noInit = true
+      innerStore.graphite.lazy!.alwaysActive = false
+      addActivator(innerStore, [store, linkNode], true)
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },
@@ -345,6 +364,7 @@ export function createStore<State>(
   const meta = initUnit(STORE, store, config)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
+    alwaysActive: true,
     scope: {state: plainState, fn: updateFilter},
     node: [
       calc((upd, _, stack) => {
@@ -390,12 +410,12 @@ export function createStore<State>(
     setMeta(store, 'warnSerialize', true)
   }
   const isVoidDefaultState = isVoid(defaultState)
-  const canVoid = (isVoidDefaultState && voidValueAllowed)
+  const canVoid = isVoidDefaultState && voidValueAllowed
   assert(
     derived || !isVoidDefaultState || canVoid,
     requireExplicitSkipVoidMessage,
   )
-  if (derived && (isVoidDefaultState && !explicitSkipVoid)) {
+  if (derived && isVoidDefaultState && !explicitSkipVoid) {
     console.error(requireExplicitSkipVoidMessage)
   }
   own(store, [updates])
@@ -423,6 +443,7 @@ const updateStore = (
   op: string,
   caller: typeof callStackAReg,
   fn: Function,
+  alwaysActive: boolean,
 ) => {
   const storeRef = getStoreState(store)
   const reader = mov({
@@ -443,5 +464,5 @@ const updateStore = (
     node,
     is.store(from) && getStoreState(from),
   )
-  return createLinkNode(from, store, node, op, fn)
+  return createLinkNode(from, store, node, op, fn, alwaysActive)
 }

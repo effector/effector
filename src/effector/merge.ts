@@ -3,6 +3,7 @@ import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {unitObjectName} from './naming'
 import {assertNodeSet} from './is'
+import {addActivator} from './lazy'
 
 export function merge<T>(
   units: Array<Event<T> | Store<T> | Effect<T, any, any>>,
@@ -15,5 +16,6 @@ export function merge<T>(
     and: config,
   })
   createLinkNode(units, result, [], 'merge')
+  addActivator(result, units, true)
   return result
 }
