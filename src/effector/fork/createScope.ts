@@ -1,4 +1,4 @@
-import {getForkPage, getGraph, getMeta, getParent} from '../getter'
+import {getForkPage, getGraph} from '../getter'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {calc, compute} from '../step'
@@ -16,11 +16,11 @@ export function createScope(unit?: Domain): Scope {
     },
     node: [
       calc((_, scope, stack) => {
-        if (!getParent(stack)) {
+        if (!stack.parent) {
           scope.fxID += 1
           return
         }
-        if (getMeta(getParent(stack).node, 'needFxCounter') === 'dec') {
+        if (stack.parent.node.meta.needFxCounter === 'dec') {
           scope.inFlight -= 1
         } else {
           scope.inFlight += 1
@@ -56,21 +56,20 @@ export function createScope(unit?: Domain): Scope {
   const storeChange = createNode({
     node: [
       calc((value, __, stack) => {
-        const storeStack = getParent(stack)
+        const storeStack = stack.parent
         if (storeStack) {
           const storeNode = storeStack.node
           if (
-            !getMeta(storeNode, 'isCombine') ||
-            (getParent(storeStack) &&
-              getMeta(getParent(storeStack).node, 'op') !== 'combine')
+            !storeNode.meta.isCombine ||
+            (storeStack.parent && storeStack.parent.node.meta.op !== 'combine')
           ) {
             const forkPage = getForkPage(stack)!
             const id = storeNode.scope.state.id
-            const sid = getMeta(storeNode, 'sid')
+            const sid = storeNode.meta.sid
             forkPage.sidIdMap[sid] = id
             forkPage.values.sidMap[sid] = value
 
-            const serialize = getMeta(storeNode, 'serialize')
+            const serialize = storeNode.meta.serialize
             if (serialize) {
               if (serialize === 'ignore') {
                 forkPage.sidSerializeSettings.set(sid, {ignore: true})
@@ -91,13 +90,13 @@ export function createScope(unit?: Domain): Scope {
       calc((_, __, stack) => {
         const forkPage = getForkPage(stack)
         if (forkPage) {
-          const storeStack = getParent(stack)
+          const storeStack = stack.parent
           if (storeStack) {
             const storeNode = storeStack.node
             if (
-              !getMeta(storeNode, 'isCombine') ||
-              (getParent(storeStack) &&
-                getMeta(getParent(storeStack).node, 'op') !== 'combine')
+              !storeNode.meta.isCombine ||
+              (storeStack.parent &&
+                storeStack.parent.node.meta.op !== 'combine')
             ) {
               forkPage.warnSerialize = true
             }

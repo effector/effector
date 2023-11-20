@@ -2,7 +2,7 @@ import type {Leaf} from '../forest/index.h'
 
 import type {Node, NodeUnit, StateRef, Stack} from './index.h'
 import {readRef} from './stateRef'
-import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
+import {getForkPage, getGraph, getValue} from './getter'
 import type {Scope} from './unit.h'
 import {add, forEach} from './collection'
 
@@ -196,7 +196,7 @@ export const setCurrentPage = (newPage: Leaf | null) => {
 const getPageForRef = (page: Leaf | null, id: string) => {
   if (page) {
     while (page && !page.reg[id]) {
-      page = getParent(page)
+      page = page.parent
     }
     if (page) return page
   }
@@ -382,7 +382,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         case 'compute':
           const data = step.data
           if (data.fn) {
-            isWatch = getMeta(node, 'op') === 'watch'
+            isWatch = node.meta.op === 'watch'
             isPure = data.pure
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
@@ -414,7 +414,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         pushFirstHeapItem('child', page, nextNode, stack, finalValue, forkPage)
       })
       if (forkPage) {
-        if (getMeta(node, 'needFxCounter'))
+        if (node.meta.needFxCounter)
           pushFirstHeapItem(
             'child',
             page,
@@ -423,7 +423,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             finalValue,
             forkPage,
           )
-        if (getMeta(node, 'storeChange'))
+        if (node.meta.storeChange)
           pushFirstHeapItem(
             'child',
             page,
@@ -432,7 +432,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             finalValue,
             forkPage,
           )
-        if (getMeta(node, 'warnSerialize'))
+        if (node.meta.warnSerialize)
           pushFirstHeapItem(
             'child',
             page,
