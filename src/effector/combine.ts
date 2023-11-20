@@ -10,7 +10,7 @@ import {createLinkNode} from './forward'
 import {assert, deprecate} from './throw'
 import {readTemplate} from './region'
 import {forIn} from './collection'
-import {BARRIER, MAP, REG_A, VALUE} from './tag'
+import {MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
 
@@ -151,7 +151,7 @@ const storeCombination = (
       from: VALUE,
       store: true,
       target: isFresh,
-      priority: BARRIER,
+      priority: 'barrier',
       batch: true,
     }),
     /**

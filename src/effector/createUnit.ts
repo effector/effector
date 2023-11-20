@@ -41,7 +41,7 @@ import {
   getMeta,
 } from './getter'
 import {assert, deprecate} from './throw'
-import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
+import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
@@ -172,7 +172,7 @@ export function createEvent<Payload = any>(
     map: (fn: Function) => deriveEvent(event, MAP, fn, [userFnCall()]),
     filter: (fn: {fn: Function}) =>
       //@ts-expect-error
-      deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
+      deriveEvent(event, 'filter', fn.fn ? fn : fn.fn, [
         userFnCall(callStack, true),
       ]),
     filterMap: (fn: Function) =>

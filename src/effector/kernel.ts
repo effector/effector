@@ -3,7 +3,6 @@ import type {Leaf} from '../forest/index.h'
 import type {Node, NodeUnit, StateRef, Stack} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
-import {STORE, EFFECT, SAMPLER, STACK, BARRIER, VALUE, REG_A, MAP} from './tag'
 import type {Scope} from './unit.h'
 import {add, forEach} from './collection'
 
@@ -178,11 +177,11 @@ const getPriority = (t: PriorityTag) => {
       return 1
     case 'read':
       return 2
-    case BARRIER:
+    case 'barrier':
       return 3
-    case SAMPLER:
+    case 'sampler':
       return 4
-    case EFFECT:
+    case 'effect':
       return 5
     default:
       return -1
@@ -255,7 +254,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     upsert = unit.defer
     meta = unit.meta
     pageForLaunch = 'page' in unit ? unit.page : pageForLaunch
-    if (unit[STACK]) stackForLaunch = unit[STACK]
+    if (unit.stack) stackForLaunch = unit.stack
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
     unit = unit.target
   }
@@ -344,13 +343,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           let value
           //prettier-ignore
           switch (data.from) {
-            case STACK: value = getValue(stack); break
-            case REG_A: /** fall-through case */
+            case 'stack': value = getValue(stack); break
+            case 'a': /** fall-through case */
             case 'b':
               value = stack[data.from]
               break
-            case VALUE: value = data.store; break
-            case STORE:
+            case 'value': value = data.store; break
+            case 'store':
               if (reg && !reg[data.store.id]) {
                 // if (!page.parent) {
                 if (hasPageReg) {
@@ -379,12 +378,12 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           }
           //prettier-ignore
           switch (data.to) {
-            case STACK: stack.value = value; break
-            case REG_A: /** fall-through case */
+            case 'stack': stack.value = value; break
+            case 'a': /** fall-through case */
             case 'b':
               stack[data.to] = value
               break
-            case STORE:
+            case 'store':
               getPageRef(page, forkPage, node, data.target).current = value
               break
           }
@@ -506,7 +505,7 @@ export const initRefInScope = (
       const needToAssign = isGetState || !sourceRef.noInit || isKernelCall
       forEach(sourceRef.before, cmd => {
         switch (cmd.type) {
-          case MAP: {
+          case 'map': {
             const from = cmd.from
             if (from || cmd.fn) {
               if (from) initRefInScope(scope, from, isGetState, isKernelCall)

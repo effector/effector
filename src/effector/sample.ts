@@ -19,7 +19,7 @@ import {createEvent} from './createUnit'
 import {createNode} from './createNode'
 import {assert, deprecate} from './throw'
 import {forEach} from './collection'
-import {SAMPLE, STACK, VALUE} from './tag'
+import {STACK, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
 import {own} from './own'
@@ -52,7 +52,7 @@ export function sample(...args: any[]) {
   if (
     isVoid(clock) &&
     isObject(source) &&
-    validateSampleConfig(source, SAMPLE)
+    validateSampleConfig(source, 'sample')
   ) {
     clock = source.clock
     fn = source.fn
@@ -70,7 +70,7 @@ export function sample(...args: any[]) {
     source = source.source
   }
   return createSampling(
-    SAMPLE,
+    'sample',
     clock,
     source,
     filter,
