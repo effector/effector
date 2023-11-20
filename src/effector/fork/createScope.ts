@@ -114,10 +114,10 @@ export function createScope(unit?: Domain): Scope {
     sidSerializeSettings: new Map(),
     getState(store: StateRef | Store<any>) {
       if ('current' in store) {
-        return getPageRef(currentPage, resultScope, null, store).current
+        return getPageRef(currentPage, resultScope, store, false).current
       }
       const node = getGraph(store)
-      return getPageRef(currentPage, resultScope, node, node.scope.state, true)
+      return getPageRef(currentPage, resultScope, node.scope.state, true)
         .current
     },
     kind: SCOPE,

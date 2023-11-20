@@ -133,22 +133,13 @@ const pushFirstHeapItem = (
       meta,
     },
     type,
+    0,
   )
-const pushHeap = (
-  idx: number,
-  stack: Stack,
-  type: PriorityTag,
-  id: number = 0,
-) => {
+const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id: number) => {
   const priority = getPriority(type)
   const bucket: QueueBucket = queue[priority]
   const item: QueueItem = {
-    v: {
-      idx,
-      stack,
-      type,
-      id,
-    },
+    v: {idx, stack, type, id},
     l: null,
     r: null,
   }
@@ -214,9 +205,8 @@ const getPageForRef = (page: Leaf | null, id: string) => {
 export const getPageRef = (
   page: Leaf | null,
   forkPage: Scope | null | void,
-  node: Node | null,
   ref: StateRef,
-  isGetState?: boolean,
+  isGetState: boolean,
 ) => {
   const pageForRef = getPageForRef(page, ref.id)
   if (pageForRef) return pageForRef.reg[ref.id]
@@ -331,7 +321,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               pushHeap(stepn, stack, priority, barrierID)
             }
           } else {
-            pushHeap(stepn, stack, priority)
+            pushHeap(stepn, stack, priority, 0)
           }
           continue kernelLoop
         }
@@ -372,7 +362,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                 }
                 // }
               }
-              // value = getPageRef(page, forkPage, node, data.store.id).current
+              // value = getPageRef(page, forkPage, data.store.id, false).current
               value = readRef(reg ? reg[data.store.id] || data.store : data.store)
               break
           }
@@ -384,7 +374,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               stack[data.to] = value
               break
             case 'store':
-              getPageRef(page, forkPage, node, data.target).current = value
+              getPageRef(page, forkPage, data.target, false).current = value
               break
           }
           break
