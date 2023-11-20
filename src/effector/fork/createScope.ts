@@ -3,7 +3,7 @@ import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {calc, compute} from '../step'
 import type {Domain, Scope, SettledDefer, Store} from '../unit.h'
-import type {StateRef} from '../index.h'
+import type {Stack, StateRef} from '../index.h'
 import {forEach} from '../collection'
 import {DOMAIN, SAMPLER, SCOPE} from '../tag'
 
@@ -59,10 +59,7 @@ export function createScope(unit?: Domain): Scope {
         const storeStack = stack.parent
         if (storeStack) {
           const storeNode = storeStack.node
-          if (
-            !storeNode.meta.isCombine ||
-            (storeStack.parent && storeStack.parent.node.meta.op !== 'combine')
-          ) {
+          if (isNotCombineNode(storeStack)) {
             const forkPage = getForkPage(stack)!
             const id = storeNode.scope.state.id
             const sid = storeNode.meta.sid
@@ -89,17 +86,9 @@ export function createScope(unit?: Domain): Scope {
     node: [
       calc((_, __, stack) => {
         const forkPage = getForkPage(stack)
-        if (forkPage) {
-          const storeStack = stack.parent
-          if (storeStack) {
-            const storeNode = storeStack.node
-            if (
-              !storeNode.meta.isCombine ||
-              (storeStack.parent &&
-                storeStack.parent.node.meta.op !== 'combine')
-            ) {
-              forkPage.warnSerialize = true
-            }
+        if (forkPage && stack.parent) {
+          if (isNotCombineNode(stack.parent)) {
+            forkPage.warnSerialize = true
           }
         }
       }),
@@ -136,3 +125,7 @@ export function createScope(unit?: Domain): Scope {
   }
   return resultScope
 }
+
+const isNotCombineNode = (storeStack: Stack) =>
+  !storeStack.node.meta.isCombine ||
+  (storeStack.parent && storeStack.parent.node.meta.op !== 'combine')
