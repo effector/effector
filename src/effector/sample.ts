@@ -24,6 +24,7 @@ import {merge} from './merge'
 import {applyTemplate} from './template'
 import {own} from './own'
 import {createLinkNode} from './forward'
+import {generateErrorTitle} from './naming'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -48,18 +49,19 @@ export function sample(...args: any[]) {
   let sid
   let batch = true
   let filter
+  const errorTitle = generateErrorTitle('sample', metadata)
   /** config case */
   if (
     isVoid(clock) &&
     isObject(source) &&
-    validateSampleConfig(source, 'sample')
+    validateSampleConfig(source, errorTitle)
   ) {
     clock = source.clock
     fn = source.fn
     if ('batch' in source) {
       batch = source.batch
     } else {
-      deprecate(!('greedy' in source), 'greedy in sample', 'batch')
+      deprecate(!('greedy' in source), 'greedy in sample', 'batch', errorTitle)
       batch = !source.greedy
     }
     filter = source.filter
@@ -99,10 +101,11 @@ export const createSampling = (
   filterRequired: boolean,
   sid?: string | undefined,
 ) => {
+  const errorTitle = generateErrorTitle(method, metadata)
   const isUpward = !!target
   assert(
     !isVoid(source) || !isVoid(clock),
-    fieldErrorMessage(method, 'either source or clock'),
+    fieldErrorMessage(errorTitle, 'either source or clock'),
   )
   let sourceIsClock = false
   if (isVoid(source)) {
@@ -114,7 +117,7 @@ export const createSampling = (
     /** still undefined! */
     clock = source
   } else {
-    assertNodeSet(clock, method, 'clock')
+    assertNodeSet(clock, errorTitle, 'clock')
     if (Array.isArray(clock)) {
       clock = merge(clock as CommonUnit[])
     }
@@ -134,8 +137,8 @@ export const createSampling = (
     }
   }
   if (target) {
-    assertNodeSet(target, method, 'target')
-    assertTarget(method, target)
+    assertNodeSet(target, errorTitle, 'target')
+    assertTarget(errorTitle, target)
   } else {
     if (
       filterType === 'none' &&

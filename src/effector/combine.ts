@@ -5,7 +5,7 @@ import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject, isVoid} from './is'
-import {unitObjectName} from './naming'
+import {generateErrorTitle, unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {assert, deprecate} from './throw'
 import {readTemplate} from './region'
@@ -19,6 +19,7 @@ export function combine(...args: any[]): Store<any> {
   let stores
   let config
   ;[args, config] = processArgsToConfig(args)
+  const errorTitle = generateErrorTitle('combine', config)
   // skipVoid support, to be removed in effector 24
   const maybeExtConfig = args[args.length - 1]
   const isExtendedConfig = !is.store(maybeExtConfig) && isObject(maybeExtConfig)
@@ -72,7 +73,7 @@ export function combine(...args: any[]): Store<any> {
       handler = (list: any[]) => fn(...list)
     }
   }
-  assert(isObject(structStoreShape), 'shape should be an object')
+  assert(isObject(structStoreShape), `${errorTitle}: shape should be an object`)
   return storeCombination(
     Array.isArray(structStoreShape),
     !noArraySpread,
@@ -91,6 +92,7 @@ const storeCombination = (
   fn?: (upd: any) => any,
   extConfig?: {skipVoid?: boolean},
 ) => {
+  const errorTitle = generateErrorTitle('combine', config)
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
 
@@ -169,6 +171,7 @@ const storeCombination = (
       assert(
         !is.unit(child) && !isVoid(child),
         `combine expects a store in a field ${key}`,
+        errorTitle,
       )
       stateNew[key] = defaultState[key] = child
       return
@@ -192,8 +195,8 @@ const storeCombination = (
     if (fn) {
       const computedValue = fn(stateNew)
 
-      if (isVoid(computedValue) && (!extConfig || !("skipVoid" in extConfig))) {
-        console.error(requireExplicitSkipVoidMessage)
+      if (isVoid(computedValue) && (!extConfig || !('skipVoid' in extConfig))) {
+        console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
       }
 
       storeStateRef.current = computedValue
