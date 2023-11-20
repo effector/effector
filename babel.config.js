@@ -151,7 +151,6 @@ const babelConfig = {
     if (meta.isTest) {
       result.push('@babel/plugin-transform-modules-commonjs')
     }
-    addSrcPlugin(meta.isBuild, 'constToLet.js')
     addSrcPlugin(meta.replaceVueReactivity, 'vueImports.js')
     addSrcPlugin(meta.replaceReactShim, 'reactShimImports.js')
     return result
