@@ -740,6 +740,8 @@ describe('real use cases', () => {
       },
     })
 
+    started.watch(() => {})
+
     const scope = fork()
 
     inspect({
