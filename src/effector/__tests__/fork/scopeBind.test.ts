@@ -147,23 +147,16 @@ it('saves scope inside of arbiraty sync callback', () => {
   expect($count.getState()).toBe(0)
 })
 
-it('saves scope inside of arbiraty async callback', async () => {
-  const incFx = createEffect(async () => {})
-  const $count = createStore(0).on(incFx.finally, x => x + 1)
-
+it('arbiraty async callback is not supported', async () => {
   const scope = fork()
 
-  const scopeInc = scopeBind(
-    async () => {
-      incFx()
-    },
-    {scope},
+  const scopeInc = scopeBind(async () => {}, {scope})
+
+  expect(() => {
+    scopeInc()
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"scopeBind: arbitary async callback is not supported, use an effect instead"`,
   )
-
-  await scopeInc()
-
-  expect(scope.getState($count)).toBe(1)
-  expect($count.getState()).toBe(0)
 })
 
 test('scopeBind with arbitary sync callback re-throws exception', () => {
@@ -180,43 +173,8 @@ test('scopeBind with arbitary sync callback re-throws exception', () => {
     {scope},
   )
 
-  let catched: any
-
-  try {
-    scopeInc()
-  } catch (err) {
-    catched = err
-  }
+  expect(() => scopeInc()).toThrowErrorMatchingInlineSnapshot(`"error"`)
 
   expect(scope.getState($count)).toBe(1)
   expect($count.getState()).toBe(0)
-  expect(catched).toBeInstanceOf(Error)
-  expect(catched.message).toBe('error')
-})
-
-test('scopeBind with arbitary async callback exposes rejected promise', async () => {
-  const incFx = createEffect(async () => {})
-  const $count = createStore(0).on(incFx.finally, x => x + 1)
-
-  const scope = fork()
-
-  const scopeInc = scopeBind(
-    async () => {
-      await incFx()
-      throw new Error('error')
-    },
-    {scope},
-  )
-
-  let catched: any
-  try {
-    await scopeInc()
-  } catch (err) {
-    catched = err
-  }
-
-  expect(scope.getState($count)).toBe(1)
-  expect($count.getState()).toBe(0)
-  expect(catched).toBeInstanceOf(Error)
-  expect(catched.message).toBe('error')
 })

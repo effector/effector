@@ -1,6 +1,7 @@
 import {assert} from '../throw'
 import {forkPage, setForkPage, isWatch, setIsWatch} from '../kernel'
 import type {Scope} from '../unit.h'
+import {is} from '../is'
 
 /** bind event to scope */
 export function scopeBind(
@@ -28,6 +29,13 @@ export function scopeBind(
     setForkPage(lastForkPage)
 
     if (failed) throw final
+
+    if (final instanceof Promise && !is.effect(unit)) {
+      throw Error(
+        'scopeBind: arbitary async callback is not supported, use an effect instead',
+      )
+    }
+
     return final
   }
 }
