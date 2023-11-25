@@ -183,6 +183,9 @@ const barriers = new Set<string | number>()
 
 let isRoot = true
 export let isWatch = false
+export const setIsWatch = (newIsWatch: boolean) => {
+  isWatch = newIsWatch
+}
 export let isPure = false
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
