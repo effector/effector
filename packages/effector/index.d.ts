@@ -3142,6 +3142,14 @@ export function scopeBind<T>(unit: EventCallable<T>, opts?: {scope?: Scope; safe
 export function scopeBind<P, D, F = Error>(unit: Effect<P, D, F>, opts?: {scope?: Scope; safe?: boolean}): (params: P) => Promise<D>
 
 /**
+ * Bind arbitary callback to a scope to be called later.
+ * When `scope` is not provided this method retrieve scope implicitly from scope of the handler (effect handler or watch function) inside which it's being called
+ * @param unit effect to bind
+ * @returns function which will trigger an effect in a given scope and returns a promise with a result
+ */
+export function scopeBind<T extends Function>(fn: T, opts?: {scope?: Scope; safe?: boolean}): T
+
+/**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
  * 
  * @deprecated use `fork({values, handlers})` instead
