@@ -212,3 +212,23 @@ test('scopeBind with arbitary sync callback re-throws exception', () => {
   expect(scope.getState($count)).toBe(1)
   expect($count.getState()).toBe(0)
 })
+
+test('scopeBind with arbitary async callback exposes rejection', () => {
+  const incFx = createEffect(() => {})
+  const $count = createStore(0).on(incFx.finally, x => x + 1)
+
+  const scope = fork()
+
+  const scopeInc = scopeBind(
+    async () => {
+      await incFx()
+      throw new Error('error')
+    },
+    {scope},
+  )
+
+  expect(() => scopeInc()).rejects.toThrowErrorMatchingInlineSnapshot(`"error"`)
+
+  expect(scope.getState($count)).toBe(1)
+  expect($count.getState()).toBe(0)
+})
