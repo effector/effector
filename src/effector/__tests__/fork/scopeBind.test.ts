@@ -147,16 +147,50 @@ it('saves scope inside of arbiraty sync callback', () => {
   expect($count.getState()).toBe(0)
 })
 
-it('arbiraty async callback is not supported', async () => {
+it('saves scope inside of imperative flow effect', async () => {
+  const incFx = createEffect(() => {})
+  const sleepFx = createEffect(() => new Promise(r => setTimeout(r, 1)))
+  const $count = createStore(0).on(incFx.finally, x => x + 1)
+
   const scope = fork()
 
-  const scopeInc = scopeBind(async () => {}, {scope})
-
-  expect(() => {
-    scopeInc()
-  }).toThrowErrorMatchingInlineSnapshot(
-    `"scopeBind: arbitary async callback is not supported, use an effect instead"`,
+  const scopeInc = scopeBind(
+    createEffect(async () => {
+      await sleepFx()
+      await incFx()
+      await sleepFx()
+      await incFx()
+    }),
+    {scope},
   )
+
+  await scopeInc()
+
+  expect(scope.getState($count)).toBe(2)
+  expect($count.getState()).toBe(0)
+})
+
+it('saves scope inside of arbitary async callback', async () => {
+  const incFx = createEffect(() => {})
+  const sleepFx = createEffect(() => new Promise(r => setTimeout(r, 1)))
+  const $count = createStore(0).on(incFx.finally, x => x + 1)
+
+  const scope = fork()
+
+  const scopeInc = scopeBind(
+    async () => {
+      await sleepFx()
+      await incFx()
+      await sleepFx()
+      await incFx()
+    },
+    {scope},
+  )
+
+  await scopeInc()
+
+  expect(scope.getState($count)).toBe(2)
+  expect($count.getState()).toBe(0)
 })
 
 test('scopeBind with arbitary sync callback re-throws exception', () => {
