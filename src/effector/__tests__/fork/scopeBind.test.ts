@@ -232,3 +232,43 @@ test('scopeBind with arbitary async callback exposes rejection', () => {
   expect(scope.getState($count)).toBe(1)
   expect($count.getState()).toBe(0)
 })
+
+test('scopeBind with arbitary sync callback exposes return value', () => {
+  const inc = createEvent()
+  const $count = createStore(0).on(inc, x => x + 1)
+
+  const scope = fork()
+
+  const scopeInc = scopeBind(
+    () => {
+      inc()
+      return 42
+    },
+    {scope},
+  )
+
+  expect(scopeInc()).toBe(42)
+
+  expect(scope.getState($count)).toBe(1)
+  expect($count.getState()).toBe(0)
+})
+
+test('scopeBind with arbitary async callback exposes return value', async () => {
+  const inc = createEvent()
+  const $count = createStore(0).on(inc, x => x + 1)
+
+  const scope = fork()
+
+  const scopeInc = scopeBind(
+    async () => {
+      inc()
+      return Promise.resolve(42)
+    },
+    {scope},
+  )
+
+  expect(await scopeInc()).toBe(42)
+
+  expect(scope.getState($count)).toBe(1)
+  expect($count.getState()).toBe(0)
+})
