@@ -144,7 +144,7 @@ export default {
     },
     peerDependencies: {
       react: '>=16.8.0 <19.0.0',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
     },
     files: [
       ...getFiles('effector-react'),
@@ -183,7 +183,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       'solid-js': '>= 1.3.0',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
     },
     files: [
       ...getFiles('effector-solid'),
@@ -238,7 +238,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       vue: '*',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
       '@vue/reactivity': '^3.0.2',
       '@vue/runtime-core': '^3.0.2',
     },

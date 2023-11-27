@@ -54,7 +54,7 @@
   "typings": "index.d.ts",
   "peerDependencies": {
     "vue": "*",
-    "effector": "^22.0.2",
+    "effector": "^23.0.0",
     "@vue/reactivity": "^3.0.2",
     "@vue/runtime-core": "^3.0.2"
   },

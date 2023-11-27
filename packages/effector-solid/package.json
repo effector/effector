@@ -39,7 +39,7 @@
   "typings": "index.d.ts",
   "peerDependencies": {
     "solid-js": ">= 1.3.0",
-    "effector": "^22.0.2"
+    "effector": "^23.0.0"
   },
   "files": [
     "README.md",
