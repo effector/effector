@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 22.8.8
+
+- Add new types from effector 23: `UnitTargetable`, `EventCallable` and `StoreWritable` as aliases to improve migration experience and ecosystem compatibility
+
 ## effector 22.8.7
 
 - Fix `combine` function called twice on first `allSettled` call ([PR #984](https://github.com/effector/effector/pull/984))
