@@ -106,6 +106,8 @@ export interface Unit<T> {
   readonly __: T
 }
 
+export type UnitTargetable<T> = Unit<T>
+
 export type CompositeName = {
   shortName: string
   fullName: string
@@ -147,6 +149,8 @@ export interface Event<Payload> extends Unit<Payload> {
   sid: string | null
   shortName: string
 }
+
+export type EventCallable<Payload> = Event<Payload>
 
 /**
  * Container for (possibly async) side effects
@@ -235,6 +239,8 @@ export interface Store<State> extends Unit<State> {
   sid: string | null
   reinit?: Event<void>
 }
+
+export type StoreWritable<State> = Store<State>
 
 export const is: {
   unit(obj: unknown): obj is Unit<any>
