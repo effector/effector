@@ -4,6 +4,8 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector 23.0.0 Spacewatch
 
+### Improvements
+
 - Introduce `EventCallable`, `StoreWritable` and `UnitTargetable` types to allow users to express and understand what could be updated or called directly and what could not. Now `createStore` returns `StoreWritable` which can be passed to sample target and `combine` returns `Store` which will show type and runtime error ([PR #966](https://github.com/effector/effector/pull/966))
 - Improve error messages: now it includes unit names and locations so it will be useful to find errors in raw server logs or bundles with disabled source maps. To enable locations in errors use `addLoc: true` in babel-plugin. Usually the one wanted to enable this in development only so `addLoc` plugin option is disabled by default ([PR #1015](https://github.com/effector/effector/pull/1015))
 - Add `batch` option to `createWatch` ([PR #850](https://github.com/effector/effector/pull/850))
@@ -13,12 +15,16 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Unify programmatic sid insertion in `merge` and `restore` ([PR #969](https://github.com/effector/effector/pull/969))
 - Allow `domain` to be used in `attach` without parent effect ([PR #895](https://github.com/effector/effector/pull/895))
 
+### Bug fixes
+
 - Fix nullable type of `.reinit`, now it exists in `StoreWritable` and not exists in `Store` ([PR #966](https://github.com/effector/effector/pull/966))
 - Fix serialization of ignored stores ([PR #903](https://github.com/effector/effector/pull/903))
 - Fix race condition in parallel effect calls ([PR #849](https://github.com/effector/effector/pull/849))
 - Fix scope reading its initial values from current (not initial) store value ([PR #909](https://github.com/effector/effector/pull/909))
 - Fix duplicated `combine` calls ([PR #916](https://github.com/effector/effector/pull/916))
 - Fix reading stale value in `attach` ([PR #1011](https://github.com/effector/effector/pull/1011))
+
+### Deprecations and removed apis
 
 - Deprecate undefined as magical value to skip store updates, use `skipVoid: true` option in `combine` and `map` to enable old behavior. Getting rid of that edge case will allow to introduce lazy computations ([issue #920](https://github.com/effector/effector/issues/920))
 - Deprecate `forward` and `guard` in favor of `sample` ([PR #913](https://github.com/effector/effector/pull/913))
@@ -30,18 +36,26 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Deprecate `effector/babel-plugin-react` ([PR #948](https://github.com/effector/effector/pull/948))
 - Deprecate `fork(domain)` and `hydrate(domain)` - this api existed for traking units in scopes when Fork API was introduced, but starting from 22 version this is done automatically and domain is no longer required for that ([PR #950](https://github.com/effector/effector/pull/950))
 
+---
+
 - Throw error when unit called from a pure function ([PR #905](https://github.com/effector/effector/pull/905))
 - Throw error when derived event is called ([PR #905](https://github.com/effector/effector/pull/905))
 - Throw error when `fn` in `$store.map(fn)` returns `undefined` in the initialization ([issue #828](https://github.com/effector/effector/issues/828))
+
+---
 
 - Remove flow typings. In the beginning, the effector was written in flow, but now only types remained and they were extremely outdated due to lack of expertise in the technology. The flow community maintains bindings in a [separate repository](https://github.com/flow-typed/flow-typed). ([PR #912](https://github.com/effector/effector/pull/912))
 - Remove deprecated `effector/fork` module ([PR #842](https://github.com/effector/effector/pull/842))
 - Remove deprecated `createStoreObject` alias for `combine` ([PR #908](https://github.com/effector/effector/pull/908))
 - Remove deprecated `.thru` method ([PR #843](https://github.com/effector/effector/pull/843))
 - Remove deprecated second argument with state from `$store.map` ([PR #846](https://github.com/effector/effector/pull/846))
-- Remove deprecated `restore($store)` support ([PR #1018](https://github.com/effector/effector/pull/1018))
+- Remove deprecated `restore($store)` support. This was an obscure feature when _store_ is passed to method and returned without changes as is ([PR #1018](https://github.com/effector/effector/pull/1018))
+
+### Performance
 
 - 10% performance improvement ([PR #1014](https://github.com/effector/effector/pull/1014))
+
+### [See also our migration guide](https://beta.effector.dev/en/guides/migration-guide-v23/)
 
 ## effector-react 23.0.0
 
@@ -51,7 +65,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Remove deprecated `effector-react/ssr` module ([PR #844](https://github.com/effector/effector/pull/844))
 - Remove deprecated createReactState and createContextComponent ([PR #845](https://github.com/effector/effector/pull/845))
 
-## effector-solid 23.0.0
+## effector-solid 0.23.0
 
 - Make all hooks isomorphic
 - Deprecate `effector-solid/scope` in favor of isomorphic hooks ([PR #979](https://github.com/effector/effector/pull/979))
@@ -134,7 +148,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Implemented inspect API ([PR #859](https://github.com/effector/effector/pull/859))
 
-# effector 22.5.2
+## effector 22.5.2
 
 - Fix `serialize: "ignore"` in `fork({ values })` ([PR #862](https://github.com/effector/effector/pull/862))
 
