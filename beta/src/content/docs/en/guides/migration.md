@@ -41,10 +41,11 @@ Most likely you will not need to do anything, you will just get better types.
 But you might have issues with external libraries, **which are not updated to Effector 23 yet**:
 
 - Most of the libraries are just _accepting_ units as clocks and sources - those cases are ok
-- If some operator from the external library is accepting some unti as a `target`, you still will see an good-old `Event` type in this case - so you will not have an type error here
-- If some _factory_ returns an event, which you are expected to call in your own code - you will get an type error and you will need to typecast this event to `EventCallable`
+- If some operator from the external library is accepting some unit as a `target`, you still will see an good-old `Event` type in this case, so you will not have an type error here even if there is actually an issue
+- If some _factory_ returns an event, which you are expected to call in your own code, then you will get an type error and you will need to typecast this event to `EventCallable`
 
-If you run into any of these cases, just create an issue in the repo of this library with a request to support Effector 23 version - owners of the project will see relevant type errors once they had updated Effector in their repo.
+If you run into any of these cases, just create an issue in the repo of this library with a request to support Effector 23 version.
+Owners of the project will see relevant type errors in their own source code and tests, once they update Effector in their repo.
 
 If you have these issues in your own custom factories or libraries, then you should already see a relevant type errors in the source code of your library - just replace `Event` with `EventCallable`, `Store` with `StoreWritable` or `Unit` with `UnitTargetable` everywhere it is relevant (i.e. you are going to call or write into these units somehow).
 
