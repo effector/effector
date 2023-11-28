@@ -63,6 +63,10 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Deprecate `effector-vue/ssr` in favor of isomorphic hooks ([PR #1005](https://github.com/effector/effector/pull/1005))
 - Remove obsolete deprecated apis `$watchAsStore` and `$store` ([PR #1004](https://github.com/effector/effector/pull/1004))
 
+## effector 22.8.8
+
+- Add new types from effector 23: `UnitTargetable`, `EventCallable` and `StoreWritable` as aliases to improve migration experience and ecosystem compatibility
+
 ## effector 22.8.7
 
 - Fix `combine` function called twice on first `allSettled` call ([PR #984](https://github.com/effector/effector/pull/984))
