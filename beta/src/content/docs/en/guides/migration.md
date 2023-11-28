@@ -81,3 +81,5 @@ If you do want to skip store update in certain cases, then it is better to expli
 It is recommended to use `{skipVoid: false}` at all times, so you are able to use an `undefined` as a normal value.
 
 If you do need `undefined` as a "magic skip" value - then you can use `{skipVoid: true}` to preserve current behaviour. You still will get a deprecation warning though, but only one for declaration instead of one for every such update.
+
+The `skipVoid` setting is temporary and only needed as a way to properly deprecate this feature from Effector. In Effector 24 `skipVoid` itself will be deprecated and then removed.
