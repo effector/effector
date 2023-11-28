@@ -72,7 +72,7 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: { en: "Migration guide" },
-        link: "/guides/migration-guide",
+        link: "/guides/migration-guide-v23",
       },
     ],
   },

@@ -1,7 +1,9 @@
 ---
 title: Migration guide
 redirectFrom:
+  - /guides/migration-guide-v23
   - /guides/migration-guide
+  - /en/guides/migration-guide
 ---
 
 This guide covers the steps required to migrate to Effector 23 from a previous version.
