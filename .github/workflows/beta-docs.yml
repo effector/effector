@@ -2,7 +2,7 @@ name: Beta Docs CI
 
 on:
   push:
-    branches: ['release/v23']
+    branches: ['master']
     paths:
       - 'beta/**'
   workflow_dispatch:
