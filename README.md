@@ -19,8 +19,6 @@ Business logic with ease
 
 ## Visit [effector.dev](https://effector.dev) for docs, guides and examples
 
-### Check out [beta.effector.dev](https://beta.effector.dev) for update documentation website
-
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
