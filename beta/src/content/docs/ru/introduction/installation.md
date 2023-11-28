@@ -10,13 +10,13 @@ Effector не требует использования какого-то одн
 Например: [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/).
 
 ```bash
-npm add effector
+npm install effector
 ```
 
 ### React
 
 ```bash
-npm add effector effector-react
+npm install effector effector-react
 ```
 
 Вы можете начать использовать effector онлайн с помощью [шаблона Stackblitz](https://stackblitz.com/fork/github/effector/vite-react-template) внутри которого уже настроен [TypeScript](https://typescriptlang.org/), [ViteJS](https://vitejs.dev/) и [React](https://reactjs.org/).
@@ -24,13 +24,13 @@ npm add effector effector-react
 ### Vue
 
 ```bash
-npm add effector effector-vue
+npm install effector effector-vue
 ```
 
 ### Solid
 
 ```bash
-npm add effector effector-solid
+npm install effector effector-solid
 ```
 
 ### Svelte
@@ -76,7 +76,7 @@ import { createStore } from "https://cdn.jsdelivr.net/npm/effector/effector.mjs"
 ### SWC
 
 ```bash
-npm add --development @effector/swc-plugin @swc/core
+npm install --development @effector/swc-plugin @swc/core
 ```
 
 [Документация плагина](https://github.com/effector/swc-plugin).

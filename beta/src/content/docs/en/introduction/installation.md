@@ -12,13 +12,13 @@ Effector doesn't depend on NPM, you can use any package manager you want.<br/>
 For example: [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/).
 
 ```bash
-npm add effector
+npm install effector
 ```
 
 ### React
 
 ```bash
-npm add effector effector-react
+npm install effector effector-react
 ```
 
 Also, you can start from [Stackblitz template](https://stackblitz.com/fork/github/effector/vite-react-template) with [TypeScript](https://typescriptlang.org/), [ViteJS](https://vitejs.dev/), and [React](https://reactjs.org/) already set up.
@@ -26,13 +26,13 @@ Also, you can start from [Stackblitz template](https://stackblitz.com/fork/githu
 ### Vue
 
 ```bash
-npm add effector effector-vue
+npm install effector effector-vue
 ```
 
 ### Solid
 
 ```bash
-npm add effector effector-solid
+npm install effector effector-solid
 ```
 
 ### Svelte
@@ -78,7 +78,7 @@ To use Babel plugin, you don't need to install additional packages, plugin bundl
 ### SWC
 
 ```bash
-npm add --development @effector/swc-plugin @swc/core
+npm install --development @effector/swc-plugin @swc/core
 ```
 
 [Documentation](https://github.com/effector/swc-plugin).
