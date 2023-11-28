@@ -65,7 +65,7 @@ There is a old feature in Effector: `undefined` is used as a "magic" value to sk
 const $value = createStore(0).on(newValueReceived, (_oldValue, newValue) => newValue);
 ```
 
-:point_up: if `newValue` is `undefined`, then update will be skipped.
+☝️ if `newValue` is `undefined`, then update will be skipped.
 
 The idea of making each mapper and reducer work as a sort of `filterMap` was considered useful in early Effectors, but is very rarely used properly, and is confusing and distracting, so it should be deprecated and removed.
 
