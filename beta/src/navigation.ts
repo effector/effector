@@ -70,6 +70,10 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Server Side Rendering" },
         link: "/guides/server-side-rendering",
       },
+      {
+        text: { en: "Migration guide" },
+        link: "/guides/migration-guide",
+      },
     ],
   },
   {
