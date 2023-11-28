@@ -7,7 +7,22 @@ import {
   Store,
   Event,
   guard,
+  StoreWritable,
+  EventCallable,
 } from 'effector'
+
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 
 const typecheck = '{global}'
 
@@ -129,7 +144,7 @@ describe('explicit generics', () => {
 
 describe('generic edge cases', () => {
   test('generic edge cases (should pass)', () => {
-    function generic1<A, B>(target: Store<A>, clock: Event<B>) {
+    function generic1<A, B>(target: StoreWritable<A>, clock: EventCallable<B>) {
       {
         sample({
           source: target,
@@ -208,7 +223,7 @@ describe('generic edge cases', () => {
     `)
   })
   test('generic edge cases (should fail)', () => {
-    function generic1<A, B>(target: Store<A>, clock: Event<B>) {
+    function generic1<A, B>(target: StoreWritable<A>, clock: EventCallable<B>) {
       {
         //@ts-expect-error
         sample({
@@ -267,12 +282,12 @@ describe('generic edge cases', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '[{ source: Store<A>; clock: Event<B>; target: Event<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"src\\", Event<B>, { clock: Event<B>; source: Store<A>; filter?: undefined; target: Event<B>; greedy?: boolean | undefined; } & { source: Store<...>; clock: Event<...>; target: Event<...>; }>'.
-      Argument of type '[{ source: Store<A>; clock: Event<B>; fn: (source: A, clock: B) => A; target: Event<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"fnRet\\", Event<B>, { clock: Event<B>; source: Store<A>; filter?: undefined; fn: (source: A, clock: B) => A; target: Event<B>; greedy?: boolean | undefined; } & { ...; }>'.
-      Argument of type '[{ source: Store<A>; clock: Event<B>; fn: (source: A, clock: B) => B; target: Store<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", Store<A>, { clock: Event<B>; source: Store<A>; filter?: undefined; fn: (source: A, clock: B) => B; target: Store<A>; greedy?: boolean | undefined; } & { ...; }>'.
-      Argument of type '[{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; target: Event<B>; }]' is not assignable to parameter of type 'TargetOrError<NonFalsy<A>, \\"src\\", Event<B>, { clock: Event<B>; source: Store<A>; filter: BooleanConstructor; target: Event<B>; greedy?: boolean | undefined; } & { ...; }>'.
-      Argument of type '[{ clock: Event<B>; source: Store<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => B; target: Store<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", Store<A>, { clock: Event<B>; source: Store<A>; filter?: BooleanConstructor | undefined; fn?: ((source: NonFalsy<A>, clock: B) => B) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }>'.
-      Argument of type '[{ clock: Event<B>; source: Store<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: Store<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", Store<A>, { clock: Event<B>; source: Store<A>; filter?: ((source: A, clock: B) => true) | undefined; fn?: ((source: A, clock: B) => B) | undefined; target: Store<...>; greedy?: boolean | undefined; } & { ...; }>'.
+      Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; target: EventCallable<B>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }>'.
+      Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => A; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"fnRet\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => A; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }>'.
+      Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => B; target: StoreWritable<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => B; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }>'.
+      Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<NonFalsy<A>, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }>'.
+      Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: BooleanConstructor | undefined; fn?: ((source: NonFalsy<...>, clock: B) => B) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }>'.
+      Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: ((source: A, clock: B) => true) | undefined; fn?: ((source: A, clock: B) => B) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }>'.
       "
     `)
   })
@@ -288,7 +303,7 @@ test('event by event', () => {
   const sample_ee_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Event<number>' is not assignable to type 'Event<string>'.
     "
   `)
 })
@@ -302,9 +317,8 @@ test('event by event with handler', () => {
   const sample_eeh_check2: Event<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -319,7 +333,7 @@ test('store by event', () => {
   const sample_se_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Event<number>' is not assignable to type 'Event<string>'.
     "
   `)
 })
@@ -333,9 +347,8 @@ test('store by event with handler', () => {
   const sample_seh_check2: Event<string> = e
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -350,7 +363,7 @@ test('effect by event', () => {
   const sample_efe_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Event<string>' is not assignable to type 'Event<number>'.
     "
   `)
 })
@@ -364,9 +377,8 @@ test('effect by event with handler', () => {
   const sample_efeh_check2: Event<number> = g
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<number>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
     "
   `)
 })
@@ -381,7 +393,8 @@ test('store by store', () => {
   const sample_ss_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 2.
+    Type 'Store<boolean>' is not assignable to type 'Store<string>'.
+      Type 'boolean' is not assignable to type 'string'.
     "
   `)
 })
@@ -395,9 +408,8 @@ test('store by store with handler', () => {
   const sample_ssh_check2: Store<string> = c
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Expected 1 arguments, but got 3.
-    Parameter 'a' implicitly has an 'any' type.
-    Parameter 'b' implicitly has an 'any' type.
+    Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
     "
   `)
 })
@@ -407,8 +419,7 @@ describe('sample(Store<T>):Store<T>', () => {
     const sample_s_correct: Store<string> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'Store<string>' is not assignable to parameter of type '{ error: \\"either target, clock or source should exists\\"; }'.
-        Property 'error' is missing in type 'Store<string>' but required in type '{ error: \\"either target, clock or source should exists\\"; }'.
+      no errors
       "
     `)
   })
@@ -418,7 +429,7 @@ describe('sample(Store<T>):Store<T>', () => {
     const sample_s_incorrect: Store<number> = sample(a)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'Store<string>' is not assignable to parameter of type '{ error: \\"either target, clock or source should exists\\"; }'.
+      Type 'Store<string>' is not assignable to type 'Store<number>'.
       "
     `)
   })
@@ -429,7 +440,7 @@ describe('sample(Store<T>):Store<T>', () => {
       const sample_s_edge_correct: Event<string> = sample(a, clock)
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Expected 1 arguments, but got 2.
+        no errors
         "
       `)
     })
@@ -440,7 +451,7 @@ describe('sample(Store<T>):Store<T>', () => {
       const sample_s_edge_incorrect: Event<number> = sample(a, clock)
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Expected 1 arguments, but got 2.
+        Type 'Event<string>' is not assignable to type 'Event<number>'.
         "
       `)
     })
@@ -504,14 +515,7 @@ describe('sample + guard (should pass)', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (number | boolean)[], clk: number) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-        Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (number | boolean)[], clk: number) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type '(number | boolean)[]' is not assignable to type '[any, any]'.
-              Target requires 2 element(s) but source may have fewer.
-      Binding element 'isAble' implicitly has an 'any' type.
-      Binding element 'field' implicitly has an 'any' type.
-      Parameter 'data' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
@@ -688,7 +692,7 @@ describe('clock without source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: Store<string>; fn: (foo: string) => string; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
+      Argument of type '{ clock: StoreWritable<string>; fn: (foo: string) => string; target: StoreWritable<number>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
       "
     `)
@@ -707,7 +711,7 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: Store<number>[]; fn: (foo: number) => boolean; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
+      Argument of type '{ clock: StoreWritable<number>[]; fn: (foo: number) => boolean; target: StoreWritable<number>; }' is not assignable to parameter of type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
       "
     `)
@@ -724,7 +728,7 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: Store<string>; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
+      Argument of type '{ clock: StoreWritable<string>; target: StoreWritable<number>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
       "
     `)
@@ -744,7 +748,7 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ clock: (Store<boolean> | Store<number> | Store<string>)[]; target: Store<number>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
+      Argument of type '{ clock: (StoreWritable<number> | StoreWritable<string> | StoreWritable<boolean>)[]; target: StoreWritable<number>; }' is not assignable to parameter of type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
       "
     `)
@@ -752,7 +756,7 @@ describe('clock without source', () => {
 })
 describe('sample + .map', () => {
   test('directly assign `.map` result to `source` (should pass)', () => {
-    const event: Event<[{foo: string}]> = createEvent()
+    const event: EventCallable<[{foo: string}]> = createEvent()
     const target = createStore('yes')
 
     sample({
@@ -767,7 +771,7 @@ describe('sample + .map', () => {
     `)
   })
   test('directly assign `.map` result to `source` without losing inference in `fn` (should pass)', () => {
-    const event: Event<[{foo: 'payload'}]> = createEvent()
+    const event: EventCallable<[{foo: 'payload'}]> = createEvent()
     const a = createStore(0)
     const b = createEvent<number | string>()
 
@@ -798,8 +802,48 @@ test('from unknown to known type (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<unknown>; target: Event<number>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
+    Argument of type '{ source: EventCallable<unknown>; target: EventCallable<number>; }' is not assignable to parameter of type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
     "
   `)
+})
+
+describe('derived unit in target', () => {
+  test('should not allow derived unit in target (should fail)', () => {
+    const start = createEvent()
+    const started = start.map(() => true)
+    const $store = createStore(false)
+    const $storeMap = $store.map(() => true)
+
+    const trigger = createEvent()
+
+    function wrap() {
+      sample({
+        clock: trigger,
+        target: started,
+      })
+  
+      sample({
+        clock: trigger,
+        target: $storeMap,
+      })
+  
+      sample({
+        clock: trigger,
+        fn: () => true,
+        target: [started, $store, $storeMap],
+      })
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{ clock: EventCallable<void>; target: Event<boolean>; }' is not assignable to parameter of type '{ error: \\"derived units are not allowed in target\\"; got: Event<boolean>; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Event<boolean>; }'.
+      Argument of type '{ clock: EventCallable<void>; target: Store<boolean>; }' is not assignable to parameter of type '{ error: \\"derived units are not allowed in target\\"; got: Store<boolean>; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Store<boolean>; }'.
+      Argument of type '{ clock: EventCallable<void>; fn: () => boolean; target: (Store<boolean> | Event<boolean>)[]; }' is not assignable to parameter of type '{ error: \\"derived units are not allowed in target\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
+      "
+    `)
+  })
 })

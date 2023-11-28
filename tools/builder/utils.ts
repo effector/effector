@@ -64,7 +64,22 @@ export function publishScript(name: string) {
     const command = args.shift()
     const argument = args.shift()
     if (command === 'publish') {
-      if (argument === 'next') {
+      if (argument === 'dry') {
+        try {
+          const {stdout, stderr} = await execa(
+            'npm',
+            ['publish', '--dry-run', '--tag', 'next'],
+            {
+              cwd: `${process.cwd()}/npm/${name}`,
+              env: process.env,
+            },
+          )
+          console.log(stdout)
+          console.error(stderr)
+        } catch (error) {
+          onCatch(error)
+        }
+      } else if (argument === 'next') {
         try {
           const {stdout, stderr} = await execa(
             'npm',

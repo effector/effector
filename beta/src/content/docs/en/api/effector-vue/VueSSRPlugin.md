@@ -5,6 +5,10 @@ redirectFrom:
   - /docs/api/effector-vue/VueSSRPlugin
 ---
 
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) `VueSSRPlugin` is deprecated. Use [`EffectorScopePlugin`](./EffectorScopePlugin) instead.
+:::
+
 The Plugin provides a general scope which needs for read and update effector's stores, call effector's events. Required for SSR.
 
 ### Arguments {#VueSSRPlugin-arguments}

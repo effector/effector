@@ -22,7 +22,6 @@ export interface Event<E> extends Unit {
   filterMap<T>(fn: (_: E) => T | void): Event<T>
   prepend<Before>(fn: (_: Before) => E): Event<Before>
   subscribe(subscriber: Subscriber<E>): Subscription
-  thru<U>(fn: (event: Event<E>) => U): U
   getType(): string
   shortName: string
   graphite: Node
@@ -47,7 +46,6 @@ export interface Store<State> extends Unit {
   ): Store<State>
   off(unit: CommonUnit): void
   subscribe(listener: (upd: State) => void): Subscription
-  thru<U>(fn: (store: Store<State>) => U): U
   //prettier-ignore
   watch: (
     & (
@@ -193,7 +191,6 @@ export interface Scope extends Unit {
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
   warnSerialize?: boolean
   warnSerializeNode: Node
-  activeEffects: Array<{ref: Scope}>
 }
 
 export type CommonUnit<T = any> = Event<T> | Effect<T, any, any> | Store<T>

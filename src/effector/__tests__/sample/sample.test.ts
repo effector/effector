@@ -11,6 +11,19 @@ import {
 
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('sid support', () => {
   const source = createStore(null)
   const sampled = sample({source, sid: 'foo'})
@@ -167,7 +180,9 @@ it('should not accept undefined clocks', () => {
       source: createStore(null),
       clock: undefined,
     })
-  }).toThrowErrorMatchingInlineSnapshot(`"sample: clock should be defined"`)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"[sample] (/src/effector/__tests__/sample/sample.test.ts:178:4): clock should be defined"`,
+  )
 })
 
 describe('sample type', () => {
@@ -216,12 +231,12 @@ describe('sample', () => {
   })
   describe('sample with event as source', () => {
     describe.each`
-      greedy   | resultDirect                | resultBacktracking
-      ${false} | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 2}, {x: 3}]}
-      ${true}  | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 1}, {x: 2}]}
+      batch    | resultDirect                | resultBacktracking
+      ${true}  | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 2}, {x: 3}]}
+      ${false} | ${[{x: 1}, {x: 2}, {x: 3}]} | ${[{x: 1}, {x: 2}]}
     `(
-      'depended on order of execution (greedy = $greedy)',
-      ({greedy, resultDirect, resultBacktracking}) => {
+      'depended on order of execution (batch = $batch)',
+      ({batch, resultDirect, resultBacktracking}) => {
         test('direct order', () => {
           const fn = jest.fn()
           const A = createEvent<number>()
@@ -231,7 +246,7 @@ describe('sample', () => {
             source: A,
             clock: B,
             fn: (A, B) => B,
-            greedy,
+            batch,
           }).watch(e => fn(e))
 
           A(1)
@@ -249,7 +264,7 @@ describe('sample', () => {
             source: B,
             clock: A,
             fn: B => B,
-            greedy,
+            batch,
           }).watch(e => fn(e))
 
           A(1)
@@ -457,12 +472,12 @@ describe('sample', () => {
     })
     describe('event call will not break watchers', () => {
       it.each`
-        greedy
-        ${false}
+        batch
         ${true}
+        ${false}
       `(
-        'event call will not break watchers (greedy = $greedy)',
-        async ({greedy}) => {
+        'event call will not break watchers (batch = $batch)',
+        async ({batch}) => {
           const fn1 = jest.fn()
           const hello = createEvent<string>()
           const run = createEvent<string>()
@@ -471,14 +486,14 @@ describe('sample', () => {
             source: hello,
             clock: run,
             fn: (a, b) => ({a, b}),
-            greedy,
+            batch,
           }).watch(() => {})
 
           sample({
             source: hello,
             clock: run,
             fn: (a, b) => ({a, b}),
-            greedy,
+            batch,
           }).watch(e => fn1(e))
 
           run('R')
@@ -700,7 +715,9 @@ describe('validation', () => {
     expect(() => {
       //@ts-expect-error
       sample({source: undefined, target})
-    }).toThrowErrorMatchingInlineSnapshot(`"sample: source should be defined"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:717:6): source should be defined"`,
+    )
   })
   test('clock validation', () => {
     const target = createEffect((_: any) => {})
@@ -708,7 +725,9 @@ describe('validation', () => {
     expect(() => {
       //@ts-expect-error
       sample({clock: undefined, target})
-    }).toThrowErrorMatchingInlineSnapshot(`"sample: clock should be defined"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:727:6): clock should be defined"`,
+    )
   })
   test('no source no clock', () => {
     const target = createEffect((_: any) => {})
@@ -717,7 +736,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"sample: either source or clock should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:737:6): either source or clock should be defined"`,
     )
   })
 })
@@ -772,11 +791,78 @@ describe('event/effect sampling behavior (issue #633)', () => {
 
     triggerEffect()
     /*
+    [effect] targetFx 2
+    [effect] targetFx.done {params: 2, result: undefined}
+    */
+    expect(argumentHistory(fn)).toEqual([2])
+  })
+
+  test('non-batched effect behavior', () => {
+    const fn = jest.fn()
+    const triggerEffect = createEvent()
+
+    const targetFx = createEffect(() => {})
+    const initFx = createEffect(() => {})
+
+    sample({
+      clock: triggerEffect,
+      target: [initFx.prepend(() => 1), initFx.prepend(() => 2)],
+    })
+
+    sample({
+      clock: initFx,
+      filter: targetFx.pending.map(val => !val),
+      target: targetFx,
+      batch: false,
+    })
+
+    targetFx.watch(params => fn(params))
+
+    triggerEffect()
+    /*
     [effect] targetFx 1
     [effect] targetFx 2
     [effect] targetFx.done {params: 1, result: undefined}
     [effect] targetFx.done {params: 2, result: undefined}
     */
     expect(argumentHistory(fn)).toEqual([1, 2])
+  })
+})
+
+describe('greedy deprecation', () => {
+  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    warn.mockRestore()
+  })
+
+  function getWarning() {
+    return warn.mock.calls.map(([msg]) => msg)[0]
+  }
+  test('greedy true is deprecated', () => {
+    const clock = createEvent()
+    const target = createEvent()
+    sample({
+      clock,
+      target,
+      greedy: true,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:847:4): greedy in sample is deprecated, use batch instead"`,
+    )
+  })
+  test('greedy false is deprecated', () => {
+    const clock = createEvent()
+    const target = createEvent()
+    sample({
+      clock,
+      target,
+      greedy: false,
+    })
+    expect(getWarning()).toMatchInlineSnapshot(
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:859:4): greedy in sample is deprecated, use batch instead"`,
+    )
   })
 })

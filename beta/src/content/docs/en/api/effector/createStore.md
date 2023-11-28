@@ -13,6 +13,7 @@ createStore<T>(defaultState: T): Store<T>
 createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
   name?: string
   updateFilter?: (update: T, current: T) => boolean
+  skipVoid?: boolean
   serialize?: 'ignore' | {
           write: (state: State) => SerializedState
           read: (json: SerializedState) => State
@@ -29,6 +30,7 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
    - `serialize: 'ignore'`: Option to disable store serialization when [serialize](/en/api/effector/serialize) is called _(since `effector 22.0.0`)_
    - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` – called on [serialize](/en/api/effector/serialize), transforms value to JSON value – primitive type or plain object/array. `read` – parse store state from JSON value, called on [fork](/en/api/effector/fork), if provided `values` is the result of `serialize` call.
    - `domain`: (_Domain_): Domain to attach store to after creation.
+   - `skipVoid`: (_boolean_): Flag to control, how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will read `undefined` as a "skip update" command and will do nothing.
 
 **Throws**
 

@@ -2,6 +2,67 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.0.0 Spacewatch
+
+- Introduce `EventCallable`, `StoreWritable` and `UnitTargetable` types to allow users to express and understand what could be updated or called directly and what could not. Now `createStore` returns `StoreWritable` which can be passed to sample target and `combine` returns `Store` which will show type and runtime error ([PR #966](https://github.com/effector/effector/pull/966))
+- Improve error messages: now it includes unit names and locations so it will be useful to find errors in raw server logs or bundles with disabled source maps. To enable locations in errors use `addLoc: true` in babel-plugin. Usually the one wanted to enable this in development only so `addLoc` plugin option is disabled by default ([PR #1015](https://github.com/effector/effector/pull/1015))
+- Add `batch` option to `createWatch` ([PR #850](https://github.com/effector/effector/pull/850))
+- Add `@withease/factories` to babel-plugin defaults ([PR #995](https://github.com/effector/effector/pull/995))
+- Add all `patronum` modules to babel-plugin defaults ([PR #996](https://github.com/effector/effector/pull/996))
+- Rename `greedy` to `batch` in `sample`. `greedy: true` becomes `batch: false` which is a better mental model for what this option do ([PR #972](https://github.com/effector/effector/pull/972))
+- Unify programmatic sid insertion in `merge` and `restore` ([PR #969](https://github.com/effector/effector/pull/969))
+- Allow `domain` to be used in `attach` without parent effect ([PR #895](https://github.com/effector/effector/pull/895))
+
+- Fix nullable type of `.reinit`, now it exists in `StoreWritable` and not exists in `Store` ([PR #966](https://github.com/effector/effector/pull/966))
+- Fix serialization of ignored stores ([PR #903](https://github.com/effector/effector/pull/903))
+- Fix race condition in parallel effect calls ([PR #849](https://github.com/effector/effector/pull/849))
+- Fix scope reading its initial values from current (not initial) store value ([PR #909](https://github.com/effector/effector/pull/909))
+- Fix duplicated `combine` calls ([PR #916](https://github.com/effector/effector/pull/916))
+- Fix reading stale value in `attach` ([PR #1011](https://github.com/effector/effector/pull/1011))
+
+- Deprecate undefined as magical value to skip store updates, use `skipVoid: true` option in `combine` and `map` to enable old behavior. Getting rid of that edge case will allow to introduce lazy computations ([issue #920](https://github.com/effector/effector/issues/920))
+- Deprecate `forward` and `guard` in favor of `sample` ([PR #913](https://github.com/effector/effector/pull/913))
+- Deprecate `reactSsr` option in babel-plugin ([PR #910](https://github.com/effector/effector/pull/910))
+- Deprecate `onlyChanges` option in `serialize` ([PR #907](https://github.com/effector/effector/pull/907))
+- Deprecate raw object `{[fx.sid]: Function}` in fork `handlers` ([PR #973](https://github.com/effector/effector/pull/973))
+- Deprecate `.watch` with second argument in favor of `sample` ([PR #906](https://github.com/effector/effector/pull/906))
+- Deprecate `.getType()` - relic from ancient times which exists for redux compatibility ([PR #899](https://github.com/effector/effector/pull/899))
+- Deprecate `effector/babel-plugin-react` ([PR #948](https://github.com/effector/effector/pull/948))
+- Deprecate `fork(domain)` and `hydrate(domain)` - this api existed for traking units in scopes when Fork API was introduced, but starting from 22 version this is done automatically and domain is no longer required for that ([PR #950](https://github.com/effector/effector/pull/950))
+
+- Throw error when unit called from a pure function ([PR #905](https://github.com/effector/effector/pull/905))
+- Throw error when derived event is called ([PR #905](https://github.com/effector/effector/pull/905))
+- Throw error when `fn` in `$store.map(fn)` returns `undefined` in the initialization ([issue #828](https://github.com/effector/effector/issues/828))
+
+- Remove flow typings. In the beginning, the effector was written in flow, but now only types remained and they were extremely outdated due to lack of expertise in the technology. The flow community maintains bindings in a [separate repository](https://github.com/flow-typed/flow-typed). ([PR #912](https://github.com/effector/effector/pull/912))
+- Remove deprecated `effector/fork` module ([PR #842](https://github.com/effector/effector/pull/842))
+- Remove deprecated `createStoreObject` alias for `combine` ([PR #908](https://github.com/effector/effector/pull/908))
+- Remove deprecated `.thru` method ([PR #843](https://github.com/effector/effector/pull/843))
+- Remove deprecated second argument with state from `$store.map` ([PR #846](https://github.com/effector/effector/pull/846))
+- Remove deprecated `restore($store)` support ([PR #1018](https://github.com/effector/effector/pull/1018))
+
+- 10% performance improvement ([PR #1014](https://github.com/effector/effector/pull/1014))
+
+## effector-react 23.0.0
+
+- Deprecate `effector-react/scope` in favor of isomorphic hooks ([PR #979](https://github.com/effector/effector/pull/979))
+- Deprecate `useStore`, `useEvent`, `connect` and `createStoreConsumer` in favor of universal `useUnit` ([PR #951](https://github.com/effector/effector/pull/951))
+- Deprecate `createComponent` in favor of [`@effector/reflect`](https://github.com/effector/reflect)
+- Remove deprecated `effector-react/ssr` module ([PR #844](https://github.com/effector/effector/pull/844))
+- Remove deprecated createReactState and createContextComponent ([PR #845](https://github.com/effector/effector/pull/845))
+
+## effector-solid 23.0.0
+
+- Make all hooks isomorphic
+- Deprecate `effector-solid/scope` in favor of isomorphic hooks ([PR #979](https://github.com/effector/effector/pull/979))
+
+## effector-vue 23.0.0
+
+- Add `useUnit` hook ([PR #1003](https://github.com/effector/effector/pull/1003))
+- Make bindings isomorphic
+- Deprecate `effector-vue/ssr` in favor of isomorphic hooks ([PR #1005](https://github.com/effector/effector/pull/1005))
+- Remove obsolete deprecated apis `$watchAsStore` and `$store` ([PR #1004](https://github.com/effector/effector/pull/1004))
+
 ## effector 22.8.8
 
 - Add new types from effector 23: `UnitTargetable`, `EventCallable` and `StoreWritable` as aliases to improve migration experience and ecosystem compatibility

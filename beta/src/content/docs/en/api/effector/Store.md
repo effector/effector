@@ -19,11 +19,6 @@ be [derived](#store-derived).
 
 ## `map(fn)` {#map-fn}
 
-:::info
-Since [effector 21.8.0](https://github.com/effector/effector/releases/tag/effector%4021.8.0) the second argument of `fn`
-and `firstState` are deprecated, use [updateFilter](/en/api/effector/createStore) or explicit `createStore` instead.
-:::
-
 Creates a derived store. It will call a provided function with the state, when the original store updates, and will use
 the result to update the derived store
 
@@ -41,6 +36,9 @@ const $second = $first.map(fn);
 1. `fn` (_Function_): Function that receives `state` and `lastState?` and returns a new state for the derived store
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
+
+2. `config` (_Object_): Optional configuration
+   - `skipVoid`: (_boolean_): Flag to control, how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will read `undefined` as a "skip update" command and will do nothing.
 
 [Should be **pure**](/en/explanation/glossary#purity)
 
@@ -112,6 +110,12 @@ changed("hello world");
 ```
 
 [Try it](https://share.effector.dev/XGKGMvpF)
+
+### Skip Void Example {#map-skip-void-example}
+
+```js
+const $length = $title.map((title) => title.length, {skipVoid: false});
+```
 
 ## `on(trigger, reducer)` {#on}
 

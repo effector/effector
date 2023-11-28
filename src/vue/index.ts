@@ -1,66 +1,69 @@
 import Vue, {VueConstructor, ComponentOptions} from 'vue'
-import {createEvent, restore, is, combine, Store, withRegion, clearNode, forward, Unit} from 'effector'
+import {
+  createEvent,
+  restore,
+  is,
+  combine,
+  Store,
+  withRegion,
+  clearNode,
+  sample,
+  Unit,
+} from 'effector'
 
-export interface EffectorVue extends Vue {
-  $watchAsStore: typeof watchAsStore;
-  $store: typeof store;
-}
-
-export const VueEffector = (
-  vue: VueConstructor<EffectorVue>,
-  options: Object,
-) => {
+export const VueEffector = (vue: VueConstructor, options: Object) => {
   vue.mixin(effectorMixin)
-  /** @deprecated since v21.1.0 */
-  vue.prototype.$watchAsStore = watchAsStore
-  /** @deprecated since v21.1.0 */
-  vue.prototype.$store = store
 }
 
 const effectorMixin: ComponentOptions<Vue> = {
   beforeCreate() {
-    let shape = this.$options.effector;
+    let shape = this.$options.effector
 
-    if (typeof shape === "function") {
+    if (typeof shape === 'function') {
       // @ts-ignore
       shape = shape.call(this)
     }
-    if (!shape) return;
+    if (!shape) return
     if (!this.$options.computed) this.$options.computed = {}
 
-    let obj: { [key: string]: Unit<any> } = {}
+    let obj: {[key: string]: Unit<any>} = {}
 
     // normalize effector field data
     if (is.store(shape)) {
-      obj = { state: shape }
+      obj = {state: shape}
     } else if (typeof shape === 'object') {
-      obj = { ...shape }
+      obj = {...shape}
     } else {
       throw Error('property should be Store')
     }
 
     // @ts-ignore
-    this.__clear = createEvent();
+    this.__clear = createEvent()
 
     // @ts-ignore
     withRegion(this.__clear, () => {
-      const state: Record<string, Store<any>> = {};
-      let nextID = 0;
+      const state: Record<string, Store<any>> = {}
+      let nextID = 0
 
-      for(const key in obj) {
-        const v = obj[key];
+      for (const key in obj) {
+        const v = obj[key]
 
         if (is.store(v)) {
-          state[key] = v;
+          state[key] = v
         } else if (is.event(v) || is.effect(v)) {
-          state[key] = restore(v.map(() => ++nextID), null);
+          state[key] = restore(
+            v.map(() => ++nextID),
+            null,
+          )
         } else {
-          throw Error(`Effector property ${key} should be Store or Unit (will be transform to Store<number>)`);
+          throw Error(
+            `Effector property ${key} should be Store or Unit (will be transform to Store<number>)`,
+          )
         }
       }
 
       const store = combine(state)
-      for(const key in store.defaultState) {
+      for (const key in store.defaultState) {
         // @ts-ignore
         Vue.util.defineReactive(this, key, store.defaultState[key])
       }
@@ -73,15 +76,15 @@ const effectorMixin: ComponentOptions<Vue> = {
       })
 
       for (const key in state) {
-        const updated = createEvent();
-        forward({ from: updated, to: state[key] });
+        const updated = createEvent()
+        sample({clock: updated, target: state[key]})
 
         // @ts-ignore
         this.$options.computed[key] = {
           // @ts-ignore
           get: () => this[key],
-          set: updated
-        };
+          set: updated,
+        }
       }
     })
   },
@@ -90,9 +93,9 @@ const effectorMixin: ComponentOptions<Vue> = {
     // @ts-ignore
     if (this.__clear) {
       // @ts-ignore
-      clearNode(this.__clear);
+      clearNode(this.__clear)
     }
-  }
+  },
 }
 
 export function createComponent<S>(options: any, store?: S) {
@@ -101,51 +104,10 @@ export function createComponent<S>(options: any, store?: S) {
       {},
       options,
       store && {
-        effector: () => store
+        effector: () => store,
       },
     ),
   )
 }
 
-function watchAsStore(
-  this: EffectorVue,
-  expOrFn: string | Function,
-  options: {
-    immediate?: boolean
-  } = {
-    immediate: true,
-  },
-): Store<{oldValue: any; newValue: any}> {
-  console.error('$watchAsStore is deprecated')
-  
-  const update = createEvent<{oldValue: any; newValue: any}>()
-  const store = restore(update, {} as any)
-  const watch = () => {
-    this.$watch(
-      //@ts-ignore
-      expOrFn,
-      //@ts-ignore
-      (newValue, oldValue) => {
-        update({oldValue, newValue})
-      },
-      options,
-    )
-  }
-  //@ts-ignore
-  if (this._data) {
-    watch()
-  } else {
-    this.$once('hook:created', watch)
-  }
-
-  return store
-}
-
-function store<State>(
-  this: EffectorVue,
-  expOrFn: string | Function,
-): Store<State> {
-  console.error('$store is deprecated')
-
-  return this.$watchAsStore(expOrFn).map(({newValue}) => newValue)
-}
+export {EffectorScopePlugin} from './EffectorScopePlugin'

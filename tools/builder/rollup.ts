@@ -63,6 +63,7 @@ const externals = [
   'use-sync-external-store/shim/index.js',
   'use-sync-external-store/shim/with-selector.js',
   'solid-js',
+  'solid-js/web'
 ]
 
 const getPlugins = (
@@ -157,14 +158,6 @@ export async function rollupEffector() {
     }),
     createEsCjs(name, {
       file: {
-        cjs: dir(`npm/${name}/fork.js`),
-        es: dir(`npm/${name}/fork.mjs`),
-      },
-      input: 'fork',
-      inputExtension: 'ts',
-    }),
-    createEsCjs(name, {
-      file: {
         cjs: dir(`npm/${name}/inspect.js`),
         es: dir(`npm/${name}/inspect.mjs`),
       },
@@ -251,19 +244,7 @@ export async function rollupEffectorReact() {
   }: {
     file: {cjs: string; es: string}
   }) {
-    await Promise.all([
-      runBuild(cjs, 'cjs'),
-      runBuild(es, 'es'),
-      createEsCjs(name, {
-        file: {
-          cjs: dir(`npm/${name}/ssr.js`),
-          es: dir(`npm/${name}/ssr.mjs`),
-        },
-        input: 'ssr',
-        inputExtension: 'ts',
-        replaceReactShim: true,
-      }),
-    ])
+    await Promise.all([runBuild(cjs, 'cjs'), runBuild(es, 'es')])
     async function runBuild(file: string, format: 'cjs' | 'es') {
       const isEsm = format === 'es'
       const plugins = getPlugins(name, {

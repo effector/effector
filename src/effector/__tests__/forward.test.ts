@@ -1,5 +1,18 @@
 import {forward, createEvent, createStore, createNode} from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('forward')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 it('should forward data from one event to another', () => {
   const fn = jest.fn()
   const source1 = createEvent<string>()
@@ -159,18 +172,18 @@ it('should validate arguments', () => {
     //@ts-expect-error
     forward({})
   }).toThrowErrorMatchingInlineSnapshot(
-    `"forward: expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
+    `"[forward] (/src/effector/__tests__/forward.test.ts:173:4): expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
   )
   expect(() => {
     //@ts-expect-error
     forward({from: createStore(null)})
   }).toThrowErrorMatchingInlineSnapshot(
-    `"forward: expect \\"to\\" to be a unit (store, event or effect) or array of units"`,
+    `"[forward] (/src/effector/__tests__/forward.test.ts:179:4): expect \\"to\\" to be a unit (store, event or effect) or array of units"`,
   )
   expect(() => {
     //@ts-expect-error
     forward({to: createStore(null)})
   }).toThrowErrorMatchingInlineSnapshot(
-    `"forward: expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
+    `"[forward] (/src/effector/__tests__/forward.test.ts:185:4): expect \\"from\\" to be a unit (store, event or effect) or array of units"`,
   )
 })

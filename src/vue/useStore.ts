@@ -1,25 +1,24 @@
-import {is, Store} from "effector"
-import {onUnmounted, readonly, shallowRef} from "vue-next"
+import {is, createWatch, Store} from 'effector'
+import {onUnmounted, readonly, shallowRef} from 'vue-next'
 
-import {createWatch} from "./lib/create-watch"
-import {stateReader} from "./lib/state-reader"
-import {getScope} from "./lib/get-scope"
-import {throwError} from "./lib/throw"
+import {stateReader} from './lib/state-reader'
+import {getScope} from './lib/get-scope'
+import {throwError} from './lib/throw'
 
 export function useStore<T>(store: Store<T>) {
-  if (!is.store(store)) throwError("expect useStore argument to be a store")
+  if (!is.store(store)) throwError('expect useStore argument to be a store')
   let {scope} = getScope()
 
   let state = stateReader(store, scope)
   let _ = shallowRef(state)
 
-  let stop = createWatch(
-    store,
-    (value) => {
+  let stop = createWatch({
+    unit: store,
+    fn: value => {
       _.value = shallowRef(value).value
     },
-    scope
-  )
+    scope,
+  })
 
   onUnmounted(() => {
     stop()

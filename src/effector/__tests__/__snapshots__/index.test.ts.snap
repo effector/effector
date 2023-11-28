@@ -22,7 +22,7 @@ exports[`graphite: show bar 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: callStackAReg
+                compute: callStack
               ],
               next: [
                 Node {
@@ -74,7 +74,7 @@ exports[`graphite: show bar 2`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: callStackAReg
+                compute: callStack
               ],
               next: [
                 Node {
@@ -128,7 +128,7 @@ exports[`graphite: show foo 1`] = `
                     Node {
                       seq: [
                         mov: store a,
-                        compute: callStackAReg
+                        compute: callStack
                       ],
                       next: [
                         Node {
@@ -169,7 +169,7 @@ exports[`graphite: show store1 1`] = `
     Node {
       seq: [
         mov: store a,
-        compute: callStackAReg
+        compute: callStack
       ],
       next: [
         Node {
@@ -247,7 +247,7 @@ exports[`showcase: event foo 1`] = `
                     Node {
                       seq: [
                         mov: store a,
-                        compute: callStackAReg
+                        compute: callStack
                       ],
                       next: [
                         Node {
@@ -336,7 +336,7 @@ exports[`showcase: store a 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: callStackAReg
+                compute: callStack
               ],
               next: [
                 Node {
