@@ -27,7 +27,7 @@ export const GITHUB_BRANCH = "master";
 
 // It is useful when documentation package located in a subdirectory
 // There would be 'beta/'. Slash at the end is required
-export const GITHUB_DOCS_ROOT = "beta/";
+export const GITHUB_DOCS_ROOT = "documentation/";
 
 // Used to convert pathname into file path in the repository
 // It is where the docs are located related to the docs package.json file
