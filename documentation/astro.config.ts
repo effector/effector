@@ -18,7 +18,7 @@ import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 // https://astro.build/config
 export default defineConfig({
   site:
-    process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://beta.effector.dev`,
+    process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://effector.dev`,
   integrations: [
     tailwind({ applyBaseStyles: false }),
     preact({ compat: true }),
