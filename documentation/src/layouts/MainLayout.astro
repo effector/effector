@@ -18,10 +18,19 @@ export type Props = CollectionEntry<"docs">["data"] & {
   documentId: string;
   redirectTo?: string;
   pagefindWeight?: number;
+  indexing?: boolean;
 };
 
-const { headings, translations, breadcrumbs, lang, documentId, pagefindWeight, ...data } =
-  Astro.props;
+const {
+  headings,
+  translations,
+  breadcrumbs,
+  lang,
+  documentId,
+  pagefindWeight,
+  indexing = true,
+  ...data
+} = Astro.props;
 const currentPage = Astro.url.pathname;
 ---
 
@@ -153,6 +162,7 @@ const currentPage = Astro.url.pathname;
         translations={translations}
         breadcrumbs={breadcrumbs}
         pagefindWeight={pagefindWeight}
+        indexing={indexing}
       >
         <slot />
       </PageContent>

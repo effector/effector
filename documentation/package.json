@@ -16,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/effector/effector"
   },
-  "packageManager": "pnpm@8.9.2",
+  "packageManager": "pnpm@8.11.0",
   "overrides": {
     "react": "npm:@preact/compat@latest",
     "react-dom": "npm:@preact/compat@latest"
@@ -43,7 +43,7 @@
     "dotenv": "^16.3.1",
     "html-escaper": "^3.0.3",
     "nanoid": "^4.0.2",
-    "pagefind": "^0.12.0",
+    "pagefind": "^1.0.4",
     "preact": "^10.18.1",
     "prettier": "^3.0.0",
     "prettier-plugin-astro": "^0.11.0",

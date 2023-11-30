@@ -48,6 +48,8 @@ KNOWN_LANGUAGE_CODES.forEach((langCode) => {
   }
 });
 
+const noTranslation = !post;
+
 const { Content, headings } = post ? await post.render() : await defaultLanguagePost.render();
 const postData = (post ?? defaultLanguagePost).data;
 ---
@@ -58,6 +60,7 @@ const postData = (post ?? defaultLanguagePost).data;
   {...postData}
   translations={translations}
   breadcrumbs={breadcrumbs}
+  indexing={!noTranslation}
 >
   {!post ? <NotTranslatedYet lang={lang!} /> : null}
   <Content />
