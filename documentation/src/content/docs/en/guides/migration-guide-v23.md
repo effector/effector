@@ -85,3 +85,31 @@ It is recommended to use `{skipVoid: false}` at all times, so you are able to us
 If you do need `undefined` as a "magic skip" value - then you can use `{skipVoid: true}` to preserve current behaviour. You still will get a deprecation warning though, but only one for declaration instead of one for every such update.
 
 The `skipVoid` setting is temporary and only needed as a way to properly deprecate this feature from Effector. In Effector 24 `skipVoid` itself will be deprecated and then removed.
+
+## `useStore` and `useEvent` to `useUnit` in `effector-react`
+
+We merged two old hooks into one, its advantage is that you can pass many units to it at once and it batches all the stores' updates into one single update
+
+It's safe to just swap the calls of the old hooks with the new one:
+
+```ts
+const Component = () => {
+  const foo = useStore($foo)
+  const bar = useStore($bar)
+  const onSubmit = useEvent(triggerSubmit)
+}
+```
+Becomes
+```ts
+const Component = () => {
+  const foo = useUnit($foo)
+  const bar = useUnit($bar)
+  const onSubmit = useUnit(triggerSubmit)
+}
+```
+Or shorter
+```ts
+const Component = () => {
+  const [foo, bar, onSubmit] = useUnit([$foo, $bar, triggerSubmit])
+}
+```
