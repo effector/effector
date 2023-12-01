@@ -309,7 +309,7 @@ export function useListBase<T>(
   fnRef.current = [fn, getKey!]
   const keysSelfMemo = React.useMemo(() => keys, keys)
   if (getKey!) {
-    const listItems = useStoreBase(list, scope)
+    const listItems = useUnitBase(list, scope)
     if (listItems.length === 0 && placeholder) return placeholder
     return listItems.map(value => {
       const key = fnRef.current[1](value)
