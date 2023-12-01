@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 23.0.1
+
+- Fix warning about `useStore` appeared in `useList` ([PR #1022](https://github.com/effector/effector/pull/1022))
+
 ## effector 23.0.0 Spacewatch
 
 ### Improvements
