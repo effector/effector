@@ -65,9 +65,6 @@ dependencies:
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
-  effector:
-    specifier: file:../npm/effector
-    version: file:../npm/effector
   html-escaper:
     specifier: ^3.0.3
     version: 3.0.3
@@ -6699,10 +6696,4 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
-    dev: false
-
-  file:../npm/effector:
-    resolution: {directory: ../npm/effector, type: directory}
-    name: effector
-    engines: {node: '>=11.0.0'}
     dev: false
