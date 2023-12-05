@@ -1,6 +1,5 @@
 <script setup>
 import { Sandpack } from "sandpack-vue3";
-import effectorRaw from '../../../npm/effector/effector.mjs?raw'
 
 const props = defineProps(["demoFile"]);
 
