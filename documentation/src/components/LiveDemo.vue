@@ -6,30 +6,13 @@ const props = defineProps(["demoFile"]);
 
 const files = {
   "/index.js": props.demoFile,
-  ...localPackage({ name: "effector", content: effectorRaw }),
 };
 
 const customSetup = {
   dependencies: {
-
+    effector: 'latest'
   },
 };
-
-function localPackage({ name, content }) {
-  return {
-    [`/node_modules/${name}/package.json`]: {
-      hidden: true,
-      code: JSON.stringify({
-        name: `${name}`,
-        main: "./index.js",
-      }),
-    },
-    [`/node_modules/${name}/index.js`]: {
-      hidden: true,
-      code: content,
-    },
-  };
-}
 
 const options = {
   showConsole: true,
