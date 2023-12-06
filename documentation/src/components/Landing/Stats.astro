@@ -89,7 +89,8 @@ async function getGzipSize() {
         size: `${(gzip / 1024).toFixed(1)} kB`,
       };
     } else {
-      throw new Error(`Bundlephobia answer is not OK: ${response.statusText}`);
+      console.error(`Bundlephobia answer is not OK: ${response.statusText}`);
+      return { size: "11.9 kB" };
     }
   } catch (error) {
     console.error("Failed to fetch gzip size:", error);
@@ -139,9 +140,14 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
       {
         Object.entries(stats).map(([name, counter]) => {
           return (
-            <a class="stats-card" href={statsMeta[name].link} target="_blank" rel="noreferrer noopener">
+            <a
+              class="stats-card"
+              href={statsMeta[name as keyof typeof stats].link}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
               <span class="text-4xl">{counter}</span>
-              <span>{statsMeta[name].label}</span>
+              <span>{statsMeta[name as keyof typeof stats].label}</span>
             </a>
           );
         })
@@ -151,9 +157,9 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
       <span class="getting-started-message">{gettingStartedText}:</span>
       <div class="install-command">
         <span class="inline-block">
-          <span class="command-line-sign">$&nbsp;</span>npm install <span
-          class="package-name">effector</span
-        >
+          <span class="command-line-sign">$&nbsp;</span>npm install <span class="package-name"
+            >effector</span
+          >
         </span>
         <copy-button class="copy-button" data-value="npm install effector" aria-role="button">
           <IconCopy />
@@ -173,12 +179,12 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .counts {
-    @apply mb-6 grid grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6 select-none;
+    @apply mb-6 grid select-none grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6;
   }
 
   .stats-card {
     @apply flex min-w-[8rem] flex-col items-center rounded-md p-2.5 text-[color:var(--theme-text)] focus:no-underline;
-    @apply transition-all focus:bg-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-xl;
+    @apply transition-all hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-xl focus:bg-[var(--theme-accent)];
   }
 
   .stats-bar {
@@ -186,23 +192,23 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .getting-started-message {
-    @apply hidden md:inline select-none;
+    @apply hidden select-none md:inline;
   }
 
   .command-line-sign {
-    @apply text-[color:var(--theme-text-light)] select-none;
+    @apply select-none text-[color:var(--theme-text-light)];
   }
 
   .package-name {
-    color: var(--theme-text-accent)
+    color: var(--theme-text-accent);
   }
 
   .install-command {
-    @apply flex flex-1 items-center justify-between rounded-md p-1.5 pl-2.5 font-mono md:max-w-xl bg-[var(--theme-bg)];
+    @apply flex flex-1 items-center justify-between rounded-md bg-[var(--theme-bg)] p-1.5 pl-2.5 font-mono md:max-w-xl;
   }
 
   .copy-button {
-    @apply flex items-center justify-center rounded-md p-1 bg-[var(--theme-divider)] cursor-pointer;
+    @apply flex cursor-pointer items-center justify-center rounded-md bg-[var(--theme-divider)] p-1;
     @apply transition-all hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-md;
   }
 
