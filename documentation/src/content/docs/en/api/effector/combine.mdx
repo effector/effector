@@ -33,10 +33,10 @@ $result = combine(
 
 #### Example
 
-import LiveDemo from "../../../../../components/LiveDemo.vue";
+import LiveDemo from "../../../../../components/LiveDemo.jsx";
 import demoFile from "./demo/_combine-stores-fn.live.js?raw";
 
-<LiveDemo client:only="vue" demoFile={demoFile} />
+<LiveDemo client:only="preact" demoFile={demoFile} />
 
 ## `combine({ A, B, C }, fn?)`
 

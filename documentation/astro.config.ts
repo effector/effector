@@ -4,7 +4,6 @@ import mdx from "@astrojs/mdx";
 import compress from "astro-compress";
 import prefetch from "@astrojs/prefetch";
 import preact from "@astrojs/preact";
-import vue from "@astrojs/vue";
 import tailwind from "@astrojs/tailwind";
 import directive from "remark-directive";
 import github from "remark-github";
@@ -27,7 +26,6 @@ export default defineConfig({
     mdx(),
     prefetch(),
     process.env.COMPRESS !== "false" && compress(),
-    vue(),
   ],
   base: "/",
   build: {
