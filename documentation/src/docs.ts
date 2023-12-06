@@ -1,4 +1,4 @@
-import { CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import { getPathParamsFromId } from "./languages";
 
 type DocsEntry = CollectionEntry<"docs">;
