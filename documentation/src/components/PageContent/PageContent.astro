@@ -77,6 +77,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
         lang={lang}
         collapsed
         client:media="(max-width: 1280px)"
+        client:only="preact"
         headings={headings}
       />
     </nav>
