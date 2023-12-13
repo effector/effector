@@ -63,7 +63,7 @@ const requestReceived = createEvent<{ id: number; title: string }>();
 requestReceived({ id: 1, title: "example" });
 ```
 
-This rule also contributes to the clarity of each argument's meaning, both at the call site and subscription site. It promotes clean and organized code, making it easier to understand and maintain
+This rule also contributes to the clarity of each argument's meaning, both at the call side and subscription side. It promotes clean and organized code, making it easier to understand and maintain.
 
 ## Watching the event {#event-watch}
 

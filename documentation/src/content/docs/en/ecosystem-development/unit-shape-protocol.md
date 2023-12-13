@@ -40,7 +40,7 @@ const Component = () => {
 };
 ```
 
-It is possible with the `@@unitShape` protocol. It allows us to define the shape of a unit in your custom entity, and then using it in UI libraries. Just add field `@@unitShape` with a function that return shape of units to your entity:
+It is possible with the `@@unitShape` protocol. It allows defining the shape of a unit in the custom entity and then using it in UI libraries. Just add field `@@unitShape` with a function that return shape of units to your entity:
 
 ```ts
 function createRoute(/* ... */) {

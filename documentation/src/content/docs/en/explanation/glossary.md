@@ -8,7 +8,7 @@ redirectFrom:
   - /en/glossary
 ---
 
-Glossary of basic terms in effector
+Glossary of basic terms in effector.
 
 ## Event
 
@@ -30,7 +30,7 @@ It exposes special events and stores, such as `.pending`, `.done`, `.fail`, `.fi
 
 It can be safely used in place of the original async function.
 
-It returns promise with the result of a function call
+It returns promise with the result of a function call.
 
 The only requirement for the function:
 
@@ -51,11 +51,11 @@ It is useful for logging or other side effects.
 ## Unit {#unit}
 
 Data type used to describe business logic of applications. Most of the effector methods deal with unit processing.
-There are five unit types: [Store](/en/api/effector/Store), [Event](/en/api/effector/Event), [Effect](/en/api/effector/Effect), [Domain](/en/api/effector/Domain) and [Scope](/en/api/effector/Scope)
+There are five unit types: [Store](/en/api/effector/Store), [Event](/en/api/effector/Event), [Effect](/en/api/effector/Effect), [Domain](/en/api/effector/Domain) and [Scope](/en/api/effector/Scope).
 
 ## Common unit
 
-Common units can be used to trigger updates of other units. There are three common unit types: [Store](/en/api/effector/Store), [Event](/en/api/effector/Event) and [Effect](/en/api/effector/Effect). **When a method accepts units, it means that it accepts events, effects, and stores** as a source of reactive updates
+Common units can be used to trigger updates of other units. There are three common unit types: [Store](/en/api/effector/Store), [Event](/en/api/effector/Event) and [Effect](/en/api/effector/Effect). **When a method accepts units, it means that it accepts events, effects, and stores** as a source of reactive updates.
 
 ## Purity
 
@@ -141,12 +141,12 @@ type Subscription = {
 };
 ```
 
-**Function**, returned by [forward](/en/api/effector/forward), [Event.watch](/en/api/effector/Event#watch-watcher), [Store.watch](/en/api/effector/Store#watchwatcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing
+**Function**, returned by [forward](/en/api/effector/forward), [Event.watch](/en/api/effector/Event#watch-watcher), [Store.watch](/en/api/effector/Store#watchwatcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing.
 
 :::warning
 **Managing subscriptions manually distracts from business logic improvements.**
 <br/><br/>
-Effector provides a wide range of features to minimize the need to remove subscriptions. This sets it apart from most other reactive libraries
+Effector provides a wide range of features to minimize the need to remove subscriptions. This sets it apart from most other reactive libraries.
 :::
 
 [effect]: /en/api/effector/Effect

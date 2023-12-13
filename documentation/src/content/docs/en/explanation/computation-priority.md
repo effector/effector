@@ -16,8 +16,8 @@ the highest priority and move to the start of the queue and less significant to 
 
 Computation priority allows us to have side effects, and it's one of the main reasons to create this concept:
 
-- Letting pure functions to execute first
-- Side effects can follow a consistent state of the application
+- Letting pure functions to execute first.
+- Side effects can follow a consistent state of the application.
 
 Actually, pure computation cannot be observed out of the scope, therefore, the definition of **_pure computation_** used
 in this library gives us an opportunity to optimize grouping.

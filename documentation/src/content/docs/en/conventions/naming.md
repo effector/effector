@@ -6,7 +6,7 @@ redirectFrom:
   - /conventions/naming
 ---
 
-First of all, to avoid any misconceptions and get better developer experience for all of us. This document contains several pretty simple rules to keep consistency between different projects written on effector.
+First of all, to avoid any misconceptions and get better developer experience for all of us. This document contains several pretty simple rules to keep consistency between different projects written with effector.
 
 ## Stores naming
 
@@ -29,7 +29,7 @@ const fetchUserFx = createEffect(async () => {
 
 ## Event naming
 
-There are no any real preferred rules on that. But the proposal is to name events, which directly trigger store updates like it has already done in the past.
+There are no any specific rules for this. However, the proposal is to name events that directly trigger store updates, as like as they have already happened.
 
 ```js
 const emailChanged = createEvent();

@@ -142,7 +142,7 @@ const App = () => (
 );
 ```
 
-Prevent the default html form submit behavior using react event from `submitted`
+Prevent the default html form submit behavior using react event from `submitted`:
 
 ```js
 submitted.watch((e) => {

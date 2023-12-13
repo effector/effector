@@ -11,8 +11,8 @@ The SID is a Stable IDentifier of an effector unit. It can be used for different
 
 The SIDs have two important properties:
 
-1. They are **unique** - each SID for each unit should be unique
-2. They are **stable** between different environments - each SID of each unit in some environment (e.g. server code) should be equal to a SID of this unit in any other environment (e.g. client code)
+1. They are **unique** – each SID for each unit should be unique.
+2. They are **stable** between different environments – each SID of each unit in some environment (e.g. server code) should be equal to a SID of this unit in any other environment (e.g. client code).
 
 ## How to add SIDs {#how-to-add-sids}
 
@@ -34,7 +34,7 @@ For sure, manually creating unique ids is a quite boring job.
 
 Thankfully, there are [`effector/babel-plugin`](/api/effector/babel-plugin) and [`@effector/swc-plugin`](https://github.com/effector/swc-plugin), which will provide SIDs automatically.
 
-Because code-transpilation tools are working at the file level and are run before bundling happens - it is possible to make SIDs **stable** for every environment.
+Because code-transpilation tools are working at the file level and are run before bundling happens – it is possible to make SIDs **stable** for every environment.
 
 :::tip
 It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin) instead of adding SIDs manually.
@@ -44,11 +44,11 @@ It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or
 
 Because of **multi-store** architecture, Effector code in the applications is written in **atomic** and **distributed** way and there is no single central "root store" or "controller", which needs to be notified about all stores/reducers/etc, created anywhere in the app.
 
-And since there is no central "root store" - no additional setup (like Reducer Manager, etc) is required to support micro-frontends and code-splitting, everything works out of the box.
+And since there is no central "root store" – no additional setup (like Reducer Manager, etc) is required to support micro-frontends and code-splitting, everything works out of the box.
 
 **Code example**
 
-Notice, that there is no central point at all - any event of any "feature" can be triggered from anywhere and the rest of them will react accordingly.
+Notice, that there is no central point at all – any event of any "feature" can be triggered from anywhere and the rest of them will react accordingly.
 
 ```tsx
 // src/features/first-name/model.ts
@@ -110,7 +110,7 @@ Also, after the client browser has received a page — we need to "hydrate" ever
 
 This is a hard problem and to solve this, `effector` needs a way to connect the "server-calculated" state of some store with its client-side instance.
 
-While **it could be** done by introducing a "root store" or something like that, which would manage store instances and their state for us, it would also bring to us all the downsides of this approach, e.g. much more complicated code-splitting - so this is still undesirable.
+While **it could be** done by introducing a "root store" or something like that, which would manage store instances and their state for us, it would also bring to us all the downsides of this approach, e.g. much more complicated code-splitting – so this is still undesirable.
 
 This is where SIDs will help us a lot.
 Because SID is, by definition, the same for the same store in any environment, `effector` can simply rely on it to handle state serializing and hydration.
@@ -191,8 +191,8 @@ To understand why, we need to dive a bit deeper into plugin internals.
 
 Both `effector` plugins use the same approach to code transformation. Basically, they do two things:
 
-1. Add `sid`-s and any other meta-information to raw Effector's factories calls, like `createStore` or `createEvent`
-2. Wrap any custom factories with `withFactory` helper that allows you to make `sid`-s of inner units unique as well
+1. Add `sid`-s and any other meta-information to raw Effector's factories calls, like `createStore` or `createEvent`.
+2. Wrap any custom factories with `withFactory` helper that allows you to make `sid`-s of inner units unique as well.
 
 ### Built-in unit factories {#built-in-factories}
 
