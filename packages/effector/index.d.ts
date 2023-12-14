@@ -216,11 +216,7 @@ type InferValueFromTupleOfUnitTargetables<T extends Tuple<UnitTargetable<any>>> 
 
 export interface Store<State> extends Unit<State> {
   kind: "store"
-  map<T>(fn: (state: State, lastState?: T) => T, config?: {skipVoid?: boolean}): Store<T>
-  /**
-   * @deprecated second argument of `fn` and `firstState` are deprecated, use `updateFilter` or explicit `createStore` instead
-   */
-  map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
+  map<T>(fn: (state: State) => T, config?: {skipVoid?: boolean}): Store<T>
 
   updates: Event<State>
 
