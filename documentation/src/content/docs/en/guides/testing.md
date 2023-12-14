@@ -10,7 +10,7 @@ Fork creates an independent context instance, which we can use to emulate some s
 
 ## Counter example
 
-For example, we have some typical counter, but with asynchronous checking through our backend api, and our logic rules are as follows:
+For example, we have some typical counter, but with asynchronous checking through our backend. Let's assume we have next requirements:
 
 - When the user clicks a button, we check if the current counter is less than 100, and then check that click through our backend api.
 - If the validation is successful, we increase the counter by 1.
@@ -56,8 +56,8 @@ Our main scenario is:
 
 Let's test it:
 
-1. We create a new Scope via `fork` call. We can treat it as an independent instance of our effector's app.
-2. We check, that initially we have count `0`.
+1. We create a new [Scope](/en/api/effector/Scope) via `fork` call. We can treat it as an independent instance of our effector's app.
+2. We check, that initially count is equal to `0`.
 3. Then we emulate `buttonClicked` event with `allSettled` – this promise will resolve once all computations are over.
 4. We check that we have a desired state in the end.
 
@@ -104,9 +104,9 @@ test("main case", async () => {
 
 We have another scenario:
 
-0. Count is more than 100 already.
-1. User clicks the button.
-2. There should be no effect call.
+1. Count is more than 100 already.
+2. User clicks the button.
+3. There should be no effect call.
 
 For that case, we will need to mock initial "more than 100" states somehow.
 

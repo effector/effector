@@ -139,7 +139,7 @@ export interface Session {
 }
 ```
 
-Also, to generate a usernames and don't require to type it by themselves, import `unique-names-generator`:
+Also, to generate usernames and don't require to type it by themselves, import `unique-names-generator`:
 
 ```ts
 // File: /src/shared/api/session.ts
@@ -155,9 +155,6 @@ Let's create effects to manage session:
 // File: /src/shared/api/session.ts
 const LocalStorageKey = "effector-example-session";
 
-// We need explicitly return `null` because `undefined` is a special value in the effector ecosystem,
-// that defines some "empty" state, and store will skip updates if we try to pass `undefined` inside.
-// Always use `null` for "no value state".
 // Note, that we need explicit types definition in that case, because `JSON.parse()` returns `any`
 export const sessionLoadFx = createEffect<void, Session | null>(async () => {
   const source = localStorage.getItem(LocalStorageKey);
@@ -168,7 +165,7 @@ export const sessionLoadFx = createEffect<void, Session | null>(async () => {
   return JSON.parse(source);
 });
 
-// By default if no aruments, no explicit type arguments, and no return,
+// By default, if there are no arguments, no explicit type arguments, and no return statement provided
 // effect will have type: `Effect<void, void, Error>`
 export const sessionDeleteFx = createEffect(async () => {
   localStorage.removeItem(LocalStorageKey);

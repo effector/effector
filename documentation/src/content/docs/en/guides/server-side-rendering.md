@@ -7,10 +7,10 @@ redirectFrom:
   - /en/guides/server-side-rendering
 ---
 
-Server-side rendering (SSR) means that the content of your site is generated on the server and then sent to the browser - which these days is achieved in very different ways and forms.
+Server-side rendering (SSR) means that the content of your site is generated on the server and then sent to the browser – which these days is achieved in very different ways and forms.
 
 :::info
-Generally, if the rendering happens at the runtime - it is called SSR. If the rendering happens at the build-time - it is usually called Server Side Generation (SSG), which in fact is basically a subset of SSR
+Generally, if the rendering happens at the runtime – it is called SSR. If the rendering happens at the build-time – it is usually called Server Side Generation (SSG), which in fact is basically a subset of SSR.
 
 This difference it is not important for this guide, everything said applies both to SSR and SSG.
 :::
@@ -27,42 +27,42 @@ The frontend code in this case works only at the client browser and **is not use
 This approach works for effector, as well as any javascript code. Any SPA application is basically an edge-case of it, as its HTML template does not contain any content, except for `<script src="my-app.js" />` link.
 
 :::tip
-If you have non-isomorphic SSR - just use effector the way you would for an SPA app.
+If you have non-isomorphic SSR – just use effector the way you would for an SPA app.
 :::
 
 ## Isomorphic SSR
 
 When you have an isomorphic SSR application, **most of the frontend code is shared with server** and **is used to generate the response** HTML.
 
-You can also think of it as a an approach, where your app **starts at the server** - and then gets transfered over the network to the client browser, where it **continues** the work it started doing at the server.
+You can also think of it as an approach, where your app **starts at the server** – and then gets transferred over the network to the client browser, where it **continues** the work it started doing at the server.
 
-That's where the name comes from - despite the fact, that the code is bundled for and run in different enviroments, its output remains (mostly) the same, if given the same input.
+That's where the name comes from – despite the fact, that the code is bundled for and run in different environments, its output remains (mostly) the same, if given the same input.
 
-There are a lot of different frameworks, which are built upon this approach - e.g. Next.js, Remix.run, Razzle.js,Nuxt.js, Astro, etc
+There are a lot of different frameworks, which are built upon this approach – e.g. Next.js, Remix.run, Razzle.js, Nuxt.js, Astro, etc
 
 :::tip{title="Next.js"}
 Next.js does SSR/SSG in the special way, which requires a bit of custom handling on the effector side.
 
-This is done via dedicated [`@effector/next`](https://github.com/effector/next) package - use it, if you want to use effector with Next.js.
+This is done via dedicated [`@effector/next`](https://github.com/effector/next) package – use it, if you want to use effector with Next.js.
 :::
 
-For this guide we will not focus on any specific framework or server implementation - these details will be abstracted away.
+For this guide we will not focus on any specific framework or server implementation – these details will be abstracted away.
 
 ### SIDs
 
 To handle isomorphic SSR with effector we need a reliable way to [`serialize`](/en/api/effector/serialize/) state, to pass it over the network. This where we need to have Stable IDentifiers for each store in our app.
 
 :::info
-Deep-dive explanation about SIDs [can be found here](/en/explanation/sids)
+Deep-dive explanation about SIDs [can be found here](/en/explanation/sids).
 :::
 
-To add SIDs - [just use one of effector's plugins](/en/explanation/sids#how-to-add-sids-automatic).
+To add SIDs – [just use one of effector's plugins](/en/explanation/sids#how-to-add-sids-automatic).
 
 ### Common application code
 
-The main feature of isomorphic SSR - the same code is used to both server render and client app.
+The main feature of isomorphic SSR – the same code is used to both server render and client app.
 
-For sake of example we will use a very simple React-based counter app - all of it will be contained in one module:
+For sake of example we will use a very simple React-based counter app – all of it will be contained in one module:
 
 ```tsx
 // app.tsx
@@ -131,7 +131,7 @@ const notifyFx = createEffect((message: string) => {
 
 sample({
   clock: [
-    saveUserCounterFx.done.map(() => "Counter update is saved successfuly"),
+    saveUserCounterFx.done.map(() => "Counter update is saved successfully"),
     saveUserCounterFx.fail.map(() => "Could not save the counter update :("),
   ],
   // It is totally ok to have some splits in the app's logic based on current environment
@@ -162,29 +162,29 @@ export function App() {
 This is our app's code which will be used to both server-side render and to handle client's needs.
 
 :::tip
-Notice, that it is important, that all of effector units - stores, events, etc - are "bound" to the react component via `useUnit` hook.
+Notice, that it is important, that all of effector units – stores, events, etc – are "bound" to the react component via `useUnit` hook.
 
-You can use the official eslint plugin of effector to validate that and to follow other best practices - checkout the [eslint.effector.dev](https://eslint.effector.dev/) website
+You can use the official eslint plugin of effector to validate that and to follow other best practices – checkout the [eslint.effector.dev](https://eslint.effector.dev/) website.
 :::
 
 ## Server entrypoint
 
 The way of the `<App />` to the client browsers starts at the server. For this we need to create **separate entrypoint** for the specific server-related code, which will also handle the server-side render part.
 
-In this example we're not going to dive deep into various possible server impelementations - we will focus on the request handler itself instead.
+In this example we're not going to dive deep into various possible server implementations – we will focus on the request handler itself instead.
 
 :::info
-Alongside with basic SSR needs, like calculating the final state of the app and serializing it, effector also handles **the isolation of user's data between requests**
+Alongside with basic SSR needs, like calculating the final state of the app and serializing it, effector also handles **the isolation of user's data between requests**.
 
 It is very important feature, as Node.js servers usually handle more than one user request at the same moment of time.
 
-Since JS-based platforms, including Node.js, usually have single "main" thread - all logical computaions are happening in the same context, with the same memory available.
-So, if state is not properly isolated, one user may receive the data, prepared for another, which is very undesirable.
+Since JS-based platforms, including Node.js, usually have single "main" thread – all logical computations are happening in the same context, with the same memory available.
+So, if state is not properly isolated, one user may receive the data, prepared for another user, which is very undesirable.
 
-effector handles this problem automatically inside the `fork` feature. Read [the relevant docs for details](/en/api/effector/fork)
+effector handles this problem automatically inside the `fork` feature. Read [the relevant docs for details](/en/api/effector/fork).
 :::
 
-This is the code for server request handler, which contains all server-specific stuff, which needs to be done.
+This is the code for server request handler, which contains all server-specific stuff that need to be done.
 Notice, that for meaningful parts of our app we are still using the "shared" `app.tsx` code.
 
 ```tsx
@@ -199,7 +199,7 @@ export async function handleRequest(req) {
   // 1. create separate instance of effector's state - special `Scope` object
   const scope = fork({
     values: [
-      // some parts of app's state can be immideatly set to relevant states,
+      // some parts of app's state can be immediately set to relevant states,
       // before any computations started
       [$pathname, req.pathname],
     ],
@@ -252,7 +252,7 @@ export async function handleRequest(req) {
 
 ## Client entrypoint
 
-When the generated HTML string reaches the client browser, has been processed by the parser and all the required assets have been loaded - our application code starts working on the client.
+When the generated HTML string reaches the client browser, has been processed by the parser and all the required assets have been loaded – our application code starts working on the client.
 
 At this point `<App />` needs to restore its past state (which was computed on the server), so that it doesn't start from scratch, but starts from the same point the work reached on the server.
 
@@ -268,7 +268,7 @@ import { Provider } from "effector-react";
 import { App, appStarted } from "./app";
 
 /**
- * 1. Find, where the server state is stored and retreive it
+ * 1. Find, where the server state is stored and retrieve it
  *
  * See the server handler code to find out, where it was saved in the HTML
  */
@@ -295,7 +295,7 @@ hydrateRoot(
 /**
  * 4. Call the same starting event at the client
  *
- * This is optional and actually depeneds on your app's logic is organized
+ * This is optional and actually depends on how your app's logic is organized
  */
 allSettled(appStarted, { scope: clientScope });
 ```
@@ -305,7 +305,7 @@ allSettled(appStarted, { scope: clientScope });
 ## Recap
 
 1. You don't need to do anything special for **non-isomorphic** SSR, all SPA-like patterns will work.
-2. Isomorphic SSR requires a bit of special preparation - you will need [SIDs for stores](/en/explanation/sids)
-3. Common code of the **isomorphic** SSR app handles all meaningful parts - how the UI should look, how state should be calculated, when and which effects should be run.
-4. Server-specific code calculates and **serializes** all of the app's state into the HTML string
-5. Client-specific code retreives this state and uses it to **"hydrate"** the app on the client.
+2. Isomorphic SSR requires a bit of special preparation – you will need [SIDs for stores](/en/explanation/sids).
+3. Common code of the **isomorphic** SSR app handles all meaningful parts – how the UI should look, how state should be calculated, when and which effects should be run.
+4. Server-specific code calculates and **serializes** all of the app's state into the HTML string.
+5. Client-specific code retrieves this state and uses it to **"hydrate"** the app on the client.
