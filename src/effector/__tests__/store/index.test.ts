@@ -7,6 +7,7 @@ import {
   fork,
   allSettled,
   serialize,
+  step,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -543,4 +544,29 @@ describe('void skip pattern deprecation', () => {
       expect(store.getState()).toBe(undefined)
     })
   })
+})
+
+test('patronum previousValue agreement', () => {
+  /**
+   * Tests agreement on non-breaking of internals between core effector and patronum previousValue
+   * previousValue assumes that previous store value will be in stack.a after last store node step
+   */
+  const fn = jest.fn()
+  const inc = createEvent()
+  const $foo = createStore(0)
+  $foo.on(inc, x => x + 1)
+  ;($foo as any).graphite.seq.push(
+    step.compute({
+      fn(upd, _, stack) {
+        fn([upd, stack.a])
+        return upd
+      },
+    }),
+  )
+  inc()
+  inc()
+  expect(argumentHistory(fn)).toEqual([
+    [1, 0],
+    [2, 1],
+  ])
 })
