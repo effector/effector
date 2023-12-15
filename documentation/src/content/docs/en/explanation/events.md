@@ -88,7 +88,7 @@ firstTriggered();
 // => [event] secondTriggered undefined
 ```
 
-However, if your environment does not permit the addition of further dependencies, you may use the [`.watch()`](#readonlyEvent-watch-watcher) method with caution.
+However, if your environment does not permit the addition of further dependencies, you may use the `.watch()` method with caution.
 
 ```ts
 import { createEvent, sample } from "effector";
@@ -138,8 +138,8 @@ sample({
 
 To specify the argument type for an event, it is essential to first determine the intended purpose, what do you want to do with this event:
 
-- If you intend to **invoke** an event or use it as a target, you should utilize the `Event<T>` type.
-- If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `ReadonlyEvent<T>` type.
+- If you intend to **invoke** an event or use it as a target, you should utilize the `EventCallable<T>` type.
+- If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `Event<T>` type.
 
 _Where `T` represents the type of the event's argument._
 
@@ -158,18 +158,18 @@ const whenCounterChanged = createEvent<number>();
 createCounter(whenCounterChanged);
 ```
 
-## Using `ReadonlyEvent` {#readonlyEvent-using}
+## Using `Event` {#event-using}
 
-A ReadonlyEvent is a super type of `Event` with different approach. Firstly, invoking a ReadonlyEvent is not allowed, and it cannot be used as a target in the sample operator, and so on.
+A `Event` is a super type of `EventCallable` with different approach. Firstly, invoking a `Event` is not allowed, and it cannot be used as a target in the sample operator, and so on.
 
-The primary purpose of a ReadonlyEvent is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a ReadonlyEvent, which is subsequently called by the `.map()` method itself.
+The primary purpose of a `Event` is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a `Event`, which is subsequently called by the `.map()` method itself.
 
-To utilize the `ReadonlyEvent` type, simply import it from the `"effector"` package and integrate it into your code as needed:
+To utilize the `Event` type, simply import it from the `"effector"` package and integrate it into your code as needed:
 
 ```ts
-import { type ReadonlyEvent, createStore, createEvent } from "effector";
+import { type Event, createStore, createEvent } from "effector";
 
-function createCounter(increment: ReadonlyEvent<void>) {
+function createCounter(increment: Event<void>) {
   const $counter = createStore(0);
 
   $counter.on(increment, (count) => count + 1);
@@ -180,4 +180,4 @@ createCounter(incrementCounter);
 incrementCounter();
 ```
 
-There allowed to pass `Event<T>` into argument with type `ReadonlyEvent<T>`. The primary purpose of ReadonlyEvent is to accept any event type while explicitly signaling the code's intention to listen to the event, rather than invoking it.
+It is allowed to pass `EventCallable<T>` into argument with type `Event<T>`. The primary purpose of Event is to accept any event type while explicitly signaling the code's intention to listen to the event, rather than invoking it.
