@@ -514,7 +514,7 @@ $store.updates;
 
 ### Returns {#updates-returns}
 
-[_ReadonlyEvent_](/en/api/effector/Event#readonlyEvent): Event that represents updates of the given store.
+[_Event_](/en/api/effector/Event): Event that represents updates of the given store.
 
 :::warning{title="Important"}
 Do not manually call this event. It is an event that depends on a store.
