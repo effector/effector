@@ -272,3 +272,15 @@ test('scopeBind with arbitary async callback exposes return value', async () => 
   expect(scope.getState($count)).toBe(1)
   expect($count.getState()).toBe(0)
 })
+
+test('scopeBind allows $store.getState as a callback', () => {
+  const $count = createStore(0)
+
+  const scope = fork({
+    values: [[$count, 42]],
+  })
+
+  const getCount = scopeBind($count.getState, {scope})
+
+  expect(getCount()).toBe(42)
+})
