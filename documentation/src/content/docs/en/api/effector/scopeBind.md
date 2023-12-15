@@ -17,26 +17,65 @@ A method to bind event or effect to a [Scope](/en/api/effector/Scope) to be call
 
 ### Arguments {#scopeBind-arguments}
 
-1. `event` [_Event_](/en/api/effector/Event) to be bound to the scope
+1. `event` [_EventCallable_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) to be bound to the scope
 2. `options`  (_Object_): Optional configuration
    - `scope` (_Scope_): scope binding event to
-   - `safe` (_Boolean_): flag for exception supression if there is no scope. (will return original event)
+   - `safe` (_Boolean_): flag for exception supression if there is no scope.
 
 ## Example {#scopeBind-example}
 
 We are going to call `changeLocation` inside `history.listen` callback so there is no way for effector to associate event with corresponding scope, and we should explicitly bind event to scope using `scopeBind`.
 
-```js
-const installHistory = app.createEvent<any>()
-const changeLocation = app.createEvent<string>()
+```ts
+const $history = createStore(history)
+const initHistory = createEvent()
+const changeLocation = createEvent<string>()
 
-installHistory.watch(history => {
-
+const installHistoryFx = attach({
+ source: $history,
+ effect: (history) => {
   const locationUpdate = scopeBind(changeLocation)
+
   history.listen(location => {
-    locationUpdate(location.pathname)
+    locationUpdate(location)
   })
+ }
 })
+
+sample({
+ clock: initHistory,
+ target: installHistoryFx,
+})
+
 ```
 
-[See full example](https://github.com/effector/effector/blob/master/examples/react-ssr/src/app.tsx#L128)
+[See full example](https://share.effector.dev/nJo1zRil)
+
+## Arbitrary сallback in scopeBind
+
+Binds arbitary callback to a scope to be called later.
+The "Bounded" version of the function preserves all properties of the original - e.g. if original would throw if called with some specific argument, then bounded version will also throw, when called with this argument.
+
+```ts
+export function scopeBind<T extends Function>(fn: T, options?: {scope?: Scope; safe?: boolean}): T
+```
+
+### Arguments {#scopeBind-arbitary-arguments}
+
+1. `fn` any function to be bound to the scope
+2. `options`  (_Object_): Optional configuration
+   - `scope` (_Scope_): scope binding event to
+   - `safe` (_Boolean_): flag for exception supression if there is no scope.
+
+### Example {$scopeBind-arbitary-example}
+
+```ts
+const installHistoryFx = attach({
+ source: $history,
+ effect: (history) => {
+  history.listen(scopeBind((location) => {
+    changeLocation(location)
+  }))
+ }
+})
+```
