@@ -7,6 +7,11 @@ redirectFrom:
 
 React hook, which subscribes to a [store](/en/api/effector/Store) and returns its current value, so when the store is updated, the component will update automatically.
 
+:::warning{title="This is API is deprecated"}
+
+Prefer [`useUnit`](/api/effector-react/useUnit) hook instead.
+:::
+
 ## Formulae {#useStore-formulae}
 
 ```ts
