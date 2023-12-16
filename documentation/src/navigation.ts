@@ -43,7 +43,11 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "TypeScript Guide", ru: "Использование с TypeScript", uz: "Typescript bilan ishlash" },
+    text: {
+      en: "TypeScript Guide",
+      ru: "Использование с TypeScript",
+      uz: "Typescript bilan ishlash",
+    },
     items: [
       {
         text: { en: "Typing effector", ru: "Типизация effector", uz: "Effector tipizatsiyasi" },
@@ -96,7 +100,7 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: {
       en: "For library developers",
-      uz: "Biblioteka dasturchilari uchun"
+      uz: "Biblioteka dasturchilari uchun",
     },
     items: [
       {
@@ -121,7 +125,7 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/explanation/computation-priority",
       },
       {
-        text: { en: "Prior Art", ru: "Prior Art", uz: "Prior Art"},
+        text: { en: "Prior Art", ru: "Prior Art", uz: "Prior Art" },
         link: "/explanation/prior-art",
       },
       {
@@ -170,11 +174,14 @@ const recipes = [
         link: "/recipes/react/dynamic-form-schema",
       },
       {
-        text: { en: "ToDo List with Validation", uz: "Validation bilan tasdiqlangan ishlar ro'yxati" },
+        text: {
+          en: "ToDo List with Validation",
+          uz: "Validation bilan tasdiqlangan ishlar ro'yxati",
+        },
         link: "/recipes/react/todo-with-validation",
       },
       {
-        text: { en: "Slots", uz: "Slotlar"},
+        text: { en: "Slots", uz: "Slotlar" },
         link: "/recipes/react/slots",
       },
     ],
@@ -192,7 +199,10 @@ const recipes = [
     text: { en: "Next.js" },
     items: [
       {
-        text: { en: "Integrate Next.js with effector", uz: "Next.js effector bilan integratsiyasi" },
+        text: {
+          en: "Integrate Next.js with effector",
+          uz: "Next.js effector bilan integratsiyasi",
+        },
         link: "/recipes/nextjs/integrate",
       },
       {
@@ -230,6 +240,10 @@ const effectorReact = [
       {
         text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
         link: "/api/effector-react/useEvent",
+      },
+      {
+        text: { en: "useScope" },
+        link: "/api/effector-react/useScope",
       },
     ],
   },
@@ -358,7 +372,7 @@ const effectorVue = [
       {
         text: { en: "ComponentOptions" },
         link: "/api/effector-vue/ComponentOptions",
-      }
+      },
     ],
   },
   {
@@ -409,7 +423,7 @@ const effectorVue = [
       {
         text: { en: "VueSSRPlugin" },
         link: "/api/effector-vue/VueSSRPlugin",
-      }
+      },
     ],
   },
   {
@@ -682,10 +696,19 @@ export const FOOTER_LINKS = [
   {
     text: { en: "Docs", ru: "Документация", uz: "Hujjatlar" },
     items: [
-      { text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" }, link: "/introduction/installation" },
+      {
+        text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" },
+        link: "/introduction/installation",
+      },
       { text: { en: "API Reference", uz: "API Havolasi" }, link: "/api" },
-      { text: { en: "Writings tests", ru: "Тестирование кода", uz: "Kodni testlash" }, link: "/guides/testing" },
-      { text: { en: "Release policy", ru: "Политика релизов", uz: "Relizlar siyosati" }, link: "/core-principles/releases" },
+      {
+        text: { en: "Writings tests", ru: "Тестирование кода", uz: "Kodni testlash" },
+        link: "/guides/testing",
+      },
+      {
+        text: { en: "Release policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
+        link: "/core-principles/releases",
+      },
       { text: { en: "What's new", ru: "Что нового", uz: "Yangiliklar" }, link: LINKS.changelog },
       { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
     ],
