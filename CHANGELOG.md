@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.1.0
+
+- Support arbitary callbacks in scopeBind. Allows library developers to create better APIs in a way that is Fork API - compatible. [PR #1016](https://github.com/effector/effector/pull/1029)
+
 ## effector-react 23.1.0
 
 - Skip enumerable prototype-inherited properties in `useUnit(shape)`. Some badly-written polyfills might add such properties to built-ins like `Array`. [PR #1023](https://github.com/effector/effector/pull/1023)
