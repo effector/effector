@@ -1,4 +1,4 @@
-import {Event, Store} from 'effector'
+import {Event, Store, Scope} from 'effector'
 import {
   useStoreBase,
   useStoreMapBase,
@@ -75,4 +75,9 @@ export function useGate<Props>(
   opts?: {forceScope?: boolean},
 ) {
   return useGateBase(GateComponent, props, getScope(opts?.forceScope))
+}
+
+export function useScope(): Scope | null {
+  const scope = getScope() || null
+  return scope
 }

@@ -250,3 +250,11 @@ export function useUnit<
     ? V
     : never
 }
+
+/**
+ * Low-Level API for library developers.
+ * For production code usage prefer `useUnit` hook instead.
+ *
+ * React hook, which returns current scope or null if no scope provided via `Provider`.
+ */
+export function useScope(): Scope | null
