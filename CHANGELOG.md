@@ -2,6 +2,13 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 23.1.0
+
+- Skip enumerable prototype-inherited properties in `useUnit(shape)`. Some badly-written polyfills might add such properties to built-ins like `Array`. [PR #1023](https://github.com/effector/effector/pull/1023)
+- Add missing depreaction tag to the one of `useEvent` overloads. [PR #1030](https://github.com/effector/effector/pull/1030)
+- Remove deprecated types for already removed `$store.map` overload. [PR #1029](https://github.com/effector/effector/pull/1029)
+- Add `useProvidedScope` low level API for library developers. [PR #1033](https://github.com/effector/effector/pull/1033)
+
 ## effector-react 23.0.1
 
 - Fix warning about `useStore` appeared in `useList` ([PR #1022](https://github.com/effector/effector/pull/1022))
@@ -287,8 +294,8 @@ sample({
 - Added `useUnit` method to read multiple stores and bind events or effects to scope in a single batched call (PR [#733](https://github.com/effector/effector/pull/733), [#738](https://github.com/effector/effector/pull/738))
 
 ```tsx
-import {createEvent, createStore, fork} from 'effector'
-import {useUnit, Provider} from 'effector-react/scope'
+import {value createEvent, value createStore, value fork} from 'effector'
+import {value useUnit, value Provider} from 'effector-react/scope'
 
 const inc = createEvent()
 const $count = createStore(0)
@@ -819,7 +826,13 @@ const secureRequest = attach({
 - Add array support for sample `clock` field which acts like a `merge` call
 
 ```typescript
-import {createStore, createEvent, createEffect, sample, merge} from 'effector'
+import {
+  value createStore,
+  value createEvent,
+  value createEffect,
+  value sample,
+  value merge,
+} from 'effector'
 
 const showNotification = createEvent<string>()
 const trigger = createEvent()
@@ -853,11 +866,11 @@ sample({
 
 ```typescript
 import {
-  createStore,
-  createEffect,
-  StoreValue,
-  EffectParams,
-  EffectResult,
+  value createStore,
+  value createEffect,
+  value StoreValue,
+  value EffectParams,
+  value EffectResult,
 } from 'effector'
 
 const getUserFX = createEffect<number, {name: string}>()
@@ -877,7 +890,7 @@ type User = EffectResult<typeof getUserFX>
 - Allow `domain.createEffect` to infer type from given `handler` (that feature was already implemented for `createEffect` method), this code now typechecked as expected:
 
 ```typescript
-import {createDomain} from 'effector'
+import {value createDomain} from 'effector'
 
 const app = createDomain()
 
@@ -891,7 +904,7 @@ await voidFx()
 - Allow to call `allSettled` with void units without `params` field, this code now typechecked as expected:
 
 ```typescript
-import {createDomain, fork, allSettled} from 'effector'
+import {value createDomain, value fork, value allSettled} from 'effector'
 
 const app = createDomain()
 
@@ -1025,10 +1038,10 @@ messageReceived({
 - Export `useGate` with `fork` support from `effector-react/ssr`
 
 ```tsx
-import {useGate, useStore, Provider} from 'effector-react/ssr'
-import {createGate} from 'effector-react'
-import {createDomain, forward} from 'effector'
-import {fork} from 'effector/fork'
+import {value useGate, value useStore, value Provider} from 'effector-react/ssr'
+import {value createGate} from 'effector-react'
+import {value createDomain, value forward} from 'effector'
+import {value fork} from 'effector/fork'
 
 const app = createDomain()
 
@@ -1213,7 +1226,7 @@ const node = createNode()
 - Remove `object` restriction from `createGate` `Props` type in typescript, as it becomes useless with introduction of `useGate`. This code now passes type checking successfully
 
 ```typescript
-import {createGate} from 'effector-react'
+import {value createGate} from 'effector-react'
 
 const RouteGate = createGate<string>()
 
@@ -1225,7 +1238,7 @@ const UserGate = createGate({defaultState: 'guest'})
 - Allow typescript to refine type if `guard` got `Boolean` (a function) as `filter`
 
 ```typescript
-import {createEvent, createStore, guard} from 'effector'
+import {value createEvent, value createStore, value guard} from 'effector'
 
 type User = {name: string}
 
@@ -1292,8 +1305,13 @@ export default Vue.extend({
 - Add support for `handlers` to `fork` to change effect handlers for forked scope (useful for testing)
 
 ```typescript
-import {createDomain} from 'effector'
-import {fork, hydrate, serialize, allSettled} from 'effector/fork'
+import {value createDomain} from 'effector'
+import {
+  value fork,
+  value hydrate,
+  value serialize,
+  value allSettled,
+} from 'effector/fork'
 
 //app
 const app = createDomain()
@@ -1448,8 +1466,8 @@ reset() // changed 0
 This code now works without type errors:
 
 ```tsx
-import {createStore} from 'effector'
-import {useList} from 'effector-react'
+import {value createStore} from 'effector'
+import {value useList} from 'effector-react'
 
 const $users = createStore<User[]>([
   {
@@ -1495,7 +1513,7 @@ const App = () => (
 - Extend typescript support for any to void forwarding: add support for forwarding to array of void units
 
 ```typescript
-import {forward, createEvent, createEffect} from 'effector'
+import {value forward, value createEvent, value createEffect} from 'effector'
 
 const sourceA = createEvent<string>()
 const sourceB = createEvent<number>()
@@ -1645,7 +1663,7 @@ const foo = createInputField('-', {
 - Add type support for sample with target and without clock (in that case, `source` will become `clock` as well)
 
 ```typescript
-import {createStore, sample} from 'effector'
+import {value createStore, value sample} from 'effector'
 
 const $a = createStore([{foo: 0}])
 const $b = createStore(0)
@@ -1795,8 +1813,13 @@ trigger(1)
 /**
  * app
  */
-import {createDomain, forward, restore} from 'effector'
-import {useStore, useList, Provider, useEvent} from 'effector-react/ssr'
+import {value createDomain, value forward, value restore} from 'effector'
+import {
+  value useStore,
+  value useList,
+  value Provider,
+  value useEvent,
+} from 'effector-react/ssr'
 
 export const app = createDomain()
 
@@ -1832,8 +1855,8 @@ export const View = ({root}) => (
  * client
  */
 import ReactDOM from 'react-dom'
-import {fork} from 'effector/fork'
-import {app, View} from './app'
+import {value fork} from 'effector/fork'
+import {value app, value View} from './app'
 
 // initialize app with values from server
 
@@ -1847,10 +1870,10 @@ ReactDOM.hydrate(<View root={clientScope} />, document.getElementById('root'))
  * server
  */
 import express from 'express'
-import {renderToString} from 'react-dom/server'
-import {fork, serialize, allSettled} from 'effector/fork'
+import {value renderToString} from 'react-dom/server'
+import {value fork, value serialize, value allSettled} from 'effector/fork'
 
-import {app, View} from './app'
+import {value app, value View} from './app'
 
 export const server = express()
 
@@ -1947,8 +1970,8 @@ event()
 
 ```typescript
 import React from 'react'
-import {createStore} from 'effector'
-import {useStoreMap} from 'effector-react'
+import {value createStore} from 'effector'
+import {value useStoreMap} from 'effector-react'
 
 type User = {
   username: string
@@ -2115,8 +2138,8 @@ secondSource('B')
 
 ```typescript
 // component.vue
-import {createStore, createApi} from 'effector'
-import {createComponent} from 'effector-vue'
+import {value createStore, value createApi} from 'effector'
+import {value createComponent} from 'effector-vue'
 
 const $counter = createStore(0)
 const {update} = createApi($counter, {
@@ -2527,7 +2550,7 @@ fx()
 - Allow typescript to refine type of payload if `event.filter({fn})` got a predicate function as a callback [PR](https://github.com/effector/effector/pull/170)
 
 ```typescript
-import {createEvent} from 'effector'
+import {value createEvent} from 'effector'
 
 const event = createEvent<string | number>()
 
@@ -2544,7 +2567,7 @@ num.watch(value => value.toFixed(2)) // OK now
 - Allow typescript to refine type with `is` methods [PR](https://github.com/effector/effector/pull/169)
 
 ```typescript
-import {is} from 'effector'
+import {value is} from 'effector'
 
 //result has type Event<any> | void
 function getEvent(obj: unknown) {
@@ -2625,8 +2648,8 @@ ReactDOM.render(<List />, document.getElementById('root'))
 
 ```typescript
 import React from 'react'
-import {createStore} from 'effector'
-import {useStoreMap} from 'effector-react'
+import {value createStore} from 'effector'
+import {value useStoreMap} from 'effector-react'
 
 type User = {
   username: string
@@ -2667,8 +2690,8 @@ In typescript versions below 3.4, you can still use an explicit type assertion
 
 ```typescript
 import React from 'react'
-import {createStore} from 'effector'
-import {useStoreMap} from 'effector-react'
+import {value createStore} from 'effector'
+import {value useStoreMap} from 'effector-react'
 
 type User = {
   username: string
