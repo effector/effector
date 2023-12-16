@@ -201,7 +201,7 @@ describe('guard(source, config)', () => {
             Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
                 Types of property 'map' are incompatible.
-                  Type '{ <T>(fn: (state: string, lastState?: T | undefined) => T, config?: { skipVoid?: boolean | undefined; } | undefined): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }' is not assignable to type '{ <T>(fn: (state: boolean, lastState?: T | undefined) => T, config?: { skipVoid?: boolean | undefined; } | undefined): Store<T>; <T>(fn: (state: boolean, lastState: T) => T, firstState: T): Store<...>; }'.
+                  Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
                     Types of parameters 'fn' and 'fn' are incompatible.
                       Types of parameters 'state' and 'state' are incompatible.
                         Type 'string' is not assignable to type 'boolean'.
