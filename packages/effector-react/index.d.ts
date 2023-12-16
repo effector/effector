@@ -159,6 +159,9 @@ export function useEvent<T, R>(
   fx: Effect<T, R, any>,
   opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<List extends (EventCallable<any> | Effect<any, any>)[]>(
   list: [...List],
   opts?: {forceScope?: boolean},
