@@ -4,11 +4,11 @@ import {render, container} from 'effector/fixtures/react'
 import {
     fork,
 } from 'effector'
-import {useScope, Provider} from 'effector-react'
+import {useProvidedScope, Provider} from 'effector-react'
 
-describe('low-level useScope hook', () => {
+describe('low-level useProvidedScope hook', () => {
   const Comp = () => {
-    const scope = useScope()
+    const scope = useProvidedScope()
     return <div>{scope === null ? 'null' : 'not null'}</div>
   }
 

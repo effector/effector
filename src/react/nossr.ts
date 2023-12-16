@@ -77,7 +77,7 @@ export function useGate<Props>(
   return useGateBase(GateComponent, props, getScope(opts?.forceScope))
 }
 
-export function useScope(): Scope | null {
+export function useProvidedScope(): Scope | null {
   const scope = getScope() || null
   return scope
 }

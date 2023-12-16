@@ -242,8 +242,8 @@ const effectorReact = [
         link: "/api/effector-react/useEvent",
       },
       {
-        text: { en: "useScope" },
-        link: "/api/effector-react/useScope",
+        text: { en: "useProvidedScope" },
+        link: "/api/effector-react/useProvidedScope",
       },
     ],
   },
