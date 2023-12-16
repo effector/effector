@@ -1226,6 +1226,15 @@ describe('useUnit', () => {
     )
     expect(failed).toBe(false)
   })
+  test('avoiding prototype pollution', async () => {
+    const base = {fk: function fk() {}}
+    const $foo = createStore(0)
+    const App = () => {
+      const {foo} = useUnit({foo: $foo, __proto__: base})
+      return <div>{foo}</div>
+    }
+    await render(<App />)
+  })
 })
 
 describe('@effector/next custom hydration triggers hooks', () => {
