@@ -78,6 +78,10 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Migration guide" },
         link: "/guides/migration-guide-v23",
       },
+      {
+        text: { en: "Migrating from Redux" },
+        link: "https://withease.pages.dev/magazine/migration_from_redux.html",
+      },
     ],
   },
   {
