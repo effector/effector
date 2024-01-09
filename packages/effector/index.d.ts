@@ -3190,10 +3190,9 @@ export function fork<
   S22 = unknown,
   S23 = unknown,
   S24 = unknown,
-  Values = unknown
 >(
   config?: {
-    values?: Values extends Map<any, any> ? LegacyMap : Partial<[
+    values?: Partial<[
       StorePair<S1>,
       StorePair<S2>,
       StorePair<S3>,
@@ -3217,7 +3216,7 @@ export function fork<
       StorePair<S21>,
       StorePair<S22>,
       StorePair<S23>,
-      StorePair<S24>,
+      StorePair<S24>
     ]>,
     handlers?: Handlers
   },
