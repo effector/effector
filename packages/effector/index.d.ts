@@ -3149,6 +3149,94 @@ export function scopeBind<P, D, F = Error>(unit: Effect<P, D, F>, opts?: {scope?
  */
 export function scopeBind<T extends Function>(fn: T, opts?: {scope?: Scope; safe?: boolean}): T
 
+// fork types
+type Handlers = Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function};
+type SerializedState = Record<string, unknown>;
+type LegacyMap = Map<StoreWritable<any>, any>
+
+type StorePair<T extends unknown = unknown> = [StoreWritable<T>, T];
+
+// `values` is a array of tuples, where each tuple is a pair of store and its value - and type of value can be different
+// Sadly, it seems like that TS does not allow for heterogenous array of tuples,
+// so, as a hacky way to work around it, we type it as a generic tuple with variable length up to 24 elements
+// That is why there are all those S1, S2, ..., S24 generics in this overload
+/**
+ * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * @param config optional configuration object with initial store values and effect handlers
+ * @returns new scope
+ */
+export function fork<
+  S1 = unknown,
+  S2 = unknown,
+  S3 = unknown,
+  S4 = unknown,
+  S5 = unknown,
+  S6 = unknown,
+  S7 = unknown,
+  S8 = unknown,
+  S9 = unknown,
+  S10 = unknown,
+  S11 = unknown,
+  S12 = unknown,
+  S13 = unknown,
+  S14 = unknown,
+  S15 = unknown,
+  S16 = unknown,
+  S17 = unknown,
+  S18 = unknown,
+  S19 = unknown,
+  S20 = unknown,
+  S21 = unknown,
+  S22 = unknown,
+  S23 = unknown,
+  S24 = unknown,
+  Values = unknown
+>(
+  config?: {
+    values?: Values extends Map<any, any> ? LegacyMap : Partial<[
+      StorePair<S1>,
+      StorePair<S2>,
+      StorePair<S3>,
+      StorePair<S4>,
+      StorePair<S5>,
+      StorePair<S6>,
+      StorePair<S7>,
+      StorePair<S8>,
+      StorePair<S9>,
+      StorePair<S10>,
+      StorePair<S11>,
+      StorePair<S12>,
+      StorePair<S13>,
+      StorePair<S14>,
+      StorePair<S15>,
+      StorePair<S16>,
+      StorePair<S17>,
+      StorePair<S18>,
+      StorePair<S19>,
+      StorePair<S20>,
+      StorePair<S21>,
+      StorePair<S22>,
+      StorePair<S23>,
+      StorePair<S24>,
+    ]>,
+    handlers?: Handlers
+  },
+): Scope
+
+/**
+ * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ *
+ * @param config optional configuration object with initial store values and effect handlers
+ * @returns new scope
+ */
+export function fork(
+  config?: {
+    values?: SerializedState | LegacyMap,
+    handlers?: Handlers;
+  },
+): Scope
+
+// legacy overloads
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
  * 
@@ -3161,19 +3249,8 @@ export function scopeBind<T extends Function>(fn: T, opts?: {scope?: Scope; safe
 export function fork(
   domain: Domain,
   config?: {
-    values?: ValueMap
-    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function}
-  },
-): Scope
-/**
- * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
- * @param config optional configuration object with initial store values and effect handlers
- * @returns new scope
- */
-export function fork(
-  config?: {
-    values?: ValueMap
-    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function}
+    values?: SerializedState | LegacyMap | Array<[StoreWritable<any>, any]>,
+    handlers?: Handlers;
   },
 ): Scope
 

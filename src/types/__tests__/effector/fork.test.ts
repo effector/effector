@@ -1,5 +1,14 @@
 /* eslint-disable no-unused-vars */
-import {createDomain, Store, fork, serialize, allSettled, Json} from 'effector'
+import {
+  createDomain,
+  Store,
+  fork,
+  serialize,
+  allSettled,
+  Json,
+  StoreWritable,
+  createStore,
+} from 'effector'
 
 const typecheck = '{global}'
 
@@ -126,6 +135,8 @@ describe('fork values', () => {
       const bar = app.createStore<string>('a')
 
       const scope = fork(app, {
+        // TS expects homogenous Map by default :shrug:
+        // @ts-expect-error
         values: new Map([
           [foo, 1],
           [bar, 'b'],
@@ -156,15 +167,124 @@ describe('fork values', () => {
 
       const scope = fork(app, {
         values: {
-          [foo.sid]: 1,
-          [bar.sid]: 'b',
+          [foo.sid!]: 1,
+          [bar.sid!]: 'b',
         },
       })
 
       expect(typecheck).toMatchInlineSnapshot(`
+              "
+              no errors
+              "
+          `)
+    })
+  })
+  describe('strictly types tuple', () => {
+    test('as tuple', () => {
+      const foo = createStore<number>(0)
+      const bar = createStore<string>('a')
+      const baz = createStore({
+        nested: {
+          value: 0,
+        },
+      })
+
+      const scope = fork({
+        values: [
+          [foo, 1],
+          [bar, 'b'],
+          [
+            baz,
+            {
+              nested: {
+                value: 42,
+              },
+            },
+          ],
+        ],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+              "
+              no errors
+              "
+          `)
+    })
+
+    test('as invalid tuple - one error (should fail)', () => {
+      const foo = createStore<number>(0)
+      const bar = createStore<string>('a')
+      const baz = createStore({
+        nested: {
+          value: 0,
+        },
+      })
+
+      // @ts-expect-error
+      const scope = fork({
+        values: [
+          [foo, 0],
+          [bar, 'b'],
+          [
+            baz,
+            {
+              nested: {
+                value: '42',
+              },
+            },
+          ],
+        ],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
         "
-        A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-        A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+        No overload matches this call.
+          Overload 1 of 3, '(config?: { values?: [(StorePair<number> | undefined)?, (StorePair<string> | undefined)?, (StorePair<{ nested: { value: number; }; }> | undefined)?, (StorePair<...> | undefined)?, ... 19 more ...?, (StorePair<...> | undefined)?] | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
+            Type 'string' is not assignable to type 'number'.
+          Overload 2 of 3, '(config?: { values?: SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
+            Type '([StoreWritable<number>, number] | [StoreWritable<string>, string] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { ...; }; }])[]' is not assignable to type 'SerializedState | LegacyMap | undefined'.
+              Type '([StoreWritable<number>, number] | [StoreWritable<string>, string] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { ...; }; }])[]' is not assignable to type 'SerializedState'.
+                Index signature for type 'string' is missing in type '([StoreWritable<number>, number] | [StoreWritable<string>, string] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { ...; }; }])[]'.
+          Overload 3 of 3, '(domain: Domain, config?: { values?: [StoreWritable<any>, any][] | SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
+            Argument of type '{ values: ((number | StoreWritable<number>)[] | (string | StoreWritable<string>)[] | (StoreWritable<{ nested: { value: number; }; }> | { ...; })[])[]; }' is not assignable to parameter of type 'Domain'.
+              Object literal may only specify known properties, and 'values' does not exist in type 'Domain'.
+        "
+      `)
+    })
+
+    test('as invalid tuple - more than one error (should fail)', () => {
+      const foo = createStore<number>(0)
+      const bar = createStore<string>('a')
+      const baz = createStore({
+        nested: {
+          value: 0,
+        },
+      })
+
+      const scope = fork({
+        // If there is more than one type mistake in values pairs
+        // TS fails to legacy overload with Domain instead for some reason
+        // @ts-expect-error
+        values: [
+          [foo, '0'],
+          [bar, 'b'],
+          [
+            baz,
+            {
+              nested: {
+                value: '42',
+              },
+            },
+          ],
+        ],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        No overload matches this call.
+          Overload 3 of 3, '(domain: Domain, config?: { values?: [StoreWritable<any>, any][] | SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
+            Argument of type '{ values: ((string | StoreWritable<string>)[] | (string | StoreWritable<number>)[] | (StoreWritable<{ nested: { value: number; }; }> | { ...; })[])[]; }' is not assignable to parameter of type 'Domain'.
+              Object literal may only specify known properties, and 'values' does not exist in type 'Domain'.
         "
       `)
     })
@@ -176,7 +296,7 @@ describe('fork values', () => {
       const bar = app.createStore<string>('a')
 
       const scope = fork(app, {
-        values: new Map<Store<any>, any>([
+        values: new Map<StoreWritable<any>, any>([
           [foo, 1],
           [bar, 'b'],
         ]),

@@ -938,6 +938,7 @@ describe('derived units are not allowed in values', () => {
     const $map = $store.map(x => x)
 
     expect(() => {
+      // @ts-expect-error
       fork({values: [[$map, 1]]})
     }).toThrowErrorMatchingInlineSnapshot(
       `"Values map can contain only writable stores as keys"`,
@@ -948,6 +949,7 @@ describe('derived units are not allowed in values', () => {
     const $map = combine($store, x => x)
 
     expect(() => {
+      // @ts-expect-error
       fork({values: [[$map, 1]]})
     }).toThrowErrorMatchingInlineSnapshot(
       `"Values map can contain only writable stores as keys"`,
