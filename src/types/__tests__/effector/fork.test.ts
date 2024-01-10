@@ -222,8 +222,8 @@ describe('fork values', () => {
       const map = foo.map(x => x)
 
       function nocall() {
-        // @ts-expect-error
         const scope = fork({
+          // @ts-expect-error
           values: [
             [map, 1],
             [bar, 'b'],
@@ -242,13 +242,14 @@ describe('fork values', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
-          Overload 1 of 3, '(config?: { values?: StorePair<any>[] | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
-            Type 'Store<number>' is missing the following properties from type 'StoreWritable<any>': ____, on, off, reset, and 2 more.
-          Overload 2 of 3, '(config?: { values?: SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
-            Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'SerializedState | LegacyMap | undefined'.
-              Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'SerializedState'.
-                Index signature for type 'string' is missing in type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]'.
-          Overload 3 of 3, '(domain: Domain, config?: { values?: [StoreWritable<any>, any][] | SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
+          Overload 1 of 2, '(config?: { values?: SerializedState | LegacyMap | StorePair<any>[] | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
+            Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'SerializedState | LegacyMap | StorePair<any>[] | undefined'.
+              Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'StorePair<any>[]'.
+                Type '[StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }]' is not assignable to type 'StorePair<any>'.
+                  Type '[Store<number>, number]' is not assignable to type '[StoreWritable<any>, any]'.
+                    Type at position 0 in source is not compatible with type at position 0 in target.
+                      Type 'Store<number>' is missing the following properties from type 'StoreWritable<any>': ____, on, off, reset, and 2 more.
+          Overload 2 of 2, '(domain: Domain, config?: { values?: [StoreWritable<any>, any][] | SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
             Argument of type '{ values: ((string | StoreWritable<string>)[] | (number | Store<number>)[] | (StoreWritable<{ nested: { value: number; }; }> | { nested: { value: number; }; })[])[]; }' is not assignable to parameter of type 'Domain'.
               Object literal may only specify known properties, and 'values' does not exist in type 'Domain'.
         "

@@ -3163,23 +3163,11 @@ type StorePair<T extends unknown = unknown> = [StoreWritable<T>, T];
  */
 export function fork(
   config?: {
-    values?: StorePair<any>[],
+    values?: StorePair<any>[] | SerializedState | LegacyMap,
     handlers?: Handlers
   },
 ): Scope
 
-/**
- * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
- *
- * @param config optional configuration object with initial store values and effect handlers
- * @returns new scope
- */
-export function fork(
-  config?: {
-    values?: SerializedState | LegacyMap,
-    handlers?: Handlers;
-  },
-): Scope
 
 // legacy overloads
 /**
