@@ -213,7 +213,7 @@ src/
     <page-name>/
       page.tsx — just the View layer
       model.ts — a business-logic code
-      index.ts — reexports, sometimes there will be a connection code
+      index.ts — reexports, sometimes there will be a connection-glue code
 ```
 
 I recommend writing code in the view layer from the top to bottom, more common code at the top.
@@ -221,8 +221,6 @@ Let's model our view layer. We will have two main sections at the page: messages
 
 ```tsx
 // File: /src/pages/chat/page.tsx
-import React from "react";
-
 export function ChatPage() {
   return (
     <div className="parent">
@@ -257,6 +255,14 @@ The view layer doesn't know how data are loaded, how it should be converted and 
 // File: /src/pages/chat/model.ts
 import { createEvent, createStore } from "effector";
 
+// And the events report just what happened
+export const messageDeleteClicked = createEvent<Message>();
+export const messageSendClicked = createEvent();
+export const messageEnterPressed = createEvent();
+export const messageTextChanged = createEvent<string>();
+export const loginClicked = createEvent();
+export const logoutClicked = createEvent();
+
 // At the moment, there is just raw data without any knowledge how to load
 export const $loggedIn = createStore<boolean>(false);
 export const $userName = createStore("");
@@ -269,28 +275,19 @@ export const $messageText = createStore("");
 // page should NOT be changed, just because we changed the implementation
 export const $messageDeleting = messageApi.messageDeleteFx.pending;
 export const $messageSending = messageApi.messageSendFx.pending;
-
-// And the events report just what happened
-export const messageDeleteClicked = createEvent<Message>();
-export const messageSendClicked = createEvent();
-export const messageEnterPressed = createEvent();
-export const messageTextChanged = createEvent<string>();
-export const loginClicked = createEvent();
-export const logoutClicked = createEvent();
 ```
 
 Now we can implement components.
 
 ```tsx
 // File: /src/pages/chat/page.tsx
-import { useEvent, useList, useStore } from "effector-react";
+import { useList, useUnit } from "effector-react";
 import * as model from "./model";
 
 // export function ChatPage { ... }
 
 function ChatHistory() {
-  const messageDeleting = useStore(model.$messageDeleting);
-  const onMessageDelete = useEvent(model.messageDeleteClicked);
+  const [messageDeleting, onMessageDelete] = useUnit([model.$messageDeleting, model.messageDeleteClicked]);
 
   // Hook `useList` allows React not rerender messages really doesn't changed
   const messages = useList(model.$messages, (message) => (
@@ -313,19 +310,19 @@ I split `MessageForm` to the different components, to simplify code:
 ```tsx
 // File: /src/pages/chat/page.tsx
 function MessageForm() {
-  const isLogged = useStore(model.$loggedIn);
+  const isLogged = useUnit(model.$loggedIn);
   return isLogged ? <SendMessage /> : <LoginForm />;
 }
 
 function SendMessage() {
-  const userName = useStore(model.$userName);
-  const messageText = useStore(model.$messageText);
-  const messageSending = useStore(model.$messageSending);
+  const [userName, messageText, messageSending] = useUnit([model.$userName, model.$messageText, model.$messageSending]);
 
-  const handleLogout = useEvent(model.logoutClicked);
-  const handleTextChange = useEvent(model.messageTextChanged);
-  const handleEnterPress = useEvent(model.messageEnterPressed);
-  const handleSendClick = useEvent(model.messageSendClicked);
+  const [handleLogout, handleTextChange, handleEnterPress, handleSendClick] = useUnit([
+    model.logoutClicked,
+    model.messageTextChanged,
+    model.messageEnterPressed,
+    model.messageSendClicked,
+  ]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -352,7 +349,8 @@ function SendMessage() {
 }
 
 function LoginForm() {
-  const handleLogin = useEvent(model.loginClicked);
+  const handleLogin = useUnit(model.loginClicked);
+
   return (
     <div className="message-form">
       <div>Please, log in to be able to send messages</div>
@@ -404,7 +402,8 @@ Just add `useEffect` and call bound event inside.
 ```tsx
 // File: /src/pages/chat/page.tsx
 export function ChatPage() {
-  const handlePageMount = useEvent(model.pageMounted);
+  const handlePageMount = useUnit(model.pageMounted);
+
   React.useEffect(() => {
     handlePageMount();
   }, [handlePageMount]);
