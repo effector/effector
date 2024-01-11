@@ -167,6 +167,16 @@ describe('units without sids support', () => {
     expect(scope.getState($sidBar)).toBe(4)
     expect(scope.getState($sidBarOther)).toBe(8)
   })
+
+  test('sids should not be used when `values` is not a record', () => {
+    const $a = createStore('a', {sid: '1'})
+    const $b = createStore('b', {sid: '1'})
+
+    const scope = fork({values: [[$a, 'override']]})
+
+    expect(scope.getState($b)).toBe('b')
+    expect(scope.getState($a)).toBe('override')
+  })
 })
 describe('fork values support', () => {
   test('values as js Map', async () => {
