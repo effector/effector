@@ -171,11 +171,25 @@ describe('units without sids support', () => {
   test('sids should not be used when `values` is not a record', () => {
     const $a = createStore('a', {sid: '$a'})
     const $b = createStore('b', {sid: '$a'})
+    const $c = createStore('c', {sid: '$b'})
+    const $d = createStore('d', {sid: '$b'})
 
-    const scope = fork({values: [[$a, 'override']]})
+    const scope = fork({
+      values: [
+        [$a, 'override'],
+        [$c, 'override'],
+      ],
+    })
 
     expect(scope.getState($b)).toBe('b')
     expect(scope.getState($a)).toBe('override')
+
+    /**
+     * scope.getState forces creation of the stateRef for the store,
+     * so order of getState calls is also important for this case
+     */
+    expect(scope.getState($c)).toBe('override')
+    expect(scope.getState($d)).toBe('d')
   })
 })
 describe('fork values support', () => {
