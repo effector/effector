@@ -36,6 +36,14 @@ export function fork(
       forEach(unitMap, (value, unit) => {
         scope.values.idMap[(unit as Store<any>).stateRef.id] = value
 
+        /**
+         * If store values were provided as tuple or map,
+         * but unit has sid anyway, we should add it to sidIdMap,
+         * 
+         * It is needed to avoid issues, if there are duplicated sids in the code + values is a tuple or map
+         */
+        scope.sidIdMap[getMeta(unit, 'sid')] = (unit as Store<any>).stateRef.id
+
         const serialize = getMeta(unit, 'serialize')
         if (serialize === 'ignore') {
           const sid = getMeta(unit, 'sid')
