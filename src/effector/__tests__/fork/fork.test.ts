@@ -169,8 +169,8 @@ describe('units without sids support', () => {
   })
 
   test('sids should not be used when `values` is not a record', () => {
-    const $a = createStore('a', {sid: '1'})
-    const $b = createStore('b', {sid: '1'})
+    const $a = createStore('a', {sid: '$a'})
+    const $b = createStore('b', {sid: '$a'})
 
     const scope = fork({values: [[$a, 'override']]})
 
