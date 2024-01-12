@@ -167,6 +167,36 @@ describe('units without sids support', () => {
     expect(scope.getState($sidBar)).toBe(4)
     expect(scope.getState($sidBarOther)).toBe(8)
   })
+
+  test('sids should not be used when `values` is not a record', () => {
+    /**
+     * Possible use-case:
+     * There is some problem with sids in the codebase, they are duplicated between different units
+     *
+     * But this should not matter for cases, when `values` is not a record (e.g. tests), units reference itself should be used instead
+     */
+    const $a = createStore('a', {sid: '$a'})
+    const $b = createStore('b', {sid: '$a'})
+    const $c = createStore('c', {sid: '$b'})
+    const $d = createStore('d', {sid: '$b'})
+
+    const scope = fork({
+      values: [
+        [$a, 'override'],
+        [$c, 'override'],
+      ],
+    })
+
+    expect(scope.getState($b)).toBe('b')
+    expect(scope.getState($a)).toBe('override')
+
+    /**
+     * scope.getState forces creation of the stateRef for the store,
+     * so order of getState calls is also important for this case
+     */
+    expect(scope.getState($c)).toBe('override')
+    expect(scope.getState($d)).toBe('d')
+  })
 })
 describe('fork values support', () => {
   test('values as js Map', async () => {
