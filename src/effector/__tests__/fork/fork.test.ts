@@ -169,6 +169,12 @@ describe('units without sids support', () => {
   })
 
   test('sids should not be used when `values` is not a record', () => {
+    /**
+     * Possible use-case:
+     * There is some problem with sids in the codebase, they are duplicated between different units
+     *
+     * But this should not matter for cases, when `values` is not a record (e.g. tests), units reference itself should be used instead
+     */
     const $a = createStore('a', {sid: '$a'})
     const $b = createStore('b', {sid: '$a'})
     const $c = createStore('c', {sid: '$b'})
