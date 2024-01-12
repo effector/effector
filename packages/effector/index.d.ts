@@ -3149,6 +3149,27 @@ export function scopeBind<P, D, F = Error>(unit: Effect<P, D, F>, opts?: {scope?
  */
 export function scopeBind<T extends Function>(fn: T, opts?: {scope?: Scope; safe?: boolean}): T
 
+// fork types
+type Handlers = Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function};
+type SerializedState = Record<string, unknown>;
+type LegacyMap = Map<StoreWritable<any>, any>
+
+type StorePair<T extends unknown = unknown> = [StoreWritable<T>, T];
+
+/**
+ * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * @param config optional configuration object with initial store values and effect handlers
+ * @returns new scope
+ */
+export function fork(
+  config?: {
+    values?: StorePair<any>[] | SerializedState | LegacyMap,
+    handlers?: Handlers
+  },
+): Scope
+
+
+// legacy overloads
 /**
  * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
  * 
@@ -3161,19 +3182,8 @@ export function scopeBind<T extends Function>(fn: T, opts?: {scope?: Scope; safe
 export function fork(
   domain: Domain,
   config?: {
-    values?: ValueMap
-    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function}
-  },
-): Scope
-/**
- * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
- * @param config optional configuration object with initial store values and effect handlers
- * @returns new scope
- */
-export function fork(
-  config?: {
-    values?: ValueMap
-    handlers?: Map<Effect<any, any, any>, Function> | Array<[Effect<any, any, any>, Function]> | {[sid: string]: Function}
+    values?: SerializedState | LegacyMap | Array<[StoreWritable<any>, any]>,
+    handlers?: Handlers;
   },
 ): Scope
 
