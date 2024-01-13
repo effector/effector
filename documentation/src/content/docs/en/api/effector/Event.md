@@ -32,7 +32,7 @@ When event is explicitly created by [`createEvent`](/en/api/effector/createEvent
 as a Generic type argument:
 
 ```ts
-import { ItemAdded } from "effector";
+import { createEvent } from "effector";
 
 interface ItemAdded {
   id: string;
