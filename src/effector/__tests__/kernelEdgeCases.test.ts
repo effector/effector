@@ -392,8 +392,17 @@ describe('experimental stack meta', () => {
 
   test('effects cases', async () => {
     const metas: any[] = []
+    const fails: any[] = []
 
-    const saveCurrentMeta = () => metas.push(getStackMeta().testKey)
+    const saveCurrentMeta = (id: string) => {
+      const testKeyValue = getStackMeta()?.testKey
+
+      if (!testKeyValue) {
+        fails.push(id)
+      } else {
+        metas.push(testKeyValue)
+      }
+    }
     const event = createEvent()
 
     const fx1 = createEffect(async () => {
@@ -406,34 +415,34 @@ describe('experimental stack meta', () => {
       await Promise.resolve()
     })
     const controller1Fx = createEffect(async () => {
-      saveCurrentMeta()
+      saveCurrentMeta('controller1Fx - 1')
       fx1()
-      saveCurrentMeta()
+      saveCurrentMeta('controller1Fx - 2')
       fx2()
-      saveCurrentMeta()
+      saveCurrentMeta('controller1Fx - 3')
       fx3()
-      saveCurrentMeta()
+      saveCurrentMeta('controller1Fx - 4')
     })
     const controller2Fx = createEffect(async () => {
-      saveCurrentMeta()
+      saveCurrentMeta('controller2Fx - 1')
       await fx1()
-      saveCurrentMeta()
+      saveCurrentMeta('controller2Fx - 2')
       await fx2()
-      saveCurrentMeta()
+      saveCurrentMeta('controller2Fx - 3')
       await fx3()
-      saveCurrentMeta()
+      saveCurrentMeta('controller2Fx - 4')
     })
     const controller3Fx = createEffect(async () => {
-      saveCurrentMeta()
+      saveCurrentMeta('controller3Fx - 1')
       await Promise.all([fx1(), fx2(), fx3()])
-      saveCurrentMeta()
+      saveCurrentMeta('controller3Fx - 2')
     })
     const controller4Fx = createEffect(async () => {
-      saveCurrentMeta()
+      saveCurrentMeta('controller4Fx - 1')
       event()
-      saveCurrentMeta()
+      saveCurrentMeta('controller4Fx - 2')
       await fx2()
-      saveCurrentMeta()
+      saveCurrentMeta('controller4Fx - 3')
     })
 
     const start = createEvent()
@@ -456,6 +465,8 @@ describe('experimental stack meta', () => {
     await allSettled(scope)
 
     expect(metas.every(v => v === 'testValue')).toEqual(true)
+    expect(fails).toEqual([])
+    expect(metas.length).toBe(13) // 13 saveCurrentMeta calls
     /** no meta should left */
     expect(getSharedStackMeta()).toEqual(undefined)
   })
