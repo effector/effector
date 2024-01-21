@@ -13,6 +13,7 @@ import {assert} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
 import {createSampling} from './sample'
+import {generateErrorTitle} from './naming'
 
 const launchCase = (
   scopeTargets: Record<string, DataCarrier>,
@@ -37,6 +38,7 @@ export function split(...args: any[]) {
   let targets: Record<string, DataCarrier>
   let clock: void | DataCarrier | DataCarrier[]
   let [[source, match], metadata] = processArgsToConfig(args)
+  const errorTitle = generateErrorTitle(METHOD, metadata)
   const configForm = !match
   if (configForm) {
     targets = source.cases
@@ -47,10 +49,10 @@ export function split(...args: any[]) {
   const matchIsUnit = is.store(match)
   const matchIsFunction = !is.unit(match) && isFunction(match)
   const matchIsShape = !matchIsUnit && !matchIsFunction && isObject(match)
-  assert(is.unit(source), 'source must be a unit')
+  assert(is.unit(source), 'source must be a unit', errorTitle)
   if (!targets!) targets = {}
   if (!configForm) {
-    assert(matchIsShape, 'match should be an object')
+    assert(matchIsShape, 'match should be an object', errorTitle)
     forIn(
       match,
       (_, key) =>
@@ -67,7 +69,7 @@ export function split(...args: any[]) {
     })
   } else {
     forIn(targets, (target, field) =>
-      assertTarget(METHOD, target, `cases.${field}`),
+      assertTarget(errorTitle, target, `cases.${field}`),
     )
   }
   const owners = new Set(

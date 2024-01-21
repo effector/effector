@@ -19,9 +19,10 @@ import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {assert} from './throw'
 import {EFFECT} from './tag'
-import {add, removeItem} from './collection'
+import {add} from './collection'
 import {flattenConfig} from './config'
 import {nextEffectID} from './id'
+import {generateErrorTitle} from './naming'
 
 type RunnerData<Params, Done, Fail> = {
   params: Params
@@ -41,6 +42,7 @@ export function createEffect<Params, Done, Fail = Error>(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
   )
+  const errorTitle = generateErrorTitle('effect', config)
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     {...maybeConfig, actualOp: EFFECT},
@@ -49,7 +51,7 @@ export function createEffect<Params, Done, Fail = Error>(
   setMeta(node, 'op', (instance.kind = EFFECT))
   //@ts-expect-error
   instance.use = (fn: Function) => {
-    assert(isFunction(fn), '.use argument should be a function')
+    assert(isFunction(fn), '.use argument should be a function', errorTitle)
     runner.scope.handler = fn
     return instance
   }
@@ -101,7 +103,11 @@ export function createEffect<Params, Done, Fail = Error>(
     scope: {
       handler:
         instance.defaultConfig.handler ||
-        (() => assert(false, `no handler used in ${instance.getType()}`)),
+        (() =>
+          assert(
+            false,
+            `no handler used in ${instance.compositeName.fullName}`,
+          )),
     },
     node: [
       calc(
@@ -122,27 +128,26 @@ export function createEffect<Params, Done, Fail = Error>(
       ),
       calc(
         (
-          {
-            params,
-            req,
-            handler,
-            args = [params],
-          }: RunnerData<Params, Done, Fail> & {handler: Function},
+          upd: RunnerData<Params, Done, Fail> & {handler: Function},
           _,
           stack,
         ) => {
-          const scopeRef = createScopeRef(stack)
+          if (_.runnerFn) {
+            const needToContinue = _.runnerFn(upd, null, stack)
+            if (!needToContinue) return
+          }
 
           /** `true` for imperative effect call inside another effect */
           const lastIsEffectBody = isEffectBody
 
+          /** upd.args could be changed by runnerFn */
+          const {params, req, handler, args = [params]} = upd
           const onResolve = onSettled(
             params,
             req,
             true,
             anyway,
             stack,
-            scopeRef,
             lastIsEffectBody,
           )
           const onReject = onSettled(
@@ -151,14 +156,13 @@ export function createEffect<Params, Done, Fail = Error>(
             false,
             anyway,
             stack,
-            scopeRef,
             lastIsEffectBody,
           )
+
           setIsEffectBody(true)
 
           /** make stack.meta available for effect's body */
           setSharedStackMeta(stack.meta)
-
           const [ok, result] = runFn(handler, onReject, args)
 
           setIsEffectBody(false)
@@ -279,13 +283,6 @@ export const runFn = (
   }
 }
 
-export const createScopeRef = (stack: Stack) => {
-  const scope = getForkPage(stack)
-  const scopeRef = {ref: scope}
-  if (scope) add(scope.activeEffects, scopeRef)
-  return scopeRef
-}
-
 export const onSettled =
   (
     params: any,
@@ -296,11 +293,9 @@ export const onSettled =
     ok: boolean,
     anyway: Unit,
     stack: Stack,
-    scopeRef: {ref: Scope | void},
     lastIsEffectBody: boolean,
   ) =>
   (data: any) => {
-    if (scopeRef.ref) removeItem(scopeRef.ref.activeEffects, scopeRef)
     setIsEffectBody(lastIsEffectBody)
     if (isEffectBody) {
       /**
@@ -322,7 +317,7 @@ export const onSettled =
       defer: true,
       // WARN! Will broke forest pages as they arent moved to new scope
       page: stack.page,
-      scope: scopeRef.ref,
+      scope: stack.scope,
       meta: stack.meta,
     })
   }

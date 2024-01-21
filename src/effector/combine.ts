@@ -1,16 +1,16 @@
 import type {Store} from './unit.h'
-import {createStore} from './createUnit'
+import {createStore, requireExplicitSkipVoidMessage} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject, isVoid} from './is'
-import {unitObjectName} from './naming'
+import {generateErrorTitle, unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {assert, deprecate} from './throw'
 import {readTemplate} from './region'
 import {forIn} from './collection'
-import {BARRIER, MAP, REG_A, VALUE} from './tag'
+import {MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
 
@@ -19,9 +19,14 @@ export function combine(...args: any[]): Store<any> {
   let stores
   let config
   ;[args, config] = processArgsToConfig(args)
-  const rawHandler = args[args.length - 1]
+  const errorTitle = generateErrorTitle('combine', config)
+  // skipVoid support, to be removed in effector 24
+  const maybeExtConfig = args[args.length - 1]
+  const isExtendedConfig = !is.store(maybeExtConfig) && isObject(maybeExtConfig)
+  const extConfig = isExtendedConfig && maybeExtConfig
+  const rawHandler = isExtendedConfig ? args[args.length - 2] : maybeExtConfig
   if (isFunction(rawHandler)) {
-    stores = args.slice(0, -1)
+    stores = args.slice(0, isExtendedConfig ? -2 : -1)
     handler = rawHandler
   } else {
     stores = args
@@ -68,13 +73,14 @@ export function combine(...args: any[]): Store<any> {
       handler = (list: any[]) => fn(...list)
     }
   }
-  assert(isObject(structStoreShape), 'shape should be an object')
+  assert(isObject(structStoreShape), `${errorTitle}: shape should be an object`)
   return storeCombination(
     Array.isArray(structStoreShape),
     !noArraySpread,
     structStoreShape,
     config,
     handler,
+    extConfig,
   )
 }
 
@@ -84,7 +90,9 @@ const storeCombination = (
   obj: any,
   config?: Config,
   fn?: (upd: any) => any,
+  extConfig?: {skipVoid?: boolean},
 ) => {
+  const errorTitle = generateErrorTitle('combine', config)
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
 
@@ -97,6 +105,7 @@ const storeCombination = (
   const store = createStore(stateNew, {
     name: unitObjectName(obj),
     derived: true,
+    ...extConfig,
     and: config,
   })
   const storeStateRef = getStoreState(store)
@@ -109,6 +118,17 @@ const storeCombination = (
    * (thats why order has no "barrierID" field, which assume batching)
    **/
   rawShapeReader.order = {priority: 'barrier'}
+  /**
+   * Soft store reading is required for
+   * setting target store as inited in scope
+   * for preventing retriggering issues
+   **/
+  const softReader = mov({
+    store: storeStateRef,
+    to: 'b',
+    priority: 'read',
+  })
+  softReader.data.softRead = true
   const node = [
     calc((upd, _, stack) => {
       if (stack.scope && !stack.scope.reg[rawShape.id]) {
@@ -133,17 +153,25 @@ const storeCombination = (
       from: VALUE,
       store: true,
       target: isFresh,
-      priority: BARRIER,
+      priority: 'barrier',
       batch: true,
     }),
-    read(rawShape, true),
+    /**
+     * `read` with `sampler` priority is used to prevent cases,
+     *  where `combine` triggers are duplicated
+     *
+     *  basically, this makes `sample` and `combine` priorities equal
+     */
+    read(rawShape, true, true),
     fn && userFnCall(),
+    softReader,
   ]
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
       assert(
         !is.unit(child) && !isVoid(child),
         `combine expects a store in a field ${key}`,
+        errorTitle,
       )
       stateNew[key] = defaultState[key] = child
       return
@@ -164,14 +192,19 @@ const storeCombination = (
     fn,
   })
   if (!readTemplate()) {
-    store.defaultState = fn
-      ? (storeStateRef.current = fn(stateNew))
-      : defaultState
+    if (fn) {
+      const computedValue = fn(stateNew)
+
+      if (isVoid(computedValue) && (!extConfig || !('skipVoid' in extConfig))) {
+        console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
+      }
+
+      storeStateRef.current = computedValue
+      storeStateRef.initial = computedValue
+      store.defaultState = computedValue
+    } else {
+      store.defaultState = defaultState
+    }
   }
   return store
-}
-
-export function createStoreObject(...args: any[]) {
-  deprecate(false, 'createStoreObject', 'combine')
-  return combine(...args)
 }

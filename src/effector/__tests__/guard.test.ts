@@ -9,6 +9,19 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('use case', () => {
   const clickRequest = createEvent()
   const fetchRequest = createEffect<number, number>(
@@ -329,7 +342,9 @@ describe('validation', () => {
     const target = createEffect((_: any) => {})
     expect(() => {
       guard({source: undefined, filter, target})
-    }).toThrowErrorMatchingInlineSnapshot(`"guard: source should be defined"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[guard] (/src/effector/__tests__/guard.test.ts:344:6): source should be defined"`,
+    )
   })
   test('clock validation', () => {
     const filter = createStore(true)
@@ -337,7 +352,9 @@ describe('validation', () => {
 
     expect(() => {
       guard({clock: undefined, filter, target})
-    }).toThrowErrorMatchingInlineSnapshot(`"guard: clock should be defined"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[guard] (/src/effector/__tests__/guard.test.ts:354:6): clock should be defined"`,
+    )
   })
   test('no source no clock', () => {
     const target = createEffect((_: any) => {})
@@ -346,7 +363,7 @@ describe('validation', () => {
       //@ts-expect-error
       guard({target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"guard: either source or clock should be defined"`,
+      `"[guard] (/src/effector/__tests__/guard.test.ts:364:6): either source or clock should be defined"`,
     )
   })
 })

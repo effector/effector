@@ -1,0 +1,28 @@
+---
+import CommonLayout from "../layouts/CommonLayout.astro";
+
+interface Props {
+  title: string;
+  lang: "en" | "ru" | "uz";
+  description: string;
+  dir?: "ltr" | "rtl";
+}
+
+const { title, lang, description, dir = "ltr" } = Astro.props;
+---
+
+<CommonLayout lang={lang} title={title} dir={dir} description={description}>
+  <div class="landing">
+    <slot />
+  </div>
+</CommonLayout>
+
+<style>
+  :root {
+    --header-max-width: 98rem;
+  }
+
+  .landing {
+    margin-top: var(--theme-navbar-height);
+  }
+</style>

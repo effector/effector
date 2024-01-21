@@ -4,14 +4,15 @@ import {
   createEvent,
   createEffect,
   sample,
-  Store,
+  StoreWritable,
   Event,
+  EventCallable,
 } from 'effector'
 const typecheck = '{global}'
 
 test('clock param name in the function', () => {
-  const trigger: Event<number> = createEvent()
-  const allow: Store<string> = createStore('no')
+  const trigger: EventCallable<number> = createEvent()
+  const allow: StoreWritable<string> = createStore('no')
 
   const result1 = sample({
     //@ts-expect-error
@@ -32,11 +33,11 @@ test('clock param name in the function', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ source: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ source: Event<number>; clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ source: EventCallable<number>; clock: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Argument of type '{ clock: Event<number>; filter: Store<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Argument of type '{ clock: EventCallable<number>; filter: StoreWritable<string>; }' is not assignable to parameter of type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
     "
   `)
@@ -79,13 +80,10 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (string | number | boolean)[], clk: { a: number; }) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (string | number | boolean)[], clk: { a: number; }) => any'.
-        Types of parameters '__0' and 'src' are incompatible.
-          Type '(string | number | boolean)[]' is not assignable to type '[any, any]'.
-    Binding element 'isAble' implicitly has an 'any' type.
-    Binding element 'field' implicitly has an 'any' type.
-    Parameter 'data' implicitly has an 'any' type.
+    A type predicate's type must be assignable to its parameter's type.
+      Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
+        Types of property 'data' are incompatible.
+          Type 'number' is not assignable to type '{ a: number; }'.
     "
   `)
 })
@@ -128,13 +126,10 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '((src: (string | number | boolean)[], clk: { a: number; }) => any) & (([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null)'.
-      Type '([isAble, field]: [any, any], data: any) => { field: any; data: any; } | null' is not assignable to type '(src: (string | number | boolean)[], clk: { a: number; }) => any'.
-        Types of parameters '__0' and 'src' are incompatible.
-          Type '(string | number | boolean)[]' is not assignable to type '[any, any]'.
-    Binding element 'isAble' implicitly has an 'any' type.
-    Binding element 'field' implicitly has an 'any' type.
-    Parameter 'data' implicitly has an 'any' type.
+    A type predicate's type must be assignable to its parameter's type.
+      Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
+        Types of property 'data' are incompatible.
+          Type 'number' is not assignable to type '{ a: number; }'.
     "
   `)
 })

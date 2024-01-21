@@ -15,6 +15,24 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (
+      String(message).includes('forward') ||
+      String(message).includes('guard') ||
+      String(message).includes('object with handlers')
+    )
+      return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 test('usage with domain', async () => {
   const app = createDomain()
   const add = app.createEvent<number>()
@@ -44,6 +62,25 @@ test('usage without domain', async () => {
   await allSettled(addFx, {scope})
   expect(scope.getState($count)).toBe(15)
   expect($count.getState()).toBe(0)
+})
+describe('getState cases', () => {
+  test('getState on default value works', () => {
+    const $store = createStore('default value')
+
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe('default value')
+  })
+
+  test('getState on default value (store with serialize ignore)', () => {
+    const $store = createStore('default value', {
+      serialize: 'ignore',
+    })
+
+    const scope = fork()
+
+    expect(scope.getState($store)).toBe('default value')
+  })
 })
 describe('units without sids support', () => {
   test('store without sid should be supported', () => {
@@ -130,6 +167,36 @@ describe('units without sids support', () => {
     expect(scope.getState($sidBar)).toBe(4)
     expect(scope.getState($sidBarOther)).toBe(8)
   })
+
+  test('sids should not be used when `values` is not a record', () => {
+    /**
+     * Possible use-case:
+     * There is some problem with sids in the codebase, they are duplicated between different units
+     *
+     * But this should not matter for cases, when `values` is not a record (e.g. tests), units reference itself should be used instead
+     */
+    const $a = createStore('a', {sid: '$a'})
+    const $b = createStore('b', {sid: '$a'})
+    const $c = createStore('c', {sid: '$b'})
+    const $d = createStore('d', {sid: '$b'})
+
+    const scope = fork({
+      values: [
+        [$a, 'override'],
+        [$c, 'override'],
+      ],
+    })
+
+    expect(scope.getState($b)).toBe('b')
+    expect(scope.getState($a)).toBe('override')
+
+    /**
+     * scope.getState forces creation of the stateRef for the store,
+     * so order of getState calls is also important for this case
+     */
+    expect(scope.getState($c)).toBe('override')
+    expect(scope.getState($d)).toBe('d')
+  })
 })
 describe('fork values support', () => {
   test('values as js Map', async () => {
@@ -212,7 +279,7 @@ describe('fork values support', () => {
         values: new Map().set(unit, 0),
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"Values map can contain only stores as keys"`,
+      `"Values map can contain only writable stores as keys"`,
     )
   })
   describe('consistency simple', () => {
@@ -863,4 +930,29 @@ describe('scope watch calls', () => {
     })
     store.updates.watch(upd => fnB(upd))
   }
+})
+
+describe('derived units are not allowed in values', () => {
+  test('store.map', () => {
+    const $store = createStore(0)
+    const $map = $store.map(x => x)
+
+    expect(() => {
+      // @ts-expect-error
+      fork({values: [[$map, 1]]})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Values map can contain only writable stores as keys"`,
+    )
+  })
+  test('combine', () => {
+    const $store = createStore(0)
+    const $map = combine($store, x => x)
+
+    expect(() => {
+      // @ts-expect-error
+      fork({values: [[$map, 1]]})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Values map can contain only writable stores as keys"`,
+    )
+  })
 })

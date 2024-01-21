@@ -3,7 +3,7 @@ import {Domain} from 'effector'
 
 import type {Gate} from './index.h'
 
-import {useGate as commonUseGate, createGateImplementation} from './lib/gate'
+import {useGate as commonUseGate, createGateImplementation, useGateBase} from './lib/gate'
 import {useStoreMapBase, useUnitBase} from './lib/base'
 import {getScope, ScopeContext} from './lib/get-scope'
 
@@ -26,33 +26,17 @@ export function createGate<Props>(
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  props: Accessor<Props> = () => ({} as any),
+  props: Props = {} as any,
 ) {
-  const events = useUnit([
-    GateComponent.open,
-    GateComponent.close,
-    GateComponent.set,
-  ])
-
-  const ForkedGate = createMemo(() => {
-    const [open, close, set] = events
-
-    return {
-      open,
-      close,
-      set,
-    } as Gate<Props>
-  })
-
-  createEffect(() => commonUseGate(ForkedGate(), props))
+  return useGateBase(GateComponent, props, getScope(true))
 }
 export function useUnit(shape) {
-  const scope = getScope()
+  const scope = getScope(true)
   return useUnitBase(shape, scope)
 }
 /** useStoreMap wrapper for scopes */
 export function useStoreMap(configOrStore: any, separateFn: any) {
-  const scope = getScope()
+  const scope = getScope(true)
   if (separateFn) return useStoreMapBase([configOrStore, separateFn], scope)
   return useStoreMapBase(
     [

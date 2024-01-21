@@ -1,6 +1,28 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEvent, guard, Store, Event, Unit} from 'effector'
+import {
+  createStore,
+  createEvent,
+  guard,
+  Store,
+  Event,
+  Unit,
+  StoreWritable,
+  EventCallable,
+} from 'effector'
 const typecheck = '{global}'
+
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 
 describe('explicit generics', () => {
   test('guard<A>({source, clock, filter})', () => {
@@ -142,7 +164,7 @@ describe('explicit generics', () => {
 describe('guard(source, config)', () => {
   describe('guard(source, {filter: store})', () => {
     it('return new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow = createStore<boolean>(false)
 
       const result: Event<number> = guard(trigger, {filter: allow})
@@ -154,7 +176,7 @@ describe('guard(source, config)', () => {
       `)
     })
     it('support any unit (should pass)', () => {
-      const trigger: Store<number[]> = createStore([1])
+      const trigger: StoreWritable<number[]> = createStore([1])
       const allow = createStore<boolean>(false)
 
       const result: Event<number[]> = guard(trigger, {filter: allow})
@@ -166,8 +188,8 @@ describe('guard(source, config)', () => {
       `)
     })
     test('store is not boolean (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger: EventCallable<number> = createEvent()
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       guard(trigger, {filter: allow})
@@ -176,33 +198,38 @@ describe('guard(source, config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
-              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
-                The types returned by 'getState()' are incompatible between these types.
-                  Type 'string' is not assignable to type 'boolean'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+              Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+                Types of property 'map' are incompatible.
+                  Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+                    Types of parameters 'fn' and 'fn' are incompatible.
+                      Types of parameters 'state' and 'state' are incompatible.
+                        Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger: EventCallable<number> = createEvent()
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: allow})
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Type 'Target' is not assignable to type 'Event<string>'.
+          Type 'UnitTargetable<any>' is missing the following properties from type 'Event<string>': map, filter, filterMap, watch, and 5 more.
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
         "
       `)
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
-        const target: Store<number> = createStore(0)
+        const target: StoreWritable<number> = createStore(0)
 
         guard(trigger, {
           filter: allow,
@@ -215,9 +242,9 @@ describe('guard(source, config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
-        const target: Store<string> = createStore('no')
+        const target: StoreWritable<string> = createStore('no')
 
         guard(trigger, {
           filter: allow,
@@ -228,7 +255,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+              Type 'StoreWritable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -236,7 +263,7 @@ describe('guard(source, config)', () => {
   })
   describe('guard(source, {filter: fn})', () => {
     it('returns new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const result: Event<number> = guard(trigger, {filter: n => n > 0})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -246,8 +273,8 @@ describe('guard(source, config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger: EventCallable<number> = createEvent()
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: x => x > 0})
@@ -255,13 +282,14 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
-        const target: Store<number> = createStore(0)
+        const trigger: EventCallable<number> = createEvent()
+        const target: StoreWritable<number> = createStore(0)
 
         guard(trigger, {
           filter: x => x > 0,
@@ -274,8 +302,8 @@ describe('guard(source, config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
-        const target: Store<string> = createStore('no')
+        const trigger: EventCallable<number> = createEvent()
+        const target: StoreWritable<string> = createStore('no')
 
         guard(trigger, {
           filter: x => x > 0,
@@ -286,7 +314,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+              Type 'StoreWritable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -295,7 +323,7 @@ describe('guard(source, config)', () => {
   describe('guard(source, {filter: Boolean})', () => {
     it('returns new event (should pass)', () => {
       type User = {name: string}
-      const trigger: Event<User | null> = createEvent()
+      const trigger: EventCallable<User | null> = createEvent()
       const result: Event<User> = guard(trigger, {filter: Boolean})
 
       expect(typecheck).toMatchInlineSnapshot(`
@@ -306,7 +334,7 @@ describe('guard(source, config)', () => {
     })
     test('result type mismatch (should fail)', () => {
       type User = {name: string}
-      const trigger: Event<User | null> = createEvent()
+      const trigger: EventCallable<User | null> = createEvent()
 
       //@ts-expect-error
       const result: Event<string> = guard(trigger, {filter: Boolean})
@@ -314,18 +342,14 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
         type User = {name: string}
-        const trigger: Event<User | null> = createEvent()
+        const trigger: EventCallable<User | null> = createEvent()
         const target = createStore<User>({name: 'alice'})
 
         guard(trigger, {
@@ -340,8 +364,8 @@ describe('guard(source, config)', () => {
       })
       test('type mismatch (should fail)', () => {
         type User = {name: string}
-        const trigger: Event<User | null> = createEvent()
-        const target: Store<string> = createStore('no')
+        const trigger: EventCallable<User | null> = createEvent()
+        const target: StoreWritable<string> = createStore('no')
 
         guard(trigger, {
           filter: Boolean,
@@ -352,7 +376,7 @@ describe('guard(source, config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+              Type 'StoreWritable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -363,7 +387,7 @@ describe('guard(source, config)', () => {
 describe('guard(config)', () => {
   describe('guard({source, filter: store})', () => {
     it('return new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const allow = createStore<boolean>(false)
 
       const result: Event<number> = guard({
@@ -378,7 +402,7 @@ describe('guard(config)', () => {
       `)
     })
     it('support any unit (should pass)', () => {
-      const trigger: Store<number[]> = createStore([1])
+      const trigger: StoreWritable<number[]> = createStore([1])
       const allow = createStore<boolean>(false)
 
       const result: Event<number[]> = guard({
@@ -393,8 +417,8 @@ describe('guard(config)', () => {
       `)
     })
     test('store is not boolean (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger: EventCallable<number> = createEvent()
+      const allow: StoreWritable<string> = createStore('no')
 
       guard({
         source: trigger,
@@ -406,14 +430,14 @@ describe('guard(config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
-              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+              Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
         "
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger: EventCallable<number> = createEvent()
+      const allow: StoreWritable<string> = createStore('no')
 
       guard({
         source: trigger,
@@ -425,15 +449,15 @@ describe('guard(config)', () => {
         "
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+            Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
         "
       `)
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
-        const target: Store<number> = createStore(0)
+        const target: StoreWritable<number> = createStore(0)
 
         guard({
           source: trigger,
@@ -447,9 +471,9 @@ describe('guard(config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
+        const trigger: EventCallable<number> = createEvent()
         const allow = createStore<boolean>(false)
-        const target: Store<string> = createStore('no')
+        const target: StoreWritable<string> = createStore('no')
 
         guard({
           source: trigger,
@@ -461,7 +485,7 @@ describe('guard(config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+              Type 'StoreWritable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -469,7 +493,7 @@ describe('guard(config)', () => {
   })
   describe('guard({source, filter: fn})', () => {
     it('returns new event (should pass)', () => {
-      const trigger: Event<number> = createEvent()
+      const trigger: EventCallable<number> = createEvent()
       const result: Event<number> = guard({
         source: trigger,
         filter: n => n > 0,
@@ -482,8 +506,8 @@ describe('guard(config)', () => {
       `)
     })
     test('result type mismatch (should fail)', () => {
-      const trigger: Event<number> = createEvent()
-      const allow: Store<string> = createStore('no')
+      const trigger: EventCallable<number> = createEvent()
+      const allow: StoreWritable<string> = createStore('no')
 
       //@ts-expect-error
       const result: Event<string> = guard({
@@ -499,8 +523,8 @@ describe('guard(config)', () => {
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
-        const trigger: Event<number> = createEvent()
-        const target: Store<number> = createStore(0)
+        const trigger: EventCallable<number> = createEvent()
+        const target: StoreWritable<number> = createStore(0)
 
         guard({
           source: trigger,
@@ -514,8 +538,8 @@ describe('guard(config)', () => {
         `)
       })
       test('type mismatch (should fail)', () => {
-        const trigger: Event<number> = createEvent()
-        const target: Store<string> = createStore('no')
+        const trigger: EventCallable<number> = createEvent()
+        const target: StoreWritable<string> = createStore('no')
 
         guard({
           source: trigger,
@@ -527,7 +551,7 @@ describe('guard(config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+              Type 'StoreWritable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -569,7 +593,7 @@ describe('guard(config)', () => {
   describe('guard({source, filter: Boolean})', () => {
     it('returns new event (should pass)', () => {
       type User = {name: string}
-      const trigger: Event<User | null> = createEvent()
+      const trigger: EventCallable<User | null> = createEvent()
       const result: Event<User> = guard({
         source: trigger,
         filter: Boolean,
@@ -583,7 +607,7 @@ describe('guard(config)', () => {
     })
     test('result type mismatch (should fail)', () => {
       type User = {name: string}
-      const trigger: Event<User> = createEvent()
+      const trigger: EventCallable<User> = createEvent()
 
       //@ts-expect-error
       const result: Event<string> = guard({
@@ -594,19 +618,15 @@ describe('guard(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<User>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: User) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'User' is not assignable to type 'string'.
+          Type 'User' is not assignable to type 'string'.
         "
       `)
     })
     describe('support target field', () => {
       it('allow to pass target field (should pass)', () => {
         type User = {name: string}
-        const trigger: Event<User | null> = createEvent()
-        const target: Store<User> = createStore({name: 'alice'})
+        const trigger: EventCallable<User | null> = createEvent()
+        const target: StoreWritable<User> = createStore({name: 'alice'})
 
         guard({
           source: trigger,
@@ -621,8 +641,8 @@ describe('guard(config)', () => {
       })
       test('type mismatch (should fail)', () => {
         type User = {name: string}
-        const trigger: Event<User> = createEvent()
-        const target: Store<string> = createStore('no')
+        const trigger: EventCallable<User> = createEvent()
+        const target: StoreWritable<string> = createStore('no')
 
         guard({
           source: trigger,
@@ -634,7 +654,7 @@ describe('guard(config)', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type '\\"incompatible unit in target\\"'.
+              Type 'StoreWritable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
           "
         `)
       })
@@ -658,7 +678,7 @@ describe('guard(config)', () => {
 })
 
 test('guard return type supports union types (should pass)', () => {
-  const trigger: Event<{a: 1} | {a: 2}> = createEvent()
+  const trigger: EventCallable<{a: 1} | {a: 2}> = createEvent()
   const allow = createStore<boolean>(false)
 
   const result: Event<{a: 1} | {a: 2}> = guard(trigger, {filter: allow})

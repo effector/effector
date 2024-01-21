@@ -1987,9 +1987,11 @@ exports[`babel-plugin should default factories 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/default-factories.js'
 import {withFactory as _withFactory} from 'effector'
 import {createQuery} from '@farfetched/core'
+import {debounce} from 'patronum'
+import {delay} from 'patronum/delay'
 
 const q = _withFactory({
-  sid: '-9en8j0',
+  sid: '-8gjzqm',
   fn: () =>
     createQuery({
       handler: async () => null,
@@ -1998,8 +2000,42 @@ const q = _withFactory({
   method: 'createQuery',
   loc: {
     file: _effectorFileName,
-    line: 3,
+    line: 5,
     column: 10,
+  },
+})
+
+_withFactory({
+  sid: '-d76u2e',
+  fn: () =>
+    debounce({
+      source: q,
+      timeout: 100,
+      target: q.refresh,
+    }),
+  name: 'none',
+  method: 'debounce',
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 0,
+  },
+})
+
+_withFactory({
+  sid: 'e9kkk1',
+  fn: () =>
+    delay({
+      source: q,
+      timeout: 100,
+      target: q.refresh,
+    }),
+  name: 'none',
+  method: 'delay',
+  loc: {
+    file: _effectorFileName,
+    line: 13,
+    column: 0,
   },
 })
 "

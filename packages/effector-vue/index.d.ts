@@ -1,22 +1,35 @@
-import Vue, {ComponentOptions, WatchOptions, VueConstructor} from 'vue'
+import Vue, {WatchOptions, VueConstructor} from 'vue'
 import {
   ThisTypedComponentOptionsWithArrayProps,
   ThisTypedComponentOptionsWithRecordProps,
 } from 'vue/types/options'
 import {ExtendedVue} from 'vue/types/vue'
-import {Store, Unit} from 'effector'
+import {Scope, Store, Unit} from 'effector'
 
 type Inference<EffectorState> = EffectorState extends Store<infer State>
   ? State
   : EffectorState extends {[storeName: string]: Store<any>}
-  ? {[K in keyof EffectorState]: EffectorState[K] extends Store<infer U> ? U : never}
+  ? {
+      [K in keyof EffectorState]: EffectorState[K] extends Store<infer U>
+        ? U
+        : never
+    }
   : EffectorState extends Unit<infer State>
   ? number
-  : never;
+  : never
 
-type EffectorType = Store<any> | {[key: string]: Store<any> | Unit<any>} | (() => Store<any> | Unit<any>)
+type EffectorType =
+  | Store<any>
+  | {[key: string]: Store<any> | Unit<any>}
+  | (() => Store<any> | Unit<any>)
 
-type ExpandType<V extends Vue, EffectorState extends EffectorType> = EffectorState extends ((this: V) => Store<infer State> | Unit<infer State>) | Store<infer State> | Unit<infer State>
+type ExpandType<
+  V extends Vue,
+  EffectorState extends EffectorType,
+> = EffectorState extends
+  | ((this: V) => Store<infer State> | Unit<infer State>)
+  | Store<infer State>
+  | Unit<infer State>
   ? {state: State}
   : EffectorState extends {[storeName: string]: Store<any> | Unit<any>}
   ? {[Key in keyof EffectorState]: Inference<EffectorState[Key]>}
@@ -29,24 +42,46 @@ declare module 'vue/types/vue' {
   }
 
   interface VueConstructor<V extends Vue> {
-    extend<EffectorState extends EffectorType, Data, Methods, Computed, PropNames extends string = never>(
-      options?: {effector?: EffectorState} & ThisTypedComponentOptionsWithArrayProps<
+    extend<
+      EffectorState extends EffectorType,
+      Data,
+      Methods,
+      Computed,
+      PropNames extends string = never,
+    >(
+      options?: {
+        effector?: EffectorState
+      } & ThisTypedComponentOptionsWithArrayProps<
         ExpandType<V, EffectorState> & V,
         Data,
         Methods,
         Computed,
         PropNames
       >,
-    ): ExtendedVue<ExpandType<V, EffectorState> & V, Data, Methods, Computed, Record<PropNames, any>>
+    ): ExtendedVue<
+      ExpandType<V, EffectorState> & V,
+      Data,
+      Methods,
+      Computed,
+      Record<PropNames, any>
+    >
     extend<EffectorState extends EffectorType, Data, Methods, Computed, Props>(
-      options?: {effector?: EffectorState} & ThisTypedComponentOptionsWithRecordProps<
+      options?: {
+        effector?: EffectorState
+      } & ThisTypedComponentOptionsWithRecordProps<
         ExpandType<V, EffectorState> & V,
         Data,
         Methods,
         Computed,
         Props
       >,
-    ): ExtendedVue<ExpandType<V, EffectorState> & V, Data, Methods, Computed, Props>
+    ): ExtendedVue<
+      ExpandType<V, EffectorState> & V,
+      Data,
+      Methods,
+      Computed,
+      Props
+    >
   }
 }
 
@@ -84,7 +119,7 @@ declare function createComponent<
   Data,
   Methods,
   Computed,
-  PropNames extends string
+  PropNames extends string,
 >(
   options: ThisTypedComponentOptionsWithArrayProps<
     V,
@@ -101,7 +136,7 @@ declare function createComponent<
   Data,
   Methods,
   Computed,
-  Props
+  Props,
 >(
   options: ThisTypedComponentOptionsWithRecordProps<
     Inference<S> & V,
@@ -118,7 +153,7 @@ declare function createComponent<
   Data,
   Methods,
   Computed,
-  PropNames extends string
+  PropNames extends string,
 >(
   options: ThisTypedComponentOptionsWithArrayProps<
     Inference<S> & V,
@@ -129,3 +164,8 @@ declare function createComponent<
   >,
   store?: S,
 ): ExtendedVue<Inference<S> & V, Data, Methods, Computed, PropNames>
+
+export function EffectorScopePlugin(config: {
+  scope: Scope
+  scopeName?: string
+}): Plugin

@@ -12,6 +12,7 @@ import {
   fork,
   allSettled,
   serialize,
+  launch,
 } from 'effector'
 import {useUnit} from 'effector-react'
 import {
@@ -1224,5 +1225,77 @@ describe('useUnit', () => {
       </Provider>,
     )
     expect(failed).toBe(false)
+  })
+  test('avoiding prototype pollution', async () => {
+    const base = {fk: function fk() {}}
+    const $foo = createStore(0)
+    const App = () => {
+      const {foo} = useUnit({foo: $foo, __proto__: base})
+      return <div>{foo}</div>
+    }
+    await render(<App />)
+  })
+})
+
+describe('@effector/next custom hydration triggers hooks', () => {
+  test('useUnit case', async () => {
+    const $count = createStore(0)
+    const $mappedCount = $count.map(x => x + 2)
+
+    const Component = () => {
+      const count = useUnit($mappedCount)
+      return <div>{count}</div>
+    }
+
+    const scope = fork({values: [[$count, 1]]})
+
+    await render(
+      <Provider value={scope}>
+        <Component />
+      </Provider>,
+    )
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        3
+      </div>
+    `)
+
+    /**
+     * @effector/next library now uses custom implementation of `hydrate` under the hood,
+     * which relies on some internals of `Scope` object
+     *
+     * Here is the short test to check that hydration triggers hooks
+     *
+     * More details at `hydrate.test.ts` -> "@effector/next custom hydration works" test
+     */
+    const tscope = scope as any
+    Object.values(tscope.reg).forEach((ref: any) => {
+      if (ref?.meta?.id === ($count as any).graphite.id) {
+        ref.current = 2
+      }
+      if (ref?.meta?.id === ($mappedCount as any).graphite.id) {
+        delete tscope.reg[ref.id]
+      }
+    })
+    await act(() => {
+      Object.values(tscope.additionalLinks).forEach(links => {
+        ;(links as any[]).forEach((link: any) => {
+          if (link.meta.watchOp === 'store') {
+            launch({
+              scope,
+              target: link,
+              params: null,
+            })
+          }
+        })
+      })
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        4
+      </div>
+    `)
   })
 })

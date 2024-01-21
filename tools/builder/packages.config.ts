@@ -60,10 +60,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '22.8.6',
-  'effector-react': '22.5.3',
-  'effector-vue': '22.2.0',
-  'effector-solid': '0.22.7',
+  effector: '23.1.0',
+  'effector-react': '23.1.0',
+  'effector-vue': '23.0.0',
+  'effector-solid': '0.23.0',
   forest: '0.21.2',
 }
 
@@ -95,7 +95,6 @@ export default {
         import: './effector.mjs',
         default: './effector.mjs',
       },
-      './fork': extensionlessExport('./fork'),
       './compat': compatExport,
       './inspect': extensionlessExport('./inspect'),
       './effector.umd': umdExport('./effector'),
@@ -105,9 +104,6 @@ export default {
     },
     files: [
       ...getFiles('effector'),
-      ...compiledFile('fork'),
-      ...esmFile('fork'),
-      'fork.d.ts',
       ...compiledFile('inspect'),
       ...esmFile('inspect'),
       'inspect.d.ts',
@@ -137,7 +133,6 @@ export default {
         default: './scope.mjs',
       },
       './scope': extensionlessExport('./scope'),
-      './ssr': extensionlessExport('./ssr'),
       './compat': compatExport,
       './effector-react.umd': umdExport('./effector-react'),
     },
@@ -149,16 +144,13 @@ export default {
     },
     peerDependencies: {
       react: '>=16.8.0 <19.0.0',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
     },
     files: [
       ...getFiles('effector-react'),
       ...compiledFile('scope'),
       ...esmFile('scope'),
-      ...compiledFile('ssr'),
-      ...esmFile('ssr'),
       'scope.d.ts',
-      'ssr.d.ts',
     ],
     keywords: ['react', 'hooks', ...keywords],
     ...common,
@@ -191,7 +183,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       'solid-js': '>= 1.3.0',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
     },
     files: [
       ...getFiles('effector-solid'),
@@ -246,7 +238,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       vue: '*',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
       '@vue/reactivity': '^3.0.2',
       '@vue/runtime-core': '^3.0.2',
     },

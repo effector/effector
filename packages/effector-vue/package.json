@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "22.2.0",
+  "version": "23.0.0",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.mjs",
@@ -54,7 +54,7 @@
   "typings": "index.d.ts",
   "peerDependencies": {
     "vue": "*",
-    "effector": "^22.0.2",
+    "effector": "^23.0.0",
     "@vue/reactivity": "^3.0.2",
     "@vue/runtime-core": "^3.0.2"
   },
@@ -62,7 +62,6 @@
     "README.md",
     "LICENSE",
     "index.d.ts",
-    "index.js.flow",
     "effector-vue.mjs",
     "effector-vue.mjs.map",
     "effector-vue.cjs.js",
@@ -71,9 +70,6 @@
     "effector-vue.umd.js.map",
     "compat.js",
     "compat.js.map",
-    "effector-vue.cjs.js.flow",
-    "effector-vue.umd.js.flow",
-    "compat.js.flow",
     "effector-vue.cjs.d.ts",
     "effector-vue.mjs.d.ts",
     "effector-vue.umd.d.ts",

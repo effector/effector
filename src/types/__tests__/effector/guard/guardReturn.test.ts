@@ -1,5 +1,17 @@
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, guard, Event, Store} from 'effector'
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('guard')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
 const typecheck = '{global}'
 type AN = {a: number}
 const $num = createStore(0)

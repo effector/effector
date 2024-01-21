@@ -2,8 +2,7 @@ import type {Leaf} from '../forest/index.h'
 
 import type {Node, NodeUnit, StateRef, Stack} from './index.h'
 import {readRef} from './stateRef'
-import {getForkPage, getGraph, getMeta, getParent, getValue} from './getter'
-import {STORE, EFFECT, SAMPLER, STACK, BARRIER, VALUE, REG_A, MAP} from './tag'
+import {getForkPage, getGraph, getValue} from './getter'
 import type {Scope} from './unit.h'
 import {add, forEach} from './collection'
 
@@ -183,11 +182,11 @@ const getPriority = (t: PriorityTag) => {
       return 1
     case 'read':
       return 2
-    case BARRIER:
+    case 'barrier':
       return 3
-    case SAMPLER:
+    case 'sampler':
       return 4
-    case EFFECT:
+    case 'effect':
       return 5
     default:
       return -1
@@ -226,7 +225,7 @@ export const setSharedStackMeta = (meta: Record<string, any> | void) => {
 const getPageForRef = (page: Leaf | null, id: string) => {
   if (page) {
     while (page && !page.reg[id]) {
-      page = getParent(page)
+      page = page.parent
     }
     if (page) return page
   }
@@ -235,9 +234,8 @@ const getPageForRef = (page: Leaf | null, id: string) => {
 export const getPageRef = (
   page: Leaf | null,
   forkPage: Scope | null | void,
-  node: Node | null,
   ref: StateRef,
-  isGetState?: boolean,
+  isGetState: boolean,
 ) => {
   const pageForRef = getPageForRef(page, ref.id)
   if (pageForRef) return pageForRef.reg[ref.id]
@@ -275,7 +273,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     upsert = unit.defer
     meta = unit.meta || sharedStackMeta
     pageForLaunch = 'page' in unit ? unit.page : pageForLaunch
-    if (unit[STACK]) stackForLaunch = unit[STACK]
+    if (unit.stack) stackForLaunch = unit.stack
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
     unit = unit.target
   }
@@ -358,7 +356,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               pushHeap(stepn, stack, priority, effectBody, barrierID)
             }
           } else {
-            pushHeap(stepn, stack, priority, effectBody)
+            pushHeap(stepn, stack, priority, effectBody, 0)
           }
           if (effectBody !== null) {
             isEffectBody = prevEffectBody
@@ -373,13 +371,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           let value
           //prettier-ignore
           switch (data.from) {
-            case STACK: value = getValue(stack); break
-            case REG_A: /** fall-through case */
+            case 'stack': value = getValue(stack); break
+            case 'a': /** fall-through case */
             case 'b':
               value = stack[data.from]
               break
-            case VALUE: value = data.store; break
-            case STORE:
+            case 'value': value = data.store; break
+            case 'store':
               if (reg && !reg[data.store.id]) {
                 // if (!page.parent) {
                 if (hasPageReg) {
@@ -402,19 +400,19 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                 }
                 // }
               }
-              // value = getPageRef(page, forkPage, node, data.store.id).current
+              // value = getPageRef(page, forkPage, data.store.id, false).current
               value = readRef(reg ? reg[data.store.id] || data.store : data.store)
               break
           }
           //prettier-ignore
           switch (data.to) {
-            case STACK: stack.value = value; break
-            case REG_A: /** fall-through case */
+            case 'stack': stack.value = value; break
+            case 'a': /** fall-through case */
             case 'b':
               stack[data.to] = value
               break
-            case STORE:
-              getPageRef(page, forkPage, node, data.target).current = value
+            case 'store':
+              getPageRef(page, forkPage, data.target, false).current = value
               break
           }
           break
@@ -422,7 +420,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         case 'compute':
           const data = step.data
           if (data.fn) {
-            isWatch = getMeta(node, 'op') === 'watch'
+            isWatch = node.meta.op === 'watch'
             isPure = data.pure
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
@@ -463,7 +461,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         )
       })
       if (forkPage) {
-        if (getMeta(node, 'needFxCounter'))
+        if (node.meta.needFxCounter)
           pushFirstHeapItem(
             'child',
             page,
@@ -473,7 +471,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             effectBody,
             forkPage,
           )
-        if (getMeta(node, 'storeChange'))
+        if (node.meta.storeChange)
           pushFirstHeapItem(
             'child',
             page,
@@ -483,7 +481,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             effectBody,
             forkPage,
           )
-        if (getMeta(node, 'warnSerialize'))
+        if (node.meta.warnSerialize)
           pushFirstHeapItem(
             'child',
             page,
@@ -532,22 +530,22 @@ export const initRefInScope = (
   softRead?: boolean,
 ) => {
   const refsMap = scope.reg
-  const sid = sourceRef.sid
-  const serialize = sourceRef?.meta?.serialize
-  const parser =
-    scope.fromSerialize && serialize !== 'ignore'
-      ? serialize?.read || noopParser
-      : noopParser
   if (refsMap[sourceRef.id]) return
+  const sid = sourceRef.sid
   const ref: StateRef = {
     id: sourceRef.id,
-    current: sourceRef.current,
+    current: sourceRef.initial!,
     meta: sourceRef.meta,
   }
 
   if (ref.id in scope.values.idMap) {
     ref.current = scope.values.idMap[ref.id]
   } else if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
+    const serialize = sourceRef?.meta?.serialize
+    const parser =
+      scope.fromSerialize && serialize !== 'ignore'
+        ? serialize?.read || noopParser
+        : noopParser
     ref.current = parser(scope.values.sidMap[sid])
   } else {
     if (sourceRef.before && !softRead) {
@@ -555,18 +553,19 @@ export const initRefInScope = (
       const needToAssign = isGetState || !sourceRef.noInit || isKernelCall
       forEach(sourceRef.before, cmd => {
         switch (cmd.type) {
-          case MAP: {
+          case 'map': {
             const from = cmd.from
             if (from || cmd.fn) {
               if (from) initRefInScope(scope, from, isGetState, isKernelCall)
-              const value = from && refsMap[from.id].current
               if (needToAssign) {
+                const value = from && refsMap[from.id].current
                 ref.current = cmd.fn ? cmd.fn(value) : value
               }
             }
             break
           }
           case 'field': {
+            initRefInScope(scope, cmd.from, isGetState, isKernelCall)
             if (!isFresh) {
               isFresh = true
               if (Array.isArray(ref.current)) {
@@ -575,7 +574,6 @@ export const initRefInScope = (
                 ref.current = {...ref.current}
               }
             }
-            initRefInScope(scope, cmd.from, isGetState, isKernelCall)
             if (needToAssign) {
               const from = refsMap[cmd.from.id]
               ref.current[cmd.field] = refsMap[from.id].current

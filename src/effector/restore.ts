@@ -3,13 +3,12 @@ import {is} from './is'
 import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './forward'
-import {deprecate} from './throw'
+import {assert} from './throw'
+import {generateErrorTitle} from './naming'
 
 export function restore(obj: any, defaultState: any, config?: any) {
-  if (is.store(obj)) {
-    deprecate(false, 'restore($store)')
-    return obj
-  }
+  const errorTitle = generateErrorTitle('restore', config)
+  assert(!is.store(obj), 'restore($store) is not supported', errorTitle)
   if (is.event(obj) || is.effect(obj)) {
     const domain = getParent(obj)
     const result = createStore(defaultState, {

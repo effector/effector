@@ -1,0 +1,62 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import type { InferGetStaticPropsType, InferGetStaticParamsType } from "astro";
+import MainLayout from "src/layouts/MainLayout.astro";
+import { getPathParamsFromId } from "src/languages";
+
+interface Path {
+  params: { slug: string };
+  props: { redirectTo: CollectionEntry<"docs"> };
+}
+
+export async function getStaticPaths() {
+  const alreadyUsedPaths = new Set<string>();
+  const paths: Path[] = [];
+  const pagesWithRedirect = await getCollection("docs", (page) => page.data.redirectFrom);
+
+  for (const page of pagesWithRedirect) {
+    for (const slug of page.data.redirectFrom!) {
+      const actualPath = slug.startsWith("/") ? slug.slice(1) : slug;
+      if (alreadyUsedPaths.has(actualPath)) {
+        throw new Error(
+          `'redirectFrom' path "${actualPath}" already claimed. Cannot use for "${page.id}"`,
+        );
+      }
+
+      paths.push({
+        params: { slug: actualPath },
+        props: { redirectTo: page },
+      });
+
+      alreadyUsedPaths.add(actualPath);
+    }
+  }
+
+  return paths;
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+const { redirectTo } = Astro.props;
+const { slug } = Astro.params as Params;
+
+// It is important to use .id instead of .slug, because .slug loses case from url
+// we need /api/effector/Event instead of /api/effector/event
+const pageParams = getPathParamsFromId(redirectTo.id.replace(/\.(md|mdx)$/, ""));
+const url = `/${pageParams.lang}/${pageParams.slug}`;
+---
+
+<MainLayout
+  documentId={slug}
+  headings={[]}
+  translations={[]}
+  breadcrumbs={[]}
+  redirectTo={url}
+  pagefindWeight={100}
+  {...redirectTo.data}
+>
+  <div class="admonition admonition-info">
+    Redirecting to: {redirectTo.data.title}.
+    <a href={url}>Click here if not redirected automatically.</a>
+  </div>
+</MainLayout>
