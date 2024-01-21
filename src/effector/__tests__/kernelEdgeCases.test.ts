@@ -524,10 +524,7 @@ describe('experimental stack meta', () => {
     expect(getSharedStackMeta()).toEqual(undefined)
   })
 
-  test.skip('inject meta from step', async () => {
-    /**
-     * Unsupported case yet
-     */
+  test('injecting meta from the middle', async () => {
     const scope = fork()
 
     const start = createEvent()
