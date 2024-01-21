@@ -190,29 +190,25 @@ export function createEffect<Params, Done, Fail = Error>(
   node.scope.runner = runner
   add(
     node.seq,
-    calc(
-      (params, {runner}, stack) => {
-        const upd: RunnerData<Params, Done, Fail> = getParent(stack)
-          ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
-          : /** empty stack means that this node was launched directly */
-            params
+    calc((params, {runner}, stack) => {
+      const upd: RunnerData<Params, Done, Fail> = getParent(stack)
+        ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
+        : /** empty stack means that this node was launched directly */
+          params
 
-        const fxID = nextEffectID()
+      const fxID = nextEffectID()
 
-        stack.meta = {...stack.meta, fxID}
+      stack.meta = {...stack.meta, fxID}
 
-        launch({
-          target: runner,
-          params: upd,
-          defer: true,
-          scope: getForkPage(stack),
-          meta: stack.meta,
-        })
-        return upd.params
-      },
-      false,
-      true,
-    ),
+      launch({
+        target: runner,
+        params: upd,
+        defer: true,
+        scope: getForkPage(stack),
+        meta: stack.meta,
+      })
+      return upd.params
+    }),
   )
   //@ts-expect-error
   instance.create = (params: Params) => {

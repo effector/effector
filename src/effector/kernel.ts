@@ -136,6 +136,7 @@ const pushFirstHeapItem = (
     },
     type,
     effectBody,
+    0,
   )
 const pushHeap = (
   idx: number,
