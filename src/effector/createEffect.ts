@@ -166,12 +166,6 @@ export function createEffect<Params, Done, Fail = Error>(
           const [ok, result] = runFn(handler, onReject, args)
 
           setIsEffectBody(false)
-          /**
-           * Clean up shared stack meta,
-           * so it won't interfere with other calls during async resolution
-           * of this effect
-           */
-          setSharedStackMeta()
 
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
@@ -295,11 +289,14 @@ export const onSettled =
     setIsEffectBody(lastIsEffectBody)
     if (isEffectBody) {
       /**
-       * set stack.meta after effect is settled,
+       * Set stack.meta after effect is settled,
        * so next imperative call will also catch it
        */
       setSharedStackMeta(stack.meta)
     } else {
+      /**
+       * Clean up shared stack meta
+       */
       setSharedStackMeta()
     }
     launch({
