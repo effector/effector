@@ -272,7 +272,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
-    meta = unit.meta || sharedStackMeta
+    meta = unit.meta || sharedStackMeta || {} // empty object by default
     pageForLaunch = 'page' in unit ? unit.page : pageForLaunch
     if (unit.stack) stackForLaunch = unit.stack
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
