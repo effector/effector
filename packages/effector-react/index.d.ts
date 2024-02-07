@@ -11,7 +11,7 @@ export type Gate<Props = {}> = React.ComponentType<Props> & {
   open: EventCallable<Props>
   close: EventCallable<Props>
   status: Store<boolean>
-  state: EventCallable<Props>
+  state: Store<Props>
 }
 export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
   mounted: Event<{props: Props; state: State}>
