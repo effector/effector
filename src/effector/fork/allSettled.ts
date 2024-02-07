@@ -1,7 +1,9 @@
 import {add} from '../collection'
 import {createDefer} from '../defer'
+import {getGraph} from '../getter'
 import {is} from '../is'
 import {launch, forkPage} from '../kernel'
+import {generateErrorTitle} from '../naming'
 import type {Scope, Event, Effect, DataCarrier, SettledDefer} from '../unit.h'
 
 export function allSettled<T>(
@@ -25,6 +27,9 @@ export function allSettled<T>(
   /** duplicated check because of ts validation */
   if (is.scope(start)) {
     scope = start
+  } else if (!is.targetable(start)) {
+    const errorTitle = generateErrorTitle('allSettled', getGraph(start).meta)
+    return Promise.reject(Error(`${errorTitle}: unit should be targetable`))
   }
   const defer = createDefer() as SettledDefer
   defer.parentFork = forkPage
