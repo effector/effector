@@ -8,6 +8,7 @@ import {
   sample,
   serialize,
   createStore,
+  combine,
 } from 'effector'
 
 test('allSettled first argument validation', async () => {
@@ -41,6 +42,30 @@ test('allSettled first argument validation', async () => {
   )
 })
 
+test('derived units are not accepted', async () => {
+  const $foo = createStore(0)
+  const $bar = combine($foo, x => x)
+
+  const trigger = createEvent()
+  const derived = trigger.map(x => x)
+
+  const scope = fork()
+
+  await expect(
+    // @ts-expect-error
+    allSettled($bar, {scope, params: 1}),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"[allSettled] unit '$bar': unit should be targetable"`,
+  )
+
+  await expect(
+    // @ts-expect-error
+    allSettled(derived, {scope}),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"[allSettled] unit 'trigger → *': unit should be targetable"`,
+  )
+})
+
 test('allSettled(scope)', async () => {
   const scope = fork()
   const requestFx = createEffect(() => new Promise(rs => setTimeout(rs, 400)))
@@ -54,7 +79,7 @@ test('allSettled(scope)', async () => {
   await allSettled(scope)
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "el2wwt": true,
+      "-es2ed7": true,
     }
   `)
 })
@@ -209,20 +234,20 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-ec3clm": Array [
+        "-36m1p8": "a",
+        "rbve3i": Array [
           "a",
         ],
-        "-ywmq49": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-36m1ni": "b",
-        "-ec3clm": Array [
+        "-36m1p8": "b",
+        "-8fvm5d": "b",
+        "-bi6cil": Array [
           "b",
         ],
-        "-ywmq49": "b",
-        "rsx11i": Array [
+        "rbve3i": Array [
           "b",
         ],
       }
