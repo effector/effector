@@ -2,6 +2,14 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 23.2.0
+
+- Make `Gate.open` and `Gate.close` `EventCallable` to allow users to call it in tests
+
+## effector 23.2.0
+
+- Add missed runtime validation for `allSettled` calls with derived units. This case was labeled as a type error, but was forgotten in runtime.
+
 ## effector 23.1.0
 
 - Support arbitary callbacks in scopeBind. Allows library developers to create better APIs in a way that is Fork API - compatible. [PR #1016](https://github.com/effector/effector/pull/1029)
