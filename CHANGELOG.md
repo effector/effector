@@ -8,6 +8,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector 23.2.0
 
+- Improve type validation for derived stores in fork
 - Add missed runtime validation for `allSettled` calls with derived units. This case was labeled as a type error, but was forgotten in runtime.
 
 ## effector 23.1.0
