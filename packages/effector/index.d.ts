@@ -690,11 +690,72 @@ export function launch(config: {
   meta?: Record<string, any>
 }): void
 
+type Subscribable<T> = {
+  subscribe: (fn: (v: T) => void) => (() => void) | { unsubscribe: () => void };
+}
+
+/**
+ * Method to create an event subscribed to given observable. Explicit `start` trigger is needed for Fork API support.
+ * @param config configuration object. Accepts `source` with store which may contain an instance of special object, `start` and (optional) `stop` triggers and `setup` function which provides effector's listener to subscribe and returns (optional) cleanup function
+ *
+ * @example
+ * const event = fromObservable<HistoryUpdate>({
+ *  source: $history,
+ *  clock: appStarted,
+ *  stop: appStopped,
+ *  setup: (listener, history) => {
+ *    const unsubsribe = history.listen(listener)
+ *
+ *    return () => unsubsribe()
+ *  },
+ * })
+ */
+export function fromObservable<T>(config: {
+  source: Store<unknown>
+  start: Unit<any> | Unit<any>[]
+  stop?: Unit<any> | Unit<any>[]
+  setup: (
+    scopedTrigger: (
+      value: T,
+    ) => void,
+    src: StoreValue<typeof config[
+      'source'
+    ]>,
+  ) => () => void
+}): Event<T>
 /**
  * Method to create an event subscribed to given observable
- * @param observable object with `subscribe` method, e.g. rxjs stream or redux store
+ * @param observable object with `subscribe` method, e.g. rxjs stream or redux store or configuration object
+ * 
+ * @example
+ * const event = fromObservable(rxjs.interval(1000))
+ * // or
+ * const event = fromObservable({
+ *  start: appStarted,
+ *  stop: appStopped,
+ *  setup: rxjs.interval(1000),
+ * })
+ * // or
+ * const event = fromObservable<number>({
+ *  start: appStarted,
+ *  stop: appStopped,
+ *  setup: (listener) => {
+ *    const unsubsribe = intervalStream.subscribe(listener)
+ *
+ *    return () => unsubsribe()
+ *  },
+ * })
+ * 
  */
-export function fromObservable<T>(observable: unknown): Event<T>
+export function fromObservable<T>(
+  observable: Subscribable<T> | {
+    start: Unit<any> | Unit<any>[]
+    stop?: Unit<any> | Unit<any>[]
+    setup: Subscribable<T> | ((
+      scopedTrigger: (value: T) => void,
+    ) => () => void)
+  },
+): Event<T>
 /**
  * Creates an event
  */
