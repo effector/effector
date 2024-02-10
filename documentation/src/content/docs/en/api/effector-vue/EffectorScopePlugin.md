@@ -11,7 +11,7 @@ The Plugin provides a general scope which needs for read and update effector's s
 
 ```js
 import {createSSRApp} from "vue"
-import {EffectorScopePlugin} from "effector-vue
+import {EffectorScopePlugin} from "effector-vue"
 import {fork} from "effector"
 
 const app = createSSRApp(AppComponent)
