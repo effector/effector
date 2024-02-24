@@ -3,10 +3,10 @@ title: useProvidedScope
 lang: ru
 ---
 
-Низкоуровненый Реакт хук, который возвращает текущий [Scope](/ru/api/effector/Scope) из [Provider](/ru/api/effector-react/Provider).
+Низкоуровневый Реакт хук, который возвращает текущий [Scope](/ru/api/effector/Scope) из [Provider](/ru/api/effector-react/Provider).
 
 :::warning{title="Это низкоуровневый API"}
-Хук `useProvidedScope` это низкоуровненый API для разработчиков библиотек и не предназначен для использования в продакшен коде напрямую.
+Хук `useProvidedScope` это низкоуровневый API для разработчиков библиотек и не предназначен для использования в продакшен коде напрямую.
 
 Для использования `effector-react` в продакшен коде используейте хук [`useUnit`](/ru/api/effector-react/useUnit).
 :::
