@@ -1,9 +1,7 @@
 ---
 title: Domain
-description: Domain, its methods and properties
-redirectFrom:
-  - /api/effector/Domain
-  - /docs/api/effector/domain
+description: Domain, его методы и свойства
+lang: ru
 ---
 
 _Domain (домен)_ - это способ группировки и применения массовых обработок к юнитам.

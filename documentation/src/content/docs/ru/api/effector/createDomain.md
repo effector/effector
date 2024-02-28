@@ -1,9 +1,7 @@
 ---
 title: createDomain
-description: createDomain is a method for creating a domain
-redirectFrom:
-  - /api/effector/createDomain
-  - /docs/api/effector/createDomain
+description: createDomain это метод для создания домена
+lang: ru
 ---
 
 Метод для создания [доменов](/ru/api/effector/Domain)
