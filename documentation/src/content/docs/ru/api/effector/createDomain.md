@@ -18,7 +18,7 @@ createDomain(name?)
 
 **Возвращает**
 
-[_Domain_](/en/api/effector/Domain): Новый домен
+[_Domain_](/ru/api/effector/Domain): Новый домен
 
 ### Пример
 

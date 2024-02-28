@@ -6,7 +6,7 @@ redirectFrom:
   - /docs/api/effector/domain
 ---
 
-_Domain (домен)_ - это пространство имен для ваших событий, сторов и эфектов.
+_Domain (домен)_ - это способ группировки и применения массовых обработок к юнитам.
 
 Домен может подписываться на событие, эффект, стор или вложенный домен, созданный с помощью методов `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain`.
 
@@ -26,11 +26,11 @@ _Domain (домен)_ - это пространство имен для ваши
 
 **Возвращает**
 
-[_Event_](/en/api/effector/Event): Новое событие
+[_Event_](/ru/api/effector/Event): Новое событие
 
 ## `createEffect(handler?)`
 
-Создает [эффект](/en/api/effector/Effect) с переданным обработчиком
+Создает [эффект](/ru/api/effector/Effect) с переданным обработчиком
 
 ### Аргументы
 
@@ -38,7 +38,7 @@ _Domain (домен)_ - это пространство имен для ваши
 
 **Возвращает**
 
-[_Effect_](/en/api/effector/Effect): Контейнер для асинхронных функций.
+[_Effect_](/ru/api/effector/Effect): Контейнер для асинхронных функций.
 
 :::info{title="since"}
 [effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
@@ -52,7 +52,7 @@ _Domain (домен)_ - это пространство имен для ваши
 
 **Возвращает**
 
-[_Effect_](/en/api/effector/Effect): Контейнер для асинхронных функций.
+[_Effect_](/ru/api/effector/Effect): Контейнер для асинхронных функций.
 
 ## `createStore(defaultState)`
 
@@ -62,7 +62,7 @@ _Domain (домен)_ - это пространство имен для ваши
 
 **Возвращает**
 
-[_Store_](/en/api/effector/Store): Ноый стор
+[_Store_](/ru/api/effector/Store): Ноый стор
 
 ## `createDomain(name?)`
 
@@ -72,7 +72,7 @@ _Domain (домен)_ - это пространство имен для ваши
 
 **Возвращает**
 
-[_Domain_](/en/api/effector/Domain): Новый домен
+[_Domain_](/ru/api/effector/Domain): Новый домен
 
 ## `history`
 
@@ -105,19 +105,19 @@ console.log(domain.history);
 
 ### `event(name?)`
 
-Алиас для [domain.createEvent](/en/api/effector/Domain#createevent-name)
+Алиас для [domain.createEvent](/ru/api/effector/Domain#createevent-name)
 
 ### `effect(name?)`
 
-Алиас для [domain.createEffect](/en/api/effector/Domain#createeffect-name)
+Алиас для [domain.createEffect](/ru/api/effector/Domain#createeffect-name)
 
 ### `store(defaultState)`
 
-Алиас для [domain.createStore](/en/api/effector/Domain#createstore-defaultstate)
+Алиас для [domain.createStore](/ru/api/effector/Domain#createstore-defaultstate)
 
 ### `domain(name?)`
 
-Алиас для [domain.createDomain](/en/api/effector/Domain#createdomain-name)
+Алиас для [domain.createDomain](/ru/api/effector/Domain#createdomain-name)
 
 # Хуки доменов
 
@@ -135,7 +135,7 @@ domain.onCreateEvent((event) => {});
 
 ### Аргументы
 
-1. `hook` ([_Watcher_]): Функция, которая принимает [Event](/en/api/effector/Event) и будет вызвана во время каждого вызова [domain.createEvent](/en/api/effector/Domain#createeventname)
+1. `hook` ([_Watcher_]): Функция, которая принимает [Event](/ru/api/effector/Event) и будет вызвана во время каждого вызова [domain.createEvent](/ru/api/effector/Domain#createeventname)
 
 **Возвращает**
 
@@ -175,7 +175,7 @@ domain.onCreateEffect((effect) => {});
 
 ### Аргументы
 
-1. `hook` ([_Watcher_]): Функция, которая принимает [Effect](/en/api/effector/Effect) и будет вызвана во время каждого вызова [domain.createEffect](/en/api/effector/Domain#createeffect-name)
+1. `hook` ([_Watcher_]): Функция, которая принимает [Effect](/ru/api/effector/Effect) и будет вызвана во время каждого вызова [domain.createEffect](/ru/api/effector/Domain#createeffect-name)
 
 **Возвращает**
 
@@ -215,7 +215,7 @@ domain.onCreateStore(($store) => {});
 
 ### Аргументы
 
-1. `hook` ([_Watcher_]): Функция, которая принимает [Store](/en/api/effector/Store) и будет вызвана во время каждого вызова [domain.createStore](/en/api/effector/Domain#createstore-defaultstate)
+1. `hook` ([_Watcher_]): Функция, которая принимает [Store](/ru/api/effector/Store) и будет вызвана во время каждого вызова [domain.createStore](/ru/api/effector/Domain#createstore-defaultstate)
 
 **Возвращает**
 
@@ -252,7 +252,7 @@ domain.onCreateDomain((domain) => {});
 
 ### Аргументы
 
-1. `hook` ([_Watcher_]): Функция, которая принимает [Domain](/en/api/effector/Domain) и будет вызвана во время каждого вызова [domain.createDomain](/en/api/effector/Domain#createdomain-name)
+1. `hook` ([_Watcher_]): Функция, которая принимает [Domain](/ru/api/effector/Domain) и будет вызвана во время каждого вызова [domain.createDomain](/ru/api/effector/Domain#createdomain-name)
 
 **Возвращает**
 
@@ -278,5 +278,5 @@ const b = domain.createDomain();
 
 [Запустить пример](https://share.effector.dev/dvBLiwHf)
 
-[_watcher_]: /en/explanation/glossary#watcher
-[_subscription_]: /en/explanation/glossary#subscription
+[_watcher_]: /ru/explanation/glossary#watcher
+[_subscription_]: /ru/explanation/glossary#subscription
