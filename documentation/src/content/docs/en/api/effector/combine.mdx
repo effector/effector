@@ -5,6 +5,8 @@ redirectFrom:
   - /docs/api/effector/combine
 ---
 
+import LiveDemo from "../../../../../components/LiveDemo.jsx";
+
 This method allows you to get state from each passed store and **combine** it to a single value and save into a single store, that updates every time like each passed store.
 
 :::warning{title="Caution"}
@@ -33,10 +35,9 @@ $result = combine(
 
 #### Example
 
-import LiveDemo from "../../../../../components/LiveDemo.jsx";
-import demoFile from "./demo/_combine-stores-fn.live.js?raw";
+import demo_combineStoresFn from "./demo/_combine-stores-fn.live.js?raw";
 
-<LiveDemo client:only="preact" demoFile={demoFile} />
+<LiveDemo client:only="preact" demoFile={demo_combineStoresFn} />
 
 ## `combine({ A, B, C }, fn?)`
 
@@ -71,21 +72,9 @@ $result = combine({ a: $first, b: $second, c: $third }, ({ a, b, c }) => result)
 
 #### Example
 
-```js
-import { createStore, combine } from "effector";
+import demo_combineObjectFn from "./demo/_combine-object-fn.live.js?raw";
 
-const $r = createStore(255);
-const $g = createStore(0);
-const $b = createStore(255);
-
-const $color = combine({ r: $r, g: $g, b: $b });
-$color.watch(console.log); // => {r: 255, b: 0, b: 255}
-
-const $sum = combine({ r: $r, g: $g, b: $b }, ({ r, g, b }) => r + g + b);
-$sum.watch(console.log); // => 510
-```
-
-[Try it](https://share.effector.dev/9AckAVg7)
+<LiveDemo client:only="preact" demoFile={demo_combineObjectFn} />
 
 ## `combine([A, B, C], fn?)`
 
@@ -116,23 +105,9 @@ $result = combine([$first, $second, $third]);
 
 #### Example
 
-```js
-import { createStore, combine } from "effector";
+import demo_combineArrayFn from "./demo/_combine-array-fn.live.js?raw";
 
-const $r = createStore(255);
-const $g = createStore(0);
-const $b = createStore(255);
-
-const $color = combine([$r, $g, $b]);
-$color.watch(console.log);
-// => [255, 0, 255]
-
-const $sum = combine([r, g, b], ([r, g, b]) => r + g + b);
-$sum.watch(console.log);
-// => 510
-```
-
-[Try it](https://share.effector.dev/ch4CKPrX)
+<LiveDemo client:only="preact" demoFile={demo_combineArrayFn} />
 
 ## `combine` with primitives and objects
 
@@ -140,34 +115,9 @@ It works the same as before. Now primitives and objects can be used in `combine`
 
 #### Example
 
-```js
-const $a = createStore("a");
-const b = 2;
-const c = [false];
-const d = { value: 1 };
+import demo_combineNonStoresFn from "./demo/_combine-non-stores-fn.live.js?raw";
 
-const $resultUsingComa = combine($a, b, c, d);
-const $resultUsingArray = combine([$a, b, c, d]);
-const $resultUsingObject = combine({ $a, b, c, d });
-
-const $withFn = combine($a, b, c, d, (a, b) => ({ a, b }));
-
-$resultUsingComa.watch(console.log);
-// => ["a", 2, [false], {value: 1}]
-$resultUsingArray.watch(console.log);
-// => ["a", 2, [false], {value: 1}]
-$resultUsingObject.watch(console.log);
-// => {$a: "a", b: 2, c: [false], d: {value: 1}}
-$withFn.watch(console.log);
-// => {a: "a", b: 2}
-
-// will not trigger combine, but object and array will be changed because of reference
-// uncomment the code below to see changes
-// c.push(true)
-// d.value = 2
-```
-
-[Try it](https://share.effector.dev/XWk1lG4a)
+<LiveDemo client:only="preact" demoFile={demo_combineNonStoresFn} />
 
 ## Optional configuration \{#combine-optional-configuration}
 

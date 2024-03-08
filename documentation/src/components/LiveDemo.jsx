@@ -6,11 +6,7 @@ const customSetup = {
   },
 }
 
-const options = {
-  showConsole: true,
-}
-
-export default function LiveDemo({demoFile}) {
+export default function LiveDemo({demoFile, layout = 'console'}) {
   const files = {
     '/index.js': demoFile,
   }
@@ -21,7 +17,7 @@ export default function LiveDemo({demoFile}) {
       theme="auto"
       files={files}
       customSetup={customSetup}
-      options={options}
+      options={{layout}}
     />
   )
 }
