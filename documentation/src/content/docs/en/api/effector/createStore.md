@@ -6,6 +6,8 @@ redirectFrom:
   - /docs/api/effector/createStore
 ---
 
+# `createStore()` {#createStore}
+
 Method for creating a [store](/en/api/effector/Store).
 
 ```ts
@@ -21,7 +23,7 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
 }): Store<T>
 ```
 
-**Arguments**
+## Arguments {#createStore-arguments}
 
 1. `defaultState` (_State_): Default state
 2. `config` (_Object_): Optional configuration
@@ -30,16 +32,15 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
    - `serialize: 'ignore'`: Option to disable store serialization when [serialize](/en/api/effector/serialize) is called _(since `effector 22.0.0`)_
    - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` – called on [serialize](/en/api/effector/serialize), transforms value to JSON value – primitive type or plain object/array. `read` – parse store state from JSON value, called on [fork](/en/api/effector/fork), if provided `values` is the result of `serialize` call.
    - `domain`: (_Domain_): Domain to attach store to after creation.
-   - `skipVoid`: (_boolean_): Flag to control, how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will read `undefined` as a "skip update" command and will do nothing.
+   - `skipVoid`: (_boolean_): Flag to control how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will interpret `undefined` as a "skip update" command and will do nothing.
 
-**Throws**
+## Throws {#createStore-throws}
 
-<details>
-<summary><b>unit call from pure function is not supported, use operators like sample instead</b></summary>
+### unit call from pure function is not supported, use operators like sample instead {#createStore-throws-unit-call-from-pure}
 
 > Since: effector 23.0.0
 
-Happens when events or effects called from [pure functions](/en/glossary#purity), like updateFilter:
+Occurs when events or effects are called from [pure functions](/en/glossary#purity), like updateFilter:
 
 ```ts
 const someHappened = createEvent<number>();
@@ -51,7 +52,7 @@ const $counter = createStore(0, {
 });
 ```
 
-To fix this, use `sample`:
+To resolve this, use `sample`:
 
 ```ts
 const someHappened = createEvent<number>();
@@ -67,13 +68,13 @@ sample({
 });
 ```
 
-</details>
-
-**Returns**
+## Returns {#createStore-returns}
 
 [_Store_](/en/api/effector/Store): New store
 
-## Example
+## Examples {#createStore-examples}
+
+### Basic Usage {#createStore-examples-basic}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -110,7 +111,7 @@ clearTodoList();
 
 [Try it](https://share.effector.dev/MNibrAFC)
 
-## Example with `updateFilter`
+### Example with `updateFilter` {#createStore-examples-updateFilter}
 
 ```js
 import { createEvent, createStore, sample } from "effector";
@@ -138,16 +139,16 @@ veryStrongHit.watch((strength) => {
 });
 
 punch(200); // updateFilter prevented update
-punch(300); // Same here. Note: store don't updates, value is the same `0`
-punch(500); // Yeeah! updateFilter allows to update store value
+punch(300); // Same here, store doesn't update, value remains `0`
+punch(500); // Yeeah! updateFilter allows store update
 // => Strength: 500kg
 // => Wooow! It was very strong! 500kg
-punch(100); // Also nothing
+punch(100); // No update as well
 ```
 
 [Try it](https://share.effector.dev/rtxfqObf)
 
-## Example with `serialize: ignore`
+### Example with `serialize: ignore` {#createStore-examples-serializeIgnore}
 
 ```js
 import { createEvent, createStore, serialize, fork, allSettled } from "effector";
@@ -187,12 +188,12 @@ await allSettled(readPackage, {
 const actualValues = serialize(scope);
 console.log(actualValues);
 // => {n74m6b: "effector"}
-// This is because `$version` store has `serialize: ignore`
+// `$version` store has `serialize: ignore`, so it's not included
 ```
 
 [Try it](https://share.effector.dev/aLKAHDOM)
 
-## Example with custom `serialize` configuration
+### Custom `serialize` configuration {#createStore-examples-customSerialize}
 
 ```ts
 import { createEvent, createStore, serialize, fork, allSettled } from "effector";

@@ -6,20 +6,22 @@ redirectFrom:
   - /docs/api/effector-solid/useGate
 ---
 
-## `useGate(GateComponent, props)` {#useGate-props}
+# `useGate(GateComponent, props)` {#useGate-props}
 
-Function for passing data to [_Gate_](/en/api/effector-solid/Gate)
+Function for passing data to [_Gate_](/en/api/effector-solid/Gate).
 
-### Arguments {#useGate-props-arguments}
+## Arguments {#useGate-props-arguments}
 
 1. `GateComponent` (_Gate_)
 2. `props` (_Props_)
 
-### Returns {#useGate-props-returns}
+## Returns {#useGate-props-returns}
 
 (_`void`_)
 
-### Example {#useGate-props-example}
+## Examples {#useGate-props-examples}
+
+### Basic Usage {#useGate-props-examples-basic-usage}
 
 ```js
 import { createGate, useGate } from "effector-solid";

@@ -17,8 +17,10 @@ Creates new [effects](/en/api/effector/Effect) based on the other effects, [stor
 Use cases: declarative way to pass values from stores to effects and argument preprocessing. Most useful case is `attach({ source, async effect })`.
 
 :::tip
-The attached effects are the same first-class-citizens as the regular effects made by [createEffect](/en/api/effector/createEffect). You should place them in the same files as regular effects, also you can use the same naming strategy.
+The attached effects are the same first-class citizens as the regular effects made by [createEffect](/en/api/effector/createEffect). You should place them in the same files as regular effects, also you can use the same naming strategy.
 :::
+
+# Methods {#methods}
 
 ## `attach({effect})` {#attach-effect}
 
@@ -57,7 +59,7 @@ const attachedFx: Effect<Params, Done, Fail> = attach({
 
 In case of this simple variant of `attach`, types of `originalFx` and `attachedFx` will be the same.
 
-### Example {#attach-effect-example}
+### Examples {#attach-effect-examples}
 
 It allows to create _local_ copy of the effect, to react only on triggers emitted from the current _local_ code.
 
@@ -168,7 +170,7 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 
 Types of the `source` object must be the same as `originalFx` params. But the `attachedFx` will omit the type of params, it means the attached effect not requires any params at all.
 
-### Example {#attach-source-effect-example}
+### Examples {#attach-source-effect-examples}
 
 ```ts
 const requestPageFx = createEffect<{ page: number; size: number }, string[]>(
@@ -235,7 +237,7 @@ const attachedFx = attach({
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Scope {#attach-source-async-effect-scope}
+### Usage with scope {#attach-source-async-effect-scope}
 
 Any effects called inside `async effect` function will propagate scope.
 
@@ -275,7 +277,7 @@ const regularFunctionFx = createEffect(regularFunction);
 
 ### Types {#attach-source-async-effect-types}
 
-#### Single store
+#### Single store {#attach-source-async-effect-types-single-store}
 
 ```ts
 const $store: Store<T>;
@@ -297,10 +299,10 @@ const attachedFx: Effect<void, void, Fail> = attach({
 });
 ```
 
-#### Multiple stores
+#### Multiple stores {#attach-source-async-effect-types-multiple-stores}
 
 :::tip
-For details review [previous section of types](#shape-of-stores). Here the same logic.
+For details review [previous section of types](#attach-source-async-effect-types). Here the same logic.
 :::
 
 ```ts
@@ -388,9 +390,9 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 });
 ```
 
-### Example {#attach-effect-mapParams-example}
+### Examples {#attach-effect-mapParams-examples}
 
-#### Map arguments
+#### Map arguments {#attach-effect-mapParams-examples-map-arguments}
 
 ```ts
 const originalFx = createEffect<{ input: number }, void>((a) => a);
@@ -410,7 +412,7 @@ attachedFx(1);
 
 [Try it](https://share.effector.dev/TFRlrmhm)
 
-#### Handle exception
+#### Handle exceptions {#attach-effect-mapParams-examples-handle-exceptions}
 
 ```ts
 const originalFx = createEffect<{ a: number }, void>((a) => a);
@@ -432,11 +434,11 @@ attachedFx(1);
 
 [Try it](https://share.effector.dev/VYvWQoOk)
 
-## `attach({effect, mapParams, source})` {#attach-effect-mapParams-source}
+## `attach({source, mapParams, effect})` {#attach-source-mapParams-effect}
 
 Creates effect which will read values from `source` stores, pass them with params to `mapParams` function and then call `effect` with the result.
 
-### Formulae {#attach-effect-mapParams-source-formulae}
+### Formulae {#attach-source-mapParams-effect-formulae}
 
 :::tip{title="Note"}
 This variant of `attach` mostly works like the [attach({effect, mapParams})](#attach-effect-mapParams). The same things are omitted from this section.
@@ -444,34 +446,35 @@ This variant of `attach` mostly works like the [attach({effect, mapParams})](#at
 
 ```ts
 const attachedFx = attach({
-  effect: originalFx,
+  source,
   mapParams,
+  effect: originalFx,
 });
 ```
 
-- When `attachedFx` triggered, payload passed into `mapParams` function, then the result of it passed into `originalFx`
+- When `attachedFx` triggered, payload passed into `mapParams` function with value from `source` store, then the result of it passed into `originalFx`
 - When `originalFx` is finished, then `attachedFx` must be finished with the same resolution (done/fail).
 - If `mapParams` throws an exception, then `attachedFx` must be finished with the error as `attachedFx.fail`. But `originalFx` will not be triggered at all.
 
-### Arguments {#attach-effect-mapParams-source-arguments}
+### Arguments {#attach-source-mapParams-effect-arguments}
 
-- `effect` ([_Effect_](/en/api/effector/Effect)): Wrapped effect
-- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
 - `source` ([_Store_](/en/api/effector/Store) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
+- `effect` ([_Effect_](/en/api/effector/Effect)): Wrapped effect
 
-### Returns {#attach-effect-mapParams-source-returns}
+### Returns {#attach-source-mapParams-effect-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Types {#attach-effect-mapParams-source-types}
+### Types {#attach-source-mapParams-effect-types}
 
 :::warning{title="TBD"}
 Please, open pull request via "Edit this page" link.
 :::
 
-### Example {#attach-effect-mapParams-source-example}
+### Examples {#attach-source-mapParams-effect-examples}
 
-#### Userland example with factory
+#### With factory {#attach-source-mapParams-effect-example-with-factory}
 
 ```ts
 // ./api/request.ts
@@ -559,7 +562,7 @@ To allow factory works correct, add a path to a `./api/authorized` into `factori
 }
 ```
 
-## Extra parameters
+## Extra parameters {#attach-parameters}
 
 `attach` also receives extra parameters, you can use it when you need.
 

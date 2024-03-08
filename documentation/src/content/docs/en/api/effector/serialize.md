@@ -6,11 +6,7 @@ redirectFrom:
   - /docs/api/effector/serialize
 ---
 
-## Formulae
-
-```ts
-serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): {[sid: string]: any}
-```
+# `serialize(scope, params)` {#serialize-scope}
 
 A companion method for [_fork_](/en/api/effector/fork). It allows us to get a serialized value for all the store states within a [scope](/en/api/effector/Scope). The main purpose is an application state serialization on the server side during SSR.
 
@@ -20,7 +16,13 @@ A companion method for [_fork_](/en/api/effector/fork). It allows us to get a se
 You can find deep-dive [explanation here](/en/explanation/sids)
 :::
 
-### Arguments {#serialize-args}
+## Formulae {#serialize-scope-formulae}
+
+```ts
+serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): {[sid: string]: any}
+```
+
+## Arguments {#serialize-scope-arguments}
 
 1. `scope` [_Scope_](/en/api/effector/Scope): a scope object (forked instance)
 2. `ignore` Optional array of [_Store_](/en/api/effector/Store) to be omitted during serialization (added 20.14.0)
@@ -30,7 +32,7 @@ You can find deep-dive [explanation here](/en/explanation/sids)
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) property `onlyChanges` is deprecated.
 :::
 
-### Returns {#serialize-returns}
+## Returns {#serialize-scope-returns}
 
 An object with store values using sids as a keys
 
@@ -38,9 +40,9 @@ An object with store values using sids as a keys
 If a store [does not have a sid](/en/api/effector/babel-plugin#sid), its value will be omitted during serialization.
 :::
 
-## Example {#serialize-example}
+## Examples {#serialize-scope-examples}
 
-Serialize forked instance state
+### Serialize forked instance state {#serialize-scope-examples-serialize-forked-instance-state}
 
 ```js
 import { createDomain, fork, serialize } from "effector";
@@ -53,7 +55,7 @@ console.log(serialize(scope)); // => {[sid]: 42}
 
 [Try it](https://share.effector.dev/zlRJbjei)
 
-## Note on `onlyChanges`
+## Using with `onlyChanges` {#serialize-scope-with-onlyChanges}
 
 With `onlyChanges`, this method will serialize only stores which were changed by some trigger during work or defined in `values` field by [fork](/en/api/effector/fork) or [hydrate(scope)](/en/api/effector/hydrate). Once being changed, a store will stay marked as changed in given scope even if it was turned back to the default state during work, otherwise client will not update that store on its side, which is unexpected and inconsistent.
 This allows us to hydrate client state several times, for example, during route changes in next.js

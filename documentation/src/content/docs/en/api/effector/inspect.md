@@ -9,7 +9,7 @@ Special API methods designed to handle debugging and monitoring use cases withou
 
 Useful to create developer tools and production monitoring and observability instruments.
 
-## Inspect API
+## Inspect API {#inspect-api}
 
 Allows us to track any computations that have happened in the effector's kernel.
 
@@ -73,7 +73,7 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 // [store] $count 1337
 ```
 
-### Tracing
+### Tracing {#inspect-tracing}
 
 Adding `trace: true` setting allows looking up previous computations, that led to this specific one.
 It is useful to debug the specific reason for some events happening
@@ -111,7 +111,7 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 // ☝️ traces are provided in backwards order, because we are looking back in time
 ```
 
-### Errors
+### Errors {#inspect-errors}
 
 Effector does not allow exceptions in pure functions. In such case, branch computation is stopped and an exception is logged.
 
@@ -128,9 +128,9 @@ inspect({
 });
 ```
 
-## Inspect Graph
+## Inspect Graph {#inspect-graph}
 
-Allows us to track declarations of units, [factories](/en/api/effector/babel-plugin#factories) and [regions](/en/api/effector/withRegion)
+Allows us to track declarations of units, [factories](/en/api/effector/babel-plugin#factories), and [regions](/en/api/effector/withRegion).
 
 ```ts
 import { createStore } from "effector";
@@ -150,7 +150,7 @@ const $count = createStore(0);
 // logs "store $count" to console
 ```
 
-## withRegion
+## `withRegion` {#withRegion}
 
 Meta-data provided via region's root node is available on declaration.
 

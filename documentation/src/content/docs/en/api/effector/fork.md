@@ -5,6 +5,8 @@ redirectFrom:
   - /docs/api/effector/fork
 ---
 
+# `fork()` {#fork}
+
 :::info{title="since"}
 
 - `fork()` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
@@ -24,10 +26,10 @@ fork(options: { values?, handlers? }): Scope
 fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
-### Arguments {#fork-args}
+## Arguments {#fork-arguments}
 
-1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork
-2. `values`: Option to provide initial states for stores
+1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork.
+2. `values`: Option to provide initial states for stores.
 
    Can be used in three ways:
 
@@ -65,7 +67,7 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       Such objects are created by [serialize](/en/api/effector/serialize), in application code **array of tuples is preferred**
       :::
 
-3. `handlers`: Option to provide handlers for effects
+3. `handlers`: Option to provide handlers for effects.
 
    Can be used in different ways:
 
@@ -90,20 +92,22 @@ fork(domain: Domain, options?: { values?, handlers? }): Scope
       });
       ```
 
-4. Plain object: `{[sid: string]: handler}`
+   3. Plain object: `{[sid: string]: handler}`
+
       ```ts
       fork({
         handlers: {
           [getMessageFx.sid]: (params) => ({ id: 0, text: "message" }),
           [getUserFx.sid]: async (params) => ({ name: "alice", age: 21 }),
-        }
+        },
       });
       ```
+
       :::warning{title="deprecation"}
       Such objects are deprecated since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) and will be removed in future versions. Array of tuples is preferred.
       :::
 
-### Returns {#fork-return}
+## Returns {#fork-returns}
 
 [_Scope_](/en/api/effector/Scope)
 
@@ -136,7 +140,7 @@ console.log(scopeB.getState($counter)); // => -1
 
 ### Set initial state for store and change handler for effect
 
-This is an example of test, which ensures that after a request to the server, the value of `$friends` is filled
+This is an example of test, which ensures that after a request to the server, the value of `$friends` is filled.
 
 ```ts
 import { createEffect, createStore, fork, allSettled } from "effector";

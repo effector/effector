@@ -5,11 +5,13 @@ redirectFrom:
   - /docs/api/effector-solid/useStoreMap
 ---
 
-Function, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change
+# `useStoreMap(store, fn)` {#useStoreMap-store-fn}
 
-## useStoreMap(store, fn) {#useStoreMap-fn}
+Function, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change.
 
-Common use case: subscribe to changes in selected part of store only
+Common use case: subscribe to changes in selected part of store only.
+
+## Formulae {#useStoreMap-store-fn-formulae}
 
 ```ts
 useStoreMap<State, Result>(
@@ -18,36 +20,58 @@ useStoreMap<State, Result>(
 ): Accessor<Result>
 ```
 
-### Arguments {#useStoreMap-fn-arguments}
+## Arguments {#useStoreMap-store-fn-arguments}
 
 1. `store`: Source [store](/en/api/effector/Store)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
-### Returns {#useStoreMap-fn-returns}
+## Throws {#useStoreMap-store-fn-throws}
+
+TBD
+
+## Returns {#useStoreMap-store-fn-returns}
 
 (_Result_)
 
-## useStoreMap(config) {#useStoreMap-config}
+## Types {#useStoreMap-store-fn-types}
+
+TBD
+
+## Examples {#useStoreMap-store-fn-examples}
+
+TBD
+
+# `useStoreMap(config)` {#useStoreMap-config}
+
+## Formulae {#useStoreMap-config-formulae}
 
 ```ts
 useStoreMap({ store, keys, fn, updateFilter });
 ```
 
-### Arguments {#useStoreMap-config-arguments}
+## Arguments {#useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
    - `store`: Source [store](/en/api/effector/Store)
    - `keys` (_Array_): Will be passed to `fn` selector
-   - `fn` (_(state, keys) => result_): Selector function to receive part of source store
+   - `fn` (_(state, keys) => result_): Selector function to receive part of the source store
    - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore) option under the hood
 
-### Returns {#useStoreMap-config-returns}
+## Throws {#useStoreMap-config-throws}
 
-(_Accessor<Result\>_)
+TBD
 
-### Example {#useStoreMap-config-example}
+## Returns {#useStoreMap-config-returns}
 
-This hook is very useful for working with lists, especially with large ones
+`Accessor<Result>`
+
+## Types {#useStoreMap-config-types}
+
+TBD
+
+## Examples {#useStoreMap-config-examples}
+
+This hook is very useful for working with lists, especially large ones.
 
 ```js
 import { createStore } from "effector";

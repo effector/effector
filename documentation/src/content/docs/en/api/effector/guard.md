@@ -6,6 +6,8 @@ redirectFrom:
   - /docs/api/effector/guard
 ---
 
+# `guard({ clock?, source?, filter, target? })` {#guard-clock-source-filter-target}
+
 :::warning{title="Deprecated"}
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
 
@@ -15,7 +17,7 @@ The core team recommends using [sample](/en/api/effector/sample) instead of `gua
 Method for conditional event routing.
 It provides a way to control one dataflow with the help of another: when the condition and the data are in different places, we can use `guard` with stores as filters to trigger events when condition state is true, thereby modulate signals without mixing them.
 
-## Formulae
+## Formulae {#guard-clock-source-filter-target-formulae}
 
 ```ts
 guard({ clock?, source?, filter, target? }): target
@@ -39,17 +41,19 @@ When `clock` is triggered, check `filter` for [truthy] and call `target` with da
 `clock` in `guard` is available since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-## `guard({source, filter, target?})`
+# `guard({source, filter, target?})` {#guard-source-filter-target}
 
-**Arguments**
+## Arguments {#guard-source-filter-target-arguments}
 
 1. `params` (_Object_): Configuration object
 
-**Returns**
+## Returns {#guard-source-filter-target-returns}
 
 [_Event_](/en/api/effector/Event), which fires upon `clock` trigger
 
-#### Example
+## Examples {#guard-source-filter-target-examples}
+
+### Basic example {#guard-source-filter-target-examples-basic}
 
 ```js
 import { createStore, createEffect, createEvent, guard } from "effector";
@@ -78,9 +82,7 @@ guard({
 
 See [ui visualization](https://share.effector.dev/zLB4NwNV)
 
-Also, `guard` accepts a common function predicate as `filter`, to drop events before forwarding them to `target`
-
-#### Example 2
+### Function predicate example {#guard-source-filter-target-examples-function-predicate}
 
 ```js
 import { createEffect, createEvent, guard } from "effector";
@@ -100,14 +102,16 @@ submitForm("alice"); // ~> searchUser('alice')
 
 [Try it](https://share.effector.dev/84j97tZ7)
 
-## `guard(source, {filter: booleanStore})`
+# `guard(source, {filter: booleanStore})` {#guard-source-filter-booleanStore}
 
-**Arguments**
+## Arguments {#guard-source-filter-booleanStore-arguments}
 
 1. `source` ([_Store_](/en/api/effector/Store)/[_Event_](/en/api/effector/Event)/[_Effect_](/en/api/effector/Effect)): Source unit. Will trigger given `guard` on updates
-1. `filter` ([_Store_](/en/api/effector/Store)): Filter store
+2. `filter` ([_Store_](/en/api/effector/Store)): Filter store
 
-#### Example
+## Examples {#guard-source-filter-booleanStore-examples}
+
+### Store filter {#guard-source-filter-booleanStore-examples-store-filter}
 
 ```js
 import { createEvent, createStore, createApi, guard } from "effector";
@@ -134,14 +138,16 @@ trigger("C");
 
 [Try it](https://share.effector.dev/6bqOCO4y)
 
-## `guard(source, {filter: predicate})`
+# `guard(source, {filter: predicate})` {#guard-source-filter-predicate}
 
-**Arguments**
+## Arguments {#guard-source-filter-predicate-arguments}
 
 1. `source` ([_Store_](/en/api/effector/Store)/[_Event_](/en/api/effector/Event)/[_Effect_](/en/api/effector/Effect)): Source unit. Will trigger given `guard` on updates
 2. `filter` (_(payload) => Boolean_): Predicate function, [should be **pure**](/en/explanation/glossary#purity)
 
-#### Example 2
+## Examples {#guard-source-filter-predicate-examples}
+
+### Predicate function example {#guard-source-filter-predicate-examples-predicate-function}
 
 ```js
 import { createEvent, guard } from "effector";

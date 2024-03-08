@@ -6,7 +6,7 @@ redirectFrom:
 
 List of the methods
 
-## Unit definitions
+## Unit Definitions {#unit-definitions}
 
 - [Event](/en/api/effector/Event)
 - [Effect](/en/api/effector/Effect)
@@ -14,14 +14,14 @@ List of the methods
 - [Domain](/en/api/effector/Domain)
 - [Scope](/en/api/effector/Scope)
 
-## Unit creators
+## Unit Creators {#unit-creators}
 
 - [createEvent](/en/api/effector/createEvent)
 - [createStore](/en/api/effector/createStore)
 - [createEffect](/en/api/effector/createEffect)
 - [createDomain](/en/api/effector/createDomain)
 
-## Common methods
+## Common Methods {#common-methods}
 
 - [combine(...stores, f)](/en/api/effector/combine)
 - [attach({effect, mapParams?, source?})](/en/api/effector/attach)
@@ -30,7 +30,7 @@ List of the methods
 - [split(event, cases)](/en/api/effector/split)
 - [createApi(store, api)](/en/api/effector/createApi)
 
-## Fork API
+## Fork API {#fork-api}
 
 - [fork](/en/api/effector/fork)
 - [serialize](/en/api/effector/serialize)
@@ -38,24 +38,24 @@ List of the methods
 - [scopeBind](/en/api/effector/scopeBind)
 - [hydrate](/en/api/effector/hydrate)
 
-## Plugins
+## Plugins {#plugins}
 
 - [effector/babel-plugin](/en/api/effector/babel-plugin)
 - [@effector/swc-plugin](https://github.com/effector/swc-plugin)
 
-## Utilities
+## Utilities {#utilities}
 
 - [is](/en/api/effector/is)
 - [fromObservable(observable)](/en/api/effector/fromObservable)
 
-## Low level api
+## Low Level API {#low-level-api}
 
 - [clearNode](/en/api/effector/clearNode)
 - [withRegion](/en/api/effector/withRegion)
 - [launch](/en/api/effector/launch)
 - [inspect](/en/api/effector/inspect)
 
-## Import map
+## Import Map {#import-map}
 
 Package `effector` provides couple different entry points for different purposes:
 
@@ -63,7 +63,7 @@ Package `effector` provides couple different entry points for different purposes
 - [effector/inspect](/en/api/effector/module/inspect)
 - [effector/babel-plugin](/en/api/effector/module/babel-plugin)
 
-## Deprecated methods
+## Deprecated Methods {#deprecated-methods}
 
 - [forward({from, to})](/en/api/effector/forward)
 - [guard({source, filter, target})](/en/api/effector/guard)

@@ -3,9 +3,16 @@ title: effector/compat
 description: Separate module of Effector with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices)
 ---
 
-The library provides separate module with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices).
+The library provides a separate module with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices).
 
-## Required polyfills
+:::warning{title="Bundler, Not Transpiler"}
+Since third-party libraries can import `effector` directly, you **should not** use transpilers like Babel to replace `effector` with `effector/compat` in your code because by default, Babel will not transform third-party code.
+
+**Use a bundler instead**, as it will replace `effector` with `effector/compat` in all modules, including those from third parties.
+
+:::
+
+## Required Polyfills {#required-polyfills}
 
 You need to install polyfills for these objects:
 
@@ -35,18 +42,18 @@ export default defineConfig({
 
 </details>
 
-## Usage
+## Usage {#usage}
 
-### Manual
+### Manual {#usage-manual}
 
-You can use it instead of `effector` package if you need to support old browsers.
+You can use `effector/compat` instead of the `effector` package if you need to support old browsers.
 
 ```diff
 - import {createStore} from 'effector'
 + import {createStore} from 'effector/compat'
 ```
 
-### Automatic
+### Automatic {#usage-automatic}
 
 However, you can set up your bundler to automatically replace `effector` with `effector/compat` in your code.
 
@@ -81,9 +88,3 @@ export default defineConfig({
 ```
 
 </details>
-
-:::warning{title="Bundler, not transpiler"}
-Since third-party libraries can import `effector` directly, you **should not** use transpilers like Babel to replace `effector` with `effector/compat` in your code, because by default Babel will not transform third-party code.
-
-**Use bundler instead**, as it will replace `effector` with `effector/compat` in all modules, including third-party ones.
-:::

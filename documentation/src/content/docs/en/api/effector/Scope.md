@@ -5,10 +5,12 @@ redirectFrom:
   - /docs/api/effector/scope
 ---
 
-`Scope` is a fully isolated instance of application.
-The primary purpose of scope includes SSR (but is not limited to). Scope contains independent clone of all the units (including connections between them) and basic methods to access them.
+# `Scope` {#scope}
 
-Scope can be created by [fork](/en/api/effector/fork).
+`Scope` is a fully isolated instance of application.
+The primary purpose of scope includes SSR (Server-Side Rendering) but is not limited to this use case. A `Scope` contains an independent clone of all units (including connections between them) and basic methods to access them.
+
+A `Scope` can be created using [fork](/en/api/effector/fork).
 
 ```ts
 interface Scope {
@@ -16,21 +18,19 @@ interface Scope {
 }
 ```
 
-## Imperative effects calls with scope
+## Imperative effects calls with scope {#scope-imperative-effect-calls}
 
-Imperative effects calls are supported in effect handlers but **not** in `watch` functions.
+When making imperative effect calls within effect handlers, it is supported but **not** within `watch` functions. For effect handlers that call other effects, ensure to only call effects, not common asynchronous functions. Furthermore, effect calls should be awaited:
 
-When effect calls other effects, then it should call only effects, not common async functions and effect calls should have awaited:
-
-**Correct**, effect without inner effects:
+**✅ Correct usage for an effect without inner effects:**
 
 ```js
 const delayFx = createEffect(async () => {
-  await new Promise((rs) => setTimeout(rs, 80));
+  await new Promise((resolve) => setTimeout(resolve, 80));
 });
 ```
 
-**Correct**, effect with inner effects:
+**✅ Correct usage for an effect with inner effects:**
 
 ```js
 const authUserFx = createEffect();
@@ -43,37 +43,43 @@ const sendWithAuthFx = createEffect(async () => {
 });
 ```
 
-**Incorrect**, effect with inner effects:
+**❌ Incorrect usage for an effect with inner effects:**
 
 ```js
 const sendWithAuthFx = createEffect(async () => {
   await authUserFx();
 
-  // WRONG! wrap that in effect
-  await new Promise((rs) => setTimeout(rs, 80));
+  // Incorrect! This should be wrapped in an effect.
+  await new Promise((resolve) => setTimeout(resolve, 80));
 
-  // context lost
+  // Context is lost here.
   await sendMessageFx();
 });
 ```
 
-So, any effect might either call another effect or perform some async computations but not both.
+For scenarios where an effect might call another effect or perform asynchronous computations, but not both, consider utilizing the [attach](/en/api/effector/attach) method instead for more succinct imperative calls.
 
-:::tip
-Consider using [attach](/en/api/effector/attach) instead of imperative call.
-:::
+# Scope methods {#scope-methods}
 
-<br/><br/>
+## `.getState($store)` {#scope-getState}
 
-# Scope methods
+Returns the value of a store in a given `Scope`.
 
-## `getState`
+### Formulae {#scope-getState-formulae}
 
-Returns store value in given scope
+TBD
 
-### Example
+### Returns {#scope-getState-returns}
 
-Create two instances of application, call events in them and test `$counter` store value in both
+TBD
+
+### Types {#scope-getState-types}
+
+TBD
+
+### Examples {#scope-getState-examples}
+
+Create two instances of an application, trigger events in them, and test the `$counter` store value in both instances:
 
 ```js
 import { createStore, createEvent, fork, allSettled } from "effector";

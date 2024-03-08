@@ -23,7 +23,7 @@ fetchFx();
 
 [Try it](https://share.effector.dev/Yb8vQ1Ly)
 
-## Usage
+## Usage {#babelPlugin-usage}
 
 In the simplest case, it can be used without any configuration:
 
@@ -34,7 +34,7 @@ In the simplest case, it can be used without any configuration:
 }
 ```
 
-### sid
+### SID {#babelPlugin-sid}
 
 :::info{title="since"}
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
@@ -99,16 +99,16 @@ getUsers.use(
 );
 ```
 
-## Configuration
+## Configuration {#babelPlugin-configuration}
 
-### importName
+### `importName` {#babelPlugin-configuration-importName}
 
 - Type: `string | string[]`
 - Default: `['effector', 'effector/compat']`
 
 Specifying import name or names to process by plugin. Import should be used in the code as specified.
 
-### factories
+### `factories` {#babelPlugin-configuration-factories}
 
 :::info{title="since"}
 [effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
@@ -126,7 +126,7 @@ SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for c
 - Modules with factories can export any number of functions.
 - Factories should be compiled with `effector/babel-plugin` as well as code which use them.
 
-#### Example
+#### Examples {#babelPlugin-configuration-factories-examples}
 
 ```json
 // .babelrc
@@ -166,7 +166,7 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 has its own [sid](/en/api/effector/babel-plugin#sid) and will be handled by [serialize](/en/api/effector/serialize)
 independently, although without `factories` they will share the same `sid`.
 
-### reactSsr
+### `reactSsr` {#babelPlugin-configuration-reactSsr}
 
 :::warning{title="Deprecated"}
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends deleting this option from `babel-plugin` configuration because [effector-react](/en/api/effector-react) supports SSR by default.
@@ -178,7 +178,7 @@ Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the cor
 Replaces imports from `effector-react` to `effector-react/scope`. Useful for building both server-side and client-side
 builds from the same codebase.
 
-### addNames
+### `addNames` {#babelPlugin-configuration-addNames}
 
 :::info{title="since"}
 [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
@@ -189,21 +189,21 @@ builds from the same codebase.
 
 Adds name to units factories call. Useful for minification and obfuscation of production builds.
 
-### addLoc
+### `addLoc` {#babelPlugin-configuration-addLoc}
 
 - Type: `boolean`
 - Default: `false`
 
 Adds location to methods' calls. Used by devtools, for example [effector-logger](https://github.com/effector/logger).
 
-### debugSids
+### `debugSids` {#babelPlugin-configuration-debugSids}
 
 - Type: `boolean`
 - Default: `false`
 
 Adds a file path and variable name of a unit definition to a sid. Useful for debugging SSR.
 
-### noDefaults
+### `noDefaults` {#babelPlugin-configuration-noDefaults}
 
 :::info{title="since"}
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
@@ -259,14 +259,14 @@ const foo = createInputField('-', {
 */
 ```
 
-## Bundlers
+## Bundlers {#babelPlugin-bundlers}
 
-### Vite + React (SSR)
+### Vite + React (SSR) {#babelPlugin-bundlers-ViteReactSSR}
 
 To use with `effector/babel-plugin`, you have to following next steps:
 
 1. Install `@vitejs/plugin-react` package.
-1. `vite.js.config` should be follows:
+2. `vite.js.config` should be follows:
 
 > Note: `effector/babel-plugin` is not a package, it is bundled with `effector`
 
