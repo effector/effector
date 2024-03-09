@@ -6,24 +6,27 @@ redirectFrom:
   - /docs/api/effector-vue/createGate
 ---
 
-## `createGate(config?: {defaultState?, domain?, name?})` {#createGate-config}
+Creates a [_Gate_](/apieffector-vue/Gate) to consume data from view, designed for vue 3. If `defaultState` is defined, [Gate.state](/apieffector-vue/Gate#state) will be created with passed value.
 
-Creates a [_Gate_](/apieffector-vue/Gate) to consume data from view, designed for vue 3.
-If `defaultState` is defined, [Gate.state](/apieffector-vue/Gate#state) will be created with passed value
+# Methods {#methods}
 
-### Arguments {#createGate-config-arguments}
+## `createGate(config?: {defaultState?, domain?, name?})` {#methods-createGate-config}
+
+### Arguments {#methods-createGate-config-arguments}
 
 `config` (_Object_): Optional configuration object
 
 - `defaultState?`: Optional default state for [Gate.state](/en/api/effector-vue/Gate#state)
-- `domain?` ([_Domain_](/en/api/effector/Domain)): Optional domain which will be used to create gate units ([Gate.open](/en/api/effector-vue/Gate#open) event, [Gate.state](/en/api/effector-vue/Gate#state) store and so on)
-- `name?` (_string_): Optional name which will be used as name of a created React component
+- `domain?` ([_Domain_](/en/api/effector/Domain)): Optional domain which will be used to create gate units ([Gate.open](/en/api/effector-vue/Gate#open) event, [Gate.state](/en/api/effector-vue/Gate#state) store, and so on)
+- `name?` (_string_): Optional name which will be used as the name of a created Vue component
 
-### Returns {#createGate-config-returns}
+### Returns {#methods-createGate-config-returns}
 
 [_Gate_](/en/api/effector-vue/Gate)
 
-### Example {#createGate-config-example}
+### Examples {#methods-createGate-config-examples}
+
+#### Basic Usage {#methods-createGate-config-examples-basic}
 
 ```js
 import { createGate, useGate } from "effector-vue/composition";

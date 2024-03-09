@@ -22,7 +22,7 @@ The attached effects are the same first-class citizens as the regular effects ma
 
 # Methods {#methods}
 
-## `attach({effect})` {#attach-effect}
+## `attach({effect})` {#methods-attach-effect}
 
 :::info{title="since"}
 [effector 21.5.0](https://changelog.effector.dev/#effector-21-5-0)
@@ -30,7 +30,7 @@ The attached effects are the same first-class citizens as the regular effects ma
 
 Create effect which will call `effect` with params as it is. That allows creating separate effects with shared behavior.
 
-### Formulae {#attach-effect-formulae}
+### Formulae {#methods-attach-effect-formulae}
 
 ```ts
 const attachedFx = attach({ effect: originalFx });
@@ -39,15 +39,15 @@ const attachedFx = attach({ effect: originalFx });
 - When `attachedFx` is triggered, then `originalFx` is triggered too
 - When `originalFx` is finished (fail/done), then `attachedFx` must be finished with the same state.
 
-### Arguments {#attach-effect-arguments}
+### Arguments {#methods-attach-effect-arguments}
 
 - `effect` ([_Effect_](/en/api/effector/Effect)): Wrapped effect
 
-### Returns {#attach-effect-returns}
+### Returns {#methods-attach-effect-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Types {#attach-effect-types}
+### Types {#methods-attach-effect-types}
 
 ```ts
 const originalFx: Effect<Params, Done, Fail>;
@@ -59,7 +59,7 @@ const attachedFx: Effect<Params, Done, Fail> = attach({
 
 In case of this simple variant of `attach`, types of `originalFx` and `attachedFx` will be the same.
 
-### Examples {#attach-effect-examples}
+### Examples {#methods-attach-effect-examples}
 
 It allows to create _local_ copy of the effect, to react only on triggers emitted from the current _local_ code.
 
@@ -93,11 +93,11 @@ attachedFx("second");
 
 [Try it](https://share.effector.dev/7Uhk4XfW)
 
-## `attach({source, effect})` {#attach-source-effect}
+## `attach({source, effect})` {#methods-attach-source-effect}
 
 Create effect which will trigger given one with values from `source` stores.
 
-### Formulae {#attach-source-effect-formulae}
+### Formulae {#methods-attach-source-effect-formulae}
 
 ```ts
 const attachedFx = attach({
@@ -109,16 +109,16 @@ const attachedFx = attach({
 - When `attachedFx` is triggered, read data from `source`, trigger with the data `originalFx`
 - When `originalFx` is finished, pass the same resolution (done/fail) into `attachedFx` and finish it
 
-### Arguments {#attach-source-effect-arguments}
+### Arguments {#methods-attach-source-effect-arguments}
 
 - `source` ([_Store_](/en/api/effector/Store) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
 - `effect` ([_Effect_](/en/api/effector/Effect)): Original effect
 
-### Returns {#attach-source-effect-returns}
+### Returns {#methods-attach-source-effect-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Types {#attach-source-effect-types}
+### Types {#methods-attach-source-effect-types}
 
 :::tip
 You don't need to explicitly set types for each declaration. The purpose of the following example is to provide a clear understanding.
@@ -170,7 +170,7 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 
 Types of the `source` object must be the same as `originalFx` params. But the `attachedFx` will omit the type of params, it means the attached effect not requires any params at all.
 
-### Examples {#attach-source-effect-examples}
+### Examples {#methods-attach-source-effect-examples}
 
 ```ts
 const requestPageFx = createEffect<{ page: number; size: number }, string[]>(
@@ -207,7 +207,7 @@ await requestNextPageFx();
 
 [Try it](https://share.effector.dev/FGqlrrnw)
 
-## `attach({source, async effect})` {#attach-source-async-effect}
+## `attach({source, async effect})` {#methods-attach-source-async-effect}
 
 :::info{title="since"}
 [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
@@ -215,7 +215,7 @@ await requestNextPageFx();
 
 Creates effect which will call async function with values from the `source` stores.
 
-### Formulae {#attach-source-async-effect-formulae}
+### Formulae {#methods-attach-source-async-effect-formulae}
 
 ```ts
 const attachedFx = attach({
@@ -228,16 +228,16 @@ const attachedFx = attach({
 - When `effect` function returns resolved `Promise`, finish `attachedFx` with the data from the function as `attachedFx.done`.
 - When `effect` throws exception, or returns rejected `Promise`, finish `attachedFx` with the data from function as `attachedFx.fail`.
 
-### Arguments {#attach-source-async-effect-arguments}
+### Arguments {#methods-attach-source-async-effect-arguments}
 
 - `effect` (_Function_): `(source: Source, params: Params) => Promise<Result> | Result`
 - `source` ([_Store_](/en/api/effector/Store) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the first argument of `effect`
 
-### Returns {#attach-source-async-effect-returns}
+### Returns {#methods-attach-source-async-effect-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Usage with scope {#attach-source-async-effect-scope}
+### Usage with scope {#methods-attach-source-async-effect-scope}
 
 Any effects called inside `async effect` function will propagate scope.
 
@@ -275,9 +275,9 @@ To solve this case, you need to just wrap your `regularFunction` into effect:
 const regularFunctionFx = createEffect(regularFunction);
 ```
 
-### Types {#attach-source-async-effect-types}
+### Types {#methods-attach-source-async-effect-types}
 
-#### Single store {#attach-source-async-effect-types-single-store}
+#### Single store {#methods-attach-source-async-effect-types-single-store}
 
 ```ts
 const $store: Store<T>;
@@ -299,10 +299,10 @@ const attachedFx: Effect<void, void, Fail> = attach({
 });
 ```
 
-#### Multiple stores {#attach-source-async-effect-types-multiple-stores}
+#### Multiple stores {#methods-attach-source-async-effect-types-multiple-stores}
 
 :::tip
-For details review [previous section of types](#attach-source-async-effect-types). Here the same logic.
+For details review [previous section of types](#methods-attach-source-async-effect-types). Here the same logic.
 :::
 
 ```ts
@@ -323,17 +323,17 @@ attachedFx({ baz: true });
 
 [Try it](https://tsplay.dev/m3xjbW)
 
-### Example {#attach-source-async-effect-example}
+### Example {#methods-attach-source-async-effect-example}
 
 :::warning{title="TBD"}
 Please, open pull request via "Edit this page" link.
 :::
 
-## `attach({effect, mapParams})` {#attach-effect-mapParams}
+## `attach({effect, mapParams})` {#methods-attach-effect-mapParams}
 
 Creates effect which will trigger given one by transforming params by `mapParams` function.
 
-### Formulae {#attach-effect-mapParams-formulae}
+### Formulae {#methods-attach-effect-mapParams-formulae}
 
 ```ts
 const attachedFx = attach({
@@ -346,16 +346,16 @@ const attachedFx = attach({
 - When `originalFx` is finished, then `attachedFx` must be finished with the same resolution (done/fail).
 - If `mapParams` throws an exception, then `attachedFx` must be finished with the error as `attachedFx.fail`. But `originalFx` will not be triggered at all.
 
-### Arguments {#attach-effect-mapParams-arguments}
+### Arguments {#methods-attach-effect-mapParams-arguments}
 
 - `effect` ([_Effect_](/en/api/effector/Effect)): Wrapped effect
 - `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works mostly like [event.prepend](/en/api/effector/Event#prepend-fn). Errors happened in `mapParams` function will force attached effect to fail.
 
-### Returns {#attach-effect-mapParams-returns}
+### Returns {#methods-attach-effect-mapParams-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Types {#attach-effect-mapParams-types}
+### Types {#methods-attach-effect-mapParams-types}
 
 ```ts
 const originalFx: Effect<A, Done, Fail>;
@@ -390,9 +390,9 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 });
 ```
 
-### Examples {#attach-effect-mapParams-examples}
+### Examples {#methods-attach-effect-mapParams-examples}
 
-#### Map arguments {#attach-effect-mapParams-examples-map-arguments}
+#### Map arguments {#methods-attach-effect-mapParams-examples-map-arguments}
 
 ```ts
 const originalFx = createEffect<{ input: number }, void>((a) => a);
@@ -412,7 +412,7 @@ attachedFx(1);
 
 [Try it](https://share.effector.dev/TFRlrmhm)
 
-#### Handle exceptions {#attach-effect-mapParams-examples-handle-exceptions}
+#### Handle exceptions {#methods-attach-effect-mapParams-examples-handle-exceptions}
 
 ```ts
 const originalFx = createEffect<{ a: number }, void>((a) => a);
@@ -434,14 +434,14 @@ attachedFx(1);
 
 [Try it](https://share.effector.dev/VYvWQoOk)
 
-## `attach({source, mapParams, effect})` {#attach-source-mapParams-effect}
+## `attach({source, mapParams, effect})` {#methods-attach-source-mapParams-effect}
 
 Creates effect which will read values from `source` stores, pass them with params to `mapParams` function and then call `effect` with the result.
 
-### Formulae {#attach-source-mapParams-effect-formulae}
+### Formulae {#methods-attach-source-mapParams-effect-formulae}
 
 :::tip{title="Note"}
-This variant of `attach` mostly works like the [attach({effect, mapParams})](#attach-effect-mapParams). The same things are omitted from this section.
+This variant of `attach` mostly works like the [attach({effect, mapParams})](#methods-attach-effect-mapParams). The same things are omitted from this section.
 :::
 
 ```ts
@@ -456,25 +456,25 @@ const attachedFx = attach({
 - When `originalFx` is finished, then `attachedFx` must be finished with the same resolution (done/fail).
 - If `mapParams` throws an exception, then `attachedFx` must be finished with the error as `attachedFx.fail`. But `originalFx` will not be triggered at all.
 
-### Arguments {#attach-source-mapParams-effect-arguments}
+### Arguments {#methods-attach-source-mapParams-effect-arguments}
 
 - `source` ([_Store_](/en/api/effector/Store) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
 - `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
 - `effect` ([_Effect_](/en/api/effector/Effect)): Wrapped effect
 
-### Returns {#attach-source-mapParams-effect-returns}
+### Returns {#methods-attach-source-mapParams-effect-returns}
 
 [_Effect_](/en/api/effector/Effect): New effect
 
-### Types {#attach-source-mapParams-effect-types}
+### Types {#methods-attach-source-mapParams-effect-types}
 
 :::warning{title="TBD"}
 Please, open pull request via "Edit this page" link.
 :::
 
-### Examples {#attach-source-mapParams-effect-examples}
+### Examples {#methods-attach-source-mapParams-effect-examples}
 
-#### With factory {#attach-source-mapParams-effect-example-with-factory}
+#### With factory {#methods-attach-source-mapParams-effect-example-with-factory}
 
 ```ts
 // ./api/request.ts
@@ -562,14 +562,14 @@ To allow factory works correct, add a path to a `./api/authorized` into `factori
 }
 ```
 
-## Extra parameters {#attach-parameters}
+## Parameters {#attach-parameters}
 
-`attach` also receives extra parameters, you can use it when you need.
+`attach()` also receives extra parameters, you can use it when you need.
 
-### `name` {#attach-name}
+### `name` {#attach-parameters-name}
 
 ```ts
-name?: string;
+attach({ name: string });
 ```
 
 It allows us to explicitly set the name of the created attached effect:
@@ -590,15 +590,15 @@ attachedFx.shortName; // "anotherUsefulName"
 
 This parameter exists in **any variant** of the `attach`.
 
-### `domain` {#attach-domain}
+### `domain` {#attach-parameters-domain}
 
 ```ts
-domain?: Domain;
+attach({ domain: Domain });
 ```
 
-> Note: this property can only be used with a plain function `effect`.
+It allows to create effect inside specified domain.
 
-It allows to create effect inside specified domain:
+> Note: this property can only be used with a plain function `effect`.
 
 ```ts
 import { createDomain, createStore, attach } from "effector";

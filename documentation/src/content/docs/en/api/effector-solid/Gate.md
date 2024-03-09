@@ -20,9 +20,9 @@ Gate can have two states:
 - **Open**, which means mounted
 - **Closed**, which means unmounted
 
-## Properties {#Gate-properties}
+# Properties {#properties}
 
-### `.state` Store {#Gate-state}
+## `.state` Store {#properties-state}
 
 :::warning{title="Important"}
 Do not modify the `state` value! It is a [derived store](/en/api/effector/Store#readonly) and should be kept in a predictable state.
@@ -30,7 +30,7 @@ Do not modify the `state` value! It is a [derived store](/en/api/effector/Store#
 
 `Store<Props>`: [Derived Store](/en/api/effector/Store#readonly) with the current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-solid/useGate) and from props when rendering the gate as a component.
 
-### `.open` Event {#Gate-open}
+## `.open` Event {#properties-open}
 
 :::info{title="Important"}
 Do not manually call this event. It is an event that depends on a Gate's state.
@@ -38,7 +38,7 @@ Do not manually call this event. It is an event that depends on a Gate's state.
 
 [Event<Props>](/en/api/effector/Event): Event which will be called during the gate's mounting.
 
-### `.close` Event {#Gate-close}
+## `.close` Event {#properties-close}
 
 :::info{title="Important"}
 Do not manually call this event. It is an event that depends on a Gate's state.
@@ -46,7 +46,7 @@ Do not manually call this event. It is an event that depends on a Gate's state.
 
 [Event<Props>](/en/api/effector/Event): Event which will be called during the gate's unmounting.
 
-### `.status` Store {#Gate-status}
+## `.status` Store {#properties-status}
 
 :::warning{title="Important"}
 Do not modify the `status` value! It is a [derived store](/en/api/effector/Store#readonly) and should be in a predictable state.

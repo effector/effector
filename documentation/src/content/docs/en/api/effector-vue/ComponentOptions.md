@@ -5,17 +5,21 @@ redirectFrom:
   - /docs/api/effector-vue/component-options
 ---
 
-## `effector`
+# ComponentOptions {#ComponentOptions}
 
-### Returns {#effector-returns}
+## `effector` {#ComponentOptions-effector}
 
-(_`Function | Object | Store`_): `Store` or object of `Store`, or function which will be called with Component instance as `this`
+### Returns {#ComponentOptions-effector-returns}
 
-### Example
+(_`Function | Object | Store`_): `Store` or object of `Store`'s, or function which will be called with the Component instance as `this`.
+
+### Examples {#ComponentOptions-effector-examples}
+
+#### Basic Usage {#ComponentOptions-effector-examples-basic}
 
 ```js
 import Vue from "vue";
-import { createStore } from "effector";
+import { createStore, combine } from "effector";
 
 const counter = createStore(0);
 
@@ -36,7 +40,11 @@ new Vue({
 });
 ```
 
+#### Using Object Syntax {#ComponentOptions-effector-examples-object}
+
 ```js
+import { counter } from "./stores";
+
 new Vue({
   effector: {
     counter, // would create `counter` in template
@@ -44,7 +52,11 @@ new Vue({
 });
 ```
 
+#### Using Store Directly {#ComponentOptions-effector-examples-direct}
+
 ```js
+import { counter } from "./stores";
+
 new Vue({
   effector: counter, // would create `state` in template
 });

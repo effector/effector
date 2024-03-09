@@ -23,7 +23,7 @@ fetchFx();
 
 [Try it](https://share.effector.dev/Yb8vQ1Ly)
 
-## Usage {#babelPlugin-usage}
+# Usage {#usage}
 
 In the simplest case, it can be used without any configuration:
 
@@ -34,7 +34,7 @@ In the simplest case, it can be used without any configuration:
 }
 ```
 
-### SID {#babelPlugin-sid}
+# SID {#sid}
 
 :::info{title="since"}
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
@@ -99,25 +99,47 @@ getUsers.use(
 );
 ```
 
-## Configuration {#babelPlugin-configuration}
+# Configuration {#configuration}
 
-### `importName` {#babelPlugin-configuration-importName}
+## `importName` {#configuration-importName}
+
+Specifying import name or names to process by plugin. Import should be used in the code as specified.
+
+### Formulae {#configuration-importName-formulae}
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "importName": ["effector"]
+  }
+]
+```
 
 - Type: `string | string[]`
 - Default: `['effector', 'effector/compat']`
 
-Specifying import name or names to process by plugin. Import should be used in the code as specified.
+## `factories` {#configuration-factories}
 
-### `factories` {#babelPlugin-configuration-factories}
+Accepts an array of module names which exports treat as custom factories, therefore, each function call provides a unique prefix for [sids](/en/api/effector/babel-plugin#sid) of units inside them. Used to
+SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for client-only application.
 
 :::info{title="since"}
 [effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
 :::
 
-- Type: `string[]`
+### Formulae {#configuration-factories-formulae}
 
-Accepts an array of module names which exports treat as custom factories, therefore, each function call provides a unique prefix for [sids](/en/api/effector/babel-plugin#sid) of units inside them. Used to
-SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for client-only application.
+```json
+[
+  "effector/babel-plugin",
+  {
+    "factories": ["path/here"]
+  }
+]
+```
+
+- Type: `string[]`
 
 - Factories can have any number of arguments.
 - Factories can create any number of units.
@@ -126,7 +148,7 @@ SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for c
 - Modules with factories can export any number of functions.
 - Factories should be compiled with `effector/babel-plugin` as well as code which use them.
 
-#### Examples {#babelPlugin-configuration-factories-examples}
+### Examples {#configuration-factories-examples}
 
 ```json
 // .babelrc
@@ -166,53 +188,110 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 has its own [sid](/en/api/effector/babel-plugin#sid) and will be handled by [serialize](/en/api/effector/serialize)
 independently, although without `factories` they will share the same `sid`.
 
-### `reactSsr` {#babelPlugin-configuration-reactSsr}
+## `reactSsr` {#configuration-reactSsr}
+
+Replaces imports from `effector-react` to `effector-react/scope`. Useful for building both server-side and client-side
+builds from the same codebase.
 
 :::warning{title="Deprecated"}
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends deleting this option from `babel-plugin` configuration because [effector-react](/en/api/effector-react) supports SSR by default.
 :::
 
+### Formulae {#configuration-reactSsr-formulae}
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "reactSsr": false
+  }
+]
+```
+
 - Type: `boolean`
 - Default: `false`
 
-Replaces imports from `effector-react` to `effector-react/scope`. Useful for building both server-side and client-side
-builds from the same codebase.
+## `addNames` {#configuration-addNames}
 
-### `addNames` {#babelPlugin-configuration-addNames}
+Adds name to units factories call. Useful for minification and obfuscation of production builds.
 
 :::info{title="since"}
 [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
+### Formulae {#configuration-addNames-formulae}
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "addNames": true
+  }
+]
+```
+
 - Type: `boolean`
 - Default: `true`
 
-Adds name to units factories call. Useful for minification and obfuscation of production builds.
-
-### `addLoc` {#babelPlugin-configuration-addLoc}
-
-- Type: `boolean`
-- Default: `false`
+## `addLoc` {#configuration-addLoc}
 
 Adds location to methods' calls. Used by devtools, for example [effector-logger](https://github.com/effector/logger).
 
-### `debugSids` {#babelPlugin-configuration-debugSids}
+### Formulae {#configuration-addLoc-formulae}
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "addLoc": false
+  }
+]
+```
 
 - Type: `boolean`
 - Default: `false`
 
+## `debugSids` {#configuration-debugSids}
+
 Adds a file path and variable name of a unit definition to a sid. Useful for debugging SSR.
 
-### `noDefaults` {#babelPlugin-configuration-noDefaults}
+## Formulae {#configuration-debugSids-formulae}
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "debugSids": false
+  }
+]
+```
+
+- Type: `boolean`
+- Default: `false`
+
+## `noDefaults` {#configuration-noDefaults}
+
+Option for `effector/babel-plugin` for making custom unit factories with clean configuration.
 
 :::info{title="since"}
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
+### Formulae {#configuration-noDefaults-formulae}
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "noDefaults": false
+  }
+]
+```
+
 - Type: `boolean`
 - Default: `false`
 
-Option for `effector/babel-plugin` for making custom unit factories with clean configuration.
+### Examples {#configuration-noDefaults-examples}
 
 ```json
 // .babelrc
@@ -259,14 +338,14 @@ const foo = createInputField('-', {
 */
 ```
 
-## Bundlers {#babelPlugin-bundlers}
+# Usage with Bundlers {#bundlers}
 
-### Vite + React (SSR) {#babelPlugin-bundlers-ViteReactSSR}
+## Vite + React (SSR) {#bundlers-ViteReactSSR}
 
 To use with `effector/babel-plugin`, you have to following next steps:
 
 1. Install `@vitejs/plugin-react` package.
-2. `vite.js.config` should be follows:
+2. `vite.config.js` should be follows:
 
 > Note: `effector/babel-plugin` is not a package, it is bundled with `effector`
 

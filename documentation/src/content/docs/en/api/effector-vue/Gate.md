@@ -17,9 +17,9 @@ Gate can have two states:
 - **Open**, which means mounted
 - **Closed**, which means unmounted
 
-## Gate Properties {#Gate-properties}
+# Gate Properties {#properties}
 
-## `state` {#Gate-state}
+## `.state` {#properties-state}
 
 :::warning{title="Important"}
 Do not modify `state` value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
@@ -27,7 +27,7 @@ Do not modify `state` value! It is [derived store](/en/api/effector/Store#readon
 
 `Store<Props>`: [DerivedStore](/en/api/effector/Store#readonly) with current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-vue/useGate) and from props when rendering gate as a component.
 
-## `open` {#Gate-open}
+## `.open` {#properties-open}
 
 :::info{title="Important"}
 Do not manually call this event. It is an event that depends on a Gate state.
@@ -35,7 +35,7 @@ Do not manually call this event. It is an event that depends on a Gate state.
 
 [Event<Props>](/en/api/effector/Event): Event which will be called during gate mounting
 
-## `close` {#Gate-close}
+## `.close` {#properties-close}
 
 :::info{title="Important"}
 Do not manually call this event. It is an event that depends on a Gate state.
@@ -43,7 +43,7 @@ Do not manually call this event. It is an event that depends on a Gate state.
 
 [Event<Props>](/en/api/effector/Event): Event which will be called during a gate unmounting.
 
-## `status` {#Gate-status}
+## `.status` {#properties-status}
 
 :::warning{title="Important"}
 Do not modify `status` value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
