@@ -6,29 +6,37 @@ redirectFrom:
   - /docs/api/effector/merge
 ---
 
+# `merge(units)` {#merge-units}
+
 :::info{title="since"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
-Merges an array of units (events, effects or stores), returns a new event, which fires upon trigger of given units
+Merges an array of units (events, effects, or stores), returning a new event that triggers upon any of the given units being triggered.
 
 ```ts
 merge(units: Unit[]): Event
 ```
 
-**Arguments**
+## Arguments {#merge-units-arguments}
 
-1. `units`: Array of [units](/en/explanation/glossary#common-unit) to be merged
+1. `units`: An array of [units](/en/explanation/glossary#common-unit) to be merged.
 
-**Returns**
+## Returns {#merge-units-returns}
 
-[_Event_](/en/api/effector/Event): New event, which fires when any of given units is triggered
+[_Event_](/en/api/effector/Event): A new event that fires when any of the given units is triggered.
 
 :::tip
-In case of store, the resulting event will fire upon store updates.
+In the case of a store, the resulting event will fire upon store updates.
 :::
 
-#### Example 1
+## Types {#merge-units-types}
+
+TBD
+
+## Examples {#merge-units-examples}
+
+### Basic usage {#merge-units-examples-basic-usage}
 
 ```js
 import { createEvent, merge } from "effector";
@@ -46,7 +54,7 @@ bar(2);
 
 [Try it](https://share.effector.dev/WxUgr6dZ)
 
-#### Example 2
+### Working with stores {#merge-units-examples-working-with-stores}
 
 ```js
 import { createEvent, createStore, merge } from "effector";
@@ -66,7 +74,7 @@ setBar(123); // => state changed to: 123
 
 [Try it](https://share.effector.dev/Rp9wuRvl)
 
-#### Example 3
+### Merging a store and an event {#merge-units-examples-merging-a-store-and-an-event}
 
 ```js
 import { createEvent, createStore, merge } from "effector";

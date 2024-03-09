@@ -3,13 +3,18 @@ title: effector-react/compat
 description: Separate module of effector-react with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices)
 ---
 
-The library provides separate module with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices).
+The library provides a separate module with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices).
 
-## effector/compat
+:::warning{title="Bundler, Not Transpiler"}
+Since third-party libraries can import `effector-react` directly, you **should not** use transpilers like Babel to replace `effector-react` with `effector-react/compat` in your code because by default, Babel will not transform third-party code.
 
-Since `effector-react` uses `effector` under the hood, you need to use compat-version of `effector` as well. Please, read [`effector/compat`](/en/api/effector/module/сompat) for the details.
+**Use a bundler instead**, as it will replace `effector-react` with `effector-react/compat` in all modules, including those from third parties.
 
-## Required polyfills
+:::
+
+Since `effector-react` uses `effector` under the hood, you need to use the compat-version of `effector` as well. Please, read [`effector/compat`](/en/api/effector/module/compat) for details.
+
+## Required Polyfills {#required-polyfills}
 
 You need to install polyfills for these objects:
 
@@ -21,8 +26,10 @@ You need to install polyfills for these objects:
 
 In most cases, a bundler can automatically add polyfills.
 
+### Vite {#required-polyfills-vite}
+
 <details>
-<summary>Vite</summary>
+<summary>Vite Configuration Example</summary>
 
 ```js
 import { defineConfig } from "vite";
@@ -39,23 +46,25 @@ export default defineConfig({
 
 </details>
 
-## Usage
+## Usage {#usage}
 
-### Manual
+### Manual Usage {#usage-manual}
 
-You can use it instead of `effector-react` package if you need to support old browsers.
+You can use it instead of the `effector-react` package if you need to support old browsers.
 
 ```diff
 - import {useUnit} from 'effector-react'
 + import {useUnit} from 'effector-react/compat'
 ```
 
-### Automatic
+### Automatic Replacement {#usage-automatic-replacement}
 
 However, you can set up your bundler to automatically replace `effector` with `effector/compat` in your code.
 
+#### Webpack {#usage-automatic-replacement-webpack}
+
 <details>
-<summary>Webpack</summary>
+<summary>Webpack Configuration Example</summary>
 
 ```js
 module.exports = {
@@ -69,8 +78,10 @@ module.exports = {
 
 </details>
 
+#### Vite {#usage-automatic-replacement-vite}
+
 <details>
-<summary>Vite</summary>
+<summary>Vite Configuration Example</summary>
 
 ```js
 import { defineConfig } from "vite";
@@ -85,9 +96,3 @@ export default defineConfig({
 ```
 
 </details>
-
-:::warning{title="Bundler, not transpiler"}
-Since third-party libraries can import `effector-react` directly, you **should not** use transpilers like Babel to replace `effector-react` with `effector-react/compat` in your code, because by default Babel will not transform third-party code.
-
-**Use bundler instead**, as it will replace `effector-react` with `effector-react/compat` in all modules, including third-party ones.
-:::

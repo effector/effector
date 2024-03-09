@@ -7,22 +7,24 @@ redirectFrom:
 
 `createApi` is a shorthand for creating [events](/en/api/effector/Event) attached to [store](/en/api/effector/Store) by providing an object with [_reducers_](/en/explanation/glossary#reducer) for them. If source `store` belongs to some [domain](/en/api/effector/Domain) then new events will also belong to it
 
-## Formulae
+# `createApi(store, api)` {#createApi-store-api}
+
+## Formulae {#createApi-store-api-formulae}
 
 ```ts
 createApi(store, api): objectWithEvents
 ```
 
-**Arguments**
+## Arguments {#createApi-store-api-arguments}
 
 1. `store` [_Store_](/en/api/effector/Store)
 2. `api` (_Object_) Object with [_reducers_](/en/explanation/glossary#reducer)
 
-**Returns**
+## Returns {#createApi-store-api-returns}
 
-(_`Object`_) Object with [events](/en/api/effector/Event)
+(_Object_) Object with [events](/en/api/effector/Event)
 
-### Example
+## Examples {#createApi-store-api-examples}
 
 ```js
 import { createStore, createApi } from "effector";

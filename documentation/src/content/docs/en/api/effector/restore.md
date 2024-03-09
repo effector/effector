@@ -5,25 +5,33 @@ redirectFrom:
   - /docs/api/effector/restore
 ---
 
-## `restore(event, defaultState)`
+# `restore(event, defaultState)` {#restore-event-defaultState}
 
-Creates a [_Store_](/en/api/effector/Store) from [_Event_](/en/api/effector/Event).
+Creates a [_StoreWritable_](/en/api/effector/Store) from an [_Event_](/en/api/effector/Event).
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
 :::warning{title="It is not a derived store"}
-Restore creates a new store. It is not [DerivedStore](/en/api/effector/Store#readonly). That means you can modify it's state via events, and use it as `target` in [sample](/en/api/effector/sample).
+Restore creates a new store. It is not a [DerivedStore](/en/api/effector/Store#readonly). That means you can modify its state via events, and use it as `target` in [sample](/en/api/effector/sample).
 :::
 
-**Arguments**
+## Formulae {#restore-event-defaultState-formulae}
+
+```ts
+restore(event, defaultState): StoreWritable
+```
+
+## Arguments {#restore-event-defaultState-arguments}
 
 1. `event` [_Event_](/en/api/effector/Event)
 2. `defaultState` (_Payload_)
 
-**Returns**
+## Returns {#restore-event-defaultState-returns}
 
-[_Store_](/en/api/effector/Store): New store
+[_StoreWritable_](/en/api/effector/Store): New store
 
-#### Example
+## Examples {#restore-event-defaultState-examples}
+
+### Basic Example {#restore-event-defaultState-examples-basic}
 
 ```js
 import { createEvent, restore } from "effector";
@@ -40,21 +48,34 @@ event("foo");
 
 [Try it](https://share.effector.dev/MGGQnTlQ)
 
-## `restore(effect, defaultState)`
+# `restore(effect, defaultState)` {#restore-effect-defaultState}
 
-Creates a [_Store_](/en/api/effector/Store) out of successful results of [_Effect_](/en/api/effector/Effect).
+Creates a [_StoreWritable_](/en/api/effector/Store) out of successful results of an [_Effect_](/en/api/effector/Effect).
 It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
-**Arguments**
+## Formulae {#restore-effect-defaultState-formulae}
+
+```ts
+restore(effect, defaultState): StoreWritable
+```
+
+## Arguments {#restore-effect-defaultState-arguments}
 
 1. `effect` [_Effect_](/en/api/effector/Effect)
 2. `defaultState` (_Done_)
 
-**Returns**
+## Returns {#restore-effect-defaultState-returns}
 
-[_Store_](/en/api/effector/Store): New store
+[_StoreWritable_](/en/api/effector/Store): New store
 
-#### Example
+## Types {#restore-effect-defaultState-types}
+
+Store will have the same type as `Done` from `Effect<Params, Done, Fail`>.
+Also, `defaultState` should have `Done` type.
+
+## Examples {#restore-effect-defaultState-examples}
+
+### Effect Example {#restore-effect-defaultState-examples-effect}
 
 ```js
 import { createEffect, restore } from "effector";
@@ -71,19 +92,25 @@ await fx();
 
 [Try it](https://share.effector.dev/tP6RQsri)
 
-## `restore(obj)`
+# `restore(shape)` {#restore-shape}
 
 Creates an object with stores from an object with values
 
-**Arguments**
+## Formulae {#restore-shape-formulae}
 
-1. `obj` (_State_)
+TBD
 
-**Returns**
+## Arguments {#restore-shape-arguments}
 
-[_Store_](/en/api/effector/Store): New store
+1. `shape` (_State_)
 
-#### Example
+## Returns {#restore-shape-returns}
+
+[_StoreWritable_](/en/api/effector/Store): New store.
+
+## Examples {#restore-shape-examples}
+
+### Object Example {#restore-shape-examples-object}
 
 ```js
 import { restore } from "effector";

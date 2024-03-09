@@ -6,21 +6,25 @@ redirectFrom:
   - /docs/api/effector/createDomain
 ---
 
+# `createDomain(name?)` {#createDomain-name}
+
 Creates a [domain](/en/api/effector/Domain)
 
+## Formulae {#createDomain-name-formulae}
+
 ```typescript
-createDomain(name?)
+createDomain(name?): Domain
 ```
 
-**Arguments**
+## Arguments {#createDomain-name-arguments}
 
-1. `name`? (_string_): domain name
+1. `name`? (_string_): domain name. Useful for debugging
 
-**Returns**
+## Returns {#createDomain-name-returns}
 
 [_Domain_](/en/api/effector/Domain): New domain
 
-### Example
+## Examples {#createDomain-name-examples}
 
 ```js
 import { createDomain } from "effector";

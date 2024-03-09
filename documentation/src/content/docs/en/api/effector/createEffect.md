@@ -8,12 +8,16 @@ redirectFrom:
 
 Method for creating an [effect](/en/api/effector/Effect)
 
-## createEffect with handler {#createEffect-handler}
+# Methods {#methods}
 
-Creates an effect with given handler
+## `createEffect(handler)` {#createEffect-handler}
+
+Creates an effect with given handler.
+
+### Formulae {#createEffect-handler-formulae}
 
 ```typescript
-createEffect(handler?)
+createEffect(handler?): Effect<Params, Done, Fail>
 ```
 
 ### Arguments {#createEffect-handler-arguments}
@@ -54,7 +58,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/7K23rdej)
 
-#### Change state on effect completion
+#### Change state on effect completion {#createEffect-handler-examples-change-state}
 
 ```js
 import { createStore, createEffect } from "effector";
@@ -78,7 +82,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/uAJFC1XM)
 
-#### Set handler to effect after creating
+#### Set handler to effect after creating {#createEffect-handler-examples-set-handler}
 
 ```js
 import { createEffect } from "effector";
@@ -96,7 +100,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/e1QPH9Uq)
 
-#### Watch effect status
+#### Watch effect status {#createEffect-handler-examples-watch-status}
 
 ```js
 import { createEffect } from "effector";
@@ -137,9 +141,11 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/LeurvtYA)
 
-## createEffect with config {#createEffect-config}
+## `createEffect(config)` {#createEffect-config}
 
-Creates an effect with handler and name from a given config object
+Creates an effect with handler and name from a given config object.
+
+### Formulae {#createEffect-config-formulae}
 
 ```typescript
 createEffect({ handler, name });

@@ -6,26 +6,32 @@ redirectFrom:
   - /docs/api/effector/createEvent
 ---
 
+# `createEvent(name?)` {#createEvent-name}
+
 Method for creating an [event](/en/api/effector/Event).
+
+## Formulae {#createEvent-name-formulae}
 
 ```ts
 createEvent<T>(name?): Event<T>
 createEvent(name?): Event<void>
 ```
 
-**Arguments**
+## Arguments {#createEvent-name-arguments}
 
 1. `name`? (_string_): Event name
 
-**Returns**
+## Returns {#createEvent-name-returns}
 
 [_Event_](/en/api/effector/Event): New event
 
 ### Notes
 
-[Event](/en/api/effector/Event) – it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2)). Also it allows us to send data to another event or effect via effector operators.
+[Event](/en/api/effector/Event) – it is a function which allows to change state when called (see [example 1](#createEvent-name-examples-simple)) also it can be a good way to extract data (see [example 2](#createEvent-name-examples-map-watch)). Also, it allows us to send data to another event or effect via effector operators.
 
-## Example 1
+## Examples {#createEvent-name-examples}
+
+### Simple {#createEvent-name-examples-simple}
 
 ```js
 import { createStore, createEvent } from "effector";
@@ -59,7 +65,7 @@ resetCounter();
 We created a store `$counter` and an event `incrementBy`, and started watching the store.<br/>
 Notice the function call `incrementBy(10)`. Whenever you will call `incrementBy(10)`, you can look at the console and see how state of `$counter` changes.
 
-## Example 2
+### Using .map and .watch {#createEvent-name-examples-map-watch}
 
 ```js
 import { createEvent } from "effector";

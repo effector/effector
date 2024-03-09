@@ -5,7 +5,7 @@ redirectFrom:
   - /docs/api/effector/is
 ---
 
-Namespace for unit validators
+Namespace for unit validators.
 
 ## `is.store(value)` {#is-store}
 
@@ -124,17 +124,23 @@ is.effect(null);
 
 [Try it](https://share.effector.dev/ZdZ2N6VG)
 
-## `is.targetable` {#is-targetable} 
+## `is.targetable` {#is-targetable}
 
 Checks if given value can be used in operators target (or be called as a function in case of events)
+
+### Returns {#is-targetable-returns}
+
+`boolean`
+
+### Examples {#is-targetable-examples}
 
 ```js
 import { is, createStore, createEvent, createEffect } from "effector";
 
 const $store = createStore(null);
-const $mapped = $store.map(x => x)
+const $mapped = $store.map((x) => x);
 const event = createEvent();
-const mappedEvent = event.map(x => x)
+const mappedEvent = event.map((x) => x);
 const fx = createEffect();
 
 is.targetable($store);
@@ -159,7 +165,9 @@ Checks if given value is [_domain_](/en/api/effector/Domain)
 
 ### Returns {#is-domain-returns}
 
-boolean
+`boolean`
+
+### Examples {#is-domain-examples}
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -192,11 +200,13 @@ is.domain(null);
 [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
-Checks if given value is [_scope_](/en/api/effector/Scope).
+Checks if given value is [_scope_](/en/api/effector/Scope) since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0).
 
 ### Returns {#is-scope-returns}
 
-_boolean_
+`boolean`
+
+### Examples {#is-scope-examples}
 
 ```js
 import { fork } from "effector";
@@ -233,7 +243,9 @@ Checks if given value is [Unit](/en/explanation/glossary#unit): [Store](/en/api/
 
 ### Returns {#is-unit-returns}
 
-boolean
+`boolean`
+
+### Examples {#is-unit-examples}
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain, fork } from "effector";
@@ -279,12 +291,13 @@ is.unit(null);
 [effector 22.4.0](https://changelog.effector.dev/#effector-22-4-0)
 :::
 
-Checks if given value is [_effect_](/en/api/effector/Effect) created via [_attach_](/en/api/effector/attach) method.
-If passed not an effect, returns `false`.
+Checks if given value is [_effect_](/en/api/effector/Effect) created via [_attach_](/en/api/effector/attach) method. If passed not an effect, returns `false`.
 
 ### Returns {#is-attached-returns}
 
-boolean
+`boolean`
+
+### Examples {#is-attached-examples}
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain, attach } from "effector";

@@ -9,7 +9,7 @@ Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the cor
 
 Provides all exports from [effector-react](/en/api/effector-react), but enforces application to use [Scope](/en/api/effector/scope) for all components.
 
-## Usage
+## Usage {#usage}
 
 You can use this module in the same way as [effector-react](/en/api/effector-react), but it will require passing [Scope](/en/api/effector/scope) to [Provider](/en/api/effector-react/Provider) component.
 
@@ -29,7 +29,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 ```
 
-## Migration
+## Migration {#migration}
 
 Since `effector-react/scope` is deprecated, it is better to migrate to [effector-react](/en/api/effector-react) by removing `scope` from import path.
 
@@ -79,18 +79,18 @@ If you use [SWC](/en/api/effector/swc-plugin), you need to remove [`bindings.rea
 }
 ```
 
-## Scope enforcement
+## Scope Enforcement {#scope-enforcement}
 
-All modern hooks of `effector-react` are designed to work with [Scope](/en/api/effector/scope). If you want to imitate the behavior of `effector-react/scope` module, you can second parameter of hooks with an option `forceScope: true`. In this case, the hook will throw an error if the [Scope](/en/api/effector/scope) is not passed to [Provider](/en/api/effector-react/Provider).
+All modern hooks of `effector-react` are designed to work with [Scope](/en/api/effector/scope). If you want to imitate the behavior of `effector-react/scope` module, you can use the second parameter of hooks with an option `forceScope: true`. In this case, the hook will throw an error if the [Scope](/en/api/effector/scope) is not passed to [Provider](/en/api/effector-react/Provider).
 
 ```diff
 - import { useUnit } from 'effector-react/scope'
 + import { useUnit } from 'effector-react'
 
 
-function MyComponent() {
--  const { test } = useUnit({ text: $text })
-+  const { test } = useUnit({ text: $text }, { forceScope: true })
+function Example() {
+-  const { text } = useUnit({ text: $text })
++  const { text } = useUnit({ text: $text }, { forceScope: true })
 
   return <p>{text}</p>
 }

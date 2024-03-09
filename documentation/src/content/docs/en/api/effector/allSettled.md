@@ -6,9 +6,11 @@ redirectFrom:
   - /docs/api/effector/allsettled
 ---
 
-## `allSettled(unit, {scope, params?})` {#unit-scope-params}
+# Methods {#methods}
 
-### Formulae {#unit-scope-params-formulae}
+## `allSettled(unit, {scope, params?})` {#allSettled-unit-scope-params}
+
+### Formulae {#allSettled-unit-scope-params-formulae}
 
 ```ts
 allSettled<T>(unit: Event<T>, {scope: Scope, params?: T}): Promise<void>
@@ -21,7 +23,7 @@ allSettled<T>(unit: Store<T>, {scope: Scope, params?: T}): Promise<void>
 
 Call the provided unit within the current scope and wait for all triggered effects to complete
 
-### Arguments {#unit-scope-params-arguments}
+### Arguments {#allSettled-unit-scope-params-arguments}
 
 1. `unit`: [_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) to be called
 2. `scope`: [_Scope_](/en/api/effector/Scope)
@@ -31,13 +33,15 @@ Call the provided unit within the current scope and wait for all triggered effec
 Return value for effect is supported since [effector 21.4.0](https://changelog.effector.dev/#effector-21-4-0)
 :::
 
-### Example {#unit-scope-params-example}
+### Examples {#allSettled-unit-scope-params-examples}
 
 :::tip{title="Contribution"}
 Please, [open PullRequest](https://github.com/effector/effector) and contribute examples for this section via "Edit this page" link below.
 :::
 
-## `allSettled(scope)` {#scope-formulae}
+## `allSettled(scope)` {#allSettled-scope}
+
+### Formulae {#allSettled-scope-formulae}
 
 ```ts
 allSettled<T>(scope): Promise<void>
@@ -45,7 +49,7 @@ allSettled<T>(scope): Promise<void>
 
 Check the provided scope for any ongoing computations and wait for their completion.
 
-### Arguments {#scope-arguments}
+### Arguments {#allSettled-scope-arguments}
 
 1. `scope`: [_Scope_](/en/api/effector/Scope)
 
@@ -53,9 +57,9 @@ Check the provided scope for any ongoing computations and wait for their complet
 Supported since effector 22.5.0
 :::
 
-### Example {#scope-example}
+### Examples {#allSettled-scope-examples}
 
-#### Usage in tests
+#### Usage in tests {#allSettled-scope-examples-tests}
 
 For example, tests that validate the integration with an external reactive API
 
@@ -77,7 +81,7 @@ test('integration with externalSource', async () => {
   // 2. Trigger update of external source
   externalSource.trigger()
 
-  //3. Wait for all triggered computations in effector's scope, even though these were not triggered by effector itself
+  // 3. Wait for all triggered computations in effector's scope, even though these were not triggered by effector itself
   await allSettled(scope)
 
   // 4. Check anything as usual
