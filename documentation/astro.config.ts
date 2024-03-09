@@ -34,7 +34,7 @@ export default defineConfig({
   scopedStyleStrategy: "where",
   markdown: {
     syntaxHighlight: "prism",
-    remarkPlugins: [directive, admonitions, github, remarkHeadingId],
+    remarkPlugins: [directive, admonitions, github, remarkHeadingId as any],
     rehypePlugins: [
       [
         rehypeAutolinkHeadings,
