@@ -6,6 +6,10 @@ redirectFrom:
   - /docs/api/effector/effect
 ---
 
+```ts
+import { type Effect } from "effector";
+```
+
 **Effect** is a container for async function or any throwing function.
 
 It can be safely used in place of the original async function.
@@ -544,3 +548,36 @@ await Promise.all([req1, req2]);
 ```
 
 [Try it](https://share.effector.dev/XsM8fZXa)
+
+# Types {#types}
+
+```ts
+import { type EffectParams, type EffectResult, type EffectError } from "effector";
+```
+
+## `EffectParams<FX>` {#types-EffectParams}
+
+Allows to extract type of Params from `effect`.
+
+```ts
+const effect: Effect<Params, Done, Fail>;
+type Params = EffectParams<typeof effect>;
+```
+
+## `EffectResult<FX>` {#types-EffectResult}
+
+Allows to extract type of result from `effect`.
+
+```ts
+const effect: Effect<Params, Done, Fail>;
+type Done = EffectResult<typeof effect>;
+```
+
+## `EffectError<FX>` {#types-EffectError}
+
+Allows to extract type of error from `effect`.
+
+```ts
+const effect: Effect<Params, Done, Fail>;
+type Fail = EffectError<typeof effect>;
+```

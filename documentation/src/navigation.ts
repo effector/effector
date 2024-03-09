@@ -573,6 +573,10 @@ const effector = [
     collapsed: true,
     items: [
       {
+        text: { en: "createWatch" },
+        link: "/api/effector/createWatch",
+      },
+      {
         text: { en: "clearNode" },
         link: "/api/effector/clearNode",
       },

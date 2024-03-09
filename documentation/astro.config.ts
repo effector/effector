@@ -23,7 +23,19 @@ export default defineConfig({
     preact({
       compat: true,
     }),
-    mdx(),
+    mdx({
+      syntaxHighlight: "prism",
+      remarkPlugins: [directive, admonitions, github, remarkHeadingId as any],
+      rehypePlugins: [
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "append",
+            properties: { class: "href" },
+          },
+        ],
+      ],
+    }),
     prefetch(),
     process.env.COMPRESS !== "false" && compress(),
   ],

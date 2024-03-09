@@ -6,6 +6,10 @@ redirectFrom:
   - /docs/api/effector/attach
 ---
 
+```ts
+import { attach } from "effector";
+```
+
 :::info{title="since"}
 Available since [effector 20.13.0](https://changelog.effector.dev/#effector-20-13-0).
 

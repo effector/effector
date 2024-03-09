@@ -6,7 +6,15 @@ redirectFrom:
   - /docs/api/effector/forward
 ---
 
-# `forward()` {#forward}
+```ts
+import { forward, type Subscription } from "effector";
+```
+
+Method to create connection between units in a declarative way. Send updates from one set of units to another.
+
+# Methods {#methods}
+
+## `forward({ from, to })` {#methods-forward}
 
 :::warning{title="Deprecated"}
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
@@ -14,9 +22,7 @@ Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
 The core team recommends using [sample](/en/api/effector/sample) instead of `forward`.
 :::
 
-Method to create connection between units in a declarative way. Send updates from one set of units to another.
-
-## Formulae {#forward-formulae}
+### Formulae {#methods-forward-formulae}
 
 ```ts
 forward({
@@ -25,7 +31,7 @@ forward({
 }): Subscription
 ```
 
-## Arguments {#forward-arguments}
+### Arguments {#methods-forward-arguments}
 
 1. `from` ([Unit | Unit\[\]](/en/explanation/glossary#common-unit)): Source of updates. Forward will listen for changes of these units
 
@@ -40,7 +46,7 @@ forward({
    - if passed an [_Effect_], it will be called with data from `from` unit as parameter
    - if `to` is an array of [units](/en/explanation/glossary#common-unit), each unit in that array will be triggered
 
-## Returns {#forward-returns}
+### Returns {#methods-forward-returns}
 
 [Subscription](/en/explanation/glossary#subscription): Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
 
@@ -48,9 +54,9 @@ forward({
 Arrays of units are supported since [effector 20.6.0](https://changelog.effector.dev/#effector-20-6-0)
 :::
 
-## Examples {#forward-examples}
+### Examples {#methods-forward-examples}
 
-### Send store updates to another store {#forward-examples-send-store-updates}
+#### Send store updates to another store {#methods-forward-examples-send-store-updates}
 
 ```js
 import { createStore, createEvent, forward } from "effector";
@@ -72,7 +78,7 @@ event(200);
 
 [Try it](https://share.effector.dev/UeJbgRG9)
 
-### Forward between arrays of units {#forward-examples-forward-between-arrays}
+#### Forward between arrays of units {#methods-forward-examples-forward-between-arrays}
 
 ```js
 import { createEvent, forward } from "effector";

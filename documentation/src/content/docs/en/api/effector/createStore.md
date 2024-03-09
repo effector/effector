@@ -6,41 +6,33 @@ redirectFrom:
   - /docs/api/effector/createStore
 ---
 
-# `createStore()` {#createStore}
+```ts
+import { createStore, type Store, type StoreWritable } from "effector";
+```
+
+# Methods {#methods}
+
+## `createStore(defaultState)` {#methods-createStore-defaultState}
 
 Method for creating a [store](/en/api/effector/Store).
 
+### Formulae {#methods-createStore-defaultState-formulae}
+
 ```ts
-createStore<T>(defaultState: T): Store<T>
-createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
-  name?: string
-  updateFilter?: (update: T, current: T) => boolean
-  skipVoid?: boolean
-  serialize?: 'ignore' | {
-          write: (state: State) => SerializedState
-          read: (json: SerializedState) => State
-        }
-}): Store<T>
+createStore<T>(defaultState: T): StoreWritable<T>
 ```
 
-## Arguments {#createStore-arguments}
+### Arguments {#methods-createStore-defaultState-arguments}
 
 1. `defaultState` (_State_): Default state
-2. `config` (_Object_): Optional configuration
-   - `name` (_String_): Name for the store. Babel plugin can set it from the variable name, if not passed explicitly in config.
-   - `updateFilter` (_Function_): Function that prevents store from updating when it returns `false`. Accepts updated state as the first argument and current state as the second argument. Redundant for most cases since store already ensures that update is not `undefined` and not equal (`!==`) to current state _(since `effector 21.8.0`)_
-   - `serialize: 'ignore'`: Option to disable store serialization when [serialize](/en/api/effector/serialize) is called _(since `effector 22.0.0`)_
-   - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` – called on [serialize](/en/api/effector/serialize), transforms value to JSON value – primitive type or plain object/array. `read` – parse store state from JSON value, called on [fork](/en/api/effector/fork), if provided `values` is the result of `serialize` call.
-   - `domain`: (_Domain_): Domain to attach store to after creation.
-   - `skipVoid`: (_boolean_): Flag to control how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will interpret `undefined` as a "skip update" command and will do nothing.
 
-## Throws {#createStore-throws}
+### Throws {#methods-createStore-defaultState-throws}
 
-### unit call from pure function is not supported, use operators like sample instead {#createStore-throws-unit-call-from-pure}
+#### unit call from pure function is not supported, use operators like sample instead {#methods-createStore-defaultState-throws-unit-call-from-pure}
 
 > Since: effector 23.0.0
 
-Occurs when events or effects are called from [pure functions](/en/glossary#purity), like updateFilter:
+Occurs when events or effects are called from [pure functions](/en/explanation/glossary#purity), like updateFilter:
 
 ```ts
 const someHappened = createEvent<number>();
@@ -68,13 +60,13 @@ sample({
 });
 ```
 
-## Returns {#createStore-returns}
+### Returns {#methods-createStore-defaultState-returns}
 
 [_Store_](/en/api/effector/Store): New store
 
-## Examples {#createStore-examples}
+### Examples {#methods-createStore-defaultState-examples}
 
-### Basic Usage {#createStore-examples-basic}
+#### Basic {#methods-createStore-defaultState-examples-basic}
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -111,7 +103,46 @@ clearTodoList();
 
 [Try it](https://share.effector.dev/MNibrAFC)
 
-### Example with `updateFilter` {#createStore-examples-updateFilter}
+## `createStore(defaultState, config)` {#methods-createStore-defaultState-config}
+
+Method for creating a [store](/en/api/effector/Store) but with configuration.
+
+### Formulae {#methods-createStore-defaultState-config-formulae}
+
+```ts
+createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
+  name?: string
+  updateFilter?: (update: T, current: T) => boolean
+  skipVoid?: boolean
+  serialize?: 'ignore' | {
+          write: (state: State) => SerializedState
+          read: (json: SerializedState) => State
+        }
+}): StoreWritable<T>
+```
+
+### Arguments {#methods-createStore-defaultState-config-arguments}
+
+1. `defaultState` (_State_): Default state
+2. `config` (_Object_): Optional configuration
+   - `name` (_String_): Name for the store. Babel plugin can set it from the variable name, if not passed explicitly in config.
+   - `updateFilter` (_Function_): Function that prevents store from updating when it returns `false`. Accepts updated state as the first argument and current state as the second argument. Redundant for most cases since store already ensures that update is not `undefined` and not equal (`!==`) to current state _(since `effector 21.8.0`)_
+   - `serialize: 'ignore'`: Option to disable store serialization when [serialize](/en/api/effector/serialize) is called _(since `effector 22.0.0`)_
+   - `serialize` (_Object_): Configuration object to handle store state serialization in custom way. `write` – called on [serialize](/en/api/effector/serialize), transforms value to JSON value – primitive type or plain object/array. `read` – parse store state from JSON value, called on [fork](/en/api/effector/fork), if provided `values` is the result of `serialize` call.
+   - `domain`: (_Domain_): Domain to attach store to after creation.
+   - `skipVoid`: (_boolean_): Flag to control how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will interpret `undefined` as a "skip update" command and will do nothing.
+
+### Throws {#methods-createStore-defaultState-config-throws}
+
+The same behaviour like for regular [`createStore(defaultState)`](#methods-createStore-defaultState-throws).
+
+### Returns {#methods-createStore-defaultState-config-returns}
+
+[_Store_](/en/api/effector/Store): New store
+
+### Examples {#methods-createStore-defaultState-config-examples}
+
+#### With `updateFilter` {#methods-createStore-defaultState-examples-updateFilter}
 
 ```js
 import { createEvent, createStore, sample } from "effector";
@@ -148,7 +179,7 @@ punch(100); // No update as well
 
 [Try it](https://share.effector.dev/rtxfqObf)
 
-### Example with `serialize: ignore` {#createStore-examples-serializeIgnore}
+#### With `serialize: ignore` {#methods-createStore-defaultState-examples-serializeIgnore}
 
 ```js
 import { createEvent, createStore, serialize, fork, allSettled } from "effector";
@@ -193,7 +224,7 @@ console.log(actualValues);
 
 [Try it](https://share.effector.dev/aLKAHDOM)
 
-### Custom `serialize` configuration {#createStore-examples-customSerialize}
+#### Custom `serialize` configuration {#methods-createStore-defaultState-examples-customSerialize}
 
 ```ts
 import { createEvent, createStore, serialize, fork, allSettled } from "effector";

@@ -5,33 +5,39 @@ redirectFrom:
   - /docs/api/effector/createApi
 ---
 
-`createApi` is a shorthand for creating [events](/en/api/effector/Event) attached to [store](/en/api/effector/Store) by providing an object with [_reducers_](/en/explanation/glossary#reducer) for them. If source `store` belongs to some [domain](/en/api/effector/Domain) then new events will also belong to it
+```ts
+import { createApi } from "effector";
+```
 
-# `createApi(store, api)` {#createApi-store-api}
+`createApi` is a shortcut for generating [events](/en/api/effector/Event) connected to a [store](/en/api/effector/Store) by supplying an object with [_reducers_](/en/explanation/glossary#reducer) for these events. If the source `store` is part of a [domain](/en/api/effector/Domain), then the newly created events will also be within that domain.
 
-## Formulae {#createApi-store-api-formulae}
+# Methods {#methods}
+
+## `createApi(store, api)` {#methods-createApi-store-api}
+
+### Formulae {#methods-createApi-store-api-formulae}
 
 ```ts
 createApi(store, api): objectWithEvents
 ```
 
-## Arguments {#createApi-store-api-arguments}
+### Arguments {#methods-createApi-store-api-arguments}
 
 1. `store` [_Store_](/en/api/effector/Store)
-2. `api` (_Object_) Object with [_reducers_](/en/explanation/glossary#reducer)
+2. `api` (_Object_) An object with [_reducers_](/en/explanation/glossary#reducer)
 
-## Returns {#createApi-store-api-returns}
+### Returns {#methods-createApi-store-api-returns}
 
-(_Object_) Object with [events](/en/api/effector/Event)
+(_Object_) An object with [events](/en/api/effector/Event)
 
-## Examples {#createApi-store-api-examples}
+### Examples {#methods-createApi-store-api-examples}
 
 ```js
 import { createStore, createApi } from "effector";
 
 const $playerPosition = createStore(0);
 
-// create events and attach them to store
+// Creating events and attaching them to the store
 const api = createApi($playerPosition, {
   moveLeft: (pos, offset) => pos - offset,
   moveRight: (pos, offset) => pos + offset,

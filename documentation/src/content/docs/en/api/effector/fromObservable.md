@@ -5,27 +5,33 @@ redirectFrom:
   - /docs/api/effector/fromObservable
 ---
 
-# `fromObservable()` {#fromObservable}
+```ts
+import { fromObservable, type Observable } from "effector";
+```
+
+# Methods {#methods}
+
+## `fromObservable()` {#methods-fromObservable}
 
 Creates an event containing all items from an Observable.
 
-## Formulae {#fromObservable-formulae}
+### Formulae {#methods-fromObservable-formulae}
 
 ```ts
 fromObservable<T>(source: Observable<T>): Event<T>
 ```
 
-## Arguments {#fromObservable-arguments}
+### Arguments {#methods-fromObservable-arguments}
 
 1. `observable` (_Observable_)
 
-## Returns {#fromObservable-returns}
+### Returns {#methods-fromObservable-returns}
 
 [_Event_](/en/api/effector/Event): New event
 
-## Examples {#fromObservable-examples}
+### Examples {#methods-fromObservable-examples}
 
-### Basic use case {#fromObservable-examples-basic-use-case}
+#### Basic use case {#methods-fromObservable-examples-basic-use-case}
 
 ```js
 import { interval } from "rxjs";

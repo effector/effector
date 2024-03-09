@@ -5,38 +5,36 @@ redirectFrom:
   - /docs/api/effector/hydrate
 ---
 
-A companion method for [_serialize_](/en/api/effector/serialize). Hydrates provided values into corresponding stores within a provided domain or scope. The main purpose is an application state hydration on the client side after SSR.
-
-# `hydrate(domainOrScope, {values})` {#hydrate-domainOrScope-values}
-
-## Formulae {#hydrate-domainOrScope-values-formulae}
-
 ```ts
-hydrate(domainOrScope: Domain | Scope, { values: Map<Store<any>, any> | {[sid: string]: any} }): void
+import { hydrate } from "effector";
 ```
 
-## Arguments {#hydrate-domainOrScope-values-arguments}
+A companion method for [_serialize_](/en/api/effector/serialize). Hydrates provided values into corresponding stores within a provided domain or scope. The main purpose is an application state hydration on the client side after SSR.
 
-1. `domainOrScope`: [domain](/en/api/effector/Domain) or [scope](/en/api/effector/Scope) which will be filled with given `values`
-2. `values`: a mapping from store sids to store values or a Map where keys are [store](/en/api/effector/Store) objects and values contain initial store value
+# Methods {#methods}
+
+## `hydrate(domainOrScope, {values})` {#methods-hydrate-domainOrScope-values}
 
 :::warning
 You need to make sure that the store is created beforehand, otherwise, the hydration might fail. This could be the case if you keep store initialization/hydration scripts separate from stores' creation.
 :::
 
-## Throws {#hydrate-domainOrScope-values-throws}
+### Formulae {#methods-hydrate-domainOrScope-values-formulae}
 
-TBD
+```ts
+hydrate(domainOrScope: Domain | Scope, { values: Map<Store<any>, any> | {[sid: string]: any} }): void
+```
 
-## Returns {#hydrate-domainOrScope-values-returns}
+### Arguments {#methods-hydrate-domainOrScope-values-arguments}
+
+1. `domainOrScope`: [domain](/en/api/effector/Domain) or [scope](/en/api/effector/Scope) which will be filled with given `values`
+2. `values`: a mapping from store sids to store values or a Map where keys are [store](/en/api/effector/Store) objects and values contain initial store value
+
+### Returns {#methods-hydrate-domainOrScope-values-returns}
 
 `void`
 
-## Types {#hydrate-domainOrScope-values-types}
-
-TBD
-
-## Examples {#hydrate-domainOrScope-values-examples}
+### Examples {#methods-hydrate-domainOrScope-values-examples}
 
 Populate store with a predefined value
 
