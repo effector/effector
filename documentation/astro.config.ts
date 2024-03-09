@@ -39,7 +39,8 @@ export default defineConfig({
       [
         rehypeAutolinkHeadings,
         {
-          behavior: "prepend",
+          behavior: "append",
+          properties: { class: "href" },
         },
       ],
     ],
