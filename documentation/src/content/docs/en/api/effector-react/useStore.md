@@ -5,6 +5,10 @@ redirectFrom:
   - /docs/api/effector-react/useStore
 ---
 
+```ts
+import { useStore } from "effector-react";
+```
+
 React hook, which subscribes to a [store](/en/api/effector/Store) and returns its current value, so when the store is updated, the component will update automatically.
 
 :::warning{title="This is API is deprecated"}
@@ -12,41 +16,46 @@ React hook, which subscribes to a [store](/en/api/effector/Store) and returns it
 Prefer [`useUnit`](/api/effector-react/useUnit) hook instead.
 :::
 
-## Formulae {#useStore-formulae}
+# Methods {#methods}
+
+## `useStore($store): State` {#methods-useStore-store}
+
+### Formulae {#methods-useStore-store-formulae}
 
 ```ts
-useStore(store: Store<T>): T
+useStore($store: Store<State>): State
 ```
 
-### Arguments {#useStore-arguments}
+### Arguments {#methods-useStore-store-arguments}
 
-1. `store`: [Store](/en/api/effector/Store)
+1. `$store`: [Store](/en/api/effector/Store)
 
-### Returns {#useStore-returns}
+### Returns {#methods-useStore-store-returns}
 
 (_`State`_): The value from the store
 
-## Example {#useStore-example}
+### Examples {#methods-useStore-store-examples}
 
-```js
-import { createStore, createApi } from "effector";
-import { useStore } from "effector-react";
+```jsx
+import { createStore } from "effector";
+import { useStore, useEvent } from "effector-react";
 
 const $counter = createStore(0);
 
-const { increment, decrement } = createApi($counter, {
-  increment: (state) => state + 1,
-  decrement: (state) => state - 1,
+const { incrementClicked, decrementClicked } = createApi($counter, {
+  incrementClicked: (state) => state + 1,
+  decrementClicked: (state) => state - 1,
 });
 
 const App = () => {
   const counter = useStore($counter);
+  const [onIncrement, onDecrement] = useEvent([incrementClicked, decrementClicked]);
 
   return (
     <div>
       {counter}
-      <button onClick={increment}>Increment</button>
-      <button onClick={decrement}>Decrement</button>
+      <button onClick={onIncrement}>Increment</button>
+      <button onClick={onDecrement}>Decrement</button>
     </div>
   );
 };

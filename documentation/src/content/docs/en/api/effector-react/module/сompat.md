@@ -3,6 +3,10 @@ title: effector-react/compat
 description: Separate module of effector-react with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices)
 ---
 
+```ts
+import {} from "effector-react/compat";
+```
+
 The library provides a separate module with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices).
 
 :::warning{title="Bundler, Not Transpiler"}
@@ -46,9 +50,9 @@ export default defineConfig({
 
 </details>
 
-## Usage {#usage}
+# Usage {#usage}
 
-### Manual Usage {#usage-manual}
+## Manual Usage {#usage-manual}
 
 You can use it instead of the `effector-react` package if you need to support old browsers.
 
@@ -57,31 +61,24 @@ You can use it instead of the `effector-react` package if you need to support ol
 + import {useUnit} from 'effector-react/compat'
 ```
 
-### Automatic Replacement {#usage-automatic-replacement}
+## Automatic Replacement {#usage-automatic-replacement}
 
 However, you can set up your bundler to automatically replace `effector` with `effector/compat` in your code.
 
-#### Webpack {#usage-automatic-replacement-webpack}
-
-<details>
-<summary>Webpack Configuration Example</summary>
+### Webpack {#usage-automatic-replacement-webpack}
 
 ```js
 module.exports = {
   resolve: {
     alias: {
+      effector: "effector/compat",
       "effector-react": "effector-react/compat",
     },
   },
 };
 ```
 
-</details>
-
-#### Vite {#usage-automatic-replacement-vite}
-
-<details>
-<summary>Vite Configuration Example</summary>
+### Vite {#usage-automatic-replacement-vite}
 
 ```js
 import { defineConfig } from "vite";
@@ -89,10 +86,9 @@ import { defineConfig } from "vite";
 export default defineConfig({
   resolve: {
     alias: {
+      effector: "effector/compat",
       "effector-react": "effector-react/compat",
     },
   },
 });
 ```
-
-</details>

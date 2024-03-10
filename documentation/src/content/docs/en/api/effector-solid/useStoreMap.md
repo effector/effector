@@ -5,80 +5,75 @@ redirectFrom:
   - /docs/api/effector-solid/useStoreMap
 ---
 
-# `useStoreMap(store, fn)` {#useStoreMap-store-fn}
+```ts
+import { useStoreMap } from "effector-solid";
+```
+
+# Methods {#methods}
+
+## `useStoreMap($store, fn)` {#methods-useStoreMap-store-fn}
 
 Function, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change.
 
 Common use case: subscribe to changes in selected part of store only.
 
-## Formulae {#useStoreMap-store-fn-formulae}
+### Formulae {#methods-useStoreMap-store-fn-formulae}
 
 ```ts
-useStoreMap<State, Result>(
+useStoreMap(
+  $store: Store<State>,
+  fn: (state: State) => Result,
+): Accessor<Result>;
+```
+
+### Arguments {#methods-useStoreMap-store-fn-arguments}
+
+1. `$store`: Source [`Store<T>`](/en/api/effector/Store)
+2. `fn` (`(state: T) => Result`): Selector function to receive part of source store
+
+### Returns {#methods-useStoreMap-store-fn-returns}
+
+(`Result`)
+
+### Examples {#methods-useStoreMap-store-fn-examples}
+
+TBD
+
+## `useStoreMap(config)` {#methods-useStoreMap-config}
+
+### Formulae {#methods-useStoreMap-config-formulae}
+
+```ts
+useStoreMap({
   store: Store<State>,
-  fn: (state: State) => Result
-): Accessor<Result>
+  keys: any[],
+  fn: (state: State, keys: any[]) => Result,
+  updateFilter? (newResult, oldResult) => boolean,
+}): Result;
 ```
 
-## Arguments {#useStoreMap-store-fn-arguments}
-
-1. `store`: Source [store](/en/api/effector/Store)
-2. `fn` (_(state) => result_): Selector function to receive part of source store
-
-## Throws {#useStoreMap-store-fn-throws}
-
-TBD
-
-## Returns {#useStoreMap-store-fn-returns}
-
-(_Result_)
-
-## Types {#useStoreMap-store-fn-types}
-
-TBD
-
-## Examples {#useStoreMap-store-fn-examples}
-
-TBD
-
-# `useStoreMap(config)` {#useStoreMap-config}
-
-## Formulae {#useStoreMap-config-formulae}
-
-```ts
-useStoreMap({ store, keys, fn, updateFilter });
-```
-
-## Arguments {#useStoreMap-config-arguments}
+### Arguments {#methods-useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
    - `store`: Source [store](/en/api/effector/Store)
    - `keys` (_Array_): Will be passed to `fn` selector
    - `fn` (_(state, keys) => result_): Selector function to receive part of the source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore) option under the hood
+   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore#methods-createStore-defaultState-config-formulae) option under the hood
 
-## Throws {#useStoreMap-config-throws}
+### Returns {#methods-useStoreMap-config-returns}
 
-TBD
+(`Accessor<Result>`)
 
-## Returns {#useStoreMap-config-returns}
-
-`Accessor<Result>`
-
-## Types {#useStoreMap-config-types}
-
-TBD
-
-## Examples {#useStoreMap-config-examples}
+### Examples {#methods-useStoreMap-config-examples}
 
 This hook is very useful for working with lists, especially large ones.
 
-```js
+```jsx
 import { createStore } from "effector";
 import { useUnit, useStoreMap } from "effector-solid";
 import { For } from "solid-js/web";
 
-const data = [
+const usersRaw = [
   {
     id: 1,
     name: "Yung",
@@ -97,19 +92,19 @@ const data = [
   },
 ];
 
-const $users = createStore(data);
-const $ids = createStore(data.map(({ id }) => id));
+const $users = createStore(usersRaw);
+const $ids = createStore(usersRaw.map(({ id }) => id));
 
 const User = ({ id }) => {
   const user = useStoreMap({
     store: $users,
     keys: [id],
-    fn: (users, [userId]) => users.find(({ id }) => id === userId),
+    fn: (users, [userId]) => users.find(({ id }) => id === userId) ?? null,
   });
 
   return (
     <div>
-      <strong>[{user().id}]</strong> {user().name}
+      <strong>[{user()?.id}]</strong> {user()?.name}
     </div>
   );
 };

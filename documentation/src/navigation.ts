@@ -245,17 +245,13 @@ const effectorReact = [
         text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
         link: "/api/effector-react/useEvent",
       },
-      {
-        text: { en: "useProvidedScope" },
-        link: "/api/effector-react/useProvidedScope",
-      },
     ],
   },
   {
     text: { en: "Components", uz: "Komponentlar" },
     items: [
       {
-        text: { en: "Provider", uz: "Provayderlar" },
+        text: { en: "Provider", ru: "Provider", uz: "Provider" },
         link: "/api/effector-react/Provider",
       },
     ],
@@ -278,6 +274,29 @@ const effectorReact = [
     ],
   },
   {
+    text: { en: "Import map" },
+    items: [
+      {
+        text: { en: "effector-react/compat" },
+        link: "/api/effector-react/module/сompat",
+      },
+      {
+        text: { en: "effector-react/scope" },
+        link: "/api/effector-react/module/scope",
+      },
+    ],
+  },
+  {
+    text: { en: "Low-level API" },
+    collapsed: true,
+    items: [
+      {
+        text: { en: "useProvidedScope" },
+        link: "/api/effector-react/useProvidedScope",
+      },
+    ],
+  },
+  {
     text: { en: "HOC-like APIs", uz: "HOCsimon APIlar" },
     collapsed: true,
     items: [
@@ -292,19 +311,6 @@ const effectorReact = [
       {
         text: { en: "createStoreConsumer" },
         link: "/api/effector-react/createStoreConsumer",
-      },
-    ],
-  },
-  {
-    text: { en: "Import map" },
-    items: [
-      {
-        text: { en: "effector-react/compat" },
-        link: "/api/effector-react/module/сompat",
-      },
-      {
-        text: { en: "effector-react/scope" },
-        link: "/api/effector-react/module/scope",
       },
     ],
   },

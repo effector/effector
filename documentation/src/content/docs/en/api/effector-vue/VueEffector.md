@@ -6,20 +6,27 @@ redirectFrom:
   - /docs/api/effector-vue/vue-effector
 ---
 
+```ts
+import { VueEffector } from "effector-vue";
+```
+
 `effector-vue` plugin for vue 2
 
-## `VueEffector(Vue, options?)`
+# Methods {#methods}
 
-### Arguments
+## `VueEffector(Vue, options?)` {#methods-VueEffector-Vue-options}
+
+### Arguments {#methods-VueEffector-Vue-options-arguments}
 
 1. `Vue` (_class Vue_): Vue class
 2. `options` (_Object_): Plugin options
+   - TBD
 
-### Returns
+### Returns {#methods-VueEffector-Vue-options-returns}
 
 (_`void`_)
 
-### Example
+### Examples {#methods-VueEffector-Vue-options-examples}
 
 ```js
 import Vue from "vue";

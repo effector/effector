@@ -3,6 +3,10 @@ title: effector-react/scope
 description: Deprecated separate module of effector-react that enforces library to use Scope
 ---
 
+```ts
+import {} from "effector-react/scope";
+```
+
 :::warning{title="Deprecated"}
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends using main module of `effector-react` instead.
 :::
@@ -17,12 +21,14 @@ You can use this module in the same way as [effector-react](/en/api/effector-rea
 // main.js
 import { fork } from "effector";
 import { Provider } from "effector-react/scope";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 
 const scope = fork();
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+root.render(
   <Provider value={scope}>
     <Application />
   </Provider>,

@@ -6,20 +6,21 @@ redirectFrom:
   - /docs/api/effector-vue/useStore
 ---
 
-## `useStore(store)` {#useStore-store}
+```ts
+import { useStore } from "effector-vue/composition";
+```
 
-A hook function, which subscribes to watcher, that observes changes in the current **readonly**` store, so when recording results, the component will update automatically.
-You can mutate the store value **only via [createEvent](/en/api/effector/createEvent)**.
+A hook function, which subscribes to watcher, that observes changes in the current **readonly** store, so when recording results, the component will update automatically. You can mutate the store value **only via [createEvent](/en/api/effector/createEvent)**. Designed for vue 3
 
-Designed for vue 3
+## `useStore($store)` {#useStore-store}
 
 ### Arguments {#useStore-store-arguments}
 
-1. `store` (_Store_)
+1. `$store` ([`Store<State>`](/en/api/effector/Store))
 
 ### Returns {#useStore-store-returns}
 
-_readonly(State)_
+(`readonly(State)`)
 
 ### Example {#useStore-store-example}
 
@@ -29,9 +30,9 @@ import { useStore } from "effector-vue/composition";
 
 const $counter = createStore(0);
 
-const { increment, decrement } = createApi($counter, {
-  increment: (state) => state + 1,
-  decrement: (state) => state - 1,
+const { incremented, decremented } = createApi($counter, {
+  incremented: (count) => count + 1,
+  decremented: (count) => count - 1,
 });
 
 export default {
@@ -40,8 +41,8 @@ export default {
 
     return {
       counter,
-      increment,
-      decrement,
+      incremented,
+      decremented,
     };
   },
 };

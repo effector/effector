@@ -5,6 +5,10 @@ redirectFrom:
   - /docs/api/effector-react/useEvent
 ---
 
+```ts
+import { useEvent } from "effector-react";
+```
+
 :::info{title="since"}
 `useEvent` introduced in [effector-react 20.9.0](https://changelog.effector.dev/#effector-20-9-0)
 :::
@@ -14,7 +18,6 @@ redirectFrom:
 Prefer [`useUnit`](/api/effector-react/useUnit) hook instead.
 :::
 
-
 Bind event to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.<br/>
 Only `effector-react/scope` version works this way, `useEvent` of `effector-react` is a no-op and does not require `Provider` with scope.
 
@@ -22,22 +25,26 @@ Only `effector-react/scope` version works this way, `useEvent` of `effector-reac
 Useful only if you have server-side rendering or writing tests for React-components.
 :::
 
-## `useEvent(unit)` {#useEvent-unit}
+# Methods {#methods}
 
-### Arguments {#useEvent-unit-arguments}
+## `useEvent(unit)` {#methods-useEvent-unit}
+
+### Arguments {#methods-useEvent-unit-arguments}
 
 1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be bound to current `scope`
 
-### Returns {#useEvent-unit-returns}
+### Returns {#methods-useEvent-unit-returns}
 
 (Function): Function to pass to event handlers. Will trigger a given unit in the current scope.
 
-### Example {#useEvent-unit-example}
+### Examples {#methods-useEvent-unit-examples}
+
+#### Basic Usage {#methods-useEvent-unit-examples-basic}
 
 ```jsx
 import ReactDOM from "react-dom";
-import {createEvent, createStore, fork} from "effector";
-import {useStore, useEvent, Provider} from "effector-react";
+import { createEvent, createStore, fork } from "effector";
+import { useStore, useEvent, Provider } from "effector-react";
 
 const incremented = createEvent();
 const $count = createStore(0);
@@ -68,22 +75,24 @@ ReactDOM.render(
 
 [Try it](https://share.effector.dev/GyiJvLdo)
 
-## `useEvent(shape)` {#useEvent-shape}
+## `useEvent(shape)` {#methods-useEvent-shape}
 
-### Arguments {#useEvent-shape-arguments}
+### Arguments {#methods-useEvent-shape-arguments}
 
 1. `shape` Object or array of ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Events or effects as values which will be bound to the current `scope`
 
-### Returns {#useEvent-shape-returns}
+### Returns {#methods-useEvent-shape-returns}
 
 (Object or Array): List of functions with the same names or keys as an argument to pass to event handlers. Will trigger a given unit in the current scope.
 
-### Example {#useEvent-shape-example}
+### Examples {#methods-useEvent-shape-examples}
+
+#### Object Usage {#methods-useEvent-shape-examples-object}
 
 ```jsx
 import ReactDOM from "react-dom";
-import {createStore, createEvent, fork} from "effector";
-import {useStore, useEvent, Provider} from "effector-react";
+import { createStore, createEvent, fork } from "effector";
+import { useStore, useEvent, Provider } from "effector-react";
 
 const incremented = createEvent();
 const decremented = createEvent();

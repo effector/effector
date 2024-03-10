@@ -5,11 +5,15 @@ redirectFrom:
   - /docs/api/effector/split
 ---
 
+```ts
+import { split } from "effector";
+```
+
 Choose one of cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions. Works like pattern matching for payload values and external stores
 
-## Concepts
+# Concepts {#concepts}
 
-### Case mode
+## Case mode {#concepts-case-mode}
 
 Mode in which target case is selected by the name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which kept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one).
 
@@ -18,17 +22,17 @@ Mode in which target case is selected by the name of its field. Case could be se
 - [case store](/en/api/effector/split#case-store)
 - [case function](/en/api/effector/split#case-function)
 
-### Matching mode
+## Matching mode {#concepts-matching-mode}
 
 Mode in which each case is sequentially matched by stores and functions in fields of `match` object.
 If one of the fields got `true` from store value or return of function, then the data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
 
 **See also**:
 
-- [matching store](/en/api/effector/split#matcher-store)
-- [matching function](/en/api/effector/split#matcher-function)
+- [matcher store](/en/api/effector/split#matcher-store)
+- [matcher function](/en/api/effector/split#matcher-function)
 
-### Case store
+## Case store {#concepts-case-store}
 
 Store with a string which will be used to choose the case by its name. Placed directly in `match` field.
 
@@ -45,7 +49,7 @@ split({
 })
 ```
 
-### Case function
+## Case function {#concepts-case-function}
 
 String-returning function which will be called with value from `source` to choose the case by its name. Placed directly in `match` field, [should be **pure**](/en/explanation/glossary#purity)
 
@@ -62,7 +66,7 @@ split({
 })
 ```
 
-### Matcher store
+## Matcher store {#concepts-matcher-store}
 
 Boolean store which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher functions](/en/api/effector/split#matcher-function)
 
@@ -82,7 +86,7 @@ split({
 })
 ```
 
-### Matcher function
+## Matcher function {#concepts-matcher-function}
 
 :::info
 Case store, case function and matcher store are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
@@ -106,11 +110,15 @@ split({
 })
 ```
 
-## `split` with cases
+# Methods {#methods}
+
+## `split({ source, match, cases })` {#methods-split-source-match-cases}
 
 :::info{title="since"}
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 :::
+
+### Formulae {#methods-split-source-match-cases-formulae}
 
 ```ts
 split({ source, match, cases });
@@ -153,17 +161,19 @@ split({
 })
 ```
 
-**Arguments**
+### Arguments {#methods-split-source-match-cases-arguments}
 
 - `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
 - `match`: Single [store with string](/en/api/effector/split#case-store), single [function which returns string](/en/api/effector/split#case-function) or object with [boolean stores](/en/api/effector/split#matching-store) and [functions which returns boolean](/en/api/effector/split#matching-function)
 - `cases`: Object with [units](/en/explanation/glossary#common-unit) to which data will be passed from `source` after case selection
 
-**Returns**
+### Returns {#methods-split-source-match-cases-returns}
 
-_void_
+`void`
 
-#### Example 1
+### Examples {#methods-split-source-match-cases-examples}
+
+#### Basic {#methods-split-source-match-cases-examples-basic}
 
 ```js
 import { split, createEffect, createEvent } from "effector";
@@ -205,7 +215,7 @@ messageReceived({
 
 [Try it](https://share.effector.dev/W6VYZbfH)
 
-#### Example 2
+#### Direct match {#methods-split-source-match-cases-examples-direct-match}
 
 You can match directly to store api as well:
 
@@ -252,26 +262,30 @@ messageReceived({
 
 [Try it](https://share.effector.dev/32FNNk8H)
 
-## `split` without explicit cases
+## `split(source, match)` {#methods-split-source-match}
 
 :::info{title="since"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
+### Formulae {#methods-split-source-match-formulae}
+
 ```ts
 split(source, match);
 ```
 
-**Arguments**
+### Arguments {#methods-split-source-match-arguments}
 
 1. `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
 2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
 
-**Returns**
+### Returns {#methods-split-source-match-returns}
 
 (Object) – Object, having keys, defined in `match` argument, plus `__`(two underscores) – which stands for `default` (no matches met) case.
 
-#### Example 1
+### Examples {#methods-split-source-match-examples}
+
+#### Basic {#methods-split-source-match-examples-basic}
 
 ```js
 import { createEvent, split } from "effector";
@@ -309,7 +323,7 @@ message({ user: "unregistered", text: "hi" });
 Only the first met match will trigger resulting event
 :::
 
-#### Example 2
+#### Another {#methods-split-source-match-examples-another}
 
 ```js
 import { createEvent, split } from "effector";
@@ -335,19 +349,25 @@ message("Hi!");
 
 [Try it](https://share.effector.dev/ke2tM78I)
 
-## `split` with `clock`
+## `split({ source, clock?, match, cases })` {#methods-split-source-clock-match-cases}
 
 :::info{title="since"}
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
-It works the same as [split with cases](/en/api/effector/split#split-with-cases), however computations in `split` will be started after `clock` is triggered.
+It works the same as [split with cases](/en/api/effector/split#methods-split-source-match-cases), however computations in `split` will be started after `clock` is triggered.
+
+### Formulae {#methods-split-source-clock-match-cases-formulae}
 
 ```js
 split({source, clock?, match, cases})
 ```
 
-#### Example
+### Arguments {#methods-split-source-clock-match-cases-arguments}
+
+TBD
+
+### Examples {#methods-split-source-clock-match-cases-examples}
 
 ```js
 const options = ["save", "delete", "forward"];

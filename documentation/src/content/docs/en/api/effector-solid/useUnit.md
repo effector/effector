@@ -6,36 +6,53 @@ redirectFrom:
   - /docs/api/effector-solid/useUnit
 ---
 
+```ts
+import { useUnit } from "effector-solid";
+```
+
 Binds effector stores to the Solid reactivity system or, in the case of events/effects – binds to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
 Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid` is no-op for events and does not require `Provider` with scope.
 
-## `useUnit(unit)` {#useUnit-unit}
+# Methods {#methods}
 
-### Arguments {#useUnit-unit-arguments}
+## `useUnit(unit)` {#methods-useUnit-unit}
 
-1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be bound to current `scope`
+### Arguments {#methods-useUnit-unit-arguments}
 
-### Returns {#useUnit-unit-returns}
+```ts
+useUnit(event: EventCallable<T>): (payload: T) => T;
+useUnit(effect: Effect<Params, Done, any>): (payload: Params) => Promise<Done>;
+```
 
-(Function): Function to pass to event handlers. Will trigger the given unit in current scope
+### Arguments {#methods-useUnit-unit-arguments}
 
-### Example {#useUnit-unit-example}
+1. `unit` ([`EventCallable<T>`](/en/api/effector/Event#eventCallable) or [`Effect<Params, Done, Fail>`](/en/api/effector/Effect)): Event or effect which will be bound to current `scope`.
+
+### Returns {#methods-useUnit-unit-returns}
+
+(`Function`): Function to pass to event handlers. Will trigger the given unit in the current scope.
+
+### Example {#methods-useUnit-unit-example}
+
+A basic Solid component using `useUnit` with events and stores.
 
 ```jsx
 import { render } from "solid-js/web";
 import { createEvent, createStore, fork } from "effector";
-import { useUnit, Provider } from "effector-solid/scope";
+import { useUnit, Provider } from "effector-solid";
 
-const inc = createEvent();
-const $count = createStore(0).on(inc, (x) => x + 1);
+const incremented = createEvent();
+const $count = createStore(0);
+
+$count.on(incremented, (count) => count + 1);
 
 const App = () => {
-  const [count, incFn] = useUnit([$count, inc]);
+  const [count, handleIncrement] = useUnit([$count, incremented]);
 
   return (
     <>
-      <p>Count: {count}</p>
-      <button onClick={() => incFn()}>increment</button>
+      <p>Count: {count()}</p>
+      <button onClick={() => handleIncrement()}>Increment</button>
     </>
   );
 };
@@ -52,80 +69,95 @@ render(
 );
 ```
 
-## `useUnit(store)` {#useUnit-store}
+## `useUnit(store)` {#methods-useUnit-store}
 
-### Arguments {#useUnit-store-arguments}
+### Formulae {#methods-useUnit-store-formulae}
 
-1. `store` effector ([_Store_](/en/api/effector/Store))
+```ts
+useUnit($store: Store<State>): Accessor<State>;
+```
 
-### Returns {#useUnit-store-returns}
+### Arguments {#methods-useUnit-store-arguments}
 
-Accessor, which will subscribe to store state
+1. `$store` effector ([_Store_](/en/api/effector/Store)).
 
-### Example {#useUnit-store-example}
+### Returns {#methods-useUnit-store-returns}
 
-```js
+(`Accessor<State>`) which will subscribe to store state.
+
+### Example {#methods-useUnit-store-example}
+
+```jsx
 import { createStore, createApi } from "effector";
 import { useUnit } from "effector-solid";
 
 const $counter = createStore(0);
 
-const { increment, decrement } = createApi($counter, {
-  increment: (state) => state + 1,
-  decrement: (state) => state - 1,
+const { incremented, decremented } = createApi($counter, {
+  incremented: (count) => count + 1,
+  decremented: (count) => count - 1,
 });
 
 const App = () => {
   const counter = useUnit($counter);
+  const [handleIncrement, handleDecrement] = useUnit([incremented, decremented]);
 
   return (
     <div>
-      {counter}
-      <button onClick={increment}>Increment</button>
-      <button onClick={decrement}>Decrement</button>
+      {counter()}
+      <button onClick={incremented}>Increment</button>
+      <button onClick={decremented}>Decrement</button>
     </div>
   );
 };
 ```
 
-## `useUnit(shape)`
+## `useUnit(shape)` {#methods-useUnit-shape}
 
-### Arguments
+### Formulae {#methods-useUnit-shape-formulae}
 
-1. `shape` Object or array of ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) or [_Store_](/en/api/effector/Store)): Events or effects or stores as accessors which will be bound to the current `scope`
+```ts
+useUnit({ a: Store<A>, b: Event<B>, ... }): { a: Accessor<A>, b: (payload: B) => B; ... }
 
-**Returns**
+useUnit([Store<A>, Event<B>, ... ]): [Accessor<A>, (payload: B) => B, ... ]
+```
 
-(Object or Array):
+### Arguments {#methods-useUnit-shape-arguments}
 
-- if event or effect: functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope _Note: events or effects will be bound **only** if `useUnit` is imported from `effector-solid/scope`_
-- if store: accessor signals which will subscribe to the store state
+1. `shape` Object or array of ([`EventCallable`](/en/api/effector/Event#eventCallable), [`Effect`](/en/api/effector/Effect), or [`Store`](/en/api/effector/Store)): Events, or effects, or stores as accessors which will be bound to the current `scope`.
 
-### Example
+### Returns {#methods-useUnit-shape-returns}
+
+(`Object` or `Array`):
+
+- If `EventCallable` or `Effect`: functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope _Note: events or effects will be bound **only** if `useUnit` is imported from `effector-solid/scope`_.
+- If `Store`: accessor signals which will subscribe to the store state.
+
+### Examples {#methods-useUnit-shape-examples}
 
 ```jsx
 import { render } from "solid-js/web";
 import { createStore, createEvent, fork } from "effector";
 import { useUnit, Provider } from "effector-solid/scope";
 
-const inc = createEvent();
-const dec = createEvent();
+const incremented = createEvent();
+const decremented = createEvent();
 
 const $count = createStore(0)
-  .on(inc, (x) => x + 1)
-  .on(dec, (x) => x - 1);
+  .on(incremented, (count) => count + 1)
+  .on(decremented, (count) => count - 1);
 
 const App = () => {
   const count = useUnit($count);
-  const handler = useUnit({ inc, dec });
+  const on = useUnit({ incremented, decremented });
   // or
-  const [a, b] = useUnit([inc, dec]);
+  const [a, b] = useUnit([incremented, decremented]);
 
   return (
     <>
-      <p>Count: {count}</p>
-      <button onClick={() => handler.inc()}>increment</button>
-      <button onClick={() => handler.dec()}>decrement</button>
+      <p>Count: {count()}</p>
+      <button onClick={() => on.incremented()}>Increment</button>
+      <button onClick={() => on.decremented()}>Decrement</button>
     </>
   );
 };

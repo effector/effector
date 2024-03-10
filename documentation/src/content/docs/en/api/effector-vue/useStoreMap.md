@@ -5,60 +5,70 @@ redirectFrom:
   - /docs/api/effector-vue/useStoreMap
 ---
 
+```ts
+import { useStoreMap } from "effector-vue/composition";
+```
+
 Function, which subscribes to [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change
 
-## useStoreMap(store, fn) {#useStoreMap-fn}
+# Methods {#methods}
 
-Common use case: subscribe to changes in selected part of store only
+## `useStoreMap($store, fn)` {#methods-useStoreMap-store-fn}
 
-### Formulae {#useStoreMap-fn-formulae}
+### Formulae {#methods-useStoreMap-store-fn-formulae}
 
 ```ts
-useStoreMap<State, Result>(
-  store: Store<State>,
-  fn: (state: State) => Result
-): ComputedRef<Result>
+useStoreMap(
+  $store: Store<State>,
+  fn: (state: State) => Result,
+): ComputedRef<Result>;
 ```
 
-### Arguments {#useStoreMap-fn-arguments}
+### Arguments {#methods-useStoreMap-store-fn-arguments}
 
-1. `store`: Source [store](/en/api/effector/Store)
+1. `$store`: Source [`Store<State>`](/en/api/effector/Store)
 2. `fn` (_(state) => result_): Selector function to receive part of source store
 
-### Returns {#useStoreMap-fn-returns}
+### Returns {#methods-useStoreMap-store-fn-returns}
 
-(_Result_)
+(`ComputedRef<Result>`)
 
-## useStoreMap(config) {#useStoreMap-config}
+## `useStoreMap(config)` {#methods-useStoreMap-config}
 
-### Formulae {#useStoreMap-config-formulae}
+### Formulae {#methods-useStoreMap-config-formulae}
 
 ```ts
-useStoreMap({ store, keys, fn });
+useStoreMap({
+  store: Store<State>,
+  keys?: () => Keys,
+  fn: (state: State, keys: Keys) => Result,
+  defaultValue?: Result,
+}): ComputedRef<Result>;
 ```
 
-### Arguments {#useStoreMap-config-arguments}
+### Arguments {#methods-useStoreMap-config-arguments}
 
 1. `params` (_Object_): Configuration object
    - `store`: Source [store](/en/api/effector/Store)
-   - `keys` (_Function_): Will be passed to `fn` selector
-   - `fn` (_(state, keys) => result_): Selector function to receive part of source store
+   - `keys` (`() => Keys`): Will be passed to `fn` selector
+   - `fn` (`(state: State, keys: Keys) => Result`): Selector function to receive part of source store
+   - `defaultValue` (`Result`): Optional default value if `fn` returned `undefined`
 
-### Returns {#useStoreMap-config-returns}
+### Returns {#methods-useStoreMap-config-returns}
 
-(_ComputedRef<Result\>_)
+(`ComputedRef<Result>`)
 
-### Example {#useStoreMap-config-example}
+### Examples {#methods-useStoreMap-config-examples}
 
 This hook is very useful for working with lists, especially with large ones
 
-##### User.vue
+##### User.vue {#methods-useStoreMap-config-example-userVue}
 
 ```js
 import { createStore } from "effector";
 import { useUnit, useStoreMap } from "effector-vue/composition";
 
-const data = [
+const $users = createStore([
   {
     id: 1,
     name: "Yung",
@@ -75,9 +85,7 @@ const data = [
     id: 4,
     name: "Sesh",
   },
-];
-
-const $users = createStore(data);
+]);
 
 export default {
   props: {
@@ -89,15 +97,19 @@ export default {
       keys: () => props.id,
       fn: (users, userId) => users.find(({ id }) => id === userId),
     });
+
+    return { user };
   },
 };
 ```
 
-```html
-<div><strong>[{user.id}]</strong> {user.name}</div>
+```jsx
+<div>
+  <strong>[{user.id}]</strong> {user.name}
+</div>
 ```
 
-##### App.vue
+##### App.vue {#methods-useStoreMap-config-examples-appVue}
 
 ```js
 const $ids = createStore(data.map(({ id }) => id));
@@ -111,7 +123,7 @@ export default {
 };
 ```
 
-```html
+```jsx
 <div>
   <User v-for="id in ids" :key="id" :id="id" />
 </div>

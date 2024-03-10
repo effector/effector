@@ -6,31 +6,50 @@ redirectFrom:
   - /docs/api/effector-react/useGate
 ---
 
-## `useGate(GateComponent, props)` {#useGate-props}
+```ts
+import { useGate } from "effector-react";
+```
+
+# Methods {#methods}
+
+## `useGate(Gate, props?)` {#methods-useGate-Gate-props}
 
 Hook for passing data to [_Gate_](/en/api/effector-react/Gate).
 
-### Arguments {#useGate-props-arguments}
+### Formulae {#methods-useGate-Gate-props-formulae}
 
-1. `GateComponent` (_Gate_)
-2. `props` (_Props_)
+```ts
+const CustomGate: Gate<T>;
 
-### Returns {#useGate-props-returns}
+useGate(CustomGate, props?: T): void;
+```
 
-(_`void`_)
+### Arguments {#methods-useGate-Gate-props-arguments}
 
-## Example {#useGate-example}
+1. `Gate` ([`Gate<T>`](/en/api/effector-react/Gate))
+2. `props` (`T`)
+
+### Returns {#methods-useGate-Gate-props-returns}
+
+(`void`)
+
+### Examples {#methods-useGate-Gate-props-examples}
+
+#### Basic {#methods-useGate-Gate-props-examples-basic}
 
 ```js
 import { createGate, useGate } from "effector-react";
 import { Route } from "react-router";
 
-const Page = createGate("page");
-Page.state.watch(({ match }) => {
+const PageGate = createGate("page");
+
+PageGate.state.watch(({ match }) => {
   console.log(match);
 });
+
 const Home = (props) => {
-  useGate(Page, props);
+  useGate(PageGate, props);
+
   return <section>Home</section>;
 };
 

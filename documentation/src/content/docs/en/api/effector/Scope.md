@@ -5,20 +5,16 @@ redirectFrom:
   - /docs/api/effector/scope
 ---
 
-# `Scope` {#scope}
+```ts
+import { type Scope } from "effector";
+```
 
 `Scope` is a fully isolated instance of application.
 The primary purpose of scope includes SSR (Server-Side Rendering) but is not limited to this use case. A `Scope` contains an independent clone of all units (including connections between them) and basic methods to access them.
 
 A `Scope` can be created using [fork](/en/api/effector/fork).
 
-```ts
-interface Scope {
-  getState<T>(store: Store<T>): T;
-}
-```
-
-## Imperative effects calls with scope {#scope-imperative-effect-calls}
+## Imperative effects calls with scope {#scope-imperativeEffectCalls}
 
 When making imperative effect calls within effect handlers, it is supported but **not** within `watch` functions. For effect handlers that call other effects, ensure to only call effects, not common asynchronous functions. Furthermore, effect calls should be awaited:
 
@@ -59,25 +55,26 @@ const sendWithAuthFx = createEffect(async () => {
 
 For scenarios where an effect might call another effect or perform asynchronous computations, but not both, consider utilizing the [attach](/en/api/effector/attach) method instead for more succinct imperative calls.
 
-# Scope methods {#scope-methods}
+# Methods {#methods}
 
-## `.getState($store)` {#scope-getState}
+## `.getState($store)` {#methods-getState}
 
 Returns the value of a store in a given `Scope`.
 
-### Formulae {#scope-getState-formulae}
+### Formulae {#methods-getState-formulae}
 
-TBD
+```ts
+const scope: Scope;
+const $value: Store<T> | StoreWritable<T>;
 
-### Returns {#scope-getState-returns}
+const value: T = scope.getState($value);
+```
 
-TBD
+### Returns {#methods-getState-returns}
 
-### Types {#scope-getState-types}
+`T` the value of the store
 
-TBD
-
-### Examples {#scope-getState-examples}
+### Examples {#methods-getState-examples}
 
 Create two instances of an application, trigger events in them, and test the `$counter` store value in both instances:
 

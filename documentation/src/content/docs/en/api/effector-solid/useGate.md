@@ -6,35 +6,49 @@ redirectFrom:
   - /docs/api/effector-solid/useGate
 ---
 
-# `useGate(GateComponent, props)` {#useGate-props}
+```ts
+import { useGate } from "effector-solid";
+```
 
 Function for passing data to [_Gate_](/en/api/effector-solid/Gate).
 
-## Arguments {#useGate-props-arguments}
+# Methods {#methods}
 
-1. `GateComponent` (_Gate_)
+## `useGate(Gate, props)` {#methods-useGate-Gate-props}
+
+### Formulae {#methods-useGate-Gate-props-formulae}
+
+```ts
+useGate(Gate: Gate<Props>, props: Props): void;
+```
+
+### Arguments {#methods-useGate-Gate-props-arguments}
+
+1. `Gate` ([`Gate<Props>`](/en/api/effector-solid/Gate))
 2. `props` (_Props_)
 
-## Returns {#useGate-props-returns}
+### Returns {#methods-useGate-Gate-props-returns}
 
-(_`void`_)
+(`void`)
 
-## Examples {#useGate-props-examples}
+### Examples {#methods-useGate-Gate-props-examples}
 
-### Basic Usage {#useGate-props-examples-basic-usage}
+#### Basic Usage {#methods-useGate-Gate-props-examples-basic-usage}
 
-```js
+```jsx
 import { createGate, useGate } from "effector-solid";
 import { Route, Routes } from "solid-app-router";
 
-const Page = createGate("page");
-Page.state.watch(({ match }) => {
-  console.log(match);
-});
+const PageGate = createGate("page");
+
 const Home = (props) => {
-  useGate(Page, props);
+  useGate(PageGate, props);
   return <section>Home</section>;
 };
+
+PageGate.state.watch(({ match }) => {
+  console.log(match);
+});
 
 const App = () => (
   <Routes>

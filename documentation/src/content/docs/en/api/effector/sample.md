@@ -5,13 +5,19 @@ redirectFrom:
   - /docs/api/effector/sample
 ---
 
-# `sample({ source?, clock?, filter?, fn?, target? })` {#sample}
+```ts
+import { sample } from "effector";
+```
+
+# Methods {#methods}
+
+# `sample({ source?, clock?, filter?, fn?, target? })` {#methods-sample-config}
 
 This method can be used for linking two nodes, resulting in the third one, which will fire only upon the `clock` node trigger.
 
 Quite a common case, when you need to handle an event with some store's state. Instead of using `store.getState()`, which may cause race conditions and inconsistency of state, it is more suitable to use the `sample` method.
 
-## Formulae {#sample-formulae}
+## Formulae {#methods-sample-config-formulae}
 
 ```ts
 sample({ source?, clock?, filter?, fn?, target?}): target
@@ -24,13 +30,13 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
-## Schema {#sample-schema}
+## Schema {#methods-sample-config-schema}
 
 ![](/images/sample-visualization.gif)
 
-## Types {#sample-types}
+## Types {#methods-sample-config-types}
 
-### Type of the created `target` {#sample-types-target}
+### Type of the created `target` {#methods-sample-config-types-target}
 
 If `target` is not passed to `sample()` call, it will be created internally. The type of unit is described in the table below:
 
@@ -58,13 +64,13 @@ const event = sample({ clock: event, source: $store });
 // Because not all arguments are stores.
 ```
 
-# `sample({clock?, source, filter?, fn?, target?, greedy?})` {#sample-greedy}
+# `sample({clock?, source, filter?, fn?, target?, greedy?})` {#methods-sample-greedy}
 
-## Formulae {#sample-greedy-formulae}
+## Formulae {#methods-sample-greedy-formulae}
 
 TBD
 
-## Arguments {#sample-greedy-arguments}
+## Arguments {#methods-sample-greedy-arguments}
 
 `params` (_Object_): Configuration object
 
@@ -82,7 +88,7 @@ TBD
   - If event or effect: call given event or effect upon `clock` is triggered
   - If store: update given store upon `clock` is triggered
   - If array of units: trigger every given unit upon `clock` is triggered
-  - If not passed: new unit will be created under the hood and will be returned as a result of the `sample()` call. Type of created target is described [in table beyond](/en/api/effector/sample#type-of-the-created-target)
+  - If not passed: new unit will be created under the hood and will be returned as a result of the `sample()` call. Type of created target is described [in table beyond](/en/api/effector/sample#sample-types-target)
 - `filter?` _(Function or [Store](/en/api/effector/Store))_ `((sourceData, clockData) => result): boolean | Store<boolean>`: If returns value of the function or store contains `true` continue execution otherwise cancel
 - `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](/en/explanation/glossary#purity). If not passed, data from `source` will be passed to `target` as it is
 - `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to `clock`, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
@@ -97,11 +103,11 @@ Use `batch` instead of `greedy`.
 Array of units in `target` are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-## Returns {#sample-greedy-returns}
+## Returns {#methods-sample-greedy-returns}
 
-([_Event_](/en/api/effector/Event) | [_Store_](/en/api/effector/Store)) - Unit, which fires/updates upon `clock` is triggered, if `source` is not passed. [The type of returned unit depends on the types of `clock` and `source`](#type-of-the-created-target).
+([_Event_](/en/api/effector/Event) | [_Store_](/en/api/effector/Store)) - Unit, which fires/updates upon `clock` is triggered, if `source` is not passed. [The type of returned unit depends on the types of `clock` and `source`](#sample-types-target).
 
-## Examples {#sample-greedy-examples}
+## Examples {#methods-sample-greedy-examples}
 
 ```js
 import { createStore, createEvent, createEffect, sample } from "effector";
@@ -150,7 +156,7 @@ TBD
 **Returns**
 
 ([_Event_](/en/api/effector/Event) | [_Store_](/en/api/effector/Store)) – Unit, which fires/updates upon `clock` is triggered, if `source` is not passed.
-[The type of returned unit depends on the types of `clock` and `source`](#type-of-the-created-target).
+[The type of returned unit depends on the types of `clock` and `source`](#sample-types-target).
 
 ## Examples {#sample-sourceUnit-clockUnit-fn-examples}
 
@@ -186,7 +192,7 @@ submitForm(12345678);
 
 [Try it](https://share.effector.dev/WO6UT8bV)
 
-# `sample({name?})` {#sample-name}
+## `sample({name?})` {#sample-name}
 
 :::info{title="since"}
 [effector 20.4.0](https://changelog.effector.dev/#effector-20-4-0)
