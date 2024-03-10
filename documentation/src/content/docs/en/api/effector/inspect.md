@@ -13,13 +13,13 @@ Special API methods designed to handle debugging and monitoring use cases withou
 
 Useful to create developer tools and production monitoring and observability instruments.
 
-# Inspect API {#inspect-api}
+# Inspect API (#inspect-api)
 
 Allows us to track any computations that have happened in the effector's kernel.
 
-## `inspect()` {#inspect-api-inspect}
+## `inspect()` (#inspect-api-inspect)
 
-### Example {#inspect-api-inspect-example}
+### Example (#inspect-api-inspect-example)
 
 ```ts
 import { inspect, type Message } from "effector/inspect";
@@ -80,11 +80,11 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 // [store] $count 1337
 ```
 
-## Tracing {#inspect-api-tracing}
+## Tracing (#inspect-api-tracing)
 
 Adding `trace: true` setting allows looking up previous computations, that led to this specific one. It is useful to debug the specific reason for some events happening
 
-### Example {#inspect-api-tracing-example}
+### Example (#inspect-api-tracing-example)
 
 ```ts
 import { fork, allSettled } from "effector";
@@ -119,11 +119,11 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 // ☝️ traces are provided in backwards order, because we are looking back in time
 ```
 
-## Errors {#inspect-api-errors}
+## Errors (#inspect-api-errors)
 
 Effector does not allow exceptions in pure functions. In such case, branch computation is stopped and an exception is logged. There is also a special message type in such case:
 
-### Example {#inspect-api-errors-example}
+### Example (#inspect-api-errors-example)
 
 ```ts
 inspect({
@@ -136,11 +136,11 @@ inspect({
 });
 ```
 
-# Inspect Graph {#inspect-graph}
+# Inspect Graph (#inspect-graph)
 
 Allows us to track declarations of units, [factories](/en/api/effector/babel-plugin#factories), and [regions](/en/api/effector/withRegion).
 
-## Example {#inspect-graph-example}
+## Example (#inspect-graph-example)
 
 ```ts
 import { createStore } from "effector";
@@ -160,11 +160,11 @@ const $count = createStore(0);
 // logs "store $count" to console
 ```
 
-## `withRegion` {#inspect-graph-withRegion}
+## `withRegion` (#inspect-graph-withRegion)
 
 Meta-data provided via region's root node is available on declaration.
 
-### Example {#inspect-graph-withRegion-example}
+### Example (#inspect-graph-withRegion-example)
 
 ```ts
 import { createNode, withRegion, createStore } from "effector";

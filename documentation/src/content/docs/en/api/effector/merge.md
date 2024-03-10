@@ -10,9 +10,9 @@ redirectFrom:
 import { merge, type Unit } from "effector";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `merge(units)` {#methods-merge-units}
+## `merge(units)` (#methods-merge-units)
 
 :::info{title="since"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
@@ -24,11 +24,11 @@ Merges an array of units (events, effects, or stores), returning a new event tha
 merge(units: Unit[]): Event<T>
 ```
 
-### Arguments {#methods-merge-units-arguments}
+### Arguments (#methods-merge-units-arguments)
 
 1. `units`: An array of [units](/en/explanation/glossary#common-unit) to be merged.
 
-### Returns {#methods-merge-units-returns}
+### Returns (#methods-merge-units-returns)
 
 [_Event_](/en/api/effector/Event): A new event that fires when any of the given units is triggered.
 
@@ -36,13 +36,13 @@ merge(units: Unit[]): Event<T>
 In the case of a store, the resulting event will fire upon store updates.
 :::
 
-### Types {#methods-merge-units-types}
+### Types (#methods-merge-units-types)
 
 TBD
 
-### Examples {#methods-merge-units-examples}
+### Examples (#methods-merge-units-examples)
 
-#### Basic Usage {#methods-merge-units-examples-basic-usage}
+#### Basic Usage (#methods-merge-units-examples-basic-usage)
 
 ```js
 import { createEvent, merge } from "effector";
@@ -60,7 +60,7 @@ bar(2);
 
 [Try it](https://share.effector.dev/WxUgr6dZ)
 
-#### Working with Stores {#methods-merge-units-examples-working-with-stores}
+#### Working with Stores (#methods-merge-units-examples-working-with-stores)
 
 ```js
 import { createEvent, createStore, merge } from "effector";
@@ -80,7 +80,7 @@ setBar(123); // => state changed to: 123
 
 [Try it](https://share.effector.dev/Rp9wuRvl)
 
-#### Merging a Store and an Event {#methods-merge-units-examples-merging-a-store-and-an-event}
+#### Merging a Store and an Event (#methods-merge-units-examples-merging-a-store-and-an-event)
 
 ```js
 import { createEvent, createStore, merge } from "effector";

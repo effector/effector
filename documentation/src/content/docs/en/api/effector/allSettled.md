@@ -6,13 +6,13 @@ redirectFrom:
   - /docs/api/effector/allsettled
 ---
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `allSettled(unit, {scope, params?})` {#methods-allSettled-unit-scope-params}
+## `allSettled(unit, {scope, params?})` (#methods-allSettled-unit-scope-params)
 
 Calls the provided unit within the current scope and wait for all triggered effects to complete.
 
-### Formulae {#methods-allSettled-unit-scope-params-formulae}
+### Formulae (#methods-allSettled-unit-scope-params-formulae)
 
 ```ts
 allSettled<T>(unit: Event<T>, {scope: Scope, params?: T}): Promise<void>
@@ -23,7 +23,7 @@ allSettled<T>(unit: Effect<T, Done, Fail>, {scope: Scope, params?: T}): Promise<
 allSettled<T>(unit: Store<T>, {scope: Scope, params?: T}): Promise<void>
 ```
 
-### Arguments {#methods-allSettled-unit-scope-params-arguments}
+### Arguments (#methods-allSettled-unit-scope-params-arguments)
 
 1. `unit`: [_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) to be called
 2. `scope`: [_Scope_](/en/api/effector/Scope)
@@ -33,7 +33,7 @@ allSettled<T>(unit: Store<T>, {scope: Scope, params?: T}): Promise<void>
 Return value for effect is supported since [effector 21.4.0](https://changelog.effector.dev/#effector-21-4-0)
 :::
 
-### Examples {#methods-allSettled-unit-scope-params-examples}
+### Examples (#methods-allSettled-unit-scope-params-examples)
 
 :::tip{title="Contribution"}
 TBD
@@ -41,17 +41,17 @@ TBD
 Please, [open PullRequest](https://github.com/effector/effector) and contribute examples for this section via "Edit this page" link below.
 :::
 
-## `allSettled(scope)` {#methods-allSettled-scope}
+## `allSettled(scope)` (#methods-allSettled-scope)
 
 Checks the provided scope for any ongoing computations and wait for their completion.
 
-### Formulae {#methods-allSettled-scope-formulae}
+### Formulae (#methods-allSettled-scope-formulae)
 
 ```ts
 allSettled<T>(scope): Promise<void>
 ```
 
-### Arguments {#methods-allSettled-scope-arguments}
+### Arguments (#methods-allSettled-scope-arguments)
 
 1. `scope`: [_Scope_](/en/api/effector/Scope)
 
@@ -59,9 +59,9 @@ allSettled<T>(scope): Promise<void>
 Supported since effector 22.5.0
 :::
 
-### Examples {#methods-allSettled-scope-examples}
+### Examples (#methods-allSettled-scope-examples)
 
-#### Usage in tests {#methods-allSettled-scope-examples-tests}
+#### Usage in tests (#methods-allSettled-scope-examples-tests)
 
 For example, tests that validate the integration with an external reactive API
 

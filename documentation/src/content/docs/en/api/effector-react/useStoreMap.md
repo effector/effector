@@ -17,9 +17,9 @@ React hook, which subscribes to a [store](/en/api/effector/Store) and transforms
 
 You can read the motivation in the [issue](https://github.com/effector/effector/issues/118).
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useStoreMap($store, fn)` {#methods-useStoreMap-store-fn}
+## `useStoreMap($store, fn)` (#methods-useStoreMap-store-fn)
 
 :::info{title="since"}
 Short version of `useStoreMap` introduced in [effector-react@21.3.0](https://changelog.effector.dev/#effector-react-21-3-0)
@@ -27,7 +27,7 @@ Short version of `useStoreMap` introduced in [effector-react@21.3.0](https://cha
 
 Common use case: subscribe to changes in selected part of store only
 
-### Formulae {#methods-useStoreMap-store-fn-formulae}
+### Formulae (#methods-useStoreMap-store-fn-formulae)
 
 ```ts
 useStoreMap(
@@ -36,24 +36,24 @@ useStoreMap(
 ): Result
 ```
 
-### Arguments {#methods-useStoreMap-store-fn-arguments}
+### Arguments (#methods-useStoreMap-store-fn-arguments)
 
 1. `$store`: Source [`Store<State>`](/en/api/effector/Store)
 2. `fn` (`(state: State) => Result`): Selector function to receive part of source store
 
-### Returns {#methods-useStoreMap-store-fn-returns}
+### Returns (#methods-useStoreMap-store-fn-returns)
 
 (`Result`): Value from the `fn` function call.
 
-### Examples {#methods-useStoreMap-store-fn-examples}
+### Examples (#methods-useStoreMap-store-fn-examples)
 
 TBD
 
-## `useStoreMap(config)` {#methods-useStoreMap-config}
+## `useStoreMap(config)` (#methods-useStoreMap-config)
 
 Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
 
-### Formulae {#methods-useStoreMap-config-formulae}
+### Formulae (#methods-useStoreMap-config-formulae)
 
 ```ts
 useStoreMap({
@@ -65,7 +65,7 @@ useStoreMap({
 }): Result;
 ```
 
-### Arguments {#methods-useStoreMap-config-arguments}
+### Arguments (#methods-useStoreMap-config-arguments)
 
 1. `config` (_Object_): Configuration object
    - `store`: Source [`Store<State>`](/en/api/effector/Store)
@@ -82,7 +82,7 @@ useStoreMap({
 `defaultValue` option introduced in [effector-react@22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
 :::
 
-### Returns {#methods-useStoreMap-config-returns}
+### Returns (#methods-useStoreMap-config-returns)
 
 (`Result`): Value from the `fn` function call, or the `defaultValue`.
 

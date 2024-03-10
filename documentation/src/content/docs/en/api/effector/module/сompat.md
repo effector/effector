@@ -16,7 +16,7 @@ Since third-party libraries can import `effector` directly, you **should not** u
 
 :::
 
-## Required Polyfills {#required-polyfills}
+## Required Polyfills (#required-polyfills)
 
 You need to install polyfills for these objects:
 
@@ -28,7 +28,7 @@ You need to install polyfills for these objects:
 
 In most cases, a bundler can automatically add polyfills.
 
-### Vite {#required-polyfills-vite}
+### Vite (#required-polyfills-vite)
 
 <details>
 <summary>Vite Configuration Example</summary>
@@ -48,9 +48,9 @@ export default defineConfig({
 
 </details>
 
-# Usage {#usage}
+# Usage (#usage)
 
-## Manual Replacement {#usage-manual}
+## Manual Replacement (#usage-manual)
 
 You can use `effector/compat` instead of the `effector` package if you need to support old browsers.
 
@@ -59,11 +59,11 @@ You can use `effector/compat` instead of the `effector` package if you need to s
 + import {createStore} from 'effector/compat'
 ```
 
-## Automatic Replacement {#usage-automatic}
+## Automatic Replacement (#usage-automatic)
 
 However, you can set up your bundler to automatically replace `effector` with `effector/compat` in your code.
 
-### Webpack {#usage-automatic-webpack}
+### Webpack (#usage-automatic-webpack)
 
 <details>
 <summary>Webpack Configuration Example</summary>
@@ -80,7 +80,7 @@ module.exports = {
 
 </details>
 
-### Vite {#usage-automatic-vite}
+### Vite (#usage-automatic-vite)
 
 <details>
 <summary>Vite Configuration Example</summary>

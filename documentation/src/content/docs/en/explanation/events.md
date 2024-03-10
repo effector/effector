@@ -16,7 +16,7 @@ Event instances persist throughout the entire runtime of the application and inh
 Attempting to delete instances and clear memory for the purpose of saving resources is not advised, as it may adversely impact the functionality and performance of the application.
 :::
 
-## Calling the event {#event-calling}
+## Calling the event (#event-calling)
 
 There are two ways to trigger event: imperative and declarative.
 
@@ -65,7 +65,7 @@ requestReceived({ id: 1, title: "example" });
 
 This rule also contributes to the clarity of each argument's meaning, both at the call side and subscription side. It promotes clean and organized code, making it easier to understand and maintain.
 
-## Watching the event {#event-watch}
+## Watching the event (#event-watch)
 
 To ascertain when an event is called, effector and its ecosystem offer various methods with distinct capabilities. Debugging is the primary use case for this purpose, and we highly recommend using [`patronum/debug`](https://patronum.effector.dev/methods/debug/) to display when an event is triggered and the argument it carries.
 
@@ -115,7 +115,7 @@ The `watch` method neither handles nor reports exceptions, manages the completio
 Its primary intended use is for short-term debugging and logging purposes.
 :::
 
-## Working with TypeScript {#typescript}
+## Working with TypeScript (#typescript)
 
 When an event is invoked, TypeScript will verify that the type of the argument passed matches the type defined in the event, ensuring consistency and type safety within the code.
 
@@ -158,7 +158,7 @@ const whenCounterChanged = createEvent<number>();
 createCounter(whenCounterChanged);
 ```
 
-## Using `Event` {#event-using}
+## Using `Event` (#event-using)
 
 A `Event` is a super type of `EventCallable` with different approach. Firstly, invoking a `Event` is not allowed, and it cannot be used as a target in the sample operator, and so on.
 

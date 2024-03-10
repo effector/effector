@@ -18,7 +18,7 @@ interface Scope {
 }
 ```
 
-## Методы {#methods}
+## Методы (#methods)
 
 ### getState
 

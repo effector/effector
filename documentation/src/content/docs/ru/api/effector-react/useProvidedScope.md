@@ -13,11 +13,12 @@ lang: ru
 
 ## `useProvidedScope()`
 
-### Возвращает {#useProvidedScope-returns}
+### Возвращает (#useProvidedScope-returns)
 
 - [Scope](/ru/api/effector/Scope) или `null`, если `Scope` не передан.
 
-### Пример {#useProvidedScope-example}
+### Пример (#useProvidedScope-example)
+
 Этот хук может быть использован внутри библиотеки для обработки различных крайних случаев, где также необходимы `createWatch` и `scopeBind`.
 
 Для продакшен кода используйте [`useUnit`](/ru/api/effector-react/useUnit) хук.

@@ -23,7 +23,7 @@ fetchFx();
 
 [Try it](https://share.effector.dev/Yb8vQ1Ly)
 
-# Usage {#usage}
+# Usage (#usage)
 
 In the simplest case, it can be used without any configuration:
 
@@ -34,7 +34,7 @@ In the simplest case, it can be used without any configuration:
 }
 ```
 
-# SID {#sid}
+# SID (#sid)
 
 :::info{title="since"}
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
@@ -99,13 +99,13 @@ getUsers.use(
 );
 ```
 
-# Configuration {#configuration}
+# Configuration (#configuration)
 
-## `importName` {#configuration-importName}
+## `importName` (#configuration-importName)
 
 Specifying import name or names to process by plugin. Import should be used in the code as specified.
 
-### Formulae {#configuration-importName-formulae}
+### Formulae (#configuration-importName-formulae)
 
 ```json
 [
@@ -119,7 +119,7 @@ Specifying import name or names to process by plugin. Import should be used in t
 - Type: `string | string[]`
 - Default: `['effector', 'effector/compat']`
 
-## `factories` {#configuration-factories}
+## `factories` (#configuration-factories)
 
 Accepts an array of module names which exports treat as custom factories, therefore, each function call provides a unique prefix for [sids](/en/api/effector/babel-plugin#sid) of units inside them. Used to
 SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for client-only application.
@@ -128,7 +128,7 @@ SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for c
 [effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
 :::
 
-### Formulae {#configuration-factories-formulae}
+### Formulae (#configuration-factories-formulae)
 
 ```json
 [
@@ -148,7 +148,7 @@ SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for c
 - Modules with factories can export any number of functions.
 - Factories should be compiled with `effector/babel-plugin` as well as code which use them.
 
-### Examples {#configuration-factories-examples}
+### Examples (#configuration-factories-examples)
 
 ```json
 // .babelrc
@@ -188,7 +188,7 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 has its own [sid](/en/api/effector/babel-plugin#sid) and will be handled by [serialize](/en/api/effector/serialize)
 independently, although without `factories` they will share the same `sid`.
 
-## `reactSsr` {#configuration-reactSsr}
+## `reactSsr` (#configuration-reactSsr)
 
 Replaces imports from `effector-react` to `effector-react/scope`. Useful for building both server-side and client-side
 builds from the same codebase.
@@ -197,7 +197,7 @@ builds from the same codebase.
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends deleting this option from `babel-plugin` configuration because [effector-react](/en/api/effector-react) supports SSR by default.
 :::
 
-### Formulae {#configuration-reactSsr-formulae}
+### Formulae (#configuration-reactSsr-formulae)
 
 ```json
 [
@@ -211,7 +211,7 @@ Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the cor
 - Type: `boolean`
 - Default: `false`
 
-## `addNames` {#configuration-addNames}
+## `addNames` (#configuration-addNames)
 
 Adds name to units factories call. Useful for minification and obfuscation of production builds.
 
@@ -219,7 +219,7 @@ Adds name to units factories call. Useful for minification and obfuscation of pr
 [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-### Formulae {#configuration-addNames-formulae}
+### Formulae (#configuration-addNames-formulae)
 
 ```json
 [
@@ -233,11 +233,11 @@ Adds name to units factories call. Useful for minification and obfuscation of pr
 - Type: `boolean`
 - Default: `true`
 
-## `addLoc` {#configuration-addLoc}
+## `addLoc` (#configuration-addLoc)
 
 Adds location to methods' calls. Used by devtools, for example [effector-logger](https://github.com/effector/logger).
 
-### Formulae {#configuration-addLoc-formulae}
+### Formulae (#configuration-addLoc-formulae)
 
 ```json
 [
@@ -251,11 +251,11 @@ Adds location to methods' calls. Used by devtools, for example [effector-logger]
 - Type: `boolean`
 - Default: `false`
 
-## `debugSids` {#configuration-debugSids}
+## `debugSids` (#configuration-debugSids)
 
 Adds a file path and variable name of a unit definition to a sid. Useful for debugging SSR.
 
-## Formulae {#configuration-debugSids-formulae}
+## Formulae (#configuration-debugSids-formulae)
 
 ```json
 [
@@ -269,7 +269,7 @@ Adds a file path and variable name of a unit definition to a sid. Useful for deb
 - Type: `boolean`
 - Default: `false`
 
-## `noDefaults` {#configuration-noDefaults}
+## `noDefaults` (#configuration-noDefaults)
 
 Option for `effector/babel-plugin` for making custom unit factories with clean configuration.
 
@@ -277,7 +277,7 @@ Option for `effector/babel-plugin` for making custom unit factories with clean c
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
-### Formulae {#configuration-noDefaults-formulae}
+### Formulae (#configuration-noDefaults-formulae)
 
 ```json
 [
@@ -291,7 +291,7 @@ Option for `effector/babel-plugin` for making custom unit factories with clean c
 - Type: `boolean`
 - Default: `false`
 
-### Examples {#configuration-noDefaults-examples}
+### Examples (#configuration-noDefaults-examples)
 
 ```json
 // .babelrc
@@ -338,9 +338,9 @@ const foo = createInputField('-', {
 */
 ```
 
-# Usage with Bundlers {#bundlers}
+# Usage with Bundlers (#bundlers)
 
-## Vite + React (SSR) {#bundlers-ViteReactSSR}
+## Vite + React (SSR) (#bundlers-ViteReactSSR)
 
 To use with `effector/babel-plugin`, you have to following next steps:
 

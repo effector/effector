@@ -12,11 +12,11 @@ import { useVModel } from "effector-vue/composition";
 
 A hook function, which subscribes to a watcher that observes changes in the current store, so when recording results, the component will automatically update. It is primarily used when working with forms (`v-model`) in Vue 3.
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useVModel($store)` {#methods-useVModel-store}
+## `useVModel($store)` (#methods-useVModel-store)
 
-### Formulae {#methods-useVModel-store-formulae}
+### Formulae (#methods-useVModel-store-formulae)
 
 ```ts
 useVModel($store: Store<State>): Ref<UnwrapRef<State>>;
@@ -24,18 +24,18 @@ useVModel($store: Store<State>): Ref<UnwrapRef<State>>;
 
 Designed for Vue 3.
 
-### Arguments {#methods-useVModel-store-arguments}
+### Arguments (#methods-useVModel-store-arguments)
 
 1. `$store` ([_Store_](/en/api/effector/Store))
 2. `shape of Stores` ([_Store_](/en/api/effector/Store))
 
-### Returns {#methods-useVModel-store-returns}
+### Returns (#methods-useVModel-store-returns)
 
 (`State`)
 
-### Examples {#methods-useVModel-examples}
+### Examples (#methods-useVModel-examples)
 
-#### Single Store {#methods-useVModel-examples-singleStore}
+#### Single Store (#methods-useVModel-examples-singleStore)
 
 ```js
 import { createStore, createApi } from "effector";
@@ -69,7 +69,7 @@ export default {
 </div>
 ```
 
-#### Store Shape {#methods-useVModel-examples-storeShape}
+#### Store Shape (#methods-useVModel-examples-storeShape)
 
 ```js
 import { createStore, createApi } from "effector";

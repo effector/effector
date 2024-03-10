@@ -6,7 +6,7 @@ lang: ru
 
 Метод для создания [событий](/ru/api/effector/Event)
 
-## Формула {#formulae}
+## Формула (#formulae)
 
 ```ts
 event = createEvent() > Event<void>;
@@ -16,17 +16,17 @@ event = createEvent<T>() > Event<T>;
 event = createEvent(/*name*/ "eventName") > Event<void>;
 ```
 
-### Аргументы {#args}
+### Аргументы (#args)
 
 1. **`name?`**: _string_
 
    Опциональное имя события
 
-### Возвращает {#return}
+### Возвращает (#return)
 
 Новое [событие](/ru/api/effector/Event)
 
-## Примеры {#examples}
+## Примеры (#examples)
 
 ### Обновление состояния с помощью вызова события
 

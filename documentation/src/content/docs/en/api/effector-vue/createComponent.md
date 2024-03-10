@@ -4,20 +4,20 @@ redirectFrom:
   - /api/effector-vue/createComponent
 ---
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `createComponent(options, store?)` {#methods-createComponent-options-store}
+## `createComponent(options, store?)` (#methods-createComponent-options-store)
 
-### Arguments {#methods-createComponent-options-store-arguments}
+### Arguments (#methods-createComponent-options-store-arguments)
 
 1. `options` (_Object_): component options (hooks, methods, computed properties)
 2. `store` (_Object_): Store object from effector
 
-### Returns {#methods-createComponent-options-store-returns}
+### Returns (#methods-createComponent-options-store-returns)
 
 (_`vue component`_)
 
-### Example {#methods-createComponent-options-store-example}
+### Example (#methods-createComponent-options-store-example)
 
 ```html
 <template> {{ $counter }} </template>

@@ -16,25 +16,25 @@ React hook, which subscribes to a [store](/en/api/effector/Store) and returns it
 Prefer [`useUnit`](/api/effector-react/useUnit) hook instead.
 :::
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useStore($store): State` {#methods-useStore-store}
+## `useStore($store): State` (#methods-useStore-store)
 
-### Formulae {#methods-useStore-store-formulae}
+### Formulae (#methods-useStore-store-formulae)
 
 ```ts
 useStore($store: Store<State>): State
 ```
 
-### Arguments {#methods-useStore-store-arguments}
+### Arguments (#methods-useStore-store-arguments)
 
 1. `$store`: [Store](/en/api/effector/Store)
 
-### Returns {#methods-useStore-store-returns}
+### Returns (#methods-useStore-store-returns)
 
 (_`State`_): The value from the store
 
-### Examples {#methods-useStore-store-examples}
+### Examples (#methods-useStore-store-examples)
 
 ```jsx
 import { createStore } from "effector";

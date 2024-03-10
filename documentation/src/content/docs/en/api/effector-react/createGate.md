@@ -10,23 +10,23 @@ redirectFrom:
 import { createGate, type Gate } from "effector-react";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `createGate(name?)` {#methods-createGate-name}
+## `createGate(name?)` (#methods-createGate-name)
 
 Creates a [_Gate_](/en/api/effector-react/Gate)
 
-### Formulae {#methods-createGate-name-formulae}
+### Formulae (#methods-createGate-name-formulae)
 
 ```ts
 createGate(name?: string): Gate<T>
 ```
 
-### Arguments {#methods-createGate-name-arguments}
+### Arguments (#methods-createGate-name-arguments)
 
 1. `name?` (_string_): Optional name which will be used as the name of a created React component
 
-### Returns {#methods-createGate-name-returns}
+### Returns (#methods-createGate-name-returns)
 
 [`Gate<T>`](/en/api/effector-react/Gate)
 
@@ -61,17 +61,17 @@ ReactDOM.unmountComponentAtNode(document.getElementById("root"));
 
 [Try it](https://share.effector.dev/mMZSQclh)
 
-## `createGate(config?)` {#methods-createGate-config}
+## `createGate(config?)` (#methods-createGate-config)
 
 Creates a [_Gate_](/en/api/effector-react/Gate), if `defaultState` is defined, [Gate.state](/en/api/effector-react/Gate#properties-state) will be created with passed value.
 
-### Formulae {#methods-createGate-config-formulae}
+### Formulae (#methods-createGate-config-formulae)
 
 ```ts
 createGate({ defaultState?: T, domain?: Domain, name?: string }): Gate<T>
 ```
 
-### Arguments {#methods-createGate-config-arguments}
+### Arguments (#methods-createGate-config-arguments)
 
 `config` (_Object_): Optional configuration object
 
@@ -79,6 +79,6 @@ createGate({ defaultState?: T, domain?: Domain, name?: string }): Gate<T>
 - `domain?` ([_Domain_](/en/api/effector/Domain)): Optional domain which will be used to create gate units ([Gate.open](/en/api/effector-react/Gate#properties-open) event, [Gate.state](/en/api/effector-react/Gate#properties-state) store, and so on)
 - `name?` (_string_): Optional name which will be used as the name of a created React component
 
-### Returns {#methods-createGate-config-returns}
+### Returns (#methods-createGate-config-returns)
 
 [`Gate<T>`](/en/api/effector-react/Gate)

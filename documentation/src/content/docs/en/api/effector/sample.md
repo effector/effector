@@ -9,15 +9,15 @@ redirectFrom:
 import { sample } from "effector";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-# `sample({ source?, clock?, filter?, fn?, target? })` {#methods-sample-config}
+# `sample({ source?, clock?, filter?, fn?, target? })` (#methods-sample-config)
 
 This method can be used for linking two nodes, resulting in the third one, which will fire only upon the `clock` node trigger.
 
 Quite a common case, when you need to handle an event with some store's state. Instead of using `store.getState()`, which may cause race conditions and inconsistency of state, it is more suitable to use the `sample` method.
 
-## Formulae {#methods-sample-config-formulae}
+## Formulae (#methods-sample-config-formulae)
 
 ```ts
 sample({ source?, clock?, filter?, fn?, target?}): target
@@ -30,13 +30,13 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
-## Schema {#methods-sample-config-schema}
+## Schema (#methods-sample-config-schema)
 
 ![](/images/sample-visualization.gif)
 
-## Types {#methods-sample-config-types}
+## Types (#methods-sample-config-types)
 
-### Type of the created `target` {#methods-sample-config-types-target}
+### Type of the created `target` (#methods-sample-config-types-target)
 
 If `target` is not passed to `sample()` call, it will be created internally. The type of unit is described in the table below:
 
@@ -64,13 +64,13 @@ const event = sample({ clock: event, source: $store });
 // Because not all arguments are stores.
 ```
 
-# `sample({clock?, source, filter?, fn?, target?, greedy?})` {#methods-sample-greedy}
+# `sample({clock?, source, filter?, fn?, target?, greedy?})` (#methods-sample-greedy)
 
-## Formulae {#methods-sample-greedy-formulae}
+## Formulae (#methods-sample-greedy-formulae)
 
 TBD
 
-## Arguments {#methods-sample-greedy-arguments}
+## Arguments (#methods-sample-greedy-arguments)
 
 `params` (_Object_): Configuration object
 
@@ -103,11 +103,11 @@ Use `batch` instead of `greedy`.
 Array of units in `target` are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-## Returns {#methods-sample-greedy-returns}
+## Returns (#methods-sample-greedy-returns)
 
 ([_Event_](/en/api/effector/Event) | [_Store_](/en/api/effector/Store)) - Unit, which fires/updates upon `clock` is triggered, if `source` is not passed. [The type of returned unit depends on the types of `clock` and `source`](#sample-types-target).
 
-## Examples {#methods-sample-greedy-examples}
+## Examples (#methods-sample-greedy-examples)
 
 ```js
 import { createStore, createEvent, createEffect, sample } from "effector";
@@ -135,15 +135,15 @@ submitForm(12345678);
 
 [Try it](https://share.effector.dev/PAjWhOJc)
 
-# `sample(sourceUnit, clockUnit, fn?)` {#sample-sourceUnit-clockUnit-fn}
+# `sample(sourceUnit, clockUnit, fn?)` (#sample-sourceUnit-clockUnit-fn)
 
 It is just another form of the `sample` invocation, with the same sense.
 
-## Formulae {#sample-sourceUnit-clockUnit-fn-formulae}
+## Formulae (#sample-sourceUnit-clockUnit-fn-formulae)
 
 TBD
 
-## Arguments {#sample-sourceUnit-clockUnit-fn-arguments}
+## Arguments (#sample-sourceUnit-clockUnit-fn-arguments)
 
 - `sourceUnit`: Source [unit](/en/explanation/glossary#common-unit)
   - If event or effect. Take last invocation argument value. That event or effect must be invoked at least once
@@ -158,7 +158,7 @@ TBD
 ([_Event_](/en/api/effector/Event) | [_Store_](/en/api/effector/Store)) – Unit, which fires/updates upon `clock` is triggered, if `source` is not passed.
 [The type of returned unit depends on the types of `clock` and `source`](#sample-types-target).
 
-## Examples {#sample-sourceUnit-clockUnit-fn-examples}
+## Examples (#sample-sourceUnit-clockUnit-fn-examples)
 
 ```js
 import { createStore, createEvent, createEffect, sample } from "effector";
@@ -192,7 +192,7 @@ submitForm(12345678);
 
 [Try it](https://share.effector.dev/WO6UT8bV)
 
-## `sample({name?})` {#sample-name}
+## `sample({name?})` (#sample-name)
 
 :::info{title="since"}
 [effector 20.4.0](https://changelog.effector.dev/#effector-20-4-0)
@@ -214,9 +214,9 @@ const sampled = sample({
 console.log(sampled.shortName); // 'sampled foo'
 ```
 
-# Objects and Arrays of _Store_ in `sample({ source })` {#sample-source-objects-arrays}
+# Objects and Arrays of _Store_ in `sample({ source })` (#sample-source-objects-arrays)
 
-## Object of Stores {#sample-source-object-stores}
+## Object of Stores (#sample-source-object-stores)
 
 :::info{title="since"}
 [effector 20.8.0](https://changelog.effector.dev/#effector-20-8-0)
@@ -248,7 +248,7 @@ trigger();
 
 [Try it](https://share.effector.dev/Wp9nq14k)
 
-### Array of Stores {#sample-source-array-stores}
+### Array of Stores (#sample-source-array-stores)
 
 :::info{title="since"}
 [effector 20.8.0](https://changelog.effector.dev/#effector-20-8-0)
@@ -288,7 +288,7 @@ trigger();
 
 [Try it](https://share.effector.dev/duqTwRgT)
 
-### Array of _Units_ in `sample({ clock })` {#sample-clock-array}
+### Array of _Units_ in `sample({ clock })` (#sample-clock-array)
 
 :::info{title="since"}
 [effector 21.2.0](https://changelog.effector.dev/#effector-21-2-0)
@@ -321,7 +321,7 @@ sample({
 
 [Try it](https://share.effector.dev/1YEHUFs7)
 
-## Filtering updates with `sample({ filter })` {#sample-filter}
+## Filtering updates with `sample({ filter })` (#sample-filter)
 
 :::info{title="since"}
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)

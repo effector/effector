@@ -12,23 +12,23 @@ import { createEffect, type Effect } from "effector";
 
 Method for creating an [effect](/en/api/effector/Effect).
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `createEffect(handler)` {#methods-createEffect-handler}
+## `createEffect(handler)` (#methods-createEffect-handler)
 
 Creates an effect with the given handler.
 
-### Formulae {#methods-createEffect-handler-formulae}
+### Formulae (#methods-createEffect-handler-formulae)
 
 ```typescript
 createEffect(handler?): Effect<Params, Done, Fail>
 ```
 
-### Arguments {#methods-createEffect-handler-arguments}
+### Arguments (#methods-createEffect-handler-arguments)
 
 1. `handler` (_Function_): Function to handle effect calls, can also be set using [`.use(handler)`](/en/api/effector/Effect#methods-use-handler).
 
-### Returns {#methods-createEffect-handler-returns}
+### Returns (#methods-createEffect-handler-returns)
 
 [_Effect_](/en/api/effector/Effect): A new effect.
 
@@ -40,9 +40,9 @@ You must provide a handler either in [`createEffect`](/en/api/effector/createEff
 [effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
 :::
 
-### Examples {#methods-createEffect-handler-examples}
+### Examples (#methods-createEffect-handler-examples)
 
-#### Create effect with handler {#methods-createEffect-handler-examples-create-effect-with-handler}
+#### Create effect with handler (#methods-createEffect-handler-examples-create-effect-with-handler)
 
 ```js
 import { createEffect } from "effector";
@@ -62,7 +62,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/7K23rdej)
 
-#### Change state on effect completion {#methods-createEffect-handler-examples-change-state-on-effect-completion}
+#### Change state on effect completion (#methods-createEffect-handler-examples-change-state-on-effect-completion)
 
 ```js
 import { createStore, createEffect } from "effector";
@@ -86,7 +86,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/uAJFC1XM)
 
-#### Set handler to effect after creating {#methods-createEffect-handler-examples-set-handler-to-effect-after-creating}
+#### Set handler to effect after creating (#methods-createEffect-handler-examples-set-handler-to-effect-after-creating)
 
 ```js
 import { createEffect } from "effector";
@@ -104,7 +104,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/e1QPH9Uq)
 
-#### Watch effect status {#methods-createEffect-handler-examples-watch-effect-status}
+#### Watch effect status (#methods-createEffect-handler-examples-watch-effect-status)
 
 ```js
 import { createEffect } from "effector";
@@ -145,29 +145,29 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Try it](https://share.effector.dev/LeurvtYA)
 
-## `createEffect(config)` {#methods-createEffect-config}
+## `createEffect(config)` (#methods-createEffect-config)
 
 Creates an effect with handler and name from a given config object.
 
-### Formulae {#methods-createEffect-config-formulae}
+### Formulae (#methods-createEffect-config-formulae)
 
 ```typescript
 createEffect({ handler, name }): Effect<Params, Done, Fail>
 ```
 
-### Arguments {#methods-createEffect-config-arguments}
+### Arguments (#methods-createEffect-config-arguments)
 
 1. `config?: {}` (_Object_): Effect configuration.
    - `handler` (_Function_): Function to handle effect calls, can also be set using [`.use(handler)`](#use).
    - `name?` (_string_): Optional effect name.
 
-### Returns {#methods-createEffect-config-returns}
+### Returns (#methods-createEffect-config-returns)
 
 [_Effect_](/en/api/effector/Effect): A new effect.
 
-### Examples {#methods-createEffect-config-examples}
+### Examples (#methods-createEffect-config-examples)
 
-#### Create named effect {#methods-createEffect-config-examples-create-named-effect}
+#### Create named effect (#methods-createEffect-config-examples-create-named-effect)
 
 ```js
 import { createEffect } from "effector";

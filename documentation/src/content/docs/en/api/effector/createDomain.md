@@ -10,27 +10,27 @@ redirectFrom:
 import { createDomain, type Domain } from "effector";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `createDomain(name?)` {#methods-createDomain-name}
+## `createDomain(name?)` (#methods-createDomain-name)
 
 Creates a [domain](/en/api/effector/Domain)
 
-### Formulae {#methods-createDomain-name-formulae}
+### Formulae (#methods-createDomain-name-formulae)
 
 ```typescript
 createDomain(name?): Domain
 ```
 
-### Arguments {#methods-createDomain-name-arguments}
+### Arguments (#methods-createDomain-name-arguments)
 
 1. `name`? (_string_): domain name. Useful for debugging
 
-### Returns {#methods-createDomain-name-returns}
+### Returns (#methods-createDomain-name-returns)
 
 [_Domain_](/en/api/effector/Domain): New domain
 
-### Examples {#methods-createDomain-name-examples}
+### Examples (#methods-createDomain-name-examples)
 
 ```js
 import { createDomain } from "effector";

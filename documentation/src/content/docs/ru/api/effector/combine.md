@@ -27,11 +27,11 @@ $c = combine(a, b, (a: A, b: B) => C) > Store<C>;
 
 ## Сочетание состояний
 
-### _combine( { a, b } )_ {#combine-shape}
+### _combine( { a, b } )_ (#combine-shape)
 
 Комбинирует объект сторов в стор с объектом значений
 
-#### Формула {#combine-shape-formulae}
+#### Формула (#combine-shape-formulae)
 
 ```ts
 declare const a: Store<A>;
@@ -40,7 +40,7 @@ declare const b: Store<B>;
 $c = combine(/*shape*/ { a, b }) > Store<{ a: A; b: B }>;
 ```
 
-#### Аргументы {#combine-shape-args}
+#### Аргументы (#combine-shape-args)
 
 - **`shape`**: Объект сторов
 
@@ -51,11 +51,11 @@ $c = combine(/*shape*/ { a, b }) > Store<{ a: A; b: B }>;
 
 Новый, производный стор
 
-### _combine( \[ a, b \] )_ {#combine-list}
+### _combine( \[ a, b \] )_ (#combine-list)
 
 Комбинирует массив сторов в стор с массивом значений
 
-#### Формула {#combine-list-formulae}
+#### Формула (#combine-list-formulae)
 
 ```ts
 declare const a: Store<A>;
@@ -64,24 +64,24 @@ declare const b: Store<B>;
 $c = combine(/*shape*/ [a, b]) > Store<[A, B]>;
 ```
 
-#### Аргументы {#combine-list-args}
+#### Аргументы (#combine-list-args)
 
 - **`shape`**: Массив сторов
 
   Обновление любого из сторов означает изменение значения соответствующего элемента в производном сторе, <br/>
   количество сторов не ограничено
 
-#### Возвращает {#combine-list-return}
+#### Возвращает (#combine-list-return)
 
 Новый, производный стор
 
 ## Трансформация состояний
 
-### _combine( { a, b }, ({ a, b }) => result )_ {#transform-shape}
+### _combine( { a, b }, ({ a, b }) => result )_ (#transform-shape)
 
 Трансформирует объект сторов через функцию, принимающую объект значений
 
-#### Формула {#transform-shape-formulae}
+#### Формула (#transform-shape-formulae)
 
 ```ts
 declare const a: Store<A>;
@@ -90,7 +90,7 @@ declare const b: Store<B>;
 $c = combine(/*shape*/ { a, b }, /*fn*/ (values: { a: A; b: B }) => C) > Store<C>;
 ```
 
-#### Аргументы {#transform-shape-args}
+#### Аргументы (#transform-shape-args)
 
 - **`shape`**: Объект сторов. Количество сторов не ограничено
 - **`fn`**: `(values: {a: A; b: B}) => C`
@@ -107,15 +107,15 @@ $c = combine(/*shape*/ { a, b }, /*fn*/ (values: { a: A; b: B }) => C) > Store<C
   **Возвращает**: Новое значение для хранения в производном сторе <br/>
   Если функция возвращает undefined или текущее состояние производного стора, то обновления не будет
 
-#### Возвращает {#transform-shape-return}
+#### Возвращает (#transform-shape-return)
 
 Новый, производный стор
 
-### _combine( \[ a, b \], (\[ a, b \]) => result )_ {#transform-list}
+### _combine( \[ a, b \], (\[ a, b \]) => result )_ (#transform-list)
 
 Трансформирует массив сторов через функцию, принимающую массив значений
 
-#### Формула {#transform-list-formulae}
+#### Формула (#transform-list-formulae)
 
 ```ts
 declare const a: Store<A>;
@@ -124,7 +124,7 @@ declare const b: Store<B>;
 $c = combine(/*stores*/ [a, b], /*fn*/ (values: [A, B]) => C) > Store<C>;
 ```
 
-#### Аргументы {#transform-list-args}
+#### Аргументы (#transform-list-args)
 
 - **`stores`**: Массив сторов <br/>
   Количество используемых сторов не ограничено
@@ -143,15 +143,15 @@ $c = combine(/*stores*/ [a, b], /*fn*/ (values: [A, B]) => C) > Store<C>;
   **Возвращает**: Новое значение для хранения в производном сторе <br/>
   Если функция возвращает undefined или текущее состояние производного стора, то обновления не будет
 
-#### Возвращает {#transform-list-return}
+#### Возвращает (#transform-list-return)
 
 Новый, производный стор
 
-### _combine( a, b, ( a, b ) => result )_ {#transform-spread}
+### _combine( a, b, ( a, b ) => result )_ (#transform-spread)
 
 Трансформирует произвольное число сторов через функцию, принимающую соответствующее число значений в аргументах
 
-#### Формула {#transform-spread-formulae}
+#### Формула (#transform-spread-formulae)
 
 ```ts
 declare const a: Store<A>;
@@ -160,7 +160,7 @@ declare const b: Store<B>;
 $c = combine(/*...stores*/ a, b, /*fn*/ (a: A, b: B) => C) > Store<C>;
 ```
 
-#### Аргументы {#transform-spread-args}
+#### Аргументы (#transform-spread-args)
 
 - **`...stores`**: Аргументы со сторами, по одному стору на аргумент <br/>
   В типах максимальное количество используемых сторов - 12, при превышении числа рекомендуется использовать [вариант с массивом](#transform-list)
@@ -180,7 +180,7 @@ $c = combine(/*...stores*/ a, b, /*fn*/ (a: A, b: B) => C) > Store<C>;
   **Возвращает**: Новое значение для хранения в производном сторе <br/>
   Если функция возвращает undefined или текущее состояние производного стора, то обновления не будет
 
-#### Возвращает {#transform-spread-return}
+#### Возвращает (#transform-spread-return)
 
 Новый, производный стор
 

@@ -9,15 +9,15 @@ redirectFrom:
 import { useStoreMap } from "effector-solid";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useStoreMap($store, fn)` {#methods-useStoreMap-store-fn}
+## `useStoreMap($store, fn)` (#methods-useStoreMap-store-fn)
 
 Function, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change.
 
 Common use case: subscribe to changes in selected part of store only.
 
-### Formulae {#methods-useStoreMap-store-fn-formulae}
+### Formulae (#methods-useStoreMap-store-fn-formulae)
 
 ```ts
 useStoreMap(
@@ -26,22 +26,22 @@ useStoreMap(
 ): Accessor<Result>;
 ```
 
-### Arguments {#methods-useStoreMap-store-fn-arguments}
+### Arguments (#methods-useStoreMap-store-fn-arguments)
 
 1. `$store`: Source [`Store<T>`](/en/api/effector/Store)
 2. `fn` (`(state: T) => Result`): Selector function to receive part of source store
 
-### Returns {#methods-useStoreMap-store-fn-returns}
+### Returns (#methods-useStoreMap-store-fn-returns)
 
 (`Result`)
 
-### Examples {#methods-useStoreMap-store-fn-examples}
+### Examples (#methods-useStoreMap-store-fn-examples)
 
 TBD
 
-## `useStoreMap(config)` {#methods-useStoreMap-config}
+## `useStoreMap(config)` (#methods-useStoreMap-config)
 
-### Formulae {#methods-useStoreMap-config-formulae}
+### Formulae (#methods-useStoreMap-config-formulae)
 
 ```ts
 useStoreMap({
@@ -52,7 +52,7 @@ useStoreMap({
 }): Result;
 ```
 
-### Arguments {#methods-useStoreMap-config-arguments}
+### Arguments (#methods-useStoreMap-config-arguments)
 
 1. `params` (_Object_): Configuration object
    - `store`: Source [store](/en/api/effector/Store)
@@ -60,11 +60,11 @@ useStoreMap({
    - `fn` (_(state, keys) => result_): Selector function to receive part of the source store
    - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore#methods-createStore-defaultState-config-formulae) option under the hood
 
-### Returns {#methods-useStoreMap-config-returns}
+### Returns (#methods-useStoreMap-config-returns)
 
 (`Accessor<Result>`)
 
-### Examples {#methods-useStoreMap-config-examples}
+### Examples (#methods-useStoreMap-config-examples)
 
 This hook is very useful for working with lists, especially large ones.
 

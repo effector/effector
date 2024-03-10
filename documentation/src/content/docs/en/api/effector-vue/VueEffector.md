@@ -12,21 +12,21 @@ import { VueEffector } from "effector-vue";
 
 `effector-vue` plugin for vue 2
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `VueEffector(Vue, options?)` {#methods-VueEffector-Vue-options}
+## `VueEffector(Vue, options?)` (#methods-VueEffector-Vue-options)
 
-### Arguments {#methods-VueEffector-Vue-options-arguments}
+### Arguments (#methods-VueEffector-Vue-options-arguments)
 
 1. `Vue` (_class Vue_): Vue class
 2. `options` (_Object_): Plugin options
    - TBD
 
-### Returns {#methods-VueEffector-Vue-options-returns}
+### Returns (#methods-VueEffector-Vue-options-returns)
 
 (_`void`_)
 
-### Examples {#methods-VueEffector-Vue-options-examples}
+### Examples (#methods-VueEffector-Vue-options-examples)
 
 ```js
 import Vue from "vue";

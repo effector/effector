@@ -16,9 +16,9 @@ import { type Event, type EventCallable } from "effector";
 The **Event** in effector represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things.
 This unit is designed to be a carrier of information/intention/state within the application, not the holder of a state.
 
-# `EventCallable<T>` {#eventCallable}
+# `EventCallable<T>` (#eventCallable)
 
-## Construction {#eventCallable-construction}
+## Construction (#eventCallable-construction)
 
 There are many ways to create an event:
 
@@ -28,7 +28,7 @@ There are many ways to create an event:
 - Some [Effect's methods](/en/api/effector/Effect#methods) return new events and readonly events
 - Operators such as: [`createApi`](/en/api/effector/createApi)
 
-### Declaring types {#eventCallable-declaringTypes}
+### Declaring types (#eventCallable-declaringTypes)
 
 Event carries some data and in a TypeScript ecosystem each data should have a defined type. When an event is explicitly created by [`createEvent`](/en/api/effector/createEvent), type of the argument must be provided as a Generic type argument:
 
@@ -63,13 +63,13 @@ const maybeDataReceived = createEvent<Data | null>();
 
 [Read more in the explanation section](/en/explanation/events#typescript).
 
-## Call as function `event(argument)` {#eventCallable-call-argument}
+## Call as function `event(argument)` (#eventCallable-call-argument)
 
 Initiates an event with the provided argument, which in turn activates any registered subscribers.
 
 [Read more in the explanation section](/en/explanation/events#event-calling).
 
-### Formulae {#eventCallable-call-argument-formulae}
+### Formulae (#eventCallable-call-argument-formulae)
 
 ```ts
 const event: EventCallable<T>;
@@ -90,13 +90,13 @@ All arguments beyond the first will be ignored.
 The core team has implemented this rule for specific reasons related to the design and functionality.
 :::
 
-### Arguments {#eventCallable-call-argument-arguments}
+### Arguments (#eventCallable-call-argument-arguments)
 
 1. `argument` is a value of `T`. It's optional if the event is defined as `EventCallable<void>`.
 
-### Throws {#eventCallable-call-argument-throws}
+### Throws (#eventCallable-call-argument-throws)
 
-#### call of readonly event is not supported, use createEvent instead {#eventCallable-call-argument-throws-call-of-readonly-event}
+#### call of readonly event is not supported, use createEvent instead (#eventCallable-call-argument-throws-call-of-readonly-event)
 
 > Since: effector 23.0.0
 
@@ -126,7 +126,7 @@ sample({
 stringifiedReceived("123"); // OK
 ```
 
-#### unit call from pure function is not supported, use operators like sample instead {#eventCallable-call-argument-throws-unit-call-from-pure}
+#### unit call from pure function is not supported, use operators like sample instead (#eventCallable-call-argument-throws-unit-call-from-pure)
 
 > Since: effector 23.0.0
 
@@ -162,11 +162,11 @@ sample({
 });
 ```
 
-### Returns {#eventCallable-call-argument-returns}
+### Returns (#eventCallable-call-argument-returns)
 
 `T`: Represents the same value that is passed into the `event`.
 
-### Types {#eventCallable-call-argument-types}
+### Types (#eventCallable-call-argument-types)
 
 ```ts
 import { createEvent, Event } from "effector";
@@ -182,7 +182,7 @@ anotherHappened();
 
 An event can be specified with a single generic type argument. By default, this argument is set to void, indicating that the event does not accept any parameters.
 
-## Methods {#eventCallable-methods}
+## Methods (#eventCallable-methods)
 
 Since the `createEvent` factory creates `EventCallable` for you, its methods will be described first, even though it is a extension of the `Event` type.
 
@@ -194,7 +194,7 @@ You can think of the EventCallable and Event as type and its super type:
 `EventCallable<T> extends Event<T>`
 :::
 
-### `.prepend(fn)` {#eventCallable-methods-prepend-fn}
+### `.prepend(fn)` (#eventCallable-methods-prepend-fn)
 
 Creates a new `EventCallable`, that should be called, upon trigger it sends transformed data into the original event.
 
@@ -203,7 +203,7 @@ case of `.map`, data transforms **after original event occurred**.
 
 If the original event belongs to some [domain](/en/api/effector/Domain), then a new event will belong to it as well.
 
-#### Formulae {#eventCallable-methods-prepend-fn-formulae}
+#### Formulae (#eventCallable-methods-prepend-fn-formulae)
 
 ```ts
 const first: EventCallable<T>;
@@ -214,13 +214,13 @@ const second: EventCallable<T> = first.prepend(fn);
 - Call `fn` with argument from the `second` event
 - Trigger `first` event with the result of `fn()`
 
-#### Arguments {#eventCallable-methods-prepend-fn-arguments}
+#### Arguments (#eventCallable-methods-prepend-fn-arguments)
 
 1. `fn` (_Function_): A function that receives `argument`, and should be **pure**.
 
-#### Throws {#eventCallable-methods-prepend-fn-throws}
+#### Throws (#eventCallable-methods-prepend-fn-throws)
 
-##### unit call from pure function is not supported, use operators like sample instead {#eventCallable-methods-prepend-fn-throws-unit-call-from-pure}
+##### unit call from pure function is not supported, use operators like sample instead (#eventCallable-methods-prepend-fn-throws-unit-call-from-pure)
 
 > Since: effector 23.0.0
 
@@ -256,11 +256,11 @@ sample({
 });
 ```
 
-#### Returns {#eventCallable-methods-prepend-fn-returns}
+#### Returns (#eventCallable-methods-prepend-fn-returns)
 
 [`EventCallable<T>`](/en/api/effector/Event): New event.
 
-#### Types {#eventCallable-methods-prepend-fn-types}
+#### Types (#eventCallable-methods-prepend-fn-types)
 
 There TypeScript requires explicitly setting type of the argument of `fn` function:
 
@@ -275,9 +275,9 @@ const prepended = original.prepend((input: string) => ({ input }));
 
 Type of the `original` event argument and the resulting type of the `fn` must be the same.
 
-#### Examples {#eventCallable-methods-prepend-fn-examples}
+#### Examples (#eventCallable-methods-prepend-fn-examples)
 
-##### Basic {#eventCallable-methods-prepend-fn-examples-basic}
+##### Basic (#eventCallable-methods-prepend-fn-examples-basic)
 
 ```js
 import { createEvent } from "effector";
@@ -309,7 +309,7 @@ changeName("alice");
 
 [Try it](https://share.effector.dev/XGxlG4LD)
 
-##### Meaningful example {#eventCallable-methods-prepend-fn-examples-meaningful}
+##### Meaningful example (#eventCallable-methods-prepend-fn-examples-meaningful)
 
 You can think of this method like a wrapper function. Let's assume we have function with not ideal API, but we want to
 call it frequently:
@@ -341,7 +341,7 @@ reportClick("example");
 
 Check all other methods on [Event](#event-methods).
 
-# `Event<T>` {#event}
+# `Event<T>` (#event)
 
 A **Event** is a super type of `EventCallable` with different approach. Firstly, invoking a Event is not
 allowed, and it cannot be used as a `target` in the `sample` operator, and so on.
@@ -358,7 +358,7 @@ application's logic.
 
 All the functionalities provided by an Event are also supported in an EventCallable.
 
-## Construction {#event-construction}
+## Construction (#event-construction)
 
 There is no way to manually create Event, but some methods and operators returns derived events, they are return
 `Event<T>` type:
@@ -368,11 +368,11 @@ There is no way to manually create Event, but some methods and operators returns
 - Effect's [methods](/en/api/effector/Effect#effect) and [properties](/en/api/effector/Effect#properties)
 - operators like: [`sample`](/en/api/effector/sample), [`merge`](/en/api/effector/merge)
 
-## Throws {#event-throws}
+## Throws (#event-throws)
 
 - **Errors related to incorrect usage**: More details in specific method sections.
 
-## Declaring types {#event-types}
+## Declaring types (#event-types)
 
 It becomes necessary in cases where a factory or library requires an event to subscribe to its updates, ensuring proper
 integration and interaction with the provided functionality:
@@ -381,15 +381,15 @@ integration and interaction with the provided functionality:
 const event: Event<T>;
 ```
 
-## Methods {#event-methods}
+## Methods (#event-methods)
 
-### `.map(fn)` {#event-methods-map-fn}
+### `.map(fn)` (#event-methods-map-fn)
 
 Creates a new derived Event, which will be called after the original event is called, using the result of the fn
 function as its argument. This special function enables you to break down and manage data flow, as well as extract or
 transform data within your business logic model.
 
-#### Formulae {#event-methods-map-fn-formulae}
+#### Formulae (#event-methods-map-fn-formulae)
 
 ```ts
 const first: Event<T> | EventCallable<T>;
@@ -401,13 +401,13 @@ const second: Event<F> = first.map(fn);
 - The function `fn` is invoked each time the `first` event is triggered.
 - Also, the `second` event triggered each time the `first` is triggered.
 
-#### Arguments {#event-methods-map-fn-arguments}
+#### Arguments (#event-methods-map-fn-arguments)
 
 1. `fn` (_Function_): A function that receives `argument`, and [should be **pure**](/en/explanation/glossary#purity).
 
-#### Throws {#event-methods-map-fn-throws}
+#### Throws (#event-methods-map-fn-throws)
 
-##### unit call from pure function is not supported, use operators like sample instead {#event-methods-map-fn-throws-unit-call-from-pure}
+##### unit call from pure function is not supported, use operators like sample instead (#event-methods-map-fn-throws-unit-call-from-pure)
 
 > Since: effector 23.0.0
 
@@ -443,11 +443,11 @@ sample({
 });
 ```
 
-#### Returns {#event-methods-map-fn-returns}
+#### Returns (#event-methods-map-fn-returns)
 
 [`Event<T>`](#event): The new event.
 
-#### Types {#event-methods-map-fn-types}
+#### Types (#event-methods-map-fn-types)
 
 The resulting type of the `fn` function will be utilized to define the type of the derived event.
 
@@ -464,7 +464,7 @@ const second = first.map((count) => count.toString());
 The `first` event can be represented as either `Event<T>` or `Event<T>`. <br/>
 The `second` event will always be represented as `Event<T>`.
 
-#### Examples {#event-methods-map-fn-examples}
+#### Examples (#event-methods-map-fn-examples)
 
 ```js
 import { createEvent } from "effector";
@@ -487,7 +487,7 @@ userUpdated({ name: "john", role: "admin" });
 
 [Try it](https://share.effector.dev/duDut6nR)
 
-### `.filter({ fn })` {#event-methods-filter-fn}
+### `.filter({ fn })` (#event-methods-filter-fn)
 
 This method generates a new derived Event that will be invoked after the original event, but only if the `fn`
 function returns `true`. This special function enables you to break down data flow into a branches and
@@ -497,7 +497,7 @@ subscribe on them within the business logic model.
 [sample](/en/api/effector/sample) operator with `filter` argument is the preferred filtering method.
 :::
 
-#### Formulae {#event-methods-filter-fn-formulae}
+#### Formulae (#event-methods-filter-fn-formulae)
 
 ```ts
 const first: Event<T> | EventCallable<T>;
@@ -509,7 +509,7 @@ const second: Event<T> = first.filter({ fn });
 - The function `fn` is invoked each time the `first` event is triggered.
 - Also, the `second` event triggered each time the `first` is triggered, **and** the `fn` returned `true`.
 
-#### Arguments {#event-methods-filter-fn-arguments}
+#### Arguments (#event-methods-filter-fn-arguments)
 
 1. `fn` (_Function_): A function that receives `argument`, and [should be **pure**](/en/explanation/glossary#purity).
 
@@ -520,9 +520,9 @@ for [Event filterMap](/en/api/effector/Event#event-methods-filterMap-fn).
 Use it always like this `.filter({ fn })`.
 :::
 
-#### Throws {#event-methods-filter-fn-throws}
+#### Throws (#event-methods-filter-fn-throws)
 
-##### unit call from pure function is not supported, use operators like sample instead {#event-methods-filter-fn-throws-unit-call-from-pure}
+##### unit call from pure function is not supported, use operators like sample instead (#event-methods-filter-fn-throws-unit-call-from-pure)
 
 > Since: effector 23.0.0
 
@@ -558,11 +558,11 @@ sample({
 });
 ```
 
-#### Returns {#event-methods-filter-fn-returns}
+#### Returns (#event-methods-filter-fn-returns)
 
 [`Event<T>`](#event): The new event
 
-#### Types {#event-methods-filter-fn-types}
+#### Types (#event-methods-filter-fn-types)
 
 Method `.filter()` always returns Event. Also this event will have the same type as the original type:
 
@@ -582,7 +582,7 @@ numberReceived(5); // nothing
 numberReceived(2); // => 2
 ```
 
-#### Examples {#event-methods-filter-fn-examples}
+#### Examples (#event-methods-filter-fn-examples)
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -612,7 +612,7 @@ numbers({ x: 10 });
 
 [Try it](https://share.effector.dev/H2Iu4iJH)
 
-#### Meaningful example {#event-methods-filter-fn-examples-meaningful}
+#### Meaningful example (#event-methods-filter-fn-examples-meaningful)
 
 Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the
 particular size of the sneakers' model, and in addition, you want to receive a notification if they have it, and ignore
@@ -626,7 +626,7 @@ const uniqueSizeReceived = sneackersReceived.filter({
 });
 ```
 
-### `.filterMap(fn)` {#event-methods-filterMap-fn}
+### `.filterMap(fn)` (#event-methods-filterMap-fn)
 
 :::info{title="since"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
@@ -641,7 +641,7 @@ impossibility for event filtering.
 
 This method is mostly useful with JavaScript APIs whose returns `undefined` sometimes.
 
-#### Formulae {#event-methods-filterMap-fn-formulae}
+#### Formulae (#event-methods-filterMap-fn-formulae)
 
 ```ts
 const first: Event<T> | EventCallable<T>;
@@ -652,15 +652,15 @@ const second: Event<F> = first.filterMap(fn);
 - If `fn()` returned `undefined` do not trigger `second`
 - If `fn()` returned some data, trigger `second` with data from `fn()`
 
-#### Arguments {#event-methods-filterMap-fn-arguments}
+#### Arguments (#event-methods-filterMap-fn-arguments)
 
 1. `fn` (_Function_): A function that receives `argument`, [should be **pure**](/en/explanation/glossary#purity).
 
 The `fn` function should return some data. When `undefined` is returned, the update of derived event will be skipped.
 
-#### Throws {#event-methods-filterMap-fn-throws}
+#### Throws (#event-methods-filterMap-fn-throws)
 
-##### unit call from pure function is not supported, use operators like sample instead {#event-methods-filterMap-fn-throws-unit-call-from-pure}
+##### unit call from pure function is not supported, use operators like sample instead (#event-methods-filterMap-fn-throws-unit-call-from-pure)
 
 > Since: effector 23.0.0
 
@@ -692,11 +692,11 @@ sample({
 });
 ```
 
-#### Returns {#event-methods-filterMap-fn-returns}
+#### Returns (#event-methods-filterMap-fn-returns)
 
 [`Event<T>`](#event): The new event
 
-#### Types {#event-methods-filterMap-fn-types}
+#### Types (#event-methods-filterMap-fn-types)
 
 The type for the derived event is automatically inferred from the `fn` declaration.
 No need to explicitly set type for variable or generic type argument:
@@ -717,7 +717,7 @@ const second = first.filterMap((count) => {
 The `first` event can be represented as either `Event<T>` or `EventCallable<T>`. <br/>
 The `second` event will always be represented as `Event<T>`.
 
-#### Examples {#event-methods-filterMap-fn-examples}
+#### Examples (#event-methods-filterMap-fn-examples)
 
 ```tsx
 import { createEvent } from "effector";
@@ -735,7 +735,7 @@ listReceived(["redux", "mobx"]);
 
 [Try it](https://share.effector.dev/ARDanMAM)
 
-#### Meaningful example {#event-methods-filterMap-fn-examples-meaningful}
+#### Meaningful example (#event-methods-filterMap-fn-examples-meaningful)
 
 Consider a scenario where you walk into a grocery store with a specific task: you need to purchase 10 apples, but only
 if they're red. If they're not red, you're out of luck.
@@ -753,7 +753,7 @@ case:
 4. Put in pack – event.
 5. Pack – store
 
-### `.watch(watcher)` {#event-methods-watch-watcher}
+### `.watch(watcher)` (#event-methods-watch-watcher)
 
 This method enables you to call callback on each event trigger with the argument of the event.
 
@@ -766,7 +766,7 @@ Its primary intended use is for short-term debugging and logging purposes.
 
 [Read more in the explanation section](/en/explanation/events#event-watch).
 
-#### Formulae {#event-methods-watch-watcher-formulae}
+#### Formulae (#event-methods-watch-watcher-formulae)
 
 ```ts
 const event: Event<T> | EventCallable<T>;
@@ -776,15 +776,15 @@ const unwatch: () => void = event.watch(fn);
 - The `fn` will be called on each `event` trigger, passed argument of the `event` to the `fn`.
 - When `unwatch` is called, stop calling `fn` on each `event` trigger.
 
-#### Arguments {#event-methods-watch-watcher-arguments}
+#### Arguments (#event-methods-watch-watcher-arguments)
 
 1. `watcher` ([_Watcher_](/en/explanation/glossary#watcher)): A function that receives `argument` from the event.
 
-#### Returns {#event-methods-watch-watcher-returns}
+#### Returns (#event-methods-watch-watcher-returns)
 
 [_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function.
 
-#### Examples {#event-methods-watch-watcher-examples}
+#### Examples (#event-methods-watch-watcher-examples)
 
 ```js
 import { createEvent } from "effector";
@@ -800,7 +800,7 @@ sayHi("Drew"); // => nothing happened
 
 [Try it](https://share.effector.dev/9YVgCl4C)
 
-### `.subscribe(observer)` {#event-methods-subscribe-observer}
+### `.subscribe(observer)` (#event-methods-subscribe-observer)
 
 This is the low-level method to integrate event with the standard `Observable` pattern.
 
@@ -813,12 +813,12 @@ Read more:
 - https://rxjs.dev/guide/observable
 - https://github.com/tc39/proposal-observable
 
-## Properties {#event-properties}
+## Properties (#event-properties)
 
 These set of property is mostly set by [`effector/babel-plugin`](/en/api/effector/babel-plugin)
 or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin). So they are exist only when babel or SWC is used.
 
-### `.sid` {#event-properties-sid}
+### `.sid` (#event-properties-sid)
 
 It is an unique identifier for each event.
 
@@ -830,7 +830,7 @@ server/browser: [examples/worker-rpc](https://github.com/effector/effector/tree/
 
 It has the `string | null` type.
 
-### `.shortName` {#event-properties-shortName}
+### `.shortName` (#event-properties-shortName)
 
 It is a `string` type property, contains the name of the variable event declared at.
 
@@ -848,7 +848,7 @@ const another = demo;
 // another.shortName === 'demo'
 ```
 
-### `.compositeName` {#event-properties-compositeName}
+### `.compositeName` (#event-properties-compositeName)
 
 This property contains the full internal chain of units. For example, event can be created by the domain, so the
 composite name will contain a domain name inside it.
@@ -867,13 +867,13 @@ console.log(second);
 // => { shortName: "second", fullName: "domain/second", path: ["domain", "second"] }
 ```
 
-# Types {#types}
+# Types (#types)
 
 ```ts
 import { type EventPayload } from "effector";
 ```
 
-## `EventPayload<E>` {#types-EventPayload}
+## `EventPayload<E>` (#types-EventPayload)
 
 Extracts type of payload from `Event` or `EventCallable`.
 

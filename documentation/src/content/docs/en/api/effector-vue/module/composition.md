@@ -9,7 +9,7 @@ import {} from "effector-vue/composition";
 
 Provides additional API for [effector-vue](/en/api/effector-vue) that allows to use [Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html)
 
-## APIs {#api}
+## APIs (#api)
 
 - [useUnit(shape)](/en/api/effector-vue/useUnit)
 - [useStore($store)](/en/api/effector-vue/useStore)

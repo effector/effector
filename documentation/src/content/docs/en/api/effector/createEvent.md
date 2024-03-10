@@ -10,34 +10,34 @@ redirectFrom:
 import { createEvent } from "effector";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `createEvent(name?)` {#methods-createEvent-name}
+## `createEvent(name?)` (#methods-createEvent-name)
 
 Method for creating an [event](/en/api/effector/Event).
 
-### Formulae {#methods-createEvent-name-formulae}
+### Formulae (#methods-createEvent-name-formulae)
 
 ```ts
 createEvent<T>(name?): Event<T>
 createEvent(name?): Event<void>
 ```
 
-### Arguments {#methods-createEvent-name-arguments}
+### Arguments (#methods-createEvent-name-arguments)
 
 1. `name`? (_string_): Event name
 
-### Returns {#methods-createEvent-name-returns}
+### Returns (#methods-createEvent-name-returns)
 
 [_EventCallable_](/en/api/effector/Event#eventCallable): New event
 
-### Notes {#methods-createEvent-name-notes}
+### Notes (#methods-createEvent-name-notes)
 
 [Event](/en/api/effector/Event) – it is a function which allows to change state when called (see [simple example](#methods-createEvent-name-examples-simple)) also it can be a good way to extract data (see [map and watch example](#methods-createEvent-name-examples-map-watch)). Also, it allows us to send data to another event or effect via effector operators.
 
-### Examples {#methods-createEvent-name-examples}
+### Examples (#methods-createEvent-name-examples)
 
-#### Simple {#methods-createEvent-name-examples-simple}
+#### Simple (#methods-createEvent-name-examples-simple)
 
 ```js
 import { createStore, createEvent } from "effector";
@@ -71,7 +71,7 @@ resetCounter();
 We created a store `$counter` and an event `incrementBy`, and started watching the store.<br/>
 Notice the function call `incrementBy(10)`. Whenever you will call `incrementBy(10)`, you can look at the console and see how state of `$counter` changes.
 
-#### Using `.map` and `.watch` {#methods-createEvent-name-examples-map-watch}
+#### Using `.map` and `.watch` (#methods-createEvent-name-examples-map-watch)
 
 ```js
 import { createEvent } from "effector";

@@ -8,7 +8,7 @@ lang: ru
 
 ## createEffect с обработчиком событий
 
-### Формула {#formulae_handler}
+### Формула (#formulae_handler)
 
 ```typescript
 createEffect(handler?)
@@ -139,7 +139,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 Создает эффект с обработчиком событий и именем, которые заданы в объекте параметров
 
-### Формула {#formulae_config}
+### Формула (#formulae_config)
 
 ```typescript
 createEffect({ handler, name });

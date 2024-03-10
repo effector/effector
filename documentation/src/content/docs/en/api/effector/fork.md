@@ -9,9 +9,9 @@ redirectFrom:
 import { fork, type Scope } from "effector";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `fork()` {#methods-fork}
+## `fork()` (#methods-fork)
 
 :::info{title="since"}
 
@@ -22,19 +22,19 @@ introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 Creates an isolated instance of application.
 Primary purposes of this method are SSR and testing.
 
-### Formulae {#methods-fork-formulae}
+### Formulae (#methods-fork-formulae)
 
 ```ts
 fork(): Scope
 ```
 
-### Returns {#methods-fork-returns}
+### Returns (#methods-fork-returns)
 
 [_Scope_](/en/api/effector/Scope): New fresh scope
 
-### Examples {#methods-fork-examples}
+### Examples (#methods-fork-examples)
 
-#### Create two instances with independent counter state {#methods-fork-examples-create-two-instances}
+#### Create two instances with independent counter state (#methods-fork-examples-create-two-instances)
 
 ```js
 import { createStore, createEvent, fork, allSettled } from "effector";
@@ -59,7 +59,7 @@ console.log(scopeB.getState($counter)); // => -1
 
 [Try it](https://share.effector.dev/dBSC59h8)
 
-## `fork(options)` {#methods-fork-options}
+## `fork(options)` (#methods-fork-options)
 
 Allows to set values for stores in scope and replace handlers for effects.
 
@@ -69,17 +69,17 @@ support for array of tuples in `values` and `handlers` introduced in [effector 2
 
 :::
 
-### Formulae {#methods-fork-options-formulae}
+### Formulae (#methods-fork-options-formulae)
 
 ```ts
 fork(options: { values?, handlers? }): Scope
 ```
 
-### Arguments {#methods-fork-options-arguments}
+### Arguments (#methods-fork-options-arguments)
 
 1. `options: { values?, handlers? }` — Object with optional values and handlers
 
-#### `values` {#methods-fork-options-arguments-values}
+#### `values` (#methods-fork-options-arguments-values)
 
 Option to provide initial states for stores.
 
@@ -121,7 +121,7 @@ fork({
 Such objects are created by [serialize](/en/api/effector/serialize), in application code **array of tuples is preferred**
 :::
 
-#### `handlers` {#methods-fork-options-arguments-handlers}
+#### `handlers` (#methods-fork-options-arguments-handlers)
 
 Option to provide handlers for effects.
 
@@ -165,13 +165,13 @@ fork({
 Such objects are deprecated since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) and will be removed in future versions. Array of tuples is preferred.
 :::
 
-### Returns {#methods-fork-options-returns}
+### Returns (#methods-fork-options-returns)
 
 [_Scope_](/en/api/effector/Scope): New fresh scope
 
-### Examples {#methods-fork-options-examples}
+### Examples (#methods-fork-options-examples)
 
-#### Set initial state for store and change handler for effect {#methods-fork-examples-set-initial-state-and-change-handler}
+#### Set initial state for store and change handler for effect (#methods-fork-examples-set-initial-state-and-change-handler)
 
 This is an example of test, which ensures that after a request to the server, the value of `$friends` is filled.
 
@@ -205,7 +205,7 @@ console.log(testScope.getState($friends));
 
 [Try it](https://share.effector.dev/gnNbGZuu)
 
-## `fork(domain, options?)` {#methods-fork-domain}
+## `fork(domain, options?)` (#methods-fork-domain)
 
 :::info{title="since"}
 
@@ -213,21 +213,21 @@ introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 
 :::
 
-### Formulae {#methods-fork-domain-formulae}
+### Formulae (#methods-fork-domain-formulae)
 
 ```ts
 fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
-### Arguments {#methods-fork-domain-arguments}
+### Arguments (#methods-fork-domain-arguments)
 
 1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork.
 2. `options: { values?, handlers? }` — Object with optional [values](#methods-fork-options-arguments-values) and [handlers](#methods-fork-options-arguments-handlers)
 
-### Returns {#methods-fork-domain-returns}
+### Returns (#methods-fork-domain-returns)
 
 [_Scope_](/en/api/effector/Scope): New fresh scope
 
-### Examples {#methods-fork-domain-examples}
+### Examples (#methods-fork-domain-examples)
 
 TBD

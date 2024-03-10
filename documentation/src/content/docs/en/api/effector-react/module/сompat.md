@@ -18,7 +18,7 @@ Since third-party libraries can import `effector-react` directly, you **should n
 
 Since `effector-react` uses `effector` under the hood, you need to use the compat-version of `effector` as well. Please, read [`effector/compat`](/en/api/effector/module/compat) for details.
 
-## Required Polyfills {#required-polyfills}
+## Required Polyfills (#required-polyfills)
 
 You need to install polyfills for these objects:
 
@@ -30,7 +30,7 @@ You need to install polyfills for these objects:
 
 In most cases, a bundler can automatically add polyfills.
 
-### Vite {#required-polyfills-vite}
+### Vite (#required-polyfills-vite)
 
 <details>
 <summary>Vite Configuration Example</summary>
@@ -50,9 +50,9 @@ export default defineConfig({
 
 </details>
 
-# Usage {#usage}
+# Usage (#usage)
 
-## Manual Usage {#usage-manual}
+## Manual Usage (#usage-manual)
 
 You can use it instead of the `effector-react` package if you need to support old browsers.
 
@@ -61,11 +61,11 @@ You can use it instead of the `effector-react` package if you need to support ol
 + import {useUnit} from 'effector-react/compat'
 ```
 
-## Automatic Replacement {#usage-automatic-replacement}
+## Automatic Replacement (#usage-automatic-replacement)
 
 However, you can set up your bundler to automatically replace `effector` with `effector/compat` in your code.
 
-### Webpack {#usage-automatic-replacement-webpack}
+### Webpack (#usage-automatic-replacement-webpack)
 
 ```js
 module.exports = {
@@ -78,7 +78,7 @@ module.exports = {
 };
 ```
 
-### Vite {#usage-automatic-replacement-vite}
+### Vite (#usage-automatic-replacement-vite)
 
 ```js
 import { defineConfig } from "vite";

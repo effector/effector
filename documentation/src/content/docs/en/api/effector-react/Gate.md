@@ -24,9 +24,9 @@ Gate has two potential states:
 <Gate history={history} />
 ```
 
-# Properties {#properties}
+# Properties (#properties)
 
-## `.state` Store {#properties-state}
+## `.state` Store (#properties-state)
 
 :::warning{title="Important"}
 Do not modify the `state` value! It is a [derived store](/en/api/effector/Store#readonly) and should remain in a predictable state.
@@ -34,7 +34,7 @@ Do not modify the `state` value! It is a [derived store](/en/api/effector/Store#
 
 `Store<Props>`: [DerivedStore](/en/api/effector/Store#readonly) containing the current state of the gate. This state derives from the second argument of [useGate](/en/api/effector-react/useGate) and from props when rendering the gate as a component.
 
-### Example {#properties-state-example}
+### Example (#properties-state-example)
 
 ```tsx
 const Gate = createGate();
@@ -50,7 +50,7 @@ ReactDOM.render(<App />, root);
 // => gate state updated { props: "yep" }
 ```
 
-## `.open` Event {#properties-open}
+## `.open` Event (#properties-open)
 
 :::info{title="Important"}
 Do not manually invoke this event. It is an event that is triggered based on the gate's state.
@@ -58,7 +58,7 @@ Do not manually invoke this event. It is an event that is triggered based on the
 
 [Event<Props>](/en/api/effector/Event): Event fired upon gate mounting.
 
-## `.close` Event {#properties-close}
+## `.close` Event (#properties-close)
 
 :::info{title=Important}
 Do not manually invoke this event. It is an event that is triggered based on the gate's state.
@@ -66,7 +66,7 @@ Do not manually invoke this event. It is an event that is triggered based on the
 
 [Event<Props>](/en/api/effector/Event): Event fired upon gate unmounting.
 
-## `.status` Store {#properties-status}
+## `.status` Store (#properties-status)
 
 :::warning{title="Important"}
 Do not modify the `status` value! It is a [derived store](/en/api/effector/Store#readonly) and should remain in a predictable state.
@@ -74,7 +74,7 @@ Do not modify the `status` value! It is a [derived store](/en/api/effector/Store
 
 [Store<boolean>](/en/api/effector/Store): Boolean [DerivedStore](/en/api/effector/Store#readonly) indicating whether the gate is mounted.
 
-### Example {#properties-status-example}
+### Example (#properties-status-example)
 
 ```tsx
 const Gate = createGate();

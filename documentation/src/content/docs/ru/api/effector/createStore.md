@@ -6,7 +6,7 @@ lang: ru
 
 Метод для создания независимого [стора](/ru/api/effector/Store)
 
-## Формула {#createStore-formulae}
+## Формула (#createStore-formulae)
 
 ```ts
 createStore<T>(defaultState: T): Store<T>
@@ -17,7 +17,7 @@ createStore<T>(defaultState: T, config: {
 }): Store<T>
 ```
 
-### Аргументы {#createStore-args}
+### Аргументы (#createStore-args)
 
 1. **`defaultState`**: Исходное состояние
 2. **`config`**: Опциональный объект конфигурации
@@ -42,7 +42,7 @@ createStore<T>(defaultState: T, config: {
 
    - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стора к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
 
-### Возвращает {#createStore-return}
+### Возвращает (#createStore-return)
 
 Новый [стор](/ru/api/effector/Store)
 

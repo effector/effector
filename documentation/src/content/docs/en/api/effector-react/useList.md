@@ -16,13 +16,13 @@ import { useList } from "effector-react";
 Hook function for efficient rendering of list store.
 Every item will be memoized and updated only when their data change.
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useList($store, fn)` {#methods-useList-store-fn}
+## `useList($store, fn)` (#methods-useList-store-fn)
 
 Using `index` as `key` for each element in the list.
 
-### Formulae {#methods-useList-store-fn-formulae}
+### Formulae (#methods-useList-store-fn-formulae)
 
 ```ts
 useList(
@@ -31,18 +31,18 @@ useList(
 ): React.ReactNode;
 ```
 
-### Arguments {#methods-useList-store-fn-arguments}
+### Arguments (#methods-useList-store-fn-arguments)
 
 1. `$store` ([`Store<T>`](/en/api/effector/Store)): Store with an array of items
 2. `fn` (_Function_): Render function which will be called for every item in list
 
-### Returns {#methods-useList-store-fn-returns}
+### Returns (#methods-useList-store-fn-returns)
 
 (`React.Node`)
 
 ### Examples {##methods-useList-store-fn-examples}
 
-#### Basic {#methods-useList-store-fn-examples-basic}
+#### Basic (#methods-useList-store-fn-examples-basic)
 
 ```jsx
 import { createStore } from "effector";
@@ -69,7 +69,7 @@ const App = () => {
 
 [Try it](https://share.effector.dev/dV9dmuz3)
 
-#### With store updates {#methods-useList-store-fn-examples-with-store-updates}
+#### With store updates (#methods-useList-store-fn-examples-with-store-updates)
 
 ```jsx
 import { createStore, createEvent } from "effector";
@@ -141,7 +141,7 @@ const App = () => {
 
 [Try it](https://share.effector.dev/dUay9F3U)
 
-## `useList($store, config)` {#methods-useList-store-config}
+## `useList($store, config)` (#methods-useList-store-config)
 
 Used when you need to pass dependencies to react (to update items when some of its dependencies are changed).
 
@@ -149,7 +149,7 @@ By default, `useList` rerenders only when some of its items were changed.
 However, sometimes we need to update items when some external value (e.g. props field or state of another store) changes.
 In such case, we need to tell React about our dependencies and pass keys explicitly.
 
-### Formulae {#methods-useList-store-config-formulae}
+### Formulae (#methods-useList-store-config-formulae)
 
 ```ts
 useList(
@@ -163,7 +163,7 @@ useList(
 ): React.ReactNode;
 ```
 
-### Arguments {#methods-useList-store-config-arguments}
+### Arguments (#methods-useList-store-config-arguments)
 
 1. `$store` ([`Store<T>`](/en/api/effector/Store)): Store with an array of items
 2. `config` (`Object`)
@@ -180,13 +180,13 @@ useList(
 `placeholder` option introduced in [effector-react@22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
 :::
 
-### Returns {#methods-useList-store-config-returns}
+### Returns (#methods-useList-store-config-returns)
 
 (`React.Node`)
 
-### Examples {#methods-useList-store-config-examples}
+### Examples (#methods-useList-store-config-examples)
 
-#### Basic {#methods-useList-store-config-examples-config}
+#### Basic (#methods-useList-store-config-examples-config)
 
 ```jsx
 import ReactDOM from "react-dom";

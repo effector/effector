@@ -13,26 +13,26 @@ import { useUnit } from "effector-solid";
 Binds effector stores to the Solid reactivity system or, in the case of events/effects – binds to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
 Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid` is no-op for events and does not require `Provider` with scope.
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useUnit(unit)` {#methods-useUnit-unit}
+## `useUnit(unit)` (#methods-useUnit-unit)
 
-### Arguments {#methods-useUnit-unit-arguments}
+### Arguments (#methods-useUnit-unit-arguments)
 
 ```ts
 useUnit(event: EventCallable<T>): (payload: T) => T;
 useUnit(effect: Effect<Params, Done, any>): (payload: Params) => Promise<Done>;
 ```
 
-### Arguments {#methods-useUnit-unit-arguments}
+### Arguments (#methods-useUnit-unit-arguments)
 
 1. `unit` ([`EventCallable<T>`](/en/api/effector/Event#eventCallable) or [`Effect<Params, Done, Fail>`](/en/api/effector/Effect)): Event or effect which will be bound to current `scope`.
 
-### Returns {#methods-useUnit-unit-returns}
+### Returns (#methods-useUnit-unit-returns)
 
 (`Function`): Function to pass to event handlers. Will trigger the given unit in the current scope.
 
-### Example {#methods-useUnit-unit-example}
+### Example (#methods-useUnit-unit-example)
 
 A basic Solid component using `useUnit` with events and stores.
 
@@ -69,23 +69,23 @@ render(
 );
 ```
 
-## `useUnit(store)` {#methods-useUnit-store}
+## `useUnit(store)` (#methods-useUnit-store)
 
-### Formulae {#methods-useUnit-store-formulae}
+### Formulae (#methods-useUnit-store-formulae)
 
 ```ts
 useUnit($store: Store<State>): Accessor<State>;
 ```
 
-### Arguments {#methods-useUnit-store-arguments}
+### Arguments (#methods-useUnit-store-arguments)
 
 1. `$store` effector ([_Store_](/en/api/effector/Store)).
 
-### Returns {#methods-useUnit-store-returns}
+### Returns (#methods-useUnit-store-returns)
 
 (`Accessor<State>`) which will subscribe to store state.
 
-### Example {#methods-useUnit-store-example}
+### Example (#methods-useUnit-store-example)
 
 ```jsx
 import { createStore, createApi } from "effector";
@@ -112,9 +112,9 @@ const App = () => {
 };
 ```
 
-## `useUnit(shape)` {#methods-useUnit-shape}
+## `useUnit(shape)` (#methods-useUnit-shape)
 
-### Formulae {#methods-useUnit-shape-formulae}
+### Formulae (#methods-useUnit-shape-formulae)
 
 ```ts
 useUnit({ a: Store<A>, b: Event<B>, ... }): { a: Accessor<A>, b: (payload: B) => B; ... }
@@ -122,18 +122,18 @@ useUnit({ a: Store<A>, b: Event<B>, ... }): { a: Accessor<A>, b: (payload: B) =>
 useUnit([Store<A>, Event<B>, ... ]): [Accessor<A>, (payload: B) => B, ... ]
 ```
 
-### Arguments {#methods-useUnit-shape-arguments}
+### Arguments (#methods-useUnit-shape-arguments)
 
 1. `shape` Object or array of ([`EventCallable`](/en/api/effector/Event#eventCallable), [`Effect`](/en/api/effector/Effect), or [`Store`](/en/api/effector/Store)): Events, or effects, or stores as accessors which will be bound to the current `scope`.
 
-### Returns {#methods-useUnit-shape-returns}
+### Returns (#methods-useUnit-shape-returns)
 
 (`Object` or `Array`):
 
 - If `EventCallable` or `Effect`: functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope _Note: events or effects will be bound **only** if `useUnit` is imported from `effector-solid/scope`_.
 - If `Store`: accessor signals which will subscribe to the store state.
 
-### Examples {#methods-useUnit-shape-examples}
+### Examples (#methods-useUnit-shape-examples)
 
 ```jsx
 import { render } from "solid-js/web";

@@ -23,21 +23,21 @@ In the future, these APIs can be deprecated and removed.
 
 :::
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useUnit(unit)` {#methods-useUnit-unit}
+## `useUnit(unit)` (#methods-useUnit-unit)
 
-### Arguments {#methods-useUnit-unit-arguments}
+### Arguments (#methods-useUnit-unit-arguments)
 
 1. `unit` ([_Event_](../effector/Event) or [_Effect_](../effector/Effect)): Event or effect which will be bound to current [_Scope_](../effector/Scope)
 
-### Returns {#methods-useUnit-unit-returns}
+### Returns (#methods-useUnit-unit-returns)
 
 (`Function`): Function to pass to event handlers. Will trigger given unit in current scope
 
-### Examples {#methods-useUnit-unit-examples}
+### Examples (#methods-useUnit-unit-examples)
 
-#### Basic Usage {#methods-useUnit-unit-examples-basic}
+#### Basic Usage (#methods-useUnit-unit-examples-basic)
 
 ```js
 // model.js
@@ -65,19 +65,19 @@ $count.on(incremented, (count) => count + 1);
 </template>
 ```
 
-### `useUnit($store)` {#methods-useUnit-store}
+### `useUnit($store)` (#methods-useUnit-store)
 
-#### Arguments {#methods-useUnit-store-arguments}
+#### Arguments (#methods-useUnit-store-arguments)
 
 1. `$store` ([_Store_](../effector/Store)): Store which will be bound to Vue reactivity system
 
-#### Returns {#methods-useUnit-store-returns}
+#### Returns (#methods-useUnit-store-returns)
 
 Reactive value of given [_Store_](../effector/Store)
 
-#### Examples {#methods-useUnit-store-examples}
+#### Examples (#methods-useUnit-store-examples)
 
-##### Basic Usage {#methods-useUnit-store-examples-basic}
+##### Basic Usage (#methods-useUnit-store-examples-basic)
 
 ```js
 // model.js
@@ -105,22 +105,22 @@ $count.on(incremented, (count) => count + 1);
 </template>
 ```
 
-### `useUnit(shape)` {#methods-useUnit-shape}
+### `useUnit(shape)` (#methods-useUnit-shape)
 
-#### Arguments {#methods-useUnit-shape-arguments}
+#### Arguments (#methods-useUnit-shape-arguments)
 
 1. `shape` Object or array of ([_Events_](../effector/Event) or [_Effects_](../effector/Effect) or [_Stores_](../effector/Store)): Every unit will be processed by `useUnit` and returned as a reactive value in case of [_Store_](../effector/Store) or as a function to pass to event handlers in case of [_Event_](../effector/Event) or [_Effect_](../effector/Effect).
 
-#### Returns {#methods-useUnit-shape-returns}
+#### Returns (#methods-useUnit-shape-returns)
 
 (Object or Array):
 
 - if [_Event_](../effector/Event) or [_Effect_](../effector/Effect): functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current [_Scope_](../effector/Scope).
 - if [_Store_](../effector/Store): reactive value of given [_Store_](../effector/Store) with the same names or keys as argument.
 
-#### Examples {#methods-useUnit-shape-examples}
+#### Examples (#methods-useUnit-shape-examples)
 
-##### Basic Usage {#methods-useUnit-shape-examples-basic}
+##### Basic Usage (#methods-useUnit-shape-examples-basic)
 
 ```js
 // model.js

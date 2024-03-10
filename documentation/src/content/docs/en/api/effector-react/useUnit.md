@@ -21,30 +21,30 @@ In the case of [stores](/en/api/effector/Store), it subscribes the component to 
 In the case of [events](/en/api/effector/Event)/[effects](/en/api/effector/Effect) – it binds to the current [_scope_](/en/api/effector/Scope) to use in DOM event handlers.
 Only the `effector-react/scope` version works this way; the `useUnit` of `effector-react` is no-op for events and does not require a `Provider` with scope.
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useUnit(unit)` {#methods-useUnit-unit}
+## `useUnit(unit)` (#methods-useUnit-unit)
 
 Creates function that calls original unit but bounded to [`Scope`](/en/api/effector/Scope) if provided.
 
-### Formulae {#methods-useUnit-unit-formulae}
+### Formulae (#methods-useUnit-unit-formulae)
 
 ```ts
 useUnit(event: EventCallable<T>): (payload: T) => T;
 useUnit(effect: Effect<Params, Done, any>): (payload: Params) => Promise<Done>;
 ```
 
-### Arguments {#methods-useUnit-unit-arguments}
+### Arguments (#methods-useUnit-unit-arguments)
 
 1. `unit` ([`EventCallable<T>`](/en/api/effector/Event#eventCallable) or [`Effect<Params, Done, Fail>`](/en/api/effector/Effect)): Event or effect which will be bound to the current `scope`.
 
-### Returns {#methods-useUnit-unit-returns}
+### Returns (#methods-useUnit-unit-returns)
 
 (Function): Function to pass to event handlers. Will trigger the given unit in the current scope.
 
-### Examples {#methods-useUnit-unit-examples}
+### Examples (#methods-useUnit-unit-examples)
 
-#### Basic {#methods-useUnit-unit-examples-basic}
+#### Basic (#methods-useUnit-unit-examples-basic)
 
 ```jsx
 import { createEvent, createStore, fork } from "effector";
@@ -79,27 +79,27 @@ render(
 );
 ```
 
-## `useUnit($store)` {#methods-useUnit-store}
+## `useUnit($store)` (#methods-useUnit-store)
 
 Reads value from the `$store` and rerenders component when `$store` updates in [`Scope`](/en/api/effector/Scope) if provided.
 
-### Formulae {#methods-useUnit-store-formulae}
+### Formulae (#methods-useUnit-store-formulae)
 
 ```ts
 useUnit($store: Store<T>): T;
 ```
 
-### Arguments {#methods-useUnit-store-arguments}
+### Arguments (#methods-useUnit-store-arguments)
 
 1. `$store`: effector ([_Store_](/en/api/effector/Store))
 
-### Returns {#methods-useUnit-store-returns}
+### Returns (#methods-useUnit-store-returns)
 
 Current value of the store.
 
-### Examples {#methods-useUnit-store-examples}
+### Examples (#methods-useUnit-store-examples)
 
-#### Basic {#methods-useUnit-store-examples-basic}
+#### Basic (#methods-useUnit-store-examples-basic)
 
 ```js
 import { createStore, createApi } from "effector";
@@ -126,9 +126,9 @@ const App = () => {
 };
 ```
 
-## `useUnit(shape)` {#methods-useUnit-shape}
+## `useUnit(shape)` (#methods-useUnit-shape)
 
-### Formulae {#methods-useUnit-shape-formulae}
+### Formulae (#methods-useUnit-shape-formulae)
 
 ```ts
 useUnit({ a: Store<A>, b: Event<B>, ... }): { a: A, b: (payload: B) => B; ... }
@@ -136,11 +136,11 @@ useUnit({ a: Store<A>, b: Event<B>, ... }): { a: A, b: (payload: B) => B; ... }
 useUnit([Store<A>, Event<B>, ... ]): [A, (payload: B) => B, ... ]
 ```
 
-### Arguments {#methods-useUnit-shape-arguments}
+### Arguments (#methods-useUnit-shape-arguments)
 
 1. `shape`: Object or array of ([`EventCallable`](/en/api/effector/Event#eventCallable), [`Effect`](/en/api/effector/Effect), or [`Store`](/en/api/effector/Store))
 
-### Returns {#methods-useUnit-shape-returns}
+### Returns (#methods-useUnit-shape-returns)
 
 (`Object` or `Array`):
 
@@ -148,9 +148,9 @@ useUnit([Store<A>, Event<B>, ... ]): [A, (payload: B) => B, ... ]
   _Note: events or effects will be bound to `Scope` **only** if component wrapped into [`Provider`](/en/api/effector-react/Provider)._
 - If passed `Store`: The current value of the store.
 
-### Examples {#methods-useUnit-shape-examples}
+### Examples (#methods-useUnit-shape-examples)
 
-#### Basic {#methods-useUnit-shape-examples-basic}
+#### Basic (#methods-useUnit-shape-examples-basic)
 
 ```jsx
 import { createStore, createEvent, fork } from "effector";

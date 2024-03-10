@@ -16,31 +16,31 @@ Domain can subscribe to event, effect, store or nested domain creation with `onC
 
 It is useful for logging or other side effects.
 
-# Unit creators {#unit-creators}
+# Unit creators (#unit-creators)
 
 :::info{title="since"}
 [effector 20.7.0](https://changelog.effector.dev/#effector-20-7-0)
 :::
 
-## `createEvent(name?)` {#unit-creators-createEvent-name}
+## `createEvent(name?)` (#unit-creators-createEvent-name)
 
-### Arguments {#unit-creators-createEvent-name-arguments}
+### Arguments (#unit-creators-createEvent-name-arguments)
 
 1. `name`? (_string_): event name
 
-### Returns {#unit-creators-createEvent-name-returns}
+### Returns (#unit-creators-createEvent-name-returns)
 
 [_Event_](/en/api/effector/Event): New event
 
-## `createEffect(handler?)` {#unit-creators-createEffect-handler}
+## `createEffect(handler?)` (#unit-creators-createEffect-handler)
 
 Creates an [effect](/en/api/effector/Effect) with given handler.
 
-### Arguments {#unit-creators-createEffect-handler-arguments}
+### Arguments (#unit-creators-createEffect-handler-arguments)
 
 1. `handler`? (_Function_): function to handle effect calls, also can be set with [use(handler)](#use)
 
-### Returns {#unit-creators-createEffect-handler-returns}
+### Returns (#unit-creators-createEffect-handler-returns)
 
 [_Effect_](/en/api/effector/Effect): A container for async function.
 
@@ -48,57 +48,57 @@ Creates an [effect](/en/api/effector/Effect) with given handler.
 [effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
 :::
 
-## `createEffect(name?)` {#unit-creators-createEffect-name}
+## `createEffect(name?)` (#unit-creators-createEffect-name)
 
-### Arguments {#unit-creators-createEffect-name-arguments}
+### Arguments (#unit-creators-createEffect-name-arguments)
 
 1. `name`? (_string_): effect name
 
-### Returns {#unit-creators-createEffect-name-returns}
+### Returns (#unit-creators-createEffect-name-returns)
 
 [_Effect_](/en/api/effector/Effect): A container for async function.
 
-## `createStore(defaultState)` {#unit-creators-createStore-defaultState}
+## `createStore(defaultState)` (#unit-creators-createStore-defaultState)
 
-### Arguments {#unit-creators-createStore-defaultState-arguments}
+### Arguments (#unit-creators-createStore-defaultState-arguments)
 
 1. `defaultState` (_State_): store default state
 
-### Returns {#unit-creators-createStore-defaultState-returns}
+### Returns (#unit-creators-createStore-defaultState-returns)
 
 [_Store_](/en/api/effector/Store): New store
 
-## `createDomain(name?)` {#unit-creators-createDomain-name}
+## `createDomain(name?)` (#unit-creators-createDomain-name)
 
-### Arguments {#unit-creators-createDomain-name-arguments}
+### Arguments (#unit-creators-createDomain-name-arguments)
 
 1. `name`? (_string_): domain name
 
-### Returns {#unit-creators-createDomain-name-returns}
+### Returns (#unit-creators-createDomain-name-returns)
 
 [_Domain_](/en/api/effector/Domain): New domain
 
-## Aliases {#unit-creators-aliases}
+## Aliases (#unit-creators-aliases)
 
-### `event(name?)` {#unit-creators-aliases-event-name}
+### `event(name?)` (#unit-creators-aliases-event-name)
 
 An alias for [domain.createEvent](/en/api/effector/Domain#createevent-name)
 
-### `effect(name?)` {#unit-creators-aliases-effect-name}
+### `effect(name?)` (#unit-creators-aliases-effect-name)
 
 An alias for [domain.createEffect](/en/api/effector/Domain#createeffect-name)
 
-### `store(defaultState)` {#unit-creators-aliases-store-defaultState}
+### `store(defaultState)` (#unit-creators-aliases-store-defaultState)
 
 An alias for [domain.createStore](/en/api/effector/Domain#createstore-defaultstate)
 
-### `domain(name?)` {#unit-creators-aliases-domain-name}
+### `domain(name?)` (#unit-creators-aliases-domain-name)
 
 An alias for [domain.createDomain](/en/api/effector/Domain#createdomain-name)
 
-# Domain Properties {#properties}
+# Domain Properties (#properties)
 
-## `.history` {#unit-creators-history}
+## `.history` (#unit-creators-history)
 
 Contains mutable read-only sets of units inside a domain.
 
@@ -106,7 +106,7 @@ Contains mutable read-only sets of units inside a domain.
 [effector 20.3.0](https://changelog.effector.dev/#effector-20-3-0)
 :::
 
-### Formulae {#unit-creators-history-formulae}
+### Formulae (#unit-creators-history-formulae)
 
 ```ts
 interface DomainHistory {
@@ -121,9 +121,9 @@ const { stores, events, domains, effects } = domain.history;
 
 When any kind of unit created inside a domain, it appears in a set with the name of type(stores, events, domains, effects) in the same order as created.
 
-### Examples {#unit-creators-history-examples}
+### Examples (#unit-creators-history-examples)
 
-#### Basic {#unit-creators-history-examples-basic}
+#### Basic (#unit-creators-history-examples-basic)
 
 ```js
 import { createDomain } from "effector";
@@ -136,11 +136,11 @@ console.log(domain.history);
 
 [Try it](https://share.effector.dev/flIV7Fja)
 
-# Domain hooks {#domain-hooks}
+# Domain hooks (#domain-hooks)
 
-## `onCreateEvent(callback)` {#domain-hooks-onCreateEvent-callback}
+## `onCreateEvent(callback)` (#domain-hooks-onCreateEvent-callback)
 
-### Formulae {#domain-hooks-onCreateEvent-callback-formulae}
+### Formulae (#domain-hooks-onCreateEvent-callback-formulae)
 
 ```ts
 domain.onCreateEvent((event: Event<any>) => {});
@@ -150,15 +150,15 @@ domain.onCreateEvent((event: Event<any>) => {});
 - Function called with `event` as first argument
 - The result of function call is ignored
 
-### Arguments {#domain-hooks-onCreateEvent-callback-arguments}
+### Arguments (#domain-hooks-onCreateEvent-callback-arguments)
 
 1. `callback` ([_Watcher_]): A function that receives [Event](/en/api/effector/Event) and will be called during every [domain.createEvent](/en/api/effector/Domain#unit-creators-createEvent-name) call
 
-### Returns {#domain-hooks-onCreateEvent-callback-returns}
+### Returns (#domain-hooks-onCreateEvent-callback-returns)
 
 [_Subscription_]: Unsubscribe function.
 
-### Example {#domain-hooks-onCreateEvent-callback-example}
+### Example (#domain-hooks-onCreateEvent-callback-example)
 
 ```js
 import { createDomain } from "effector";
@@ -178,9 +178,9 @@ const b = domain.createEvent();
 
 [Try it](https://share.effector.dev/QCQpga6u)
 
-## `onCreateEffect(callback)` {#domain-hooks-onCreateEffect-callback}
+## `onCreateEffect(callback)` (#domain-hooks-onCreateEffect-callback)
 
-### Formulae {#domain-hooks-onCreateEffect-callback-formulae}
+### Formulae (#domain-hooks-onCreateEffect-callback-formulae)
 
 ```ts
 domain.onCreateEffect((effect: Effect<any, any, any>) => {});
@@ -190,15 +190,15 @@ domain.onCreateEffect((effect: Effect<any, any, any>) => {});
 - Function called with `effect` as first argument
 - The result of function call is ignored
 
-### Arguments {#domain-hooks-onCreateEffect-callback-arguments}
+### Arguments (#domain-hooks-onCreateEffect-callback-arguments)
 
 1. `callback` ([_Watcher_]): A function that receives [Effect](/en/api/effector/Effect) and will be called during every [domain.createEffect](/en/api/effector/Domain#unit-creators-createEffect-handler) call
 
-### Returns {#domain-hooks-onCreateEffect-callback-returns}
+### Returns (#domain-hooks-onCreateEffect-callback-returns)
 
 [_Subscription_]: Unsubscribe function.
 
-### Example {#domain-hooks-onCreateEffect-callback-example}
+### Example (#domain-hooks-onCreateEffect-callback-example)
 
 ```js
 import { createDomain } from "effector";
@@ -218,9 +218,9 @@ const barFx = domain.createEffect();
 
 [Try it](https://share.effector.dev/uT6f8vv9)
 
-## `onCreateStore(callback)` {#domain-hooks-onCreateStore-callback}
+## `onCreateStore(callback)` (#domain-hooks-onCreateStore-callback)
 
-### Formulae {#domain-hooks-onCreateStore-callback-formulae}
+### Formulae (#domain-hooks-onCreateStore-callback-formulae)
 
 ```ts
 domain.onCreateStore(($store: Store<any>) => {});
@@ -230,15 +230,15 @@ domain.onCreateStore(($store: Store<any>) => {});
 - Function called with `$store` as first argument
 - The result of function call is ignored
 
-### Arguments {#domain-hooks-onCreateStore-callback-arguments}
+### Arguments (#domain-hooks-onCreateStore-callback-arguments)
 
 1. `callback` ([_Watcher_]): A function that receives [Store](/en/api/effector/Store) and will be called during every [domain.createStore](/en/api/effector/Domain#unit-creators-createStore-defaultState) call
 
-### Returns {#domain-hooks-onCreateStore-callback-returns}
+### Returns (#domain-hooks-onCreateStore-callback-returns)
 
 [_Subscription_]: Unsubscribe function.
 
-### Example {#domain-hooks-onCreateStore-callback-example}
+### Example (#domain-hooks-onCreateStore-callback-example)
 
 ```js
 import { createDomain } from "effector";
@@ -255,9 +255,9 @@ const $a = domain.createStore(null);
 
 [Try it](https://share.effector.dev/OGlYOtfz)
 
-## `onCreateDomain(callback)` {#domain-hooks-onCreateDomain-callback}
+## `onCreateDomain(callback)` (#domain-hooks-onCreateDomain-callback)
 
-### Formulae {#domain-hooks-onCreateDomain-callback-formulae}
+### Formulae (#domain-hooks-onCreateDomain-callback-formulae)
 
 ```ts
 domain.onCreateDomain((domain) => {});
@@ -267,15 +267,15 @@ domain.onCreateDomain((domain) => {});
 - Function called with `domain` as first argument
 - The result of function call is ignored
 
-### Arguments {#domain-hooks-onCreateDomain-callback-arguments}
+### Arguments (#domain-hooks-onCreateDomain-callback-arguments)
 
 1. `callback` ([_Watcher_]): A function that receives [Domain](/en/api/effector/Domain) and will be called during every [domain.createDomain](/en/api/effector/Domain#unit-creators-createDomain-name) call
 
-### Returns {#domain-hooks-onCreateDomain-callback-returns}
+### Returns (#domain-hooks-onCreateDomain-callback-returns)
 
 [_Subscription_]: Unsubscribe function.
 
-### Example {#domain-hooks-onCreateDomain-callback-example}
+### Example (#domain-hooks-onCreateDomain-callback-example)
 
 ```js
 import { createDomain } from "effector";

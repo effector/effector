@@ -5,17 +5,17 @@ redirectFrom:
   - /docs/api/effector-vue/component-options
 ---
 
-# ComponentOptions {#ComponentOptions}
+# ComponentOptions (#ComponentOptions)
 
-## `effector` {#ComponentOptions-effector}
+## `effector` (#ComponentOptions-effector)
 
-### Returns {#ComponentOptions-effector-returns}
+### Returns (#ComponentOptions-effector-returns)
 
 (_`Function | Object | Store`_): `Store` or object of `Store`'s, or function which will be called with the Component instance as `this`.
 
-### Examples {#ComponentOptions-effector-examples}
+### Examples (#ComponentOptions-effector-examples)
 
-#### Basic Usage {#ComponentOptions-effector-examples-basic}
+#### Basic Usage (#ComponentOptions-effector-examples-basic)
 
 ```js
 import Vue from "vue";
@@ -40,7 +40,7 @@ new Vue({
 });
 ```
 
-#### Using Object Syntax {#ComponentOptions-effector-examples-object}
+#### Using Object Syntax (#ComponentOptions-effector-examples-object)
 
 ```js
 import { counter } from "./stores";
@@ -52,7 +52,7 @@ new Vue({
 });
 ```
 
-#### Using Store Directly {#ComponentOptions-effector-examples-direct}
+#### Using Store Directly (#ComponentOptions-effector-examples-direct)
 
 ```js
 import { counter } from "./stores";

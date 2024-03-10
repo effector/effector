@@ -12,17 +12,17 @@ import { useStore } from "effector-vue/composition";
 
 A hook function, which subscribes to watcher, that observes changes in the current **readonly** store, so when recording results, the component will update automatically. You can mutate the store value **only via [createEvent](/en/api/effector/createEvent)**. Designed for vue 3
 
-## `useStore($store)` {#useStore-store}
+## `useStore($store)` (#useStore-store)
 
-### Arguments {#useStore-store-arguments}
+### Arguments (#useStore-store-arguments)
 
 1. `$store` ([`Store<State>`](/en/api/effector/Store))
 
-### Returns {#useStore-store-returns}
+### Returns (#useStore-store-returns)
 
 (`readonly(State)`)
 
-### Example {#useStore-store-example}
+### Example (#useStore-store-example)
 
 ```js
 import { createStore, createApi } from "effector";

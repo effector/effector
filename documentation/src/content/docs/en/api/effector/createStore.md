@@ -10,25 +10,25 @@ redirectFrom:
 import { createStore, type Store, type StoreWritable } from "effector";
 ```
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `createStore(defaultState)` {#methods-createStore-defaultState}
+## `createStore(defaultState)` (#methods-createStore-defaultState)
 
 Method for creating a [store](/en/api/effector/Store).
 
-### Formulae {#methods-createStore-defaultState-formulae}
+### Formulae (#methods-createStore-defaultState-formulae)
 
 ```ts
 createStore<T>(defaultState: T): StoreWritable<T>
 ```
 
-### Arguments {#methods-createStore-defaultState-arguments}
+### Arguments (#methods-createStore-defaultState-arguments)
 
 1. `defaultState` (_State_): Default state
 
-### Throws {#methods-createStore-defaultState-throws}
+### Throws (#methods-createStore-defaultState-throws)
 
-#### unit call from pure function is not supported, use operators like sample instead {#methods-createStore-defaultState-throws-unit-call-from-pure}
+#### unit call from pure function is not supported, use operators like sample instead (#methods-createStore-defaultState-throws-unit-call-from-pure)
 
 > Since: effector 23.0.0
 
@@ -60,13 +60,13 @@ sample({
 });
 ```
 
-### Returns {#methods-createStore-defaultState-returns}
+### Returns (#methods-createStore-defaultState-returns)
 
 [_Store_](/en/api/effector/Store): New store
 
-### Examples {#methods-createStore-defaultState-examples}
+### Examples (#methods-createStore-defaultState-examples)
 
-#### Basic {#methods-createStore-defaultState-examples-basic}
+#### Basic (#methods-createStore-defaultState-examples-basic)
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -103,11 +103,11 @@ clearTodoList();
 
 [Try it](https://share.effector.dev/MNibrAFC)
 
-## `createStore(defaultState, config)` {#methods-createStore-defaultState-config}
+## `createStore(defaultState, config)` (#methods-createStore-defaultState-config)
 
 Method for creating a [store](/en/api/effector/Store) but with configuration.
 
-### Formulae {#methods-createStore-defaultState-config-formulae}
+### Formulae (#methods-createStore-defaultState-config-formulae)
 
 ```ts
 createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
@@ -121,7 +121,7 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
 }): StoreWritable<T>
 ```
 
-### Arguments {#methods-createStore-defaultState-config-arguments}
+### Arguments (#methods-createStore-defaultState-config-arguments)
 
 1. `defaultState` (_State_): Default state
 2. `config` (_Object_): Optional configuration
@@ -132,17 +132,17 @@ createStore<T, SerializedState extends Json = Json>(defaultState: T, config: {
    - `domain`: (_Domain_): Domain to attach store to after creation.
    - `skipVoid`: (_boolean_): Flag to control how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will interpret `undefined` as a "skip update" command and will do nothing.
 
-### Throws {#methods-createStore-defaultState-config-throws}
+### Throws (#methods-createStore-defaultState-config-throws)
 
 The same behaviour like for regular [`createStore(defaultState)`](#methods-createStore-defaultState-throws).
 
-### Returns {#methods-createStore-defaultState-config-returns}
+### Returns (#methods-createStore-defaultState-config-returns)
 
 [_Store_](/en/api/effector/Store): New store
 
-### Examples {#methods-createStore-defaultState-config-examples}
+### Examples (#methods-createStore-defaultState-config-examples)
 
-#### With `updateFilter` {#methods-createStore-defaultState-examples-updateFilter}
+#### With `updateFilter` (#methods-createStore-defaultState-examples-updateFilter)
 
 ```js
 import { createEvent, createStore, sample } from "effector";
@@ -179,7 +179,7 @@ punch(100); // No update as well
 
 [Try it](https://share.effector.dev/rtxfqObf)
 
-#### With `serialize: ignore` {#methods-createStore-defaultState-examples-serializeIgnore}
+#### With `serialize: ignore` (#methods-createStore-defaultState-examples-serializeIgnore)
 
 ```js
 import { createEvent, createStore, serialize, fork, allSettled } from "effector";
@@ -224,7 +224,7 @@ console.log(actualValues);
 
 [Try it](https://share.effector.dev/aLKAHDOM)
 
-#### Custom `serialize` configuration {#methods-createStore-defaultState-examples-customSerialize}
+#### Custom `serialize` configuration (#methods-createStore-defaultState-examples-customSerialize)
 
 ```ts
 import { createEvent, createStore, serialize, fork, allSettled } from "effector";

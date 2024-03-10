@@ -18,21 +18,21 @@ The `useProvidedScope` hook is a low-level API for library developers and **is n
 For production `effector-react` usage, see the [`useUnit`](/api/effector-react/useUnit) hook.
 :::
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useProvidedScope()` {#methods-useProvidedScope}
+## `useProvidedScope()` (#methods-useProvidedScope)
 
-### Formulae {#methods-useProvidedScope-formulae}
+### Formulae (#methods-useProvidedScope-formulae)
 
 ```ts
 useProvidedScope(): Scope | null
 ```
 
-### Returns {#methods-useProvidedScope-returns}
+### Returns (#methods-useProvidedScope-returns)
 
 ([`Scope | null`](/api/effector/Scope)) — if no Scope provided, returns `null`.
 
-### Examples {#methods-useProvidedScope-examples}
+### Examples (#methods-useProvidedScope-examples)
 
 This hook can be used in library internals to handle various edge-cases, where `createWatch` and `scopeBind` APIs are also needed.
 

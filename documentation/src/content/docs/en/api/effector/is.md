@@ -11,17 +11,17 @@ import { is, type Unit } from "effector";
 
 Namespace for unit validators.
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `is.store(value)` {#methods-isStore}
+## `is.store(value)` (#methods-isStore)
 
 Checks if given value is [_store_](/en/api/effector/Store)
 
-### Returns {#methods-isStore-returns}
+### Returns (#methods-isStore-returns)
 
 `boolean` — Type-guard
 
-### Examples {#methods-isStore-examples}
+### Examples (#methods-isStore-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -57,15 +57,15 @@ is.store(null);
 
 [Try it](https://share.effector.dev/4vzdWan1)
 
-## `is.event(value)` {#methods-isEvent}
+## `is.event(value)` (#methods-isEvent)
 
 Checks if given value is [_event_](/en/api/effector/Event)
 
-### Returns {#methods-isEvent-returns}
+### Returns (#methods-isEvent-returns)
 
 `boolean` — Type-guard
 
-### Examples {#methods-isEvent-examples}
+### Examples (#methods-isEvent-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -101,15 +101,15 @@ is.event(null);
 
 [Try it](https://share.effector.dev/hB0JEiIo)
 
-## `is.effect(value)` {#methods-isEffect}
+## `is.effect(value)` (#methods-isEffect)
 
 Checks if given value is [_effect_](/en/api/effector/Effect)
 
-### Returns {#methods-isEffect-returns}
+### Returns (#methods-isEffect-returns)
 
 `boolean` — Type-guard
 
-### Examples {#methods-isEffect-examples}
+### Examples (#methods-isEffect-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -136,15 +136,15 @@ is.effect(null);
 
 [Try it](https://share.effector.dev/ZdZ2N6VG)
 
-## `is.targetable` {#methods-isTargetable}
+## `is.targetable` (#methods-isTargetable)
 
 Checks if given value can be used in operators target (or be called as a function in case of events)
 
-### Returns {#methods-isTargetable-returns}
+### Returns (#methods-isTargetable-returns)
 
 `boolean` — Type-guard
 
-### Examples {#methods-isTargetable-examples}
+### Examples (#methods-isTargetable-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect } from "effector";
@@ -171,15 +171,15 @@ is.targetable(fx);
 // => true
 ```
 
-## `is.domain(value)` {#methods-isDomain}
+## `is.domain(value)` (#methods-isDomain)
 
 Checks if given value is [_domain_](/en/api/effector/Domain)
 
-### Returns {#methods-isDomain-returns}
+### Returns (#methods-isDomain-returns)
 
 `boolean` — Type-guard
 
-### Examples {#methods-isDomain-examples}
+### Examples (#methods-isDomain-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -206,7 +206,7 @@ is.domain(null);
 
 [Try it](https://share.effector.dev/Iea0gmfD)
 
-## `is.scope(value)` {#methods-isScope}
+## `is.scope(value)` (#methods-isScope)
 
 :::info{title="since"}
 [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
@@ -214,11 +214,11 @@ is.domain(null);
 
 Checks if given value is [_scope_](/en/api/effector/Scope) since [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0).
 
-### Returns {#methods-isScope-returns}
+### Returns (#methods-isScope-returns)
 
 `boolean` — Type-guard
 
-### Examples {#methods-isScope-examples}
+### Examples (#methods-isScope-examples)
 
 ```js
 import { fork } from "effector";
@@ -249,15 +249,15 @@ is.scope(null);
 
 [Try it](https://share.effector.dev/hF0krFUK)
 
-## `is.unit(value)` {#methods-isUnit}
+## `is.unit(value)` (#methods-isUnit)
 
 Checks if given value is [Unit](/en/explanation/glossary#unit): [Store](/en/api/effector/Store), [Event](/en/api/effector/Event), [Effect](/en/api/effector/Effect), [Domain](/en/api/effector/Domain) or [Scope](/en/api/effector/Scope)
 
-### Returns {#methods-isUnit-returns}
+### Returns (#methods-isUnit-returns)
 
 `boolean` — Type-guard
 
-### Examples {#methods-isUnit-examples}
+### Examples (#methods-isUnit-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain, fork } from "effector";
@@ -297,7 +297,7 @@ is.unit(null);
 
 [Try it](https://share.effector.dev/iOpDvweB)
 
-## `is.attached(value)` {#methods-isAttached}
+## `is.attached(value)` (#methods-isAttached)
 
 :::info{title="since"}
 [effector 22.4.0](https://changelog.effector.dev/#effector-22-4-0)
@@ -305,11 +305,11 @@ is.unit(null);
 
 Checks if given value is [_effect_](/en/api/effector/Effect) created via [_attach_](/en/api/effector/attach) method. If passed not an effect, returns `false`.
 
-### Returns {#methods-isAttached-returns}
+### Returns (#methods-isAttached-returns)
 
 `boolean` — Type-guard
 
-### Usage {#methods-isAttached-usage}
+### Usage (#methods-isAttached-usage)
 
 Sometimes you need to add an error log on effects failures, but only on effects that have been "localized" via `attach`.
 If you leave `onCreateEffect` as it is, without checks, the error log will be duplicated, because it will happen on the parent and the child effect.
@@ -347,7 +347,7 @@ loadListFx();
 
 [Try it](https://share.effector.dev/NxQseHOR)
 
-### Examples {#methods-isAttached-examples}
+### Examples (#methods-isAttached-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain, attach } from "effector";

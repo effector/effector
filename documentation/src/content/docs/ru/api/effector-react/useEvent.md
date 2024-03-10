@@ -7,11 +7,11 @@ lang: ru
 
 Используется с серверным рендерингом и в тестировании, импортируется из `effector-react/scope`
 
-## _useEvent(unit)_ {#useEvent-unit}
+## _useEvent(unit)_ (#useEvent-unit)
 
 Привязывает юнит к скоупу компонента
 
-### Формула {#useEvent-unit-formulae}
+### Формула (#useEvent-unit-formulae)
 
 ```ts
 declare const event: Event<T>
@@ -24,15 +24,15 @@ const fxFn = useEvent(/*unit*/ fx)
 -> (data: T) => Promise<S>
 ```
 
-### Аргументы {#useEvent-unit-args}
+### Аргументы (#useEvent-unit-args)
 
 1. **`unit`**: [Событие](/ru/api/effector/Event) или [эффект](/ru/api/effector/Effect) для привязки к скоупу компонента
 
-### Возвращает {#useEvent-unit-return}
+### Возвращает (#useEvent-unit-return)
 
 Функцию для запуска юнита в скоупе компонента
 
-### Пример {#useEvent-unit-usage-example}
+### Пример (#useEvent-unit-usage-example)
 
 ```jsx
 import ReactDOM from "react-dom";
@@ -65,11 +65,11 @@ ReactDOM.render(
 
 [Запустить пример](https://share.effector.dev/GyiJvLdo)
 
-## _useEvent([a, b])_ {#useEvent-list}
+## _useEvent([a, b])_ (#useEvent-list)
 
 Привязывает массив событий или эффектов к скоупу компонента
 
-### Формула {#useEvent-list-formulae}
+### Формула (#useEvent-list-formulae)
 
 ```ts
 declare const a: Event<T>
@@ -79,15 +79,15 @@ const [aFn, bFn] = useEvent(/*list*/ [a, bFx])
 -> [(data: T) => T, (data: T) => Promise<S>]
 ```
 
-### Аргументы {#useEvent-list-args}
+### Аргументы (#useEvent-list-args)
 
 1. **`list`**: Массив [событий](/ru/api/effector/Event) или [эффектов](/ru/api/effector/Effect)
 
-### Возвращает {#useEvent-list-return}
+### Возвращает (#useEvent-list-return)
 
 Массив функций для запуска юнитов в скоупе компонента
 
-### Пример {#useEvent-list-usage-example}
+### Пример (#useEvent-list-usage-example)
 
 ```jsx
 import ReactDOM from "react-dom";
@@ -124,11 +124,11 @@ ReactDOM.render(
 
 [Запустить пример](https://share.effector.dev/tskNc0Pt)
 
-## _useEvent({a, b})_ {#useEvent-shape}
+## _useEvent({a, b})_ (#useEvent-shape)
 
 Привязывает объект событий или эффектов к скоупу компонента
 
-### Формула {#useEvent-shape-formulae}
+### Формула (#useEvent-shape-formulae)
 
 ```ts
 declare const a: Event<T>
@@ -138,15 +138,15 @@ const {a: aFn, b: bFn} = useEvent(/*shape*/ {a, b: bFx})
 -> {a: (data: T) => T, b: (data: T) => Promise<S>}
 ```
 
-### Аргументы {#useEvent-shape-args}
+### Аргументы (#useEvent-shape-args)
 
 1. **`shape`**: Объект [событий](/ru/api/effector/Event) или [эффектов](/ru/api/effector/Effect)
 
-### Возвращает {#useEvent-shape-return}
+### Возвращает (#useEvent-shape-return)
 
 Объект функций для запуска юнитов в скоупе компонента
 
-### Пример {#useEvent-shape-usage-example}
+### Пример (#useEvent-shape-usage-example)
 
 ```jsx
 import ReactDOM from "react-dom";

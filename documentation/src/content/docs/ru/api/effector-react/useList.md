@@ -10,15 +10,15 @@ lang: ru
 React-хук для эффективного рендеринга сторов хранящих массивы данных.
 Каждый элемент будет мемоизирован и обновлен только при изменении его данных
 
-## Сокращённая запись {#useList-short}
+## Сокращённая запись (#useList-short)
 
-### Формула {#useList-short-formulae}
+### Формула (#useList-short-formulae)
 
 ```ts
 function useList(store: Store<T[]>, fn: (item: T, key: number) => React.ReactNode): React.ReactNode;
 ```
 
-### Аргументы {#useList-short-args}
+### Аргументы (#useList-short-args)
 
 1. **`store`**: [Стор](/ru/api/effector/Store) с массивом данных
 2. **`fn`**: `(item: T, key: number) => React.ReactNode`
@@ -32,11 +32,11 @@ function useList(store: Store<T[]>, fn: (item: T, key: number) => React.ReactNod
 
    **Возвращает**: `React.ReactNode`
 
-### Возвращает {#useList-short-return}
+### Возвращает (#useList-short-return)
 
 `React.ReactNode`
 
-## Полная запись {#useList-full}
+## Полная запись (#useList-full)
 
 Используется, когда необходимо вычислять ключ элемента или обновлять элементы при изменении какого-либо внешнего значения, доступного только через React (например, поля props из замыкания компонента или состояния другого стора)
 
@@ -44,7 +44,7 @@ function useList(store: Store<T[]>, fn: (item: T, key: number) => React.ReactNod
 Однако иногда необходимо обновлять элементы при изменении какого-либо внешнего значения (например, поля props или состояния другого стора).
 В таком случае нужно сообщить React о дополнительных зависимостях, в таком случае элемент будет перерендерен и в случае их изменения
 
-### Формула {#useList-full-formulae}
+### Формула (#useList-full-formulae)
 
 ```ts
 function useList(
@@ -57,7 +57,7 @@ function useList(
 ): React.ReactNode;
 ```
 
-### Аргументы {#useList-full-args}
+### Аргументы (#useList-full-args)
 
 1. **`store`**: [Стор](/ru/api/effector/Store) с массивом данных
 2. **`config`**: Объект конфигурации
@@ -86,7 +86,7 @@ function useList(
 
    - **`placeholder?`**: `React.ReactNode` Опциональный реакт-элемент который будет использован в случае пустого массива
 
-### Возвращает {#useList-full-return}
+### Возвращает (#useList-full-return)
 
 `React.ReactNode`
 

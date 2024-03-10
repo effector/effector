@@ -13,7 +13,7 @@ Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the cor
 
 Provides all exports from [effector-solid](/en/api/effector-solid), but enforces the application to use [Scope](/en/api/effector/scope) for all components.
 
-## Usage {#usage}
+## Usage (#usage)
 
 You can use this module in the same way as [effector-solid](/en/api/effector-solid), but it will require passing [Scope](/en/api/effector/scope) to [Provider](/en/api/effector-solid/Provider) component.
 
@@ -33,7 +33,7 @@ render(
 );
 ```
 
-## Migration {#migration}
+## Migration (#migration)
 
 Since `effector-solid/scope` is deprecated, it is recommended to migrate to [effector-solid](/en/api/effector-solid) by removing `scope` from the import path.
 
@@ -46,7 +46,7 @@ Since `effector-solid/scope` is deprecated, it is recommended to migrate to [eff
 `effector-solid` and `effector-solid/scope` do not share any code, so you have to migrate all your code to `effector-solid` at the same time, because otherwise, you will get runtime errors. These errors will occur because `effector-solid` and `effector-solid/scope` will use different instances of `Provider` and do not have access to each other's `Provider`.
 :::
 
-## Scope enforcement {#scope-enforcement}
+## Scope enforcement (#scope-enforcement)
 
 All modern hooks of `effector-solid` are designed to work with [Scope](/en/api/effector/scope). If you want to imitate the behavior of the `effector-solid/scope` module, you can pass a second parameter to hooks with an option `forceScope: true`. In this case, the hook will throw an error if the [Scope](/en/api/effector/scope) is not passed to [Provider](/en/api/effector-solid/Provider).
 

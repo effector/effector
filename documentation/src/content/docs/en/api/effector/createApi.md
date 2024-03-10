@@ -11,26 +11,26 @@ import { createApi } from "effector";
 
 `createApi` is a shortcut for generating [events](/en/api/effector/Event) connected to a [store](/en/api/effector/Store) by supplying an object with [_reducers_](/en/explanation/glossary#reducer) for these events. If the source `store` is part of a [domain](/en/api/effector/Domain), then the newly created events will also be within that domain.
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `createApi(store, api)` {#methods-createApi-store-api}
+## `createApi(store, api)` (#methods-createApi-store-api)
 
-### Formulae {#methods-createApi-store-api-formulae}
+### Formulae (#methods-createApi-store-api-formulae)
 
 ```ts
 createApi(store, api): objectWithEvents
 ```
 
-### Arguments {#methods-createApi-store-api-arguments}
+### Arguments (#methods-createApi-store-api-arguments)
 
 1. `store` [_Store_](/en/api/effector/Store)
 2. `api` (_Object_) An object with [_reducers_](/en/explanation/glossary#reducer)
 
-### Returns {#methods-createApi-store-api-returns}
+### Returns (#methods-createApi-store-api-returns)
 
 (_Object_) An object with [events](/en/api/effector/Event)
 
-### Examples {#methods-createApi-store-api-examples}
+### Examples (#methods-createApi-store-api-examples)
 
 ```js
 import { createStore, createApi } from "effector";

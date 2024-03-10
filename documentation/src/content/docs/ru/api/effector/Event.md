@@ -17,9 +17,9 @@ _Event (событие, эвент)_ это декларация намерен�
 
 События можно вызывать как обычные функции (_императивный вызов_) а также подключать в различные методы api включая [sample](/ru/api/effector/sample), [guard](/ru/api/effector/guard) и [split](/ru/api/effector/split) (_декларативное подключение_). При императивном вызове принимают максимум один аргумент и всегда возвращают переданные данные
 
-# Методы {#methods}
+# Методы (#methods)
 
-## `watch(watcher)` {#watch-watcher}
+## `watch(watcher)` (#watch-watcher)
 
 Вызывает функцию с сайд-эффектами при каждом срабатывании события
 
@@ -27,7 +27,7 @@ _Event (событие, эвент)_ это декларация намерен�
 По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect) и [sample](/ru/api/effector/sample)
 :::
 
-### Формула {#watch-watcher-formulae}
+### Формула (#watch-watcher-formulae)
 
 ```ts
 declare const event: Event<T>
@@ -36,17 +36,17 @@ event.watch(/*watcher*/ (data: T) => any)
 -> Subscription
 ```
 
-### Аргументы {#watch-watcher-arguments}
+### Аргументы (#watch-watcher-arguments)
 
 1. **`watcher`**: `(data: T) => any`
 
    Функция с сайд-эффектами, в качестве первого аргумента получает значение с которым было вызвано событие. Возвращаемое значение не используется
 
-### Возвращает {#watch-watcher-returns}
+### Возвращает (#watch-watcher-returns)
 
 [_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки, после её вызова `watcher` перестаёт получать обновления и удаляется из памяти. Повторные вызовы функции отмены подписки не делают ничего
 
-### Пример {#watch-watcher-example}
+### Пример (#watch-watcher-example)
 
 ```js
 import { createEvent } from "effector";
@@ -67,11 +67,11 @@ sayHi("Алиса");
 
 [Запустить пример](https://share.effector.dev/FeEWVUbj)
 
-## `map(fn)` {#map-fn}
+## `map(fn)` (#map-fn)
 
 Создает производное событие на основе данных из исходного
 
-### Формула {#map-fn-formulae}
+### Формула (#map-fn-formulae)
 
 ```ts
 declare const eventA: Event<T>
@@ -88,7 +88,7 @@ const eventB = eventA.map(/*fn*/(data: T) => S)
 
 ```
 
-### Аргументы {#map-fn-arguments}
+### Аргументы (#map-fn-arguments)
 
 1.  **`fn`**: `(data: T) => S`
 
@@ -102,11 +102,11 @@ const eventB = eventA.map(/*fn*/(data: T) => S)
 
     Данные для передачи в производное событие `eventB`
 
-### Возвращает {#map-fn-returns}
+### Возвращает (#map-fn-returns)
 
 Новое, производное событие
 
-### Пример {#map-fn-example}
+### Пример (#map-fn-example)
 
 ```js
 import { createEvent } from "effector";
@@ -125,11 +125,11 @@ updateUser({ name: "john", role: "admin" });
 
 [Запустить пример](https://share.effector.dev/U3w3dlbO)
 
-## `prepend(fn)` {#prepend-fn}
+## `prepend(fn)` (#prepend-fn)
 
 Создаёт событие-триггер для преобразования данных _перед_ запуском исходного эвента. По сравнению с [map](#map), работает в обратном направлении
 
-### Формула {#prepend-fn-formulae}
+### Формула (#prepend-fn-formulae)
 
 ```ts
 declare const targetEvent: Event<S>
@@ -146,7 +146,7 @@ const trigger = targetEvent.prepend(/*fn*/(data: T) => S)
 
 ```
 
-### Аргументы {#prepend-fn-arguments}
+### Аргументы (#prepend-fn-arguments)
 
 1.  **`fn`**: `(data: T) => S`
 
@@ -160,13 +160,13 @@ const trigger = targetEvent.prepend(/*fn*/(data: T) => S)
 
     Данные для передачи в исходное событие `targetEvent`
 
-### Возвращает {#prepend-fn-returns}
+### Возвращает (#prepend-fn-returns)
 
 Новое событие
 
-### Пример {#prepend-fn-example}
+### Пример (#prepend-fn-example)
 
-##### Пример использования {#prepend-fn-examples-usage}
+##### Пример использования (#prepend-fn-examples-usage)
 
 ```js
 import { createEvent } from "effector";
@@ -198,7 +198,7 @@ changeName("alice");
 
 [Запустить пример](https://share.effector.dev/ets1GxTA)
 
-## `filterMap(fn)` {#filterMap-fn}
+## `filterMap(fn)` (#filterMap-fn)
 
 Создает производное событие на основе данных из исходного с возможностью отмены вызова
 
@@ -206,7 +206,7 @@ changeName("alice");
 Метод добавлен в effector 20.0.0
 :::
 
-### Формула {#filterMa-formulae}
+### Формула (#filterMa-formulae)
 
 ```ts
 declare const eventA: Event<T>
@@ -229,7 +229,7 @@ const eventB = eventA.filterMap(
 Если требуется только фильтрация вызовов без трансформации данных, то оптимальнее использовать [guard](/ru/api/effector/guard)
 :::
 
-### Аргументы {#filterMap-fn-arguments}
+### Аргументы (#filterMap-fn-arguments)
 
 1.  **`fn`**: `(data: T) => S | void`
 
@@ -243,13 +243,13 @@ const eventB = eventA.filterMap(
 
     Данные для передачи в производное событие `eventB` либо _undefined_, если вызов `eventB` не требуется
 
-### Возвращает {#filterMap-fn-returns}
+### Возвращает (#filterMap-fn-returns)
 
 Новое, производное событие
 
-### Пример {#filterMap-fn-example}
+### Пример (#filterMap-fn-example)
 
-#### Использование с методами JavaScript возвращающими undefined {#filterMap-fn-example-usage-with-functions-returning-undefined}
+#### Использование с методами JavaScript возвращающими undefined (#filterMap-fn-example-usage-with-functions-returning-undefined)
 
 ```jsx
 const listReceived = createEvent<string[]>()
@@ -262,7 +262,7 @@ listReceived(["redux", "mobx"])
 
 [Запустить пример](https://share.effector.dev/ARDanMAM)
 
-#### Использование c nullable React ref {#filterMap-fn-example-usage-with-nullable-ref}
+#### Использование c nullable React ref (#filterMap-fn-example-usage-with-nullable-ref)
 
 :::info
 Методы _modal.showModal_ и _modal.close_ – стандартные возможности dom-элемента `<dialog>`
@@ -311,7 +311,7 @@ const App = () => {
 
 [Запустить пример](https://share.effector.dev/OzA9AbpY)
 
-## `filter({fn})` {#filter-fn}
+## `filter({fn})` (#filter-fn)
 
 Создает производное событие с возможностью отмены вызова
 
@@ -319,7 +319,7 @@ const App = () => {
 Более гибким способом фильтрации является [guard](/ru/api/effector/guard), рекомендуется использовать именно его
 :::
 
-### Формула {#filter-fn-formulae}
+### Формула (#filter-fn-formulae)
 
 ```ts
 declare const eventA: Event<T>
@@ -330,7 +330,7 @@ const eventB = eventA.filter(/*config*/ {fn: (data: T) => boolean})
 
 При вызове исходного события `eventA`, функция-обработчик `fn` будет вызвана с поступившими данными, после чего, если функция вернула [истинное значение](https://developer.mozilla.org/ru/docs/Glossary/Truthy), производный эвент `eventB` будет вызван с теми же данными
 
-### Аргументы {#filter-fn-arguments}
+### Аргументы (#filter-fn-arguments)
 
 1. **`config`**: Объект конфигурации
 
@@ -338,7 +338,7 @@ const eventB = eventA.filter(/*config*/ {fn: (data: T) => boolean})
 
      Функция-предикат, которая определяет необходимость вызова производного события `eventB` возвращая [истинное значение](https://developer.mozilla.org/ru/docs/Glossary/Truthy),[должна быть **чистой**](/ru/explanation/glossary#purity)
 
-### Возвращает {#filter-fn-returns}
+### Возвращает (#filter-fn-returns)
 
 Новое, производное событие
 
@@ -346,7 +346,7 @@ const eventB = eventA.filter(/*config*/ {fn: (data: T) => boolean})
 Объектная форма аргумента используется потому что _event.filter(fn)_ был сокращённой формой [_filterMap_](#filterMap)
 :::
 
-### Пример {#filter-fn-example}
+### Пример (#filter-fn-example)
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -377,13 +377,13 @@ numbers({ x: 10 });
 
 [Запустить пример](https://share.effector.dev/NjKNAxmz)
 
-# Свойства {#properties}
+# Свойства (#properties)
 
-## `shortName` {#shortName}
+## `shortName` (#shortName)
 
 Имя события. Задаётся либо явно, через поле `name` [в createEvent](/ru/api/effector/createEvent), либо автоматически через [Babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEvent)
 
-### Формула {#shortName-formulae}
+### Формула (#shortName-formulae)
 
 ```ts
 declare const event: Event<any>
@@ -392,11 +392,11 @@ event.shortName
 -> string
 ```
 
-## `sid` {#sid}
+## `sid` (#sid)
 
 Стабильный идентификатор события. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
 
-### Формула {#sid-formulae}
+### Формула (#sid-formulae)
 
 ```ts
 declare const event: Event<any>

@@ -12,28 +12,28 @@ import { useGate } from "effector-solid";
 
 Function for passing data to [_Gate_](/en/api/effector-solid/Gate).
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useGate(Gate, props)` {#methods-useGate-Gate-props}
+## `useGate(Gate, props)` (#methods-useGate-Gate-props)
 
-### Formulae {#methods-useGate-Gate-props-formulae}
+### Formulae (#methods-useGate-Gate-props-formulae)
 
 ```ts
 useGate(Gate: Gate<Props>, props: Props): void;
 ```
 
-### Arguments {#methods-useGate-Gate-props-arguments}
+### Arguments (#methods-useGate-Gate-props-arguments)
 
 1. `Gate` ([`Gate<Props>`](/en/api/effector-solid/Gate))
 2. `props` (_Props_)
 
-### Returns {#methods-useGate-Gate-props-returns}
+### Returns (#methods-useGate-Gate-props-returns)
 
 (`void`)
 
-### Examples {#methods-useGate-Gate-props-examples}
+### Examples (#methods-useGate-Gate-props-examples)
 
-#### Basic Usage {#methods-useGate-Gate-props-examples-basic-usage}
+#### Basic Usage (#methods-useGate-Gate-props-examples-basic-usage)
 
 ```jsx
 import { createGate, useGate } from "effector-solid";

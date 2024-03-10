@@ -25,21 +25,21 @@ Only `effector-react/scope` version works this way, `useEvent` of `effector-reac
 Useful only if you have server-side rendering or writing tests for React-components.
 :::
 
-# Methods {#methods}
+# Methods (#methods)
 
-## `useEvent(unit)` {#methods-useEvent-unit}
+## `useEvent(unit)` (#methods-useEvent-unit)
 
-### Arguments {#methods-useEvent-unit-arguments}
+### Arguments (#methods-useEvent-unit-arguments)
 
 1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be bound to current `scope`
 
-### Returns {#methods-useEvent-unit-returns}
+### Returns (#methods-useEvent-unit-returns)
 
 (Function): Function to pass to event handlers. Will trigger a given unit in the current scope.
 
-### Examples {#methods-useEvent-unit-examples}
+### Examples (#methods-useEvent-unit-examples)
 
-#### Basic Usage {#methods-useEvent-unit-examples-basic}
+#### Basic Usage (#methods-useEvent-unit-examples-basic)
 
 ```jsx
 import ReactDOM from "react-dom";
@@ -75,19 +75,19 @@ ReactDOM.render(
 
 [Try it](https://share.effector.dev/GyiJvLdo)
 
-## `useEvent(shape)` {#methods-useEvent-shape}
+## `useEvent(shape)` (#methods-useEvent-shape)
 
-### Arguments {#methods-useEvent-shape-arguments}
+### Arguments (#methods-useEvent-shape-arguments)
 
 1. `shape` Object or array of ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Events or effects as values which will be bound to the current `scope`
 
-### Returns {#methods-useEvent-shape-returns}
+### Returns (#methods-useEvent-shape-returns)
 
 (Object or Array): List of functions with the same names or keys as an argument to pass to event handlers. Will trigger a given unit in the current scope.
 
-### Examples {#methods-useEvent-shape-examples}
+### Examples (#methods-useEvent-shape-examples)
 
-#### Object Usage {#methods-useEvent-shape-examples-object}
+#### Object Usage (#methods-useEvent-shape-examples-object)
 
 ```jsx
 import ReactDOM from "react-dom";

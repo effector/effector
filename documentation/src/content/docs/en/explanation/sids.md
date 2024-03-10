@@ -14,11 +14,11 @@ The SIDs have two important properties:
 1. They are **unique** – each SID for each unit should be unique.
 2. They are **stable** between different environments – each SID of each unit in some environment (e.g. server code) should be equal to a SID of this unit in any other environment (e.g. client code).
 
-## How to add SIDs {#how-to-add-sids}
+## How to add SIDs (#how-to-add-sids)
 
 The SIDs can be added manually and automatically, but it is important that they are set before any bundling happens — otherwise, there is no way to guarantee stability.
 
-### Manual way {#how-to-add-sids-manual}
+### Manual way (#how-to-add-sids-manual)
 
 ```tsx
 import { createStore } from "effector";
@@ -28,7 +28,7 @@ export const $myStore = createStore(42, { sid: "my-stable-id" });
 
 It is important, that all SIDs are also **unique**. If you are using the manual way, you have to guarantee that by yourself.
 
-### Automatic way {#how-to-add-sids-automatic}
+### Automatic way (#how-to-add-sids-automatic)
 
 For sure, manually creating unique ids is a quite boring job.
 
@@ -40,7 +40,7 @@ Because code-transpilation tools are working at the file level and are run befor
 It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin) instead of adding SIDs manually.
 :::
 
-## Why do we need Stable Identifiers {#why-do-we-need-sids}
+## Why do we need Stable Identifiers (#why-do-we-need-sids)
 
 Because of **multi-store** architecture, Effector code in the applications is written in **atomic** and **distributed** way and there is no single central "root store" or "controller", which needs to be notified about all stores/reducers/etc, created anywhere in the app.
 
@@ -52,34 +52,30 @@ Notice, that there is no central point at all – any event of any "feature" can
 
 ```tsx
 // src/features/first-name/model.ts
-import {createStore, createEvent} from "effector";
+import { createStore, createEvent } from "effector";
 
 export const firstNameChanged = createEvent<string>();
-export const $firstName = createStore("")
+export const $firstName = createStore("");
 
 $firstName.on(firstNameChanged, (_, firstName) => firstName);
 
 // src/features/last-name/model.ts
-import {createStore, createEvent} from "effector";
+import { createStore, createEvent } from "effector";
 
 export const lastNameChanged = createEvent<string>();
-export const $lastName = createStore("")
+export const $lastName = createStore("");
 
 $lastName.on(lastNameChanged, (_, lastName) => lastName);
 
 // src/features/form/model.ts
-import {createEvent, sample, combine} from "effector";
+import { createEvent, sample, combine } from "effector";
 
-import {$firstName, firstNameChanged} from "@/features/first-name";
-import {$lastName, lastNameChanged} from "@/features/last-name";
+import { $firstName, firstNameChanged } from "@/features/first-name";
+import { $lastName, lastNameChanged } from "@/features/last-name";
 
-export const formValuesFilled = createEvent<{firstName: string; lastName: string}>();
+export const formValuesFilled = createEvent<{ firstName: string; lastName: string }>();
 
-export const $fullName = combine(
-  $firstName,
-  $lastName,
-  (first, last) => `${first} ${last}`,
-);
+export const $fullName = combine($firstName, $lastName, (first, last) => `${first} ${last}`);
 
 sample({
   clock: formValuesFilled,
@@ -96,17 +92,17 @@ sample({
 
 If this application was a SPA or any other kind of client-only app — this would be the end of the article.
 
-### Serialization boundary {#serialization-boundary}
+### Serialization boundary (#serialization-boundary)
 
 But in the case of Server Side Rendering, there is always a **serialization boundary** — a point, where all state is stringified, added to a server response, and sent to a client browser.
 
-#### Problem {#serialization-boundary-problem}
+#### Problem (#serialization-boundary-problem)
 
 And at this point we **still need to collect the states of all stores of the app** somehow!
 
 Also, after the client browser has received a page — we need to "hydrate" everything back: unpack these values at the client and add this "server-calculated" state to client-side instances of all stores.
 
-#### Solution {#serialization-boundary-solution}
+#### Solution (#serialization-boundary-solution)
 
 This is a hard problem and to solve this, `effector` needs a way to connect the "server-calculated" state of some store with its client-side instance.
 
@@ -115,15 +111,15 @@ While **it could be** done by introducing a "root store" or something like that,
 This is where SIDs will help us a lot.
 Because SID is, by definition, the same for the same store in any environment, `effector` can simply rely on it to handle state serializing and hydration.
 
-#### Example {#serialization-boundary-example}
+#### Example (#serialization-boundary-example)
 
 This is a generic server-side rendering handler. The `renderHtmlToString` function is an implementation detail, which will depend on the framework you use.
 
 ```tsx
 // src/server/handler.ts
-import {fork, allSettled, serialize} from "effector";
+import { fork, allSettled, serialize } from "effector";
 
-import {formValuesFilled} from "@/features/form";
+import { formValuesFilled } from "@/features/form";
 
 async function handleServerRequest(req) {
   const scope = fork(); // creates isolated container for application state
@@ -162,7 +158,7 @@ Thanks to SIDs, state hydration also works automatically:
 
 ```tsx
 // src/client/index.ts
-import {Provider} from "effector-react";
+import { Provider } from "effector-react";
 
 const serverState = window._SERVER_STATE_;
 
@@ -181,7 +177,7 @@ hydrateApp(
 
 At this point, the state of all stores in the `clientScope` is the same, as it was at the server and there was **zero** manual work to do it.
 
-## Unique SIDs {#unique-sids}
+## Unique SIDs (#unique-sids)
 
 The stability of SIDs is ensured by the fact, that they are added to the code before any bundling has happened.
 
@@ -194,7 +190,7 @@ Both `effector` plugins use the same approach to code transformation. Basically,
 1. Add `sid`-s and any other meta-information to raw Effector's factories calls, like `createStore` or `createEvent`.
 2. Wrap any custom factories with `withFactory` helper that allows you to make `sid`-s of inner units unique as well.
 
-### Built-in unit factories {#built-in-factories}
+### Built-in unit factories (#built-in-factories)
 
 Let's take a look at the first case. For the following source code:
 
@@ -205,14 +201,14 @@ const $name = createStore(null);
 The plugin will apply these transformations:
 
 ```ts
-const $name = createStore(null, {sid: "j3l44"});
+const $name = createStore(null, { sid: "j3l44" });
 ```
 
 :::tip
 Plugins create `sid`-s as a hash of the location in the source code of a unit. It allows making `sid`-s unique and stable.
 :::
 
-### Custom factories {#custom-factories}
+### Custom factories (#custom-factories)
 
 The second case is about custom factories. These are usually created to abstract away some common pattern.
 
@@ -232,11 +228,11 @@ export function createName() {
 
   $name.on(updateName, (_, nextName) => nextName);
 
-  return {$name};
+  return { $name };
 }
 
 // src/feature/persons/model.ts
-import {createName} from "@/shared/lib/create-name";
+import { createName } from "@/shared/lib/create-name";
 
 const personOne = createName();
 const personTwo = createName();
@@ -248,15 +244,15 @@ First, the plugin will add `sid` to the inner stores of the factory
 // src/shared/lib/create-name/index.ts
 export function createName() {
   const updateName = createEvent();
-  const $name = createStore(null, {sid: "ffds2"});
+  const $name = createStore(null, { sid: "ffds2" });
 
   $name.on(updateName, (_, nextName) => nextName);
 
-  return {$name};
+  return { $name };
 }
 
 // src/feature/persons/model.ts
-import {createName} from "@/shared/lib/create-name";
+import { createName } from "@/shared/lib/create-name";
 
 const personOne = createName();
 const personTwo = createName();
@@ -297,16 +293,16 @@ Now the plugin knows about our factory and it will wrap `createName` with the in
 // src/shared/lib/create-name/index.ts
 export function createName() {
   const updateName = createEvent();
-  const $name = createStore(null, {sid: "ffds2"});
+  const $name = createStore(null, { sid: "ffds2" });
 
   $name.on(updateName, (_, nextName) => nextName);
 
-  return {$name};
+  return { $name };
 }
 
 // src/feature/persons/model.ts
-import {withFactory} from 'effector';
-import {createName} from "@/shared/lib/create-name";
+import { withFactory } from "effector";
+import { createName } from "@/shared/lib/create-name";
 
 const personOne = withFactory({
   sid: "gre24f",
