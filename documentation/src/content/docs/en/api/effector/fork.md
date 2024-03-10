@@ -5,115 +5,36 @@ redirectFrom:
   - /docs/api/effector/fork
 ---
 
-# `fork()` {#fork}
+```ts
+import { fork, type Scope } from "effector";
+```
+
+# Methods {#methods}
+
+## `fork()` {#methods-fork}
 
 :::info{title="since"}
 
-- `fork()` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
-- `fork(domain)` introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
-- support for array of tuples in `values` and `handlers` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 
 :::
 
 Creates an isolated instance of application.
 Primary purposes of this method are SSR and testing.
 
-## Formulae {#fork-formulae}
+### Formulae {#methods-fork-formulae}
 
 ```ts
 fork(): Scope
-fork(options: { values?, handlers? }): Scope
-fork(domain: Domain, options?: { values?, handlers? }): Scope
 ```
 
-## Arguments {#fork-arguments}
+### Returns {#methods-fork-returns}
 
-1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork.
-2. `values`: Option to provide initial states for stores.
+[_Scope_](/en/api/effector/Scope): New fresh scope
 
-   Can be used in three ways:
+### Examples {#methods-fork-examples}
 
-   1. Array of tuples with stores and values:
-
-      ```ts
-      fork({
-        values: [
-          [$user, "alice"],
-          [$age, 21],
-        ],
-      });
-      ```
-
-   2. Map with stores and values:
-
-      ```ts
-      fork({
-        values: new Map().set($user, "alice").set($age, 21),
-      });
-      ```
-
-   3. Plain object: `{[sid: string]: value}`
-
-      ```ts
-      fork({
-        values: {
-          [$user.sid]: "alice",
-          [$age.sid]: 21,
-        },
-      });
-      ```
-
-      :::info{title="Explanation"}
-      Such objects are created by [serialize](/en/api/effector/serialize), in application code **array of tuples is preferred**
-      :::
-
-3. `handlers`: Option to provide handlers for effects.
-
-   Can be used in different ways:
-
-   1. Array of tuples with effects and handlers:
-
-      ```ts
-      fork({
-        handlers: [
-          [getMessageFx, (params) => ({ id: 0, text: "message" })],
-          [getUserFx, async (params) => ({ name: "alice", age: 21 })],
-        ],
-      });
-      ```
-
-   2. Map with effects and handlers:
-
-      ```ts
-      fork({
-        handlers: new Map()
-          .set(getMessageFx, (params) => ({ id: 0, text: "message" }))
-          .set(getUserFx, async (params) => ({ name: "alice", age: 21 })),
-      });
-      ```
-
-   3. Plain object: `{[sid: string]: handler}`
-
-      ```ts
-      fork({
-        handlers: {
-          [getMessageFx.sid]: (params) => ({ id: 0, text: "message" }),
-          [getUserFx.sid]: async (params) => ({ name: "alice", age: 21 }),
-        },
-      });
-      ```
-
-      :::warning{title="deprecation"}
-      Such objects are deprecated since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) and will be removed in future versions. Array of tuples is preferred.
-      :::
-
-## Returns {#fork-returns}
-
-[_Scope_](/en/api/effector/Scope)
-
-## Examples {#fork-examples}
-
-### Create two instances with independent counter state
+#### Create two instances with independent counter state {#methods-fork-examples-create-two-instances}
 
 ```js
 import { createStore, createEvent, fork, allSettled } from "effector";
@@ -138,7 +59,119 @@ console.log(scopeB.getState($counter)); // => -1
 
 [Try it](https://share.effector.dev/dBSC59h8)
 
-### Set initial state for store and change handler for effect
+## `fork(options)` {#methods-fork-options}
+
+Allows to set values for stores in scope and replace handlers for effects.
+
+:::info{title="since"}
+
+support for array of tuples in `values` and `handlers` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+
+:::
+
+### Formulae {#methods-fork-options-formulae}
+
+```ts
+fork(options: { values?, handlers? }): Scope
+```
+
+### Arguments {#methods-fork-options-arguments}
+
+1. `options: { values?, handlers? }` — Object with optional values and handlers
+
+#### `values` {#methods-fork-options-arguments-values}
+
+Option to provide initial states for stores.
+
+Can be used in three ways:
+
+1.  Array of tuples with stores and values:
+
+```ts
+fork({
+  values: [
+    [$user, "alice"],
+    [$age, 21],
+  ],
+});
+```
+
+2.  Map with stores and values:
+
+```ts
+fork({
+  values: new Map().set($user, "alice").set($age, 21),
+});
+```
+
+3.  Plain object: `{[sid: string]: value}`
+
+```ts
+fork({
+  values: {
+    [$user.sid]: "alice",
+    [$age.sid]: 21,
+  },
+});
+```
+
+<br />
+
+:::info{title="Explanation"}
+Such objects are created by [serialize](/en/api/effector/serialize), in application code **array of tuples is preferred**
+:::
+
+#### `handlers` {#methods-fork-options-arguments-handlers}
+
+Option to provide handlers for effects.
+
+Can be used in different ways:
+
+1.  Array of tuples with effects and handlers:
+
+```ts
+fork({
+  handlers: [
+    [getMessageFx, (params) => ({ id: 0, text: "message" })],
+    [getUserFx, async (params) => ({ name: "alice", age: 21 })],
+  ],
+});
+```
+
+2.  Map with effects and handlers:
+
+```ts
+fork({
+  handlers: new Map()
+    .set(getMessageFx, (params) => ({ id: 0, text: "message" }))
+    .set(getUserFx, async (params) => ({ name: "alice", age: 21 })),
+});
+```
+
+3.  Plain object: `{[sid: string]: handler}`
+
+```ts
+fork({
+  handlers: {
+    [getMessageFx.sid]: (params) => ({ id: 0, text: "message" }),
+    [getUserFx.sid]: async (params) => ({ name: "alice", age: 21 }),
+  },
+});
+```
+
+<br />
+
+:::warning{title="deprecation"}
+Such objects are deprecated since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) and will be removed in future versions. Array of tuples is preferred.
+:::
+
+### Returns {#methods-fork-options-returns}
+
+[_Scope_](/en/api/effector/Scope): New fresh scope
+
+### Examples {#methods-fork-options-examples}
+
+#### Set initial state for store and change handler for effect {#methods-fork-examples-set-initial-state-and-change-handler}
 
 This is an example of test, which ensures that after a request to the server, the value of `$friends` is filled.
 
@@ -171,3 +204,30 @@ console.log(testScope.getState($friends));
 ```
 
 [Try it](https://share.effector.dev/gnNbGZuu)
+
+## `fork(domain, options?)` {#methods-fork-domain}
+
+:::info{title="since"}
+
+introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
+
+:::
+
+### Formulae {#methods-fork-domain-formulae}
+
+```ts
+fork(domain: Domain, options?: { values?, handlers? }): Scope
+```
+
+### Arguments {#methods-fork-domain-arguments}
+
+1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork.
+2. `options: { values?, handlers? }` — Object with optional [values](#methods-fork-options-arguments-values) and [handlers](#methods-fork-options-arguments-handlers)
+
+### Returns {#methods-fork-domain-returns}
+
+[_Scope_](/en/api/effector/Scope): New fresh scope
+
+### Examples {#methods-fork-domain-examples}
+
+TBD

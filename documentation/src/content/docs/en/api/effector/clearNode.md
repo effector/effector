@@ -6,31 +6,35 @@ redirectFrom:
   - /docs/api/effector/clearnode
 ---
 
+```ts
+import { clearNode } from "effector";
+```
+
+Method for destroying stores, events, effects, subscriptions, and domains.
+
 # Methods {#methods}
 
-## `clearNode` {#clearNode}
+## `clearNode(unit, config?)` {#methods-clearNode-unit-config}
 
-### Formulae {#clearNode-formulae}
+### Formulae {#methods-clearNode-unit-config-formulae}
 
 ```ts
 clearNode(unit, config?: {deep?: boolean}): void
 ```
 
-Method for destroying stores, events, effects, subscriptions, and domains.
-
-### Arguments {#clearNode-arguments}
+### Arguments {#methods-clearNode-unit-config-arguments}
 
 1. `unit` ([_Store_](/en/api/effector/Store)/[_Event_](/en/api/effector/Event)/[_Effect_](/en/api/effector/Effect)/[_Domain_](/en/api/effector/Domain)/[_Scope_](/en/api/effector/Scope)): unit to be erased.
-2. `config: ({deep?: boolean})` (optional): config object.
-   - `deep: boolean` (optional): erase node _and_ all of its computed values.
+2. `config: {}` (optional): config object.
+   - `deep?: boolean` (optional): erase node _and_ all of its computed values.
 
-### Returns {#clearNode-returns}
+### Returns {#methods-clearNode-unit-config-returns}
 
 `void`
 
-### Examples {#clearNode-examples}
+### Examples {#methods-clearNode-unit-config-examples}
 
-#### Simple {#clearNode-examples-simple}
+#### Simple {#methods-clearNode-unit-config-examples-simple}
 
 ```js
 import { createStore, createEvent, clearNode } from "effector";
@@ -51,7 +55,7 @@ inc();
 
 [Try it](https://share.effector.dev/WjuSl6aN)
 
-#### Deep clear {#clearNode-examples-deep}
+#### Deep clear {#methods-clearNode-unit-config-examples-deep}
 
 ```js
 import { createStore, createEvent, clearNode } from "effector";

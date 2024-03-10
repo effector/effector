@@ -5,6 +5,10 @@ redirectFrom:
   - /docs/api/effector-react/useStoreMap
 ---
 
+```ts
+import { useStoreMap } from "effector-react";
+```
+
 :::info{title="since"}
 `useStoreMap` introduced in [effector-react 19.1.2](https://changelog.effector.dev/#effector-react-19-1-2)
 :::
@@ -13,7 +17,9 @@ React hook, which subscribes to a [store](/en/api/effector/Store) and transforms
 
 You can read the motivation in the [issue](https://github.com/effector/effector/issues/118).
 
-## useStoreMap(store, fn) {#useStoreMap-fn}
+# Methods {#methods}
+
+## `useStoreMap($store, fn)` {#methods-useStoreMap-store-fn}
 
 :::info{title="since"}
 Short version of `useStoreMap` introduced in [effector-react@21.3.0](https://changelog.effector.dev/#effector-react-21-3-0)
@@ -21,47 +27,51 @@ Short version of `useStoreMap` introduced in [effector-react@21.3.0](https://cha
 
 Common use case: subscribe to changes in selected part of store only
 
-### Formulae {#useStoreMap-fn-formulae}
+### Formulae {#methods-useStoreMap-store-fn-formulae}
 
 ```ts
-useStoreMap<State, Result>(
-  store: Store<State>,
-  fn: (state: State) => Result
+useStoreMap(
+  $store: Store<State>,
+  fn: (state: State) => Result,
 ): Result
 ```
 
-### Arguments {#useStoreMap-fn-arguments}
+### Arguments {#methods-useStoreMap-store-fn-arguments}
 
-1. `store`: Source [store](/en/api/effector/Store)
-2. `fn` (_(state) => result_): Selector function to receive part of source store
+1. `$store`: Source [`Store<State>`](/en/api/effector/Store)
+2. `fn` (`(state: State) => Result`): Selector function to receive part of source store
 
-### Returns {#useStoreMap-fn-returns}
+### Returns {#methods-useStoreMap-store-fn-returns}
 
-(_`Result`_): Value from the `fn` function call.
+(`Result`): Value from the `fn` function call.
 
-## useStoreMap(config) {#useStoreMap-config-}
+### Examples {#methods-useStoreMap-store-fn-examples}
+
+TBD
+
+## `useStoreMap(config)` {#methods-useStoreMap-config}
 
 Overload used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
 
-### Formulae {#useStoreMap-config-formulae}
+### Formulae {#methods-useStoreMap-config-formulae}
 
 ```ts
-useStoreMap<Source, Result>({
-  store: Store<Source>;
-  keys: any[];
-  fn: (state: Source, keys: any[]) => Result;
-  updateFilter?: (newResult: Result, oldResult: Result) => boolean;
-  defaultValue?: Result;
-}): Result
+useStoreMap({
+  store: Store<State>,
+  keys: any[],
+  fn: (state: State, keys: any[]) => Result,
+  updateFilter?: (newResult: Result, oldResult: Result) => boolean,
+  defaultValue?: Result,
+}): Result;
 ```
 
-### Arguments {#useStoreMap-config-arguments}
+### Arguments {#methods-useStoreMap-config-arguments}
 
-1. `params` (_Object_): Configuration object
-   - `store`: Source [store](/en/api/effector/Store)
+1. `config` (_Object_): Configuration object
+   - `store`: Source [`Store<State>`](/en/api/effector/Store)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
-   - `fn` (_(state, keys) => result_): Selector function to receive part of source store
-   - `updateFilter` (_(newResult, oldResult) => boolean_): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore) option under the hood
+   - `fn` (`(state: State, keys: any[]) => Result`): Selector function to receive part of source store
+   - `updateFilter` (`(newResult, oldResult) => boolean`): _Optional_ function used to compare old and new updates to prevent unnecessary rerenders. Uses [createStore updateFilter](/en/api/effector/createStore) option under the hood
    - `defaultValue`: Optional default value, used whenever `fn` returns undefined
 
 :::info{title="since"}
@@ -72,19 +82,21 @@ useStoreMap<Source, Result>({
 `defaultValue` option introduced in [effector-react@22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
 :::
 
-### Returns {#useStoreMap-config-returns}
+### Returns {#methods-useStoreMap-config-returns}
 
-(_`Result`_): Value from the `fn` function call, or the `defaultValue`.
+(`Result`): Value from the `fn` function call, or the `defaultValue`.
 
-## Example {#useStoreMap-example}
+### Examples {##methods-useStoreMap-config-examples}
+
+#### Basic {##methods-useStoreMap-config-examples-basic}
 
 This hook is useful for working with lists, especially with large ones
 
-```js
+```jsx
 import { createStore } from "effector";
-import { useStore, useStoreMap } from "effector-react";
+import { useList, useStoreMap } from "effector-react";
 
-const data = [
+const usersRaw = [
   {
     id: 1,
     name: "Yung",
@@ -103,14 +115,14 @@ const data = [
   },
 ];
 
-const $users = createStore(data);
-const $ids = createStore(data.map(({ id }) => id));
+const $users = createStore(usersRaw);
+const $ids = createStore(usersRaw.map(({ id }) => id));
 
 const User = ({ id }) => {
   const user = useStoreMap({
     store: $users,
     keys: [id],
-    fn: (users, [userId]) => users.find(({ id }) => id === userId),
+    fn: (users, [userId]) => users.find(({ id }) => id === userId) ?? null,
   });
 
   return (
@@ -121,9 +133,7 @@ const User = ({ id }) => {
 };
 
 const UserList = () => {
-  const ids = useStore($ids);
-
-  return ids.map((id) => <User key={id} id={id} />);
+  return useList($ids, (id) => <User id={id} />);
 };
 ```
 

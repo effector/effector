@@ -6,19 +6,25 @@ redirectFrom:
   - /docs/api/effector-vue/useGate
 ---
 
-## `useGate(GateComponent, props)` {#useGate-props}
+```ts
+import { useGate } from "effector-vue/composition";
+```
 
-Using a [_Gate_](/en/api/effector-vue/Gate) to consume data from view. Designed for vue 3
+# Methods {#methods}
 
-### Arguments {#useGate-props-arguments}
+## `useGate(Gate, props)` {#methods-useGate-Gate-props}
 
-1. `GateComponent` ([_Gate_](/en/api/effector-vue/Gate))
+Using a [`Gate`](/en/api/effector-vue/Gate) to consume data from view. Designed for Vue 3
+
+### Arguments {#methods-useGate-Gate-props-arguments}
+
+1. `Gate<Props>` ([_Gate_](/en/api/effector-vue/Gate))
 2. `props` (_Props_)
 
-### Returns {#useGate-props-returns}
+### Returns {#methods-useGate-Gate-props-returns}
 
 (_`void`_)
 
-### Example {#useGate-props-example}
+### Examples {#methods-useGate-Gate-props-examples}
 
 [See example](/en/api/effector-vue/Gate)

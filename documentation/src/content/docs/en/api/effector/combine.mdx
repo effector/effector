@@ -13,14 +13,20 @@ This method allows you to get state from each passed store and **combine** it to
 `combine` returns not just a common store. Instead, it returns [DerivedStore](/en/api/effector/Store#readonly), it cannot be modified by the events or used as `target` in [sample](/en/api/effector/sample).
 :::
 
+# Methods
+
 ## `combine(...stores, fn)`
 
-#### Formulae
+### Formulae
 
 ```ts
-$result = combine(
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<Result> = combine(
   $first, $second, $third, ...,
-  (first, second, third, ...) => result
+  (first: A, second: B, third: C, ...) => Result,
 )
 ```
 
@@ -29,11 +35,11 @@ $result = combine(
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-**Returns**
+### Returns
 
 [_DerivedStore_](/en/api/effector/Store#readonly): New derived store
 
-#### Example
+### Examples
 
 import demo_combineStoresFn from "./demo/_combine-stores-fn.live.js?raw";
 
@@ -45,20 +51,31 @@ import demo_combineStoresFn from "./demo/_combine-stores-fn.live.js?raw";
 Formerly known as `createStoreObject`
 :::
 
-#### Formulae
+### Formulae
 
 ```ts
-$result = combine({ a: $first, b: $second, c: $third });
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<{ a: A; b: B; c: C }> = combine({ a: $first, b: $second, c: $third });
 ```
 
 - Read state from stores `$first`, `$second`, `$third` and assign it to properties `a`, `b`, `c` accordingly, that object will be saved to `$result` store
 - Store `$result` contain object `{a, b, c}` and will be updated on each update of passed stores
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
-#### Formulae with `fn`
+### Formulae with `fn`
 
 ```ts
-$result = combine({ a: $first, b: $second, c: $third }, ({ a, b, c }) => result);
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<D> = combine(
+  { a: $first, b: $second, c: $third },
+  ({ a, b, c }: { a: A; b: B; c: C }): D => result,
+);
 ```
 
 - Read state from stores `$first`, `$second`, `$third` and assign it to properties `a`, `b`, `c` accordingly, calls function with that object
@@ -66,11 +83,11 @@ $result = combine({ a: $first, b: $second, c: $third }, ({ a, b, c }) => result)
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-**Returns**
+### Returns
 
 [_DerivedStore_](/en/api/effector/Store#readonly): New derived store
 
-#### Example
+### Examples
 
 import demo_combineObjectFn from "./demo/_combine-object-fn.live.js?raw";
 
@@ -78,10 +95,14 @@ import demo_combineObjectFn from "./demo/_combine-object-fn.live.js?raw";
 
 ## `combine([A, B, C], fn?)`
 
-#### Formulae
+### Formulae
 
 ```ts
-$result = combine([$first, $second, $third], ([A, B, C]) => result);
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<D> = combine([$first, $second, $third], ([A, B, C]): D => result);
 ```
 
 - Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, call function with that array
@@ -89,21 +110,25 @@ $result = combine([$first, $second, $third], ([A, B, C]) => result);
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-#### Formulae without `fn`
+### Formulae without `fn`
 
 ```ts
-$result = combine([$first, $second, $third]);
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<[A, B, C]> = combine([$first, $second, $third]);
 ```
 
 - Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, that array will be saved to `$result` store
 - Store `$result` will be updated on each update of passed stores
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
-**Returns**
+### Returns #methods-combine-array-fn-returns
 
 [_DerivedStore_](/en/api/effector/Store#readonly): New derived store
 
-#### Example
+### Examples
 
 import demo_combineArrayFn from "./demo/_combine-array-fn.live.js?raw";
 
@@ -113,19 +138,29 @@ import demo_combineArrayFn from "./demo/_combine-array-fn.live.js?raw";
 
 It works the same as before. Now primitives and objects can be used in `combine`, and `combine` will not be triggered. Effector will not track mutations of objects and primitives.
 
-#### Example
+### Examples
 
 import demo_combineNonStoresFn from "./demo/_combine-non-stores-fn.live.js?raw";
 
 <LiveDemo client:only="preact" demoFile={demo_combineNonStoresFn} />
 
-## Optional configuration \{#combine-optional-configuration}
+# Parameters
 
-All overloads of `combine` with `fn` provided are also supporting optional configuration object, wich includes:
+All overloads of `combine` with `fn` provided are also supporting optional configuration object as the last parameter.
 
-- `skipVoid`: (_boolean_): Flag to control, how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will read `undefined` as a "skip update" command and will do nothing.
+## `.skipVoid`
 
-#### Example
+Flag to control how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will read `undefined` as a "skip update" command and will do nothing
+
+### Formulae
+
+```ts
+combine($a, $b, callback, { skipVoid: true });
+```
+
+- Type: `boolean`
+
+### Examples
 
 ```js
 const $withFn = combine($a, $b, (a, b) => a || b, { skipVoid: false });

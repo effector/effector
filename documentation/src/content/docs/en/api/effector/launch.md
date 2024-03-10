@@ -5,38 +5,49 @@ redirectFrom:
   - /docs/api/effector/launch
 ---
 
+```ts
+import { launch, type Unit, type Node } from "effector";
+```
+
 :::info{title="since"}
 [effector 20.10.0](https://changelog.effector.dev/#effector-20-10-0)
 :::
 
-## `launch({ target, params })` {#launch-target-params}
+# Methods {#methods}
 
-### Formulae {#launch-target-params-formulae}
-
-```ts
-launch({ target: unit, params });
-```
+## `launch({ target, params })` {#methods-launch-config}
 
 Low level method for running computation in units (events, effects or stores). Mostly used by library developers for fine-grained control of computations.
 
-### Arguments {#launch-target-params-arguments}
+### Formulae {#methods-launch-config-formulae}
+
+```ts
+launch({
+  target,
+  params,
+  defer?: boolean,
+  page?: any,
+  scope?: Scope,
+  meta?: Record<string, any>,
+}): void
+```
+
+### Arguments {#methods-launch-config-arguments}
 
 TBD
 
-### Throws {#launch-target-params-throws}
+### Returns {#methods-launch-config-returns}
 
-TBD
+`void`
 
-### Returns {#launch-target-params-returns}
+## `launch(unit, params)` {#methods-launch-unit-params}
 
-TBD
+### Formulae {#methods-launch-unit-params-formulae}
 
-### Types {#launch-target-params-types}
+```ts
+launch(unit: Unit | Node, params: T): void
+```
 
-TBD
+### Returns {#methods-launch-unit-params-returns}
 
-### Examples {#launch-target-params-examples}
-
-#### Most typical usage {#launch-target-params-examples-typical-usage}
-
-TBD
+`void`

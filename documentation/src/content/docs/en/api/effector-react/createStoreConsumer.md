@@ -6,25 +6,31 @@ redirectFrom:
   - /docs/api/effector-react/createStoreConsumer
 ---
 
+```ts
+import { createStoreConsumer } from "effector-react";
+```
+
 :::warning{title="Deprecated"}
 since [effector-react 23.0.0](https://changelog.effector.dev/#effector-react-23-0-0).
 
 Consider using [hooks api](/en/api/effector-react/index#hooks) in modern projects.
 :::
 
-## `createStoreConsumer(store)` {#createStoreConsumer-store}
+# Methods {#methods}
+
+## `createStoreConsumer($store)` {#methods-createStoreConsumer-store}
 
 Creates a store-based React component which is watching for changes in the store. Based on _Render Props_ technique.
 
-### Arguments {#createStoreConsumer-store-arguments}
+### Arguments {#methods-createStoreConsumer-store-arguments}
 
-1. `store` (_Store_)
+1. `$store` ([`Store`](/en/api/effector/Store))
 
-### Returns {#createStoreConsumer-store-returns}
+### Returns {#methods-createStoreConsumer-store-returns}
 
-(_`React.Component`_)
+(`React.Component`)
 
-### Example {#createStoreConsumer-store-example}
+### Examples {#methods-createStoreConsumer-store-examples}
 
 ```jsx
 import { createStore } from "effector";

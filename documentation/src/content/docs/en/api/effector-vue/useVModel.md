@@ -6,51 +6,54 @@ redirectFrom:
   - /docs/api/effector-vue/useVModel
 ---
 
-## useVModel(store) {#useVModel-store}
-
-A hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
-Basically this hook use when need to work with forms (`v-model`).
-
-### Formulae {#useVModel-store-formulae}
-
 ```ts
-useVModel($store);
+import { useVModel } from "effector-vue/composition";
 ```
 
-Designed for vue 3
+A hook function, which subscribes to a watcher that observes changes in the current store, so when recording results, the component will automatically update. It is primarily used when working with forms (`v-model`) in Vue 3.
 
-### Arguments {#useVModel-store-arguments}
+# Methods {#methods}
 
-1. `store` ([_Store_](/en/api/effector/Store))
+## `useVModel($store)` {#methods-useVModel-store}
+
+### Formulae {#methods-useVModel-store-formulae}
+
+```ts
+useVModel($store: Store<State>): Ref<UnwrapRef<State>>;
+```
+
+Designed for Vue 3.
+
+### Arguments {#methods-useVModel-store-arguments}
+
+1. `$store` ([_Store_](/en/api/effector/Store))
 2. `shape of Stores` ([_Store_](/en/api/effector/Store))
 
-### Returns {#useVModel-store-returns}
+### Returns {#methods-useVModel-store-returns}
 
-(State)
+(`State`)
 
-## Examples {#useVModel-examples}
+### Examples {#methods-useVModel-examples}
 
-### Example 1 (Single Store) {#useVModel-store-example-single}
+#### Single Store {#methods-useVModel-examples-singleStore}
 
 ```js
-import {createStore, createApi} from 'effector'
-import {useVModel} from 'effector-vue/composition'
+import { createStore, createApi } from "effector";
+import { useVModel } from "effector-vue/composition";
 
 const $user = createStore({
-  name: '',
-  surname '',
-  skills: ['CSS', 'HTML']
-})
+  name: "",
+  surname: "",
+  skills: ["CSS", "HTML"],
+});
 
 export default {
   setup() {
     const user = useVModel($user);
 
-    return {
-      user
-    }
-  }
-}
+    return { user };
+  },
+};
 ```
 
 ```html
@@ -66,31 +69,29 @@ export default {
 </div>
 ```
 
-### Example 2 (Store Shape) {#useVModel-store-example-shape}
+#### Store Shape {#methods-useVModel-examples-storeShape}
 
 ```js
-import {createStore, createApi} from 'effector'
-import {useVModel} from 'effector-vue/composition'
+import { createStore, createApi } from "effector";
+import { useVModel } from "effector-vue/composition";
 
-const $name = createStore('')
-const $surname = createStore('')
-const $skills = createStore([])
+const $name = createStore("");
+const $surname = createStore("");
+const $skills = createStore([]);
 
 const model = {
   name: $name,
-  surname: $surname
-  skills: $skills
-}
+  surname: $surname,
+  skills: $skills,
+};
 
 export default {
   setup() {
     const user = useVModel(model);
 
-    return {
-      user
-    }
-  }
-}
+    return { user };
+  },
+};
 ```
 
 ```html

@@ -6,15 +6,17 @@ redirectFrom:
   - /docs/api/effector-solid/createGate
 ---
 
-# `createGate(config)` {#createGate-config}
+# Methods {#methods}
 
-## Formulae {#createGate-config-formulae}
+## `createGate(config)` {#methods-createGate-config}
+
+### Formulae {#methods-createGate-config-formulae}
 
 ```ts
 createGate(config): Gate
 ```
 
-## Arguments {#createGate-config-arguments}
+### Arguments {#methods-createGate-config-arguments}
 
 `config` (_Object_): Optional configuration object
 
@@ -22,33 +24,33 @@ createGate(config): Gate
 - `domain?` ([_Domain_]/apieffector/Domain)): Optional domain which will be used to create gate units ([Gate.open](/en/api/effector-solid/Gate#open) event, [Gate.state](/en/api/effector-solid/Gate#state) store and so on)
 - `name?` (_string_): Optional name which will be used as name of a created Solid component
 
-## Returns {#createGate-config-returns}
+### Returns {#methods-createGate-config-returns}
 
 [_Gate_](/en/api/effector-solid/Gate)
 
-## Examples {#createGate-config-example}
+### Examples {#methods-createGate-config-examples}
 
 TBD
 
-# `createGate(name?)` {#createGate-name}
+## `createGate(name?)` {#methods-createGate-name}
 
-## Formulae {#createGate-name-formulae}
+### Formulae {#methods-createGate-name-formulae}
 
 ```ts
 createGate(name): Gate
 ```
 
-## Arguments {#createGate-name-arguments}
+### Arguments {#methods-createGate-name-arguments}
 
-1. `name`? (_string_): Optional name which will be used as name of a created Solid component
+1. `name?` (_string_): Optional name which will be used as name of a created Solid component
 
-## Returns {#createGate-name-returns}
+### Returns {#methods-createGate-name-returns}
 
 [_Gate_](/en/api/effector-solid/Gate)
 
-## Examples {#createGate-examples}
+### Examples {#methods-createGate-name-examples}
 
-### Basic usage {#createGate-examples-basic}
+#### Basic usage {#methods-createGate-name-examples-basic}
 
 ```js
 import { createGate } from "effector-solid";

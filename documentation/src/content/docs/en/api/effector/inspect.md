@@ -5,13 +5,21 @@ redirectFrom:
   - /docs/api/effector/inspect
 ---
 
+```ts
+import { inspect } from "effector/inspect";
+```
+
 Special API methods designed to handle debugging and monitoring use cases without giving too much access to internals of your actual app.
 
 Useful to create developer tools and production monitoring and observability instruments.
 
-## Inspect API {#inspect-api}
+# Inspect API {#inspect-api}
 
 Allows us to track any computations that have happened in the effector's kernel.
+
+## `inspect()` {#inspect-api-inspect}
+
+### Example {#inspect-api-inspect-example}
 
 ```ts
 import { inspect, type Message } from "effector/inspect";
@@ -40,8 +48,7 @@ someEvent(42);
 // and so on, any triggers
 ```
 
-[Scope](/en/api/effector/Scope) limits the extent to which computations can be tracked.
-If no scope is provided - default out-of-scope mode computations will be tracked.
+[Scope](/en/api/effector/Scope) limits the extent to which computations can be tracked. If no scope is provided - default out-of-scope mode computations will be tracked.
 
 ```ts
 import { fork, allSettled } from "effector";
@@ -73,10 +80,11 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 // [store] $count 1337
 ```
 
-### Tracing {#inspect-tracing}
+## Tracing {#inspect-api-tracing}
 
-Adding `trace: true` setting allows looking up previous computations, that led to this specific one.
-It is useful to debug the specific reason for some events happening
+Adding `trace: true` setting allows looking up previous computations, that led to this specific one. It is useful to debug the specific reason for some events happening
+
+### Example {#inspect-api-tracing-example}
 
 ```ts
 import { fork, allSettled } from "effector";
@@ -99,7 +107,7 @@ inspect({
     if (m.kind === "store" && m.sid === $count.sid) {
       m.trace.forEach((tracedMessage) => {
         logInspectMessage(tracedMessage);
-        // ☝️ here we are loggin the trace of specific store update
+        // ☝️ here we are logging the trace of specific store update
       });
     }
   },
@@ -111,11 +119,11 @@ allSettled(someEvent, { scope: myScope, params: 42 });
 // ☝️ traces are provided in backwards order, because we are looking back in time
 ```
 
-### Errors {#inspect-errors}
+## Errors {#inspect-api-errors}
 
-Effector does not allow exceptions in pure functions. In such case, branch computation is stopped and an exception is logged.
+Effector does not allow exceptions in pure functions. In such case, branch computation is stopped and an exception is logged. There is also a special message type in such case:
 
-There is also a special message type in such case:
+### Example {#inspect-api-errors-example}
 
 ```ts
 inspect({
@@ -128,9 +136,11 @@ inspect({
 });
 ```
 
-## Inspect Graph {#inspect-graph}
+# Inspect Graph {#inspect-graph}
 
 Allows us to track declarations of units, [factories](/en/api/effector/babel-plugin#factories), and [regions](/en/api/effector/withRegion).
+
+## Example {#inspect-graph-example}
 
 ```ts
 import { createStore } from "effector";
@@ -150,9 +160,11 @@ const $count = createStore(0);
 // logs "store $count" to console
 ```
 
-## `withRegion` {#withRegion}
+## `withRegion` {#inspect-graph-withRegion}
 
 Meta-data provided via region's root node is available on declaration.
+
+### Example {#inspect-graph-withRegion-example}
 
 ```ts
 import { createNode, withRegion, createStore } from "effector";

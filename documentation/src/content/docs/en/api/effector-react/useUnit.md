@@ -6,43 +6,63 @@ redirectFrom:
   - /docs/api/effector-react/useUnit
 ---
 
+```ts
+import { useUnit } from "effector-react";
+```
+
 :::info{title="since"}
 `useUnit` introduced in [effector-react 22.1.0](https://changelog.effector.dev/#effector-react-22-1-0)
 :::
 
 React hook, which takes any unit or shape of units.
 
-In case of [stores](/en/api/effector/Store) it subscribes component to the provided [store](/en/api/effector/Store) and returns its current value, so when the store is updated, the component will update automatically.
+In the case of [stores](/en/api/effector/Store), it subscribes the component to the provided [store](/en/api/effector/Store) and returns its current value, so when the store updates, the component will update automatically.
 
-In the case of [events](/en/api/effector/Event)/[effects](/en/api/effector/Effect) – bind to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
-Only `effector-react/scope` version works this way, `useUnit` of `effector-react` is no-op for events and does not require `Provider` with scope.
+In the case of [events](/en/api/effector/Event)/[effects](/en/api/effector/Effect) – it binds to the current [_scope_](/en/api/effector/Scope) to use in DOM event handlers.
+Only the `effector-react/scope` version works this way; the `useUnit` of `effector-react` is no-op for events and does not require a `Provider` with scope.
 
-## `useUnit(unit)`
+# Methods {#methods}
 
-### Arguments {#useUnit-unit-arguments}
+## `useUnit(unit)` {#methods-useUnit-unit}
 
-1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be bound to current `scope`.
+Creates function that calls original unit but bounded to [`Scope`](/en/api/effector/Scope) if provided.
 
-### Returns {#useUnit-unit-returns}
+### Formulae {#methods-useUnit-unit-formulae}
 
-(Function): Function to pass to event handlers. Will trigger the given unit in current scope
+```ts
+useUnit(event: EventCallable<T>): (payload: T) => T;
+useUnit(effect: Effect<Params, Done, any>): (payload: Params) => Promise<Done>;
+```
 
-### Example {#useUnit-unit-example}
+### Arguments {#methods-useUnit-unit-arguments}
+
+1. `unit` ([`EventCallable<T>`](/en/api/effector/Event#eventCallable) or [`Effect<Params, Done, Fail>`](/en/api/effector/Effect)): Event or effect which will be bound to the current `scope`.
+
+### Returns {#methods-useUnit-unit-returns}
+
+(Function): Function to pass to event handlers. Will trigger the given unit in the current scope.
+
+### Examples {#methods-useUnit-unit-examples}
+
+#### Basic {#methods-useUnit-unit-examples-basic}
 
 ```jsx
 import { createEvent, createStore, fork } from "effector";
 import { useUnit, Provider } from "effector-react";
+import { render } from "react-dom";
 
-const inc = createEvent();
-const $count = createStore(0).on(inc, (x) => x + 1);
+const incrementClicked = createEvent();
+const $count = createStore(0);
+
+$count.on(incrementClicked, (count) => count + 1);
 
 const App = () => {
-  const [count, incFn] = useUnit([$count, inc]);
+  const [count, onIncrement] = useUnit([$count, incrementClicked]);
 
   return (
     <>
       <p>Count: {count}</p>
-      <button onClick={() => incFn()}>increment</button>
+      <button onClick={() => onIncrement()}>increment</button>
     </>
   );
 };
@@ -59,17 +79,27 @@ render(
 );
 ```
 
-## `useUnit(store)`
+## `useUnit($store)` {#methods-useUnit-store}
 
-### Arguments {#useUnit-store-arguments}
+Reads value from the `$store` and rerenders component when `$store` updates in [`Scope`](/en/api/effector/Scope) if provided.
 
-1. `store` effector ([_Store_](/en/api/effector/Store))
+### Formulae {#methods-useUnit-store-formulae}
 
-### Returns {#useUnit-store-returns}
+```ts
+useUnit($store: Store<T>): T;
+```
+
+### Arguments {#methods-useUnit-store-arguments}
+
+1. `$store`: effector ([_Store_](/en/api/effector/Store))
+
+### Returns {#methods-useUnit-store-returns}
 
 Current value of the store.
 
-### Example {#useUnit-store-example}
+### Examples {#methods-useUnit-store-examples}
+
+#### Basic {#methods-useUnit-store-examples-basic}
 
 ```js
 import { createStore, createApi } from "effector";
@@ -77,62 +107,74 @@ import { useUnit } from "effector-react";
 
 const $counter = createStore(0);
 
-const { increment, decrement } = createApi($counter, {
-  increment: (state) => state + 1,
-  decrement: (state) => state - 1,
+const { incrementClicked, decrementClicked } = createApi($counter, {
+  incrementClicked: (count) => count + 1,
+  decrementClicked: (count) => count - 1,
 });
 
 const App = () => {
   const counter = useUnit($counter);
+  const [onIncrement, onDecrement] = useUnit([incrementClicked, decrementClicked]);
 
   return (
     <div>
       {counter}
-      <button onClick={increment}>Increment</button>
-      <button onClick={decrement}>Decrement</button>
+      <button onClick={onIncrement}>Increment</button>
+      <button onClick={onDecrement}>Decrement</button>
     </div>
   );
 };
 ```
 
-## `useUnit(shape)`
+## `useUnit(shape)` {#methods-useUnit-shape}
 
-### Arguments {#useUnit-shape-arguments}
+### Formulae {#methods-useUnit-shape-formulae}
 
-1. `shape` Object or array of ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect) or [_Store_](/en/api/effector/Store))
+```ts
+useUnit({ a: Store<A>, b: Event<B>, ... }): { a: A, b: (payload: B) => B; ... }
 
-### Returns {#useUnit-shape-returns}
+useUnit([Store<A>, Event<B>, ... ]): [A, (payload: B) => B, ... ]
+```
 
-(Object or Array):
+### Arguments {#methods-useUnit-shape-arguments}
 
-- if event or effect: functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope _Note: events or effects will be bound **only** if `useUnit` is imported from `effector-react/scope`_
-- if store: current value of the store.
+1. `shape`: Object or array of ([`EventCallable`](/en/api/effector/Event#eventCallable), [`Effect`](/en/api/effector/Effect), or [`Store`](/en/api/effector/Store))
 
-### Example {#useUnit-shape-example}
+### Returns {#methods-useUnit-shape-returns}
+
+(`Object` or `Array`):
+
+- If passed `EventCallable` or `Effect`: Functions with the same names or keys as the argument to pass to event handlers. Will trigger the given unit in the current scope. <br/>
+  _Note: events or effects will be bound to `Scope` **only** if component wrapped into [`Provider`](/en/api/effector-react/Provider)._
+- If passed `Store`: The current value of the store.
+
+### Examples {#methods-useUnit-shape-examples}
+
+#### Basic {#methods-useUnit-shape-examples-basic}
 
 ```jsx
 import { createStore, createEvent, fork } from "effector";
 import { useUnit, Provider } from "effector-react";
 
-const inc = createEvent();
-const dec = createEvent();
+const incremented = createEvent();
+const decremented = createEvent();
 
 const $count = createStore(0);
 
-$count.on(inc, (x) => x + 1);
-$count.on(dec, (x) => x - 1);
+$count.on(incremented, (count) => count + 1);
+$count.on(decremented, (count) => count - 1);
 
 const App = () => {
   const count = useUnit($count);
-  const handler = useUnit({ inc, dec });
+  const on = useUnit({ incremented, decremented });
   // or
-  const [a, b] = useUnit([inc, dec]);
+  const [a, b] = useUnit([incremented, decremented]);
 
   return (
     <>
       <p>Count: {count}</p>
-      <button onClick={() => handler.inc()}>increment</button>
-      <button onClick={() => handler.dec()}>decrement</button>
+      <button onClick={() => on.incremented()}>increment</button>
+      <button onClick={() => on.decremented()}>decrement</button>
     </>
   );
 };
