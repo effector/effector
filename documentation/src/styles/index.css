@@ -545,8 +545,16 @@ h2.heading {
   opacity: 0;
 }
 
-:where(h1, h2, h3, h4, h5):hover .href {
-  opacity: 1;
+@media (hover: hover) {
+  :where(h1, h2, h3, h4, h5):hover .href {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  :where(h1, h2, h3, h4, h5):active .href {
+    opacity: 1;
+  }
 }
 
 .href .icon::after {
