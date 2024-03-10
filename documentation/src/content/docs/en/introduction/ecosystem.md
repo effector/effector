@@ -42,6 +42,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [SWC plugin](https://github.com/effector/swc-plugin) ☢️ — SWC plugin to efficiently work with effector.
 - [effector-logger](https://github.com/effector/logger) 🛠 — Simple logger for stores, events, effects and domains.
 - [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Simple adapter, which logs updates to Redux DevTools.
+- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 🛠 — Third-party SWC plugin.
 
 ## Form management
 
