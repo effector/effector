@@ -8,8 +8,10 @@ import tailwind from "@astrojs/tailwind";
 import directive from "remark-directive";
 import github from "remark-github";
 import breaks from "remark-breaks";
-import remarkHeadingId from "remark-heading-id";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+
+import { remarkHeadingId } from "@effector/remark-heading-id";
+
 import { admonitions } from "./plugins/admonitions";
 import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 
@@ -17,25 +19,9 @@ import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 export default defineConfig({
   site: process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://effector.dev`,
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
-    preact({
-      compat: true,
-    }),
-    mdx({
-      syntaxHighlight: "prism",
-      remarkPlugins: [directive, admonitions, github, remarkHeadingId as any],
-      rehypePlugins: [
-        [
-          rehypeAutolinkHeadings,
-          {
-            behavior: "append",
-            properties: { class: "href" },
-          },
-        ],
-      ],
-    }),
+    tailwind({ applyBaseStyles: false }),
+    preact({ compat: true }),
+    mdx({ extendMarkdownConfig: true }),
     prefetch(),
     process.env.COMPRESS !== "false" && compress(),
   ],
@@ -46,7 +32,7 @@ export default defineConfig({
   scopedStyleStrategy: "where",
   markdown: {
     syntaxHighlight: "prism",
-    remarkPlugins: [directive, admonitions, github, remarkHeadingId as any],
+    remarkPlugins: [directive, admonitions, github, remarkHeadingId],
     rehypePlugins: [
       [
         rehypeAutolinkHeadings,
