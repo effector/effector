@@ -23,7 +23,7 @@ createDomain(name?)
 ```js
 import { createDomain } from "effector";
 
-const domain = createDomain(); // безимянный домен
+const domain = createDomain(); // безымянный домен
 const httpDomain = createDomain("http"); // именованный домен
 
 const statusCodeChanged = httpDomain.createEvent();

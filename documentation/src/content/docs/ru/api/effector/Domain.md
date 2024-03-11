@@ -4,9 +4,9 @@ description: Domain, его методы и свойства
 lang: ru
 ---
 
-_Domain (домен)_ - это способ группировки и применения массовых обработок к юнитам.
+_Domain (домен)_ - это способ группировки и массовой обработки юнитов.
 
-Домен может подписываться на событие, эффект, стор или вложенный домен, созданный с помощью методов `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain`.
+Домен может подписываться на создание события, эффекта, стора или вложенного домена, созданного с помощью методов `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain`.
 
 Может использоваться для логирования или других сайд эффектов.
 
@@ -60,7 +60,7 @@ _Domain (домен)_ - это способ группировки и приме
 
 **Возвращает**
 
-[_Store_](/ru/api/effector/Store): Ноый стор
+[_Store_](/ru/api/effector/Store): Новый стор
 
 ## `createDomain(name?)`
 
@@ -82,7 +82,7 @@ _Domain (домен)_ - это способ группировки и приме
 const { stores, events, domains, effects } = domain.history;
 ```
 
-- Когда любой из юнитов создается внутри домена, он появляется в наборе с именем типа (сторы, события, домены, эффекты) в порядке создания.
+- Когда любой из юнитов создается внутри домена, он появляется в наборе с именем типа в порядке создания.
 
 :::info{title="since"}
 [effector 20.3.0](https://changelog.effector.dev/#effector-20-3-0)
@@ -99,23 +99,23 @@ console.log(domain.history);
 
 [Запустить пример](https://share.effector.dev/flIV7Fja)
 
-## Алиасы
+## Псевдонимы
 
 ### `event(name?)`
 
-Алиас для [domain.createEvent](/ru/api/effector/Domain#createevent-name)
+Псевдоним для [domain.createEvent](/ru/api/effector/Domain#createevent-name)
 
 ### `effect(name?)`
 
-Алиас для [domain.createEffect](/ru/api/effector/Domain#createeffect-name)
+Псевдоним для [domain.createEffect](/ru/api/effector/Domain#createeffect-name)
 
 ### `store(defaultState)`
 
-Алиас для [domain.createStore](/ru/api/effector/Domain#createstore-defaultstate)
+Псевдоним для [domain.createStore](/ru/api/effector/Domain#createstore-defaultstate)
 
 ### `domain(name?)`
 
-Алиас для [domain.createDomain](/ru/api/effector/Domain#createdomain-name)
+Псевдоним для [domain.createDomain](/ru/api/effector/Domain#createdomain-name)
 
 # Хуки доменов
 
@@ -127,7 +127,7 @@ console.log(domain.history);
 domain.onCreateEvent((event) => {});
 ```
 
-- Функция переданная в `onCreateEvent` вызывается каждый раз, когда создается новое события в `domain`
+- Функция переданная в `onCreateEvent` вызывается каждый раз, когда создается новое событие в `domain`
 - Первый аргумент вызываемой функции `event`
 - Результат вызова функции игнорируется
 
@@ -244,7 +244,7 @@ const $a = domain.createStore(null);
 domain.onCreateDomain((domain) => {});
 ```
 
-- Функция переданная в `onCreateDomain` вызывается каждый раз, когда создается новый сабдомен в `domain`
+- Функция переданная в `onCreateDomain` вызывается каждый раз, когда создается новый поддомен в `domain`
 - Первый аргумент вызываемой функции `domain`
 - Результат вызова функции игнорируется
 
