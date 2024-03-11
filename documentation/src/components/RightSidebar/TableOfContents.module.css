@@ -3,7 +3,9 @@
   font-weight: 700;
   font-size: 1rem;
   text-transform: uppercase;
-  font-family: Lexend Deca, sans-serif;
+  font-family:
+    Lexend Deca,
+    sans-serif;
 }
 
 .contents {
@@ -25,7 +27,7 @@
 
 .link::before {
   content: "";
-  @apply absolute top-0 bottom-0 right-0 w-8;
+  @apply absolute bottom-0 right-0 top-0 w-8;
   background: linear-gradient(90deg, transparent, var(--theme-bg, white));
 }
 
@@ -74,7 +76,7 @@
 }
 
 .expandDetails {
-  @apply block select-none flex-nowrap overflow-hidden text-ellipsis;
+  @apply block min-w-max select-none flex-nowrap overflow-hidden text-ellipsis;
 }
 
 .expandDetails summary {
@@ -101,6 +103,6 @@
 .expandContent {
   background-color: var(--theme-code-inline-bg);
   --theme-bg: var(--theme-code-inline-bg);
-  max-width: 46ch;
+  max-width: 52ch;
   @apply rounded-2xl rounded-tl-none px-1 py-3;
 }

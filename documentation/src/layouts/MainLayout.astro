@@ -63,9 +63,9 @@ const currentPage = Astro.url.pathname;
       height: 100%;
 
       position: sticky;
-      top: 0;
+      top: var(--theme-navbar-height, 0);
       padding: 0;
-      height: 100vh;
+      height: calc(100vh - var(--theme-navbar-height, 0));
     }
 
     #grid-main {

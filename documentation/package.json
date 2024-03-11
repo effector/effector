@@ -28,6 +28,7 @@
     "@astrojs/prefetch": "^0.4.1",
     "@astrojs/tailwind": "^5.0.2",
     "@codesandbox/sandpack-react": "^2.10.0",
+    "@effector/remark-heading-id": "^2.0.2",
     "@octokit/rest": "^19.0.13",
     "@pagefind/default-ui": "^0.12.0",
     "@tailwindcss/typography": "^0.5.9",
@@ -47,7 +48,6 @@
     "nanoid": "^4.0.2",
     "pagefind": "^1.0.4",
     "preact": "^10.18.1",
-    "prettier": "^3.0.0",
     "prettier-plugin-astro": "^0.11.0",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-tailwindcss": "^0.4.1",
@@ -58,7 +58,9 @@
     "rollup": "^3.25.1",
     "tailwindcss": "^3.3.5",
     "unist-util-map": "^3.1.3",
-    "@effector/remark-heading-id": "^2.0.2",
     "unist-util-visit": "^4.1.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
   }
 }

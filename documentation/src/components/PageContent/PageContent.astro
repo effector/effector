@@ -34,7 +34,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   data-weight={pagefindWeight}
 >
   <section class="main-section">
-    <nav data-pagefind-ignore>
+    <nav data-pagefind-ignore class="navigation">
       <ul class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
         <li itemscope itemtype="https://schema.org/ListItem">
           <a itemprop="item" href={`/${lang}`}>
@@ -56,10 +56,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
             </li>
           ))
         }
+        <li itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="item">
+            {title}
+          </span>
+          <meta itemprop="position" content={breadcrumbs.length.toString()} />
+        </li>
       </ul>
-    </nav>
-    <div class="heading-section">
-      <h1 class="content-title" id="overview">{title}</h1>
       {
         translations.length ? (
           <span class="translations" data-pagefind-ignore>
@@ -71,7 +74,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
           </span>
         ) : null
       }
-    </div>
+    </nav>
     <nav class="block xl:hidden" data-pagefind-ignore>
       <TableOfContents
         lang={lang}
@@ -102,22 +105,25 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     margin-bottom: 4rem;
   }
 
-  .heading-section {
+  .main-section .navigation {
     display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
     justify-content: space-between;
-    align-items: center;
+
+    @media (min-width: 512px) {
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
-  .heading-section h1 {
-    margin: 0;
-  }
-
-  .heading-section .translations {
+  .main-section .navigation .translations {
     font-size: 1rem;
   }
 
   .breadcrumbs {
     display: flex;
+    flex-wrap: nowrap;
     gap: 1rem;
     margin: 0;
     list-style-type: none;
@@ -125,14 +131,20 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .breadcrumbs li {
-    display: inline-block;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
   }
 
-  .breadcrumbs li {
-    vertical-align: bottom;
+  .breadcrumbs li a {
+    text-wrap: nowrap;
   }
 
-  .breadcrumbs li::after {
+  .breadcrumbs li:last-child span {
+    font-weight: 600;
+  }
+
+  .breadcrumbs li:not(:last-child)::after {
     content: " ";
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="black" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
       center;
@@ -143,7 +155,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     opacity: 0.5;
   }
 
-  :root.theme-dark .breadcrumbs li::after {
+  :root.theme-dark .breadcrumbs li:not(:last-child)::after {
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="white" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
       center;
   }

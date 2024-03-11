@@ -83,9 +83,6 @@ dependencies:
   preact:
     specifier: ^10.18.1
     version: 10.18.1
-  prettier:
-    specifier: ^3.0.0
-    version: 3.0.0
   prettier-plugin-astro:
     specifier: ^0.11.0
     version: 0.11.0
@@ -119,6 +116,11 @@ dependencies:
   unist-util-visit:
     specifier: ^4.1.2
     version: 4.1.2
+
+devDependencies:
+  prettier:
+    specifier: ^3.0.0
+    version: 3.0.0
 
 packages:
 
@@ -5260,7 +5262,6 @@ packages:
     resolution: {integrity: sha512-zBf5eHpwHOGPC47h0zrPyNn+eAEIdEzfywMoYn2XPi0P44Zp0tSq64rq0xAREh4auw2cJZHo9QUob+NqCQky4g==}
     engines: {node: '>=14'}
     hasBin: true
-    dev: false
 
   /pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
