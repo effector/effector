@@ -98,7 +98,9 @@ The core team has implemented this rule for specific reasons related to the desi
 
 #### call of readonly event is not supported, use createEvent instead (#eventCallable-call-argument-throws-call-of-readonly-event)
 
-> Since: effector 23.0.0
+:::info{title="since"}
+[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
+:::
 
 When user tried to call `Event`. In the most cases it happens when you tried to call derived event:
 
@@ -128,7 +130,9 @@ stringifiedReceived("123"); // OK
 
 #### unit call from pure function is not supported, use operators like sample instead (#eventCallable-call-argument-throws-unit-call-from-pure)
 
-> Since: effector 23.0.0
+:::info{title="since"}
+[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
+:::
 
 Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
 
@@ -222,7 +226,9 @@ const second: EventCallable<T> = first.prepend(fn);
 
 ##### unit call from pure function is not supported, use operators like sample instead (#eventCallable-methods-prepend-fn-throws-unit-call-from-pure)
 
-> Since: effector 23.0.0
+:::info{title="since"}
+[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
+:::
 
 Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
 
@@ -409,7 +415,9 @@ const second: Event<F> = first.map(fn);
 
 ##### unit call from pure function is not supported, use operators like sample instead (#event-methods-map-fn-throws-unit-call-from-pure)
 
-> Since: effector 23.0.0
+:::info{title="since"}
+[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
+:::
 
 Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
 
@@ -524,7 +532,9 @@ Use it always like this `.filter({ fn })`.
 
 ##### unit call from pure function is not supported, use operators like sample instead (#event-methods-filter-fn-throws-unit-call-from-pure)
 
-> Since: effector 23.0.0
+:::info{title="since"}
+[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
+:::
 
 Happens when events or effects called from [pure functions](/en/glossary#purity), like guards:
 
@@ -662,7 +672,9 @@ The `fn` function should return some data. When `undefined` is returned, the upd
 
 ##### unit call from pure function is not supported, use operators like sample instead (#event-methods-filterMap-fn-throws-unit-call-from-pure)
 
-> Since: effector 23.0.0
+:::info{title="since"}
+[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
+:::
 
 Happens when events or effects called from [pure functions](/en/glossary#purity), like mappers:
 
