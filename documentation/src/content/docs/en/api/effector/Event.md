@@ -343,8 +343,6 @@ reportClick("example");
 // sendAnalytics triggered { type: "click", container: { items: ["example"] } }
 ```
 
----
-
 Check all other methods on [Event](#event-methods).
 
 # `Event<T>` (#event)

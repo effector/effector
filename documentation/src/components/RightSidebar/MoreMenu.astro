@@ -24,7 +24,13 @@ const editFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_CONTENT_DIR, documentId].joi
 const editUrl = [GITHUB_EDIT_URL, editFilePath].join("");
 ---
 
-{showMoreSection && <h2 class={styles.title}>{getTextLocalized(translations.More, lang)}</h2>}
+{
+  showMoreSection && (
+    <h2 class:list={{ more: true, [styles.title]: true }}>
+      {getTextLocalized(translations.More, lang)}
+    </h2>
+  )
+}
 <ul class={styles.contents}>
   {
     documentId && (
@@ -47,3 +53,9 @@ const editUrl = [GITHUB_EDIT_URL, editFilePath].join("");
     )
   }
 </ul>
+
+<style>
+  body .more {
+    margin-top: 1rem;
+  }
+</style>
