@@ -46,7 +46,7 @@ redirectFrom:
 
 <br /><br />
 
-## Meet the Effector Team {#meet-the-team}
+## Meet the Effector Team (#meet-the-team)
 
 The Effector Team members work full time on the projects which use effector to solve business tasks.
 Each member uses the library every day as a user and tries to improve the user experience as a core team member.
