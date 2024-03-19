@@ -5,6 +5,15 @@ import {
   step,
   createNode,
   createEffect,
+  launch,
+  Event,
+  Node,
+  fork,
+  split,
+  allSettled,
+  Store,
+  // @ts-expect-error
+  getSharedStackMeta,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -147,4 +156,421 @@ test('stale reads', async () => {
       "a, true, a/end, false, b, true, b/end, false",
     ]
   `)
+})
+
+describe('experimental stack meta', () => {
+  /**
+   * Private thing to experiment with, not a public API, not production ready
+   */
+  function withStackMeta<T>(unit: Event<T>): Event<{params: T; meta: unknown}> {
+    const result = unit.map(x => x)
+
+    const node = (result as any).graphite as Node
+
+    node.seq.push(
+      step.compute({
+        fn: (params, _, stack) => ({params, meta: stack.meta}),
+      }),
+    )
+
+    return result as any
+  }
+  function getStackMeta(): any {
+    return getSharedStackMeta()
+  }
+
+  test('basics', async () => {
+    // app code
+    const event = createEvent()
+    const $store = createStore(0).on(event, x => x + 1)
+    const fx = createEffect(() => Promise.resolve(0))
+    const $store2 = createStore(0).on(fx.done, x => x + 1)
+
+    const up = createEvent()
+    const $count = createStore(0).on(up, x => x + 1)
+
+    const delayFx = createEffect(async () => Promise.resolve())
+
+    let fromImperativeCall: any
+    const wrapFx = createEffect(async () => {
+      up()
+      await delayFx()
+      up()
+      fromImperativeCall = getStackMeta()
+      return await fx()
+    })
+
+    sample({
+      clock: $store,
+      filter: () => true,
+      target: wrapFx,
+    })
+
+    const metaRead = withStackMeta($store2.updates)
+
+    const metaUpdated = createEvent<any>()
+
+    split({
+      // @ts-expect-error
+      source: metaRead,
+      match: $store2.map(() => 'match_by_store' as const),
+      cases: {
+        match_by_store: metaUpdated.prepend(({meta}: any) => meta),
+      },
+    })
+
+    const $meta = createStore<any>(null).on(metaUpdated, (_, x) => x)
+
+    const testMeta = {
+      foo: 'bar',
+    } as const
+
+    const scope = fork()
+
+    launch({
+      target: event,
+      params: null,
+      meta: testMeta,
+      scope: scope,
+    })
+
+    await allSettled(scope)
+
+    expect(fromImperativeCall).toMatchObject({
+      foo: 'bar',
+    })
+    expect(scope.getState($meta)).toMatchObject({
+      foo: 'bar',
+    })
+
+    /** no meta should left */
+    expect(getStackMeta()).toEqual(undefined)
+
+    /** no meta start of effect,
+     * only own effect's fxID meta visible,
+     * no previous meta
+     */
+    await allSettled(wrapFx, {scope})
+    expect(fromImperativeCall?.foo).toEqual(undefined)
+
+    /** no meta should left */
+    expect(getStackMeta()).toEqual(undefined)
+    expect(scope.getState($count)).toEqual(4)
+  })
+
+  test('attach-like bridge for any events', async () => {
+    const a = createEvent()
+    const b = createEvent()
+
+    sample({
+      clock: a,
+      target: b,
+    })
+
+    const bWithMeta = withStackMeta(b)
+
+    const bLocal = sample({
+      clock: bWithMeta,
+      filter: ({meta}) => (meta as any)?.local === true,
+      fn: ({params}) => params,
+    })
+
+    const awatcher = jest.fn()
+    const bwatcher = jest.fn()
+    const blocalwatcher = jest.fn()
+    a.watch(awatcher)
+    b.watch(bwatcher)
+    bLocal.watch(blocalwatcher)
+
+    const scope = fork()
+
+    allSettled(a, {scope})
+
+    expect(awatcher).toBeCalledTimes(1)
+    expect(bwatcher).toBeCalledTimes(1)
+    expect(blocalwatcher).toBeCalledTimes(0)
+
+    launch({
+      target: a,
+      params: null,
+      scope,
+      meta: {
+        local: true,
+      },
+    })
+    expect(awatcher).toBeCalledTimes(2)
+    expect(bwatcher).toBeCalledTimes(2)
+    expect(blocalwatcher).toBeCalledTimes(1)
+  })
+
+  test('shared controller', async () => {
+    const start = createEvent()
+    const otherStart = createEvent()
+
+    const $fails = createStore<number[]>([])
+
+    const fetchFx = createEffect(async (p: number) => {
+      const meta = getStackMeta() as any as any
+
+      const controller = meta?.controller
+
+      return await new Promise<number>((rs, rj) => {
+        if (controller) {
+          const un = controller.watch(() => {
+            rj(p)
+            un()
+          })
+        }
+        setTimeout(() => rs(p), p)
+      })
+    })
+
+    const ex1Fx = createEffect(async () => {
+      return await fetchFx(1)
+    })
+    const ex2Fx = createEffect(async () => {
+      return await fetchFx(12)
+    })
+    const ex3Fx = createEffect(async () => {
+      return await fetchFx(13)
+    })
+    const ex4Fx = createEffect(async () => {
+      return await fetchFx(5)
+    })
+
+    sample({
+      // @ts-expect-error
+      clock: [ex1Fx.failData, ex2Fx.failData, ex3Fx.failData, ex4Fx.failData],
+      source: $fails,
+      fn: (fails, fail) => [...fails, fail],
+      target: $fails,
+    })
+
+    const cancel = createEvent()
+
+    const nested = createEvent()
+
+    sample({
+      clock: start,
+      target: [ex1Fx],
+    })
+    sample({
+      clock: [ex1Fx.done],
+      target: [ex2Fx, nested],
+    })
+    sample({
+      clock: nested,
+      target: [ex3Fx],
+    })
+
+    sample({
+      clock: otherStart,
+      target: [ex4Fx],
+    })
+
+    sample({
+      clock: ex4Fx.done,
+      target: cancel,
+    })
+
+    const scope = fork()
+
+    launch({
+      target: start,
+      params: null,
+      scope,
+      meta: {
+        controller: cancel,
+      },
+    })
+    allSettled(otherStart, {scope})
+
+    await allSettled(scope)
+
+    expect(scope.getState($fails)).toEqual([12, 13])
+  })
+
+  test('effects cases', async () => {
+    const metas: any[] = []
+    const fails: any[] = []
+
+    const saveCurrentMeta = (id: string) => {
+      const testKeyValue = getStackMeta()?.testKey
+
+      if (!testKeyValue) {
+        fails.push(id)
+      } else {
+        metas.push(testKeyValue)
+      }
+    }
+    const event = createEvent()
+
+    const fx1 = createEffect(async () => {
+      await Promise.resolve()
+    })
+    const fx2 = createEffect(async () => {
+      await Promise.resolve()
+    })
+    const fx3 = createEffect(async () => {
+      await Promise.resolve()
+    })
+    const controller1Fx = createEffect(async () => {
+      saveCurrentMeta('controller1Fx - 1')
+      fx1()
+      saveCurrentMeta('controller1Fx - 2')
+      fx2()
+      saveCurrentMeta('controller1Fx - 3')
+      fx3()
+      saveCurrentMeta('controller1Fx - 4')
+    })
+    const controller2Fx = createEffect(async () => {
+      saveCurrentMeta('controller2Fx - 1')
+      await fx1()
+      saveCurrentMeta('controller2Fx - 2')
+      await fx2()
+      saveCurrentMeta('controller2Fx - 3')
+      await fx3()
+      saveCurrentMeta('controller2Fx - 4')
+    })
+    const controller3Fx = createEffect(async () => {
+      saveCurrentMeta('controller3Fx - 1')
+      await Promise.all([fx1(), fx2(), fx3()])
+      saveCurrentMeta('controller3Fx - 2')
+    })
+    const controller4Fx = createEffect(async () => {
+      saveCurrentMeta('controller4Fx - 1')
+      event()
+      saveCurrentMeta('controller4Fx - 2')
+      await fx2()
+      saveCurrentMeta('controller4Fx - 3')
+    })
+
+    const start = createEvent()
+    sample({
+      clock: start,
+      target: [controller1Fx, controller2Fx, controller3Fx, controller4Fx],
+    })
+
+    const scope = fork()
+
+    launch({
+      target: start,
+      params: null,
+      scope,
+      meta: {
+        testKey: 'testValue',
+      },
+    })
+
+    await allSettled(scope)
+
+    expect(metas.every(v => v === 'testValue')).toEqual(true)
+    expect(fails).toEqual([])
+    expect(metas.length).toBe(13) // 13 saveCurrentMeta calls
+    /** no meta should left */
+    expect(getSharedStackMeta()).toEqual(undefined)
+  })
+
+  function attachMeta<T>(ev: Event<T>, key: string, value: unknown): Event<T> {
+    const node = (ev as any).graphite as Node
+
+    node.seq.unshift(
+      step.compute({
+        fn: (params, _scope, stack) => {
+          if (stack.meta) {
+            stack.meta[key] = value
+          } else {
+            console.error('Unsupported case yet')
+          }
+          return params
+        },
+      }),
+    )
+
+    return ev
+  }
+
+  test('batching edge case', async () => {
+    const scope = fork()
+
+    const start = createEvent()
+    const ev1 = createEvent()
+    const ev2 = createEvent()
+
+    attachMeta(ev1, 'testKey1', 'testValue1')
+    attachMeta(ev2, 'testKey2', 'testValue2')
+
+    sample({
+      clock: start,
+      target: [ev1, ev2],
+    })
+
+    const end = sample({
+      clock: [ev1, ev2],
+    })
+
+    const endMeta = withStackMeta(end).map(({meta}) => meta)
+
+    const fn = jest.fn()
+    endMeta.watch(fn)
+
+    launch({
+      target: start,
+      params: null,
+      scope,
+      meta: {
+        testKey: 'testValue',
+      },
+    })
+
+    await allSettled(scope)
+
+    expect(fn).toBeCalledTimes(1)
+    expect(fn).toBeCalledWith({
+      testKey: 'testValue',
+      testKey1: 'testValue1',
+      testKey2: 'testValue2',
+    })
+    /** no meta should left */
+    expect(getSharedStackMeta()).toEqual(undefined)
+  })
+
+  test('injecting meta from the middle', async () => {
+    const scope = fork()
+
+    const start = createEvent()
+    const ev1 = createEvent()
+    const ev2 = createEvent()
+
+    attachMeta(ev1, 'testKey1', 'testValue1')
+    attachMeta(ev2, 'testKey2', 'testValue2')
+
+    sample({
+      clock: start,
+      target: [ev1, ev2],
+    })
+
+    const end = sample({
+      clock: [ev1, ev2],
+    })
+
+    const endMeta = withStackMeta(end).map(({meta}) => meta)
+
+    const fn = jest.fn()
+    endMeta.watch(fn)
+
+    launch({
+      target: start,
+      params: null,
+      scope,
+    })
+
+    await allSettled(scope)
+
+    expect(fn).toBeCalledTimes(1)
+    expect(fn).toBeCalledWith({
+      testKey1: 'testValue1',
+      testKey2: 'testValue2',
+    })
+  })
 })
