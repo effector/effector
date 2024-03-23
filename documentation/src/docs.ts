@@ -23,8 +23,6 @@ export async function getTranslatedDocsIndex() {
     docs[`${lang}/${slug}`] = doc;
   });
 
-  console.log("getTranslatedDocsIndex", docs, sourceSlugs);
-
   return { docs, sourceSlugs };
 }
 

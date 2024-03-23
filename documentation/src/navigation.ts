@@ -499,7 +499,7 @@ const effector = [
     ],
   },
   {
-    text: { en: 'Creators', ru: 'Создатели' },
+    text: { en: "Creators", ru: "Создатели" },
     items: [
       {
         text: { en: "createEvent" },
@@ -687,29 +687,27 @@ const api = [
 
 interface QuickMenuItem {
   link: string;
-  groups: LSidebarItem[][]
+  groups: LSidebarItem[][];
 }
 
 export const QUICK_MENU: Record<string, QuickMenuItem> = {
   effector: {
-    link: '/api/effector',
+    link: "/api/effector",
     groups: navigationToQuickMenu(effector),
   },
-  'effector-react': {
-    link: '/api/effector-react',
+  "effector-react": {
+    link: "/api/effector-react",
     groups: navigationToQuickMenu(effectorReact),
   },
-  'effector-solid': {
-    link: '/api/effector-solid',
+  "effector-solid": {
+    link: "/api/effector-solid",
     groups: navigationToQuickMenu(effectorSolid),
   },
-  'effector-vue': {
-    link: '/api/effector-vue',
+  "effector-vue": {
+    link: "/api/effector-vue",
     groups: navigationToQuickMenu(effectorVue),
   },
-}
-
-console.log(QUICK_MENU)
+};
 
 // Be careful: order of the items is important.
 // Sidebar searches for the first matches.
@@ -740,7 +738,7 @@ export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
 
 export const DESKTOP_NAVIGATION: LSidebarItem[] = [
   { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/installation" },
-  { text: { en: "API" }, link: "/api", features: ['API'] },
+  { text: { en: "API" }, link: "/api", features: ["API"] },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
   { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
@@ -872,9 +870,14 @@ interface LSidebarGroup {
   collapsed?: boolean;
 }
 
-export type NavigationFeatures = 'API'
+export type NavigationFeatures = "API";
 
-type LSidebarItem = { text: LText; link: string; quickMenu?: boolean, features?: NavigationFeatures[] };
+type LSidebarItem = {
+  text: LText;
+  link: string;
+  quickMenu?: boolean;
+  features?: NavigationFeatures[];
+};
 
 export function getSidebarForSlug(slug: string): LSidebarGroup[] {
   const path = slug.startsWith("/") ? slug : `/${slug}`;
@@ -994,5 +997,7 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
 }
 
 function navigationToQuickMenu(nav: LSidebarGroup[]) {
-  return nav.map(element => element.items.filter(item => item.quickMenu)).filter(items => items.length > 0)
+  return nav
+    .map((element) => element.items.filter((item) => item.quickMenu))
+    .filter((items) => items.length > 0);
 }
