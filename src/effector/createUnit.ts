@@ -90,7 +90,10 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
     }
     unit[observableSymbol] = () => unit
     const template = readTemplate()
-    if (template) meta.nativeTemplate = template
+    if (template) {
+      meta.nativeTemplate = template
+      template.units.push(unit)
+    }
   }
   return meta
 }
