@@ -228,14 +228,17 @@ const effectorReact = [
       {
         text: { en: "useUnit", ru: "useUnit", uz: "useUnit" },
         link: "/api/effector-react/useUnit",
+        quickMenu: true,
       },
       {
         text: { en: "useList", ru: "useList", uz: "useList" },
         link: "/api/effector-react/useList",
+        quickMenu: true,
       },
       {
         text: { en: "useStoreMap", ru: "useStoreMap", uz: "useStoreMap" },
         link: "/api/effector-react/useStoreMap",
+        quickMenu: true,
       },
       {
         text: { en: "useStore", ru: "useStore", uz: "useStore" },
@@ -253,6 +256,7 @@ const effectorReact = [
       {
         text: { en: "Provider", ru: "Provider", uz: "Provider" },
         link: "/api/effector-react/Provider",
+        quickMenu: true,
       },
     ],
   },
@@ -262,10 +266,12 @@ const effectorReact = [
       {
         text: { en: "Gate" },
         link: "/api/effector-react/Gate",
+        quickMenu: true,
       },
       {
         text: { en: "createGate", uz: "createGate" },
         link: "/api/effector-react/createGate",
+        quickMenu: true,
       },
       {
         text: { en: "useGate", uz: "useGate" },
@@ -323,10 +329,12 @@ const effectorSolid = [
       {
         text: { en: "useUnit" },
         link: "/api/effector-solid/useUnit",
+        quickMenu: true,
       },
       {
         text: { en: "useStoreMap" },
         link: "/api/effector-solid/useStoreMap",
+        quickMenu: true,
       },
     ],
   },
@@ -336,14 +344,17 @@ const effectorSolid = [
       {
         text: { en: "Gate" },
         link: "/api/effector-solid/Gate",
+        quickMenu: true,
       },
       {
         text: { en: "createGate" },
         link: "/api/effector-solid/createGate",
+        quickMenu: true,
       },
       {
         text: { en: "useGate" },
         link: "/api/effector-solid/useGate",
+        quickMenu: true,
       },
     ],
   },
@@ -365,14 +376,17 @@ const effectorVue = [
       {
         text: { en: "VueEffector" },
         link: "/api/effector-vue/VueEffector",
+        quickMenu: true,
       },
       {
         text: { en: "EffectorScopePlugin" },
         link: "/api/effector-vue/EffectorScopePlugin",
+        quickMenu: true,
       },
       {
         text: { en: "createComponent" },
         link: "/api/effector-vue/createComponent",
+        quickMenu: true,
       },
     ],
   },
@@ -382,6 +396,7 @@ const effectorVue = [
       {
         text: { en: "ComponentOptions" },
         link: "/api/effector-vue/ComponentOptions",
+        quickMenu: true,
       },
     ],
   },
@@ -391,14 +406,17 @@ const effectorVue = [
       {
         text: { en: "Gate" },
         link: "/api/effector-vue/Gate",
+        quickMenu: true,
       },
       {
         text: { en: "createGate" },
         link: "/api/effector-vue/createGate",
+        quickMenu: true,
       },
       {
         text: { en: "useGate" },
         link: "/api/effector-vue/useGate",
+        quickMenu: true,
       },
     ],
   },
@@ -408,6 +426,7 @@ const effectorVue = [
       {
         text: { en: "useUnit" },
         link: "/api/effector-vue/useUnit",
+        quickMenu: true,
       },
       {
         text: { en: "useStore" },
@@ -416,10 +435,12 @@ const effectorVue = [
       {
         text: { en: "useStoreMap" },
         link: "/api/effector-vue/useStoreMap",
+        quickMenu: true,
       },
       {
         text: { en: "useVModel" },
         link: "/api/effector-vue/useVModel",
+        quickMenu: true,
       },
     ],
   },
@@ -478,19 +499,22 @@ const effector = [
     ],
   },
   {
-    text: { en: "Methods", ru: "Методы", uz: "Usullar" },
+    text: { en: 'Creators', ru: 'Создатели' },
     items: [
       {
         text: { en: "createEvent" },
         link: "/api/effector/createEvent",
+        quickMenu: true,
       },
       {
         text: { en: "createStore" },
         link: "/api/effector/createStore",
+        quickMenu: true,
       },
       {
         text: { en: "createEffect" },
         link: "/api/effector/createEffect",
+        quickMenu: true,
       },
       {
         text: { en: "createDomain" },
@@ -499,30 +523,42 @@ const effector = [
       {
         text: { en: "attach" },
         link: "/api/effector/attach",
-      },
-      {
-        text: { en: "sample" },
-        link: "/api/effector/sample",
-      },
-      {
-        text: { en: "combine" },
-        link: "/api/effector/combine",
+        quickMenu: true,
       },
       {
         text: { en: "merge" },
         link: "/api/effector/merge",
+        quickMenu: true,
+      },
+    ],
+  },
+  {
+    text: { en: "Methods", ru: "Методы", uz: "Usullar" },
+    items: [
+      {
+        text: { en: "sample" },
+        link: "/api/effector/sample",
+        quickMenu: true,
+      },
+      {
+        text: { en: "combine" },
+        link: "/api/effector/combine",
+        quickMenu: true,
       },
       {
         text: { en: "split" },
         link: "/api/effector/split",
+        quickMenu: true,
       },
       {
         text: { en: "createApi" },
         link: "/api/effector/createApi",
+        quickMenu: true,
       },
       {
         text: { en: "restore" },
         link: "/api/effector/restore",
+        quickMenu: true,
       },
       {
         text: { en: "forward" },
@@ -541,18 +577,22 @@ const effector = [
       {
         text: { en: "fork" },
         link: "/api/effector/fork",
+        quickMenu: true,
       },
       {
         text: { en: "serialize" },
         link: "/api/effector/serialize",
+        quickMenu: true,
       },
       {
         text: { en: "allSettled" },
         link: "/api/effector/allSettled",
+        quickMenu: true,
       },
       {
         text: { en: "scopeBind" },
         link: "/api/effector/scopeBind",
+        quickMenu: true,
       },
       {
         text: { en: "hydrate" },
@@ -645,6 +685,32 @@ const api = [
   },
 ];
 
+interface QuickMenuItem {
+  link: string;
+  groups: LSidebarItem[][]
+}
+
+export const QUICK_MENU: Record<string, QuickMenuItem> = {
+  effector: {
+    link: '/api/effector',
+    groups: navigationToQuickMenu(effector),
+  },
+  'effector-react': {
+    link: '/api/effector-react',
+    groups: navigationToQuickMenu(effectorReact),
+  },
+  'effector-solid': {
+    link: '/api/effector-solid',
+    groups: navigationToQuickMenu(effectorSolid),
+  },
+  'effector-vue': {
+    link: '/api/effector-vue',
+    groups: navigationToQuickMenu(effectorVue),
+  },
+}
+
+console.log(QUICK_MENU)
+
 // Be careful: order of the items is important.
 // Sidebar searches for the first matches.
 export const SIDEBARS: LSidebar = {
@@ -674,7 +740,7 @@ export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
 
 export const DESKTOP_NAVIGATION: LSidebarItem[] = [
   { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/installation" },
-  { text: { en: "API" }, link: "/api" },
+  { text: { en: "API" }, link: "/api", features: ['API'] },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
   { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
@@ -806,7 +872,9 @@ interface LSidebarGroup {
   collapsed?: boolean;
 }
 
-type LSidebarItem = { text: LText; link: string };
+export type NavigationFeatures = 'API'
+
+type LSidebarItem = { text: LText; link: string; quickMenu?: boolean, features?: NavigationFeatures[] };
 
 export function getSidebarForSlug(slug: string): LSidebarGroup[] {
   const path = slug.startsWith("/") ? slug : `/${slug}`;
@@ -923,4 +991,8 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
   }
 
   return nav;
+}
+
+function navigationToQuickMenu(nav: LSidebarGroup[]) {
+  return nav.map(element => element.items.filter(item => item.quickMenu)).filter(items => items.length > 0)
 }
