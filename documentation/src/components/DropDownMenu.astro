@@ -21,7 +21,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
 <div class={`menu ${Astro.props.class}`}>
-  <button type="button" title="Change language" class="menu-button">
+  <button type="button" class="menu-button">
     <div class="button-title">
       <slot />
     </div>
@@ -152,7 +152,10 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     right: 0rem;
     visibility: hidden;
     opacity: 0;
-    transition: opacity 0.25s, visibility 0.25s, transform 0.25s;
+    transition:
+      opacity 0.25s,
+      visibility 0.25s,
+      transform 0.25s;
   }
 
   .menu:hover .flyout {
@@ -181,7 +184,9 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   .link {
     @apply rounded-md;
     display: flex;
-    transition: background-color 0.25s, color 0.25s;
+    transition:
+      background-color 0.25s,
+      color 0.25s;
     padding: 0 0.8rem;
     color: currentColor;
     font-weight: 500;
