@@ -30,9 +30,9 @@ createGate(name?: string): Gate<T>
 
 [`Gate<T>`](/en/api/effector-react/Gate)
 
-### Examples {##methods-createGate-name-examples}
+### Examples (#methods-createGate-name-examples)
 
-#### Basic Usage {##methods-createGate-name-examples-basic}
+#### Basic Usage (#methods-createGate-name-examples-basic)
 
 ```jsx
 import React from "react";

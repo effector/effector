@@ -86,9 +86,9 @@ useStoreMap({
 
 (`Result`): Value from the `fn` function call, or the `defaultValue`.
 
-### Examples {##methods-useStoreMap-config-examples}
+### Examples (#methods-useStoreMap-config-examples)
 
-#### Basic {##methods-useStoreMap-config-examples-basic}
+#### Basic (#methods-useStoreMap-config-examples-basic)
 
 This hook is useful for working with lists, especially with large ones
 

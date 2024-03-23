@@ -40,7 +40,7 @@ useList(
 
 (`React.Node`)
 
-### Examples {##methods-useList-store-fn-examples}
+### Examples (#methods-useList-store-fn-examples)
 
 #### Basic (#methods-useList-store-fn-examples-basic)
 
