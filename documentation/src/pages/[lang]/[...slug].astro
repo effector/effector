@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import type { InferGetStaticPropsType } from "astro";
 
 import { KNOWN_LANGUAGE_CODES } from "../../languages";
-import { getTranslatedDocsIndex, getBreadcrumbs } from "../../docs";
+import { getBreadcrumbs, translatedDocsIndex } from "../../docs";
 import { SITE } from "../../consts";
 
 import MainLayout from "../../layouts/MainLayout.astro";
@@ -11,7 +11,7 @@ import NotTranslatedYet from "../../components/NotTranslatedYet.astro";
 import TranslationDisclaimer from "../../components/TranslationDisclaimer.astro";
 
 export async function getStaticPaths() {
-  const { sourceSlugs, docs } = await getTranslatedDocsIndex();
+  const { sourceSlugs, docs } = translatedDocsIndex;
   const paths: {
     params: { lang: string; slug: string };
     props: { post: CollectionEntry<"docs"> | null };
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 export type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { slug, lang } = Astro.params;
 
-const { docs } = await getTranslatedDocsIndex();
+const { docs } = translatedDocsIndex;
 const breadcrumbs = getBreadcrumbs({ docs, path: Astro.url.pathname });
 
 const { post } = Astro.props;
@@ -48,7 +48,7 @@ KNOWN_LANGUAGE_CODES.forEach((langCode) => {
   }
 });
 
-const noTranslation = !post;
+const translationExists = Boolean(post);
 
 const { Content, headings } = post ? await post.render() : await defaultLanguagePost.render();
 const postData = (post ?? defaultLanguagePost).data;
@@ -60,7 +60,7 @@ const postData = (post ?? defaultLanguagePost).data;
   {...postData}
   translations={translations}
   breadcrumbs={breadcrumbs}
-  indexing={!noTranslation}
+  indexing={translationExists}
 >
   {!post ? <NotTranslatedYet lang={lang!} /> : null}
   <Content />
