@@ -2,7 +2,6 @@ import "dotenv/config";
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import compress from "astro-compress";
-import prefetch from "@astrojs/prefetch";
 import preact from "@astrojs/preact";
 import tailwind from "@astrojs/tailwind";
 import directive from "remark-directive";
@@ -17,14 +16,14 @@ import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 
 // https://astro.build/config
 export default defineConfig({
-  site: process.env.NODE_ENV === "development" ? "http://localhost:3000" : `https://effector.dev`,
+  site: process.env.NODE_ENV === "development" ? "http://localhost:4321" : `https://effector.dev`,
   integrations: [
     tailwind({ applyBaseStyles: false }),
     preact({ compat: true }),
     mdx({ extendMarkdownConfig: true }),
-    prefetch(),
     process.env.COMPRESS !== "false" && compress(),
   ],
+  prefetch: true,
   base: "/",
   build: {
     assets: "assets",
@@ -53,7 +52,5 @@ export default defineConfig({
       },
     },
   },
-  experimental: {
-    devOverlay: false,
-  },
+  devToolbar: { enabled: false },
 });

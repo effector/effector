@@ -1,10 +1,13 @@
 import { map } from "unist-util-map";
-import type { Root } from "mdast";
+import 'mdast-util-directive'
+import type { Root, Node } from "mdast";
+import type { VFile } from 'vfile'
+import type { TextDirective } from "mdast-util-directive";
 
 // TODO: Add svg icons
 
 export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
-  return (tree: Root) => {
+  return (tree: Root, file: VFile) => {
     return map(tree, (node) => {
       if (
         node.type === "containerDirective" ||
@@ -22,7 +25,7 @@ export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
               ]),
             ]),
             h("div", { className: "admonition-content" }, children),
-          ]);
+          ]) satisfies TextDirective;
         }
       }
       return node;
@@ -45,6 +48,6 @@ function text(value: string) {
   return { type: "text", value };
 }
 
-function h(name: string, props = {}, children: unknown[] = []) {
-  return node("element", name, props, { children });
+function h<T extends Node>(name: string, props = {}, children: unknown[] = []): T {
+  return node("element", name, props, { children }) as T;
 }
