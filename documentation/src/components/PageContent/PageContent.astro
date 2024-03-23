@@ -170,4 +170,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   .breadcrumbs li a.active {
     text-decoration: underline;
   }
+
+  .translations a:hover {
+    text-decoration: underline;
+  }
+
+  .translations a:not(:last-child)::after {
+    content: ", ";
+    color: var(--theme-text-light);
+  }
 </style>
