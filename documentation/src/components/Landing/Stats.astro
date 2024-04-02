@@ -174,11 +174,11 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
 
 <style>
   .wrapper {
-    @apply mx-auto max-w-6xl p-3 sm:px-6 sm:py-12;
+    @apply mx-auto max-w-6xl px-3 py-8 sm:px-6 sm:py-12;
   }
 
   .wrapper h3 {
-    @apply mb-10 text-4xl lg:mb-6;
+    @apply mb-4 text-4xl sm:mb-10 lg:mb-6;
     -webkit-box-decoration-break: clone;
     -webkit-text-fill-color: transparent;
     background: linear-gradient(to right bottom, var(--theme-text-light) 30%, var(--theme-text));
@@ -188,15 +188,15 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .stats {
-    @apply min-h-[4rem] rounded-2xl bg-[var(--theme-card)] p-2.5 pt-3 shadow-lg;
+    @apply min-h-[4rem] rounded-3xl bg-[var(--theme-card)] p-4 shadow-lg;
   }
 
   .counts {
-    @apply mb-6 grid select-none grid-cols-2 gap-y-2 sm:grid-cols-3 lg:grid-cols-6;
+    @apply mb-6 grid select-none grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6;
   }
 
   .stats-card {
-    @apply flex min-w-[8rem] flex-col items-center rounded-md p-2.5 text-[color:var(--theme-text)] focus:no-underline;
+    @apply flex min-w-[8rem] flex-col items-center rounded-lg p-2.5 text-[color:var(--theme-text)] focus:no-underline;
     @apply transition-all hover:bg-[var(--theme-accent)] hover:text-[color:var(--theme-bg)] hover:shadow-xl focus:bg-[var(--theme-accent)];
   }
 
@@ -217,7 +217,7 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   }
 
   .install-command {
-    @apply flex flex-1 items-center justify-between rounded-md bg-[var(--theme-bg)] p-1.5 pl-2.5 font-mono md:max-w-xl;
+    @apply flex flex-1 items-center justify-between rounded-lg bg-[var(--theme-bg)] p-2 pl-4 font-mono md:max-w-xl;
   }
 
   .copy-button {
