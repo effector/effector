@@ -136,7 +136,7 @@ export const translations = {
   },
   Landing: {
     Stats: {
-      title: { text: { en: "Effector at a Glance", ru: "Effector в цифрах" } },
+      title: { text: { en: "Effector at a Glance", ru: "effector в цифрах" } },
       size: { text: { en: "gzipped size", ru: "размер gzip", uz: "gzip hajmi" } },
       contributors: { text: { en: "contributors", ru: "соавторы", uz: "hammualliflar" } },
       stars: { text: { en: "stars", ru: "звёзды", uz: "yulduzchalar" } },
@@ -155,7 +155,7 @@ export const translations = {
       title: {
         text: {
           en: "Companies using effector",
-          ru: "Компании использующие эффектор",
+          ru: "Компании использующие effector",
           uz: "Effektordan foydalanadigan kompaniyalar",
         },
       },
@@ -177,16 +177,25 @@ export const translations = {
   },
   Pagefind: {
     placeholder: { text: { en: "Search", ru: "Поиск", uz: "Qidiruv" } },
-    clear_search: { text: { en: "Clear", uz: "Tozalash" } },
-    load_more: { text: { en: "Load more results", uz: "Ko'proq natijalarni yuklash" } },
-    search_label: { text: { en: "Search this site", uz: "Sayt boyisha qidiruv" } },
-    filters_label: { text: { en: "Filters", uz: "Filterlar" } },
+    clear_search: { text: { en: "Clear", ru: "Очистить", uz: "Tozalash" } },
+    load_more: {
+      text: { en: "Load more results", ru: "Загрузить еще", uz: "Ko'proq natijalarni yuklash" },
+    },
+    search_label: {
+      text: { en: "Search this site", ru: "Поиск по сайту", uz: "Sayt boyisha qidiruv" },
+    },
+    filters_label: { text: { en: "Filters", ru: "Фильтры", uz: "Filterlar" } },
     zero_results: {
-      text: { en: "No results for [SEARCH_TERM]", uz: "[SEARCH_TERM] bo‘yicha hech narsa yoq" },
+      text: {
+        en: "No results for [SEARCH_TERM]",
+        ru: "Про [SEARCH_TERM] ничего не найдено",
+        uz: "[SEARCH_TERM] bo‘yicha hech narsa yoq",
+      },
     },
     many_results: {
       text: {
         en: "[COUNT] results for [SEARCH_TERM]",
+        ru: "Найдено [COUNT] по поиску [SEARCH_TERM]",
         uz: "[SEARCH_TERM] uchun [COUNT] ta natija",
       },
     },
@@ -206,7 +215,11 @@ export const translations = {
       },
     },
     searching: {
-      text: { en: "Searching for [SEARCH_TERM]...", uz: "[SEARCH_TERM] qidirilmoqda..." },
+      text: {
+        en: "Searching for [SEARCH_TERM]…",
+        ru: "Поиск [SEARCH_TERM]…",
+        uz: "[SEARCH_TERM] qidirilmoqda…",
+      },
     },
   },
   Search: {
