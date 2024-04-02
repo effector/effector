@@ -4,16 +4,17 @@
   "semi": true,
   "singleQuote": false,
   "printWidth": 100,
-  "plugins": [
-    "prettier-plugin-astro",
-    "prettier-plugin-organize-attributes"
-  ],
+  "plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-organize-attributes"],
   "overrides": [
     {
       "files": "*.astro",
       "options": {
         "parser": "astro",
-        "plugins": ["prettier-plugin-tailwindcss"]
+        "plugins": [
+          "prettier-plugin-tailwindcss",
+          "prettier-plugin-astro",
+          "prettier-plugin-organize-attributes"
+        ]
       }
     }
   ]

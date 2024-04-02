@@ -44,7 +44,8 @@ code .token.inserted {
   color: var(--code-function);
 }
 
-code .token.deleted.prefix, code .token.inserted.prefix {
+code .token.deleted.prefix,
+code .token.inserted.prefix {
   user-select: none;
 }
 

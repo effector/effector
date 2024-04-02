@@ -1,7 +1,7 @@
 import { map } from "unist-util-map";
-import 'mdast-util-directive'
+import "mdast-util-directive";
 import type { Root, Node } from "mdast";
-import type { VFile } from 'vfile'
+import type { VFile } from "vfile";
 import type { TextDirective } from "mdast-util-directive";
 
 // TODO: Add svg icons

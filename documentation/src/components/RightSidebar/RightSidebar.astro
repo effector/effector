@@ -14,7 +14,12 @@ const { headings, documentId, lang } = Astro.props;
 
 <nav class="sidebar-nav" aria-labelledby="grid-right">
   <div class="sidebar-nav-inner">
-    <TableOfContents lang={lang} client:media="(min-width: 50em)" client:only="preact" headings={headings} />
+    <TableOfContents
+      lang={lang}
+      client:media="(min-width: 50em)"
+      client:only="preact"
+      headings={headings}
+    />
     <MoreMenu documentId={documentId} />
   </div>
 </nav>

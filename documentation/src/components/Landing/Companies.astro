@@ -1,133 +1,128 @@
 ---
-import {
-  getPathParamsFromId, getTextLocalized,
-  translations
-} from "../../languages";
+import { getPathParamsFromId, getTextLocalized, translations } from "../../languages";
 
 const companies = [
   {
     url: "aviasales.png",
     alt: "Aviasales",
-    yOffset: true
+    yOffset: true,
   },
   {
     url: "healthSamurai.svg",
-    alt: "Health Samurai"
+    alt: "Health Samurai",
   },
   {
     url: "raiffeisen.svg",
-    alt: "Raiffeisen Bank Russia"
+    alt: "Raiffeisen Bank Russia",
   },
   {
     url: "unicef.svg",
-    alt: "UNICEF (United Nations Children’s Fund)"
+    alt: "UNICEF (United Nations Children’s Fund)",
   },
   {
     url: "joom.svg",
-    alt: "Joom Group"
+    alt: "Joom Group",
   },
   {
     url: "sber.png",
-    alt: "Sber"
+    alt: "Sber",
   },
   {
     url: "avito.svg",
     alt: "Avito",
-    scale: 1.4
+    scale: 1.4,
   },
   {
     url: "mts.svg",
-    alt: "MTS"
+    alt: "MTS",
   },
   {
     url: "docsvision.png",
     alt: "Docsvision",
-    scale: 1.2
+    scale: 1.2,
   },
   {
     url: "okoo.png",
     alt: "Okoo",
-    yOffset: true
+    yOffset: true,
   },
   {
     url: "space307.svg",
-    alt: "space307"
+    alt: "space307",
   },
   {
     url: "redmadrobot.png",
     alt: "REDMADROBOT",
-    yOffset: true
+    yOffset: true,
   },
   {
     url: "travelpayouts.svg",
-    alt: "Travelpayouts"
+    alt: "Travelpayouts",
   },
   {
     url: "junto.png",
-    alt: "Junto"
+    alt: "Junto",
   },
   {
     url: "automationhero.svg",
-    alt: "automation hero"
+    alt: "automation hero",
   },
   {
     url: "radity.png",
-    alt: "Radity"
+    alt: "Radity",
   },
   {
     url: "globalCtoForum.png",
-    alt: "Global CTO Forum"
+    alt: "Global CTO Forum",
   },
   {
     url: "express24.svg",
     alt: "Express24",
-    scale: 1.4
+    scale: 1.4,
   },
   {
     url: "stellarX.svg",
-    alt: "StellarX"
+    alt: "StellarX",
   },
   {
     url: "stmLabs.png",
-    alt: "STM Labs"
+    alt: "STM Labs",
   },
   {
     url: "tenpixls.png",
-    alt: "TenPixls"
+    alt: "TenPixls",
   },
   {
     url: "uptarget.png",
-    alt: "Uptarget"
+    alt: "Uptarget",
   },
   {
     url: "smartomato.svg",
-    alt: "смартомато"
+    alt: "смартомато",
   },
   {
     url: "foxford.svg",
-    alt: "Фоксфорд"
+    alt: "Фоксфорд",
   },
   {
     url: "codengage.png",
-    alt: "Codengage"
+    alt: "Codengage",
   },
   {
     url: "lunatask.png",
-    alt: "Lunatask"
+    alt: "Lunatask",
   },
   {
     url: "semrush.png",
-    alt: "Semrush"
+    alt: "Semrush",
   },
   {
     url: "intouchHealth.png",
-    alt: "Intouch Health, a Teladoc company"
-  }
+    alt: "Intouch Health, a Teladoc company",
+  },
 ];
 
-
 const { lang } = getPathParamsFromId(Astro.url.pathname);
-
 ---
 
 <section class="companies">
@@ -135,16 +130,19 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     {getTextLocalized(translations.Landing.Companies.title, lang)}
   </h3>
   <ul class="companies-list">
-    {companies.map(({ url, alt, yOffset, scale }) => {
-      return (
-        <li
-          class="companies-item"
-          data-logo-offset={yOffset}
-          style={{ "--logo-scale": scale ?? null }}>
-          <img alt={alt} src={`/logo/${url}`} title={alt} />
-        </li>
-      );
-    })}
+    {
+      companies.map(({ url, alt, yOffset, scale }) => {
+        return (
+          <li
+            class="companies-item"
+            data-logo-offset={yOffset}
+            style={{ "--logo-scale": scale ?? null }}
+          >
+            <img alt={alt} src={`/logo/${url}`} title={alt} />
+          </li>
+        );
+      })
+    }
   </ul>
   <div class="companies-add-yours">
     <span>
@@ -164,7 +162,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .companies {
-    @apply px-5 pt-8 pb-20;
+    @apply px-5 pb-20 pt-8;
     background-color: var(--logos-bg);
     --container-max-width: 90vw;
     --logo-card-size: 130px;
@@ -177,23 +175,18 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     }
   }
 
-
   .companies h3 {
-    @apply text-4xl mb-10 lg:mb-6;
+    @apply mb-10 text-4xl lg:mb-6;
     -webkit-box-decoration-break: clone;
     -webkit-text-fill-color: transparent;
-    background: linear-gradient(
-      to right bottom,
-      var(--logos-text-light) 30%,
-      var(--logos-text)
-    );
+    background: linear-gradient(to right bottom, var(--logos-text-light) 30%, var(--logos-text));
     -webkit-background-clip: text;
     line-height: 1.3;
     text-align: center;
   }
 
   .companies-list {
-    @apply grid justify-center items-center mx-auto gap-4;
+    @apply mx-auto grid items-center justify-center gap-4;
     max-width: var(--container-max-width);
     grid-template-columns: repeat(auto-fill, minmax(var(--logo-card-size), 1fr));
     justify-items: center;
@@ -217,11 +210,10 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .companies-add-yours {
-      @apply mx-auto max-w-6xl p-3 flex justify-end text-xs italic gap-1;
+    @apply mx-auto flex max-w-6xl justify-end gap-1 p-3 text-xs italic;
   }
 
   .companies-add-yours > span {
-      color: var(--logos-text);
+    color: var(--logos-text);
   }
 </style>
-

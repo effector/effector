@@ -52,7 +52,7 @@ export const translations = {
     text: {
       en: "This page is not translated yet",
       ru: "Эта страница еще не переведена",
-      uz: "Bu sahifa hali tarjima qilinmagan"
+      uz: "Bu sahifa hali tarjima qilinmagan",
     },
   },
   TranslationDisclaimer: {
@@ -60,21 +60,21 @@ export const translations = {
       text: {
         en: "",
         ru: "Перевод поддерживается сообществом",
-        uz: "Tarjima jamiyat tomonidan qollanilyapti"
+        uz: "Tarjima jamiyat tomonidan qollanilyapti",
       },
     },
     firstLine: {
       text: {
         en: "",
         ru: "Документация на английском языке - самая актуальная, поскольку её пишет и обновляет команда effector. Перевод документации на другие языки осуществляется сообществом по мере наличия сил и желания.",
-        uz: "Ingliz tilidagi hujjatlar eng dolzarb hisoblanadi, chunki u effector guruhi tomonidan yozilgan va yangilanadi. Hujjatlarni boshqa tillarga tarjima qilish jamiyat tomonidan kuch va istaklar mavjud bo'lganda amalga oshiriladi."
+        uz: "Ingliz tilidagi hujjatlar eng dolzarb hisoblanadi, chunki u effector guruhi tomonidan yozilgan va yangilanadi. Hujjatlarni boshqa tillarga tarjima qilish jamiyat tomonidan kuch va istaklar mavjud bo'lganda amalga oshiriladi.",
       },
     },
     secondLine: {
       text: {
         en: "",
         ru: "Помните, что переведенные статьи могут быть неактуальными, поэтому для получения наиболее точной и актуальной информации рекомендуем использовать оригинальную англоязычную версию документации.",
-        uz: "Esda tutingki, tarjima qilingan maqolalar yangilanmasligi mumkin, shuning uchun eng aniq va dolzarb ma'lumot uchun hujjatlarning asl inglizcha versiyasidan foydalanishni tavsiya etamiz.\n"
+        uz: "Esda tutingki, tarjima qilingan maqolalar yangilanmasligi mumkin, shuning uchun eng aniq va dolzarb ma'lumot uchun hujjatlarning asl inglizcha versiyasidan foydalanishni tavsiya etamiz.\n",
       },
     },
   },
@@ -82,60 +82,61 @@ export const translations = {
     text: {
       en: "To add new translation open Pull Request",
       ru: "Чтобы добавить перевод, откройте Pull Request",
-      uz: "Tarjima qoshish uchun havola boyicha o'tib Pull Request oching"
+      uz: "Tarjima qoshish uchun havola boyicha o'tib Pull Request oching",
     },
   },
   usingThisLink: {
     text: {
       en: "using this link",
       ru: "по этой ссылке",
-      uz: "(havolaga o'tish)"
+      uz: "(havolaga o'tish)",
     },
   },
   ShowingContentForDefaultLanguage: {
     text: {
       en: "Showing content for default language",
       ru: "Отображается содержимое для языка по умолчанию",
-      uz: "Standart til uchun tarkibni ko'rsatadi"
+      uz: "Standart til uchun tarkibni ko'rsatadi",
     },
   },
   OnThisPage: {
     text: {
       en: "On this page",
       ru: "Оглавление",
-      uz: "Mundarija"
+      uz: "Mundarija",
     },
   },
   EditThisPage: {
     text: {
       en: "Edit this page",
       ru: "Внести правки",
-      uz: "O'zgartirish kiritish"
+      uz: "O'zgartirish kiritish",
     },
   },
   JoinOurCommunity: {
     text: {
       en: "Join our community",
       ru: "Войти в чат",
-      uz: "Chatga kirish"
+      uz: "Chatga kirish",
     },
   },
   More: {
     text: {
       en: "More",
       ru: "Дополнительно",
-      uz: "Qoshimcha"
+      uz: "Qoshimcha",
     },
   },
   Contributors: {
     text: {
       en: "Contributors",
       ru: "Соавторы",
-      uz: "Hammualliflar"
+      uz: "Hammualliflar",
     },
   },
   Landing: {
     Stats: {
+      title: { text: { en: "Effector at a Glance", ru: "Effector в цифрах" } },
       size: { text: { en: "gzipped size", ru: "размер gzip", uz: "gzip hajmi" } },
       contributors: { text: { en: "contributors", ru: "соавторы", uz: "hammualliflar" } },
       stars: { text: { en: "stars", ru: "звёзды", uz: "yulduzchalar" } },
@@ -146,7 +147,7 @@ export const translations = {
         text: {
           en: "Start by adding effector as a dependency",
           ru: "Начните с установки effector",
-          uz: "Effectorni ornatishdan boshlang"
+          uz: "Effectorni ornatishdan boshlang",
         },
       },
     },
@@ -155,24 +156,24 @@ export const translations = {
         text: {
           en: "Companies using effector",
           ru: "Компании использующие эффектор",
-          uz: "Effektordan foydalanadigan kompaniyalar"
-        }
+          uz: "Effektordan foydalanadigan kompaniyalar",
+        },
       },
       wantToAppear: {
         text: {
           en: "Want to appear on this page?",
           ru: "Хотите попасть в этот список?",
-          uz: "Ushbu ro'yxatga kirishni xohlaysizmi?"
-        }
+          uz: "Ushbu ro'yxatga kirishni xohlaysizmi?",
+        },
       },
       tellUs: {
         text: {
           en: "Tell us",
           ru: "Расскажите нам",
-          uz: "Bizga habar bering"
+          uz: "Bizga habar bering",
         },
-      }
-    }
+      },
+    },
   },
   Pagefind: {
     placeholder: { text: { en: "Search", ru: "Поиск", uz: "Qidiruv" } },
@@ -180,29 +181,49 @@ export const translations = {
     load_more: { text: { en: "Load more results", uz: "Ko'proq natijalarni yuklash" } },
     search_label: { text: { en: "Search this site", uz: "Sayt boyisha qidiruv" } },
     filters_label: { text: { en: "Filters", uz: "Filterlar" } },
-    zero_results: { text: { en: "No results for [SEARCH_TERM]", uz: "[SEARCH_TERM] bo‘yicha hech narsa yoq" } },
-    many_results: { text: { en: "[COUNT] results for [SEARCH_TERM]", uz: "[SEARCH_TERM] uchun [COUNT] ta natija" } },
-    one_result: { text: { en: "[COUNT] result for [SEARCH_TERM]", uz: "[SEARCH_TERM] uchun [COUNT] ta natija" } },
+    zero_results: {
+      text: { en: "No results for [SEARCH_TERM]", uz: "[SEARCH_TERM] bo‘yicha hech narsa yoq" },
+    },
+    many_results: {
+      text: {
+        en: "[COUNT] results for [SEARCH_TERM]",
+        uz: "[SEARCH_TERM] uchun [COUNT] ta natija",
+      },
+    },
+    one_result: {
+      text: { en: "[COUNT] result for [SEARCH_TERM]", uz: "[SEARCH_TERM] uchun [COUNT] ta natija" },
+    },
     alt_search: {
       text: {
         en: "No results for [SEARCH_TERM]. Showing results for [DIFFERENT_TERM] instead",
-        uz: "[SEARCH_TERM] boʻyicha hech narsa topilmadi. Oʻrniga [DIFFERENT TERM] boyicha natijalar koʻrsatilmoqda"
+        uz: "[SEARCH_TERM] boʻyicha hech narsa topilmadi. Oʻrniga [DIFFERENT TERM] boyicha natijalar koʻrsatilmoqda",
       },
     },
     search_suggestion: {
-      text: { en: "No results for [SEARCH_TERM]. Try one of the following searches:", uz: "[SEARCH_TERM] boʻyicha hech narsa topilmadi. Quyidagi qidiruvlardan birini sinab ko'ring:" },
+      text: {
+        en: "No results for [SEARCH_TERM]. Try one of the following searches:",
+        uz: "[SEARCH_TERM] boʻyicha hech narsa topilmadi. Quyidagi qidiruvlardan birini sinab ko'ring:",
+      },
     },
-    searching: { text: { en: "Searching for [SEARCH_TERM]...", uz: "[SEARCH_TERM] qidirilmoqda..." } },
+    searching: {
+      text: { en: "Searching for [SEARCH_TERM]...", uz: "[SEARCH_TERM] qidirilmoqda..." },
+    },
   },
   Search: {
     label: { text: { en: "Search", ru: "Поиск", uz: "Qidiruv" } },
-    shortcutLabel: { text: { en: "(Press / to Search)", ru: "(Нажмите / для поиска)", uz: "(Qidirish uchun / tugmasini bosing)" } },
+    shortcutLabel: {
+      text: {
+        en: "(Press / to Search)",
+        ru: "(Нажмите / для поиска)",
+        uz: "(Qidirish uchun / tugmasini bosing)",
+      },
+    },
     cancelLabel: { text: { en: "Cancel", ru: "Отмена", uz: "Bekor qilish" } },
     devWarning: {
       text: {
         en: "Search is only available in production builds. \nTry building and previewing the site to test it out locally.",
         ru: "Поиск недоступен в сборке для разработки. \nСоберите и включите preview для проверки поиска локально.",
-        uz: "Qidiruv ishlanma tuzilmasida mavjud emas. \nLokal qidiruvingizni sinab ko'rish uchun preview ni bosib yoqing."
+        uz: "Qidiruv ishlanma tuzilmasida mavjud emas. \nLokal qidiruvingizni sinab ko'rish uchun preview ni bosib yoqing.",
       },
     },
   },

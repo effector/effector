@@ -129,7 +129,9 @@ const additionalContributors = contributors.length - recentContributors.length; 
     font-weight: 700;
     font-size: 1rem;
     text-transform: uppercase;
-    font-family: Lexend Deca, sans-serif;
+    font-family:
+      Lexend Deca,
+      sans-serif;
   }
 
   .avatar-list {
@@ -182,13 +184,17 @@ const additionalContributors = contributors.length - recentContributors.length; 
     height: 100%;
     object-fit: cover;
     background-color: var(--theme-bg);
-    box-shadow: 0 0 0 0.05em var(--theme-bg), 0 0 0 0.08em var(--theme-divider-dark);
+    box-shadow:
+      0 0 0 0.05em var(--theme-bg),
+      0 0 0 0.08em var(--theme-divider-dark);
   }
 
   .avatar-list a:focus {
     outline: 2px solid transparent;
     /* Double-layer trick to work for dark and light backgrounds */
-    box-shadow: 0 0 0 0.08em var(--theme-accent), 0 0 0 0.12em white;
+    box-shadow:
+      0 0 0 0.08em var(--theme-accent),
+      0 0 0 0.12em white;
   }
 
   .contributors {

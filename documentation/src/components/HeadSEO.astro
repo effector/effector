@@ -24,7 +24,12 @@ const imageAlt = image?.alt ?? OPEN_GRAPH.image.alt;
 <meta property="og:locale" content={ogLocale ?? SITE.defaultLanguage} />
 <meta property="og:image" content={canonicalImageSrc} />
 <meta property="og:image:alt" content={imageAlt} />
-<meta name="description" property="og:description" content={description ?? SITE.description} data-pagefind-index-attrs="content" />
+<meta
+  name="description"
+  property="og:description"
+  content={description ?? SITE.description}
+  data-pagefind-index-attrs="content"
+/>
 <meta property="og:site_name" content={SITE.title} />
 
 <!-- Twitter Tags -->
