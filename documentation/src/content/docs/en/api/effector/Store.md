@@ -29,7 +29,7 @@ const $second = $first.map(fn);
 
 ### Arguments (#methods-map-fn-arguments)
 
-1. `fn` (_Function_): Function that receives `state` and `lastState?` and returns a new state for the derived store.
+1. `fn` (_Function_): Function that receives `state` and returns a new state for the derived store.
 2. `config` (_Object_): Optional configuration.
 
 ### Returns (#methods-map-fn-returns)
