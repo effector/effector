@@ -37,8 +37,7 @@ export interface Store<State> extends Unit {
   setState(newState: State): void
   //prettier-ignore
   map: (
-    & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
-    & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
+    & (<T>(fn: (_: State) => T, _: void) => Store<T>)
   );
   on<E>(
     event: CommonUnit<E>,
