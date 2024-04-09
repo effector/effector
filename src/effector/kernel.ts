@@ -11,33 +11,6 @@ type PriorityTag = 'child' | 'pure' | 'read' | 'barrier' | 'sampler' | 'effect'
 
 export type BarrierPriorityTag = 'read' | 'barrier' | 'sampler' | 'effect'
 
-/**
- * Position in the current branch,
- * including call stack, priority type
- * and index of next step in the executed Node
- */
-type Layer = {
-  idx: number
-  stack: Stack
-  type: PriorityTag
-  id: number
-}
-
-/** Queue as linked list or skew heap */
-type QueueItem = {
-  /** node value */
-  v: Layer
-  /** left node. always null in queue but used in skew heap */
-  l: QueueItem | null
-  /** right node */
-  r: QueueItem | null
-}
-type QueueBucket = {
-  first: QueueItem | null
-  last: QueueItem | null
-  size: number
-}
-
 /** Dedicated local metadata */
 type Local = {
   fail: boolean
@@ -45,141 +18,185 @@ type Local = {
   scope: {[key: string]: any}
 }
 
-let heap: QueueItem | null = null
-
-const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
-  if (!a) return b
-  if (!b) return a
-
-  let ret
-  if (
-    /**
-     * if both nodes has the same PriorityType
-     * and first node is created after second one
-     */
-    (a.v.type === b.v.type && a.v.id > b.v.id) ||
-    /**
-     * greater priority mean bucket of first node is executed later
-     * e.g  a: "sampler", b: "barrier"
-     */
-    getPriority(a.v.type) > getPriority(b.v.type)
-  ) {
-    ret = a
-    a = b
-    b = ret
-  }
-  ret = merge(a.r, b)
-  a.r = a.l
-  a.l = ret
-
-  return a
-}
-
-/** queue buckets for each PriorityType */
-const queue: QueueBucket[] = []
-let ix = 0
-while (ix < 6) {
+function createEffectorQueue() {
   /**
-   * although "sampler" and "barrier" are using heap instead of linked list,
-   * their buckets are still useful: they maintains size of heap queue
+   * Position in the current branch,
+   * including call stack, priority type
+   * and index of next step in the executed Node
    */
-  add(queue, {first: null, last: null, size: 0})
-  ix += 1
-}
+  type Layer = {
+    idx: number
+    stack: Stack
+    type: PriorityTag
+    id: number
+  }
 
-const deleteMin = () => {
-  for (let i = 0; i < 6; i++) {
-    const list = queue[i]
-    if (list.size > 0) {
+  /** Queue as linked list or skew heap */
+  type QueueItem = {
+    /** node value */
+    v: Layer
+    /** left node. always null in queue but used in skew heap */
+    l: QueueItem | null
+    /** right node */
+    r: QueueItem | null
+  }
+  type QueueBucket = {
+    first: QueueItem | null
+    last: QueueItem | null
+    size: number
+  }
+
+  let heap: QueueItem | null = null
+
+  const merge = (
+    a: QueueItem | null,
+    b: QueueItem | null,
+  ): QueueItem | null => {
+    if (!a) return b
+    if (!b) return a
+
+    let ret
+    if (
       /**
-       * bucket 3 is for "barrier" PriorityType (used in combine)
-       * bucket 4 is for "sampler" PriorityType (used in sample)
+       * if both nodes has the same PriorityType
+       * and first node is created after second one
        */
-      if (i === 3 || i === 4) {
+      (a.v.type === b.v.type && a.v.id > b.v.id) ||
+      /**
+       * greater priority mean bucket of first node is executed later
+       * e.g  a: "sampler", b: "barrier"
+       */
+      getPriority(a.v.type) > getPriority(b.v.type)
+    ) {
+      ret = a
+      a = b
+      b = ret
+    }
+    ret = merge(a.r, b)
+    a.r = a.l
+    a.l = ret
+
+    return a
+  }
+
+  /** queue buckets for each PriorityType */
+  const queue: QueueBucket[] = []
+  let ix = 0
+  while (ix < 6) {
+    /**
+     * although "sampler" and "barrier" are using heap instead of linked list,
+     * their buckets are still useful: they maintains size of heap queue
+     */
+    add(queue, {first: null, last: null, size: 0})
+    ix += 1
+  }
+
+  const deleteMin = () => {
+    for (let i = 0; i < 6; i++) {
+      const list = queue[i]
+      if (list.size > 0) {
+        /**
+         * bucket 3 is for "barrier" PriorityType (used in combine)
+         * bucket 4 is for "sampler" PriorityType (used in sample and guard)
+         */
+        if (i === 3 || i === 4) {
+          list.size -= 1
+          const value = heap!.v
+          heap = merge(heap!.l, heap!.r)
+          return value
+        }
+        if (list.size === 1) {
+          list.last = null
+        }
+        const item = list.first
+        list.first = item!.r
         list.size -= 1
-        const value = heap!.v
-        heap = merge(heap!.l, heap!.r)
-        return value
+        return item!.v
       }
-      if (list.size === 1) {
-        list.last = null
-      }
-      const item = list.first
-      list.first = item!.r
-      list.size -= 1
-      return item!.v
     }
   }
-}
-const pushFirstHeapItem = (
-  type: PriorityTag,
-  page: Leaf | null,
-  node: Node,
-  parent: Stack | null,
-  value: any,
-  scope?: Scope | null | void,
-  meta?: Record<string, any> | void,
-) =>
-  pushHeap(
-    0,
-    {
-      a: null,
-      b: null,
-      node,
-      parent,
-      value,
-      page,
-      scope,
-      meta,
-    },
-    type,
-    0,
-  )
-const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id: number) => {
-  const priority = getPriority(type)
-  const bucket: QueueBucket = queue[priority]
-  const item: QueueItem = {
-    v: {idx, stack, type, id},
-    l: null,
-    r: null,
-  }
-  /**
-   * bucket 3 is for "barrier" PriorityType (used in combine)
-   * bucket 4 is for "sampler" PriorityType (used in sample)
-   */
-  if (priority === 3 || priority === 4) {
-    heap = merge(heap, item)
-  } else {
-    if (bucket.size === 0) {
-      bucket.first = item
+  const pushFirstHeapItem = (
+    type: PriorityTag,
+    page: Leaf | null,
+    node: Node,
+    parent: Stack | null,
+    value: any,
+    scope?: Scope | null | void,
+    meta?: Record<string, any> | void,
+  ) =>
+    pushHeap(
+      0,
+      {
+        a: null,
+        b: null,
+        node,
+        parent,
+        value,
+        page,
+        scope,
+        meta,
+      },
+      type,
+      0,
+    )
+  const pushHeap = (
+    idx: number,
+    stack: Stack,
+    type: PriorityTag,
+    id: number,
+  ) => {
+    const priority = getPriority(type)
+    const bucket: QueueBucket = queue[priority]
+    const item: QueueItem = {
+      v: {idx, stack, type, id},
+      l: null,
+      r: null,
+    }
+    /**
+     * bucket 3 is for "barrier" PriorityType (used in combine)
+     * bucket 4 is for "sampler" PriorityType (used in sample and guard)
+     */
+    if (priority === 3 || priority === 4) {
+      heap = merge(heap, item)
     } else {
-      bucket.last!.r = item
+      if (bucket.size === 0) {
+        bucket.first = item
+      } else {
+        bucket.last!.r = item
+      }
+      bucket.last = item
     }
-    bucket.last = item
+    bucket.size += 1
   }
-  bucket.size += 1
-}
 
-const getPriority = (t: PriorityTag) => {
-  switch (t) {
-    case 'child':
-      return 0
-    case 'pure':
-      return 1
-    case 'read':
-      return 2
-    case 'barrier':
-      return 3
-    case 'sampler':
-      return 4
-    case 'effect':
-      return 5
-    default:
-      return -1
+  const getPriority = (t: PriorityTag) => {
+    switch (t) {
+      case 'child':
+        return 0
+      case 'pure':
+        return 1
+      case 'read':
+        return 2
+      case 'barrier':
+        return 3
+      case 'sampler':
+        return 4
+      case 'effect':
+        return 5
+      default:
+        return -1
+    }
+  }
+
+  const barriers = new Set<string | number>()
+
+  return {
+    barriers,
+    pushFirstHeapItem,
+    pushHeap,
+    deleteMin,
   }
 }
-
-const barriers = new Set<string | number>()
 
 let isRoot = true
 export let isWatch = false
@@ -228,6 +245,7 @@ export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
   defer?: boolean
+  queue?: ReturnType<typeof createEffectorQueue>
   page?: Leaf | void | null
   scope?: Scope | void | null
   stack?: Stack | void
@@ -251,6 +269,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   if (forkPageForLaunch && forkPage && forkPageForLaunch !== forkPage) {
     forkPage = null
   }
+
+  /**
+   * Init launch queue
+   */
+  const {barriers, pushFirstHeapItem, deleteMin, pushHeap} =
+    unit.queue ?? createEffectorQueue()
+
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
       pushFirstHeapItem(
