@@ -203,6 +203,7 @@ export let isWatch = false
 export let isPure = false
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
+let currentQueue: ReturnType<typeof createEffectorQueue> | null = null
 export const setForkPage = (newForkPage: Scope | void | null) => {
   forkPage = newForkPage
 }
@@ -269,6 +270,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
     unit = unit.target
   }
+  if (upsert && !effectorQueue) {
+    effectorQueue = currentQueue
+  }
   if (forkPageForLaunch && forkPage && forkPageForLaunch !== forkPage) {
     forkPage = null
   }
@@ -316,6 +320,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     scope: forkPage,
     isWatch,
     isPure,
+    currentQueue,
   }
   isRoot = false
   let stop: boolean
@@ -329,6 +334,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     node = stack.node
     currentPage = page = stack.page
     forkPage = getForkPage(stack)
+    currentQueue = effectorQueue
     if (page) reg = page.reg
     else if (forkPage) reg = forkPage.reg
     // reg = (page ? page : forkPage ? forkPage : node).reg
@@ -499,6 +505,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
+  currentQueue = lastStartedState.currentQueue
 }
 
 const noopParser = (x: any) => x
