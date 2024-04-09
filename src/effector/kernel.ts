@@ -18,19 +18,19 @@ type Local = {
   scope: {[key: string]: any}
 }
 
-function createEffectorQueue() {
-  /**
-   * Position in the current branch,
-   * including call stack, priority type
-   * and index of next step in the executed Node
-   */
-  type Layer = {
-    idx: number
-    stack: Stack
-    type: PriorityTag
-    id: number
-  }
+/**
+ * Position in the current branch,
+ * including call stack, priority type
+ * and index of next step in the executed Node
+ */
+type Layer = {
+  idx: number
+  stack: Stack
+  type: PriorityTag
+  id: number
+}
 
+function createEffectorQueue() {
   /** Queue as linked list or skew heap */
   type QueueItem = {
     /** node value */
@@ -256,7 +256,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
-  let meta: Record<string, any> | void
+  let meta: Record<string, any> | undefined
   let effectorQueue: ReturnType<typeof createEffectorQueue> | null = null
   if (unit.target) {
     effectorQueue = unit.queue
