@@ -278,10 +278,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   }
 
   if (!effectorQueue) {
-    console.log('new queue created')
     effectorQueue = createEffectorQueue()
-  } else {
-    console.log('queue reused')
   }
 
   /**
