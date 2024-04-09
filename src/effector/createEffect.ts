@@ -125,7 +125,7 @@ export function createEffect<Params, Done, Fail = Error>(
           q,
         ) => {
           if (_.runnerFn) {
-            const needToContinue = _.runnerFn(upd, null, stack)
+            const needToContinue = _.runnerFn(upd, null, stack, q)
             if (!needToContinue) return
           }
           /** upd.args could be changed by runnerFn */
