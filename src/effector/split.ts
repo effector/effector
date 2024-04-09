@@ -20,6 +20,7 @@ const launchCase = (
   field: string,
   data: any,
   stack: Stack,
+  q: any,
 ) => {
   const target = scopeTargets[field]
   if (target) {
@@ -28,6 +29,7 @@ const launchCase = (
       params: Array.isArray(target) ? target.map(() => data) : data,
       defer: true,
       stack,
+      queue: q,
     })
   }
 }
@@ -90,13 +92,14 @@ export function split(...args: any[]) {
         safe: matchIsUnit,
         filter: true,
         pure: !matchIsUnit,
-        fn(data, scopeTargets, stack) {
+        fn(data, scopeTargets, stack, q) {
           const value = String(matchIsUnit ? stack.a : match(data))
           launchCase(
             scopeTargets,
             includes(caseNames, value) ? value : '__',
             data,
             stack,
+            q,
           )
         },
       }),
@@ -130,18 +133,18 @@ export function split(...args: any[]) {
     }
     splitterSeq = [
       needBarrier! && read(lastValues, false, true),
-      userFnCall((data, scopeTargets, stack) => {
+      userFnCall((data, scopeTargets, stack, q) => {
         for (let i = 0; i < caseNames.length; i++) {
           const caseName = caseNames[i]
           const caseValue = includes(units, caseName)
             ? stack.a[caseName]
             : match[caseName](data)
           if (caseValue) {
-            launchCase(scopeTargets, caseName, data, stack)
+            launchCase(scopeTargets, caseName, data, stack, q)
             return
           }
         }
-        launchCase(scopeTargets, '__', data, stack)
+        launchCase(scopeTargets, '__', data, stack, q)
       }, true),
     ]
   } else {

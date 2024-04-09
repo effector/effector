@@ -122,6 +122,7 @@ export function createEffect<Params, Done, Fail = Error>(
           upd: RunnerData<Params, Done, Fail> & {handler: Function},
           _,
           stack,
+          q,
         ) => {
           if (_.runnerFn) {
             const needToContinue = _.runnerFn(upd, null, stack)
@@ -129,8 +130,8 @@ export function createEffect<Params, Done, Fail = Error>(
           }
           /** upd.args could be changed by runnerFn */
           const {params, req, handler, args = [params]} = upd
-          const onResolve = onSettled(params, req, true, anyway, stack)
-          const onReject = onSettled(params, req, false, anyway, stack)
+          const onResolve = onSettled(params, req, true, anyway, stack, q)
+          const onReject = onSettled(params, req, false, anyway, stack, q)
           const [ok, result] = runFn(handler, onReject, args)
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
@@ -149,7 +150,7 @@ export function createEffect<Params, Done, Fail = Error>(
   node.scope.runner = runner
   add(
     node.seq,
-    calc((params, {runner}, stack) => {
+    calc((params, {runner}, stack, queue) => {
       const upd: RunnerData<Params, Done, Fail> = getParent(stack)
         ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
         : /** empty stack means that this node was launched directly */
@@ -161,6 +162,7 @@ export function createEffect<Params, Done, Fail = Error>(
         target: runner,
         params: upd,
         defer: true,
+        queue,
         scope: getForkPage(stack),
         meta: stack.meta,
       })
@@ -237,6 +239,7 @@ export const onSettled =
     ok: boolean,
     anyway: Unit,
     stack: Stack,
+    q: any,
   ) =>
   (data: any) => {
     launch({
@@ -248,6 +251,7 @@ export const onSettled =
         {value: data, fn: ok ? req.rs : req.rj},
       ],
       defer: true,
+      queue: q,
       // WARN! Will broke forest pages as they arent moved to new scope
       page: stack.page,
       scope: stack.scope,

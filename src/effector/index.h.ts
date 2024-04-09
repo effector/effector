@@ -125,7 +125,7 @@ export type Compute = {
   id: ID
   type: 'compute'
   data: {
-    fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
+    fn?: (data: any, scope: {[key: string]: any}, reg: Stack, q: any) => any
     safe: boolean
     filter: boolean
     pure: boolean

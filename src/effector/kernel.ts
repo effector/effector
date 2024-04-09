@@ -256,8 +256,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
-  let meta: Record<string, any> | undefined
+  let meta: Record<string, any> | void
+  let effectorQueue: ReturnType<typeof createEffectorQueue> | null = null
   if (unit.target) {
+    effectorQueue = unit.queue
+
     payload = unit.params
     upsert = unit.defer
     meta = unit.meta
@@ -270,11 +273,17 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     forkPage = null
   }
 
+  if (!effectorQueue) {
+    console.log('new queue created')
+    effectorQueue = createEffectorQueue()
+  } else {
+    console.log('queue reused')
+  }
+
   /**
    * Init launch queue
    */
-  const {barriers, pushFirstHeapItem, deleteMin, pushHeap} =
-    unit.queue ?? createEffectorQueue()
+  const {barriers, pushFirstHeapItem, pushHeap, deleteMin} = effectorQueue
 
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
@@ -410,8 +419,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             isWatch = node.meta.op === 'watch'
             isPure = data.pure
             const computationResult = data.safe
-              ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
-              : tryRun(local, data.fn, stack)
+              ? (0 as any, data.fn)(
+                  getValue(stack),
+                  local.scope,
+                  stack,
+                  effectorQueue,
+                )
+              : tryRun(local, data.fn, stack, effectorQueue)
             if (data.filter) {
               /**
                * handled edge case: if step.fn will throw,
@@ -558,9 +572,9 @@ export const initRefInScope = (
 }
 
 /** try catch for external functions */
-const tryRun = (local: Local, fn: Function, stack: Stack) => {
+const tryRun = (local: Local, fn: Function, stack: Stack, q: any) => {
   try {
-    return fn(getValue(stack), local.scope, stack)
+    return fn(getValue(stack), local.scope, stack, q)
   } catch (err) {
     console.error(err)
     local.fail = true

@@ -117,7 +117,7 @@ export const compute = <
   filter = false,
   pure = false,
 }: {
-  fn?: (data: any, scope: LocalValues, stack: Stack) => any
+  fn?: (data: any, scope: LocalValues, stack: Stack, q: any) => any
   batch?: boolean
   priority?: BarrierPriorityTag | false
   safe?: boolean
@@ -142,7 +142,7 @@ export const run = ({
 export const calc = <
   LocalValues extends {[key: string]: any} = {[key: string]: any},
 >(
-  fn: (data: any, scope: LocalValues, stack: Stack) => any,
+  fn: (data: any, scope: LocalValues, stack: Stack, q: any) => any,
   filter?: boolean,
   isEffect?: boolean,
 ) => compute({fn, safe: true, filter, priority: isEffect && EFFECT})
@@ -170,7 +170,12 @@ export const read = (
   })
 
 export const userFnCall = (
-  fn: (data: any, scope: {[key: string]: any}, stack: Stack) => any = callStack,
+  fn: (
+    data: any,
+    scope: {[key: string]: any},
+    stack: Stack,
+    q: any,
+  ) => any = callStack,
   isFilter?: boolean,
 ) => compute({fn, pure: true, filter: isFilter})
 
