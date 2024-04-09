@@ -148,3 +148,55 @@ test('stale reads', async () => {
     ]
   `)
 })
+
+describe('kernel doesnt messes up the callstack', () => {
+  test('simple case', () => {
+    let callStackVariable: any = null
+    const readCallStackValue = () => callStackVariable
+    const withCallStackValue = (value: any, cb: any) => {
+      const prev = callStackVariable
+      callStackVariable = value
+      cb()
+      callStackVariable = prev
+    }
+
+    const logs: any[] = []
+    const logStackFx = createEffect(() => {
+      logs.push(readCallStackValue())
+    })
+    const eff1 = createEffect(() => {
+      withCallStackValue('eff1', () => {
+        logStackFx()
+      })
+    })
+
+    const eff2 = createEffect(() => {
+      withCallStackValue('eff2', () => {
+        logStackFx()
+      })
+    })
+
+    const start = createEvent()
+
+    sample({
+      clock: start,
+      target: [eff1, eff2],
+    })
+
+    start()
+
+    // on master:
+    // expect(logs).toMatchInlineSnapshot(`
+    //   Array [
+    //     "eff2",
+    //     "eff2",
+    //   ]
+    // `)
+    expect(logs).toMatchInlineSnapshot(`
+      Array [
+        "eff1",
+        "eff2",
+      ]
+    `)
+  })
+})
