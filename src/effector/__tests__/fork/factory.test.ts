@@ -12,8 +12,8 @@ test('factory support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-iajnln|-77rc2s": 21,
-      "8iua16|-77rc2s": "alice",
+      "-iajnln|-77rc2s|2": 21,
+      "8iua16|-77rc2s|2": "alice",
     }
   `)
 })
@@ -31,8 +31,8 @@ test('nested factory support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-fjbluz|1104zu|-77rc2s": "alice",
-      "-fjbluz|11jxl7|-77rc2s": 21,
+      "-fjbluz|-fjbluz|1104zu|1|2|-77rc2s|2": "alice",
+      "-fjbluz|-fjbluz|11jxl7|3|4|-77rc2s|2": 21,
     }
   `)
 })
