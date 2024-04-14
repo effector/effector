@@ -19,7 +19,8 @@ type RegionStack = {
   parent: RegionStack | null
   value: any
   template: Template | null
-  sidRoot?: string
+  sidRoot?: string | null
+  sidOffset: number
   meta:
     | Record<string, unknown>
     | {
@@ -42,9 +43,24 @@ export const reportDeclaration = (node: Node | 'region') => {
 export const readTemplate = (): Template | null =>
   regionStack && regionStack.template
 export const readSidRoot = (sid?: string | null) => {
-  if (sid && regionStack && regionStack.sidRoot)
-    sid = `${regionStack.sidRoot}|${sid}`
-  return sid
+  /**
+   * If there is no regionStack or sidRoot in regionStack, return sid as is (including null and undefined cases)
+   */
+  if (!regionStack || !regionStack.sidRoot) return sid
+ 
+  /**
+   * If sid is provided, return sidRoot + sid
+   */
+  if (sid) {
+    return `${regionStack.sidRoot}|${sid}|${regionStack.sidOffset++}`
+  }
+
+  /**
+   * If sid is not provided, but region stack is available:
+   * 
+   * Try to derive sid from regionStack.sidRoot and regionStack.sidOffset.
+   */
+  return `${regionStack.sidRoot}|${regionStack.sidOffset++}`
 }
 
 export function withRegion<T = void>(unit: NodeUnit, cb: () => T): T {
@@ -55,8 +71,9 @@ export function withRegion<T = void>(unit: NodeUnit, cb: () => T): T {
     parent: regionStack,
     value: unit,
     template: meta.template || readTemplate(),
-    sidRoot: meta.sidRoot || (regionStack && regionStack.sidRoot),
+    sidRoot: readSidRoot(meta.sidRoot),
     meta: meta,
+    sidOffset: 0,
   }
   try {
     return cb()
