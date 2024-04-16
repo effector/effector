@@ -39,8 +39,8 @@ test('nested factory support', async () => {
 
 test('derived sids support', async () => {
   const pushUpdate = createEvent()
-  const inlineFactory = () => {
-    const $interalStore = createStore(0, {
+  const inlineFactory = (initial: number) => {
+    const $interalStore = createStore(initial, {
       // not-unique sid
       sid: '$interalStore',
     }).on(pushUpdate, state => state + 1)
@@ -51,11 +51,11 @@ test('derived sids support', async () => {
   }
 
   topLevelFactory(() => {
-    inlineFactory() // 1
-    inlineFactory() // 2
+    inlineFactory(1)
+    inlineFactory(2)
 
     topLevelFactory(() => {
-      inlineFactory() // 3
+      inlineFactory(3)
     })
   })
 
@@ -66,8 +66,8 @@ test('derived sids support', async () => {
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
       "ot2oxd|$interalStore|1": 1,
-      "ot2oxd|$interalStore|4": 1,
-      "ot2oxd|ot2oxd|ov9vcj|6|7|$interalStore|1": 1,
+      "ot2oxd|$interalStore|4": 2,
+      "ot2oxd|ot2oxd|ov9vcj|6|7|$interalStore|1": 3,
     }
   `)
 })
