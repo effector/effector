@@ -65,9 +65,9 @@ test('derived sids support', async () => {
 
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "ot2oxd|$interalStore|1": 1,
-      "ot2oxd|$interalStore|4": 2,
-      "ot2oxd|ot2oxd|ov9vcj|6|7|$interalStore|1": 3,
+      "ot2oxd|$interalStore|1": 2,
+      "ot2oxd|$interalStore|4": 3,
+      "ot2oxd|ot2oxd|ov9vcj|6|7|$interalStore|1": 4,
     }
   `)
 })
