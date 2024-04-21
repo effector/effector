@@ -5,6 +5,9 @@ import {
   step,
   createNode,
   createEffect,
+  fork,
+  allSettled,
+  split,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -199,4 +202,65 @@ describe('kernel doesnt messes up the callstack', () => {
       ]
     `)
   })
+})
+
+test('queue-isloation edge-case from the wild', async () => {
+  const externalMessage = createEvent<string>()
+  const subFx = createEffect(() => {
+    externalMessage('b')
+  })
+
+  const start = createEffect(() => {
+    subFx()
+  })
+  const started = createEvent()
+
+  sample({
+    clock: start.done,
+    target: started,
+  })
+
+  sample({
+    clock: start,
+    target: subFx,
+  })
+
+  const $mode = createStore('a')
+  const toA = createEvent()
+  const toB = createEvent()
+
+  sample({
+    clock: toA,
+    fn: () => 'a',
+    target: $mode,
+  })
+
+  sample({
+    clock: toB,
+    fn: () => 'b',
+    target: $mode,
+  })
+
+  const bMatched = sample({
+    clock: externalMessage,
+    filter: x => x === 'b',
+  })
+
+  sample({
+    clock: bMatched,
+    target: toB,
+  })
+
+  sample({
+    clock: started,
+    fn: () => 'a',
+    target: $mode,
+  })
+
+  // logic
+  const scope = fork()
+
+  await allSettled(start, {scope})
+
+  expect(scope.getState($mode)).toBe('b')
 })
