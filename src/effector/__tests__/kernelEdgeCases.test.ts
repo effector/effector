@@ -204,63 +204,39 @@ describe('kernel doesnt messes up the callstack', () => {
   })
 })
 
-test('queue-isloation edge-case from the wild', async () => {
-  const externalMessage = createEvent<string>()
-  const subFx = createEffect(() => {
-    externalMessage('b')
+test('queue-isolation edge-case from the wild', async () => {
+  const externalMessage = createEvent()
+
+  const startFx = createEffect(() => {
+    externalMessage()
   })
 
-  const start = createEffect(() => {
-    subFx()
-  })
-  const started = createEvent()
-
-  sample({
-    clock: start.done,
-    target: started,
-  })
-
-  sample({
-    clock: start,
-    target: subFx,
+  const parallelFx = createEffect(() => {
+    externalMessage()
   })
 
   const $mode = createStore('a')
-  const toA = createEvent()
-  const toB = createEvent()
 
   sample({
-    clock: toA,
+    clock: startFx.done,
     fn: () => 'a',
     target: $mode,
   })
 
   sample({
-    clock: toB,
+    clock: startFx,
+    target: parallelFx,
+  })
+
+  sample({
+    clock: externalMessage,
     fn: () => 'b',
     target: $mode,
   })
 
-  const bMatched = sample({
-    clock: externalMessage,
-    filter: x => x === 'b',
-  })
-
-  sample({
-    clock: bMatched,
-    target: toB,
-  })
-
-  sample({
-    clock: started,
-    fn: () => 'a',
-    target: $mode,
-  })
-
-  // logic
   const scope = fork()
 
-  await allSettled(start, {scope})
+  await allSettled(startFx, {scope})
 
   // on master: expect(scope.getState($mode)).toBe('a')
   expect(scope.getState($mode)).toBe('b')
