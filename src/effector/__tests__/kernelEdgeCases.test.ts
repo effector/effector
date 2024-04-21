@@ -262,5 +262,6 @@ test('queue-isloation edge-case from the wild', async () => {
 
   await allSettled(start, {scope})
 
+  // on master: expect(scope.getState($mode)).toBe('a')
   expect(scope.getState($mode)).toBe('b')
 })
