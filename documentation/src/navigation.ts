@@ -809,6 +809,7 @@ export const FOOTER_LINKS = [
       { text: { en: "Reddit" }, link: LINKS.reddit },
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
+      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant"  },
       { text: { en: "Made by Astro" }, link: "https://astro.build" },
     ],
   },
