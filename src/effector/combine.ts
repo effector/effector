@@ -22,7 +22,14 @@ export function combine(...args: any[]): Store<any> {
   const errorTitle = generateErrorTitle('combine', config)
   // skipVoid support, to be removed in effector 24
   const maybeExtConfig = args[args.length - 1]
-  const isExtendedConfig = !is.store(maybeExtConfig) && isObject(maybeExtConfig)
+  /**
+   * if there only one argument then it's a store or object with stores
+   * else if last argument is a store, then its `combine($foo, $bar)`
+   * else if last argument is not an object, then it's a handler
+   * else it's a config object
+   */
+  const isExtendedConfig =
+    args.length > 1 && !is.store(maybeExtConfig) && isObject(maybeExtConfig)
   const extConfig = isExtendedConfig && maybeExtConfig
   const rawHandler = isExtendedConfig ? args[args.length - 2] : maybeExtConfig
   if (isFunction(rawHandler)) {
@@ -57,7 +64,7 @@ export function combine(...args: any[]): Store<any> {
       shapeReady = true
     }
   }
-  let noArraySpread: boolean | void
+  let noArraySpread: boolean | undefined
   if (!shapeReady) {
     /*
     case combine(R,G,B, (R,G,B) => '~')
@@ -90,7 +97,7 @@ const storeCombination = (
   obj: any,
   config?: Config,
   fn?: (upd: any) => any,
-  extConfig?: {skipVoid?: boolean},
+  extConfig?: false | {skipVoid?: boolean},
 ) => {
   const errorTitle = generateErrorTitle('combine', config)
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
