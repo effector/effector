@@ -439,3 +439,29 @@ describe('fn retriggers', () => {
     expect(argumentHistory(fn)).toEqual([0, 10, 11])
   })
 })
+
+describe('dont have forbidden keys', () => {
+  describe.each(['domain', 'parent', 'sid', 'name'])('%s key', key => {
+    const $foo = createStore(0)
+    test('dont throw without babel', () => {
+      expect(() => {
+        // skip babel processing
+        ;({_: combine}._({[key]: $foo}))
+      }).not.toThrow()
+    })
+    test('dont throw with babel', () => {
+      expect(() => {
+        combine({[key]: $foo})
+      }).not.toThrow()
+    })
+    test('has expected state', () => {
+      const $store = combine({[key]: $foo})
+      expect($store.getState()).toEqual({[key]: 0})
+    })
+    test('dont throw with function', () => {
+      expect(() => {
+        combine({[key]: $foo}, x => x)
+      }).not.toThrow()
+    })
+  })
+})
