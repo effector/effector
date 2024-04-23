@@ -206,7 +206,7 @@ changeName("alice");
 Метод добавлен в effector 20.0.0
 :::
 
-### Формула (#filterMa-formulae)
+### Формула (#filterMap-formulae)
 
 ```ts
 declare const eventA: Event<T>
@@ -315,8 +315,8 @@ const App = () => {
 
 Создает производное событие с возможностью отмены вызова
 
-:::info
-Более гибким способом фильтрации является [guard](/ru/api/effector/guard), рекомендуется использовать именно его
+:::tip
+Более гибким способом фильтрации является [sample](/ru/api/effector/sample), рекомендуется использовать именно его.
 :::
 
 ### Формула (#filter-fn-formulae)
