@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.2.1
+
+- Fix forbidden keys in combine ([issue #1064](https://github.com/effector/effector/issues/1064))
+
 ## effector-react 23.2.0
 
 - Make `Gate.open` and `Gate.close` `EventCallable` to allow users to call it in tests
