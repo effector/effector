@@ -21,6 +21,7 @@ type Layer = {
   stack: Stack
   type: PriorityTag
   id: number
+  effectBody: boolean | null
 }
 
 /** Queue as linked list or skew heap */
@@ -117,6 +118,7 @@ const pushFirstHeapItem = (
   node: Node,
   parent: Stack | null,
   value: any,
+  effectBody: boolean | null,
   scope?: Scope | null | void,
   meta?: Record<string, any> | void,
 ) =>
@@ -133,13 +135,26 @@ const pushFirstHeapItem = (
       meta,
     },
     type,
+    effectBody,
     0,
   )
-const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id: number) => {
+const pushHeap = (
+  idx: number,
+  stack: Stack,
+  type: PriorityTag,
+  effectBody: boolean | null,
+  id: number = 0,
+) => {
   const priority = getPriority(type)
   const bucket: QueueBucket = queue[priority]
   const item: QueueItem = {
-    v: {idx, stack, type, id},
+    v: {
+      idx,
+      stack,
+      type,
+      id,
+      effectBody,
+    },
     l: null,
     r: null,
   }
@@ -184,6 +199,10 @@ const barriers = new Set<string | number>()
 let isRoot = true
 export let isWatch = false
 export let isPure = false
+export let isEffectBody = false
+export const setIsEffectBody = (isImperative: boolean) => {
+  isEffectBody = isImperative
+}
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
 export const setForkPage = (newForkPage: Scope | void | null) => {
@@ -191,6 +210,17 @@ export const setForkPage = (newForkPage: Scope | void | null) => {
 }
 export const setCurrentPage = (newPage: Leaf | null) => {
   currentPage = newPage
+}
+
+export let sharedStackMeta: Record<string, any> | void
+export const getSharedStackMeta = () => {
+  if (isRoot && !isEffectBody) {
+    sharedStackMeta = undefined
+  }
+  return sharedStackMeta
+}
+export const setSharedStackMeta = (meta: Record<string, any> | void) => {
+  sharedStackMeta = meta
 }
 
 const getPageForRef = (page: Leaf | null, id: string) => {
@@ -238,11 +268,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
-  let meta: Record<string, any> | void
+  let meta: Record<string, any> | void = sharedStackMeta
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
-    meta = unit.meta
+    meta = unit.meta || sharedStackMeta || {} // empty object by default
     pageForLaunch = 'page' in unit ? unit.page : pageForLaunch
     if (unit.stack) stackForLaunch = unit.stack
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
@@ -259,6 +289,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         getGraph(unit[i]),
         stackForLaunch,
         payload[i],
+        isEffectBody,
         forkPageForLaunch,
         meta,
       )
@@ -270,6 +301,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       getGraph(unit),
       stackForLaunch,
       payload,
+      isEffectBody,
       forkPageForLaunch,
       meta,
     )
@@ -291,7 +323,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let page: Leaf | null
   let reg: Record<string, StateRef> | void
   kernelLoop: while ((value = deleteMin())) {
-    const {idx, stack, type} = value
+    const {idx, stack, type, effectBody} = value
+    const prevEffectBody = isEffectBody
+    if (effectBody !== null) {
+      isEffectBody = effectBody
+    }
     node = stack.node
     currentPage = page = stack.page
     forkPage = getForkPage(stack)
@@ -318,10 +354,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (barrierID) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(stepn, stack, priority, barrierID)
+              pushHeap(stepn, stack, priority, effectBody, barrierID)
             }
           } else {
-            pushHeap(stepn, stack, priority, 0)
+            pushHeap(stepn, stack, priority, effectBody, 0)
+          }
+          if (effectBody !== null) {
+            isEffectBody = prevEffectBody
           }
           continue kernelLoop
         }
@@ -411,7 +450,16 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
       forEach(node.next, nextNode => {
-        pushFirstHeapItem('child', page, nextNode, stack, finalValue, forkPage)
+        pushFirstHeapItem(
+          'child',
+          page,
+          nextNode,
+          stack,
+          finalValue,
+          effectBody,
+          forkPage,
+          meta,
+        )
       })
       if (forkPage) {
         if (node.meta.needFxCounter)
@@ -421,6 +469,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             forkPage.fxCount,
             stack,
             finalValue,
+            effectBody,
             forkPage,
           )
         if (node.meta.storeChange)
@@ -430,6 +479,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             forkPage.storeChange,
             stack,
             finalValue,
+            effectBody,
             forkPage,
           )
         if (node.meta.warnSerialize)
@@ -439,6 +489,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             forkPage.warnSerializeNode,
             stack,
             finalValue,
+            effectBody,
             forkPage,
           )
         const additionalLinks = forkPage.additionalLinks[node.id]
@@ -450,16 +501,24 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
               nextNode,
               stack,
               finalValue,
+              effectBody,
               forkPage,
+              meta,
             )
           })
         }
       }
     }
+    if (effectBody !== null) {
+      isEffectBody = prevEffectBody
+    }
   }
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
+  if (!isEffectBody) {
+    setSharedStackMeta()
+  }
 }
 
 const noopParser = (x: any) => x

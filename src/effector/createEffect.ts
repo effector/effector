@@ -4,7 +4,16 @@ import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, setForkPage, forkPage, isWatch} from './kernel'
+import {
+  launch,
+  setForkPage,
+  forkPage,
+  isWatch,
+  setSharedStackMeta,
+  isEffectBody,
+  setIsEffectBody,
+  sharedStackMeta,
+} from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
@@ -127,11 +136,37 @@ export function createEffect<Params, Done, Fail = Error>(
             const needToContinue = _.runnerFn(upd, null, stack)
             if (!needToContinue) return
           }
+
+          /** `true` for imperative effect call inside another effect */
+          const lastIsEffectBody = isEffectBody
+
           /** upd.args could be changed by runnerFn */
           const {params, req, handler, args = [params]} = upd
-          const onResolve = onSettled(params, req, true, anyway, stack)
-          const onReject = onSettled(params, req, false, anyway, stack)
+          const onResolve = onSettled(
+            params,
+            req,
+            true,
+            anyway,
+            stack,
+            lastIsEffectBody,
+          )
+          const onReject = onSettled(
+            params,
+            req,
+            false,
+            anyway,
+            stack,
+            lastIsEffectBody,
+          )
+
+          setIsEffectBody(true)
+
+          /** make stack.meta available for effect's body */
+          setSharedStackMeta(stack.meta)
           const [ok, result] = runFn(handler, onReject, args)
+
+          setIsEffectBody(false)
+
           if (ok) {
             if (isObject(result) && isFunction(result.then)) {
               result.then(onResolve, onReject)
@@ -154,9 +189,11 @@ export function createEffect<Params, Done, Fail = Error>(
         ? {params, req: {rs(data: Done) {}, rj(data: Fail) {}}}
         : /** empty stack means that this node was launched directly */
           params
-      if (!stack.meta) {
-        stack.meta = {fxID: nextEffectID()}
-      }
+
+      const fxID = nextEffectID()
+
+      stack.meta = {...stack.meta, fxID}
+
       launch({
         target: runner,
         params: upd,
@@ -180,6 +217,15 @@ export function createEffect<Params, Done, Fail = Error>(
           })
           .catch(() => {})
       }
+    }
+    if (isEffectBody) {
+      const meta = sharedStackMeta
+      req.req
+        .finally(() => {
+          setIsEffectBody(true)
+          setSharedStackMeta(meta)
+        })
+        .catch(() => {})
     }
     launch({
       target: instance,
@@ -237,8 +283,22 @@ export const onSettled =
     ok: boolean,
     anyway: Unit,
     stack: Stack,
+    lastIsEffectBody: boolean,
   ) =>
   (data: any) => {
+    setIsEffectBody(lastIsEffectBody)
+    if (isEffectBody) {
+      /**
+       * Set stack.meta after effect is settled,
+       * so next imperative call will also catch it
+       */
+      setSharedStackMeta(stack.meta)
+    } else {
+      /**
+       * Clean up shared stack meta
+       */
+      setSharedStackMeta()
+    }
     launch({
       target: [anyway, sidechain],
       params: [
