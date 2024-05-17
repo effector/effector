@@ -51,6 +51,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [effector-forms](https://github.com/aanation/effector-forms) ☢️ — Form manager for effector.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form) ☢️ — Connect your forms with state manager.
 - [efform](https://github.com/tehSLy/efform) ⛔ — Form manager, based on effector state manager, designed to deliver high-quality DX.
+- [effector-reform](https://github.com/movpushmov/effector-reform) ☢️️ — form manager, which implements composable forms concept
 
 ## Templates
 
