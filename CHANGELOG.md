@@ -2,6 +2,22 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.2.2
+
+- Fix types for createEffect and attach in factories with generics ([issue #1069](https://github.com/effector/effector/issues/1069)). Cases like this now works correctly:
+
+```ts
+function createModel<T>() {
+  const $data = createStore<T | null>(null)
+  const fx = createEffect(() => null as T)
+  sample({clock: fx.doneData, target: $data})
+}
+```
+
+## effector-react 23.2.1
+
+- Fix types for `useUnit([fx])` with effect with custom error ([PR #1070](https://github.com/effector/effector/pull/1070))
+
 ## effector 23.2.1
 
 - Fix forbidden keys in combine ([issue #1064](https://github.com/effector/effector/issues/1064))
