@@ -90,7 +90,7 @@ test('useEvent of Effect', () => {
 test('useEvent of Effect<void, unknown, Error>', () => {
   const runEffect: () => () => Promise<unknown> = () =>
     useEvent(createEffect<void, unknown, Error>())
-    expect(typecheck).toMatchInlineSnapshot(`
+  expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
     "
@@ -326,4 +326,40 @@ test('useUnit should not allow wrong types for events or effects with arguments'
     Argument of type '{}' is not assignable to parameter of type '42'.
     "
   `)
+})
+
+describe('useUnit should support effects with custom errors', () => {
+  test('with single argument', () => {
+    const fx = createEffect<void, void, string>()
+    const Comp = () => {
+      const runEffect = useUnit(fx)
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('with shape', () => {
+    const fx = createEffect<void, void, string>()
+    const Comp = () => {
+      const {fx: runEffect} = useUnit({fx})
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('with array', () => {
+    const fx = createEffect<void, void, string>()
+    const Comp = () => {
+      const [runEffect] = useUnit([fx])
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
 })
