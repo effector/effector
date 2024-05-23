@@ -215,7 +215,7 @@ export function useUnit<T, R>(
   opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
 export function useUnit<
-  List extends (EventCallable<any> | Effect<any, any> | Store<any>)[],
+  List extends (EventCallable<any> | Effect<any, any, any> | Store<any>)[],
 >(
   list: [...List],
   opts?: {forceScope?: boolean},
