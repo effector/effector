@@ -1,13 +1,28 @@
 /* eslint-disable no-unused-vars */
 import {
   createEffect,
+  createStore,
+  sample,
   Effect,
   Event,
-  /*::type*/ CompositeName,
-  /*::type*/ kind,
+  CompositeName,
+  kind,
 } from 'effector'
 
 const typecheck = '{global}'
+
+test('generics support', () => {
+  function createModel<T>() {
+    const $data = createStore<T | null>(null)
+    const fx = createEffect(() => null as T)
+    sample({clock: fx.doneData, target: $data})
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
 
 test('createEffect', () => {
   const createEffect_effect1: Effect<number, string> = createEffect()

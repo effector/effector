@@ -58,7 +58,21 @@ export type EffectError<FX extends Effect<any, any, any>> = FX extends Effect<
 >
   ? E
   : never
-type AsyncResult<Done> = Done extends Promise<infer Async> ? Async : Done
+
+// Taken from the source code of typescript 4.5. Remove when we separate types for different versions
+/**
+ * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ */
+type Awaited<T> = T extends null | undefined
+  ? T // special case for `null | undefined` when not in `--strictNullChecks` mode
+  : T extends object // `await` only unwraps object types with a callable then. Non-object types are not unwrapped.
+  ? T extends {then(onfulfilled: infer F): any} // thenable, extracts the first argument to `then()`
+    ? F extends (value: infer V) => any // if the argument to `then` is callable, extracts the argument
+      ? Awaited<V> // recursively unwrap the value
+      : never // the argument to `then` was not callable.
+    : T // argument was not an object
+  : T // non-thenable
+
 type OptionalParams<Args extends any[]> =
   Args['length'] extends 0 // does handler accept 0 arguments?
     ? void // works since TS v3.3.3
@@ -79,7 +93,7 @@ type OptionalParams<Args extends any[]> =
     ? Args[0] | void
     : Args[0]
 type EffectByHandler<FN extends Function, Fail> = FN extends (...args: infer Args) => infer Done
-  ? Effect<OptionalParams<Args>, AsyncResult<Done>, Fail>
+  ? Effect<OptionalParams<Args>, Awaited<Done>, Fail>
   : never
 
 export const version: string
@@ -2811,7 +2825,7 @@ export function attach<
   domain?: Domain
   name?: string
 }): FX extends (source: any, ...args: infer Args) => infer Done
-  ? Effect<OptionalParams<Args>, AsyncResult<Done>>
+  ? Effect<OptionalParams<Args>, Awaited<Done>>
   : never
 /**
  * Creates independent instance of given effect. Used to add subscribers to effect call in a particular business case
