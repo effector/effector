@@ -972,9 +972,9 @@ Your support allows us to improve the developer experience 🧡.
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/pgrekovich>
-            <img src=https://avatars.githubusercontent.com/u/1001687?v=4 width="100;"  alt=Pasha Grekovich/>
+            <img src=https://avatars.githubusercontent.com/u/1001687?v=4 width="100;"  alt=Pavel Hrakovich/>
             <br />
-            <sub style="font-size:14px"><b>Pasha Grekovich</b></sub>
+            <sub style="font-size:14px"><b>Pavel Hrakovich</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
