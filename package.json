@@ -39,7 +39,6 @@
     "@babel/plugin-transform-nullish-coalescing-operator": "^7.13.8",
     "@babel/plugin-transform-optional-chaining": "^7.13.12",
     "@babel/preset-env": "^7.13.12",
-    "@babel/preset-flow": "^7.13.13",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
     "@babel/traverse": "^7.13.13",

@@ -222,14 +222,6 @@ const babelConfig = {
         ],
       ],
     },
-    {
-      test(filename) {
-        return (
-          filename && !(filename.endsWith('.tsx') || filename.endsWith('.ts'))
-        )
-      },
-      presets: ['@babel/preset-flow'],
-    },
   ],
   sourceMaps: true,
 }

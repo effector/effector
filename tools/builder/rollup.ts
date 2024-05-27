@@ -159,7 +159,7 @@ export async function rollupEffector() {
       globals: {},
       extension: 'ts',
     }),
-    createCompat(name, 'ts'),
+    createCompat(name),
   ])
 }
 export async function rollupEffectorDom({name}: {name: string}) {
@@ -189,7 +189,6 @@ export async function rollupEffectorDom({name}: {name: string}) {
       extension: 'ts',
       bundleEffector: false,
     }),
-    // createCompat(name),
   ])
 }
 
@@ -224,7 +223,7 @@ export async function rollupEffectorReact() {
       },
       extension: 'ts',
     }),
-    createCompat(name, 'ts'),
+    createCompat(name),
   ])
 
   async function createSSR({
@@ -368,7 +367,7 @@ export async function rollupEffectorVue() {
       },
       extension: 'ts',
     }),
-    createCompat(name, 'ts'),
+    createCompat(name),
   ])
 }
 
@@ -401,7 +400,7 @@ async function createUmd(
     globals,
   })
 }
-async function createCompat(name: string, extension = 'js') {
+async function createCompat(name: string) {
   const plugins = getPlugins(`${name}.compat`)
 
   const {getAliases} = require('../babel.config')
@@ -418,15 +417,13 @@ async function createCompat(name: string, extension = 'js') {
       exclude: /node_modules.*/,
       babelrc: false,
       presets: [
-        extension === 'js'
-          ? '@babel/preset-flow'
-          : [
-              '@babel/preset-typescript',
-              {
-                isTSX: true,
-                allExtensions: true,
-              },
-            ],
+        [
+          '@babel/preset-typescript',
+          {
+            isTSX: true,
+            allExtensions: true,
+          },
+        ],
         ['@babel/preset-react', {useBuiltIns: false}],
         [
           '@babel/preset-env',
@@ -490,7 +487,7 @@ async function createCompat(name: string, extension = 'js') {
   ]
   const build = await rollup({
     onwarn,
-    input: dir(`packages/${name}/index.${extension}`),
+    input: dir(`packages/${name}/index.ts`),
     external: externals,
     plugins: pluginList,
   })
