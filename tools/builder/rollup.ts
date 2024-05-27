@@ -10,7 +10,6 @@ import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 import analyze from 'rollup-plugin-visualizer'
 import alias from '@rollup/plugin-alias'
 
-import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
 import {minifyConfig} from './minificationConfig'
 
@@ -63,7 +62,7 @@ const externals = [
   'use-sync-external-store/shim/index.js',
   'use-sync-external-store/shim/with-selector.js',
   'solid-js',
-  'solid-js/web'
+  'solid-js/web',
 ]
 
 const getPlugins = (
@@ -130,10 +129,6 @@ const getPlugins = (
       inline: !name.endsWith('.umd'),
     }) as any,
   ),
-  graph: graphPlugin({
-    output: 'modules.dot',
-    exclude: 'effector/package.json',
-  }),
   json: json({
     preferConst: true,
     indent: '  ',
@@ -153,7 +148,6 @@ export async function rollupEffector() {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
         es: dir(`npm/${name}/${name}.mjs`),
       },
-      renderModuleGraph: true,
       inputExtension: 'ts',
     }),
     createEsCjs(name, {
@@ -524,14 +518,12 @@ async function createEsCjs(
   name: string,
   {
     file: {es, cjs},
-    renderModuleGraph = false,
     input = 'index',
     inputExtension = 'js',
     replaceVueReactivity = false,
     replaceReactShim = false,
   }: {
     file: {es?: string; cjs: string}
-    renderModuleGraph?: boolean
     input?: string
     inputExtension?: string
     replaceVueReactivity?: boolean
@@ -566,14 +558,6 @@ async function createEsCjs(
     pluginsEsm.analyzer,
     pluginsEsm.analyzerJSON,
   ]
-  if (renderModuleGraph) {
-    pluginListCjs.push(
-      graphPlugin({
-        output: 'modules.dot',
-        exclude: 'effector/package.json',
-      }),
-    )
-  }
   const [buildCjs, buildEs] = await Promise.all([
     rollup({
       onwarn,
