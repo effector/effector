@@ -22,7 +22,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn test
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn build
@@ -86,7 +86,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn coverage
@@ -106,7 +106,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v2
@@ -130,7 +130,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v2

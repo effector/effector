@@ -18,7 +18,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install deps
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
