@@ -56,7 +56,6 @@ const input = {
     'rollup-plugin-terser',
     '@rollup/plugin-commonjs',
     '@rollup/plugin-replace',
-    'rollup-plugin-size-snapshot',
     'rollup-plugin-visualizer',
     'readable-stream',
     'cross-fetch',

@@ -4,9 +4,6 @@ import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
 import {terser} from 'rollup-plugin-terser'
 import commonjs from '@rollup/plugin-commonjs'
-//@ts-expect-error
-import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
-//@ts-expect-error
 import analyze from 'rollup-plugin-visualizer'
 import alias from '@rollup/plugin-alias'
 
@@ -109,9 +106,6 @@ const getPlugins = (
       }),
   commonjs: commonjs({extensions}),
   resolve: resolve({extensions}),
-  sizeSnapshot: sizeSnapshot({
-    printInfo: false,
-  }),
   analyzer: analyze({
     filename: `stats/${name}.html`,
     title: `${name} size report`,
@@ -249,7 +243,6 @@ export async function rollupEffectorReact() {
         plugins.resolve,
         plugins.json,
         plugins.babel,
-        plugins.sizeSnapshot,
         plugins.terser,
         plugins.analyzer,
         plugins.analyzerJSON,
@@ -314,7 +307,6 @@ export async function rollupEffectorSolid() {
         plugins.resolve,
         plugins.json,
         plugins.babel,
-        plugins.sizeSnapshot,
         plugins.terser,
         plugins.analyzer,
         plugins.analyzerJSON,
@@ -392,9 +384,8 @@ async function createUmd(
       plugins.resolve,
       plugins.json,
       plugins.babel,
-      bundleEffector && plugins.alias,
+      (bundleEffector && plugins.alias) as typeof plugins.alias,
       plugins.commonjs,
-      plugins.sizeSnapshot,
       plugins.terser,
       plugins.analyzer,
       plugins.analyzerJSON,
@@ -469,7 +460,6 @@ async function createCompat(name: string, extension = 'js') {
       ],
     }),
     plugins.commonjs,
-    plugins.sizeSnapshot,
     terser({
       ...terserConfig,
       parse: {
@@ -538,7 +528,6 @@ async function createEsCjs(
     pluginsCjs.resolve,
     pluginsCjs.json,
     pluginsCjs.babel,
-    pluginsCjs.sizeSnapshot,
     pluginsCjs.terser,
     pluginsCjs.analyzer,
     pluginsCjs.analyzerJSON,
@@ -553,7 +542,6 @@ async function createEsCjs(
     pluginsEsm.resolve,
     pluginsEsm.json,
     pluginsEsm.babel,
-    pluginsEsm.sizeSnapshot,
     pluginsEsm.terser,
     pluginsEsm.analyzer,
     pluginsEsm.analyzerJSON,
