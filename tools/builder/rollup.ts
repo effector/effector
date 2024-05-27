@@ -114,8 +114,8 @@ const getPlugins = (
   }),
   analyzerJSON: analyze({
     sourcemap: true,
-    json: true,
     filename: `stats/${name}.json`,
+    template: 'raw-data',
   }),
   terser: terser(
     minifyConfig({
