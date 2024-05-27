@@ -124,6 +124,6 @@
     "webdriverio": "^6.5.2"
   },
   "engines": {
-    "node": ">=10.x"
+    "node": ">=20.x"
   }
 }
