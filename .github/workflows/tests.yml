@@ -16,13 +16,13 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with: {node-version: 16}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn test
@@ -32,13 +32,13 @@ jobs:
     needs: common-tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with: {node-version: 16}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn build
@@ -57,7 +57,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_build_uploader_access_key }}
       AWS_ACCESS_KEY_ID: ${{ secrets.aws_build_uploader_access_key_id }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v2
         with:
           name: effector-packages-${{ github.run_id  }}
@@ -80,13 +80,13 @@ jobs:
     needs: common-tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with: {node-version: 16}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn coverage
@@ -100,13 +100,13 @@ jobs:
     needs: [common-tests, build-packages]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with: {node-version: 16}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v2
@@ -124,13 +124,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with: {node-version: 16}
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: node-16-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v2

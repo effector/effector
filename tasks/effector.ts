@@ -1,14 +1,10 @@
-import {readFile, outputFile} from 'fs-extra'
-import Viz from 'viz.js'
-import {Module, render} from 'viz.js/full.render.js'
-import sharp from 'sharp'
 import {massCopy, publishScript} from 'Builder/utils'
 import {
   rollupEffector,
   rollupEffectorReact,
   rollupEffectorVue,
   rollupEffectorDom,
-  rollupEffectorSolid
+  rollupEffectorSolid,
 } from 'Builder/rollup'
 import {copyLicense, generatePackageJSON} from './common'
 
@@ -38,7 +34,6 @@ export default {
         'babel-plugin-react.js',
       ]),
     rollupEffector,
-    renderModulesGraph,
     publishScript('effector'),
   ],
   'effector-react': [
@@ -74,15 +69,15 @@ export default {
             'index.d.ts',
             'effector-solid.cjs.d.ts',
             'effector-solid.mjs.d.ts',
-            'effector-solid.umd.d.ts'
+            'effector-solid.umd.d.ts',
           ],
         ],
         'README.md',
         'package.json',
-        'scope.d.ts'
+        'scope.d.ts',
       ]),
     rollupEffectorSolid,
-    publishScript('effector-solid')
+    publishScript('effector-solid'),
   ],
   'effector-vue': [
     generatePackageJSON('effector-vue'),
@@ -103,10 +98,7 @@ export default {
           'composition.d.ts',
           ['composition.d.ts', 'composition.cjs.d.ts', 'composition.mjs.d.ts'],
         ],
-        [
-          'ssr.d.ts',
-          ['ssr.d.ts', 'ssr.cjs.d.ts', 'ssr.mjs.d.ts'],
-        ],
+        ['ssr.d.ts', ['ssr.d.ts', 'ssr.cjs.d.ts', 'ssr.mjs.d.ts']],
         'README.md',
         'package.json',
       ]),
@@ -138,22 +130,4 @@ export default {
     () => rollupEffectorDom({name: 'forest'}),
     publishScript('forest'),
   ],
-}
-
-const viz = new Viz({Module, render})
-async function renderModulesGraph() {
-  const root = process.cwd()
-  const source = await readFile(root + '/modules.dot', 'utf8')
-
-  const svg = await viz.renderString(source)
-  await outputFile(root + '/modules.svg', svg)
-  const buffer = await new Promise((rs, rj) => {
-    sharp(root + '/modules.svg')
-      .toFormat('png')
-      .toBuffer((err, data) => {
-        if (err) return void rj(err)
-        rs(data)
-      })
-  })
-  await outputFile(root + '/modules.png', buffer)
 }

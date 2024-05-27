@@ -4,13 +4,9 @@ import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
 import {terser} from 'rollup-plugin-terser'
 import commonjs from '@rollup/plugin-commonjs'
-//@ts-expect-error
-import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
-//@ts-expect-error
 import analyze from 'rollup-plugin-visualizer'
 import alias from '@rollup/plugin-alias'
 
-import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
 import {minifyConfig} from './minificationConfig'
 
@@ -63,7 +59,7 @@ const externals = [
   'use-sync-external-store/shim/index.js',
   'use-sync-external-store/shim/with-selector.js',
   'solid-js',
-  'solid-js/web'
+  'solid-js/web',
 ]
 
 const getPlugins = (
@@ -110,9 +106,6 @@ const getPlugins = (
       }),
   commonjs: commonjs({extensions}),
   resolve: resolve({extensions}),
-  sizeSnapshot: sizeSnapshot({
-    printInfo: false,
-  }),
   analyzer: analyze({
     filename: `stats/${name}.html`,
     title: `${name} size report`,
@@ -121,8 +114,8 @@ const getPlugins = (
   }),
   analyzerJSON: analyze({
     sourcemap: true,
-    json: true,
     filename: `stats/${name}.json`,
+    template: 'raw-data',
   }),
   terser: terser(
     minifyConfig({
@@ -130,10 +123,6 @@ const getPlugins = (
       inline: !name.endsWith('.umd'),
     }) as any,
   ),
-  graph: graphPlugin({
-    output: 'modules.dot',
-    exclude: 'effector/package.json',
-  }),
   json: json({
     preferConst: true,
     indent: '  ',
@@ -153,7 +142,6 @@ export async function rollupEffector() {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
         es: dir(`npm/${name}/${name}.mjs`),
       },
-      renderModuleGraph: true,
       inputExtension: 'ts',
     }),
     createEsCjs(name, {
@@ -171,7 +159,7 @@ export async function rollupEffector() {
       globals: {},
       extension: 'ts',
     }),
-    createCompat(name, 'ts'),
+    createCompat(name),
   ])
 }
 export async function rollupEffectorDom({name}: {name: string}) {
@@ -201,7 +189,6 @@ export async function rollupEffectorDom({name}: {name: string}) {
       extension: 'ts',
       bundleEffector: false,
     }),
-    // createCompat(name),
   ])
 }
 
@@ -236,7 +223,7 @@ export async function rollupEffectorReact() {
       },
       extension: 'ts',
     }),
-    createCompat(name, 'ts'),
+    createCompat(name),
   ])
 
   async function createSSR({
@@ -255,7 +242,6 @@ export async function rollupEffectorReact() {
         plugins.resolve,
         plugins.json,
         plugins.babel,
-        plugins.sizeSnapshot,
         plugins.terser,
         plugins.analyzer,
         plugins.analyzerJSON,
@@ -320,7 +306,6 @@ export async function rollupEffectorSolid() {
         plugins.resolve,
         plugins.json,
         plugins.babel,
-        plugins.sizeSnapshot,
         plugins.terser,
         plugins.analyzer,
         plugins.analyzerJSON,
@@ -382,7 +367,7 @@ export async function rollupEffectorVue() {
       },
       extension: 'ts',
     }),
-    createCompat(name, 'ts'),
+    createCompat(name),
   ])
 }
 
@@ -398,9 +383,8 @@ async function createUmd(
       plugins.resolve,
       plugins.json,
       plugins.babel,
-      bundleEffector && plugins.alias,
+      (bundleEffector && plugins.alias) as typeof plugins.alias,
       plugins.commonjs,
-      plugins.sizeSnapshot,
       plugins.terser,
       plugins.analyzer,
       plugins.analyzerJSON,
@@ -416,7 +400,7 @@ async function createUmd(
     globals,
   })
 }
-async function createCompat(name: string, extension = 'js') {
+async function createCompat(name: string) {
   const plugins = getPlugins(`${name}.compat`)
 
   const {getAliases} = require('../babel.config')
@@ -433,15 +417,13 @@ async function createCompat(name: string, extension = 'js') {
       exclude: /node_modules.*/,
       babelrc: false,
       presets: [
-        extension === 'js'
-          ? '@babel/preset-flow'
-          : [
-              '@babel/preset-typescript',
-              {
-                isTSX: true,
-                allExtensions: true,
-              },
-            ],
+        [
+          '@babel/preset-typescript',
+          {
+            isTSX: true,
+            allExtensions: true,
+          },
+        ],
         ['@babel/preset-react', {useBuiltIns: false}],
         [
           '@babel/preset-env',
@@ -456,10 +438,10 @@ async function createCompat(name: string, extension = 'js') {
         ],
       ],
       plugins: [
-        '@babel/plugin-proposal-export-namespace-from',
-        '@babel/plugin-proposal-optional-chaining',
-        '@babel/plugin-proposal-nullish-coalescing-operator',
-        ['@babel/plugin-proposal-class-properties', {loose: true}],
+        '@babel/plugin-transform-export-namespace-from',
+        '@babel/plugin-transform-optional-chaining',
+        '@babel/plugin-transform-nullish-coalescing-operator',
+        ['@babel/plugin-transform-class-properties', {loose: true}],
         [
           'babel-plugin-module-resolver',
           {
@@ -475,7 +457,6 @@ async function createCompat(name: string, extension = 'js') {
       ],
     }),
     plugins.commonjs,
-    plugins.sizeSnapshot,
     terser({
       ...terserConfig,
       parse: {
@@ -506,7 +487,7 @@ async function createCompat(name: string, extension = 'js') {
   ]
   const build = await rollup({
     onwarn,
-    input: dir(`packages/${name}/index.${extension}`),
+    input: dir(`packages/${name}/index.ts`),
     external: externals,
     plugins: pluginList,
   })
@@ -524,14 +505,12 @@ async function createEsCjs(
   name: string,
   {
     file: {es, cjs},
-    renderModuleGraph = false,
     input = 'index',
     inputExtension = 'js',
     replaceVueReactivity = false,
     replaceReactShim = false,
   }: {
     file: {es?: string; cjs: string}
-    renderModuleGraph?: boolean
     input?: string
     inputExtension?: string
     replaceVueReactivity?: boolean
@@ -546,7 +525,6 @@ async function createEsCjs(
     pluginsCjs.resolve,
     pluginsCjs.json,
     pluginsCjs.babel,
-    pluginsCjs.sizeSnapshot,
     pluginsCjs.terser,
     pluginsCjs.analyzer,
     pluginsCjs.analyzerJSON,
@@ -561,19 +539,10 @@ async function createEsCjs(
     pluginsEsm.resolve,
     pluginsEsm.json,
     pluginsEsm.babel,
-    pluginsEsm.sizeSnapshot,
     pluginsEsm.terser,
     pluginsEsm.analyzer,
     pluginsEsm.analyzerJSON,
   ]
-  if (renderModuleGraph) {
-    pluginListCjs.push(
-      graphPlugin({
-        output: 'modules.dot',
-        exclude: 'effector/package.json',
-      }),
-    )
-  }
   const [buildCjs, buildEs] = await Promise.all([
     rollup({
       onwarn,
