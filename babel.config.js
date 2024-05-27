@@ -131,10 +131,10 @@ const babelConfig = {
       alias['vue-next'] = 'vue'
     }
     const result = [
-      '@babel/plugin-proposal-export-namespace-from',
-      '@babel/plugin-proposal-optional-chaining',
-      '@babel/plugin-proposal-nullish-coalescing-operator',
-      ['@babel/plugin-proposal-class-properties', {loose: true}],
+      '@babel/plugin-transform-export-namespace-from',
+      '@babel/plugin-transform-optional-chaining',
+      '@babel/plugin-transform-nullish-coalescing-operator',
+      ['@babel/plugin-transform-class-properties', {loose: true}],
       [
         'babel-plugin-module-resolver',
         {

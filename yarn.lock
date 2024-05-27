@@ -86,7 +86,7 @@
     browserslist "^4.16.6"
     semver "^6.3.0"
 
-"@babel/helper-create-class-features-plugin@^7.13.0":
+"@babel/helper-create-class-features-plugin@^7.13.0", "@babel/helper-create-class-features-plugin@^7.24.6":
   version "7.24.6"
   resolved "https://registry.yarnpkg.com/@babel/helper-create-class-features-plugin/-/helper-create-class-features-plugin-7.24.6.tgz#c50b86fa1c4ca9b7a890dc21884f097b6c4b5286"
   integrity sha512-djsosdPJVZE6Vsw3kk7IPRWethP94WHGOhQTc67SNXE0ZzMhHgALw8iGmYS0TD1bbMM0VDROy43od7/hN6WYcA==
@@ -185,7 +185,7 @@
   dependencies:
     "@babel/types" "^7.24.6"
 
-"@babel/helper-plugin-utils@^7.0.0", "@babel/helper-plugin-utils@^7.10.4", "@babel/helper-plugin-utils@^7.12.13", "@babel/helper-plugin-utils@^7.13.0", "@babel/helper-plugin-utils@^7.14.5", "@babel/helper-plugin-utils@^7.17.12", "@babel/helper-plugin-utils@^7.8.0", "@babel/helper-plugin-utils@^7.8.3":
+"@babel/helper-plugin-utils@^7.0.0", "@babel/helper-plugin-utils@^7.10.4", "@babel/helper-plugin-utils@^7.12.13", "@babel/helper-plugin-utils@^7.13.0", "@babel/helper-plugin-utils@^7.14.5", "@babel/helper-plugin-utils@^7.17.12", "@babel/helper-plugin-utils@^7.24.6", "@babel/helper-plugin-utils@^7.8.0", "@babel/helper-plugin-utils@^7.8.3":
   version "7.24.6"
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.24.6.tgz#fa02a32410a15a6e8f8185bcbf608f10528d2a24"
   integrity sha512-MZG/JcWfxybKwsA9N9PmtF2lOSFSEMVCpIRrbxccZFLJPrJciJdG/UhSh5W96GEteJI2ARqm5UAHxISwRDLSNg==
@@ -545,6 +545,14 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.12.13"
 
+"@babel/plugin-transform-class-properties@^7.13.0":
+  version "7.24.6"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-class-properties/-/plugin-transform-class-properties-7.24.6.tgz#d9f394e97e88ef905d5a1e5e7a16238621b7982e"
+  integrity sha512-j6dZ0Z2Z2slWLR3kt9aOmSIrBvnntWjMDN/TVcMPxhXMLmJVqX605CBRlcGI4b32GMbfifTEsdEjGjiE+j/c3A==
+  dependencies:
+    "@babel/helper-create-class-features-plugin" "^7.24.6"
+    "@babel/helper-plugin-utils" "^7.24.6"
+
 "@babel/plugin-transform-classes@^7.13.0":
   version "7.13.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-classes/-/plugin-transform-classes-7.13.0.tgz#0265155075c42918bf4d3a4053134176ad9b533b"
@@ -594,6 +602,14 @@
   dependencies:
     "@babel/helper-builder-binary-assignment-operator-visitor" "^7.12.13"
     "@babel/helper-plugin-utils" "^7.12.13"
+
+"@babel/plugin-transform-export-namespace-from@^7.12.13":
+  version "7.24.6"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-export-namespace-from/-/plugin-transform-export-namespace-from-7.24.6.tgz#b64ded74d9afb3db5d47d93996c4df69f15ac97c"
+  integrity sha512-inXaTM1SVrIxCkIJ5gqWiozHfFMStuGbGJAxZFBoHcRRdDP0ySLb3jH6JOwmfiinPwyMZqMBX+7NBDCO4z0NSA==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.24.6"
+    "@babel/plugin-syntax-export-namespace-from" "^7.8.3"
 
 "@babel/plugin-transform-flow-strip-types@^7.13.0":
   version "7.13.0"
@@ -684,6 +700,14 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.12.13"
 
+"@babel/plugin-transform-nullish-coalescing-operator@^7.13.8":
+  version "7.24.6"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-nullish-coalescing-operator/-/plugin-transform-nullish-coalescing-operator-7.24.6.tgz#12b83b3cdfd1cd2066350e36e4fb912ab194545e"
+  integrity sha512-+QlAiZBMsBK5NqrBWFXCYeXyiU1y7BQ/OYaiPAcQJMomn5Tyg+r5WuVtyEuvTbpV7L25ZSLfE+2E9ywj4FD48A==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.24.6"
+    "@babel/plugin-syntax-nullish-coalescing-operator" "^7.8.3"
+
 "@babel/plugin-transform-object-super@^7.12.13":
   version "7.12.13"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-super/-/plugin-transform-object-super-7.12.13.tgz#b4416a2d63b8f7be314f3d349bd55a9c1b5171f7"
@@ -691,6 +715,15 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.12.13"
     "@babel/helper-replace-supers" "^7.12.13"
+
+"@babel/plugin-transform-optional-chaining@^7.13.12":
+  version "7.24.6"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-optional-chaining/-/plugin-transform-optional-chaining-7.24.6.tgz#3d636b3ed8b5a506f93e4d4675fc95754d7594f5"
+  integrity sha512-cHbqF6l1QP11OkYTYQ+hhVx1E017O5ZcSPXk9oODpqhcAD1htsWG2NpHrrhthEO2qZomLK0FXS+u7NfrkF5aOQ==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.24.6"
+    "@babel/helper-skip-transparent-expression-wrappers" "^7.24.6"
+    "@babel/plugin-syntax-optional-chaining" "^7.8.3"
 
 "@babel/plugin-transform-parameters@^7.13.0":
   version "7.13.0"
