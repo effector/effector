@@ -593,53 +593,66 @@ describe('inspectGraph API', () => {
 })
 
 describe('real use cases', () => {
-  test('measure effect timings', async () => {
-    const start = createEvent()
-
-    const fx1 = createEffect(() => new Promise(r => setTimeout(r, 12)))
-    const fx2 = createEffect(() => new Promise(r => setTimeout(r, 22)))
-    const fx3 = createEffect(() => new Promise(r => setTimeout(r, 32)))
-
-    sample({
-      clock: start,
-      target: [fx1, fx2, fx3],
+  describe('test with manual time advance', () => {
+    beforeAll(() => {
+      jest.useFakeTimers()
     })
+    afterAll(() => {
+      jest.useRealTimers()
+    })
+    test('measure effect timings', async () => {
+      const start = createEvent()
 
-    const scope = fork()
+      const fx1 = createEffect(() => new Promise(r => setTimeout(r, 10)))
+      const fx2 = createEffect(() => new Promise(r => setTimeout(r, 20)))
+      const fx3 = createEffect(() => new Promise(r => setTimeout(r, 30)))
 
-    const times: Record<string, number> = {}
-    const startRecord = (name: string) => {
-      const start = Date.now()
+      sample({
+        clock: start,
+        target: [fx1, fx2, fx3],
+      })
 
-      return () => {
-        times[name] = Date.now() - start
+      const scope = fork()
+
+      const times: Record<string, number> = {}
+      const startRecord = (name: string) => {
+        const start = Date.now()
+
+        return () => {
+          times[name] = Date.now() - start
+        }
       }
-    }
 
-    const timers = new Map<string, () => void>()
+      const timers = new Map<string, () => void>()
 
-    const unsub = inspect({
-      scope,
-      fn: m => {
-        if (m.kind === 'effect') {
-          timers.set(m.stack.fxID as string, startRecord(m.name!))
-        }
-        if (m.kind === 'event' && m.meta.named === 'finally') {
-          const stop = timers.get(m.stack.fxID as string)
-          stop?.()
-        }
-      },
+      const unsub = inspect({
+        scope,
+        fn: m => {
+          if (m.kind === 'effect') {
+            timers.set(m.stack.fxID as string, startRecord(m.name!))
+          }
+          if (m.kind === 'event' && m.meta.named === 'finally') {
+            const stop = timers.get(m.stack.fxID as string)
+            stop?.()
+          }
+        },
+      })
+
+      const promise = allSettled(start, {scope})
+      await jest.advanceTimersByTime(10)
+      await jest.advanceTimersByTime(10)
+      await jest.advanceTimersByTime(10)
+      await jest.advanceTimersByTime(10)
+      await promise
+
+      const floor = (n: number) => Math.floor(n / 10) * 10
+
+      expect(floor(times.fx1)).toEqual(10)
+      expect(floor(times.fx2)).toEqual(20)
+      expect(floor(times.fx3)).toEqual(30)
+
+      unsub()
     })
-
-    await allSettled(start, {scope})
-
-    const floor = (n: number) => Math.floor(n / 10) * 10
-
-    expect(floor(times.fx1)).toEqual(10)
-    expect(floor(times.fx2)).toEqual(20)
-    expect(floor(times.fx3)).toEqual(30)
-
-    unsub()
   })
   test('monitor out-of-scope computations', async () => {
     const start = createEvent()
