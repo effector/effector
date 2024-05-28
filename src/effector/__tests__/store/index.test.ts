@@ -266,14 +266,7 @@ describe('.off', () => {
 })
 
 describe('updateFilter', () => {
-  let consoleError: any
-  beforeEach(() => {
-    consoleError = console.error
-    console.error = () => {}
-  })
-  afterEach(() => {
-    console.error = consoleError
-  })
+  muteErrors('failure')
   it('prevent store from updates when returns false', () => {
     const fn = jest.fn()
     const moveTo = createEvent<{x: number; y: number}>()

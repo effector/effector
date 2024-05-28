@@ -1,18 +1,5 @@
-import {createStore, createEvent, forward, combine} from 'effector'
+import {createStore, createEvent, sample, combine} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 test('diamonds', async () => {
   const fn = jest.fn()
@@ -74,9 +61,9 @@ test('olympic', async () => {
   I.watch(result => {
     fn(result)
   })
-  forward({
-    from: A,
-    to: B,
+  sample({
+    clock: A,
+    target: B,
   })
   A('word')
   A('')

@@ -7,20 +7,9 @@ import {
   createNode,
   forward,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors('forward')
 
 it('binds watchers to region lifetime', () => {
   const fn = jest.fn()

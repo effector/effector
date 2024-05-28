@@ -11,20 +11,9 @@ import {
   allSettled,
   attach,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors('forward')
 
 describe('createEffect(handler) support', () => {
   test('with babel plugin', async () => {
