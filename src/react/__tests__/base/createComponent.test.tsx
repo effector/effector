@@ -1,8 +1,10 @@
 import * as React from 'react'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {createStore, combine, createEvent, createApi} from 'effector'
 import {createComponent} from 'effector-react'
+
+muteErrors(['createComponent', 'useStore'])
 
 describe('createComponent', () => {
   test('combine', async () => {
@@ -189,42 +191,42 @@ describe('createComponent', () => {
     })
     await render(<HookComponent />)
     expect(container.firstChild).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Text: 
-    foo
-  </div>
-  <div>
-    Counter: 
-    0
-  </div>
-  <button
-    id="increment"
-  >
-    incr
-  </button>
-</div>
-`)
+      <div>
+        <div>
+          Text: 
+          foo
+        </div>
+        <div>
+          Counter: 
+          0
+        </div>
+        <button
+          id="increment"
+        >
+          incr
+        </button>
+      </div>
+    `)
     await act(async () => {
       container.firstChild.querySelector('#increment').click()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Text: 
-    foo
-  </div>
-  <div>
-    Counter: 
-    1
-  </div>
-  <button
-    id="increment"
-  >
-    incr
-  </button>
-</div>
-`)
+      <div>
+        <div>
+          Text: 
+          foo
+        </div>
+        <div>
+          Counter: 
+          1
+        </div>
+        <button
+          id="increment"
+        >
+          incr
+        </button>
+      </div>
+    `)
   })
   it('should not use props from failed renders', async () => {
     const fn = jest.fn()

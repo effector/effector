@@ -1,23 +1,10 @@
 import {argumentHistory} from 'effector/fixtures'
-import {createStore, createEvent, createEffect, forward, fork} from 'effector'
+import {createStore, createEvent, createEffect, sample, fork} from 'effector'
 import {h, using, list, spec, rec, variant, remap, block} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-expect-error
 import {provideGlobals} from 'effector/fixtures/dom'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 test('block nesting', async () => {
   const scopeName = createStore('--')
@@ -33,9 +20,9 @@ test('block nesting', async () => {
     fetchContent.doneData,
     (_, {title}) => title,
   )
-  forward({
-    from: click,
-    to: fetchContent,
+  sample({
+    clock: click,
+    target: fetchContent,
   })
 
   const client = provideGlobals()

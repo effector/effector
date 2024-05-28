@@ -1,11 +1,11 @@
 import * as React from 'react'
-import {render} from 'effector/fixtures/react'
-
 import {createStore, createEffect, combine} from 'effector'
-import {useStore} from 'effector-react'
-import {argumentHistory} from 'effector/fixtures/index'
+import {useUnit} from 'effector-react'
 
-it('should rerender only once', async() => {
+import {render} from 'effector/fixtures/react'
+import {argumentHistory} from 'effector/fixtures'
+
+it('should rerender only once', async () => {
   const fn = jest.fn()
   const getPresentation = createEffect({
     async handler() {
@@ -26,7 +26,7 @@ it('should rerender only once', async() => {
   })
 
   const View = () => {
-    const presentation = useStore(presentationStore)
+    const presentation = useUnit(presentationStore)
     React.useEffect(() => {
       getPresentation()
     }, [])

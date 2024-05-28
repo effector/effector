@@ -10,26 +10,13 @@ import {
   combine,
   createDomain,
   hydrate,
+  sample,
 } from 'effector'
-import {debounce} from 'patronum19';
-import {argumentHistory} from 'effector/fixtures'
+import {debounce} from 'patronum19'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (
-      String(message).includes('forward') ||
-      String(message).includes('guard')
-    )
-      return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+// guard is used in patronum 19, need to remove it entirely
+muteErrors(['forward', 'guard'])
 
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
@@ -265,7 +252,7 @@ describe('imperative call support', () => {
         await addWord(`${word} 4`)
       })
 
-      forward({from: start.doneData, to: next})
+      sample({clock: start.doneData, target: next})
 
       const scopeA = fork()
       const scopeB = fork()
@@ -792,11 +779,10 @@ describe(`fork(domain) and related api's are deprecated`, () => {
 })
 
 describe('babel-plugin-update', () => {
-  test('patronum 19 doesn not blows up', () =>{
-
+  test('patronum 19 doesn not blows up', () => {
     expect(() => {
-      const event = createEvent();
-      const deb = debounce({source: event, timeout: 1000});
+      const event = createEvent()
+      const deb = debounce({source: event, timeout: 1000})
     }).not.toThrow()
   })
 })

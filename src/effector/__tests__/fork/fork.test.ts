@@ -1,6 +1,6 @@
 import {
   createDomain,
-  forward,
+  sample,
   attach,
   createEvent,
   createStore,
@@ -13,32 +13,16 @@ import {
   Store,
   Scope,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (
-      String(message).includes('forward') ||
-      String(message).includes('guard') ||
-      String(message).includes('object with handlers')
-    )
-      return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['fork(domain)', 'hydrate(domain', 'object with handlers'])
 
 test('usage with domain', async () => {
   const app = createDomain()
   const add = app.createEvent<number>()
   const $count = app.createStore(0).on(add, (n, x) => n + x)
   const addFx = app.createEffect(() => 0)
-  forward({from: addFx.doneData, to: add})
+  sample({clock: addFx.doneData, target: add})
 
   const scope = fork(app, {
     values: [[$count, 10]],
@@ -53,7 +37,7 @@ test('usage without domain', async () => {
   const add = createEvent<number>()
   const $count = createStore(0).on(add, (n, x) => n + x)
   const addFx = createEffect(() => 0)
-  forward({from: addFx.doneData, to: add})
+  sample({clock: addFx.doneData, target: add})
 
   const scope = fork({
     values: [[$count, 10]],

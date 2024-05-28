@@ -1,4 +1,7 @@
 import {createEvent, createDomain} from 'effector'
+import {muteErrors} from 'effector/fixtures'
+
+muteErrors('getType')
 
 test("should return it's own name on event.getType()", () => {
   expect(createEvent('foo').getType()).toBe('foo')

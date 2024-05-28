@@ -10,6 +10,19 @@ import {
   createStore,
 } from 'effector'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('fork(domain)')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 const typecheck = '{global}'
 
 describe('serialize cases (should pass)', () => {

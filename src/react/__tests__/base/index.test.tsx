@@ -2,6 +2,9 @@ import * as React from 'react'
 import {act, render, container} from 'effector/fixtures/react'
 import {createStore, createEvent} from 'effector'
 import {connect} from 'effector-react'
+import {muteErrors} from 'effector/fixtures'
+
+muteErrors(['connect', 'useStore'])
 
 test('connect api', async() => {
   const text = createStore('foo')

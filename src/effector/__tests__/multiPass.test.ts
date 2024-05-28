@@ -14,22 +14,9 @@ import {
   split,
 } from 'effector'
 
-const consoleError = console.error
+import {muteErrors} from 'effector/fixtures'
 
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (
-      String(message).includes('forward') ||
-      String(message).includes('guard')
-    )
-      return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['forward', 'guard', 'skipVoid'])
 
 test('attach', () => {
   expect(() => {

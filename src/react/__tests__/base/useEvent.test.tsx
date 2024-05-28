@@ -1,8 +1,11 @@
 import React from 'react'
-//@ts-ignore
+//@ts-expect-error
 import {render, container, act} from 'effector/fixtures/react'
+import {muteErrors} from 'effector/fixtures'
 import {createEvent, fork, createWatch} from 'effector'
 import {Provider, useEvent} from 'effector-react'
+
+muteErrors(['useEvent', 'No scope found', 'AppFail'])
 
 describe('useEvent', () => {
   test('bind event to scope if Provider is used', async () => {
@@ -36,13 +39,13 @@ describe('useEvent', () => {
   test('throw error if Provider is not used with forceScope', async () => {
     const event = createEvent()
 
-    function App() {
+    function AppFail() {
       const handler = useEvent(event, {forceScope: true})
 
       return <button onClick={handler}>Click me</button>
     }
 
-    expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+    expect(() => render(<AppFail />)).rejects.toMatchInlineSnapshot(
       `[Error: No scope found, consider adding <Provider> to app root]`,
     )
   })

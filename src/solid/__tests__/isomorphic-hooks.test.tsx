@@ -4,7 +4,7 @@ import {
   createEvent,
   createStore,
   createEffect,
-  forward,
+  sample,
   fork,
   allSettled,
   serialize,
@@ -18,19 +18,6 @@ import {
   createGate,
 } from 'effector-solid'
 import {createSignal, createMemo, For} from 'solid-js'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -71,7 +58,7 @@ test('useGate support', async () => {
 
   const activeChatGate = createGate<{chatId: string}>({})
 
-  forward({from: activeChatGate.open, to: getMessagesFx})
+  sample({clock: activeChatGate.open, target: getMessagesFx})
 
   const ChatPage = (props: {chatId: string}) => {
     useGate(activeChatGate, props)
