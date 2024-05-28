@@ -9,6 +9,19 @@ import {
   useUnit,
 } from 'effector-react'
 
+const consoleError = console.error
+
+beforeAll(() => {
+  console.error = (message, ...args) => {
+    if (String(message).includes('createComponent is deprecated')) return
+    consoleError(message, ...args)
+  }
+})
+
+afterAll(() => {
+  console.error = consoleError
+})
+
 const typecheck = '{global}'
 
 test('createComponent', () => {

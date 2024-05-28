@@ -266,24 +266,13 @@ test('#subscribe', () => {
 })
 
 test('#watch', () => {
-  const event: EventCallable<number> = createEvent()
   const store = createStore(0)
-  store.watch((state, payload) => {
+  store.watch(state => {
     const store_watch_check1: number = state
-    const store_watch_check2: typeof undefined = payload
-  })
-  store.watch(event, (state, payload) => {
-    const store_watchBy_check1: number = state
-    const store_watchBy_check2: number = payload
   })
   const computed = store.map(() => 'hello')
-  computed.watch((state, payload) => {
+  computed.watch(state => {
     const store_watchComputed_check1: string = state
-    const store_watchComputed_check2: typeof undefined = payload
-  })
-  computed.watch(event, (state, payload) => {
-    const store_watchByComputed_check1: string = state
-    const store_watchByComputed_check2: number = payload
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
