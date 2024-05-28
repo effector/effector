@@ -12,7 +12,9 @@ import {
   fork,
 } from 'effector'
 import {Provider, useStore, useStoreMap} from 'effector-react'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
+
+muteErrors(['useStore', 'No scope found', 'AppFail'])
 
 describe('useStore', () => {
   it('should render', async () => {
@@ -453,13 +455,13 @@ describe('useStore', () => {
   test('throw error on forceScope if it is not available', async () => {
     const $store = createStore('original')
 
-    function App() {
+    function AppFail() {
       const value = useStore($store, {forceScope: true})
 
       return <p>{value}</p>
     }
 
-    expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+    expect(() => render(<AppFail />)).rejects.toMatchInlineSnapshot(
       `[Error: No scope found, consider adding <Provider> to app root]`,
     )
   })
@@ -963,7 +965,7 @@ describe('useStoreMap', () => {
   test('throw error on forceScope if it is not available', async () => {
     const $store = createStore('original')
 
-    function App() {
+    function AppFail() {
       const value = useStoreMap({
         store: $store,
         fn: t => t + 'mapped',
@@ -974,7 +976,7 @@ describe('useStoreMap', () => {
       return <p>{value}</p>
     }
 
-    expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+    expect(() => render(<AppFail />)).rejects.toMatchInlineSnapshot(
       `[Error: No scope found, consider adding <Provider> to app root]`,
     )
   })

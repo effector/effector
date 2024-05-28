@@ -2,7 +2,7 @@ import * as React from 'react'
 import {from} from 'most'
 
 import {createStore, combine, createEvent, createEffect} from 'effector'
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 
 import {render, act, renderHTML} from 'effector/fixtures/react'
 
@@ -53,13 +53,13 @@ test('rfc1 example implementation', async () => {
 
   const messageStore = store.map(({counter}) => `Clicked: ${counter} times`)
   const ClickedTimes = () => {
-    const state = useStore(messageStore)
+    const state = useUnit(messageStore)
     expect(state).not.toBe(text)
     expect(typeof state).toBe('string')
     return <span>{state}</span>
   }
   const CurrentText = ({prefix}) => {
-    const {text} = useStore(store)
+    const {text} = useUnit(store)
     return (
       <div>
         <p>{prefix}</p>

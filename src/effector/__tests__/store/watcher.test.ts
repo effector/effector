@@ -1,5 +1,7 @@
 import {createStore, createEvent} from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
+
+muteErrors('watch second argument')
 
 it('support watchers for event', () => {
   const fn = jest.fn()
@@ -80,14 +82,14 @@ it('support event watchers for storages', () => {
 
 it('support event watchers for storages', () => {
   const fn = jest.fn()
-  const sample = createEvent()
+  const trigger = createEvent()
   const store = createStore(0)
 
-  const watcher = store.watch(sample, fn)
+  const watcher = store.watch(trigger, fn)
 
-  sample()
-  sample()
-  sample()
+  trigger()
+  trigger()
+  trigger()
 
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [

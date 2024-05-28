@@ -156,75 +156,77 @@ describe('transactions', () => {
     await allSettled(trigger, {scope})
   })
   test('', async () => {
-    const app = createDomain()
-    const inner1 = app.createEffect(async (x: string) => {
+    const inner1 = createEffect(async (x: string) => {
       await new Promise(rs => setTimeout(rs, 50))
     })
-    const inner2 = app.createEffect(async (x: string) => {
+    const inner2 = createEffect(async (x: string) => {
       await new Promise(rs => setTimeout(rs, 50))
     })
-    const req1 = app.createEffect(async (x: string) => {
+    const req1 = createEffect(async (x: string) => {
       await inner1(x)
       await inner2(x)
       await inner1(`${x} 2`)
     })
-    const words = app
-      .createStore([] as string[])
-      .on(inner2.done, (list, {params: word}) => [...list, word])
-    const trigger = app.createEvent<string>()
-    const str = app.createStore('-').on(trigger, (_, x) => x)
+    const words = createStore<string[]>([]).on(
+      inner2.done,
+      (list, {params: word}) => [...list, word],
+    )
+    const trigger = createEvent<string>()
+    const str = createStore('-').on(trigger, (_, x) => x)
 
     sample({
       source: str,
       target: req1,
     })
 
-    const scope1 = fork(app)
+    const scope1 = fork()
     const promise1 = allSettled(trigger, {
       scope: scope1,
       params: 'a',
     })
     expect(() => {
-      const inner1 = app.createEffect(async (x: string) => {
+      const inner1 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 50))
       })
-      const inner2 = app.createEffect(async (x: string) => {
+      const inner2 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 40))
       })
-      const req1 = app.createEffect(async (x: string) => {
+      const req1 = createEffect(async (x: string) => {
         await Promise.all([inner1(x), inner2(x)])
       })
-      const words = app
-        .createStore([] as string[])
-        .on(inner2.done, (list, {params: word}) => [...list, word])
-      const str = app.createStore('-').on(trigger, (_, x) => x)
+      const words = createStore<string[]>([]).on(
+        inner2.done,
+        (list, {params: word}) => [...list, word],
+      )
+      const str = createStore('-').on(trigger, (_, x) => x)
 
       sample({
         source: str,
         target: req1,
       })
     }).not.toThrow()
-    const scope2 = fork(app)
+    const scope2 = fork()
     const promise2 = allSettled(trigger, {
       scope: scope2,
       params: 'b',
     })
     await promise1
     expect(() => {
-      const inner1 = app.createEffect(async (x: string) => {
+      const inner1 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 50))
       })
-      const inner2 = app.createEffect(async (x: string) => {
+      const inner2 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 50))
       })
-      const req1 = app.createEffect(async (x: string) => {
+      const req1 = createEffect(async (x: string) => {
         await inner1(x)
         await inner2(x)
       })
-      const words = app
-        .createStore([] as string[])
-        .on(inner2.done, (list, {params: word}) => [...list, word])
-      const str = app.createStore('-').on(trigger, (_, x) => x)
+      const words = createStore<string[]>([]).on(
+        inner2.done,
+        (list, {params: word}) => [...list, word],
+      )
+      const str = createStore('-').on(trigger, (_, x) => x)
 
       sample({
         source: str,
@@ -235,7 +237,7 @@ describe('transactions', () => {
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
         "-36m1p8": "a",
-        "rbve3i": Array [
+        "qutrpb": Array [
           "a",
         ],
       }
@@ -243,11 +245,11 @@ describe('transactions', () => {
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
         "-36m1p8": "b",
-        "-8fvm5d": "b",
+        "-7ytzr6": "b",
         "-bi6cil": Array [
           "b",
         ],
-        "rbve3i": Array [
+        "qutrpb": Array [
           "b",
         ],
       }

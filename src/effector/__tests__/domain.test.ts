@@ -8,7 +8,7 @@ import {
   restore,
   attach,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
 describe('domain hooks', () => {
   test('domain.onCreateEvent(fn)', () => {
@@ -81,6 +81,8 @@ describe('domain hooks', () => {
 })
 
 describe('domain name', () => {
+  muteErrors('getType')
+
   test("should return it's own name on domain.getType()", () => {
     expect(createDomain('foo').getType()).toBe('foo')
   })

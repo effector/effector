@@ -12,19 +12,9 @@ import {
   createEffect,
   attach,
 } from 'effector'
+import {muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('onlyChanges')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['onlyChanges', 'fork(domain)', 'hydrate(domain'])
 
 it('serialize stores to object of sid as keys', () => {
   const $a = createStore('value', {sid: 'a'})
@@ -333,7 +323,10 @@ describe('onlyChanges: true', () => {
         const triggerB = createEvent()
         const foo = createStore(0, {sid: 'foo'})
         const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         sample({
           clock: triggerA,
           source: combined,
@@ -362,7 +355,10 @@ describe('onlyChanges: true', () => {
         const triggerB = createEvent()
         const foo = createStore(0, {sid: 'foo'})
         const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         combined.on(triggerA, ({foo, bar}) => ({
           foo: foo + 1,
           bar: bar + 1,
@@ -488,7 +484,10 @@ describe('onlyChanges: false', () => {
         const triggerB = app.createEvent()
         const foo = app.createStore(0, {sid: 'foo'})
         const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         sample({
           clock: triggerA,
           source: combined,
@@ -534,7 +533,10 @@ describe('onlyChanges: false', () => {
         const triggerB = app.createEvent()
         const foo = app.createStore(0, {sid: 'foo'})
         const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         combined.on(triggerA, ({foo, bar}) => ({
           foo: foo + 1,
           bar: bar + 1,

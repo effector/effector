@@ -15,6 +15,7 @@ import {
   launch,
 } from 'effector'
 import {useUnit} from 'effector-react'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   useUnit as useUnitScope,
   createGate,
@@ -23,7 +24,8 @@ import {
   useStore,
   Provider,
 } from 'effector-react/scope'
-import {argumentHistory} from 'effector/fixtures'
+
+muteErrors(['useEvent', 'useStore'])
 
 describe('useUnit', () => {
   it('should bind single store', async () => {
@@ -1230,6 +1232,7 @@ describe('useUnit', () => {
     const base = {fk: function fk() {}}
     const $foo = createStore(0)
     const App = () => {
+      // @ts-expect-error
       const {foo} = useUnit({foo: $foo, __proto__: base})
       return <div>{foo}</div>
     }

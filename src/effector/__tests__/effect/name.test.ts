@@ -1,4 +1,7 @@
 import {createEffect, createDomain} from 'effector'
+import {muteErrors} from 'effector/fixtures'
+
+muteErrors('getType')
 
 test("should return it's own name on effect.getType()", () => {
   expect(createEffect('foo').getType()).toBe('foo')

@@ -87,7 +87,7 @@ export function route<T>({
               visible,
               value,
             }),
-            greedy: true,
+            batch: false,
           })
           mount.watch(mountFn.routeItem)
           onValueUpdate.watch(({leaf, visible, value}) => {
@@ -139,7 +139,7 @@ export function route<T>({
       const pendingInitWithData = sample({
         source: mount,
         clock: pendingInit,
-        greedy: true,
+        batch: false,
         fn: (leaf, value) => ({leaf, value, visible: true}),
       })
       merge([onMount, onVisibleChange, pendingInitWithData]).watch(
