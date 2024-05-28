@@ -8,8 +8,14 @@ export const muteErrors = wordsRaw => {
   const words = Array.isArray(wordsRaw) ? wordsRaw : [wordsRaw]
   const consoleError = console.error
   beforeAll(() => {
-    console.error = (message, ...args) => {
-      if (words.some(word => String(message).includes(word))) return
+    console.error = (messageRaw, ...args) => {
+      const message =
+        typeof messageRaw === 'object' &&
+        messageRaw !== null &&
+        messageRaw.message
+          ? String(messageRaw.message)
+          : String(messageRaw)
+      if (words.some(word => message.includes(word))) return
       consoleError(message, ...args)
     }
   })
