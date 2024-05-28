@@ -263,8 +263,7 @@ describe('fork values', () => {
                     Type at position 0 in source is not compatible with type at position 0 in target.
                       Type 'Store<number>' is missing the following properties from type 'StoreWritable<any>': ____, on, off, reset, and 2 more.
           Overload 2 of 2, '(domain: Domain, config?: { values?: [StoreWritable<any>, any][] | SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
-            Argument of type '{ values: ((string | StoreWritable<string>)[] | (number | Store<number>)[] | (StoreWritable<{ nested: { value: number; }; }> | { nested: { value: number; }; })[])[]; }' is not assignable to parameter of type 'Domain'.
-              Object literal may only specify known properties, and 'values' does not exist in type 'Domain'.
+            Object literal may only specify known properties, and 'values' does not exist in type 'Domain'.
         "
       `)
     })

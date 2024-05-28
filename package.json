@@ -107,7 +107,7 @@
     "solid-testing-library": "^0.3.0",
     "terser": "^5.6.1",
     "ts-node": "^10.0.0",
-    "typescript": "5.2.2",
+    "typescript": "5.4.5",
     "use-sync-external-store": "^1.0.0",
     "vue": "^2.6.12",
     "vue-next": "npm:vue@^3.0.2",

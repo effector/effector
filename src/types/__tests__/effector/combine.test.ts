@@ -353,9 +353,12 @@ test('possibly undefined store error message mismatch (should pass)', () => {
 
   const result = combine({
     hasNotActiveFunnels: $hasNotActiveFunnels,
-    vacancyId: $vacancyField.map(v => {
-      if (v) return v.id
-    }, {skipVoid: false}),
+    vacancyId: $vacancyField.map(
+      v => {
+        if (v) return v.id
+      },
+      {skipVoid: false},
+    ),
   })
 
   const resultType: Store<{
@@ -441,8 +444,7 @@ describe('support optional parameters of explicit generic type', () => {
       "
       No overload matches this call.
         Overload 1 of 18, '(shape: { foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }): Store<I>', gave the following error.
-          Argument of type '{ foo: number; bar: StoreWritable<number>; baz: StoreWritable<number>; }' is not assignable to parameter of type '{ foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }'.
-            Object literal may only specify known properties, and 'baz' does not exist in type '{ foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }'.
+          Object literal may only specify known properties, and 'baz' does not exist in type '{ foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }'.
         Overload 2 of 18, '(shape: I): Store<{ foo?: string | number | undefined; bar: number; }>', gave the following error.
           Type 'StoreWritable<number>' is not assignable to type 'number'.
       "

@@ -103,8 +103,7 @@ test('case store case mismatch (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: EventCallable<number>; match: StoreWritable<\\"a\\" | \\"c\\">; cases: { a: EventCallable<number>; b: EventCallable<number>; __: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
     "
   `)
 })
@@ -147,8 +146,7 @@ test('case function case mismatch (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: EventCallable<number>; match: (x: number) => \\"a\\" | \\"c\\"; cases: { a: EventCallable<number>; b: EventCallable<number>; __: EventCallable<number>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
     "
   `)
 })
@@ -243,8 +241,7 @@ describe('any to void', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: EventCallable<number>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: (EventCallable<void> | EventCallable<string>)[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
       "
     `)
   })
@@ -392,8 +389,7 @@ describe('matcher function with inference', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: EventCallable<A | B>; match: { a: (src: A | B) => src is B; c: StoreWritable<boolean>; }; cases: { a: (EventCallable<A> | EventCallable<...>)[]; c: EventCallable<...>; __: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
       "
     `)
   })
@@ -501,8 +497,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\">; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -565,8 +560,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -625,8 +619,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; bar: number; }>; match: StoreWritable<\\"a\\">; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -689,8 +682,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; bar: number; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -713,8 +705,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -732,8 +723,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
         "
       `)
     })
@@ -753,8 +743,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\">; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -777,8 +766,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -798,8 +786,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\" | \\"c\\">; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         "
       `)
     })
@@ -821,8 +808,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -845,8 +831,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -864,8 +849,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
         "
       `)
     })
@@ -885,8 +869,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\">; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -909,8 +892,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -930,8 +912,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\" | \\"c\\">; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -953,8 +934,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: StoreWritable<\\"a\\" | \\"b\\">; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
         "
       `)
     })
@@ -1011,8 +991,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\"; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1072,8 +1051,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1129,8 +1107,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\"; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1190,8 +1167,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; bar: number; }>; match: (src: { foo: 1; bar: number; }) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1214,8 +1190,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1234,8 +1209,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1256,8 +1230,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\"; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1285,8 +1258,7 @@ describe('array cases', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: Event<{ a: number | null; b: number | null; }>; match: { write: (src: any) => boolean; }; cases: { write: EventCallable<{ a: number; b: number; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { a: number | null; b: number | null; }; caseType: { a: number; b: number; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { a: number | null; b: number | null; }; caseType: { a: number; b: number; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { a: number | null; b: number | null; }; caseType: { a: number; b: number; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1310,8 +1282,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1332,8 +1303,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\" | \\"c\\"; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1355,8 +1325,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: { foo: 1; }) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1379,8 +1348,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1399,8 +1367,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1421,8 +1388,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\"; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1446,8 +1412,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1468,8 +1433,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\" | \\"c\\"; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1492,8 +1456,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: (src: any) => \\"a\\" | \\"b\\"; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; c: EventCallable<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1559,8 +1522,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; }; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1630,8 +1592,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1695,8 +1656,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; }; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<{ foo: 1; }>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
         "
       `)
     })
@@ -1766,8 +1726,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; bar: number; }>; match: { a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; }; cases: { a: EventCallable<{ foo: 1; }>[]; b: EventCallable<...>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1794,8 +1753,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         "
@@ -1819,8 +1777,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         "
@@ -1844,8 +1801,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -1873,8 +1829,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         "
@@ -1902,8 +1857,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; c: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
@@ -1930,8 +1884,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }; cases: { a: EventCallable<{ foo: 1; bar: number; }>[]; b: EventCallable<{ foo: 1; bar: string; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
         "
       `)
     })
@@ -1958,8 +1911,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         "
@@ -1983,8 +1935,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         "
@@ -2008,8 +1959,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>[]; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         "
       `)
@@ -2037,8 +1987,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         "
@@ -2066,8 +2015,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; c: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
@@ -2096,8 +2044,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '{ source: EventCallable<{ foo: 1; }>; match: { a: (src: any) => boolean; b: (src: any) => boolean; }; cases: { a: EventCallable<{ foo: 2; }>[]; b: EventCallable<{ foo: 2; }>; c: EventCallable<...>; }; }' is not assignable to parameter of type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
         Parameter 'src' implicitly has an 'any' type.
         Parameter 'src' implicitly has an 'any' type.
         "
@@ -2122,8 +2069,7 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: EventCallable<number>; match: StoreWritable<\\"a\\" | \\"c\\">; cases: { a: EventCallable<number>[]; b: EventCallable<number>[]; __: EventCallable<...>[]; }; }' is not assignable to parameter of type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })
@@ -2144,8 +2090,7 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: EventCallable<number>; match: (src: number) => \\"a\\" | \\"c\\"; cases: { a: EventCallable<number>[]; b: EventCallable<number>[]; __: EventCallable<number>[]; }; }' is not assignable to parameter of type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })
@@ -2169,8 +2114,7 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{ source: EventCallable<number>; match: { a: (src: number) => true; c: (src: number) => true; }; cases: { a: EventCallable<number>[]; b: EventCallable<number>[]; __: EventCallable<...>[]; }; }' is not assignable to parameter of type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
       "
     `)
   })
@@ -2190,8 +2134,7 @@ test('split + attach', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '{ source: StoreWritable<number>; match: {}; cases: { __: Effect<number, void, Error>; }; }' is not assignable to parameter of type '{ error: \\"config should be object with fields \\\\\\"source\\\\\\", \\\\\\"match\\\\\\" and \\\\\\"cases\\\\\\"\\"; got: { source: StoreWritable<number>; match: {}; cases: unknown; clock: unknown; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"config should be object with fields \\\\\\"source\\\\\\", \\\\\\"match\\\\\\" and \\\\\\"cases\\\\\\"\\"; got: { source: StoreWritable<number>; match: {}; cases: unknown; clock: unknown; }; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"config should be object with fields \\\\\\"source\\\\\\", \\\\\\"match\\\\\\" and \\\\\\"cases\\\\\\"\\"; got: { source: StoreWritable<number>; match: {}; cases: unknown; clock: unknown; }; }'.
     "
   `)
 })
