@@ -34,6 +34,25 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: { en: "How to Effector" },
+    items: [
+      {
+        text: {
+          en: "Basics",
+        },
+        link: "/learn/basics",
+      },
+      {
+        text: { en: "App Structure" },
+        link: "/learn/app-structure",
+      },
+      {
+        text: { en: "Tips and tricks" },
+        link: "/learn/tips-and-trics",
+      },
+    ],
+  },
+  {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
@@ -809,7 +828,7 @@ export const FOOTER_LINKS = [
       { text: { en: "Reddit" }, link: LINKS.reddit },
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
-      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant"  },
+      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
       { text: { en: "Made by Astro" }, link: "https://astro.build" },
     ],
   },
