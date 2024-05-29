@@ -4,7 +4,6 @@ import {
   createEffect,
   createStore,
   createApi,
-  Event,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -12,7 +11,7 @@ describe('split(source, match)', () => {
   it('split event by matching conditions', () => {
     const fn1 = jest.fn()
     const fn2 = jest.fn()
-    const source: Event<string[]> = createEvent()
+    const source = createEvent<string[]>()
     const {emptyList, oneElement, commonList} = split(source, {
       emptyList: list => list.length === 0,
       oneElement: list => list.length === 1,
@@ -34,7 +33,7 @@ describe('split(source, match)', () => {
   it('has default case __', () => {
     const fn1 = jest.fn()
     const fn2 = jest.fn()
-    const source: Event<string[]> = createEvent()
+    const source = createEvent<string[]>()
     const {
       emptyList,
       oneElement,

@@ -7,9 +7,9 @@ import {
   createEffect,
   createDomain,
   Store,
-  Event,
   restore,
   fork,
+  EventCallable,
 } from 'effector'
 import {Provider, useStore, useStoreMap} from 'effector-react'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
@@ -69,8 +69,10 @@ describe('useStore', () => {
     const fn = jest.fn()
     const storeA = createStore('A')
     const storeB = createStore('B')
+    // dont do this in prod!
     const changeCurrentStore = createEvent<Store<string>>()
-    const currentStore = createStore(storeA).on(
+    // dont do this in prod!
+    const currentStore = createStore<Store<string>>(storeA).on(
       changeCurrentStore,
       (_, store) => store,
     )
@@ -239,7 +241,7 @@ describe('useStore', () => {
 
     const Meta = (props: {
       store: Store<boolean>
-      toggle: Event<unknown>
+      toggle: EventCallable<unknown>
       v: 0 | 1
     }) => {
       const v = useStore(props.store)

@@ -21,6 +21,7 @@ test('plain gate', async () => {
   await render(
     <section>
       <div>div</div>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate />
     </section>,
   )
@@ -51,6 +52,7 @@ test('gate with props', async () => {
   const Gate = createGate('gate with props')
   await render(
     <section>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate foo="bar" />
     </section>,
   )
@@ -86,6 +88,7 @@ describe('updates deduplication', () => {
       const x = useUnit(count)
       return (
         <section>
+          {/* @ts-expect-error vue messed with JSX global types */}
           <Gate field={x === 2} />
           {x}
         </section>
@@ -150,6 +153,7 @@ test('gate properties', async () => {
   Gate.state.watch(props => fn2(props))
   await render(
     <section>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate foo="bar" />
     </section>,
   )
@@ -235,6 +239,7 @@ test('gate component should be isomorphic to scope', async () => {
 
   await render(
     <Provider value={scope}>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate />
     </Provider>,
   )

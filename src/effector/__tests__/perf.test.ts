@@ -180,6 +180,7 @@ async function runTestCase({
         })
         rs(results)
       })
+      //@ts-expect-error probably buffered is browser only feature
       obs.observe({entryTypes: ['function'], buffered: true})
     })
     cb()

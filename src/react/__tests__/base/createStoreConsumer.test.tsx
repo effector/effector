@@ -1,4 +1,5 @@
 import * as React from 'react'
+//@ts-expect-error
 import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {createEvent, createStore, combine} from 'effector'
@@ -8,9 +9,10 @@ muteErrors(['createStoreConsumer', 'createComponent', 'useStore'])
 
 test('createStoreComponent attempt', async () => {
   const store1 = createStore('foo')
-  const changeText = createEvent()
+  const changeText = createEvent<string>()
   store1.on(changeText, (_, payload) => payload)
   const Store1 = createStoreConsumer(store1)
+  //@ts-expect-error vue messed with JSX global types
   await render(<Store1>{state => <span>Current state: {state}</span>}</Store1>)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <span>
@@ -48,6 +50,7 @@ test('no dull re-renders', async () => {
   const CurrentList = createStoreConsumer(currentList)
 
   await render(
+    //@ts-expect-error vue messed with JSX global types
     <CurrentList>
       {state => {
         fn(state)

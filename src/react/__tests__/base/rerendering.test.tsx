@@ -2,6 +2,7 @@ import * as React from 'react'
 import {createStore, createEffect, combine} from 'effector'
 import {useUnit} from 'effector-react'
 
+//@ts-expect-error
 import {render} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -13,7 +14,7 @@ it('should rerender only once', async () => {
       return 'ok'
     },
   })
-  const presentation = createStore(null).on(
+  const presentation = createStore<string | null>(null).on(
     getPresentation.done,
     (_, {result}) => result,
   )

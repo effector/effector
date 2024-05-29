@@ -1,5 +1,5 @@
 import type {Unit, Stack} from './index.h'
-import type {Effect, Scope} from './unit.h'
+import type {Effect} from './unit.h'
 import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'

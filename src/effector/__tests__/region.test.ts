@@ -13,7 +13,7 @@ muteErrors('forward')
 
 it('binds watchers to region lifetime', () => {
   const fn = jest.fn()
-  const trigger = createEvent()
+  const trigger = createEvent<number>()
 
   const domain = createDomain()
 
@@ -152,13 +152,13 @@ describe('protect external units from destroy', () => {
     test('reference behavior', () => {
       const fn = jest.fn()
 
-      function apply(fn) {
+      function apply(fn: () => void) {
         const unit = createNode() // <- node
         withRegion(unit, fn)
         return () => clearNode(unit)
       }
 
-      const update = createEvent()
+      const update = createEvent<number>()
       const reset = createEvent()
       const increment = createEvent()
       const decrement = createEvent()

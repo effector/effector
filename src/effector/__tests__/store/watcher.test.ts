@@ -5,7 +5,7 @@ muteErrors('watch second argument')
 
 it('support watchers for event', () => {
   const fn = jest.fn()
-  const event = createEvent()
+  const event = createEvent<number | void>()
   const watcher = event.watch(e => {
     fn(e)
   })
@@ -31,7 +31,7 @@ it('support watchers for event', () => {
 
 it('support watchers for storages', () => {
   const fn = jest.fn()
-  const event = createEvent()
+  const event = createEvent<number>()
   const store = createStore('none').on(event, (_, e) => e.toString())
   const watcher = store.watch(e => {
     fn(e)
@@ -57,8 +57,8 @@ it('support watchers for storages', () => {
 
 it('support event watchers for storages', () => {
   const fn = jest.fn()
-  const event = createEvent()
-  const update = createEvent()
+  const event = createEvent<number>()
+  const update = createEvent<(x: number) => number>()
   const store = createStore(0).on(update, (s, fn) => fn(s))
 
   const watcher = event.watch(e => fn(e))
@@ -103,11 +103,11 @@ it('support event watchers for storages', () => {
 })
 
 it('support watchers for mapped storages', () => {
-  const addMetaTag = (tag, unit: any) => {
+  const addMetaTag = (tag: string, unit: any) => {
     unit.graphite.scope.tag = tag
   }
   const fn = jest.fn()
-  const event = createEvent()
+  const event = createEvent<number>()
   const storeFirst = createStore('none').on(event, (_, e) => e.toString())
   const store = storeFirst.map(e => `/${e}`)
 
@@ -138,6 +138,7 @@ it('support watchers for mapped storages', () => {
 test('watch validation', () => {
   const store = createStore(null)
   expect(() => {
+    //@ts-expect-error
     store.watch(NaN)
   }).toThrowErrorMatchingInlineSnapshot(
     `".watch argument should be a function"`,

@@ -12,6 +12,7 @@ import {
   combine,
   Store,
   Scope,
+  StoreWritable,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 
@@ -287,8 +288,11 @@ describe('fork values support', () => {
      * goal of this test is to create a lot of stores to pass to values
      * and ensure that combined stores will work as expected
      * */
-    let sumStore = createStore([0, []] as [number, any[]], {sid: 'sum'})
-    const stores: Store<number>[] = []
+    let sumStore: Store<[number, any[]]> = createStore(
+      [0, []] as [number, any[]],
+      {sid: 'sum'},
+    )
+    const stores: StoreWritable<number>[] = []
     const storesToShow: Store<number>[] = []
     function fab(n: number) {
       const store = createStore(n, {sid: `${n}.1`})
@@ -327,7 +331,9 @@ describe('fork values support', () => {
       return results
     })
     const scope = fork({
-      values: stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
+      values: stores
+        .filter((_, i) => i % 3 === 0)
+        .map(store => [store, 0] as [StoreWritable<number>, number]),
     })
     const basicCase = serialize(scope)
     expect(scope.getState(finalStore)).toMatchInlineSnapshot(`

@@ -1,6 +1,6 @@
 export * as is from './validate'
 import {forEach} from './collection'
-import {assert, deprecate} from './throw'
+import {assert} from './throw'
 import {arrifyNodes} from './createNode'
 import type {NodeUnit} from './index.h'
 import type {DataCarrier} from './unit.h'
