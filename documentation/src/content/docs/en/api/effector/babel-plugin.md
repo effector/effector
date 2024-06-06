@@ -188,20 +188,6 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 has its own [sid](/en/api/effector/babel-plugin#sid) and will be handled by [serialize](/en/api/effector/serialize)
 independently, although without `factories` they will share the same `sid`.
 
-### Formulae (#configuration-reactSsr-formulae)
-
-```json
-[
-  "effector/babel-plugin",
-  {
-    "reactSsr": false
-  }
-]
-```
-
-- Type: `boolean`
-- Default: `false`
-
 ## `addNames` (#configuration-addNames)
 
 Adds name to units factories call. Useful for minification and obfuscation of production builds.
