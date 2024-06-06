@@ -25,7 +25,7 @@ import {
   useStoreMap,
   createGate,
   useUnit,
-} from 'effector-react/scope'
+} from 'effector-react'
 
 muteErrors([
   'useEvent',
@@ -1180,11 +1180,11 @@ test('useUnit should bind units to scope', async () => {
 })
 
 describe('hooks throw errors, if Provider is not found', () => {
-  test('useUnit from `effector-react/scope` throws error, if no Provider', () => {
+  test('useUnit from `effector-react` throws error, if no Provider', () => {
     const $a = createStore(42)
 
     const AppFail = () => {
-      const a = useUnit($a)
+      const a = useUnit($a, {forceScope: true})
 
       return <div>{a}</div>
     }
@@ -1194,11 +1194,11 @@ describe('hooks throw errors, if Provider is not found', () => {
     )
   })
 
-  test('useStore from `effector-react/scope` throws error, if no Provider', () => {
+  test('useStore from `effector-react` throws error, if no Provider', () => {
     const $a = createStore(42)
 
     const AppFail = () => {
-      const a = useStore($a)
+      const a = useStore($a, {forceScope: true})
 
       return <div>{a}</div>
     }
@@ -1208,11 +1208,11 @@ describe('hooks throw errors, if Provider is not found', () => {
     )
   })
 
-  test('useEvent from `effector-react/scope` throws error, if no Provider', () => {
+  test('useEvent from `effector-react` throws error, if no Provider', () => {
     const ev = createEvent()
 
     const AppFail = () => {
-      const a = useEvent(ev)
+      const a = useEvent(ev, {forceScope: true})
 
       return <div onClick={a}></div>
     }
@@ -1222,7 +1222,7 @@ describe('hooks throw errors, if Provider is not found', () => {
     )
   })
 
-  test('useStoreMap from `effector-react/scope` throws error, if no Provider', () => {
+  test('useStoreMap from `effector-react` throws error, if no Provider', () => {
     const $a = createStore(42)
 
     const AppFail = () => {
@@ -1231,6 +1231,7 @@ describe('hooks throw errors, if Provider is not found', () => {
         keys: [],
         fn: () => 42,
         defaultValue: 77,
+        forceScope: true,
       })
 
       return <div>{a}</div>
@@ -1241,13 +1242,17 @@ describe('hooks throw errors, if Provider is not found', () => {
     )
   })
 
-  test('useList from `effector-react/scope` throws error, if no Provider', () => {
+  test('useList from `effector-react` throws error, if no Provider', () => {
     const $a = createStore([42])
 
     const AppFail = () => {
-      const a = useList($a, {
-        fn: () => <div>42</div>,
-      })
+      const a = useList(
+        $a,
+        {
+          fn: () => <div>42</div>,
+        },
+        {forceScope: true},
+      )
 
       return <div>{a}</div>
     }

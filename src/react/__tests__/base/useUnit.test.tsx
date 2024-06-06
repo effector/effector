@@ -23,7 +23,7 @@ import {
   useEvent,
   useStore,
   Provider,
-} from 'effector-react/scope'
+} from 'effector-react'
 
 muteErrors(['useEvent', 'useStore'])
 
