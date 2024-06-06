@@ -27,7 +27,7 @@ export function getFiles(name: string) {
   ]
 }
 
-/** usage: extensionlessExport('./scope') */
+/** usage: extensionlessExport('./inspector') */
 export function extensionlessExport(path: string) {
   return {
     types: `${path}.d.ts`,
