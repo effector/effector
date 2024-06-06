@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 24.0.0
+
+- Delete deprecated option `reactSsr` in babel-plugin ([PR #1084](https://github.com/effector/effector/pull/1084))
+
 ## effector-react 24.0.0
 
 - Delete deprecated `effector-react/scope` in favor of isomorphic hooks ([PR #1084](https://github.com/effector/effector/pull/1084))
