@@ -188,15 +188,6 @@ Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory
 has its own [sid](/en/api/effector/babel-plugin#sid) and will be handled by [serialize](/en/api/effector/serialize)
 independently, although without `factories` they will share the same `sid`.
 
-## `reactSsr` (#configuration-reactSsr)
-
-Replaces imports from `effector-react` to `effector-react/scope`. Useful for building both server-side and client-side
-builds from the same codebase.
-
-:::warning{title="Deprecated"}
-Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends deleting this option from `babel-plugin` configuration because [effector-react](/en/api/effector-react) supports SSR by default.
-:::
-
 ### Formulae (#configuration-reactSsr-formulae)
 
 ```json

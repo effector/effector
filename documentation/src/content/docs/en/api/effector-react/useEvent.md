@@ -18,8 +18,7 @@ import { useEvent } from "effector-react";
 Prefer [`useUnit`](/api/effector-react/useUnit) hook instead.
 :::
 
-Bind event to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.<br/>
-Only `effector-react/scope` version works this way, `useEvent` of `effector-react` is a no-op and does not require `Provider` with scope.
+Bind event to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
 
 :::info{title="Note"}
 Useful only if you have server-side rendering or writing tests for React-components.
