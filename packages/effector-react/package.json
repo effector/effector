@@ -53,12 +53,7 @@
     "effector-react.cjs.d.ts",
     "effector-react.mjs.d.ts",
     "effector-react.umd.d.ts",
-    "compat.d.ts",
-    "scope.js",
-    "scope.js.map",
-    "scope.mjs",
-    "scope.mjs.map",
-    "scope.d.ts"
+    "compat.d.ts"
   ],
   "keywords": [
     "react",
@@ -91,7 +86,7 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/effector/effector",
-  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-react,effector-react%2Fscope",
+  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-react",
   "homepage": "https://effector.dev",
   "engines": {
     "node": ">=11.0.0"

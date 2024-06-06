@@ -65,18 +65,11 @@
     "compat.d.ts",
     "composition.cjs.js",
     "composition.cjs.js.map",
-    "ssr.cjs.js",
-    "ssr.cjs.js.map",
     "composition.mjs",
     "composition.mjs.map",
-    "ssr.mjs",
-    "ssr.mjs.map",
     "composition.d.ts",
     "composition.mjs.d.ts",
-    "composition.cjs.d.ts",
-    "ssr.d.ts",
-    "ssr.mjs.d.ts",
-    "ssr.cjs.d.ts"
+    "composition.cjs.d.ts"
   ],
   "keywords": [
     "vue",

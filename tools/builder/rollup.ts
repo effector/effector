@@ -260,15 +260,6 @@ export async function rollupEffectorVue() {
       inputExtension: 'ts',
       replaceVueReactivity: true,
     }),
-    createEsCjs(name, {
-      file: {
-        cjs: dir(`npm/${name}/ssr.cjs.js`),
-        es: dir(`npm/${name}/ssr.mjs`),
-      },
-      input: 'ssr',
-      inputExtension: 'ts',
-      replaceVueReactivity: true,
-    }),
     createUmd(name, {
       external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),
