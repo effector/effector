@@ -12,7 +12,7 @@ import {
   Scope,
   sample,
 } from 'effector'
-import {Provider, useUnit, useGate, createGate} from 'effector-solid/scope'
+import {Provider, useUnit, useGate, createGate} from 'effector-solid'
 import {createSignal} from 'solid-js'
 
 muteErrors(['fork(domain)', 'hydrate(domain'])
