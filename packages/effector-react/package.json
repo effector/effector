@@ -17,17 +17,6 @@
       "import": "./effector-react.mjs",
       "default": "./effector-react.mjs"
     },
-    "./scope.mjs": {
-      "types": "./scope.d.ts",
-      "import": "./scope.mjs",
-      "default": "./scope.mjs"
-    },
-    "./scope": {
-      "types": "./scope.d.ts",
-      "import": "./scope.mjs",
-      "require": "./scope.js",
-      "default": "./scope.mjs"
-    },
     "./compat": {
       "types": "./compat.d.ts",
       "require": "./compat.js",
