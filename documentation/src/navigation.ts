@@ -290,24 +290,6 @@ const effectorReact = [
       },
     ],
   },
-  {
-    text: { en: "HOC-like APIs", uz: "HOCsimon APIlar" },
-    collapsed: true,
-    items: [
-      {
-        text: { en: "connect" },
-        link: "/api/effector-react/connect",
-      },
-      {
-        text: { en: "createComponent" },
-        link: "/api/effector-react/createComponent",
-      },
-      {
-        text: { en: "createStoreConsumer" },
-        link: "/api/effector-react/createStoreConsumer",
-      },
-    ],
-  },
 ];
 
 const effectorSolid = [

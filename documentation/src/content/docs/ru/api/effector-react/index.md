@@ -16,9 +16,3 @@ description: Перечень основных методов API, по груп
 - [Gate](/ru/api/effector-react/Gate)
 - [createGate()](/ru/api/effector-react/createGate)
 - [useGate(GateComponent, props)](/ru/api/effector-react/useGate)
-
-## Higher Order Components API
-
-- [createComponent(store, render)](/ru/api/effector-react/createComponent)
-- [createStoreConsumer(store)](/ru/api/effector-react/createStoreConsumer)
-- [connect(store)(Component)](/ru/api/effector-react/connect)

@@ -1,10 +1,10 @@
 const importName = 'effector-react'
 
-module.exports = function(babel, options = {}) {
-  console.error('[babel-plugin-react]: this babel-plugin is deprecated, use effector/babel-plugin instead')
-  const componentCreators = new Set(
-    options.componentCreators || ['createComponent'],
+module.exports = function (babel, options = {}) {
+  console.error(
+    '[babel-plugin-react]: this babel-plugin is deprecated, use effector/babel-plugin instead',
   )
+
   const enableFileName =
     typeof options.filename === 'undefined' ? true : Boolean(options.filename)
 
@@ -13,25 +13,12 @@ module.exports = function(babel, options = {}) {
   return {
     name: '@effector/babel-plugin-react',
     visitor: {
-      ImportDeclaration(path) {
-        const source = path.node.source.value
-        const specifiers = path.node.specifiers
-        if (source === importName) {
-          for (const specifier of specifiers.filter(
-            s => s.imported && componentCreators.has(s.imported.name),
-          )) {
-            componentCreators.add(specifier.local.name)
-          }
-        }
-      },
-
       CallExpression(path, state) {
         if (!state.fileNameIdentifier) {
           const fileName = enableFileName ? state.filename || '' : ''
 
-          const fileNameIdentifier = path.scope.generateUidIdentifier(
-            '_effectorFileName',
-          )
+          const fileNameIdentifier =
+            path.scope.generateUidIdentifier('_effectorFileName')
           // babel bug https://github.com/babel/babel/issues/9496
           if (path.hub) {
             const scope = path.hub.getScope()
@@ -43,12 +30,6 @@ module.exports = function(babel, options = {}) {
             }
           }
           state.fileNameIdentifier = fileNameIdentifier
-        }
-        if (t.isIdentifier(path.node.callee)) {
-          if (componentCreators.has(path.node.callee.name)) {
-            const id = findCandidateNameForExpression(path)
-            if (id) setComponentNameAfter(path, state, id, babel.types)
-          }
         }
       },
     },
@@ -216,8 +197,6 @@ function setUseStoreNameAfter(path, state, nameNodeId, t) {
 function generateStableID(babelRoot, fileName, varName, line, column) {
   const {sep, normalize} = require('path')
   const rawPath = fileName.replace(babelRoot, '')
-  const normalizedPath = normalize(rawPath)
-    .split(sep)
-    .join('/')
+  const normalizedPath = normalize(rawPath).split(sep).join('/')
   return `${varName} ${normalizedPath} [${line}, ${column}]`
 }

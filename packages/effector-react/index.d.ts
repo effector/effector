@@ -81,49 +81,6 @@ export function createGate<Props>(
   defaultState: Props,
 ): Gate<Props>
 
-/**
- * @deprecated use useUnit hook instead
- */
-export function createComponent<Props, State>(
-  store: Store<State>,
-  view: (props: Props, state: State) => React.ReactNode,
-): StoreView<State, Props>
-/**
- * @deprecated use useUnit hook instead
- */
-export function createComponent<Props, Shape extends object>(
-  store: Shape,
-  view: (
-    props: Props,
-    state: {[K in keyof Shape]: Shape[K] extends Store<infer U> ? U : Shape[K]},
-  ) => React.ReactNode,
-): StoreView<
-  {[K in keyof Shape]: Shape[K] extends Store<infer U> ? U : Shape[K]},
-  Props
->
-
-/**
- * @deprecated use useUnit hook instead
- */
-export function connect<
-  State extends object,
-  Com extends React.ComponentType<any>,
->(store: Store<State>): (Component: Com) => React.ComponentType<State>
-/**
- * @deprecated use useUnit hook instead
- */
-export function connect<
-  State extends object,
-  Com extends React.ComponentType<any>,
->(Component: Com): (store: Store<State>) => React.ComponentType<State>
-
-/**
- * @deprecated use useUnit hook instead
- */
-export function createStoreConsumer<State>(
-  store: Store<State>,
-): StoreConsumer<State>
-
 type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
   ? 1
   : 2

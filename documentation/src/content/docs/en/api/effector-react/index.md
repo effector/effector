@@ -23,12 +23,6 @@ Effector bindings for ReactJS.
 - [createGate()](/en/api/effector-react/createGate)
 - [useGate(GateComponent, props)](/en/api/effector-react/useGate)
 
-# Higher Order Components API (#higher-order-components-api)
-
-- [createComponent(store, render)](/en/api/effector-react/createComponent)
-- [createStoreConsumer(store)](/en/api/effector-react/createStoreConsumer) renders props style
-- [connect(store)(Component)](/en/api/effector-react/connect) "connect" style
-
 # Import map (#import-map)
 
 Package `effector-react` provides couple different entry points for different purposes:

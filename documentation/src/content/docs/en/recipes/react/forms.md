@@ -158,7 +158,7 @@ This example demonstrates how to manage state by using an uncontrolled form, han
 import React from "react";
 import ReactDOM from "react-dom";
 import { createEffect, createStore } from "effector";
-import { useUnit, createComponent } from "effector-react";
+import { useUnit } from "effector-react";
 
 //defining simple Effect, which results a string in 3 seconds
 const sendFormFx = createEffect(
@@ -171,19 +171,20 @@ sendFormFx.doneData.watch((result) => {
 });
 
 const Loader = () => {
-  //approach #1: explicit store usage, with hook `useUnit`
-  const loading = useUnit(sendFormFx.pending); //typeof loading === "boolean"
+  const loading = useUnit(sendFormFx.pending); // typeof loading === "boolean"
 
   return loading ? <div>Loading...</div> : null;
 };
 
-const SubmitButton = createComponent(sendFormFx.pending, (props, loading) => (
-  //approach #2: implicit store usage
-  //actually `createComponent` is deprecated
-  <button disabled={loading} type="submit">
-    Submit
-  </button>
-));
+const SubmitButton = () => {
+  const loading = useUnit(sendFormFx.pending); // typeof loading === "boolean"
+
+  return (
+    <button disabled={loading} type="submit">
+      Submit
+    </button>
+  );
+};
 
 const onSubmit = sendFormFx.prepend((e) => new FormData(e.target)); //transforming upcoming data, from DOM Event to FormData
 

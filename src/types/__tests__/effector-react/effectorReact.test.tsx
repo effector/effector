@@ -1,46 +1,11 @@
 /* eslint-disable no-unused-vars */
 import * as React from 'react'
 import {createStore, createEvent, createEffect} from 'effector'
-import {createComponent, createGate, useGate, useUnit} from 'effector-react'
+import {createGate, useGate, useUnit} from 'effector-react'
 
 const consoleError = console.error
 
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('createComponent is deprecated')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
-
 const typecheck = '{global}'
-
-test('createComponent', () => {
-  const ImplicitObject = createComponent(
-    {
-      a: createStore<number>(0),
-      b: createStore<number>(1),
-    },
-    (props, state) => {
-      const createComponent_implicitObject_check1: number = state.a
-      const createComponent_implicitObject_check2: number = state.b
-      return null
-    },
-  )
-  const Store = createComponent(createStore(0), (props, state) => {
-    const createComponent_createStore_check1: number = state
-    return null
-  })
-
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
 
 test('createGate', () => {
   const Foo = createGate<number>('foo')
