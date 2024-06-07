@@ -26,23 +26,6 @@ const keysEqual = (a?: readonly any[], b?: readonly any[]) => {
   return isEqual
 }
 
-export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
-  useDeprecate(true, 'useStore', 'useUnit')
-  if (!is.store(store)) throwError('expect useStore argument to be a store')
-
-  const subscribe = React.useCallback(
-    (fn: () => void) => createWatch({unit: store, fn, scope}),
-    [store, scope],
-  )
-  const read = React.useCallback(
-    () => stateReader(store, scope),
-    [store, scope],
-  )
-  const currentValue = useSyncExternalStore(subscribe, read, read)
-
-  return currentValue
-}
-
 export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   shape: Shape | {'@@unitShape': () => Shape},
   scope?: Scope,

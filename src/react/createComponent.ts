@@ -1,6 +1,6 @@
 import React from 'react'
 import {Store, is, combine, createEvent} from 'effector'
-import {useStore} from './nossr'
+import {useUnit} from './nossr'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {StoreView} from './index.h'
 import {withDisplayName} from './withDisplayName'
@@ -30,7 +30,7 @@ export function createComponent<Props, State>(
 
   function RenderComponent(props: Props) {
     const propsRef = React.useRef(props)
-    const state = useStore(store)
+    const state = useUnit(store)
     useIsomorphicLayoutEffect(() => {
       mounted({props: propsRef.current, state: store.getState()})
       return () => {

@@ -12,7 +12,6 @@ Effector bindings for ReactJS.
 - [useUnit(units)](/en/api/effector-react/useUnit)
 - [useList(store, renderItem)](/en/api/effector-react/useList)
 - [useStoreMap({ store, keys, fn })](/en/api/effector-react/useStoreMap)
-- [useStore(store)](/en/api/effector-react/useStore)
 
 # Components (#components)
 

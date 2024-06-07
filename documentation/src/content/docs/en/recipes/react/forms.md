@@ -171,7 +171,7 @@ sendFormFx.doneData.watch((result) => {
 });
 
 const Loader = () => {
-  //approach #1: explicit store usage, with hook `useStore`
+  //approach #1: explicit store usage, with hook `useUnit`
   const loading = useUnit(sendFormFx.pending); //typeof loading === "boolean"
 
   return loading ? <div>Loading...</div> : null;

@@ -11,7 +11,7 @@ redirectFrom:
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore, createEvent, sample } from "effector";
-import { useStore, useList } from "effector-react";
+import { useUnit, useList } from "effector-react";
 
 function createTodoListApi(initial: string[] = []) {
   const insert = createEvent<string>();
@@ -54,7 +54,7 @@ const firstTodoList = createTodoListApi(["hello, world!"]);
 const secondTodoList = createTodoListApi(["hello, world!"]);
 
 function TodoList({ label, model }) {
-  const input = useStore(model.$input);
+  const input = useUnit(model.$input);
 
   const todos = useList(model.$todos, (value, index) => (
     <li>

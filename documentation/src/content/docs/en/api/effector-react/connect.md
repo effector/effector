@@ -15,7 +15,7 @@ since [effector-react 23.0.0](https://changelog.effector.dev/#effector-react-23-
 Consider using [hooks api](/en/api/effector-react/index#hooks) in modern projects.
 :::
 
-Wrapper for [useStore](/en/api/effector-react/useStore) to use during migration from redux and class-based projects. Will merge store value fields to component props.
+Wrapper for [useUnit](/en/api/effector-react/useUnit) to use during migration from redux and class-based projects. Will merge store value fields to component props.
 
 # Methods (#methods)
 

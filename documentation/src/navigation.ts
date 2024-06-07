@@ -240,10 +240,6 @@ const effectorReact = [
         link: "/api/effector-react/useStoreMap",
         quickMenu: true,
       },
-      {
-        text: { en: "useStore", ru: "useStore", uz: "useStore" },
-        link: "/api/effector-react/useStore",
-      },
     ],
   },
   {

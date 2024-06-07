@@ -5,7 +5,7 @@ import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {createEvent, createStore, combine} from 'effector'
 import {createStoreConsumer} from 'effector-react'
 
-muteErrors(['createStoreConsumer', 'createComponent', 'useStore'])
+muteErrors(['createStoreConsumer', 'createComponent'])
 
 test('createStoreComponent attempt', async () => {
   const store1 = createStore('foo')

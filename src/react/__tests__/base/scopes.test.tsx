@@ -18,7 +18,6 @@ import {
 
 import {
   Provider,
-  useStore,
   useList,
   useGate,
   useStoreMap,
@@ -26,13 +25,7 @@ import {
   useUnit,
 } from 'effector-react'
 
-muteErrors([
-  'useStore',
-  'fork(domain)',
-  'hydrate(domain',
-  'No scope found',
-  'AppFail',
-])
+muteErrors(['fork(domain)', 'hydrate(domain', 'No scope found', 'AppFail'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -118,9 +111,9 @@ it('works', async () => {
       params: 'carol',
     }),
   ])
-  const User = () => <h2>{useStore(user)}</h2>
+  const User = () => <h2>{useUnit(user)}</h2>
   const Friends = () => useList(friends, friend => <li>{friend}</li>)
-  const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+  const Total = () => <small>Total: {useUnit(friendsTotal)}</small>
 
   const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
@@ -225,9 +218,9 @@ test('attach support', async () => {
       params: 'carol',
     }),
   ])
-  const User = () => <h2>{useStore(user)}</h2>
+  const User = () => <h2>{useUnit(user)}</h2>
   const Friends = () => useList(friends, friend => <li>{friend}</li>)
-  const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+  const Total = () => <small>Total: {useUnit(friendsTotal)}</small>
 
   const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
@@ -283,8 +276,8 @@ test('computed values support', async () => {
     .on(fetchUser.done, (_, {result}) => result.friends)
   const friendsTotal = friends.map(list => list.length)
 
-  const Total = () => <small>Total:{useStore(friendsTotal)}</small>
-  const User = () => <b>User:{useStore(name)}</b>
+  const Total = () => <small>Total:{useUnit(friendsTotal)}</small>
+  const User = () => <b>User:{useUnit(name)}</b>
   const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
       <section>
@@ -344,7 +337,7 @@ test('useGate support', async () => {
     return (
       <div>
         <header>Chat:{chatId}</header>
-        <p>Messages total:{useStore(messagesAmount)}</p>
+        <p>Messages total:{useUnit(messagesAmount)}</p>
       </div>
     )
   }
@@ -521,7 +514,7 @@ describe('useStoreMap', () => {
     const $a = app.createStore(10).on(inc, x => x + 1)
     const $b = app.createStore(20).on(inc, x => x + 1)
     const View = () => {
-      const current = useStore($show)
+      const current = useUnit($show)
       const selectedStore = current === 'A' ? $a : $b
       const value = useStoreMap({
         store: selectedStore,
@@ -622,50 +615,6 @@ describe('useStoreMap', () => {
 })
 
 describe('behavior on scope changes', () => {
-  test('useStore should not stale', async () => {
-    const inc = createEvent()
-    const $store = createStore(0).on(inc, x => x + 1)
-    const Count = () => <p>{useStore($store)}</p>
-    const Inc = () => {
-      const boundInc = useUnit(inc)
-      return (
-        <button id="click" onClick={() => boundInc()}>
-          click
-        </button>
-      )
-    }
-    const App = ({scope}: {scope: Scope}) => (
-      <Provider value={scope}>
-        <div>
-          <Count />
-          <Inc />
-        </div>
-      </Provider>
-    )
-    const firstScope = fork()
-    const secondScope = fork({values: [[$store, 2]]})
-
-    await render(<App scope={firstScope} />)
-    await render(<App scope={secondScope} />)
-
-    await act(async () => {
-      container.firstChild.querySelector('#click').click()
-    })
-
-    expect(secondScope.getState($store)).toBe(3)
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <p>
-          3
-        </p>
-        <button
-          id="click"
-        >
-          click
-        </button>
-      </div>
-    `)
-  })
   test('useStoreMap should not stale', async () => {
     const inc = createEvent()
     const $store = createStore(0).on(inc, x => x + 1)
@@ -918,20 +867,6 @@ describe('hooks throw errors, if Provider is not found', () => {
 
     const AppFail = () => {
       const a = useUnit($a, {forceScope: true})
-
-      return <div>{a}</div>
-    }
-
-    expect(() => render(<AppFail />)).rejects.toThrow(
-      'No scope found, consider adding <Provider> to app root',
-    )
-  })
-
-  test('useStore from `effector-react` throws error, if no Provider', () => {
-    const $a = createStore(42)
-
-    const AppFail = () => {
-      const a = useStore($a, {forceScope: true})
 
       return <div>{a}</div>
     }

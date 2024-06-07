@@ -1,7 +1,7 @@
 import React from 'react'
 
 import type {Store} from 'effector'
-import {useStore} from './nossr'
+import {useUnit} from './nossr'
 import {withDisplayName} from './withDisplayName'
 import {deprecate} from './deprecate'
 
@@ -15,7 +15,7 @@ export const connect = <State>(Component: React.ComponentType<any>) => {
     }
     const wrappedComponentName = View.displayName || View.name || 'Unknown'
     return withDisplayName(`Connect(${wrappedComponentName})`, (props: any) =>
-      React.createElement(View, {...props, ...useStore(store)}),
+      React.createElement(View, {...props, ...useUnit(store)}),
     )
   }
 }

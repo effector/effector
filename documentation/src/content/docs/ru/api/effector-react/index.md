@@ -7,7 +7,6 @@ description: Перечень основных методов API, по груп
 
 ## Хуки
 
-- [useStore(store)](/ru/api/effector-react/useStore)
 - [useStoreMap({ store, keys, fn })](/ru/api/effector-react/useStoreMap)
 - [useList(store, renderItem)](/ru/api/effector-react/useList)
 - [useUnit(units)](/ru/api/effector-react/useUnit)

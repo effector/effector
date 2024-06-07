@@ -5,7 +5,7 @@ import {createStore, createEvent} from 'effector'
 import {connect} from 'effector-react'
 import {muteErrors} from 'effector/fixtures'
 
-muteErrors(['connect', 'useStore'])
+muteErrors(['connect'])
 
 test('connect api', async () => {
   const text = createStore('foo')

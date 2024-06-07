@@ -1,20 +1,7 @@
-import {Event, Store, Scope} from 'effector'
-import {
-  useStoreBase,
-  useStoreMapBase,
-  useListBase,
-  useUnitBase,
-  useGateBase,
-} from './apiBase'
+import {Store, Scope} from 'effector'
+import {useStoreMapBase, useListBase, useUnitBase, useGateBase} from './apiBase'
 import {getScope} from './scope'
 import type {Gate} from './index.h'
-
-export function useStore<State>(
-  store: Store<State>,
-  opts?: {forceScope?: boolean},
-): State {
-  return useStoreBase(store, getScope(opts?.forceScope))
-}
 
 export function useUnit(shape, opts?: {forceScope?: boolean}) {
   return useUnitBase(shape, getScope(opts?.forceScope))

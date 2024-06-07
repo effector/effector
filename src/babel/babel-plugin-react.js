@@ -49,10 +49,6 @@ module.exports = function(babel, options = {}) {
             const id = findCandidateNameForExpression(path)
             if (id) setComponentNameAfter(path, state, id, babel.types)
           }
-          if (path.node.callee.name === 'useStore') {
-            const id = findComponentName(path)
-            if (id) setUseStoreNameAfter(path, state, id, babel.types)
-          }
         }
       },
     },

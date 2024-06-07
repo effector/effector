@@ -5,7 +5,7 @@ import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {createStore, combine, createEvent, createApi} from 'effector'
 import {createComponent} from 'effector-react'
 
-muteErrors(['createComponent', 'useStore'])
+muteErrors(['createComponent'])
 
 describe('createComponent', () => {
   test('combine', async () => {
