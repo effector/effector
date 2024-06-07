@@ -1,6 +1,6 @@
 import React from 'react'
 import fetch from 'cross-fetch'
-import {sample, createDomain, forward, guard} from 'effector'
+import {sample, createDomain, sample, guard} from 'effector'
 import {scopeBind} from 'effector/fork'
 import {
   useStore,
@@ -35,14 +35,14 @@ const logFx = app.createEffect({
   },
 })
 
-forward({
-  from: startServer,
-  to: fetchUser,
+sample({
+  clock: startServer,
+  target: fetchUser,
 })
 
-forward({
-  from: selectUserEvent,
-  to: fetchUser,
+sample({
+  clock: selectUserEvent,
+  target: fetchUser,
 })
 
 const $user = app.createStore('guest')
@@ -138,9 +138,9 @@ installHistory.watch(history => {
   })
 })
 
-forward({
-  from: startClient,
-  to: installHistory,
+sample({
+  clock: startClient,
+  target: installHistory,
 })
 
 sample({

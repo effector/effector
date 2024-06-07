@@ -57,5 +57,4 @@ lang: ru
 
 ## Устаревшие методы
 
-- [forward({from, to})](/ru/api/effector/forward)
 - [guard({source, filter, target})](/ru/api/effector/guard)

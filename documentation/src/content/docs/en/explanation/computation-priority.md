@@ -27,10 +27,9 @@ Priority:
 [Source code](https://github.com/effector/effector/blob/master/src/effector/kernel.ts#L169)
 
 ```
-1. child -> forward
-2. pure -> map, on
-3. sampler -> sample, guard, combine
-4. effect -> watch, effect handler
+1. pure -> map, on
+2. sampler -> sample, guard, combine
+3. effect -> watch, effect handler
 ```
 
 > Whenever you allow side effects in pure computations, the library will work by the worst scenario. Thereby, increasing non-consistency of application and breaking pure computations. Don't ignore that.

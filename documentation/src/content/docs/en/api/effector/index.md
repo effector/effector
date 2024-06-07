@@ -65,5 +65,4 @@ Package `effector` provides couple different entry points for different purposes
 
 ## Deprecated Methods (#deprecated-methods)
 
-- [forward({from, to})](/en/api/effector/forward)
 - [guard({source, filter, target})](/en/api/effector/guard)

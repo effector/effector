@@ -70,7 +70,7 @@ loginSize.watch((size) => {
 **Правильно**, декларативно:
 
 ```js
-import { createStore, createEvent, forward } from "effector";
+import { createStore, createEvent } from "effector";
 
 const login = createStore("guest");
 
@@ -78,20 +78,20 @@ const loginSize = login.map((login) => login.length);
 
 const submitLoginSize = createEvent();
 
-forward({
-  from: loginSize,
-  to: submitLoginSize,
+sample({
+  clock: loginSize,
+  target: submitLoginSize,
 });
 ```
 
 [Запустить пример](https://share.effector.dev/it0gXQLI)
 
-[forward in docs](/ru/api/effector/forward)
+[sample in docs](/ru/api/effector/sample)
 
 **Неправильно**:
 
 ```js
-import { createStore, createEvent, forward } from "effector";
+import { createStore, createEvent } from "effector";
 
 const submitLoginSize = createEvent();
 

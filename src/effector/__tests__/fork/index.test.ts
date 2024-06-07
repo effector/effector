@@ -1,6 +1,5 @@
 import {
   createEvent,
-  forward,
   attach,
   fork,
   allSettled,
@@ -16,7 +15,7 @@ import {debounce} from 'patronum19'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 
 // guard is used in patronum 19, need to remove it entirely
-muteErrors(['forward', 'guard'])
+muteErrors(['guard'])
 
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
@@ -184,27 +183,6 @@ describe('imperative call support', () => {
         expect(scope.getState(count)).toBe(2)
         expect(count.getState()).toBe(0)
       })
-    })
-    test('with forward', async () => {
-      const inc = createEffect(async () => {})
-      const count = createStore(0).on(inc.done, x => x + 1)
-
-      const start = createEffect(async () => {
-        await inc()
-      })
-
-      const next = createEffect(async () => {
-        await inc()
-      })
-
-      forward({from: start.doneData, to: next})
-
-      const scope = fork()
-
-      await allSettled(start, {scope})
-
-      expect(scope.getState(count)).toBe(2)
-      expect(count.getState()).toBe(0)
     })
     test('attach imperative call', async () => {
       const add = createEffect((_: number) => _)
@@ -627,7 +605,7 @@ test('fork should pass through attach', () => {
     mapParams: (param, timeout) => [param, timeout],
     effect: createEffect(() => 0),
   })
-  forward({from: source, to: fx})
+  sample({clock: source, target: fx})
   expect(() => {
     fork()
   }).not.toThrow()

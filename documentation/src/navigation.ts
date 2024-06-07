@@ -540,10 +540,6 @@ const effector = [
         quickMenu: true,
       },
       {
-        text: { en: "forward" },
-        link: "/api/effector/forward",
-      },
-      {
         text: { en: "guard" },
         link: "/api/effector/guard",
       },
