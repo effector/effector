@@ -17,17 +17,6 @@
       "import": "./effector-solid.mjs",
       "default": "./effector-solid.mjs"
     },
-    "./scope.mjs": {
-      "types": "./scope.d.ts",
-      "import": "./scope.mjs",
-      "default": "./scope.mjs"
-    },
-    "./scope": {
-      "types": "./scope.d.ts",
-      "import": "./scope.mjs",
-      "require": "./scope.js",
-      "default": "./scope.mjs"
-    },
     "./effector-solid.umd": {
       "types": "./effector-solid.umd.d.ts",
       "require": "./effector-solid.umd.js",
@@ -56,12 +45,7 @@
     "effector-solid.cjs.d.ts",
     "effector-solid.mjs.d.ts",
     "effector-solid.umd.d.ts",
-    "compat.d.ts",
-    "scope.js",
-    "scope.js.map",
-    "scope.mjs",
-    "scope.mjs.map",
-    "scope.d.ts"
+    "compat.d.ts"
   ],
   "keywords": [
     "solid",
@@ -94,7 +78,7 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/effector/effector",
-  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-solid,effector-solid%2Fscope",
+  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-solid",
   "homepage": "https://effector.dev",
   "engines": {
     "node": ">=11.0.0"

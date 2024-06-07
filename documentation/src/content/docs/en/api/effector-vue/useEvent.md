@@ -6,14 +6,14 @@ redirectFrom:
 ---
 
 ```ts
-import { useEvent } from "effector-vue/ssr";
+import { useEvent } from "effector-vue/composition";
 ```
 
 :::warning{title="Deprecated"}
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) `useEvent` is deprecated. Use [`useUnit`](./useUnit#useUnit) instead.
 :::
 
-Bind event to current fork instance to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing
+Bind event to current fork instance to use in dom event handlers.
 
 # Methods (#methods)
 
@@ -33,7 +33,7 @@ Bind event to current fork instance to use in dom event handlers. Used **only** 
 
 ```js
 import { createStore, createEvent } from "effector";
-import { useEvent } from "effector-vue/ssr";
+import { useEvent } from "effector-vue/composition";
 
 const incremented = createEvent();
 const $count = createStore(0);

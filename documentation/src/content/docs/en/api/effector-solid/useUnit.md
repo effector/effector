@@ -11,7 +11,6 @@ import { useUnit } from "effector-solid";
 ```
 
 Binds effector stores to the Solid reactivity system or, in the case of events/effects – binds to current [_scope_](/en/api/effector/Scope) to use in dom event handlers.
-Only `effector-solid/scope` version works this way, `useUnit` of `effector-solid` is no-op for events and does not require `Provider` with scope.
 
 # Methods (#methods)
 
@@ -130,15 +129,14 @@ useUnit([Store<A>, Event<B>, ... ]): [Accessor<A>, (payload: B) => B, ... ]
 
 (`Object` or `Array`):
 
-- If `EventCallable` or `Effect`: functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope _Note: events or effects will be bound **only** if `useUnit` is imported from `effector-solid/scope`_.
-- If `Store`: accessor signals which will subscribe to the store state.
+- If `EventCallable` or `Effect`: functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope.
 
 ### Examples (#methods-useUnit-shape-examples)
 
 ```jsx
 import { render } from "solid-js/web";
 import { createStore, createEvent, fork } from "effector";
-import { useUnit, Provider } from "effector-solid/scope";
+import { useUnit, Provider } from "effector-solid";
 
 const incremented = createEvent();
 const decremented = createEvent();

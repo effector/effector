@@ -19,7 +19,6 @@ React hook, which takes any unit or shape of units.
 In the case of [stores](/en/api/effector/Store), it subscribes the component to the provided [store](/en/api/effector/Store) and returns its current value, so when the store updates, the component will update automatically.
 
 In the case of [events](/en/api/effector/Event)/[effects](/en/api/effector/Effect) – it binds to the current [_scope_](/en/api/effector/Scope) to use in DOM event handlers.
-Only the `effector-react/scope` version works this way; the `useUnit` of `effector-react` is no-op for events and does not require a `Provider` with scope.
 
 # Methods (#methods)
 

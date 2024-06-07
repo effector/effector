@@ -286,10 +286,6 @@ const effectorReact = [
         text: { en: "effector-react/compat" },
         link: "/api/effector-react/module/сompat",
       },
-      {
-        text: { en: "effector-react/scope" },
-        link: "/api/effector-react/module/scope",
-      },
     ],
   },
   {
@@ -355,15 +351,6 @@ const effectorSolid = [
         text: { en: "useGate" },
         link: "/api/effector-solid/useGate",
         quickMenu: true,
-      },
-    ],
-  },
-  {
-    text: { en: "Import map" },
-    items: [
-      {
-        text: { en: "effector-solid/scope" },
-        link: "/api/effector-solid/module/scope",
       },
     ],
   },
@@ -451,10 +438,6 @@ const effectorVue = [
         text: { en: "useEvent" },
         link: "/api/effector-vue/useEvent",
       },
-      {
-        text: { en: "VueSSRPlugin" },
-        link: "/api/effector-vue/VueSSRPlugin",
-      },
     ],
   },
   {
@@ -463,10 +446,6 @@ const effectorVue = [
       {
         text: { en: "effector-vue/composition" },
         link: "/api/effector-vue/module/composition",
-      },
-      {
-        text: { en: "effector-vue/ssr" },
-        link: "/api/effector-vue/module/ssr",
       },
     ],
   },
@@ -809,7 +788,7 @@ export const FOOTER_LINKS = [
       { text: { en: "Reddit" }, link: LINKS.reddit },
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
-      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant"  },
+      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
       { text: { en: "Made by Astro" }, link: "https://astro.build" },
     ],
   },

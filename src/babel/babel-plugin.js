@@ -5,7 +5,7 @@ const defaultFactories = [
   '@effector/reflect/scope',
   'atomic-router',
   '@withease/factories',
-  'patronum' // there is also custom handling for patronum/{method} imports
+  'patronum', // there is also custom handling for patronum/{method} imports
 ]
 
 module.exports = function (babel, options = {}) {
@@ -46,13 +46,7 @@ module.exports = function (babel, options = {}) {
     factories,
     importName,
     importReactNames,
-    reactSsr,
   } = normalizeOptions(options)
-  if (reactSsr) {
-    console.error(
-      '[effector/babel-plugin]: reactSsr option is deprecated, use imports from "effector-react" without aliases or /scope',
-    )
-  }
   const factoriesUsed = factories.length > 0
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
@@ -301,11 +295,6 @@ module.exports = function (babel, options = {}) {
           }
         }
       }
-      if (reactSsr) {
-        if (source === 'effector-react' || source === 'effector-react/compat') {
-          path.node.source.value = 'effector-react/scope'
-        }
-      }
       if (factoriesUsed) {
         const rootPath = state.file.opts.root || ''
         if (!this.effector_factoryPaths) {
@@ -332,10 +321,10 @@ module.exports = function (babel, options = {}) {
         }
         normalizedSource = stripExtension(normalizedSource)
         if (
-          this.effector_factoryPaths.includes(normalizedSource)
+          this.effector_factoryPaths.includes(normalizedSource) ||
           // custom handling for patronum/{method} imports
-          || normalizedSource.startsWith('patronum/')
-          ) {
+          normalizedSource.startsWith('patronum/')
+        ) {
           this.effector_needFactoryImport = true
           createFactoryTemplate()
 
@@ -540,7 +529,6 @@ const normalizeOptions = options => {
   return readConfigFlags({
     options,
     properties: {
-      reactSsr: false,
       filename: true,
       stores: true,
       events: true,

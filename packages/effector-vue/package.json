@@ -17,12 +17,6 @@
       "require": "./composition.cjs.js",
       "default": "./composition.mjs"
     },
-    "./ssr": {
-      "types": "./ssr.d.ts",
-      "import": "./ssr.mjs",
-      "require": "./ssr.cjs.js",
-      "default": "./ssr.mjs"
-    },
     "./effector-vue.mjs": {
       "types": "./effector-vue.mjs.d.ts",
       "import": "./effector-vue.mjs",
@@ -32,11 +26,6 @@
       "types": "./composition.mjs.d.ts",
       "import": "./composition.mjs",
       "default": "./composition.mjs"
-    },
-    "./ssr.mjs": {
-      "types": "./ssr.mjs.d.ts",
-      "import": "./ssr.mjs",
-      "default": "./ssr.mjs"
     },
     "./compat": {
       "types": "./compat.d.ts",
@@ -76,18 +65,11 @@
     "compat.d.ts",
     "composition.cjs.js",
     "composition.cjs.js.map",
-    "ssr.cjs.js",
-    "ssr.cjs.js.map",
     "composition.mjs",
     "composition.mjs.map",
-    "ssr.mjs",
-    "ssr.mjs.map",
     "composition.d.ts",
     "composition.mjs.d.ts",
-    "composition.cjs.d.ts",
-    "ssr.d.ts",
-    "ssr.mjs.d.ts",
-    "ssr.cjs.d.ts"
+    "composition.cjs.d.ts"
   ],
   "keywords": [
     "vue",
