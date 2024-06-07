@@ -1,6 +1,6 @@
 ---
 title: forward
-description: Deorecated method to create connection between units in a declarative way. Send updates from one set of units to another
+description: Deprecated method to create connection between units in a declarative way. Send updates from one set of units to another
 redirectFrom:
   - /api/effector/forward
   - /docs/api/effector/forward

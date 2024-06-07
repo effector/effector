@@ -11,13 +11,12 @@ import {
   createNode,
   split,
   attach,
-  guard,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
 import {withFactory} from '../region'
 
-muteErrors(['guard', 'branch computation stopped'])
+muteErrors(['branch computation stopped'])
 
 function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
@@ -57,11 +56,6 @@ describe('inspect API', () => {
       a: () => true,
     })
 
-    guard({
-      clock: attachedFnFx.doneData,
-      filter: () => true,
-      target: end,
-    })
     sample({
       clock: attachedFnFx.done,
       target: end,
@@ -166,8 +160,6 @@ describe('inspect API', () => {
         "update of 'undefined' [map] to value of 'false' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'pending' [store] to value of 'false' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of 'false' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [guard] to value of 'undefined' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'end' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [sample] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'end' [event] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",

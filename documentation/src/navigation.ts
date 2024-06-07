@@ -539,10 +539,6 @@ const effector = [
         link: "/api/effector/restore",
         quickMenu: true,
       },
-      {
-        text: { en: "guard" },
-        link: "/api/effector/guard",
-      },
     ],
   },
   {

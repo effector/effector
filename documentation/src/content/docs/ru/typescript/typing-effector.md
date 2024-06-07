@@ -118,23 +118,6 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage имеет тип Event<WarnMessage>
 ```
 
-## `guard`
-
-[TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) можно использовать для вывода типа результата с помощью функции `filter`
-
-```typescript
-type UserMessage = { kind: "user"; text: string };
-type WarnMessage = { kind: "warn"; warn: string };
-
-const message = createEvent<UserMessage | WarnMessage>();
-
-const userMessage = guard(message, {
-  filter: (msg): msg is UserMessage => msg.kind === "user",
-});
-
-// userMessage имеет тип Event<UserMessage>
-```
-
 ## `createApi`
 
 Чтобы позволить TypeScript выводить типы создаваемых событий, можно добавить тип ко второму аргументу обработчиков

@@ -6,7 +6,6 @@ import {
   createEvent,
   createStore,
   createApi,
-  guard,
   merge,
   restore,
   sample,
@@ -15,7 +14,7 @@ import {
 
 import {muteErrors} from 'effector/fixtures'
 
-muteErrors(['guard', 'skipVoid'])
+muteErrors(['skipVoid'])
 
 test('attach', () => {
   expect(() => {
@@ -52,12 +51,6 @@ test('createApi', () => {
   expect(() => {
     const $store = createStore(null)
     const g = createApi($store, {})
-  }).not.toThrow()
-})
-test('guard', () => {
-  expect(() => {
-    const event = createEvent()
-    const i = guard(event, {filter: Boolean})
   }).not.toThrow()
 })
 test('merge', () => {

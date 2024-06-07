@@ -6,7 +6,6 @@ import {
   createEvent,
   createStore,
   createApi,
-  guard,
   merge,
   restore,
   sample,
@@ -20,7 +19,6 @@ const d = createEffect()
 const e = createEvent()
 const f = createStore(null)
 const g = createApi(f, {})
-const i = guard(e, {filter: Boolean})
 const j = merge([e])
 const k = restore(d, null)
 const m = sample({clock: e, source: f})

@@ -21,7 +21,6 @@ module.exports = function (babel, options = {}) {
     restores,
     combines,
     samples,
-    guards,
     attaches,
     splits,
     apis,
@@ -34,7 +33,6 @@ module.exports = function (babel, options = {}) {
     restoreCreators,
     combineCreators,
     sampleCreators,
-    guardCreators,
     attachCreators,
     splitCreators,
     apiCreators,
@@ -60,7 +58,6 @@ module.exports = function (babel, options = {}) {
     restoreCreators,
     combineCreators,
     sampleCreators,
-    guardCreators,
     attachCreators,
     splitCreators,
     apiCreators,
@@ -106,12 +103,6 @@ module.exports = function (babel, options = {}) {
     {
       flag: samples,
       set: sampleCreators,
-      fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
-    },
-    {
-      flag: guards,
-      set: guardCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
     },
@@ -247,8 +238,6 @@ module.exports = function (babel, options = {}) {
             combineCreators.add(localName)
           } else if (sampleCreators.has(importedName)) {
             sampleCreators.add(localName)
-          } else if (guardCreators.has(importedName)) {
-            guardCreators.add(localName)
           } else if (attachCreators.has(importedName)) {
             attachCreators.add(localName)
           } else if (splitCreators.has(importedName)) {
@@ -473,7 +462,6 @@ const normalizeOptions = options => {
         restore: [],
         combine: [],
         sample: [],
-        guard: [],
         attach: [],
         split: [],
         createApi: [],
@@ -497,7 +485,6 @@ const normalizeOptions = options => {
         restore: ['restore'],
         combine: ['combine'],
         sample: ['sample'],
-        guard: ['guard'],
         attach: ['attach'],
         split: ['split'],
         createApi: ['createApi'],
@@ -524,7 +511,6 @@ const normalizeOptions = options => {
       restores: true,
       combines: true,
       samples: true,
-      guards: true,
       attaches: true,
       splits: true,
       apis: true,
@@ -568,7 +554,6 @@ const normalizeOptions = options => {
       restoreCreators: new Set(options.restoreCreators || defaults.restore),
       combineCreators: new Set(options.combineCreators || defaults.combine),
       sampleCreators: new Set(options.sampleCreators || defaults.sample),
-      guardCreators: new Set(options.guardCreators || defaults.guard),
       attachCreators: new Set(options.attachCreators || defaults.attach),
       splitCreators: new Set(options.splitCreators || defaults.split),
       apiCreators: new Set(options.apiCreators || defaults.createApi),

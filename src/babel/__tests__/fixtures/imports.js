@@ -9,7 +9,6 @@ import {
   createNode as createNodeEffector,
   createEvent as createEventEffector,
   fromObservable as fromObservableEffector,
-  guard as guardEffector,
   launch as launchEffector,
   merge as mergeEffector,
   restore as restoreEffector,
@@ -37,7 +36,6 @@ import {createStore} from 'redux'
   const b = clearNodeEffector(node)
   const c = combineEffector({store})
   const d = createApiEffector(store, {})
-  const l = guardEffector({source: event, filter: Boolean})
   const m = launchEffector(event, null)
   const n = mergeEffector([event])
   const o = restoreEffector(event, null)
@@ -63,7 +61,6 @@ function nameClashCheck() {
   const b = clearNode(node)
   const c = combine({store})
   const d = createApi(store, {})
-  const l = guard({source: event, filter: Boolean})
   const m = launch(event, null)
   const n = merge([event])
   const o = restore(event, null)
@@ -88,7 +85,6 @@ import {
   createStore as createNode,
   createStore as createEvent,
   createStore as fromObservable,
-  createStore as guard,
   createStore as launch,
   createStore as merge,
   createStore as restore,

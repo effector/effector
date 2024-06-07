@@ -457,69 +457,6 @@ describe('sample(Store<T>):Store<T>', () => {
     })
   })
 })
-describe('sample + guard (should pass)', () => {
-  test("directly assign `guard` invocation to `sample`'s `clock` argument without losing inference in `sample`'s `fn` (should pass)", () => {
-    const source = createStore(0)
-    const clock = createEvent<number>()
-
-    sample({
-      source,
-      clock: guard(clock, {
-        filter: clock => clock > 0,
-      }),
-      fn: (source, clock) => source + clock,
-    })
-
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test("directly assign `sample` invocation to `guard`'s `source` argument without losing inference in `guard`'s `filter` (should pass)", () => {
-    const source = createStore(0)
-    const clock = createEvent<number>()
-
-    guard({
-      source: sample({
-        source,
-        clock,
-        fn: (source, clock) => source + clock,
-      }),
-      filter: n => n > 0,
-    })
-
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('edge case (should pass)', () => {
-    function debounce<T>(event: Event<T>): Event<T> {
-      return event
-    }
-    const $store = createStore(0)
-    const $flag = createStore(false)
-    const trigger = createEvent<number>()
-    const target = createEffect<{field: number; data: number}, void>()
-
-    guard({
-      source: sample({
-        clock: debounce(trigger),
-        source: [$flag, $store],
-        fn: ([isAble, field], data) => (isAble ? {field, data} : null),
-      }),
-      filter: (e): e is {field: number; data: number} => !!e,
-      target,
-    })
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-})
 describe('without clock', () => {
   test('with fn (should pass)', () => {
     const source = createStore([{foo: 'ok', bar: 0}])
@@ -533,7 +470,9 @@ describe('without clock', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Parameter 'clock' implicitly has an 'any' type.
+      Parameter 'source' implicitly has an 'any' type.
+      Parameter 'clock' implicitly has an 'any' type.
       "
     `)
   })
@@ -692,7 +631,7 @@ describe('clock without source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
+      no errors
       "
     `)
   })
@@ -710,7 +649,7 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
       "
     `)
   })
@@ -726,7 +665,7 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
       "
     `)
   })
@@ -745,7 +684,7 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
       "
     `)
   })
@@ -762,7 +701,7 @@ describe('sample + .map', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
       "
     `)
   })
@@ -798,7 +737,7 @@ test('from unknown to known type (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
+    no errors
     "
   `)
 })
@@ -832,9 +771,8 @@ describe('derived unit in target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Event<boolean>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Store<boolean>; }'.
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
       "
     `)
   })

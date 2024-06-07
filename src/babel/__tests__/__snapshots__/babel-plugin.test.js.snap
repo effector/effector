@@ -2271,166 +2271,6 @@ const result = _withFactory({
 "
 `;
 
-exports[`babel-plugin should guard 1`] = `
-"var _effectorFileName = '/src/babel/__tests__/fixtures/guard.js'
-import {createStore, createEvent, guard} from 'effector'
-const foo = createStore(true, {
-  loc: {
-    file: _effectorFileName,
-    line: 3,
-    column: 12,
-  },
-  name: 'foo',
-  sid: 'lecs4',
-})
-const bar = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 12,
-  },
-  name: 'bar',
-  sid: '-45cu8q',
-})
-const baz1 = guard({
-  and: [
-    bar,
-    {
-      filter: foo,
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 6,
-      column: 13,
-    },
-    name: 'baz1',
-    sid: 'ajzcsg',
-  },
-})
-const baz2 = guard({
-  and: [
-    {
-      source: bar,
-      filter: foo,
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 7,
-      column: 13,
-    },
-    name: 'baz2',
-    sid: 'r2agou',
-  },
-})
-guard({
-  and: [
-    bar,
-    {
-      filter: foo,
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 12,
-      column: 0,
-    },
-    sid: '-ajy521',
-  },
-})
-guard({
-  and: [
-    {
-      source: bar,
-      filter: foo,
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 13,
-      column: 0,
-    },
-    sid: '-ajecgo',
-  },
-})
-const spread = [
-  bar,
-  {
-    filter: foo,
-  },
-]
-const baz4 = guard({
-  and: [...spread],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 19,
-      column: 13,
-    },
-    name: 'baz4',
-    sid: '-ocyuy5',
-  },
-})
-const config = {
-  source: bar,
-  filter: foo,
-}
-const baz5 = guard({
-  and: [config],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 26,
-      column: 13,
-    },
-    name: 'baz5',
-    sid: '-b8br2g',
-  },
-})
-
-const f = () =>
-  guard({
-    and: [
-      {
-        source: bar,
-        filter: foo,
-      },
-    ],
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 29,
-        column: 2,
-      },
-      name: 'f',
-      sid: '-83rmcb',
-    },
-  })
-
-{
-  const incorrect = guard(bar, {
-    filter: foo,
-  })
-
-  function guard() {}
-}
-{
-  const guard = () => {}
-
-  if (true) {
-    const incorrect = guard(bar, {
-      filter: foo,
-    })
-  }
-}
-"
-`;
-
 exports[`babel-plugin should import from another packages 1`] = `
 "var _effectorFileName =
   '/src/babel/__tests__/fixtures/import-from-another-packages.js'
@@ -2454,7 +2294,6 @@ import {
   createNode as createNodeEffector,
   createEvent as createEventEffector,
   fromObservable as fromObservableEffector,
-  guard as guardEffector,
   launch as launchEffector,
   merge as mergeEffector,
   restore as restoreEffector,
@@ -2472,47 +2311,47 @@ import {createStore} from 'redux'
   const domain = createDomainEffector({
     loc: {
       file: _effectorFileName,
-      line: 28,
+      line: 27,
       column: 17,
     },
     name: 'domain',
-    sid: '1eldvp',
+    sid: 'xjrhi',
   })
   const event = createEventEffector({
+    loc: {
+      file: _effectorFileName,
+      line: 28,
+      column: 16,
+    },
+    name: 'event',
+    sid: '-x1ei4k',
+  })
+  const store = createStoreEffector(0, {
     loc: {
       file: _effectorFileName,
       line: 29,
       column: 16,
     },
-    name: 'event',
-    sid: '-wkcvqd',
-  })
-  const store = createStoreEffector(0, {
-    loc: {
-      file: _effectorFileName,
-      line: 30,
-      column: 16,
-    },
     name: 'store',
-    sid: '1ewl1o',
+    sid: '-9033mm',
   })
   const effect = createEffectEffector({
     loc: {
       file: _effectorFileName,
-      line: 31,
+      line: 30,
       column: 17,
     },
     name: 'effect',
-    sid: '-iz2h3a',
+    sid: '-jg43hh',
   })
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 32,
+      line: 31,
       column: 22,
     },
     name: 'domainEvent',
-    sid: 'u860pw',
+    sid: 'tr4ebp',
   })
   const scope = forkEffector(domain)
   const node = createNodeEffector()
@@ -2523,11 +2362,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 36,
+        line: 35,
         column: 12,
       },
       name: 'a',
-      sid: '-32qm5y',
+      sid: '-3js8k5',
     },
   })
   const b = clearNodeEffector(node)
@@ -2540,11 +2379,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 38,
+        line: 37,
         column: 12,
       },
       name: 'c',
-      sid: 'zcp1je',
+      sid: 'yvnf57',
     },
   })
   const d = createApiEffector({
@@ -2552,47 +2391,30 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 39,
+        line: 38,
         column: 12,
       },
-      sid: 'ra3kzq',
-    },
-  })
-  const l = guardEffector({
-    and: [
-      {
-        source: event,
-        filter: Boolean,
-      },
-    ],
-    or: {
-      loc: {
-        file: _effectorFileName,
-        line: 40,
-        column: 12,
-      },
-      name: 'l',
-      sid: '1tg1ss',
+      sid: 'qt1ylj',
     },
   })
   const m = launchEffector(event, null)
   const n = mergeEffector([event], {
     loc: {
       file: _effectorFileName,
-      line: 42,
+      line: 40,
       column: 12,
     },
     name: 'n',
-    sid: '-us8ch0',
+    sid: '-vqbl9e',
   })
   const o = restoreEffector(event, null, {
     loc: {
       file: _effectorFileName,
-      line: 43,
+      line: 41,
       column: 12,
     },
     name: 'o',
-    sid: '-bkiimc',
+    sid: '-cilreq',
   })
   const p = sampleEffector({
     and: [
@@ -2604,11 +2426,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 44,
+        line: 42,
         column: 12,
       },
       name: 'p',
-      sid: '7n7b8c',
+      sid: '6p42fy',
     },
   })
   const q = splitEffector({
@@ -2616,10 +2438,10 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 45,
+        line: 43,
         column: 12,
       },
-      sid: '-uysoc5',
+      sid: '-vwvx4j',
     },
   })
   const r = withRegionEffector(node, () => {})
@@ -2641,11 +2463,11 @@ function nameClashCheck() {
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 58,
+      line: 56,
       column: 22,
     },
     name: 'domainEvent',
-    sid: '-8lvqg0',
+    sid: '-9jyz8e',
   })
   const scope = fork(domain)
   const node = createNode()
@@ -2657,10 +2479,6 @@ function nameClashCheck() {
     store,
   })
   const d = createApi(store, {})
-  const l = guard({
-    source: event,
-    filter: Boolean,
-  })
   const m = launch(event, null)
   const n = merge([event])
   const o = restore(event, null)
@@ -2691,7 +2509,6 @@ import {
   createStore as createNode,
   createStore as createEvent,
   createStore as fromObservable,
-  createStore as guard,
   createStore as launch,
   createStore as merge,
   createStore as restore,
@@ -2798,41 +2615,24 @@ const d = createApi({
     sid: '6v1ads',
   },
 })
-const f = guard({
-  and: [
-    {
-      source: event,
-      filter: Boolean,
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 13,
-      column: 10,
-    },
-    name: 'f',
-    sid: '-gykmgb',
-  },
-})
 const g = launch(event, null)
 const h = merge([event], {
+  loc: {
+    file: _effectorFileName,
+    line: 14,
+    column: 10,
+  },
+  name: 'h',
+  sid: '-77p9ca',
+})
+const i = restore(event, null, {
   loc: {
     file: _effectorFileName,
     line: 15,
     column: 10,
   },
-  name: 'h',
-  sid: '-6qnmy3',
-})
-const i = restore(event, null, {
-  loc: {
-    file: _effectorFileName,
-    line: 16,
-    column: 10,
-  },
   name: 'i',
-  sid: '-1mp56z',
+  sid: '-23qrl6',
 })
 const j = sample({
   and: [
@@ -2844,11 +2644,11 @@ const j = sample({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 16,
       column: 10,
     },
     name: 'j',
-    sid: '3h9ck5',
+    sid: '307q5y',
   },
 })
 const k = split({
@@ -2856,10 +2656,10 @@ const k = split({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 18,
+      line: 17,
       column: 10,
     },
-    sid: '9pb0qy',
+    sid: '989ecr',
   },
 })
 const l = withRegion(node, () => {})
@@ -2981,7 +2781,6 @@ function outerScope() {
   const clearNode = foo
   const combine = foo
   const createApi = foo
-  const guard = foo
   const launch = foo
   const merge = foo
   const restore = foo
@@ -3001,11 +2800,11 @@ function outerScope() {
     const domainEvent = domain.createEvent({
       loc: {
         file: _effectorFileName,
-        line: 28,
+        line: 27,
         column: 24,
       },
       name: 'domainEvent',
-      sid: 'p5btfd',
+      sid: 'ooa716',
     })
     const scope = fork(domain)
     const node = createNode()
@@ -3017,10 +2816,6 @@ function outerScope() {
       store,
     })
     const d = createApi(store, {})
-    const f = guard({
-      source: event,
-      filter: Boolean,
-    })
     const g = launch(event, null)
     const h = merge([event])
     const i = restore(event, null)
@@ -3766,7 +3561,6 @@ import {
   createEvent,
   createStore,
   createApi,
-  guard,
   merge,
   restore,
   sample,
@@ -3780,21 +3574,21 @@ const korben = attach({
     or: {
       loc: {
         file: _effectorFileName,
-        line: 16,
+        line: 15,
         column: 15,
       },
       name: 'korben',
-      sid: '-5uez7n',
+      sid: '-6bgllu',
     },
   },
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 16,
+      line: 15,
       column: 15,
     },
     name: 'korben',
-    sid: '-5uez7n',
+    sid: '-6bgllu',
   },
 })
 const dallas = combine({
@@ -3804,101 +3598,101 @@ const dallas = combine({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 17,
+          line: 16,
           column: 15,
         },
         name: 'dallas',
-        sid: '-3duyeq',
+        sid: '-3uwksx',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 17,
+      line: 16,
       column: 15,
     },
     name: 'dallas',
-    sid: '-3duyeq',
+    sid: '-3uwksx',
   },
 })
 const c = createDomain(
   {
     loc: {
       file: _effectorFileName,
-      line: 18,
+      line: 17,
       column: 10,
     },
     name: 'c',
-    sid: 'c6mme',
+    sid: '-4uzrt',
   },
   {
     loc: {
       file: _effectorFileName2,
-      line: 18,
+      line: 17,
       column: 10,
     },
     name: 'c',
-    sid: 'c6mme',
+    sid: '-4uzrt',
   },
 )
 const d = createEffect(
   {
     loc: {
       file: _effectorFileName,
-      line: 19,
+      line: 18,
       column: 10,
     },
     name: 'd',
-    sid: '-v16lzu',
+    sid: '-vi88e1',
   },
   {
     loc: {
       file: _effectorFileName2,
-      line: 19,
+      line: 18,
       column: 10,
     },
     name: 'd',
-    sid: '-v16lzu',
+    sid: '-vi88e1',
   },
 )
 const e = createEvent(
   {
     loc: {
       file: _effectorFileName,
-      line: 20,
+      line: 19,
       column: 10,
     },
     name: 'e',
-    sid: 'iki9n5',
+    sid: '85ikyv',
   },
   {
     loc: {
       file: _effectorFileName2,
-      line: 20,
+      line: 19,
       column: 10,
     },
     name: 'e',
-    sid: 'iki9n5',
+    sid: '85ikyv',
   },
 )
 const f = createStore(null, {
   and: {
     loc: {
       file: _effectorFileName,
-      line: 21,
+      line: 20,
       column: 10,
     },
     name: 'f',
-    sid: '-csuyz3',
+    sid: '-d9wlda',
   },
   loc: {
     file: _effectorFileName2,
-    line: 21,
+    line: 20,
     column: 10,
   },
   name: 'f',
-  sid: '-csuyz3',
+  sid: '-d9wlda',
 })
 const g = createApi({
   and: [
@@ -3907,87 +3701,57 @@ const g = createApi({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 22,
+          line: 21,
           column: 10,
         },
-        sid: '-vkw09i',
+        sid: '-w1xmnp',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 22,
+      line: 21,
       column: 10,
     },
-    sid: '-vkw09i',
-  },
-})
-const i = guard({
-  and: [
-    {
-      and: [
-        e,
-        {
-          filter: Boolean,
-        },
-      ],
-      or: {
-        loc: {
-          file: _effectorFileName,
-          line: 23,
-          column: 10,
-        },
-        name: 'i',
-        sid: 'yo7sqa',
-      },
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName2,
-      line: 23,
-      column: 10,
-    },
-    name: 'i',
-    sid: 'yo7sqa',
+    sid: '-w1xmnp',
   },
 })
 const j = merge([e], {
   and: {
     loc: {
       file: _effectorFileName,
-      line: 24,
+      line: 22,
       column: 10,
     },
     name: 'j',
-    sid: '3auk42',
+    sid: '2crbbo',
   },
   loc: {
     file: _effectorFileName2,
-    line: 24,
+    line: 22,
     column: 10,
   },
   name: 'j',
-  sid: '3auk42',
+  sid: '2crbbo',
 })
 const k = restore(d, null, {
   and: {
     loc: {
       file: _effectorFileName,
-      line: 25,
+      line: 23,
       column: 10,
     },
     name: 'k',
-    sid: '-s2ioi6',
+    sid: '-t0lxak',
   },
   loc: {
     file: _effectorFileName2,
-    line: 25,
+    line: 23,
     column: 10,
   },
   name: 'k',
-  sid: '-s2ioi6',
+  sid: '-t0lxak',
 })
 const m = sample({
   and: [
@@ -4001,22 +3765,22 @@ const m = sample({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 26,
+          line: 24,
           column: 10,
         },
         name: 'm',
-        sid: '-k96q5p',
+        sid: '-l79yy3',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 26,
+      line: 24,
       column: 10,
     },
     name: 'm',
-    sid: '-k96q5p',
+    sid: '-l79yy3',
   },
 })
 const n = split({
@@ -4026,20 +3790,20 @@ const n = split({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 27,
+          line: 25,
           column: 10,
         },
-        sid: '-t7nwaj',
+        sid: '-u5r52x',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 27,
+      line: 25,
       column: 10,
     },
-    sid: '-t7nwaj',
+    sid: '-u5r52x',
   },
 })
 "

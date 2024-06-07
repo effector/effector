@@ -9,7 +9,6 @@ function outerScope() {
   const clearNode = foo
   const combine = foo
   const createApi = foo
-  const guard = foo
   const launch = foo
   const merge = foo
   const restore = foo
@@ -33,7 +32,6 @@ function outerScope() {
     const b = clearNode(node)
     const c = combine({store})
     const d = createApi(store, {})
-    const f = guard({source: event, filter: Boolean})
     const g = launch(event, null)
     const h = merge([event])
     const i = restore(event, null)

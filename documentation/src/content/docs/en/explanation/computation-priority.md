@@ -28,7 +28,7 @@ Priority:
 
 ```
 1. pure -> map, on
-2. sampler -> sample, guard, combine
+2. sampler -> sample, combine
 3. effect -> watch, effect handler
 ```
 

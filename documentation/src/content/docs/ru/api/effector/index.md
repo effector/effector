@@ -54,7 +54,3 @@ lang: ru
 - [withRegion](/ru/api/effector/withRegion)
 - [launch](/ru/api/effector/launch)
 - [inspect](/ru/api/effector/inspect)
-
-## Устаревшие методы
-
-- [guard({source, filter, target})](/ru/api/effector/guard)

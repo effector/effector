@@ -11,11 +11,8 @@ import {
   hydrate,
   sample,
 } from 'effector'
-import {debounce} from 'patronum19'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-// guard is used in patronum 19, need to remove it entirely
-muteErrors(['guard'])
+import {and} from 'patronum19'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
@@ -759,8 +756,9 @@ describe(`fork(domain) and related api's are deprecated`, () => {
 describe('babel-plugin-update', () => {
   test('patronum 19 doesn not blows up', () => {
     expect(() => {
-      const event = createEvent()
-      const deb = debounce({source: event, timeout: 1000})
+      const $a = createStore(true)
+      const $b = createStore(true)
+      const deb = and($a, $b)
     }).not.toThrow()
   })
 })
