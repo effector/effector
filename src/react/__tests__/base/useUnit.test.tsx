@@ -20,12 +20,11 @@ import {
   useUnit as useUnitScope,
   createGate,
   useGate,
-  useEvent,
   useStore,
   Provider,
 } from 'effector-react'
 
-muteErrors(['useEvent', 'useStore'])
+muteErrors(['useStore'])
 
 describe('useUnit', () => {
   it('should bind single store', async () => {
@@ -1022,7 +1021,7 @@ describe('useUnit', () => {
       $data.on(getDataFx.doneData, (_, upd) => upd)
 
       const Component = () => {
-        const run = useEvent(getData)
+        const run = useUnit(getData)
         const [data, pending] = useUnitScope([$data, getDataFx.pending])
         React.useEffect(() => {
           run()

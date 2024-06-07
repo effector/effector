@@ -4,25 +4,10 @@ import {
   useStoreMapBase,
   useListBase,
   useUnitBase,
-  useEventBase,
   useGateBase,
 } from './apiBase'
 import {getScope} from './scope'
 import type {Gate} from './index.h'
-
-/**
-bind event to scope
-
-works like React.useCallback, but for scopes
-*/
-export function useEvent<T>(
-  event: Event<T>,
-  opts?: {forceScope?: boolean},
-): (payload: T) => T {
-  const scope = getScope(opts?.forceScope)
-
-  return useEventBase(event, scope)
-}
 
 export function useStore<State>(
   store: Store<State>,

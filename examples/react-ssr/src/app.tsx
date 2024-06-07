@@ -7,7 +7,7 @@ import {
   useList,
   useStoreMap,
   Provider,
-  useEvent,
+  useUnit,
 } from 'effector-react/ssr'
 import users from './users.json'
 
@@ -86,7 +86,7 @@ const FetchingStatus = () => {
   )
 }
 const UserList = () => {
-  const selectUser = useEvent(selectUserEvent)
+  const selectUser = useUnit(selectUserEvent)
 
   return useList($userList, userName => {
     const isSelected = useStoreMap({

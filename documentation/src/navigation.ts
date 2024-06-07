@@ -244,10 +244,6 @@ const effectorReact = [
         text: { en: "useStore", ru: "useStore", uz: "useStore" },
         link: "/api/effector-react/useStore",
       },
-      {
-        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
-        link: "/api/effector-react/useEvent",
-      },
     ],
   },
   {

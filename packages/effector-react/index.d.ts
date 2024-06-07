@@ -131,63 +131,6 @@ export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
 
-/**
- * @deprecated use useUnit hook instead
- */
-export function useEvent(
-  event: EventCallable<void>,
-  opts?: {forceScope?: boolean},
-): () => void
-/**
- * @deprecated use useUnit hook instead
- */
-export function useEvent<T>(
-  event: EventCallable<T>,
-  opts?: {forceScope?: boolean},
-): (payload: T) => T
-/**
- * @deprecated use useUnit hook instead
- */
-export function useEvent<R>(
-  fx: Effect<void, R, any>,
-  opts?: {forceScope?: boolean},
-): () => Promise<R>
-/**
- * @deprecated use useUnit hook instead
- */
-export function useEvent<T, R>(
-  fx: Effect<T, R, any>,
-  opts?: {forceScope?: boolean},
-): (payload: T) => Promise<R>
-/**
- * @deprecated use useUnit hook instead
- */
-export function useEvent<List extends (EventCallable<any> | Effect<any, any>)[]>(
-  list: [...List],
-  opts?: {forceScope?: boolean},
-): {
-  [Key in keyof List]: List[Key] extends EventCallable<infer T>
-    ? (payload: T) => T
-    : List[Key] extends Effect<infer P, infer D, any>
-    ? (payload: P) => Promise<D>
-    : never
-}
-/**
- * @deprecated use useUnit hook instead
- */
-export function useEvent<
-  Shape extends Record<string, EventCallable<any> | Effect<any, any, any>>,
->(
-  shape: Shape,
-  opts?: {forceScope?: boolean},
-): {
-  [Key in keyof Shape]: Shape[Key] extends EventCallable<infer T>
-    ? (payload: T) => T
-    : Shape[Key] extends Effect<infer P, infer D, any>
-    ? (payload: P) => Promise<D>
-    : never
-}
-
 type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
   ? 1
   : 2
@@ -233,7 +176,10 @@ export function useUnit<
     : never
 }
 export function useUnit<
-  Shape extends Record<string, EventCallable<any> | Effect<any, any, any> | Store<any>>,
+  Shape extends Record<
+    string,
+    EventCallable<any> | Effect<any, any, any> | Store<any>
+  >,
 >(
   shape: Shape | {'@@unitShape': () => Shape},
   opts?: {forceScope?: boolean},

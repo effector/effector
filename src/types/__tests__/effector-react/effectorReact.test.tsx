@@ -1,13 +1,7 @@
 /* eslint-disable no-unused-vars */
 import * as React from 'react'
 import {createStore, createEvent, createEffect} from 'effector'
-import {
-  createComponent,
-  createGate,
-  useGate,
-  useEvent,
-  useUnit,
-} from 'effector-react'
+import {createComponent, createGate, useGate, useUnit} from 'effector-react'
 
 const consoleError = console.error
 
@@ -67,74 +61,6 @@ test('createGate', () => {
     Argument of type 'number' is not assignable to parameter of type '{ a: number; }'.
     Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
       Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
-    "
-  `)
-})
-
-test('useEvent of Event', () => {
-  const runEvent: () => (payload: number) => number = () =>
-    useEvent(createEvent<number>())
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
-
-test('useEvent of Event<void>', () => {
-  const runEvent: () => () => void = () => useEvent(createEvent<void>())
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
-
-test('useEvent of Effect', () => {
-  const runEffect: () => (payload: number) => Promise<string> = () =>
-    useEvent(createEffect<number, string, Error>())
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
-
-test('useEvent of Effect<void, unknown, Error>', () => {
-  const runEffect: () => () => Promise<unknown> = () =>
-    useEvent(createEffect<void, unknown, Error>())
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
-
-test('useEvent of object', () => {
-  const handlers: () => {
-    foo: (payload: number) => number
-    bar: (payload: number) => Promise<string>
-  } = () =>
-    useEvent({
-      foo: createEvent<number>(),
-      bar: createEffect<number, string, Error>(),
-    })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
-    "
-  `)
-})
-
-test('useEvent of array', () => {
-  const handlers: () => [
-    (payload: number) => number,
-    (payload: number) => Promise<string>,
-  ] = () =>
-    useEvent([createEvent<number>(), createEffect<number, string, Error>()])
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    no errors
     "
   `)
 })

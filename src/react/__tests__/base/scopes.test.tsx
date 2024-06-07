@@ -21,14 +21,12 @@ import {
   useStore,
   useList,
   useGate,
-  useEvent,
   useStoreMap,
   createGate,
   useUnit,
 } from 'effector-react'
 
 muteErrors([
-  'useEvent',
   'useStore',
   'fork(domain)',
   'hydrate(domain',
@@ -411,271 +409,6 @@ test('allSettled effect calls', async () => {
     })
   expect(fn).toBeCalled()
 })
-describe('useEvent', () => {
-  test('useEvent and effect calls', async () => {
-    const inc = createEvent()
-    const count = createStore(0).on(inc, x => x + 1)
-    const fx = createEffect(async () => {
-      inc()
-    })
-    const scope = fork()
-    const App = () => {
-      const fxe = useEvent(fx)
-      const x = useStore(count)
-      return (
-        <div>
-          <button id="btn" onClick={() => fxe()}>
-            clicked-{x}-times
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <button
-          id="btn"
-        >
-          clicked-
-          0
-          -times
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#btn').click()
-    })
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <button
-          id="btn"
-        >
-          clicked-
-          1
-          -times
-        </button>
-      </div>
-    `)
-    expect(count.getState()).toBe(0)
-    expect(scope.getState(count)).toBe(1)
-  })
-  test('useEvent function return value', async () => {
-    const fn = jest.fn()
-    const fx = createEffect(() => 'ok')
-    const scope = fork()
-    const App = () => {
-      const fxe = useEvent(fx)
-      return (
-        <div>
-          <button id="btn" onClick={() => fxe().then(fn)}>
-            click
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    await act(async () => {
-      container.firstChild.querySelector('#btn').click()
-    })
-    expect(argumentHistory(fn)).toEqual(['ok'])
-  })
-
-  test('object in useEvent', async () => {
-    const inc = createEvent()
-    const dec = createEvent()
-    const fx = createEffect(async () => 100)
-    const count = createStore(0)
-      .on(inc, x => x + 1)
-      .on(dec, x => x - 1)
-      .on(fx.doneData, (x, v) => x + v)
-    const scope = fork()
-    const App = () => {
-      const hndl = useEvent({fx, inc, dec})
-      const x = useStore(count)
-      return (
-        <div>
-          <span id="value">current value:{x}</span>
-          <button id="fx" onClick={() => hndl.fx()}>
-            fx
-          </button>
-          <button id="inc" onClick={() => hndl.inc()}>
-            inc
-          </button>
-          <button id="dec" onClick={() => hndl.dec()}>
-            dec
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          0
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#fx').click()
-      container.firstChild.querySelector('#inc').click()
-      container.firstChild.querySelector('#inc').click()
-    })
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          102
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#dec').click()
-    })
-    expect(count.getState()).toBe(0)
-    expect(scope.getState(count)).toBe(101)
-  })
-
-  test('array in useEvent', async () => {
-    const inc = createEvent()
-    const dec = createEvent()
-    const fx = createEffect(async () => 100)
-    const count = createStore(0)
-      .on(inc, x => x + 1)
-      .on(dec, x => x - 1)
-      .on(fx.doneData, (x, v) => x + v)
-    const scope = fork()
-    const App = () => {
-      const [a, b, c] = useEvent([fx, inc, dec])
-      const x = useStore(count)
-      return (
-        <div>
-          <span id="value">current value:{x}</span>
-          <button id="fx" onClick={() => a()}>
-            fx
-          </button>
-          <button id="inc" onClick={() => b()}>
-            inc
-          </button>
-          <button id="dec" onClick={() => c()}>
-            dec
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          0
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#fx').click()
-      container.firstChild.querySelector('#inc').click()
-      container.firstChild.querySelector('#inc').click()
-    })
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          102
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#dec').click()
-    })
-    expect(count.getState()).toBe(0)
-    expect(scope.getState(count)).toBe(101)
-  })
-})
 describe('useStoreMap', () => {
   it('should render', async () => {
     const userRemove = createEvent<string>()
@@ -894,7 +627,7 @@ describe('behavior on scope changes', () => {
     const $store = createStore(0).on(inc, x => x + 1)
     const Count = () => <p>{useStore($store)}</p>
     const Inc = () => {
-      const boundInc = useEvent(inc)
+      const boundInc = useUnit(inc)
       return (
         <button id="click" onClick={() => boundInc()}>
           click
@@ -941,7 +674,7 @@ describe('behavior on scope changes', () => {
       return <p>{value}</p>
     }
     const Inc = () => {
-      const boundInc = useEvent(inc)
+      const boundInc = useUnit(inc)
       return (
         <button id="click" onClick={() => boundInc()}>
           click
@@ -985,7 +718,7 @@ describe('behavior on scope changes', () => {
     const $store = createStore([0]).on(inc, ([x]) => [x + 1])
     const Count = () => useList($store, value => <p>{value}</p>)
     const Inc = () => {
-      const boundInc = useEvent(inc)
+      const boundInc = useUnit(inc)
       return (
         <button id="click" onClick={() => boundInc()}>
           click
@@ -1201,20 +934,6 @@ describe('hooks throw errors, if Provider is not found', () => {
       const a = useStore($a, {forceScope: true})
 
       return <div>{a}</div>
-    }
-
-    expect(() => render(<AppFail />)).rejects.toThrow(
-      'No scope found, consider adding <Provider> to app root',
-    )
-  })
-
-  test('useEvent from `effector-react` throws error, if no Provider', () => {
-    const ev = createEvent()
-
-    const AppFail = () => {
-      const a = useEvent(ev, {forceScope: true})
-
-      return <div onClick={a}></div>
     }
 
     expect(() => render(<AppFail />)).rejects.toThrow(

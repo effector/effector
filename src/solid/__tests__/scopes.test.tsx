@@ -238,29 +238,6 @@ describe('useUnit', () => {
     expect(count.getState()).toBe(0)
     expect(scope.getState(count)).toBe(1)
   })
-  test('useEvent function return value', async () => {
-    const fn = jest.fn()
-    const fx = createEffect(() => 'ok')
-    const scope = fork()
-    const App = () => {
-      const fxe = useUnit(fx)
-      return (
-        <div>
-          <button id="btn" onClick={() => fxe().then(fn)}>
-            click
-          </button>
-        </div>
-      )
-    }
-    const {container} = await render(() => (
-      <Provider value={scope}>
-        <App />
-      </Provider>
-    ))
-    container.firstChild.querySelector('#btn').click()
-    await Promise.resolve()
-    expect(argumentHistory(fn)).toEqual(['ok'])
-  })
 
   test('object in useUnit', async () => {
     const inc = createEvent()

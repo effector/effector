@@ -38,7 +38,7 @@ useStore($store: Store<State>): State
 
 ```jsx
 import { createStore } from "effector";
-import { useStore, useEvent } from "effector-react";
+import { useStore, useUnit } from "effector-react";
 
 const $counter = createStore(0);
 
@@ -49,7 +49,7 @@ const { incrementClicked, decrementClicked } = createApi($counter, {
 
 const App = () => {
   const counter = useStore($counter);
-  const [onIncrement, onDecrement] = useEvent([incrementClicked, decrementClicked]);
+  const [onIncrement, onDecrement] = useUnit([incrementClicked, decrementClicked]);
 
   return (
     <div>

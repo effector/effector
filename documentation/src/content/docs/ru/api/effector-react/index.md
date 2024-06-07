@@ -11,7 +11,6 @@ description: Перечень основных методов API, по груп
 - [useStoreMap({ store, keys, fn })](/ru/api/effector-react/useStoreMap)
 - [useList(store, renderItem)](/ru/api/effector-react/useList)
 - [useUnit(units)](/ru/api/effector-react/useUnit)
-- [useEvent(unit)](/ru/api/effector-react/useEvent)
 
 ## Gate API
 
