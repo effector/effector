@@ -1,6 +1,6 @@
 import React from 'react'
 import fetch from 'cross-fetch'
-import {sample, createDomain, forward, guard, combine} from 'effector'
+import {sample, combine} from 'effector'
 import {scopeBind} from 'effector/fork'
 import {
   useStore,
@@ -46,20 +46,22 @@ const logFx = app.createEffect({
   },
 })
 
-forward({
-  from: startServer,
-  to: [fetchUser, fetchAllUsersFx],
+sample({
+  clock: startServer,
+  target: [fetchUser, fetchAllUsersFx],
 })
 
-forward({
-  from: selectUserEvent,
-  to: fetchUser,
+sample({
+  clock: selectUserEvent,
+  target: fetchUser,
 })
 
-const $user = app.createStore('guest')
+const $user = app
+  .createStore('guest')
   .on(fetchUser.doneData, (_, user) => user.name)
-    
-const $friends = app.createStore<string[]>([])
+
+const $friends = app
+  .createStore<string[]>([])
   .on(fetchUser.doneData, (_, friends) => friends)
 
 const friendsTotal = $friends.map(friends => friends.length)
@@ -90,7 +92,7 @@ const Total = () => <small>Total: {useStore(friendsTotal)}</small>
 
 const FetchingStatus = () => {
   const pending = useStore(fetchUser.pending)
-  
+
   return (
     <p>
       <small>Status: {pending ? 'fetching...' : 'ready'}</small>
@@ -139,13 +141,11 @@ const changeLocation = app.createEvent<string>()
 
 // triggered when current location not equal new location
 // and new location is valid user ID
-const onValidLocation = guard(changeLocation, {
-  filter: sample({
-    source: combine({loc: $location, users: $userList}),
-    clock: changeLocation,
-    fn: ({loc, users}, path) =>
-      loc !== path && users.includes(path.replace('/user/', '')),
-  }),
+const onValidLocation = sample({
+  clock: changeLocation,
+  source: combine({loc: $location, users: $userList}),
+  filter: ({loc, users}, path) =>
+    loc !== path && users.includes(path.replace('/user/', '')),
 })
 
 installHistory.watch(history => {
@@ -155,9 +155,9 @@ installHistory.watch(history => {
   })
 })
 
-forward({
-  from: startClient,
-  to: installHistory,
+sample({
+  clock: startClient,
+  target: installHistory,
 })
 
 sample({

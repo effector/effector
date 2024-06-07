@@ -1,6 +1,6 @@
 import React from 'react'
 import fetch from 'cross-fetch'
-import {sample, createDomain, forward, guard} from 'effector'
+import {sample, createDomain, sample} from 'effector'
 import {scopeBind} from 'effector/fork'
 import {
   useStore,
@@ -35,26 +35,30 @@ const logFx = app.createEffect({
   },
 })
 
-forward({
-  from: startServer,
-  to: fetchUser,
+sample({
+  clock: startServer,
+  target: fetchUser,
 })
 
-forward({
-  from: selectUserEvent,
-  to: fetchUser,
+sample({
+  clock: selectUserEvent,
+  target: fetchUser,
 })
 
-const $user = app.createStore('guest')
+const $user = app
+  .createStore('guest')
   .on(fetchUser.doneData, (_, user) => user.name)
 
-const $friends = app.createStore<string[]>([])
+const $friends = app
+  .createStore<string[]>([])
   .on(fetchUser.doneData, (_, friends) => friends)
 
 const friendsTotal = $friends.map(list => list.length)
 const $userList = app.createStore(Object.keys(users))
 
-export const $location = $user.map(user => (user === 'guest' ? '/' : `/${user}`))
+export const $location = $user.map(user =>
+  user === 'guest' ? '/' : `/${user}`,
+)
 
 sample({
   source: $user,
@@ -74,7 +78,7 @@ const Total = () => <small>Total: {useStore(friendsTotal)}</small>
 
 const FetchingStatus = () => {
   const pending = useStore(fetchUser.pending)
-  
+
   return (
     <p>
       <small>Status: {pending ? 'fetching...' : 'ready'}</small>
@@ -123,12 +127,10 @@ const changeLocation = app.createEvent<string>()
 
 // triggered when current location not equal new location
 // and new location is valid user ID
-const onValidLocation = guard(changeLocation, {
-  filter: sample({
-    source: $location,
-    clock: changeLocation,
-    fn: (loc, path) => loc !== path && path.slice(1) in users,
-  }),
+const onValidLocation = sample({
+  clock: changeLocation,
+  source: $location,
+  filter: (loc, path) => loc !== path && path.slice(1) in users,
 })
 
 installHistory.watch(history => {
@@ -138,9 +140,9 @@ installHistory.watch(history => {
   })
 })
 
-forward({
-  from: startClient,
-  to: installHistory,
+sample({
+  clock: startClient,
+  target: installHistory,
 })
 
 sample({

@@ -33,7 +33,7 @@ scope.getState<T>(store: Store<T>): T
 Создание двух инстансов приложения, вызов событий в них и проверка сохранения значения стора `$counter` в каждом из них
 
 ```js
-import { createStore, createEvent, createDomain, forward, fork, allSettled } from "effector";
+import { createStore, createEvent, createDomain, fork, allSettled } from "effector";
 
 const domain = createDomain();
 const inc = domain.createEvent();

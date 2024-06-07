@@ -62,8 +62,3 @@ Package `effector` provides couple different entry points for different purposes
 - [effector/compat](/en/api/effector/module/compat)
 - [effector/inspect](/en/api/effector/module/inspect)
 - [effector/babel-plugin](/en/api/effector/module/babel-plugin)
-
-## Deprecated Methods (#deprecated-methods)
-
-- [forward({from, to})](/en/api/effector/forward)
-- [guard({source, filter, target})](/en/api/effector/guard)

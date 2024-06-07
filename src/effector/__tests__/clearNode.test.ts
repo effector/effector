@@ -2,16 +2,13 @@ import {
   clearNode,
   createEvent,
   createDomain,
-  forward,
   createStore,
   sample,
   combine,
   createEffect,
   split,
 } from 'effector'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-muteErrors('forward')
+import {argumentHistory} from 'effector/fixtures'
 
 it('will deactivate event', () => {
   const fn = jest.fn()
@@ -39,9 +36,9 @@ it('will not broke subscribers', () => {
   const eventB = createEvent<number>()
   eventB.watch(e => fn(e))
 
-  forward({
-    from: eventA,
-    to: eventB,
+  sample({
+    clock: eventA,
+    target: eventB,
   })
 
   eventA(0)
@@ -169,25 +166,6 @@ describe('based on clearNode', () => {
       ]
     `)
   })
-  it('will not clear connected units after forward will be destroyed', () => {
-    const fn = jest.fn()
-    const eventA = createEvent<number>()
-    const eventB = createEvent<number>()
-    const unsub = forward({
-      from: eventA,
-      to: eventB,
-    })
-    eventA.watch(fn)
-    eventA(0)
-    unsub()
-    eventA(1)
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        0,
-        1,
-      ]
-    `)
-  })
   it('will not clear unit after .watch will be destroyed', () => {
     const fn = jest.fn()
     const event = createEvent<number>()
@@ -219,49 +197,6 @@ describe('based on clearNode', () => {
       ]
     `)
   })
-  it('will not clear node, connected via forward to destroyed one', () => {
-    const fn = jest.fn()
-    const store = createStore(0)
-    const event = createEvent<number>()
-    event.watch(fn)
-    forward({
-      from: store.updates,
-      to: event,
-    })
-    //@ts-expect-error
-    store.setState(1)
-    event(2)
-    clearNode(store)
-    event(3)
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        1,
-        2,
-        3,
-      ]
-    `)
-  })
-  it('will not clear node, which forwarded to destroyed one', () => {
-    const fn = jest.fn()
-    const store = createStore(0)
-    const event = createEvent()
-    store.updates.watch(fn)
-    forward({
-      from: store.updates,
-      to: event,
-    })
-    //@ts-expect-error
-    store.setState(1)
-    clearNode(event)
-    //@ts-expect-error
-    store.setState(2)
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        1,
-        2,
-      ]
-    `)
-  })
 })
 describe('domain support', () => {
   it('will not clear domain.createStore after event will be destroyed', () => {
@@ -280,26 +215,6 @@ describe('domain support', () => {
         0,
         1,
         2,
-      ]
-    `)
-  })
-  it('will not clear connected units after forward will be destroyed', () => {
-    const fn = jest.fn()
-    const domain = createDomain()
-    const eventA = domain.createEvent<number>()
-    const eventB = domain.createEvent<number>()
-    const unsub = forward({
-      from: eventA,
-      to: eventB,
-    })
-    eventA.watch(fn)
-    eventA(0)
-    unsub()
-    eventA(1)
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        0,
-        1,
       ]
     `)
   })
@@ -336,51 +251,6 @@ describe('domain support', () => {
       ]
     `)
   })
-  it('will not clear node, connected via forward to destroyed one', () => {
-    const fn = jest.fn()
-    const domain = createDomain()
-    const store = domain.createStore(0)
-    const event = domain.createEvent<number>()
-    event.watch(fn)
-    forward({
-      from: store.updates,
-      to: event,
-    })
-    //@ts-expect-error
-    store.setState(1)
-    event(2)
-    clearNode(store)
-    event(3)
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        1,
-        2,
-        3,
-      ]
-    `)
-  })
-  it('will not clear node, which forwarded to destroyed one', () => {
-    const fn = jest.fn()
-    const domain = createDomain()
-    const store = domain.createStore(0)
-    const event = domain.createEvent()
-    store.updates.watch(fn)
-    forward({
-      from: store.updates,
-      to: event,
-    })
-    //@ts-expect-error
-    store.setState(1)
-    clearNode(event)
-    //@ts-expect-error
-    store.setState(2)
-    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        1,
-        2,
-      ]
-    `)
-  })
   it('will not clear event after clearNode call at its prepended event', () => {
     const fn = jest.fn()
     const domain = createDomain()
@@ -403,74 +273,6 @@ describe('domain support', () => {
     expect(argumentHistory(fn)).toEqual([1])
   })
   describe('clearNode(domain) should not affect sibling nodes', () => {
-    describe('with forward', () => {
-      test('from', () => {
-        const fn = jest.fn()
-        const domain = createDomain()
-        const event = createEvent<number>()
-        const event2 = domain.createEvent<number>()
-        forward({
-          from: event,
-          to: event2,
-        })
-        event.watch(fn)
-        event(0)
-        clearNode(domain)
-        event(1)
-        expect(argumentHistory(fn)).toEqual([0, 1])
-      })
-      test('from array', () => {
-        const fn = jest.fn()
-        const domain = createDomain()
-        const event = createEvent<number>()
-        const event2 = domain.createEvent<number>()
-        const event3 = domain.createEvent<number>()
-        forward({
-          from: [event, event2],
-          to: event3,
-        })
-        event.watch(fn)
-        event(0)
-        clearNode(domain)
-        event(1)
-        expect(argumentHistory(fn)).toEqual([0, 1])
-      })
-      test('to', () => {
-        const fn = jest.fn()
-        const domain = createDomain()
-        const event = createEvent<number>()
-        const event2 = domain.createEvent<number>()
-        forward({
-          from: event2,
-          to: event,
-        })
-        event.watch(fn)
-        event(0)
-        event2(1)
-        clearNode(domain)
-        event(2)
-        event2(3)
-        expect(argumentHistory(fn)).toEqual([0, 1, 2])
-      })
-      test('to array', () => {
-        const fn = jest.fn()
-        const domain = createDomain()
-        const event = createEvent<number>()
-        const event2 = domain.createEvent<number>()
-        const event3 = domain.createEvent<number>()
-        forward({
-          from: event2,
-          to: [event, event3],
-        })
-        event.watch(fn)
-        event(0)
-        event2(1)
-        clearNode(domain)
-        event(2)
-        event2(3)
-        expect(argumentHistory(fn)).toEqual([0, 1, 2])
-      })
-    })
     test('with sample', () => {
       const fn = jest.fn()
       const fn2 = jest.fn()
