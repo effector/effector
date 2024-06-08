@@ -7,6 +7,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Delete deprecated option `reactSsr` in babel-plugin ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated operator `forward` ([PR #1087](https://github.com/effector/effector/pull/1087))
 - Delete deprecated operator `guard` ([PR #1087](https://github.com/effector/effector/pull/1087))
+- Improve SIDs generation mechanic: if unit is created by a registered factory, its SID will be derived from the SID of the factory ([PR #1063](https://github.com/effector/effector/pull/1063))
 
 ## effector-react 24.0.0
 
