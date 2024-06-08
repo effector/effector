@@ -30,54 +30,70 @@ type Layer = {
   id: number
 }
 
+const getPriority = (t: PriorityTag) => {
+  switch (t) {
+    case 'child':
+      return 0
+    case 'pure':
+      return 1
+    case 'read':
+      return 2
+    case 'barrier':
+      return 3
+    case 'sampler':
+      return 4
+    case 'effect':
+      return 5
+    default:
+      return -1
+  }
+}
+
+/** Queue as linked list or skew heap */
+type QueueItem = {
+  /** node value */
+  v: Layer
+  /** left node. always null in queue but used in skew heap */
+  l: QueueItem | null
+  /** right node */
+  r: QueueItem | null
+}
+type QueueBucket = {
+  first: QueueItem | null
+  last: QueueItem | null
+  size: number
+}
+
+const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
+  if (!a) return b
+  if (!b) return a
+
+  let ret
+  if (
+    /**
+     * if both nodes has the same PriorityType
+     * and first node is created after second one
+     */
+    (a.v.type === b.v.type && a.v.id > b.v.id) ||
+    /**
+     * greater priority mean bucket of first node is executed later
+     * e.g  a: "sampler", b: "barrier"
+     */
+    getPriority(a.v.type) > getPriority(b.v.type)
+  ) {
+    ret = a
+    a = b
+    b = ret
+  }
+  ret = merge(a.r, b)
+  a.r = a.l
+  a.l = ret
+
+  return a
+}
+
 function createEffectorQueue() {
-  /** Queue as linked list or skew heap */
-  type QueueItem = {
-    /** node value */
-    v: Layer
-    /** left node. always null in queue but used in skew heap */
-    l: QueueItem | null
-    /** right node */
-    r: QueueItem | null
-  }
-  type QueueBucket = {
-    first: QueueItem | null
-    last: QueueItem | null
-    size: number
-  }
-
   let heap: QueueItem | null = null
-
-  const merge = (
-    a: QueueItem | null,
-    b: QueueItem | null,
-  ): QueueItem | null => {
-    if (!a) return b
-    if (!b) return a
-
-    let ret
-    if (
-      /**
-       * if both nodes has the same PriorityType
-       * and first node is created after second one
-       */
-      (a.v.type === b.v.type && a.v.id > b.v.id) ||
-      /**
-       * greater priority mean bucket of first node is executed later
-       * e.g  a: "sampler", b: "barrier"
-       */
-      getPriority(a.v.type) > getPriority(b.v.type)
-    ) {
-      ret = a
-      a = b
-      b = ret
-    }
-    ret = merge(a.r, b)
-    a.r = a.l
-    a.l = ret
-
-    return a
-  }
 
   /** queue buckets for each PriorityType */
   const queue: QueueBucket[] = []
@@ -167,25 +183,6 @@ function createEffectorQueue() {
       bucket.last = item
     }
     bucket.size += 1
-  }
-
-  const getPriority = (t: PriorityTag) => {
-    switch (t) {
-      case 'child':
-        return 0
-      case 'pure':
-        return 1
-      case 'read':
-        return 2
-      case 'barrier':
-        return 3
-      case 'sampler':
-        return 4
-      case 'effect':
-        return 5
-      default:
-        return -1
-    }
   }
 
   const barriers = new Set<string | number>()
