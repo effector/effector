@@ -7,6 +7,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Delete deprecated option `reactSsr` in babel-plugin ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated operator `forward` ([PR #1087](https://github.com/effector/effector/pull/1087))
 - Delete deprecated operator `guard` ([PR #1087](https://github.com/effector/effector/pull/1087))
+- Fixed edge cases of events reordering, when called from an effect handler ([PR #1062](https://github.com/effector/effector/pull/1062))
 
 ## effector-react 24.0.0
 

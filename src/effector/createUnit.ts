@@ -278,7 +278,6 @@ export function createStore<State>(
       launch({
         target: store,
         params: state,
-        defer: true,
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
