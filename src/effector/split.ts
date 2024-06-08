@@ -7,7 +7,7 @@ import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
 import {compute, userFnCall, calc, read} from './step'
 import {createNode} from './createNode'
-import {launch} from './kernel'
+import {launch, type EffectorQueue} from './kernel'
 import {getStoreState} from './getter'
 import {assert} from './throw'
 import {createEvent} from './createUnit'
@@ -20,7 +20,7 @@ const launchCase = (
   field: string,
   data: any,
   stack: Stack,
-  q: any,
+  q: EffectorQueue,
 ) => {
   const target = scopeTargets[field]
   if (target) {

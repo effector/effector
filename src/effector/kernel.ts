@@ -195,6 +195,8 @@ function createEffectorQueue() {
   }
 }
 
+export type EffectorQueue = ReturnType<typeof createEffectorQueue>;
+
 let isRoot = true
 export let isWatch = false
 export let isPure = false
@@ -573,7 +575,7 @@ export const initRefInScope = (
 }
 
 /** try catch for external functions */
-const tryRun = (local: Local, fn: Function, stack: Stack, q: any) => {
+const tryRun = (local: Local, fn: Function, stack: Stack, q: EffectorQueue) => {
   try {
     return fn(getValue(stack), local.scope, stack, q)
   } catch (err) {

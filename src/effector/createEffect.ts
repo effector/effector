@@ -4,7 +4,7 @@ import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, setForkPage, forkPage, isWatch} from './kernel'
+import {launch, setForkPage, forkPage, isWatch, type EffectorQueue} from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
@@ -239,7 +239,7 @@ export const onSettled =
     ok: boolean,
     anyway: Unit,
     stack: Stack,
-    q: any,
+    q: EffectorQueue,
   ) =>
   (data: any) => {
     launch({

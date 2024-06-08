@@ -13,7 +13,7 @@ import {
 import {own} from './own'
 import {is, isVoid} from './is'
 import {read, calc} from './step'
-import {launch} from './kernel'
+import {launch, type EffectorQueue} from './kernel'
 import {EFFECT} from './tag'
 import {createName, generateErrorTitle} from './naming'
 import {assert} from './throw'
@@ -35,7 +35,7 @@ export function attach(config: any) {
   setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope as {runner: Node}
   let runnerSteps: Array<Cmd>
-  const runnerFnStep = (upd: any, _: any, stack: Stack, q: any) => {
+  const runnerFnStep = (upd: any, _: any, stack: Stack, q: EffectorQueue) => {
     const {params, req, handler} = upd
     const anyway = attached.finally
     const rj = onSettled(params, req, false, anyway, stack, q)
