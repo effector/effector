@@ -223,7 +223,7 @@ export const $screenQueries = combine({
 <!--JavaScript-->
 
 ```js
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 import {screenQueries} from './screenQueries'
 
 function orientationCheck(props, queries) {
@@ -246,7 +246,7 @@ function screenSizeCheck(props, queries) {
 }
 
 export const Screen = props => {
-  const queries = useStore(screenQueries)
+  const queries = useUnit(screenQueries)
   const orientationAllowed = orientationCheck(props, queries)
   const screenSizeAllowed = screenSizeCheck(props, queries)
 

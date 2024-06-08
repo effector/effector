@@ -99,7 +99,6 @@ export default {
       './inspect': extensionlessExport('./inspect'),
       './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
-      './babel-plugin-react': './babel-plugin-react.js',
       './package.json': './package.json',
     },
     files: [
@@ -108,7 +107,6 @@ export default {
       ...esmFile('inspect'),
       'inspect.d.ts',
       'babel-plugin.js',
-      'babel-plugin-react.js',
     ],
     keywords,
     ...common,

@@ -240,14 +240,6 @@ const effectorReact = [
         link: "/api/effector-react/useStoreMap",
         quickMenu: true,
       },
-      {
-        text: { en: "useStore", ru: "useStore", uz: "useStore" },
-        link: "/api/effector-react/useStore",
-      },
-      {
-        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
-        link: "/api/effector-react/useEvent",
-      },
     ],
   },
   {
@@ -295,24 +287,6 @@ const effectorReact = [
       {
         text: { en: "useProvidedScope" },
         link: "/api/effector-react/useProvidedScope",
-      },
-    ],
-  },
-  {
-    text: { en: "HOC-like APIs", uz: "HOCsimon APIlar" },
-    collapsed: true,
-    items: [
-      {
-        text: { en: "connect" },
-        link: "/api/effector-react/connect",
-      },
-      {
-        text: { en: "createComponent" },
-        link: "/api/effector-react/createComponent",
-      },
-      {
-        text: { en: "createStoreConsumer" },
-        link: "/api/effector-react/createStoreConsumer",
       },
     ],
   },

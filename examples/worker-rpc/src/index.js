@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 
 import {workerMessage, ping, failure, domain} from './common'
 import {createClient} from './remoteFX/client'
@@ -20,7 +20,7 @@ ping.finally.watch(() => {
 
 const WorkerPing = () => (
   <>
-    <strong>worker ping</strong>: {useStore($pingTimeout).toString()}
+    <strong>worker ping</strong>: {useUnit($pingTimeout).toString()}
   </>
 )
 
@@ -32,12 +32,12 @@ const App = () => (
 
 ReactDOM.render(<App />, document.getElementById('root'))
 
-setTimeout(async() => {
+setTimeout(async () => {
   console.log('req start')
   const result = await workerMessage('foo bar  baz bam')
   console.log('req result: ', result)
-  await ping({ now: Date.now() })
-  
+  await ping({now: Date.now()})
+
   try {
     await failure()
   } catch (error) {

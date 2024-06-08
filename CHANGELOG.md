@@ -7,11 +7,13 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Delete deprecated option `reactSsr` in babel-plugin ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated operator `forward` ([PR #1087](https://github.com/effector/effector/pull/1087))
 - Delete deprecated operator `guard` ([PR #1087](https://github.com/effector/effector/pull/1087))
+- Delete deprecated `effector/babel-plugin-react` ([PR #1088](https://github.com/effector/effector/pull/1088))
 - Improve SIDs generation mechanic: if unit is created by a registered factory, its SID will be derived from the SID of the factory ([PR #1063](https://github.com/effector/effector/pull/1063))
 
 ## effector-react 24.0.0
 
 - Delete deprecated `effector-react/scope` in favor of isomorphic hooks ([PR #1084](https://github.com/effector/effector/pull/1084))
+- Delete deprecated `useStore`, `useEvent`, `connect`, `createComponent` and `createStoreConsumer` in favor of universal `useUnit` ([PR #1088](https://github.com/effector/effector/pull/1088))
 
 ## effector-solid 24.0.0
 

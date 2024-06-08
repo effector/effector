@@ -37,7 +37,6 @@
       "default": "./effector.umd.js"
     },
     "./babel-plugin": "./babel-plugin.js",
-    "./babel-plugin-react": "./babel-plugin-react.js",
     "./package.json": "./package.json"
   },
   "files": [
@@ -61,8 +60,7 @@
     "inspect.mjs",
     "inspect.mjs.map",
     "inspect.d.ts",
-    "babel-plugin.js",
-    "babel-plugin-react.js"
+    "babel-plugin.js"
   ],
   "keywords": [
     "business",

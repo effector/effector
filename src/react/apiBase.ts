@@ -26,23 +26,6 @@ const keysEqual = (a?: readonly any[], b?: readonly any[]) => {
   return isEqual
 }
 
-export function useStoreBase<State>(store: Store<State>, scope?: Scope) {
-  useDeprecate(true, 'useStore', 'useUnit')
-  if (!is.store(store)) throwError('expect useStore argument to be a store')
-
-  const subscribe = React.useCallback(
-    (fn: () => void) => createWatch({unit: store, fn, scope}),
-    [store, scope],
-  )
-  const read = React.useCallback(
-    () => stateReader(store, scope),
-    [store, scope],
-  )
-  const currentValue = useSyncExternalStore(subscribe, read, read)
-
-  return currentValue
-}
-
 export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
   shape: Shape | {'@@unitShape': () => Shape},
   scope?: Scope,
@@ -344,27 +327,6 @@ export function useListBase<T>(
       }),
     )
   }
-}
-
-export function useEventBase(eventObject: any, scope?: Scope) {
-  useDeprecate(true, 'useEvent', 'useUnit')
-  if (!scope) {
-    return eventObject
-  }
-  const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
-  const events = isShape ? eventObject : {event: eventObject}
-
-  return React.useMemo(() => {
-    if (is.unit(eventObject)) {
-      //@ts-expect-error
-      return scopeBind(eventObject, {scope})
-    }
-    const shape = Array.isArray(eventObject) ? [] : ({} as any)
-    for (const key in eventObject) {
-      shape[key] = scopeBind(eventObject[key], {scope})
-    }
-    return shape
-  }, [scope, ...Object.keys(events), ...Object.values(events)])
 }
 
 export function useGateBase<Props>(

@@ -417,7 +417,7 @@ export function ChatPage() {
 }
 ```
 
-> Note: if you don't plan to write tests for effector code and/or implement SSR you can omit any usage of `useEvent`.
+> Note: if you don't plan to write tests for effector code and/or implement SSR you can omit any usage of `useUnit`.
 
 At the moment we can load a session and the messages list.
 
