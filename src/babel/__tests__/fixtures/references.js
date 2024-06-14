@@ -24,7 +24,7 @@ function outerScope() {
     const store = createStore(0)
     const effect = createEffect()
     const domainEvent = domain.createEvent()
-    const scope = fork(domain)
+    const scope = fork()
     const node = createNode()
 
     const a = attach({effect})

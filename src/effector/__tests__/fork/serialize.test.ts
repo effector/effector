@@ -13,8 +13,6 @@ import {
 } from 'effector'
 import {muteErrors} from 'effector/fixtures'
 
-muteErrors(['fork(domain)'])
-
 it('serialize stores to object of sid as keys', () => {
   const $a = createStore('value', {sid: 'a'})
   const $b = createStore([], {sid: 'b'})
@@ -200,7 +198,7 @@ it('serialize stores in nested domain', () => {
   const $c = third.createStore(null as null | number, {sid: 'c'})
   const $d = app.createStore(false, {sid: 'd'})
 
-  const scope = fork(app, {
+  const scope = fork({
     values: [
       [$a, 'value2'],
       [$b, []],

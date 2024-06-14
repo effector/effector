@@ -40,19 +40,3 @@ An object with store values using sids as a keys
 :::warning{title="Reminder"}
 If a store [does not have a sid](/en/api/effector/babel-plugin#sid), its value will be omitted during serialization.
 :::
-
-### Examples (#methods-serialize-examples)
-
-#### Serialize forked instance state (#methods-serialize-examples-serializeForkedInstanceState)
-
-```js
-import { createDomain, fork, serialize } from "effector";
-
-const domain = createDomain();
-const $store = domain.createStore(42);
-const scope = fork(domain);
-
-console.log(serialize(scope)); // => {[sid]: 42}
-```
-
-[Try it](https://share.effector.dev/zlRJbjei)

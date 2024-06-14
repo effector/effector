@@ -24,7 +24,7 @@ import {
   useUnit,
 } from 'effector-react'
 
-muteErrors(['fork(domain)', 'No scope found', 'AppFail'])
+muteErrors(['No scope found', 'AppFail'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -525,7 +525,7 @@ describe('useStoreMap', () => {
       </Provider>
     )
 
-    const scope = fork(app)
+    const scope = fork()
     await render(<App root={scope} />)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>

@@ -2569,25 +2569,6 @@ export function fork(
   },
 ): Scope
 
-
-// legacy overloads
-/**
- * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
- * 
- * @deprecated use `fork({values, handlers})` instead
- * 
- * @param domain optional root domain
- * @param config optional configuration object with initial store values and effect handlers
- * @returns new scope
- */
-export function fork(
-  domain: Domain,
-  config?: {
-    values?: SerializedState | LegacyMap | Array<[StoreWritable<any>, any]>,
-    handlers?: Handlers;
-  },
-): Scope
-
 /**
  * Run effect in scope and wait for all triggered effects to settle. This method never throw an error
  * @param unit effect to run

@@ -13,25 +13,7 @@ import {
   Scope,
   StoreWritable,
 } from 'effector'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-muteErrors(['fork(domain)'])
-
-test('usage with domain', async () => {
-  const app = createDomain()
-  const add = app.createEvent<number>()
-  const $count = app.createStore(0).on(add, (n, x) => n + x)
-  const addFx = app.createEffect(() => 0)
-  sample({clock: addFx.doneData, target: add})
-
-  const scope = fork(app, {
-    values: [[$count, 10]],
-    handlers: [[addFx, () => 5]],
-  })
-  await allSettled(addFx, {scope})
-  expect(scope.getState($count)).toBe(15)
-  expect($count.getState()).toBe(0)
-})
+import {argumentHistory} from 'effector/fixtures'
 
 test('usage without domain', async () => {
   const add = createEvent<number>()
@@ -184,14 +166,12 @@ describe('units without sids support', () => {
 })
 describe('fork values support', () => {
   test('values as js Map', async () => {
-    const app = createDomain()
-
-    const logsCache = app.createStore<string[]>([])
-    const settings = app.createStore({
+    const logsCache = createStore<string[]>([])
+    const settings = createStore({
       MAX_COUNT_CACHED_LOGS: 12,
     })
 
-    const scope = fork(app, {
+    const scope = fork({
       values: new Map()
         .set(settings, {MAX_COUNT_CACHED_LOGS: 2})
         .set(logsCache, ['LOG_MSG_MOCK']),
@@ -201,14 +181,12 @@ describe('fork values support', () => {
     expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values as tuple list', async () => {
-    const app = createDomain()
-
-    const logsCache = app.createStore<string[]>([])
-    const settings = app.createStore({
+    const logsCache = createStore<string[]>([])
+    const settings = createStore({
       MAX_COUNT_CACHED_LOGS: 12,
     })
 
-    const scope = fork(app, {
+    const scope = fork({
       values: [
         [settings, {MAX_COUNT_CACHED_LOGS: 2}],
         [logsCache, ['LOG_MSG_MOCK']],
@@ -219,14 +197,12 @@ describe('fork values support', () => {
     expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values as sid map', async () => {
-    const app = createDomain()
-
-    const logsCache = app.createStore([])
-    const settings = app.createStore({
+    const logsCache = createStore([])
+    const settings = createStore({
       MAX_COUNT_CACHED_LOGS: 12,
     })
 
-    const scope = fork(app, {
+    const scope = fork({
       values: {
         [logsCache.sid!]: ['LOG_MSG_MOCK'],
         [settings.sid!]: {MAX_COUNT_CACHED_LOGS: 2},
@@ -244,10 +220,9 @@ describe('fork values support', () => {
     }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
   })
   test('passed non store to values map should throw', () => {
-    const app = createDomain()
     const unit = createEvent()
     expect(() => {
-      fork(app, {
+      fork({
         values: new Map().set(unit, 0),
       })
     }).toThrowErrorMatchingInlineSnapshot(
