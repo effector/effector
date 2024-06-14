@@ -258,7 +258,7 @@ test('attach support', async () => {
   expect(indirectCallFn).toBeCalled()
 })
 
-test.only('computed values support', async () => {
+test('computed values support', async () => {
   const fetchUser = createEffect<string, {name: string; friends: string[]}>(
     async user => await request(`https://ssr.effector.dev/api/${user}`),
   )
