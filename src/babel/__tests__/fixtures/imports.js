@@ -15,7 +15,6 @@ import {
   sample as sampleEffector,
   split as splitEffector,
   withRegion as withRegionEffector,
-  hydrate as hydrateEffector,
   serialize as serializeEffector,
   scopeBind as scopeBindEffector,
   fork as forkEffector,
@@ -42,7 +41,6 @@ import {createStore} from 'redux'
   const p = sampleEffector({source: store, clock: event})
   const q = splitEffector(event, {})
   const r = withRegionEffector(node, () => {})
-  const s = hydrateEffector(scope, {values: {}})
   const t = serializeEffector(scope)
   const u = scopeBindEffector(domainEvent)
   const w = allSettledEffector(domainEvent, {scope})
@@ -67,7 +65,6 @@ function nameClashCheck() {
   const p = sample({source: store, clock: event})
   const q = split(event, {})
   const r = withRegion(node, () => {})
-  const s = hydrate(scope, {values: {}})
   const t = serialize(scope)
   const u = scopeBind(domainEvent)
   const w = allSettled(domainEvent, {scope})
@@ -91,7 +88,6 @@ import {
   createStore as sample,
   createStore as split,
   createStore as withRegion,
-  createStore as hydrate,
   createStore as serialize,
   createStore as scopeBind,
   createStore as fork,

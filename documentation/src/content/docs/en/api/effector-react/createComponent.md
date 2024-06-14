@@ -6,10 +6,6 @@ redirectFrom:
   - /docs/api/effector-react/createComponent
 ---
 
-```ts
-import { createComponent } from "effector-react";
-```
-
 :::warning{title="Deleted"}
 Since [effector 24.0.0](https://changelog.effector.dev/#effector-24-0-0) this method was removed.
 

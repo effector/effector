@@ -36,7 +36,6 @@ List of the methods
 - [serialize](/en/api/effector/serialize)
 - [allSettled](/en/api/effector/allSettled)
 - [scopeBind](/en/api/effector/scopeBind)
-- [hydrate](/en/api/effector/hydrate)
 
 ## Plugins (#plugins)
 

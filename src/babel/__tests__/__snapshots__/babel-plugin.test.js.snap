@@ -2300,7 +2300,6 @@ import {
   sample as sampleEffector,
   split as splitEffector,
   withRegion as withRegionEffector,
-  hydrate as hydrateEffector,
   serialize as serializeEffector,
   scopeBind as scopeBindEffector,
   fork as forkEffector,
@@ -2311,47 +2310,47 @@ import {createStore} from 'redux'
   const domain = createDomainEffector({
     loc: {
       file: _effectorFileName,
-      line: 27,
+      line: 26,
       column: 17,
     },
     name: 'domain',
-    sid: 'xjrhi',
+    sid: 'gi53b',
   })
   const event = createEventEffector({
+    loc: {
+      file: _effectorFileName,
+      line: 27,
+      column: 16,
+    },
+    name: 'event',
+    sid: '-xig4ir',
+  })
+  const store = createStoreEffector(0, {
     loc: {
       file: _effectorFileName,
       line: 28,
       column: 16,
     },
-    name: 'event',
-    sid: '-x1ei4k',
-  })
-  const store = createStoreEffector(0, {
-    loc: {
-      file: _effectorFileName,
-      line: 29,
-      column: 16,
-    },
     name: 'store',
-    sid: '-9033mm',
+    sid: '-9h4q0t',
   })
   const effect = createEffectEffector({
     loc: {
       file: _effectorFileName,
-      line: 30,
+      line: 29,
       column: 17,
     },
     name: 'effect',
-    sid: '-jg43hh',
+    sid: '-tv3s5r',
   })
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 31,
+      line: 30,
       column: 22,
     },
     name: 'domainEvent',
-    sid: 'tr4ebp',
+    sid: 'ta2rxi',
   })
   const scope = forkEffector(domain)
   const node = createNodeEffector()
@@ -2362,11 +2361,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 35,
+        line: 34,
         column: 12,
       },
       name: 'a',
-      sid: '-3js8k5',
+      sid: '-40tuyc',
     },
   })
   const b = clearNodeEffector(node)
@@ -2379,11 +2378,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 37,
+        line: 36,
         column: 12,
       },
       name: 'c',
-      sid: 'yvnf57',
+      sid: 'yelsr0',
     },
   })
   const d = createApiEffector({
@@ -2391,30 +2390,30 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 38,
+        line: 37,
         column: 12,
       },
-      sid: 'qt1ylj',
+      sid: 'qc0c7c',
     },
   })
   const m = launchEffector(event, null)
   const n = mergeEffector([event], {
     loc: {
       file: _effectorFileName,
-      line: 40,
+      line: 39,
       column: 12,
     },
     name: 'n',
-    sid: '-vqbl9e',
+    sid: 'svss1g',
   })
   const o = restoreEffector(event, null, {
     loc: {
       file: _effectorFileName,
-      line: 41,
+      line: 40,
       column: 12,
     },
     name: 'o',
-    sid: '-cilreq',
+    sid: '-czndsx',
   })
   const p = sampleEffector({
     and: [
@@ -2426,11 +2425,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 42,
+        line: 41,
         column: 12,
       },
       name: 'p',
-      sid: '6p42fy',
+      sid: '682g1r',
     },
   })
   const q = splitEffector({
@@ -2438,16 +2437,13 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 43,
+        line: 42,
         column: 12,
       },
-      sid: '-vwvx4j',
+      sid: '-wdxjiq',
     },
   })
   const r = withRegionEffector(node, () => {})
-  const s = hydrateEffector(scope, {
-    values: {},
-  })
   const t = serializeEffector(scope)
   const u = scopeBindEffector(domainEvent)
   const w = allSettledEffector(domainEvent, {
@@ -2463,11 +2459,11 @@ function nameClashCheck() {
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 56,
+      line: 54,
       column: 22,
     },
     name: 'domainEvent',
-    sid: '-9jyz8e',
+    sid: '-ai280s',
   })
   const scope = fork(domain)
   const node = createNode()
@@ -2488,9 +2484,6 @@ function nameClashCheck() {
   })
   const q = split(event, {})
   const r = withRegion(node, () => {})
-  const s = hydrate(scope, {
-    values: {},
-  })
   const t = serialize(scope)
   const u = scopeBind(domainEvent)
   const w = allSettled(domainEvent, {
@@ -2515,7 +2508,6 @@ import {
   createStore as sample,
   createStore as split,
   createStore as withRegion,
-  createStore as hydrate,
   createStore as serialize,
   createStore as scopeBind,
   createStore as fork,
@@ -2663,9 +2655,6 @@ const k = split({
   },
 })
 const l = withRegion(node, () => {})
-const n = hydrate(scope, {
-  values: {},
-})
 const o = serialize(scope)
 const p = scopeBind(domainEvent)
 const q = allSettled(domainEvent, {
@@ -2787,7 +2776,6 @@ function outerScope() {
   const sample = foo
   const split = foo
   const withRegion = foo
-  const hydrate = foo
   const serialize = foo
   const scopeBind = foo
   const allSettled = foo
@@ -2800,11 +2788,11 @@ function outerScope() {
     const domainEvent = domain.createEvent({
       loc: {
         file: _effectorFileName,
-        line: 27,
+        line: 26,
         column: 24,
       },
       name: 'domainEvent',
-      sid: 'ooa716',
+      sid: 'o78kmz',
     })
     const scope = fork(domain)
     const node = createNode()
@@ -2825,9 +2813,6 @@ function outerScope() {
     })
     const k = split(event, {})
     const l = withRegion(node, () => {})
-    const n = hydrate(scope, {
-      values: {},
-    })
     const o = serialize(scope)
     const p = scopeBind(domainEvent)
     const q = allSettled(domainEvent, {

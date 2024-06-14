@@ -8,14 +8,13 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   Scope,
   sample,
 } from 'effector'
 import {Provider, useUnit, useGate, createGate} from 'effector-solid'
 import {createSignal} from 'solid-js'
 
-muteErrors(['fork(domain)', 'hydrate(domain'])
+muteErrors(['fork(domain)'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -77,11 +76,9 @@ test('computed values support', async () => {
   })
   const serialized = serialize(serverScope)
 
-  hydrate(app, {
+  const clientScope = fork({
     values: serialized,
   })
-
-  const clientScope = fork(app)
 
   const {container} = await render(() => <App root={clientScope} />)
 
@@ -89,11 +86,11 @@ test('computed values support', async () => {
     <section>
       <b>
         User:
-        guest
+        alice
       </b>
       <small>
         Total:
-        0
+        2
       </small>
     </section>
   `)

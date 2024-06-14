@@ -12,7 +12,6 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   Scope,
 } from 'effector'
 
@@ -25,7 +24,7 @@ import {
   useUnit,
 } from 'effector-react'
 
-muteErrors(['fork(domain)', 'hydrate(domain', 'No scope found', 'AppFail'])
+muteErrors(['fork(domain)', 'No scope found', 'AppFail'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -260,20 +259,20 @@ test('attach support', async () => {
 })
 
 test('computed values support', async () => {
-  const app = createDomain()
-
-  const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
+  const fetchUser = createEffect<string, {name: string; friends: string[]}>(
     async user => await request(`https://ssr.effector.dev/api/${user}`),
   )
-  const start = app.createEvent<string>()
+  const start = createEvent<string>()
   sample({clock: start, target: fetchUser})
-  const name = app
-    .createStore('guest')
-    .on(fetchUser.done, (_, {result}) => result.name)
+  const name = createStore('guest').on(
+    fetchUser.done,
+    (_, {result}) => result.name,
+  )
 
-  const friends = app
-    .createStore<string[]>([])
-    .on(fetchUser.done, (_, {result}) => result.friends)
+  const friends = createStore<string[]>([]).on(
+    fetchUser.done,
+    (_, {result}) => result.friends,
+  )
   const friendsTotal = friends.map(list => list.length)
 
   const Total = () => <small>Total:{useUnit(friendsTotal)}</small>
@@ -287,18 +286,15 @@ test('computed values support', async () => {
     </Provider>
   )
 
-  const serverScope = fork(app)
+  const serverScope = fork()
   await allSettled(start, {
     scope: serverScope,
     params: 'alice',
   })
-  const serialized = serialize(serverScope)
 
-  hydrate(app, {
-    values: serialized,
+  const clientScope = fork({
+    values: serialize(serverScope),
   })
-
-  const clientScope = fork(app)
 
   await render(<App root={clientScope} />)
 
@@ -306,11 +302,11 @@ test('computed values support', async () => {
     <section>
       <b>
         User:
-        guest
+        alice
       </b>
       <small>
         Total:
-        0
+        2
       </small>
     </section>
   `)

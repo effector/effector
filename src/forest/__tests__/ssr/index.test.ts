@@ -7,7 +7,6 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
 } from 'effector'
 import {h, using, block, text, rec} from 'forest'
 import {renderStatic} from 'forest/server'
@@ -16,7 +15,7 @@ import prettyHtml from 'effector/fixtures/prettyHtml'
 import {provideGlobals} from 'effector/fixtures/dom'
 import {muteErrors} from 'effector/fixtures'
 
-muteErrors(['fork(domain)', 'hydrate(domain'])
+muteErrors(['fork(domain)'])
 
 test('fork support', async () => {
   const fetchContent = createEffect(async () => {
@@ -48,24 +47,20 @@ test('fork support', async () => {
 })
 
 test('hydration support (without html hydration)', async () => {
-  const app = createDomain()
-  const fetchContent = app.createEffect(async () => {
+  const fetchContent = createEffect(async () => {
     return {title: 'dashboard'}
   })
-  const title = app
-    .createStore('-')
-    .on(fetchContent.doneData, (_, {title}) => title)
+  const title = createStore('-').on(
+    fetchContent.doneData,
+    (_, {title}) => title,
+  )
 
-  const scope = fork(app, {
+  const scope = fork({
     values: [[title, 'loading...']],
     handlers: [[fetchContent, async () => ({title: 'contacts'})]],
   })
 
   await allSettled(fetchContent, {scope})
-
-  hydrate(app, {
-    values: serialize(scope),
-  })
 
   const htmlResult = await renderStatic({
     scope,
@@ -82,21 +77,21 @@ test('hydration support (without html hydration)', async () => {
 })
 
 test('hydration support (with html hydration)', async () => {
-  const app = createDomain()
-  const fetchContent = app.createEffect({
+  const fetchContent = createEffect({
     async handler() {
       return {title: 'dashboard'}
     },
   })
-  const title = app
-    .createStore('-')
-    .on(fetchContent.doneData, (_, {title}) => title)
+  const title = createStore('-').on(
+    fetchContent.doneData,
+    (_, {title}) => title,
+  )
 
   function App() {
     h('h1', {text: title})
   }
 
-  const scope = fork(app, {
+  const scope = fork({
     values: new Map([[title, 'loading...']]),
     handlers: new Map([[fetchContent, async () => ({title: 'contacts'})]]),
   })
@@ -110,9 +105,7 @@ test('hydration support (with html hydration)', async () => {
     fn: App,
   })
 
-  hydrate(app, {
-    values: serialize(scope),
-  })
+  const clientScope = fork({values: serialize(scope)})
 
   const client = provideGlobals()
 
@@ -120,6 +113,7 @@ test('hydration support (with html hydration)', async () => {
 
   // await new Promise(rs => {
   using(client.el, {
+    scope: clientScope,
     // onComplete: rs,
     hydrate: true,
     fn: App,

@@ -539,10 +539,6 @@ const effector = [
         link: "/api/effector/scopeBind",
         quickMenu: true,
       },
-      {
-        text: { en: "hydrate" },
-        link: "/api/effector/hydrate",
-      },
     ],
   },
   {
