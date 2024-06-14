@@ -202,7 +202,6 @@ $version.watch((version) => console.log("version %s", version));
 const scope = fork();
 
 // By default serialize saves value only for the changed stores
-// Review `onlyChanges` option https://effector.dev/api/effector/serialize
 const values = serialize(scope);
 console.log(values);
 // => {}

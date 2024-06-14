@@ -2522,7 +2522,7 @@ export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>,
  */
 export function serialize(
   scope: Scope,
-  options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
+  options?: {ignore?: Array<Store<any>> },
 ): {[sid: string]: any}
 
 /**

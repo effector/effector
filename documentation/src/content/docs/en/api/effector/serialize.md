@@ -25,18 +25,13 @@ You can find deep-dive [explanation here](/en/explanation/sids)
 ### Formulae (#methods-serialize-formulae)
 
 ```ts
-serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): {[sid: string]: any}
+serialize(scope: Scope, { ignore?: Array<Store<any>> }): {[sid: string]: any}
 ```
 
 ### Arguments (#methods-serialize-arguments)
 
 1. `scope` [_Scope_](/en/api/effector/Scope): a scope object (forked instance)
 2. `ignore` Optional array of [_Store_](/en/api/effector/Store) to be omitted during serialization (added 20.14.0)
-3. `onlyChanges` Optional boolean flag to ignore stores which didn't change in fork (prevent default values from being carried over network)
-
-:::warning{title="Deprecated"}
-Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) property `onlyChanges` is deprecated.
-:::
 
 ### Returns (#methods-serialize-returns)
 
@@ -61,29 +56,3 @@ console.log(serialize(scope)); // => {[sid]: 42}
 ```
 
 [Try it](https://share.effector.dev/zlRJbjei)
-
-#### Using with `onlyChanges` (#methods-serialize-examples-usingWithOnlyChanges)
-
-With `onlyChanges`, this method will serialize only stores which were changed by some trigger during work or defined in `values` field by [fork](/en/api/effector/fork). Once being changed, a store will stay marked as changed in given scope even if it was turned back to the default state during work, otherwise client will not update that store on its side, which is unexpected and inconsistent.
-
-```js
-import { fork, serialize, createStore } from "effector";
-
-/** store which we want to fill by server */
-const $title = createStore("dashboard");
-
-/** store which is not used by server */
-const $clientTheme = createStore("light");
-
-const scope = fork({
-  values: [[$title, "chats"]],
-});
-
-/** this object will contain only $title data
- * as $clientTheme never changed in server scope */
-const chatsPageData = serialize(chatsPageScope, { onlyChanges: true });
-console.log(chatsPageData);
-// => {'-l644hw': 'chats'}
-```
-
-[Try it](https://share.effector.dev/BQhzISFV)
