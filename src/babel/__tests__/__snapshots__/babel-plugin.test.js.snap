@@ -2465,7 +2465,7 @@ function nameClashCheck() {
     name: 'domainEvent',
     sid: '-ai280s',
   })
-  const scope = fork(domain)
+  const scope = fork()
   const node = createNode()
   const a = attach({
     effect,
@@ -2563,7 +2563,7 @@ const domainEvent = domain.createEvent({
   name: 'domainEvent',
   sid: 't0scbd',
 })
-const scope = fork(domain)
+const scope = fork()
 const node = createNode()
 const a = attach({
   and: {
@@ -2794,7 +2794,7 @@ function outerScope() {
       name: 'domainEvent',
       sid: 'o78kmz',
     })
-    const scope = fork(domain)
+    const scope = fork()
     const node = createNode()
     const a = attach({
       effect,
