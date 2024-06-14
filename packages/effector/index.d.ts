@@ -2522,7 +2522,7 @@ export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>,
  */
 export function serialize(
   scope: Scope,
-  options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
+  options?: {ignore?: Array<Store<any>> },
 ): {[sid: string]: any}
 
 /**
@@ -2566,25 +2566,6 @@ export function fork(
   config?: {
     values?: StorePair<any>[] | SerializedState | LegacyMap,
     handlers?: Handlers
-  },
-): Scope
-
-
-// legacy overloads
-/**
- * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
- * 
- * @deprecated use `fork({values, handlers})` instead
- * 
- * @param domain optional root domain
- * @param config optional configuration object with initial store values and effect handlers
- * @returns new scope
- */
-export function fork(
-  domain: Domain,
-  config?: {
-    values?: SerializedState | LegacyMap | Array<[StoreWritable<any>, any]>,
-    handlers?: Handlers;
   },
 ): Scope
 

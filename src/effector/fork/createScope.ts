@@ -2,12 +2,12 @@ import {getForkPage, getGraph} from '../getter'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {calc, compute} from '../step'
-import type {Domain, Scope, SettledDefer, Store} from '../unit.h'
+import type {Scope, SettledDefer, Store} from '../unit.h'
 import type {Stack, StateRef} from '../index.h'
 import {forEach} from '../collection'
 import {DOMAIN, SAMPLER, SCOPE} from '../tag'
 
-export function createScope(unit?: Domain): Scope {
+export function createScope(): Scope {
   const forkInFlightCounter = createNode({
     scope: {
       defers: [],
@@ -95,7 +95,6 @@ export function createScope(unit?: Domain): Scope {
     ],
   })
   const resultScope: Scope = {
-    cloneOf: unit,
     reg: page,
     values: {sidMap: {}, idMap: {}},
     sidIdMap: {},

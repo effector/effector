@@ -707,30 +707,6 @@ describe('no-scope events should not affect scoped stores', () => {
   })
 })
 
-describe(`fork(domain) and related api's are deprecated`, () => {
-  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
-  beforeEach(() => {
-    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-  })
-  afterEach(() => {
-    warn.mockRestore()
-  })
-
-  function getWarning() {
-    return warn.mock.calls.map(([msg]) => msg).join('\n')
-  }
-
-  test('fork(domain) is deprecated', () => {
-    const d = createDomain()
-
-    fork(d)
-
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"fork(domain) is deprecated, use fork() instead"`,
-    )
-  })
-})
-
 describe('babel-plugin-update', () => {
   test('patronum 19 doesn not blows up', () => {
     expect(() => {

@@ -1,5 +1,4 @@
 import {render} from 'solid-testing-library'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,
   createEvent,
@@ -13,8 +12,6 @@ import {
 } from 'effector'
 import {Provider, useUnit, useGate, createGate} from 'effector-solid'
 import {createSignal} from 'solid-js'
-
-muteErrors(['fork(domain)'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -69,7 +66,7 @@ test('computed values support', async () => {
     </Provider>
   )
 
-  const serverScope = fork(app)
+  const serverScope = fork()
   await allSettled(start, {
     scope: serverScope,
     params: 'alice',

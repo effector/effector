@@ -10,6 +10,8 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Delete deprecated `effector/babel-plugin-react` ([PR #1088](https://github.com/effector/effector/pull/1088))
 - Improve SIDs generation mechanic: if unit is created by a registered factory, its SID will be derived from the SID of the factory ([PR #1063](https://github.com/effector/effector/pull/1063))
 - Delete deprecated `hydrate` function ([PR #1091](https://github.com/effector/effector/pull/1091))
+- Delete deprecated `fork(domain)` overload ([PR #1092](https://github.com/effector/effector/pull/1092))
+- Delete deprecated option `onlyChanges` in `fork` function ([PR #1092](https://github.com/effector/effector/pull/1092))
 
 ## effector-react 24.0.0
 

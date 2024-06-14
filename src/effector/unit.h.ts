@@ -166,7 +166,6 @@ export interface Scope extends Unit {
   kind: Kind
   graphite: Node
   reg: Record<string, StateRef>
-  cloneOf?: Domain
   getState<T>(store: Store<T>): T
   getState(ref: StateRef): unknown
   values: {

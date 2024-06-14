@@ -13,9 +13,6 @@ import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-expect-error
 import {provideGlobals} from 'effector/fixtures/dom'
-import {muteErrors} from 'effector/fixtures'
-
-muteErrors(['fork(domain)'])
 
 test('fork support', async () => {
   const fetchContent = createEffect(async () => {

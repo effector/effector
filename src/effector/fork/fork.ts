@@ -11,26 +11,18 @@ type ForkConfig = {
   handlers?: HandlersMap
 }
 
-export function fork(
-  domainOrConfig?: Domain | ForkConfig,
-  optionalConfig?: ForkConfig,
-) {
-  let config: ForkConfig | void = domainOrConfig as any
-  let domain: Domain
-  if (is.domain(domainOrConfig)) {
-    deprecate(false, 'fork(domain)', 'fork()')
-    domain = domainOrConfig
-    config = optionalConfig
-  }
-
-  const scope = createScope(domain!)
+export function fork(config?: ForkConfig) {
+  const scope = createScope()
 
   if (config) {
     if (config.values) {
       const {sidMap, unitMap, hasSidDoubles} = normalizeValues(
         config.values,
-        unit => 
-          assert(is.store(unit) && is.targetable(unit), 'Values map can contain only writable stores as keys'),
+        unit =>
+          assert(
+            is.store(unit) && is.targetable(unit),
+            'Values map can contain only writable stores as keys',
+          ),
       )
       Object.assign(scope.values.sidMap, sidMap)
       forEach(unitMap, (value, unit) => {
@@ -39,7 +31,7 @@ export function fork(
         /**
          * If store values were provided as tuple or map,
          * but unit has sid anyway, we should add it to sidIdMap,
-         * 
+         *
          * It is needed to avoid issues, if there are duplicated sids in the code + values is a tuple or map
          */
         scope.sidIdMap[getMeta(unit, 'sid')] = (unit as Store<any>).stateRef.id
