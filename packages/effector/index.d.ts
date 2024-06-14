@@ -702,7 +702,6 @@ export function createStore<State, SerializedState extends Json = Json>(
     domain?: Domain;
   },
 ): StoreWritable<State>
-export function setStoreName<State>(store: Store<State>, name: string): void
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
