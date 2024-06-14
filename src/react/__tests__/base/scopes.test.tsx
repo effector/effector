@@ -302,11 +302,11 @@ test('computed values support', async () => {
     <section>
       <b>
         User:
-        alice
+        guest
       </b>
       <small>
         Total:
-        2
+        0
       </small>
     </section>
   `)
