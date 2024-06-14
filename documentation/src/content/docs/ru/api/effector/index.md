@@ -36,7 +36,6 @@ lang: ru
 - [serialize](/ru/api/effector/serialize)
 - [allSettled](/ru/api/effector/allSettled)
 - [scopeBind](/ru/api/effector/scopeBind)
-- [hydrate](/ru/api/effector/hydrate)
 
 ## Плагины для компилятора
 

@@ -8,7 +8,6 @@ import {
   createStore,
   combine,
   createDomain,
-  hydrate,
   sample,
 } from 'effector'
 import {and} from 'patronum19'
@@ -729,27 +728,6 @@ describe(`fork(domain) and related api's are deprecated`, () => {
     expect(getWarning()).toMatchInlineSnapshot(
       `"fork(domain) is deprecated, use fork() instead"`,
     )
-  })
-
-  test('hydrate(domain) is deprecated', () => {
-    const d = createDomain()
-
-    hydrate(d, {values: {}})
-
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"hydrate(domain, { values }) is deprecated, use fork({ values }) instead"`,
-    )
-  })
-
-  test('hydrate(fork(domain)) is deprecated', () => {
-    const d = createDomain()
-
-    hydrate(fork(d), {values: {}})
-
-    expect(getWarning()).toMatchInlineSnapshot(`
-      "fork(domain) is deprecated, use fork() instead
-      hydrate(fork(domain), { values }) is deprecated, use fork({ values }) instead"
-    `)
   })
 })
 

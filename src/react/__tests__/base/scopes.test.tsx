@@ -12,7 +12,6 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   Scope,
 } from 'effector'
 
@@ -25,7 +24,7 @@ import {
   useUnit,
 } from 'effector-react'
 
-muteErrors(['fork(domain)', 'hydrate(domain', 'No scope found', 'AppFail'])
+muteErrors(['fork(domain)'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -294,11 +293,9 @@ test('computed values support', async () => {
   })
   const serialized = serialize(serverScope)
 
-  hydrate(app, {
+  const clientScope = fork({
     values: serialized,
   })
-
-  const clientScope = fork(app)
 
   await render(<App root={clientScope} />)
 

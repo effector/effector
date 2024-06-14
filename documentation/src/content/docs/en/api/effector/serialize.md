@@ -64,31 +64,19 @@ console.log(serialize(scope)); // => {[sid]: 42}
 
 #### Using with `onlyChanges` (#methods-serialize-examples-usingWithOnlyChanges)
 
-With `onlyChanges`, this method will serialize only stores which were changed by some trigger during work or defined in `values` field by [fork](/en/api/effector/fork) or [hydrate(scope)](/en/api/effector/hydrate). Once being changed, a store will stay marked as changed in given scope even if it was turned back to the default state during work, otherwise client will not update that store on its side, which is unexpected and inconsistent.
-This allows us to hydrate client state several times, for example, during route changes in next.js
+With `onlyChanges`, this method will serialize only stores which were changed by some trigger during work or defined in `values` field by [fork](/en/api/effector/fork). Once being changed, a store will stay marked as changed in given scope even if it was turned back to the default state during work, otherwise client will not update that store on its side, which is unexpected and inconsistent.
 
 ```js
-import { createDomain, fork, serialize, hydrate } from "effector";
+import { fork, serialize, createStore } from "effector";
 
-const app = createDomain();
-
-/** store which we want to hydrate by server */
-const $title = app.createStore("dashboard");
+/** store which we want to fill by server */
+const $title = createStore("dashboard");
 
 /** store which is not used by server */
-const $clientTheme = app.createStore("light");
+const $clientTheme = createStore("light");
 
-/** scope in client app */
-const clientScope = fork(app, {
-  values: new Map([
-    [$clientTheme, "dark"],
-    [$title, "profile"],
-  ]),
-});
-
-/** server side scope of chats page created for each request */
-const chatsPageScope = fork(app, {
-  values: new Map([[$title, "chats"]]),
+const scope = fork({
+  values: [[$title, "chats"]],
 });
 
 /** this object will contain only $title data
@@ -96,12 +84,6 @@ const chatsPageScope = fork(app, {
 const chatsPageData = serialize(chatsPageScope, { onlyChanges: true });
 console.log(chatsPageData);
 // => {'-l644hw': 'chats'}
-
-/** thereby, filling values from a server will touch only relevant stores */
-hydrate(clientScope, { values: chatsPageData });
-
-console.log(clientScope.getState($clientTheme));
-// => dark
 ```
 
 [Try it](https://share.effector.dev/BQhzISFV)

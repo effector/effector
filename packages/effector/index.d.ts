@@ -2517,13 +2517,6 @@ export interface Scope extends Unit<any> {
 export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>, any]> | {[sid: string]: any}
 
 /**
- * Fill stores with given values in provided scope or domain
- * 
- * @deprecated use `fork({values})` instead
- */
-export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
-
-/**
  * Serialize store values from given scope
  * @returns object with saved values
  */

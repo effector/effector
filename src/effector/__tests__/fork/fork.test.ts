@@ -8,7 +8,6 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   combine,
   Store,
   Scope,
@@ -16,7 +15,7 @@ import {
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-muteErrors(['fork(domain)', 'hydrate(domain', 'object with handlers'])
+muteErrors(['fork(domain)'])
 
 test('usage with domain', async () => {
   const app = createDomain()
@@ -198,12 +197,8 @@ describe('fork values support', () => {
         .set(logsCache, ['LOG_MSG_MOCK']),
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
-    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+    expect(scope.getState(settings)).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values as tuple list', async () => {
     const app = createDomain()
@@ -220,12 +215,8 @@ describe('fork values support', () => {
       ],
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
-    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+    expect(scope.getState(settings)).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values as sid map', async () => {
     const app = createDomain()
@@ -242,12 +233,8 @@ describe('fork values support', () => {
       },
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
-    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+    expect(scope.getState(settings)).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values validation', async () => {
     expect(() => {

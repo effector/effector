@@ -6,7 +6,6 @@ import {
   allSettled,
   combine,
   fork,
-  hydrate,
   serialize,
   sample,
   createEffect,
@@ -14,7 +13,7 @@ import {
 } from 'effector'
 import {muteErrors} from 'effector/fixtures'
 
-muteErrors(['onlyChanges', 'fork(domain)', 'hydrate(domain'])
+muteErrors(['onlyChanges', 'fork(domain)'])
 
 it('serialize stores to object of sid as keys', () => {
   const $a = createStore('value', {sid: 'a'})
@@ -162,32 +161,6 @@ describe('serialize: custom', () => {
     expect(clientScope.getState($map)).toEqual(new Map().set(1, 2).set(2, 3))
   })
 
-  test('hydrate case', () => {
-    const domain = createDomain()
-    const $map = domain.createStore(new Map<number, number>(), {
-      sid: 'map',
-      serialize: {
-        write: map => [...map.entries()],
-        read: jsonMap => new Map(jsonMap),
-      },
-    })
-
-    const scope = fork(domain)
-
-    allSettled($map, {scope, params: new Map().set(1, 2).set(2, 3)})
-
-    const values = serialize(scope)
-
-    expect(values).toEqual({
-      map: [...new Map().set(1, 2).set(2, 3)],
-    })
-
-    const clientScope = fork(domain)
-
-    hydrate(clientScope, {values})
-
-    expect(clientScope.getState($map)).toEqual(new Map().set(1, 2).set(2, 3))
-  })
   test('does not affect normal ref initialization', () => {
     const parser = jest.fn()
     const up = createEvent()
@@ -289,22 +262,6 @@ describe('onlyChanges: true', () => {
     expect(serialize(scope)).toEqual({messages: 1})
     await allSettled(resetMessages, {scope})
     expect(serialize(scope)).toEqual({messages: 0})
-  })
-  it('keep store in serialization when it filled with hydrate values', async () => {
-    const app = createDomain()
-    const newMessage = app.createEvent()
-    const resetMessages = app.createEvent()
-    const messages = app
-      .createStore(0, {sid: 'messages'})
-      .on(newMessage, x => x + 1)
-      .reset(resetMessages)
-    const scope = fork(app)
-    hydrate(scope, {
-      values: [[messages, 0]],
-    })
-    expect(serialize(scope)).toEqual({messages: 0})
-    await allSettled(newMessage, {scope})
-    expect(serialize(scope)).toEqual({messages: 1})
   })
 
   describe('serializing combine', () => {
@@ -448,22 +405,6 @@ describe('onlyChanges: false', () => {
     expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 1})
     await allSettled(resetMessages, {scope})
     expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 0})
-  })
-  it('keep store in serialization when it filled with hydrate values', async () => {
-    const app = createDomain()
-    const newMessage = app.createEvent()
-    const resetMessages = app.createEvent()
-    const messages = app
-      .createStore(0, {sid: 'messages'})
-      .on(newMessage, x => x + 1)
-      .reset(resetMessages)
-    const scope = fork(app)
-    hydrate(scope, {
-      values: [[messages, 0]],
-    })
-    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 0})
-    await allSettled(newMessage, {scope})
-    expect(serialize(scope, {onlyChanges: false})).toEqual({messages: 1})
   })
 
   describe('serializing combine', () => {
