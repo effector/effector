@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createBrowserHistory} from 'history'
-import {fork, allSettled} from 'effector/fork'
+import {fork, allSettled} from 'effector'
 import {App, location$, startClient} from './app'
 
 const history = createBrowserHistory()

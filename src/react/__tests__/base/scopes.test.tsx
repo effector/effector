@@ -24,7 +24,7 @@ import {
   useUnit,
 } from 'effector-react'
 
-muteErrors(['fork(domain)'])
+muteErrors(['fork(domain)', 'No scope found', 'AppFail'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
