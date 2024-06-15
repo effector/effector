@@ -12,6 +12,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Delete deprecated `hydrate` function ([PR #1091](https://github.com/effector/effector/pull/1091))
 - Delete deprecated `fork(domain)` overload ([PR #1092](https://github.com/effector/effector/pull/1092))
 - Delete deprecated option `onlyChanges` in `fork` function ([PR #1092](https://github.com/effector/effector/pull/1092))
+- Delete broken `setStoreName` function ([PR #1094](https://github.com/effector/effector/pull/1094))
 
 ## effector-react 24.0.0
 
