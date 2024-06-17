@@ -18,6 +18,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Delete deprecated `effector-react/scope` in favor of isomorphic hooks ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated `useStore`, `useEvent`, `connect`, `createComponent` and `createStoreConsumer` in favor of universal `useUnit` ([PR #1088](https://github.com/effector/effector/pull/1088))
+- Use regular import of `effector` in ESM version of `effector-react` ([PR #1096](https://github.com/effector/effector/pull/1096))
 
 ## effector-solid 24.0.0
 
