@@ -7,6 +7,10 @@ import {
   combine,
   createEffect,
   split,
+  withRegion,
+  createNode,
+  Node,
+  step,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -651,5 +655,119 @@ describe('domain support', () => {
     domain.onCreateEvent(fn)
     expect(domain.history.events.size).toBe(0)
     expect(fn).not.toHaveBeenCalled()
+  })
+})
+
+describe('supports sample in withRegion', () => {
+  test('sample will not work after clearNode call', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const $source = createStore(0)
+    const target = createEvent<number>()
+
+    target.watch(upd => fn(upd))
+
+    const region = createNode()
+    withRegion(region, () => {
+      sample({
+        clock: trigger,
+        source: $source,
+        target,
+      })
+    })
+
+    trigger()
+
+    clearNode(region)
+
+    trigger()
+
+    expect(argumentHistory(fn)).toEqual([0])
+  })
+  test('parallel sample call will work after clearNode call', () => {
+    const fn = jest.fn()
+    const triggerA = createEvent()
+    const triggerB = createEvent()
+    const $sourceA = createStore(0)
+    const $sourceB = createStore(10)
+    const target = createEvent<number>()
+
+    target.watch(upd => fn(upd))
+
+    const region = createNode()
+    withRegion(region, () => {
+      sample({
+        clock: triggerA,
+        source: $sourceA,
+        target,
+      })
+    })
+
+    sample({
+      clock: triggerB,
+      source: $sourceB,
+      target,
+    })
+
+    triggerA()
+
+    clearNode(region)
+
+    triggerA()
+
+    triggerB()
+
+    expect(argumentHistory(fn)).toEqual([0, 10])
+  })
+  function addFnCallStep(unit: any, fn: Function) {
+    ;(unit.graphite as Node).seq.push(
+      step.compute({
+        fn(upd) {
+          fn(upd)
+          return upd
+        },
+      }),
+    )
+  }
+  test('units will not die after clearNode call', () => {
+    const fnTrigger = jest.fn()
+    const fnSource = jest.fn()
+    const fnTarget = jest.fn()
+    const trigger = createEvent<string>()
+    const updSource = createEvent<number>()
+    const $source = createStore(0)
+    const target = createEvent<number>()
+
+    addFnCallStep(trigger, fnTrigger)
+    addFnCallStep($source, fnSource)
+    addFnCallStep(target, fnTarget)
+
+    sample({clock: updSource, target: $source})
+
+    const region = createNode()
+    withRegion(region, () => {
+      sample({
+        clock: trigger,
+        source: $source,
+        target,
+      })
+    })
+
+    trigger('a')
+
+    clearNode(region)
+
+    sample({
+      clock: trigger,
+      source: $source,
+      target,
+    })
+
+    updSource(10)
+    trigger('b')
+
+    expect(argumentHistory(fnTrigger)).toEqual(['a', 'b'])
+    expect(argumentHistory(fnSource)).toEqual([10])
+    expect(argumentHistory(fnTarget)).toEqual([0, 10])
   })
 })
