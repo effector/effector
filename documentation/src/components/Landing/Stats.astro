@@ -39,7 +39,7 @@ async function getNpmStats() {
 
     return {
       latest,
-      downloads: `${downloadCounts.downloads.toFixed(0)}K`,
+      downloads: `${(downloadCounts.downloads / 1000).toFixed(0)}K`,
     };
   } catch (error) {
     console.error("Failed to get NPM stats", error);
