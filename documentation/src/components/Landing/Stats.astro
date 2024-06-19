@@ -30,16 +30,21 @@ async function getNpmStats() {
   const fromDateString = formatDate(from);
   const toDateString = formatDate(to);
 
-  const { body: downloadCounts } = await stat("effector", fromDateString, toDateString);
+  try {
+    const { body: downloadCounts } = await stat("effector", fromDateString, toDateString);
 
-  const result = await exec("npm info effector --json");
-  const npm = JSON.parse(result.stdout);
-  const latest = npm["dist-tags"].latest;
+    const result = await exec("npm info effector --json");
+    const npm = JSON.parse(result.stdout);
+    const latest = npm["dist-tags"].latest as string;
 
-  return {
-    latest,
-    downloads: `${downloadCounts.downloads.toFixed(0)}K`,
-  };
+    return {
+      latest,
+      downloads: `${downloadCounts.downloads.toFixed(0)}K`,
+    };
+  } catch (error) {
+    console.error("Failed to get NPM stats", error);
+    return null;
+  }
 }
 
 async function getRepoStats() {
@@ -135,19 +140,21 @@ const stats = await Promise.all([getRepoStats(), getNpmStats(), getGzipSize()]).
   <div class="stats">
     <div class="counts">
       {
-        Object.entries(stats).map(([name, counter]) => {
-          return (
-            <a
-              class="stats-card"
-              href={statsMeta[name as keyof typeof stats].link}
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <span class="text-4xl">{counter}</span>
-              <span>{statsMeta[name as keyof typeof stats].label}</span>
-            </a>
-          );
-        })
+        Object.entries(stats)
+          .filter(([_name, counter]) => typeof counter !== "undefined")
+          .map(([name, counter]) => {
+            return (
+              <a
+                class="stats-card"
+                href={statsMeta[name as keyof typeof stats].link}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <span class="text-4xl">{counter}</span>
+                <span>{statsMeta[name as keyof typeof stats].label}</span>
+              </a>
+            );
+          })
       }
     </div>
     <div class="stats-bar">
