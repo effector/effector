@@ -31,14 +31,8 @@
       "types": "./compat.d.ts",
       "require": "./compat.js",
       "default": "./compat.js"
-    },
-    "./effector-vue.umd": {
-      "types": "./effector-vue.umd.d.ts",
-      "require": "./effector-vue.umd.js",
-      "default": "./effector-vue.umd.js"
     }
   },
-  "umd:main": "effector-vue.umd.js",
   "jsnext:main": "effector-vue.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
@@ -55,13 +49,10 @@
     "effector-vue.mjs.map",
     "effector-vue.cjs.js",
     "effector-vue.cjs.js.map",
-    "effector-vue.umd.js",
-    "effector-vue.umd.js.map",
     "compat.js",
     "compat.js.map",
     "effector-vue.cjs.d.ts",
     "effector-vue.mjs.d.ts",
-    "effector-vue.umd.d.ts",
     "compat.d.ts",
     "composition.cjs.js",
     "composition.cjs.js.map",

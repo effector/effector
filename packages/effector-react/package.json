@@ -21,14 +21,8 @@
       "types": "./compat.d.ts",
       "require": "./compat.js",
       "default": "./compat.js"
-    },
-    "./effector-react.umd": {
-      "types": "./effector-react.umd.d.ts",
-      "require": "./effector-react.umd.js",
-      "default": "./effector-react.umd.js"
     }
   },
-  "umd:main": "effector-react.umd.js",
   "jsnext:main": "effector-react.mjs",
   "typings": "index.d.ts",
   "dependencies": {
@@ -46,13 +40,10 @@
     "effector-react.mjs.map",
     "effector-react.cjs.js",
     "effector-react.cjs.js.map",
-    "effector-react.umd.js",
-    "effector-react.umd.js.map",
     "compat.js",
     "compat.js.map",
     "effector-react.cjs.d.ts",
     "effector-react.mjs.d.ts",
-    "effector-react.umd.d.ts",
     "compat.d.ts"
   ],
   "keywords": [
