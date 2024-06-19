@@ -76,7 +76,7 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: { en: "Migration guide" },
-        link: "/guides/migration-guide-v23",
+        link: "/guides/migration-guide-v24",
       },
       {
         text: { en: "Migrating from Redux" },
