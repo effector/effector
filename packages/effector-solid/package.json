@@ -16,14 +16,8 @@
       "types": "./effector-solid.mjs.d.ts",
       "import": "./effector-solid.mjs",
       "default": "./effector-solid.mjs"
-    },
-    "./effector-solid.umd": {
-      "types": "./effector-solid.umd.d.ts",
-      "require": "./effector-solid.umd.js",
-      "default": "./effector-solid.umd.js"
     }
   },
-  "umd:main": "effector-solid.umd.js",
   "jsnext:main": "effector-solid.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
@@ -38,13 +32,10 @@
     "effector-solid.mjs.map",
     "effector-solid.cjs.js",
     "effector-solid.cjs.js.map",
-    "effector-solid.umd.js",
-    "effector-solid.umd.js.map",
     "compat.js",
     "compat.js.map",
     "effector-solid.cjs.d.ts",
     "effector-solid.mjs.d.ts",
-    "effector-solid.umd.d.ts",
     "compat.d.ts"
   ],
   "keywords": [
