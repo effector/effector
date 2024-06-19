@@ -2,6 +2,7 @@
 import { Octokit } from "@octokit/rest";
 import { promisify } from "node:util";
 import * as childProcess from "node:child_process";
+import { stat } from "npm-stats-api";
 
 import { GITHUB_REPO } from "../../consts";
 import IconCopy from "../../icons/Copy.astro";
@@ -29,22 +30,15 @@ async function getNpmStats() {
   const fromDateString = formatDate(from);
   const toDateString = formatDate(to);
 
-  const downloadCounts = await fetch(
-    `https://npm-stat.com/api/download-counts?package=effector&from=${fromDateString}&until=${toDateString}`,
-  ).then((r) => r.json());
+  const { body: downloadCounts } = await stat("effector", fromDateString, toDateString);
 
   const result = await exec("npm info effector --json");
   const npm = JSON.parse(result.stdout);
   const latest = npm["dist-tags"].latest;
 
-  const totalDownloads =
-    Object.values<number>(downloadCounts.effector)
-      .slice(-30)
-      .reduce((total, count) => total + count) / 1000;
-
   return {
     latest,
-    downloads: `${totalDownloads.toFixed(0)}K`,
+    downloads: `${downloadCounts.downloads.toFixed(0)}K`,
   };
 }
 
