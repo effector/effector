@@ -214,9 +214,9 @@ The second case is about custom factories. These are usually created to abstract
 
 Examples of custom factories:
 
-- `createQuery`, `createMutation` from [`farfetched`](https://farfetched.pages.dev/)
+- `createQuery`, `createMutation` from [`farfetched`](https://ff.effector.dev/)
 - `debounce`, `throttle`, etc from [`patronum`](https://patronum.effector.dev/)
-- Any custom factory in your code, e.g. factory of a [feature-flag entity](https://farfetched.pages.dev/recipes/feature_flags.html)
+- Any custom factory in your code, e.g. factory of a [feature-flag entity](https://ff.effector.dev/recipes/feature_flags.html)
 
 For this explanation, we will create a very simple factory:
 

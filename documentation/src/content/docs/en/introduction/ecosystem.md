@@ -22,12 +22,12 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 
 - [patronum](https://github.com/effector/patronum) 💚 — Effector utility library delivering modularity and convenience.
 - [@effector/reflect](https://github.com/effector/reflect) 💚 — Classic HOCs redesigned to connect React components to Effector units in an efficient, composable and (sort of) "fine-grained reactive" way.
-- [@withease/redux](https://withease.pages.dev/redux/) 💚 — Smooth migration from redux to effector.
-- [@withease/i18next](https://withease.pages.dev/i18next) 💚 — A powerful internationalization framework bindings.
-- [@withease/web-api](https://withease.pages.dev/web-api/) 💚 — Web API bindings — network status, tab visibility, and more.
-- [@withease/factories](https://withease.pages.dev/factories/) 💚 — Set of helpers to create factories in your application.
+- [@withease/redux](https://withease.effector.dev/redux/) 💚 — Smooth migration from redux to effector.
+- [@withease/i18next](https://withease.effector.dev/i18next) 💚 — A powerful internationalization framework bindings.
+- [@withease/web-api](https://withease.effector.dev/web-api/) 💚 — Web API bindings — network status, tab visibility, and more.
+- [@withease/factories](https://withease.effector.dev/factories/) 💚 — Set of helpers to create factories in your application.
 - [effector-storage](https://github.com/yumauri/effector-storage) 💚 - Small module to sync stores with all kinds of storages (local/session storage, IndexedDB, cookies, server side storage, etc).
-- [farfetched](https://farfetched.pages.dev) 🛠 — The advanced data fetching tool for web applications.
+- [farfetched](https://ff.effector.dev) 🛠 — The advanced data fetching tool for web applications.
 - [@effector/next](https://github.com/effector/next) 🛠 - Official bindings for Next.js
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) 🛠 — Module for effector that sync stores with localStorage.
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
