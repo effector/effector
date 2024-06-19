@@ -32,6 +32,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Delete deprecated `effector-vue/ssr` in favor of isomorphic hooks ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated `VueSSRPlugin` in favor of `EffectorScopePlugin` ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
+- Function `useStore` is deprecated in favor of `useUnit` ([PR #1099](https://github.com/effector/effector/pull/1099))
 
 ## forest 0.22.0
 
