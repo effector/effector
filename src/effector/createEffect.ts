@@ -106,9 +106,7 @@ export function createEffect<Params, Done, Fail = Error>(
           let handler: Function = scope_.handler
           const scope = getForkPage(stack)
           if (scope) {
-            const scopeHandler =
-              scope.handlers.unitMap.get(instance) ||
-              scope.handlers.sidMap[instance.sid!]
+            const scopeHandler = scope.handlers.unitMap.get(instance)
             if (scopeHandler) handler = scopeHandler
           }
           upd.handler = handler

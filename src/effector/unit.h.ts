@@ -180,7 +180,6 @@ export interface Scope extends Unit {
   >
   additionalLinks: Record<string, Node[]>
   handlers: {
-    sidMap: Record<string, (params: unknown) => any>
     /** map of sidless effects */
     unitMap: Map<Unit<any>, (params: unknown) => any>
   }
