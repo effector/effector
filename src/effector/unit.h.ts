@@ -201,7 +201,6 @@ export type ValuesMap =
 export type HandlersMap =
   | Map<Effect<any, any, any>, Function>
   | Array<[Effect<any, any, any>, Function]>
-  | Record<string, Function>
 
 export type Defer = {
   rs: (value: any) => any
