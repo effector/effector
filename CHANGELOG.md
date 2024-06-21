@@ -14,6 +14,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Delete deprecated option `onlyChanges` in `fork` function ([PR #1092](https://github.com/effector/effector/pull/1092))
 - Delete broken `setStoreName` function ([PR #1094](https://github.com/effector/effector/pull/1094))
 - Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
+- Delete deprecated `fork({ handlers: sidMap })` overload ([PR #1102](https://github.com/effector/effector/pull/1102))
 
 ## effector-react 24.0.0
 

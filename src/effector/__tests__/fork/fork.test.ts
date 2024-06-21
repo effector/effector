@@ -471,24 +471,6 @@ describe('fork handlers support', () => {
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
-  test('handlers as sid map', async () => {
-    const fx = createEffect(() => 'not to call')
-
-    const acc = createStore<string[]>([]).on(fx.doneData, (list, val) => [
-      ...list,
-      val,
-    ])
-
-    const scope = fork({
-      handlers: {
-        [fx.sid!]: () => 'fn',
-      },
-    })
-
-    await allSettled(fx, {scope})
-
-    expect(scope.getState(acc)).toEqual(['fn'])
-  })
   test('handlers as a tuple list, but with sid doubles', async () => {
     const h1 = jest.fn()
     const h2 = jest.fn()

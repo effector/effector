@@ -180,7 +180,6 @@ export interface Scope extends Unit {
   >
   additionalLinks: Record<string, Node[]>
   handlers: {
-    sidMap: Record<string, (params: unknown) => any>
     /** map of sidless effects */
     unitMap: Map<Unit<any>, (params: unknown) => any>
   }
@@ -201,7 +200,6 @@ export type ValuesMap =
 export type HandlersMap =
   | Map<Effect<any, any, any>, Function>
   | Array<[Effect<any, any, any>, Function]>
-  | Record<string, Function>
 
 export type Defer = {
   rs: (value: any) => any

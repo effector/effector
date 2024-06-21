@@ -117,7 +117,7 @@ export function createScope(): Scope {
       scope: {forkInFlightCounter},
     }),
     additionalLinks: {},
-    handlers: {sidMap: {}, unitMap: new Map()},
+    handlers: {unitMap: new Map()},
     fxCount: forkInFlightCounter,
     storeChange,
     warnSerializeNode,
