@@ -217,7 +217,9 @@ describe('fork values support', () => {
       fork({
         values: new Map().set(null, () => {}),
       })
-    }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Values map can contain only writable stores as keys"`,
+    )
   })
   test('passed non store to values map should throw', () => {
     const unit = createEvent()
@@ -503,7 +505,9 @@ describe('handlers validation', () => {
       fork({
         handlers: new Map().set(null, () => {}),
       })
-    }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Handlers map can contain only effects as keys"`,
+    )
   })
   test('passing non-effect unit to handlers should throw', () => {
     const unit = createEvent()
