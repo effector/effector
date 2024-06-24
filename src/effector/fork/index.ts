@@ -1,5 +1,4 @@
 export {allSettled} from './allSettled'
 export {fork} from './fork'
-export {hydrate} from './hydrate'
 export {scopeBind} from './scopeBind'
 export {serialize} from './serialize'

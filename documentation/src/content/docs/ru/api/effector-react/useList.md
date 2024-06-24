@@ -194,14 +194,14 @@ const App = () => (
 ```jsx
 import ReactDOM from "react-dom";
 import { createEvent, createStore, restore } from "effector";
-import { useStore, useList } from "effector-react";
+import { useUnit, useList } from "effector-react";
 
 const renameUser = createEvent();
 const $user = restore(renameUser, "alice");
 const $friends = createStore(["bob"]);
 
 const App = () => {
-  const user = useStore($user);
+  const user = useUnit($user);
   return useList($friends, {
     keys: [user],
     fn: (friend) => (

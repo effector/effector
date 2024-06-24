@@ -76,7 +76,7 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: { en: "Migration guide" },
-        link: "/guides/migration-guide-v23",
+        link: "/guides/migration-guide-v24",
       },
       {
         text: { en: "Migrating from Redux" },
@@ -240,14 +240,6 @@ const effectorReact = [
         link: "/api/effector-react/useStoreMap",
         quickMenu: true,
       },
-      {
-        text: { en: "useStore", ru: "useStore", uz: "useStore" },
-        link: "/api/effector-react/useStore",
-      },
-      {
-        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
-        link: "/api/effector-react/useEvent",
-      },
     ],
   },
   {
@@ -286,10 +278,6 @@ const effectorReact = [
         text: { en: "effector-react/compat" },
         link: "/api/effector-react/module/сompat",
       },
-      {
-        text: { en: "effector-react/scope" },
-        link: "/api/effector-react/module/scope",
-      },
     ],
   },
   {
@@ -299,24 +287,6 @@ const effectorReact = [
       {
         text: { en: "useProvidedScope" },
         link: "/api/effector-react/useProvidedScope",
-      },
-    ],
-  },
-  {
-    text: { en: "HOC-like APIs", uz: "HOCsimon APIlar" },
-    collapsed: true,
-    items: [
-      {
-        text: { en: "connect" },
-        link: "/api/effector-react/connect",
-      },
-      {
-        text: { en: "createComponent" },
-        link: "/api/effector-react/createComponent",
-      },
-      {
-        text: { en: "createStoreConsumer" },
-        link: "/api/effector-react/createStoreConsumer",
       },
     ],
   },
@@ -355,15 +325,6 @@ const effectorSolid = [
         text: { en: "useGate" },
         link: "/api/effector-solid/useGate",
         quickMenu: true,
-      },
-    ],
-  },
-  {
-    text: { en: "Import map" },
-    items: [
-      {
-        text: { en: "effector-solid/scope" },
-        link: "/api/effector-solid/module/scope",
       },
     ],
   },
@@ -451,10 +412,6 @@ const effectorVue = [
         text: { en: "useEvent" },
         link: "/api/effector-vue/useEvent",
       },
-      {
-        text: { en: "VueSSRPlugin" },
-        link: "/api/effector-vue/VueSSRPlugin",
-      },
     ],
   },
   {
@@ -463,10 +420,6 @@ const effectorVue = [
       {
         text: { en: "effector-vue/composition" },
         link: "/api/effector-vue/module/composition",
-      },
-      {
-        text: { en: "effector-vue/ssr" },
-        link: "/api/effector-vue/module/ssr",
       },
     ],
   },
@@ -560,14 +513,6 @@ const effector = [
         link: "/api/effector/restore",
         quickMenu: true,
       },
-      {
-        text: { en: "forward" },
-        link: "/api/effector/forward",
-      },
-      {
-        text: { en: "guard" },
-        link: "/api/effector/guard",
-      },
     ],
   },
   {
@@ -593,10 +538,6 @@ const effector = [
         text: { en: "scopeBind" },
         link: "/api/effector/scopeBind",
         quickMenu: true,
-      },
-      {
-        text: { en: "hydrate" },
-        link: "/api/effector/hydrate",
       },
     ],
   },
@@ -809,7 +750,7 @@ export const FOOTER_LINKS = [
       { text: { en: "Reddit" }, link: LINKS.reddit },
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
-      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant"  },
+      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
       { text: { en: "Made by Astro" }, link: "https://astro.build" },
     ],
   },

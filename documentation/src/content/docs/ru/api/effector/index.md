@@ -36,7 +36,6 @@ lang: ru
 - [serialize](/ru/api/effector/serialize)
 - [allSettled](/ru/api/effector/allSettled)
 - [scopeBind](/ru/api/effector/scopeBind)
-- [hydrate](/ru/api/effector/hydrate)
 
 ## Плагины для компилятора
 
@@ -54,8 +53,3 @@ lang: ru
 - [withRegion](/ru/api/effector/withRegion)
 - [launch](/ru/api/effector/launch)
 - [inspect](/ru/api/effector/inspect)
-
-## Устаревшие методы
-
-- [forward({from, to})](/ru/api/effector/forward)
-- [guard({source, filter, target})](/ru/api/effector/guard)

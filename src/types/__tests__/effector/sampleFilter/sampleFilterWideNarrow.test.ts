@@ -101,7 +101,7 @@ test('unknown type in source (should fail)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
-    Type 'Event<unknown>' is not assignable to type 'EventCallable<string>'.
+    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
     Type 'Event<unknown>' is not assignable to type '[EventCallable<string>]'.
     "
@@ -341,7 +341,7 @@ test('wide union in array (should fail)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type 'EventCallable<(string | number)[]>'.
+    Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, targetable
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type '[EventCallable<(string | number)[]>]'.
     "

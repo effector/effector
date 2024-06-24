@@ -19,7 +19,7 @@ The method is based on the idea of region-based memory management (see [Region-b
 [effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
 :::
 
-The method allows to explicitly transfer ownership of all units (including links created with `sample`, `forward`, etc...) defined in the callback to `unit`. As an implication, all the created links will be erased as soon as `clearNode` is called on [_Unit_](/en/explanation/glossary#unit).
+The method allows to explicitly transfer ownership of all units (including links created with `sample`, etc...) defined in the callback to `unit`. As an implication, all the created links will be erased as soon as `clearNode` is called on [_Unit_](/en/explanation/glossary#unit).
 
 ### Formulae (#methods-withRegion-unit-callback-formulae)
 
@@ -43,11 +43,11 @@ const $store = restore(first, "");
 const domain = createDomain();
 
 withRegion(domain, () => {
-  // Following links created with `forward` or `sample` are owned by the provided unit `domain`
+  // Following links created with `sample` are owned by the provided unit `domain`
   // and will be disposed as soon as `clearNode` is called on `domain`.
-  forward({
-    from: second,
-    to: first,
+  sample({
+    clock: second,
+    target: first,
   });
 });
 

@@ -66,7 +66,7 @@ useStoreMap<Source, Result>({
 
 ```jsx
 import { createStore } from "effector";
-import { useStore, useStoreMap } from "effector-react";
+import { useUnit, useStoreMap } from "effector-react";
 
 const data = [
   {
@@ -105,7 +105,7 @@ const User = ({ id }) => {
 };
 
 const UserList = () => {
-  const ids = useStore($ids);
+  const ids = useUnit($ids);
   return ids.map((id) => <User key={id} id={id} />);
 };
 ```

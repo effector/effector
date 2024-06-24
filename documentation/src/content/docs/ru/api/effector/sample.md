@@ -173,9 +173,9 @@ const sampleUnit = sample(
   (name, password) => ({ name, password }) /* 3 */,
 );
 
-forward({
-  from: sampleUnit,
-  to: signIn /* 4 */,
+sample({
+  clock: sampleUnit,
+  target: signIn /* 4 */,
 });
 
 submitForm(12345678);

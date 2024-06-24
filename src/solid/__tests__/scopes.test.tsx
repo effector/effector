@@ -1,5 +1,4 @@
 import {render} from 'solid-testing-library'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,
   createEvent,
@@ -8,14 +7,11 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   Scope,
   sample,
 } from 'effector'
-import {Provider, useUnit, useGate, createGate} from 'effector-solid/scope'
+import {Provider, useUnit, useGate, createGate} from 'effector-solid'
 import {createSignal} from 'solid-js'
-
-muteErrors(['fork(domain)', 'hydrate(domain'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -70,18 +66,16 @@ test('computed values support', async () => {
     </Provider>
   )
 
-  const serverScope = fork(app)
+  const serverScope = fork()
   await allSettled(start, {
     scope: serverScope,
     params: 'alice',
   })
   const serialized = serialize(serverScope)
 
-  hydrate(app, {
+  const clientScope = fork({
     values: serialized,
   })
-
-  const clientScope = fork(app)
 
   const {container} = await render(() => <App root={clientScope} />)
 
@@ -89,11 +83,11 @@ test('computed values support', async () => {
     <section>
       <b>
         User:
-        guest
+        alice
       </b>
       <small>
         Total:
-        0
+        2
       </small>
     </section>
   `)
@@ -237,29 +231,6 @@ describe('useUnit', () => {
     `)
     expect(count.getState()).toBe(0)
     expect(scope.getState(count)).toBe(1)
-  })
-  test('useEvent function return value', async () => {
-    const fn = jest.fn()
-    const fx = createEffect(() => 'ok')
-    const scope = fork()
-    const App = () => {
-      const fxe = useUnit(fx)
-      return (
-        <div>
-          <button id="btn" onClick={() => fxe().then(fn)}>
-            click
-          </button>
-        </div>
-      )
-    }
-    const {container} = await render(() => (
-      <Provider value={scope}>
-        <App />
-      </Provider>
-    ))
-    container.firstChild.querySelector('#btn').click()
-    await Promise.resolve()
-    expect(argumentHistory(fn)).toEqual(['ok'])
   })
 
   test('object in useUnit', async () => {

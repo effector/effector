@@ -17,9 +17,3 @@ Effector bindings for SolidJS.
 - [Gate](/en/api/effector-solid/Gate)
 - [createGate()](/en/api/effector-solid/createGate)
 - [useGate(GateComponent, props)](/en/api/effector-solid/useGate)
-
-# Import Map (#import-map)
-
-Package `effector-solid` provides couple different entry points for different purposes:
-
-- [effector-solid/scope](/en/api/effector-solid/module/scope)
