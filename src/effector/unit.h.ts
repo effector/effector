@@ -179,10 +179,8 @@ export interface Scope extends Unit {
     {ignore: true} | {ignore: false; write: (value: any) => any}
   >
   additionalLinks: Record<string, Node[]>
-  handlers: {
-    /** map of sidless effects */
-    unitMap: Map<Unit<any>, (params: unknown) => any>
-  }
+  /** map with effects */
+  handlers: Map<Unit<any>, (params: any) => any>
   fxCount: Node
   storeChange: Node
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
@@ -198,8 +196,8 @@ export type ValuesMap =
   | Array<[Store<any>, any]>
   | Record<string, any>
 export type HandlersMap =
-  | Map<Effect<any, any, any>, Function>
-  | Array<[Effect<any, any, any>, Function]>
+  | Map<Effect<any, any, any>, (params: any) => any>
+  | Array<[Effect<any, any, any>, (params: any) => any]>
 
 export type Defer = {
   rs: (value: any) => any
