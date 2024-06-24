@@ -27,7 +27,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [@withease/web-api](https://withease.effector.dev/web-api/) 💚 — Web API bindings — network status, tab visibility, and more.
 - [@withease/factories](https://withease.effector.dev/factories/) 💚 — Set of helpers to create factories in your application.
 - [effector-storage](https://github.com/yumauri/effector-storage) 💚 - Small module to sync stores with all kinds of storages (local/session storage, IndexedDB, cookies, server side storage, etc).
-- [farfetched](https://farfetched.pages.dev) 🛠 — The advanced data fetching tool for web applications.
+- [farfetched](https://ff.effector.dev) 🛠 — The advanced data fetching tool for web applications.
 - [@effector/next](https://github.com/effector/next) 🛠 - Official bindings for Next.js
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) 🛠 — Module for effector that sync stores with localStorage.
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
