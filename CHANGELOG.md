@@ -2,7 +2,7 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-## effector 24.0.0
+## effector 24.0.0 Neowise
 
 - Delete deprecated option `reactSsr` in babel-plugin ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated operator `forward` ([PR #1087](https://github.com/effector/effector/pull/1087))
