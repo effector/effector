@@ -2835,6 +2835,7 @@ export function attach<
   FX extends Effect<any, any, any>,
 >(config: {
   effect: FX
+  name?: string
 }): Effect<EffectParams<FX>, EffectResult<FX>, EffectError<FX>>
 /**
  * Method for creating state-dependent effect and transforming effect payload
