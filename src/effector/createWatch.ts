@@ -1,6 +1,6 @@
 import {clearNode} from './clearNode'
 import {createNode} from './createNode'
-import type {Subscription, Unit, Compute, MovStoreToRegister} from './index.h'
+import type {Subscription, Unit, Cmd} from './index.h'
 import {step} from './step'
 import {Scope} from './unit.h'
 import {addUnsubscribe} from './subscription'
@@ -11,17 +11,20 @@ export function createWatch<T>({
   fn,
   scope,
   batch,
+  seq: additionalSeq,
 }: {
   unit: Unit<T> | Unit<T>[]
   fn: (value: T) => any
   scope?: Scope
   batch?: boolean
+  seq?: Cmd[]
 }): Subscription {
-  const seq: (Compute | MovStoreToRegister)[] = [
-    step.run({fn: value => fn(value)}),
-  ]
+  const seq: Cmd[] = [step.run({fn: value => fn(value)})]
   if (batch) {
     seq.unshift(step.compute({priority: 'sampler', batch: true}))
+  }
+  if (additionalSeq) {
+    seq.unshift(...additionalSeq)
   }
   if (is.store(unit)) {
     seq.unshift(
@@ -70,7 +73,7 @@ export function createWatch<T>({
   }
 }
 
-function prepareSeq(seq: (Compute | MovStoreToRegister)[], unit: any) {
+function prepareSeq(seq: Cmd[], unit: any) {
   if (is.store(unit)) {
     return [
       step.mov({
