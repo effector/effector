@@ -1,5 +1,15 @@
-import {Store, is, scopeBind, Scope, Unit, Event, createWatch} from 'effector'
-import React from 'react'
+import {
+  Store,
+  is,
+  scopeBind,
+  Scope,
+  Unit,
+  Event,
+  createWatch,
+  step,
+  Node,
+} from 'effector'
+import React, {useMemo} from 'react'
 import {useSyncExternalStore} from 'use-sync-external-store/shim'
 import {useSyncExternalStoreWithSelector} from 'use-sync-external-store/shim/with-selector'
 import {throwError} from './throw'
@@ -49,38 +59,40 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     justSubscribed: false,
     scope,
   })
-  const [eventsShape, storeKeys, storeValues, eventKeys, eventValues] =
-    React.useMemo(() => {
-      flagsRef.current.stale = true
-      const shape = Array.isArray(normShape) ? [] : ({} as any)
-      const storeKeys: string[] = []
-      const storeValues: Array<Store<any>> = []
-      const eventKeys: string[] = []
-      const eventValues: Array<Unit<any>> = []
-      for (const key in normShape) {
-        if (!Object.prototype.hasOwnProperty.call(normShape, key)) continue
-        const unit = normShape[key]
-        if (!is.unit(unit)) {
-          const keyMessage = isSingleUnit ? 'argument' : `value in key "${key}"`
-          throwError(`expect useUnit ${keyMessage} to be a unit`)
-        }
-        if (is.event(unit) || is.effect(unit)) {
-          shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
-          eventKeys.push(key)
-          eventValues.push(unit)
-        } else {
-          shape[key] = null
-          storeKeys.push(key)
-          storeValues.push(unit as Store<any>)
-        }
+  const [
+    eventsShape,
+    storeKeys,
+    storeValues,
+    eventKeys,
+    eventValues,
+    usedUnits,
+  ] = React.useMemo(() => {
+    flagsRef.current.stale = true
+    const shape = Array.isArray(normShape) ? [] : ({} as any)
+    const storeKeys: string[] = []
+    const storeValues: Array<Store<any>> = []
+    const eventKeys: string[] = []
+    const eventValues: Array<Unit<any>> = []
+    for (const key in normShape) {
+      if (!Object.prototype.hasOwnProperty.call(normShape, key)) continue
+      const unit = normShape[key]
+      if (!is.unit(unit)) {
+        const keyMessage = isSingleUnit ? 'argument' : `value in key "${key}"`
+        throwError(`expect useUnit ${keyMessage} to be a unit`)
       }
-      return [shape, storeKeys, storeValues, eventKeys, eventValues]
-    }, [
-      flagsRef,
-      scope,
-      ...Object.keys(normShape),
-      ...Object.values(normShape),
-    ])
+      if (is.event(unit) || is.effect(unit)) {
+        shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
+        eventKeys.push(key)
+        eventValues.push(unit)
+      } else {
+        shape[key] = null
+        storeKeys.push(key)
+        storeValues.push(unit as Store<any>)
+      }
+    }
+    const usedUnits = new Set<Node>()
+    return [shape, storeKeys, storeValues, eventKeys, eventValues, usedUnits]
+  }, [flagsRef, scope, ...Object.keys(normShape), ...Object.values(normShape)])
   const stateRef = React.useRef({
     value: eventsShape,
     storeKeys,
@@ -97,9 +109,27 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
           cb()
         }
       }
-      return createWatch({unit: storeValues, fn: cbCaller, scope, batch: true})
+      return createWatch({
+        unit: storeValues,
+        fn: cbCaller,
+        scope,
+        batch: true,
+        // @ts-expect-error
+        seq: isSingleUnit
+          ? []
+          : [
+              step.filter({
+                fn(upd, _, stack) {
+                  if (stack.parent) {
+                    return usedUnits.has(stack.parent.node)
+                  }
+                  return false
+                },
+              }),
+            ],
+      })
     },
-    [storeValues, scope, stateRef, flagsRef],
+    [storeValues, scope, stateRef, flagsRef, usedUnits, isSingleUnit],
   )
   const read = React.useCallback(() => {
     const state = stateRef.current
@@ -155,8 +185,51 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     flags.scope = scope
     return isSingleUnit ? state.value.unit : state.value
   }, [subscribe, storeValues, eventValues, scope, stateRef, flagsRef])
-  return useSyncExternalStore(subscribe, read, read)
+  const result = useSyncExternalStore(subscribe, read, read)
+  return useMemo(() => {
+    if (isSingleUnit) return result
+    usedUnits.clear()
+    return getProxy(result, (target, key) => {
+      const value = target[key]
+      const storeKeyIndex = storeKeys.indexOf(key as any)
+      if (storeKeyIndex !== -1) {
+        const store = storeValues[storeKeyIndex]
+        usedUnits.add((store as any).graphite)
+        return stateReader(store, scope)
+      }
+      return value
+    })
+  }, [isSingleUnit, result])
+  // if (isSingleUnit) return result
+  // usedUnits.clear()
+  // return getProxy(result, (target, key) => {
+  //   const value = target[key]
+  //   const storeKeyIndex = storeKeys.indexOf(key as any)
+  //   if (storeKeyIndex !== -1) {
+  //     const store = storeValues[storeKeyIndex]
+  //     usedUnits.add((store as any).graphite)
+  //     return stateReader(store, scope)
+  //   }
+  //   return value
+  // })
 }
+
+const getProxy: <T extends object>(
+  val: T,
+  getter: (val: T, key: string) => any,
+) => T =
+  typeof Proxy !== 'undefined'
+    ? (val, getter) => new Proxy(val, {get: getter})
+    : (val, getter) => {
+        const result = (Array.isArray(val) ? [] : {}) as typeof val
+        Object.keys(val).forEach(key => {
+          Object.defineProperty(result, key, {
+            enumerable: true,
+            get: () => getter(val, key),
+          })
+        })
+        return result
+      }
 
 export function useStoreMapBase<State, Result, Keys extends ReadonlyArray<any>>(
   [configOrStore, separateFn]: [

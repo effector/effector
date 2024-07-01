@@ -1234,6 +1234,248 @@ describe('useUnit', () => {
     }
     await render(<App />)
   })
+  describe('subscribe on use', () => {
+    describe('dont rerender if store is not used', () => {
+      test('as array', async () => {
+        const fn = jest.fn()
+        const incA = createEvent()
+        const incB = createEvent()
+        const $a = createStore(0)
+        const $b = createStore(0)
+        $a.on(incA, x => x + 1)
+        $b.on(incB, x => x + 1)
+
+        const App = () => {
+          const [a] = useUnit([$a, $b])
+          fn(a)
+          return <p>a = {a}</p>
+        }
+        await render(<App />)
+        await act(async () => {
+          incB()
+        })
+        await act(async () => {
+          incA()
+        })
+        expect(argumentHistory(fn)).toEqual([0, 1])
+      })
+      test('as object', async () => {
+        const fn = jest.fn()
+        const incA = createEvent()
+        const incB = createEvent()
+        const $a = createStore(0)
+        const $b = createStore(0)
+        $a.on(incA, x => x + 1)
+        $b.on(incB, x => x + 1)
+
+        const App = () => {
+          const data = useUnit({a: $a, b: $b})
+          fn(data.a)
+          return <p>a = {data.a}</p>
+        }
+        await render(<App />)
+        await act(async () => {
+          incB()
+        })
+        await act(async () => {
+          incA()
+        })
+        expect(argumentHistory(fn)).toEqual([0, 1])
+      })
+    })
+    test('rerender if store becomes used', async () => {
+      const fn = jest.fn()
+      const incA = createEvent()
+      const incB = createEvent()
+      const $a = createStore(0)
+      const $b = createStore(0)
+      $a.on(incA, x => x + 1)
+      $b.on(incB, x => x + 1)
+
+      const App = () => {
+        const data = useUnit({a: $a, b: $b})
+        if (data.a === 0) {
+          fn([data.a, null])
+          return <p>a = {data.a}</p>
+        } else {
+          fn([data.a, data.b])
+          return (
+            <p>
+              a = {data.a}, b = {data.b}
+            </p>
+          )
+        }
+      }
+      await render(<App />)
+      await act(async () => {
+        incB()
+      })
+      await act(async () => {
+        incA()
+      })
+      await act(async () => {
+        incB()
+      })
+      expect(argumentHistory(fn)).toEqual([
+        [0, null],
+        [1, 1],
+        [1, 2],
+      ])
+    })
+    test('dont rerender if store becomes unused', async () => {
+      const fn = jest.fn()
+      const incA = createEvent()
+      const incB = createEvent()
+      const resetA = createEvent()
+      const $a = createStore(0)
+      const $b = createStore(0)
+      $a.on(incA, x => x + 1)
+      $a.reset(resetA)
+      $b.on(incB, x => x + 1)
+
+      const App = () => {
+        const data = useUnit({a: $a, b: $b})
+        if (data.a === 0) {
+          fn([data.a, null])
+          return <p>a = {data.a}</p>
+        } else {
+          fn([data.a, data.b])
+          return (
+            <p>
+              a = {data.a}, b = {data.b}
+            </p>
+          )
+        }
+      }
+      await render(<App />)
+      await act(async () => {
+        incB()
+      })
+      await act(async () => {
+        incA()
+      })
+      await act(async () => {
+        incB()
+      })
+      await act(async () => {
+        resetA()
+      })
+      await act(async () => {
+        incB()
+      })
+      expect(argumentHistory(fn)).toEqual([
+        [0, null],
+        [1, 1],
+        [1, 2],
+        [0, null],
+      ])
+    })
+    test('dont rerender if store becomes unused in nested components', async () => {
+      const fn = jest.fn()
+      const incA = createEvent()
+      const incB = createEvent()
+      const resetA = createEvent()
+      const $a = createStore(0)
+      const $b = createStore(0)
+      $a.on(incA, x => x + 1)
+      $a.reset(resetA)
+      $b.on(incB, x => x + 1)
+
+      const Component = ({data}: {data: {a: number; b: number}}) => {
+        if (data.a === 0) {
+          fn([data.a, null])
+          return <p>a = {data.a}</p>
+        } else {
+          fn([data.a, data.b])
+          return (
+            <p>
+              a = {data.a}, b = {data.b}
+            </p>
+          )
+        }
+      }
+
+      const App = () => {
+        const data = useUnit({a: $a, b: $b})
+        return <Component data={data} />
+      }
+      await render(<App />)
+      await act(async () => {
+        incB()
+      })
+      await act(async () => {
+        incA()
+      })
+      await act(async () => {
+        incB()
+      })
+      await act(async () => {
+        resetA()
+      })
+      await act(async () => {
+        incB()
+      })
+      expect(argumentHistory(fn)).toEqual([
+        [0, null],
+        [1, 1],
+        [1, 2],
+        [0, null],
+      ])
+    })
+    test('rerender in case with late reading', async () => {
+      const fnBody = jest.fn()
+      const fnTrigger = jest.fn()
+      const incA = createEvent()
+      const $a = createStore(0)
+      $a.on(incA, x => x + 1)
+
+      const App = () => {
+        const data = useUnit({a: $a})
+        fnBody(null)
+        return (
+          <button
+            id="click"
+            onClick={() => {
+              fnTrigger(data.a)
+            }}>
+            Click
+          </button>
+        )
+      }
+      await render(<App />)
+      expect(argumentHistory(fnBody)).toEqual([null])
+      await act(async () => {
+        incA()
+      })
+      expect(argumentHistory(fnBody)).toEqual([null])
+      await act(async () => {
+        container.firstChild.click()
+      })
+      expect(argumentHistory(fnTrigger)).toEqual([1])
+      await act(async () => {
+        incA()
+      })
+      expect(argumentHistory(fnBody)).toEqual([null, null])
+    })
+    test('always rerender in case of single unit', async () => {
+      const fn = jest.fn()
+      const incA = createEvent()
+      const $a = createStore(0)
+      $a.on(incA, x => x + 1)
+
+      const App = () => {
+        const a = useUnit($a)
+        fn(a)
+        return <p>a = {a}</p>
+      }
+
+      await render(<App />)
+      await act(async () => {
+        incA()
+      })
+      expect(argumentHistory(fn)).toEqual([0, 1])
+    })
+  })
 })
 
 describe('@effector/next custom hydration triggers hooks', () => {
