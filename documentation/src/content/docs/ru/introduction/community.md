@@ -10,7 +10,6 @@ redirectFrom:
 ## Материалы
 
 - [dev.to/effector](https://dev.to/effector) — пространство на публичной платформе
-- [community.effector.dev](https://community.effector.dev) — личное пространство
 - [reddit.com/r/effectorjs](https://reddit.com/r/effectorjs) — сабреддит
 - [twitter.com/effectorJS](https://twitter.com/effectorJS) — ретвиты, релизы, анонсы
 
@@ -42,6 +41,7 @@ redirectFrom:
 
 ## Поддержка и спонсирование
 
+- Sponsr — [sponsr.ru/effector](https://sponsr.ru/effector/)
 - OpenCollective — [opencollective.com/effector](https://opencollective.com/effector)
 - Patreon — [patreon.com/zero_bias](https://www.patreon.com/zero_bias)
 
