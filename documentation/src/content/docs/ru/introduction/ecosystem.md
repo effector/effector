@@ -3,8 +3,8 @@ title: Экосистема effector
 description: Пакеты и шаблоны экосистемы эффектора
 lang: ru
 redirectFrom:
-  - /docs/ecosystem
-  - /introduction/ecosystem
+  - /ru/docs/ecosystem
+  - /ru/introduction/ecosystem
 ---
 
 Пакеты и шаблоны экосистемы effector
