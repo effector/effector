@@ -48,7 +48,7 @@ mediaQueryList.addListener(e => {
 
 But how this could been used in react components? (actually, we’ll make more universal thing, which can be used in various ways)
 
-Effector can reacts on media queries changes and provide current query _ as store
+Effector can reacts on media queries changes and provide current query \_ as store
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -223,7 +223,7 @@ export const $screenQueries = combine({
 <!--JavaScript-->
 
 ```js
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 import {screenQueries} from './screenQueries'
 
 function orientationCheck(props, queries) {
@@ -246,7 +246,7 @@ function screenSizeCheck(props, queries) {
 }
 
 export const Screen = props => {
-  const queries = useStore(screenQueries)
+  const queries = useUnit(screenQueries)
   const orientationAllowed = orientationCheck(props, queries)
   const screenSizeAllowed = screenSizeCheck(props, queries)
 

@@ -48,7 +48,7 @@ import { useRouter } from 'next/router';
     ...
 
     const router = useRouter();
-    const attachRouter = useEvent(attachRouterEv);
+    const attachRouter = useUnit(attachRouterEv);
 
     useEffect(() => {
         attachRouter(router);
