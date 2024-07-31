@@ -1,8 +1,8 @@
 ---
 title: Motivation
 redirectFrom:
-  - /docs/introduction/motivation
-  - /introduction/motivation
+  - /en/docs/introduction/motivation
+  - /en/introduction/motivation
 ---
 
 Most applications have the logic for which they're created.

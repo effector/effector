@@ -10,11 +10,11 @@ That's why effector provides you a few simple examples that may cover your basic
 
 ## Simple examples
 
-### [UI loading](https://share.effector.dev/fEsYTDxe)
+### [UI loading](https://share.effector.dev/5ajdlw8c)
 
 To display loader during effects resolving
 
-### [Effects sequence](https://share.effector.dev/RYQ5z59Q)
+### [Effects sequence](https://share.effector.dev/YPxqTWxc)
 
 We'll need it when second request to the server requires resolved data from the first one
 
@@ -26,7 +26,7 @@ When we need to cancel our effect since it's pointless at the time
 
 To connect react modal with state
 
-### [Range input](https://share.effector.dev/oRB2iB8M)
+### [Range input](https://share.effector.dev/icCgTnce)
 
 To connect a custom range input component with state
 
