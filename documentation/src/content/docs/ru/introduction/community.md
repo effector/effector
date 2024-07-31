@@ -3,8 +3,8 @@ title: Сообщество
 lang: ru
 description: Статьи и команда, стоящая за проектом
 redirectFrom:
-  - /docs/introduction/community
-  - /introduction/community
+  - /ru/docs/introduction/community
+  - /ru/introduction/community
 ---
 
 ## Материалы
