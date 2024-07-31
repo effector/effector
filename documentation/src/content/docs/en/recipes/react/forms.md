@@ -155,54 +155,56 @@ submitted.watch((e) => {
 This example demonstrates how to manage state by using an uncontrolled form, handle data loading, create components that depend on stores, and transform data passed between events.
 
 ```jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { createEffect, createStore } from "effector";
-import { useUnit, createComponent } from "effector-react";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createEffect, createStore} from 'effector'
+import {useUnit} from 'effector-react'
 
 //defining simple Effect, which results a string in 3 seconds
 const sendFormFx = createEffect(
-  (formData) => new Promise((rs) => setTimeout(rs, 1000, `Signed in as [${formData.get("name")}]`)),
-);
-
-//applying side-effect, upon sendFormFx `doneData`
-sendFormFx.doneData.watch((result) => {
-  console.log(result);
-});
+  formData =>
+    new Promise(rs =>
+      setTimeout(rs, 1000, `Signed in as [${formData.get('name')}]`),
+    ),
+)
 
 const Loader = () => {
-  //approach #1: explicit store usage, with hook `useStore`
-  const loading = useUnit(sendFormFx.pending); //typeof loading === "boolean"
+  //typeof loading === "boolean"
+  const loading = useUnit(sendFormFx.pending)
+  return loading ? <div>Loading...</div> : null
+}
 
-  return loading ? <div>Loading...</div> : null;
-};
+const SubmitButton = props => {
+  const loading = useUnit(sendFormFx.pending)
+  return (
+    <button disabled={loading} type="submit">
+      Submit
+    </button>
+  )
+}
 
-const SubmitButton = createComponent(sendFormFx.pending, (props, loading) => (
-  //approach #2: implicit store usage
-  //actually `createComponent` is deprecated
-  <button disabled={loading} type="submit">
-    Submit
-  </button>
-));
+//transforming upcoming data, from DOM Event to FormData
+const onSubmit = sendFormFx.prepend(e => new FormData(e.target))
 
-const onSubmit = sendFormFx.prepend((e) => new FormData(e.target)); //transforming upcoming data, from DOM Event to FormData
+const App = () => {
+  const submit = useUnit(onSubmit)
+  return (
+    <form
+      onSubmit={e => {
+        e.preventDefault()
+        submit(e)
+      }}>
+      Login: <input name="name" />
+      <br />
+      Password: <input name="password" type="password" />
+      <br />
+      <Loader />
+      <SubmitButton />
+    </form>
+  )
+}
 
-onSubmit.watch((e) => {
-  e.preventDefault();
-});
-
-const App = () => (
-  <form onSubmit={onSubmit}>
-    Login: <input name="name" />
-    <br />
-    Password: <input name="password" type="password" />
-    <br />
-    <Loader />
-    <SubmitButton />
-  </form>
-);
-
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/yhE6HfCt)
+[Try it](https://share.effector.dev/59v6Jtos)

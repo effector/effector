@@ -173,9 +173,9 @@ const sampleUnit = sample(
   (name, password) => ({ name, password }) /* 3 */,
 );
 
-forward({
-  from: sampleUnit,
-  to: signIn /* 4 */,
+sample({
+  clock: sampleUnit,
+  target: signIn /* 4 */,
 });
 
 submitForm(12345678);
@@ -185,7 +185,7 @@ submitForm(12345678);
 // 4. и передать результат вычислений в эффект signIn
 ```
 
-[Запустить пример](https://share.effector.dev/nln8pwfj)
+[Запустить пример](https://share.effector.dev/YCTp2KLe)
 
 ## `sample({name?})`
 

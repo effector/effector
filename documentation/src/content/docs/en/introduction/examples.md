@@ -46,7 +46,7 @@ To connect a custom range input component with state
 - [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
 - [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
 - [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
-- [Update on scroll with guard](https://share.effector.dev/avjCFH22)
+- [Update on scroll with guard](https://share.effector.dev/9gLRkfiy)
 - [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
 - [Computed bounce menu animation](https://share.effector.dev/ZXEtGBBq)
 - [Values history](https://share.effector.dev/NsPi84mV)
