@@ -496,7 +496,7 @@ click();
 
 ## `shortName` (#shortName)
 
-Имя стора. Задаётся либо явно, через поле `name` в [createStore](/ru/api/effector/createStore), либо автоматически через [Babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateStore)
+Имя стора. Задаётся либо явно, через поле `name` в [createStore](/ru/api/effector/createStore), либо автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
 
 ### Формула (#shortName-formulae)
 
@@ -506,36 +506,6 @@ declare const $store: Store<any>
 $store.shortName
 -> string
 ```
-
-### Пример (#shortName-example)
-
-```js
-import { createDomain, createEvent } from "effector";
-
-const increment = createEvent();
-
-const storesDomain = createDomain();
-
-storesDomain.onCreateStore((store) => {
-  console.log(`создан стор '${store.shortName}'`);
-  store.watch((value) => {
-    console.log(`значение стора '${store.shortName}':`, value);
-  });
-});
-
-const $foo = storesDomain.createStore(0, { name: "foo" });
-// => создан стор 'foo'
-// => значение стора 'foo': 0
-const $bar = storesDomain.createStore(0, { name: "bar" });
-// => создан стор 'bar'
-// => значение стора 'bar': 0
-$foo.on(increment, (n) => n + 1);
-
-increment();
-// => значение стора 'foo': 1
-```
-
-[Запустить пример](https://share.effector.dev/CspgMvEI)
 
 ## `defaultState` (#defaultState)
 

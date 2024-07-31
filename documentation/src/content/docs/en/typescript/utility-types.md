@@ -14,12 +14,11 @@ Taking out of [Unit](/en/explanation/glossary#common-unit) value type.
 ### Example
 
 ```ts
-import { createEffect, createStore, createDomain, createEvent, fork, UnitValue } from "effector";
+import { createEffect, createStore, createEvent, fork, UnitValue } from "effector";
 
 const event = createEvent<{ id: string; name?: string } | { id: string }>();
 const $store = createStore([false, true]);
 const effect = createEffect<{ token: string }, any, string>(() => {});
-const domain = createDomain();
 const scope = fork();
 
 type UnitEventType = UnitValue<typeof event>;
@@ -30,9 +29,6 @@ type UnitStoreType = UnitValue<typeof store>;
 
 type UnitEffectType = UnitValue<typeof effect>;
 // {token: string}
-
-type UnitDomainType = UnitValue<typeof domain>;
-// any
 
 type UnitScopeType = UnitValue<typeof scope>;
 // any

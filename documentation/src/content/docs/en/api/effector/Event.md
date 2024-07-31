@@ -863,6 +863,10 @@ const another = demo;
 This property contains the full internal chain of units. For example, event can be created by the domain, so the
 composite name will contain a domain name inside it.
 
+:::note
+Usually, if long name is needed, is better to pass it explicitly to `name` field
+:::
+
 ```ts
 import { createEvent, createDomain } from "effector";
 
@@ -870,10 +874,10 @@ const first = createEvent();
 const domain = createDomain();
 const second = domain.createEvent();
 
-console.log(first);
+console.log(first.compositeName);
 // => { shortName: "first", fullName: "first", path: ["first"] }
 
-console.log(second);
+console.log(second.compositeName);
 // => { shortName: "second", fullName: "domain/second", path: ["domain", "second"] }
 ```
 
