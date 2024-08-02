@@ -341,6 +341,13 @@ Your support allows us to improve the developer experience 🧡.
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/Olovyannikov>
+            <img src=https://avatars.githubusercontent.com/u/54705024?v=4 width="100;"  alt=Ilya Olovyannikov/>
+            <br />
+            <sub style="font-size:14px"><b>Ilya Olovyannikov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/binjospookie>
             <img src=https://avatars.githubusercontent.com/u/8722478?v=4 width="100;"  alt=Viktor Pasynok/>
             <br />
@@ -368,20 +375,13 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Ivan</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/mindyourlifeguide>
             <img src=https://avatars.githubusercontent.com/u/35348648?v=4 width="100;"  alt=Bohdan Petrov/>
             <br />
             <sub style="font-size:14px"><b>Bohdan Petrov</b></sub>
-        </a>
-    </td>
-</tr>
-<tr>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/Olovyannikov>
-            <img src=https://avatars.githubusercontent.com/u/54705024?v=4 width="100;"  alt=Ilya Olovyannikov/>
-            <br />
-            <sub style="font-size:14px"><b>Ilya Olovyannikov</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
