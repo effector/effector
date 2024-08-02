@@ -2,7 +2,7 @@
 title: FAQ
 description: Частозадаваемые вопросы про Effecor
 redirectFrom:
-  - /FAQ
+  - /ru/FAQ
   - /ru/docs/faq
 ---
 
