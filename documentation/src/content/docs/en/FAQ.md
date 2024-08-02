@@ -2,7 +2,7 @@
 title: FAQ
 description: Frequent questions and answers about effector
 redirectFrom:
-  - /FAQ
+  - /en/FAQ
   - /en/docs/faq
 ---
 
