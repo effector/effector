@@ -3,25 +3,11 @@ import {
   createEvent,
   createStore,
   Event,
-  guard,
   split,
   attach,
   sample,
   EventCallable,
 } from 'effector'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('guard')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 const typecheck = '{global}'
 
@@ -177,7 +163,7 @@ test('edge case with target (should pass)', () => {
   const filter = createStore(true)
   const enumType = 3
   const typeStore = createStore(enumType)
-  const source = guard({source: intervalStore, filter})
+  const source = sample({source: intervalStore, filter})
   const caseA = createEvent()
   const caseB = createEvent()
 

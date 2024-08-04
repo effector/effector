@@ -11,14 +11,12 @@ import {
   createNode,
   split,
   attach,
-  guard,
-  forward,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
 import {withFactory} from '../region'
 
-muteErrors(['forward', 'guard', 'branch computation stopped'])
+muteErrors(['branch computation stopped'])
 
 function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
@@ -58,14 +56,9 @@ describe('inspect API', () => {
       a: () => true,
     })
 
-    guard({
-      clock: attachedFnFx.doneData,
-      filter: () => true,
+    sample({
+      clock: attachedFnFx.done,
       target: end,
-    })
-    forward({
-      from: attachedFnFx.done,
-      to: end,
     })
 
     const trackMock = jest.fn()
@@ -157,9 +150,7 @@ describe('inspect API', () => {
         "update of 'undefined' [filterMap] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'done' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [map] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [forward] to value of '[object Object]' (id:string, sid:undefined, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'doneData' [event] to value of 'undefined' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'end' [event] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'attachedFnFx.inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
@@ -169,8 +160,8 @@ describe('inspect API', () => {
         "update of 'undefined' [map] to value of 'false' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'pending' [store] to value of 'false' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of 'false' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [guard] to value of 'undefined' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
-        "update of 'end' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [sample] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
+        "update of 'end' [event] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [fx] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'finally' [event] to value of '[object Object]' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [filterMap] to value of '[object Object]' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",

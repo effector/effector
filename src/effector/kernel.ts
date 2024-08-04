@@ -93,7 +93,7 @@ const deleteMin = () => {
     if (list.size > 0) {
       /**
        * bucket 3 is for "barrier" PriorityType (used in combine)
-       * bucket 4 is for "sampler" PriorityType (used in sample and guard)
+       * bucket 4 is for "sampler" PriorityType (used in sample)
        */
       if (i === 3 || i === 4) {
         list.size -= 1
@@ -145,7 +145,7 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id: number) => {
   }
   /**
    * bucket 3 is for "barrier" PriorityType (used in combine)
-   * bucket 4 is for "sampler" PriorityType (used in sample and guard)
+   * bucket 4 is for "sampler" PriorityType (used in sample)
    */
   if (priority === 3 || priority === 4) {
     heap = merge(heap, item)

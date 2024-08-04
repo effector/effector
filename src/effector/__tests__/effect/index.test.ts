@@ -3,17 +3,15 @@ import {
   createEvent,
   createStore,
   combine,
-  forward,
   restore,
   Node,
   step,
   fork,
   allSettled,
   attach,
+  sample,
 } from 'effector'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-muteErrors('forward')
+import {argumentHistory} from 'effector/fixtures'
 
 describe('createEffect(handler) support', () => {
   test('with babel plugin', async () => {
@@ -221,38 +219,6 @@ test('effect.pending is a boolean store', async () => {
       false,
     ]
   `)
-})
-
-it('should support forward', async () => {
-  const fnHandler = jest.fn()
-  const fnWatcher = jest.fn()
-  const fetchData = createEffect({
-    async handler(payload: {url: string}) {
-      return 'fetchData result'
-    },
-  })
-
-  const logRequest = createEffect({
-    async handler(payload: {url: string}) {
-      fnHandler(payload)
-      return 'logRequest result'
-    },
-  })
-
-  logRequest.done.watch(d => {
-    fnWatcher(d)
-  })
-
-  forward({
-    from: fetchData,
-    to: logRequest,
-  })
-
-  await fetchData({url: 'xxx'})
-  expect(argumentHistory(fnHandler)).toEqual([{url: 'xxx'}])
-  expect(argumentHistory(fnWatcher)).toEqual([
-    {params: {url: 'xxx'}, result: 'logRequest result'},
-  ])
 })
 
 describe('execution order', () => {
