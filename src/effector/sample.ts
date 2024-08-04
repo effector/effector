@@ -31,7 +31,7 @@ const sampleConfigFields = ['source', 'clock', 'target']
 const fieldErrorMessage = (method: string, field: string) =>
   method + `: ${field} should be defined`
 
-export function validateSampleConfig(config: any, method: string) {
+function validateSampleConfig(config: any, method: string) {
   let atLeastOneFieldExists = false
   forEach(sampleConfigFields, field => {
     if (field in config) {
