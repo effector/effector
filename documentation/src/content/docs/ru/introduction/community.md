@@ -94,9 +94,6 @@ redirectFrom:
 
 [Github](https://github.com/igorkamyshev) • [Telegram](https://t.me/igorkamyshev) • [Commits](https://github.com/effector/effector/commits?author=igorkamyshev)
 
-Igor is working on [Farfetched](https://ff.effector.dev) is the advanced data fetching tool.
-Igor made [eslint-plugin-effector](https://eslint.effector.dev) and reviewed many of the PRs and issues of the effector and ecosystem packages.
-
 Игорь работает над [Farfetched](https://ff.effector.dev) - это продвинутый инструмент для получения данных.
 Игорь сделал [eslint-plugin-effector](https://eslint.effector.dev) и ревьюит многие PR и ишью пакетов effector и экосистемы.
 
