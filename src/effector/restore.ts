@@ -1,9 +1,8 @@
 import {createStore} from './createUnit'
-import {is} from './validate'
+import {is, assert} from './validate'
 import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './createNode'
-import {assert} from './throw'
 import {generateErrorTitle} from './naming'
 
 export function restore(obj: any, defaultState: any, config?: any) {

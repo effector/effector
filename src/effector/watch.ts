@@ -3,8 +3,7 @@ import {callStack} from './caller'
 import {createNode} from './createNode'
 import {Subscription, NodeUnit} from './index.h'
 import {createSubscription} from './subscription'
-import {assert} from './throw'
-import {isFunction} from './validate'
+import {isFunction, assert} from './validate'
 
 export const watchUnit = (
   unit: NodeUnit,

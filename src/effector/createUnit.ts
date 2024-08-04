@@ -11,6 +11,8 @@ import {
   assertObject,
   assertNodeSet,
   isVoid,
+  assert,
+  deprecate,
 } from './validate'
 import {calc, mov, read, userFnCall} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
@@ -39,7 +41,6 @@ import {
   setMeta,
   getMeta,
 } from './getter'
-import {assert, deprecate} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'

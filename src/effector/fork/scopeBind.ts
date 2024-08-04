@@ -1,4 +1,4 @@
-import {assert} from '../throw'
+import {assert} from '../validate'
 import {forkPage, setForkPage} from '../kernel'
 import type {Scope} from '../unit.h'
 
