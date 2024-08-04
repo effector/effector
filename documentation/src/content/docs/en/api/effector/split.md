@@ -370,15 +370,20 @@ TBD
 ### Examples (#methods-split-source-clock-match-cases-examples)
 
 ```js
-const options = ["save", "delete", "forward"];
-const $message = createStore({ id: 1, text: "Bring me a cup of coffee, please!" });
-const $mode = createStore("");
-const selectedMessageOption = createEvent();
-const saveMessageFx = createEffect(() => "save");
-const forwardMessageFx = createEffect(() => "forward");
-const deleteMessageFx = createEffect(() => "delete");
+import {createStore, createEvent, createEffect, split} from 'effector';
 
-$mode.on(selectedMessageOption, (_, opt) => options.find((item) => item === opt));
+const options = ['save', 'delete', 'forward'];
+const $message = createStore({id: 1, text: 'Bring me a cup of coffee, please!'});
+const $mode = createStore('');
+const selectedMessageOption = createEvent();
+const saveMessageFx = createEffect(() => 'save');
+const forwardMessageFx = createEffect(() => 'forward');
+const deleteMessageFx = createEffect(() => 'delete');
+
+$mode.on(
+  selectedMessageOption,
+  (mode, opt) => options.find(item => item === opt) ?? mode
+);
 
 split({
   source: $message,
@@ -391,8 +396,9 @@ split({
   },
 });
 
-selectedMessageOption("delet"); // nothing happens
-selectedMessageOption("delete");
+selectedMessageOption('delet'); // nothing happens
+selectedMessageOption('delete');
+
 ```
 
-[Try it](https://share.effector.dev/VJmD5KdN)
+[Try it](https://share.effector.dev/1fRuqN0o)

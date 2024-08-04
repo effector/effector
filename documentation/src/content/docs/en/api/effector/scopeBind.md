@@ -41,6 +41,8 @@ scopeBind<T>(event: EventCallable<T>, options?: {scope?: Scope, safe?: boolean})
 We are going to call `changeLocation` inside `history.listen` callback so there is no way for effector to associate event with corresponding scope, and we should explicitly bind event to scope using `scopeBind`.
 
 ```ts
+import {createStore, createEvent, attach, scopeBind} from 'effector';
+
 const $history = createStore(history);
 const initHistory = createEvent();
 const changeLocation = createEvent<string>();
@@ -62,7 +64,7 @@ sample({
 });
 ```
 
-[See full example](https://share.effector.dev/nJo1zRil)
+[See full example](https://share.effector.dev/xtP8Zk8J)
 
 ## `scopeBind(callback, options?)` (#scopeBind-methods-scopeBind-callback)
 
@@ -100,6 +102,9 @@ scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T
 ### Examples (#scopeBind-methods-scopeBind-callback-examples)
 
 ```ts
+import {createEvent, createStore, attach, scopeBind} from 'effector'
+
+const $history = createStore(history);
 const locationChanged = createEvent();
 
 const listenToHistoryFx = attach({

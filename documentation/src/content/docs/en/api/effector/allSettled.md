@@ -66,6 +66,8 @@ Supported since effector 22.5.0
 For example, tests that validate the integration with an external reactive API
 
 ```ts
+import {createEvent, sample, fork, scopeBind, allSettled} from 'effector'
+
 test('integration with externalSource', async () => {
   const scope = fork()
 
