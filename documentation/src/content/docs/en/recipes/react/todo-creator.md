@@ -5,7 +5,7 @@ redirectFrom:
   - /recipes/react/todo-creator
 ---
 
-[Try it](https://share.effector.dev/AeiP1Jeb)
+[Try it](https://share.effector.dev/jrWxrVVQ)
 
 ```tsx
 import React from "react";

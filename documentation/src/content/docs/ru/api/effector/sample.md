@@ -185,7 +185,7 @@ submitForm(12345678);
 // 4. и передать результат вычислений в эффект signIn
 ```
 
-[Запустить пример](https://share.effector.dev/nln8pwfj)
+[Запустить пример](https://share.effector.dev/YCTp2KLe)
 
 ## `sample({name?})`
 

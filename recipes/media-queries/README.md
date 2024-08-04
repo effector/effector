@@ -48,7 +48,7 @@ mediaQueryList.addListener(e => {
 
 But how this could been used in react components? (actually, we’ll make more universal thing, which can be used in various ways)
 
-Effector can reacts on media queries changes and provide current query _ as store
+Effector can reacts on media queries changes and provide current query \_ as store
 
 <!--DOCUSAURUS_CODE_TABS-->
 

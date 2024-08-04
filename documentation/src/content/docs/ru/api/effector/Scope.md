@@ -52,7 +52,7 @@ console.log(scopeA.getState($counter)); // => 1
 console.log(scopeB.getState($counter)); // => -1
 ```
 
-[Запустить пример](https://share.effector.dev/0grlV3bA)
+[Запустить пример](https://share.effector.dev/NkCWDx0G)
 
 ## Императивные вызовы эффектов и scope
 

@@ -2,8 +2,8 @@
 title: Ecosystem
 description: Packages and templates of effector ecosystem
 redirectFrom:
-  - /docs/ecosystem
-  - /introduction/ecosystem
+  - /en/docs/ecosystem
+  - /en/introduction/ecosystem
 ---
 
 Packages and templates of effector ecosystem

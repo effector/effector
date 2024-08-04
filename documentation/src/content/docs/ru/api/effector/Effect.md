@@ -534,7 +534,7 @@ fetchApiFx(1000);
 // => false
 ```
 
-[Запустить пример](https://share.effector.dev/e9y5uETf)
+[Запустить пример](https://share.effector.dev/YX24VysD)
 
 ## `inFlight` (#inFlight)
 

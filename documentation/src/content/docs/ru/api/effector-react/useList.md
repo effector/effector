@@ -221,4 +221,4 @@ setTimeout(() => {
 }, 500);
 ```
 
-[Запустить пример](https://share.effector.dev/ijRS5TYh)
+[Запустить пример](https://share.effector.dev/joHy2ADJ)

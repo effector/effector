@@ -110,4 +110,4 @@ const UserList = () => {
 };
 ```
 
-[Запустить пример](https://share.effector.dev/cAZWHCit)
+[Запустить пример](https://share.effector.dev/gIuUl8fF)

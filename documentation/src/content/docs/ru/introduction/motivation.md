@@ -2,8 +2,8 @@
 title: Мотивация
 lang: ru
 redirectFrom:
-  - /docs/introduction/motivation
-  - /introduction/motivation
+  - /ru/docs/introduction/motivation
+  - /ru/introduction/motivation
 ---
 
 Большинство приложений имеют логику для которой они были созданы. Эта логика сама по себе может быть очень сложной и основанной на реактивных принципах, мы называем ее **бизнес-логикой**.
