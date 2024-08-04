@@ -11,7 +11,7 @@ import {
   assertObject,
   assertNodeSet,
   isVoid,
-} from './is'
+} from './validate'
 import {calc, mov, read, userFnCall} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'

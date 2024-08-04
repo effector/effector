@@ -13,7 +13,7 @@ import {
   isObject,
   isVoid,
   isFunction,
-} from './is'
+} from './validate'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createNode, createLinkNode} from './createNode'

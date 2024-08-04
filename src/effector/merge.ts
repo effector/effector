@@ -2,7 +2,7 @@ import type {Store, Event, Effect} from './unit.h'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './createNode'
 import {generateErrorTitle, unitObjectName} from './naming'
-import {assertNodeSet} from './is'
+import {assertNodeSet} from './validate'
 
 export function merge<T>(
   units: Array<Event<T> | Store<T> | Effect<T, any, any>>,

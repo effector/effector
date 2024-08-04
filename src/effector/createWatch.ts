@@ -4,7 +4,7 @@ import type {Subscription, Unit, Compute, MovStoreToRegister} from './index.h'
 import {step} from './step'
 import {Scope} from './unit.h'
 import {addUnsubscribe} from './subscription'
-import {is} from './is'
+import {is} from './validate'
 
 export function createWatch<T>({
   unit,

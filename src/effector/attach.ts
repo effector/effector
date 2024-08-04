@@ -11,7 +11,7 @@ import {
   getCompositeName,
 } from './getter'
 import {own} from './own'
-import {is, isVoid} from './is'
+import {is, isVoid} from './validate'
 import {read, calc} from './step'
 import {launch} from './kernel'
 import {EFFECT} from './tag'

@@ -1,6 +1,6 @@
 import type {DataCarrier} from './unit.h'
 import type {Cmd, Stack} from './index.h'
-import {is, isFunction, isObject, assertTarget} from './is'
+import {is, isFunction, isObject, assertTarget} from './validate'
 import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
 import {processArgsToConfig} from './config'

@@ -1,5 +1,5 @@
 import {createStore} from './createUnit'
-import {is} from './is'
+import {is} from './validate'
 import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './createNode'

@@ -1,5 +1,5 @@
-import type { CommonUnit, Domain} from './unit.h'
-import {is} from './is'
+import type {CommonUnit, Domain} from './unit.h'
+import {is} from './validate'
 import {getCompositeName} from './getter'
 import {forIn} from './collection'
 

@@ -4,7 +4,7 @@ import {createNode} from './createNode'
 import {Subscription, NodeUnit} from './index.h'
 import {createSubscription} from './subscription'
 import {assert} from './throw'
-import {isFunction} from './is'
+import {isFunction} from './validate'
 
 export const watchUnit = (
   unit: NodeUnit,

@@ -1,7 +1,7 @@
 import {observableSymbol} from './observable'
 import type {Event} from './unit.h'
 import {createEvent} from './createUnit'
-import {assertObject} from './is'
+import {assertObject} from './validate'
 import {assert} from './throw'
 import {createSubscription} from './subscription'
 
