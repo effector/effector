@@ -1,8 +1,10 @@
-import {observableSymbol} from './observable'
 import type {Event} from './unit.h'
 import {createEvent} from './createUnit'
 import {assertObject, assert} from './validate'
 import {createSubscription} from './createWatch'
+
+export const observableSymbol =
+  (typeof Symbol !== 'undefined' && Symbol.observable) || '@@observable'
 
 export function fromObservable<T>(observable: any): Event<T> {
   assertObject(observable)
