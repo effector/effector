@@ -3,6 +3,11 @@ title: useEvent
 lang: ru
 ---
 
+:::warning{title="Устаревшее API "}
+
+Рекомендуется использовать хук [`useUnit`](/ru/api/effector-react/useUnit).
+:::
+
 Реакт-хук, который привязывает событие к текущему [scope](/ru/api/effector/Scope) для использования в обработчиках событий
 
 Используется с серверным рендерингом и в тестировании, импортируется из `effector-react/scope`

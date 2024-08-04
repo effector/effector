@@ -241,11 +241,11 @@ const effectorReact = [
         quickMenu: true,
       },
       {
-        text: { en: "useStore", ru: "useStore", uz: "useStore" },
+        text: { en: "useStore ⚠️", ru: "useStore ⚠️", uz: "useStore ⚠️" },
         link: "/api/effector-react/useStore",
       },
       {
-        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
+        text: { en: "useEvent ⚠️", ru: "useEvent ⚠️", uz: "useEvent ⚠️" },
         link: "/api/effector-react/useEvent",
       },
     ],
