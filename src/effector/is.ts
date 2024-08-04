@@ -1,4 +1,4 @@
-export * as is from './validate'
+export * as is from './isMethod'
 import {forEach} from './collection'
 import {assert} from './throw'
 import {arrifyNodes} from './createNode'
