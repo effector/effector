@@ -19,7 +19,7 @@ redirectFrom:
 
 ## Где я могу задать вопрос?
 
-1. Прежде всего, вы можете посмотреть [ишью](https://github.com/effector/effector/issues) and [дискуссии](https://github.com/effector/effector/discussions) в репозитории
+1. Прежде всего, вы можете посмотреть [ишью](https://github.com/effector/effector/issues) и [дискуссии](https://github.com/effector/effector/discussions) в репозитории
 2. У нас есть несколько чатов:
    - Telegram — [t.me/effector_en](https://t.me/effector_en)
    - Discord — [discord.gg/t3KkcQdt](https://discord.gg/t3KkcQdt)
