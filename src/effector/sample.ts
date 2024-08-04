@@ -16,14 +16,13 @@ import {
 } from './is'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
-import {createNode} from './createNode'
+import {createNode, createLinkNode} from './createNode'
 import {assert, deprecate} from './throw'
 import {forEach} from './collection'
 import {STACK, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
 import {own} from './own'
-import {createLinkNode} from './forward'
 import {generateErrorTitle} from './naming'
 
 const sampleConfigFields = ['source', 'clock', 'target']

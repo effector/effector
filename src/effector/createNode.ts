@@ -64,3 +64,21 @@ export function createNode({
   }
   return result
 }
+
+/** simplified version of createNode for common cases */
+export const createLinkNode = (
+  parent: NodeUnit | NodeUnit[],
+  child: NodeUnit | NodeUnit[],
+  node?: Array<Cmd | false | void | null>,
+  op?: string,
+  scopeFn?: Function,
+) =>
+  createNode({
+    node,
+    parent,
+    child,
+    scope: {fn: scopeFn},
+    meta: {op},
+    family: {owners: [parent, child], links: child},
+    regional: true,
+  })

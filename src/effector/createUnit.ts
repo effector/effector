@@ -17,7 +17,7 @@ import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
 import {own} from './own'
-import {createNode} from './createNode'
+import {createNode, createLinkNode} from './createNode'
 import {
   launch,
   currentPage,
@@ -28,7 +28,6 @@ import {
 } from './kernel'
 
 import {createName, generateErrorTitle} from './naming'
-import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 import {readTemplate, readSidRoot, reportDeclaration} from './region'

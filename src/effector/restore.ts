@@ -2,7 +2,7 @@ import {createStore} from './createUnit'
 import {is} from './is'
 import {forIn} from './collection'
 import {getParent} from './getter'
-import {createLinkNode} from './forward'
+import {createLinkNode} from './createNode'
 import {assert} from './throw'
 import {generateErrorTitle} from './naming'
 
