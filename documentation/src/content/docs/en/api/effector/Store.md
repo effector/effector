@@ -128,6 +128,8 @@ const unwatch = $store.watch(watcher);
 #### Basic (#methods-watch-watcher-examples-basic)
 
 ```js
+import {createEvent, createStore} from 'effector';
+
 const add = createEvent();
 const $store = createStore(0).on(add, (state, payload) => state + payload);
 
@@ -135,6 +137,8 @@ $store.watch((value) => console.log(`current value: ${value}`));
 add(4);
 add(3);
 ```
+
+[Try it](https://share.effector.dev/aj0A6OI4)
 
 ## `.reset(...triggers)` (#methods-reset-triggers)
 
@@ -228,7 +232,7 @@ $store.off(changed);
 import { createStore, is } from "effector";
 
 const $clicksAmount = createStore(0);
-is.event($clicksAmount.updates);
+is.event($clicksAmount.updates); // true
 
 $clicksAmount.updates.watch((amount) => {
   console.log(amount);

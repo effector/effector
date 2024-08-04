@@ -152,7 +152,7 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 });
 ```
 
-[Try it](https://tsplay.dev/NBJDDN)
+[Try it in ts playground](https://tsplay.dev/NBJDDN)
 
 Types of the `source` store and `effect` params must be the same.
 But the `attachedFx` will omit the type of params, it means the attached effect not requires any params at all.
@@ -170,13 +170,15 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 });
 ```
 
-[Try it](https://tsplay.dev/mbE58N)
+[Try it in ts playground](https://tsplay.dev/mbE58N)
 
 Types of the `source` object must be the same as `originalFx` params. But the `attachedFx` will omit the type of params, it means the attached effect not requires any params at all.
 
 ### Examples (#methods-attach-source-effect-examples)
 
 ```ts
+import {createEffect, createStore, attach} from 'effector'
+
 const requestPageFx = createEffect<{ page: number; size: number }, string[]>(
   async ({ page, size }) => {
     console.log("Requested", page);
@@ -209,7 +211,7 @@ await requestNextPageFx();
 // => requestPageFx.doneData 60
 ```
 
-[Try it](https://share.effector.dev/FGqlrrnw)
+[Try it](https://share.effector.dev/CoHyLc0W)
 
 ## `attach({source, async effect})` (#methods-attach-source-async-effect)
 
@@ -325,7 +327,7 @@ attachedFx({ baz: true });
 // => Hit! { foo: 100, bar: "demo", baz: true }
 ```
 
-[Try it](https://tsplay.dev/m3xjbW)
+[Try it in ts playground](https://tsplay.dev/m3xjbW)
 
 ### Example (#methods-attach-source-async-effect-example)
 
@@ -381,7 +383,7 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 });
 ```
 
-[Try it](https://tsplay.dev/wXOYoW)
+[Try it in ts playground](https://tsplay.dev/wXOYoW)
 
 But if `mapParams` function throws an exception, it is on your own to check types compatibility, because of TypeScript.
 
@@ -399,7 +401,9 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 #### Map arguments (#methods-attach-effect-mapParams-examples-map-arguments)
 
 ```ts
-const originalFx = createEffect<{ input: number }, void>((a) => a);
+import {createEffect, attach} from 'effector'
+
+const originalFx = createEffect((a: { input: number }) => a);
 
 const attachedFx = attach({
   effect: originalFx,
@@ -408,18 +412,20 @@ const attachedFx = attach({
   },
 });
 
-originalFx.watch((params) => console.log("originalFx", params));
+originalFx.watch((params) => console.log("originalFx started", params));
 
 attachedFx(1);
 // => originalFx { input: 100 }
 ```
 
-[Try it](https://share.effector.dev/TFRlrmhm)
+[Try it](https://share.effector.dev/CEGzfidC)
 
 #### Handle exceptions (#methods-attach-effect-mapParams-examples-handle-exceptions)
 
 ```ts
-const originalFx = createEffect<{ a: number }, void>((a) => a);
+import {createEffect, attach} from 'effector'
+
+const originalFx = createEffect((a: { a: number }) => a);
 
 const attachedFx = attach({
   effect: originalFx,
@@ -436,7 +442,7 @@ attachedFx(1);
 // =>   Error: custom error
 ```
 
-[Try it](https://share.effector.dev/VYvWQoOk)
+[Try it](https://share.effector.dev/4ZjCRKAD)
 
 ## `attach({source, mapParams, effect})` (#methods-attach-source-mapParams-effect)
 
