@@ -1,4 +1,4 @@
-export * as is from './isMethod'
+export * as is from './is'
 import {forEach} from './collection'
 import {arrifyNodes} from './createNode'
 import type {NodeUnit} from './index.h'
