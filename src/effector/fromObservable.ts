@@ -2,7 +2,7 @@ import {observableSymbol} from './observable'
 import type {Event} from './unit.h'
 import {createEvent} from './createUnit'
 import {assertObject, assert} from './validate'
-import {createSubscription} from './subscription'
+import {createSubscription} from './createWatch'
 
 export function fromObservable<T>(observable: any): Event<T> {
   assertObject(observable)

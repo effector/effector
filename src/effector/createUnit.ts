@@ -30,8 +30,7 @@ import {
 } from './kernel'
 
 import {createName, generateErrorTitle} from './naming'
-import {watchUnit} from './createWatch'
-import {createSubscription} from './subscription'
+import {watchUnit, createSubscription} from './createWatch'
 import {readTemplate, readSidRoot, reportDeclaration} from './region'
 import {
   getSubscribers,

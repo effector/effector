@@ -10,7 +10,6 @@ import type {
 } from './index.h'
 import {run, compute, mov} from './step'
 import type {Scope} from './unit.h'
-import {addUnsubscribe, createSubscription} from './subscription'
 import {is, isFunction, assert} from './validate'
 
 export function createWatch<T>({
@@ -103,4 +102,14 @@ export const watchUnit = (
       regional: true,
     }),
   )
+}
+
+export const createSubscription = (node: NodeUnit): Subscription =>
+  addUnsubscribe(() => clearNode(node))
+
+const addUnsubscribe = (callback: () => void): Subscription => {
+  const subscription: Subscription = () => callback()
+  subscription.unsubscribe = () => callback()
+
+  return subscription
 }
