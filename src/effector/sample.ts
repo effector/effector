@@ -18,12 +18,11 @@ import {
 } from './validate'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
-import {createNode, createLinkNode} from './createNode'
+import {createNode, createLinkNode, own} from './createNode'
 import {forEach} from './collection'
 import {STACK, VALUE} from './tag'
 import {merge} from './merge'
 import {applyTemplate} from './template'
-import {own} from './own'
 import {generateErrorTitle} from './naming'
 
 const sampleConfigFields = ['source', 'clock', 'target']

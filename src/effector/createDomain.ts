@@ -1,6 +1,5 @@
 import type {Domain} from './unit.h'
-import {own} from './own'
-import {createNode, createLinkNode} from './createNode'
+import {createNode, createLinkNode, own} from './createNode'
 import type {Config, NodeUnit} from './index.h'
 import {
   createEvent,

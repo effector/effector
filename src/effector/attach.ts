@@ -10,7 +10,7 @@ import {
   setMeta,
   getCompositeName,
 } from './getter'
-import {own} from './own'
+import {own} from './createNode'
 import {is, isVoid, assert} from './validate'
 import {read, calc} from './step'
 import {launch} from './kernel'

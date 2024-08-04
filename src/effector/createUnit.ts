@@ -18,8 +18,7 @@ import {calc, mov, read, userFnCall} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
-import {own} from './own'
-import {createNode, createLinkNode} from './createNode'
+import {createNode, createLinkNode, own} from './createNode'
 import {
   launch,
   currentPage,
