@@ -2,13 +2,7 @@ import React from 'react'
 import fetch from 'cross-fetch'
 import {sample, combine} from 'effector'
 import {scopeBind} from 'effector/fork'
-import {
-  useStore,
-  useList,
-  useStoreMap,
-  Provider,
-  useEvent,
-} from 'effector-react/ssr'
+import {useList, useStoreMap, Provider, useUnit} from 'effector-react/ssr'
 import domainConfig from '../domain.json'
 import {app} from './domain'
 
@@ -82,16 +76,16 @@ sample({
 
 const Meta = () => (
   <p>
-    This page is rendered on <b>{useStore($isServer) ? 'server' : 'client'}</b>
+    This page is rendered on <b>{useUnit($isServer) ? 'server' : 'client'}</b>
   </p>
 )
 
-const User = () => <h2>{useStore($user)}</h2>
+const User = () => <h2>{useUnit($user)}</h2>
 const Friends = () => useList($friends, friend => <li>{friend}</li>)
-const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+const Total = () => <small>Total: {useUnit(friendsTotal)}</small>
 
 const FetchingStatus = () => {
-  const pending = useStore(fetchUser.pending)
+  const pending = useUnit(fetchUser.pending)
 
   return (
     <p>
@@ -101,7 +95,7 @@ const FetchingStatus = () => {
 }
 
 const UserList = () => {
-  const selectUser = useEvent(selectUserEvent)
+  const selectUser = useUnit(selectUserEvent)
 
   return useList($userList, userName => {
     const isSelected = useStoreMap({

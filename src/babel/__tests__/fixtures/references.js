@@ -15,7 +15,6 @@ function outerScope() {
   const sample = foo
   const split = foo
   const withRegion = foo
-  const hydrate = foo
   const serialize = foo
   const scopeBind = foo
   const allSettled = foo
@@ -25,7 +24,7 @@ function outerScope() {
     const store = createStore(0)
     const effect = createEffect()
     const domainEvent = domain.createEvent()
-    const scope = fork(domain)
+    const scope = fork()
     const node = createNode()
 
     const a = attach({effect})
@@ -38,7 +37,6 @@ function outerScope() {
     const j = sample({source: store, clock: event})
     const k = split(event, {})
     const l = withRegion(node, () => {})
-    const n = hydrate(scope, {values: {}})
     const o = serialize(scope)
     const p = scopeBind(domainEvent)
     const q = allSettled(domainEvent, {scope})

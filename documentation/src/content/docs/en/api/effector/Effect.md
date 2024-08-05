@@ -48,6 +48,8 @@ You must provide a handler either through [.use](#methods-use-handler) method or
 ### Examples (#methods-use-handler-examples)
 
 ```js
+import {createEffect} from 'effector';
+
 const fetchUserReposFx = createEffect();
 
 fetchUserReposFx.use(async (params) => {
@@ -62,7 +64,7 @@ fetchUserReposFx({ name: "zerobias" });
 // => fetchUserRepos called with {name: 'zerobias'}
 ```
 
-[Try it](https://share.effector.dev/TlYuDeve)
+[Try it](https://share.effector.dev/pwKLDbi3)
 
 ## `.use.getCurrent()` (#methods-use-getCurrent)
 
@@ -86,6 +88,8 @@ fn = effect.use.getCurrent();
 ### Examples (#methods-use-getCurrent-examples)
 
 ```js
+import {createEffect} from 'effector';
+
 const handlerA = () => "A";
 const handlerB = () => "B";
 
@@ -99,7 +103,7 @@ console.log(fx.use.getCurrent() === handlerB);
 // => true
 ```
 
-[Try it](https://share.effector.dev/CM6hgtOM)
+[Try it](https://share.effector.dev/VJJg1CrC)
 
 ## `.watch(watcher)` (#methods-watch-watcher)
 

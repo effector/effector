@@ -70,7 +70,7 @@ loginSize.watch((size) => {
 **Правильно**, декларативно:
 
 ```js
-import { createStore, createEvent } from "effector";
+import { createStore, createEvent, sample } from "effector";
 
 const login = createStore("guest");
 
@@ -84,9 +84,9 @@ sample({
 });
 ```
 
-[Запустить пример](https://share.effector.dev/it0gXQLI)
+[Запустить пример](https://share.effector.dev/6WyFNlCK)
 
-[sample in docs](/ru/api/effector/sample)
+[sample в документации](/ru/api/effector/sample)
 
 **Неправильно**:
 

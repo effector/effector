@@ -134,7 +134,7 @@ sample({
 });
 ```
 
-[Try it](https://tsplay.dev/WyoPKN)
+[Try it in ts playground](https://tsplay.dev/WyoPKN)
 
 To specify the argument type for an event, it is essential to first determine the intended purpose, what do you want to do with this event:
 

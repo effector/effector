@@ -33,18 +33,16 @@ scope.getState<T>(store: Store<T>): T
 Создание двух инстансов приложения, вызов событий в них и проверка сохранения значения стора `$counter` в каждом из них
 
 ```js
-import { createStore, createEvent, createDomain, fork, allSettled } from "effector";
+import { createStore, createEvent, fork, allSettled } from "effector";
 
-const domain = createDomain();
-const inc = domain.createEvent();
-const dec = domain.createEvent();
-const $counter = domain
-  .createStore(0)
+const inc = createEvent();
+const dec = createEvent();
+const $counter = createStore(0)
   .on(inc, (value) => value + 1)
   .on(dec, (value) => value - 1);
 
-const scopeA = fork(domain);
-const scopeB = fork(domain);
+const scopeA = fork();
+const scopeB = fork();
 
 await allSettled(inc, { scope: scopeA });
 await allSettled(dec, { scope: scopeB });
@@ -54,7 +52,7 @@ console.log(scopeA.getState($counter)); // => 1
 console.log(scopeB.getState($counter)); // => -1
 ```
 
-[Запустить пример](https://share.effector.dev/0grlV3bA)
+[Запустить пример](https://share.effector.dev/NkCWDx0G)
 
 ## Императивные вызовы эффектов и scope
 

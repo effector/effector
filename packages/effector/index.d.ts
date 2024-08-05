@@ -702,7 +702,6 @@ export function createStore<State, SerializedState extends Json = Json>(
     domain?: Domain;
   },
 ): StoreWritable<State>
-export function setStoreName<State>(store: Store<State>, name: string): void
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
@@ -2517,19 +2516,12 @@ export interface Scope extends Unit<any> {
 export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>, any]> | {[sid: string]: any}
 
 /**
- * Fill stores with given values in provided scope or domain
- * 
- * @deprecated use `fork({values})` instead
- */
-export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
-
-/**
  * Serialize store values from given scope
  * @returns object with saved values
  */
 export function serialize(
   scope: Scope,
-  options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
+  options?: {ignore?: Array<Store<any>> },
 ): {[sid: string]: any}
 
 /**
@@ -2573,25 +2565,6 @@ export function fork(
   config?: {
     values?: StorePair<any>[] | SerializedState | LegacyMap,
     handlers?: Handlers
-  },
-): Scope
-
-
-// legacy overloads
-/**
- * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
- * 
- * @deprecated use `fork({values, handlers})` instead
- * 
- * @param domain optional root domain
- * @param config optional configuration object with initial store values and effect handlers
- * @returns new scope
- */
-export function fork(
-  domain: Domain,
-  config?: {
-    values?: SerializedState | LegacyMap | Array<[StoreWritable<any>, any]>,
-    handlers?: Handlers;
   },
 ): Scope
 

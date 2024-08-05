@@ -18,11 +18,9 @@ export function getFiles(name: string) {
     //js files
     ...esmFile(name),
     ...compiledFile(`${name}.cjs`),
-    ...compiledFile(`${name}.umd`),
     ...compiledFile('compat'),
     `${name}.cjs.d.ts`,
     `${name}.mjs.d.ts`,
-    `${name}.umd.d.ts`,
     'compat.d.ts',
   ]
 }
@@ -34,15 +32,6 @@ export function extensionlessExport(path: string) {
     import: `${path}.mjs`,
     require: `${path}.js`,
     default: `${path}.mjs`,
-  }
-}
-
-/** usage: umdExport('./effector') */
-export function umdExport(path: string) {
-  return {
-    types: `${path}.umd.d.ts`,
-    require: `${path}.umd.js`,
-    default: `${path}.umd.js`,
   }
 }
 

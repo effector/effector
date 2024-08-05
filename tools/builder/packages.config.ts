@@ -4,7 +4,6 @@ import {
   esmFile,
   getFiles,
   extensionlessExport,
-  umdExport,
   rootExport,
 } from './packageUtils'
 
@@ -84,7 +83,6 @@ export default {
     description: 'Business logic with ease',
     main: 'effector.cjs.js',
     module: 'effector.mjs',
-    'umd:main': 'effector.umd.js',
     'jsnext:main': 'effector.mjs',
     typings: 'index.d.ts',
     dependencies: {},
@@ -97,9 +95,7 @@ export default {
       },
       './compat': compatExport,
       './inspect': extensionlessExport('./inspect'),
-      './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
-      './babel-plugin-react': './babel-plugin-react.js',
       './package.json': './package.json',
     },
     files: [
@@ -108,7 +104,6 @@ export default {
       ...esmFile('inspect'),
       'inspect.d.ts',
       'babel-plugin.js',
-      'babel-plugin-react.js',
     ],
     keywords,
     ...common,
@@ -128,9 +123,7 @@ export default {
         default: './effector-react.mjs',
       },
       './compat': compatExport,
-      './effector-react.umd': umdExport('./effector-react'),
     },
-    'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.mjs',
     typings: 'index.d.ts',
     dependencies: {
@@ -159,9 +152,7 @@ export default {
         import: './effector-solid.mjs',
         default: './effector-solid.mjs',
       },
-      './effector-solid.umd': umdExport('./effector-solid'),
     },
-    'umd:main': 'effector-solid.umd.js',
     'jsnext:main': 'effector-solid.mjs',
     typings: 'index.d.ts',
     peerDependencies: {
@@ -198,9 +189,7 @@ export default {
         default: './composition.mjs',
       },
       './compat': compatExport,
-      './effector-vue.umd': umdExport('./effector-vue'),
     },
-    'umd:main': 'effector-vue.umd.js',
     'jsnext:main': 'effector-vue.mjs',
     typings: 'index.d.ts',
     peerDependencies: {
@@ -236,9 +225,7 @@ export default {
         default: './forest.mjs',
       },
       './server': extensionlessExport('./server'),
-      './forest.umd': umdExport('./forest'),
     },
-    'umd:main': 'forest.umd.js',
     'jsnext:main': 'forest.mjs',
     typings: 'index.d.ts',
     dependencies: {},

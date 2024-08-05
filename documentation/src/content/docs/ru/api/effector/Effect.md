@@ -513,7 +513,7 @@ const $isRequestPending = createStore(false)
 import React from "react";
 import ReactDOM from "react-dom";
 import { createEffect } from "effector";
-import { useStore } from "effector-react";
+import { useUnit } from "effector-react";
 
 const fetchApiFx = createEffect(async (ms) => {
   await new Promise((resolve) => setTimeout(resolve, ms));
@@ -523,7 +523,7 @@ fetchApiFx.pending.watch(console.log);
 // => false
 
 const App = () => {
-  const loading = useStore(fetchApiFx.pending);
+  const loading = useUnit(fetchApiFx.pending);
   return <div>{loading ? "Загрузка..." : "Загрузка завершена"}</div>;
 };
 
@@ -534,7 +534,7 @@ fetchApiFx(1000);
 // => false
 ```
 
-[Запустить пример](https://share.effector.dev/e9y5uETf)
+[Запустить пример](https://share.effector.dev/YX24VysD)
 
 ## `inFlight` (#inFlight)
 

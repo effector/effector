@@ -76,11 +76,11 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: { en: "Migration guide" },
-        link: "/guides/migration-guide-v23",
+        link: "/guides/migration-guide-v24",
       },
       {
         text: { en: "Migrating from Redux" },
-        link: "https://withease.pages.dev/magazine/migration_from_redux.html",
+        link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
     ],
   },
@@ -240,14 +240,6 @@ const effectorReact = [
         link: "/api/effector-react/useStoreMap",
         quickMenu: true,
       },
-      {
-        text: { en: "useStore", ru: "useStore", uz: "useStore" },
-        link: "/api/effector-react/useStore",
-      },
-      {
-        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
-        link: "/api/effector-react/useEvent",
-      },
     ],
   },
   {
@@ -295,24 +287,6 @@ const effectorReact = [
       {
         text: { en: "useProvidedScope" },
         link: "/api/effector-react/useProvidedScope",
-      },
-    ],
-  },
-  {
-    text: { en: "HOC-like APIs", uz: "HOCsimon APIlar" },
-    collapsed: true,
-    items: [
-      {
-        text: { en: "connect" },
-        link: "/api/effector-react/connect",
-      },
-      {
-        text: { en: "createComponent" },
-        link: "/api/effector-react/createComponent",
-      },
-      {
-        text: { en: "createStoreConsumer" },
-        link: "/api/effector-react/createStoreConsumer",
       },
     ],
   },
@@ -564,10 +538,6 @@ const effector = [
         text: { en: "scopeBind" },
         link: "/api/effector/scopeBind",
         quickMenu: true,
-      },
-      {
-        text: { en: "hydrate" },
-        link: "/api/effector/hydrate",
       },
     ],
   },

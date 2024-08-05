@@ -2,25 +2,43 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-## effector 24.0.0
+## effector 24.0.0 Neowise
 
 - Delete deprecated option `reactSsr` in babel-plugin ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated operator `forward` ([PR #1087](https://github.com/effector/effector/pull/1087))
 - Delete deprecated operator `guard` ([PR #1087](https://github.com/effector/effector/pull/1087))
 - Fixed edge cases of events reordering, when called from an effect handler ([PR #1062](https://github.com/effector/effector/pull/1062))
+- Delete deprecated `effector/babel-plugin-react` ([PR #1088](https://github.com/effector/effector/pull/1088))
+- Improve SIDs generation mechanic: if unit is created by a registered factory, its SID will be derived from the SID of the factory ([PR #1063](https://github.com/effector/effector/pull/1063))
+- Delete deprecated `hydrate` function ([PR #1091](https://github.com/effector/effector/pull/1091))
+- Delete deprecated `fork(domain)` overload ([PR #1092](https://github.com/effector/effector/pull/1092))
+- Delete deprecated option `onlyChanges` in `fork` function ([PR #1092](https://github.com/effector/effector/pull/1092))
+- Delete broken `setStoreName` function ([PR #1094](https://github.com/effector/effector/pull/1094))
+- Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
+- Delete deprecated `fork({ handlers: sidMap })` overload ([PR #1102](https://github.com/effector/effector/pull/1102))
 
 ## effector-react 24.0.0
 
 - Delete deprecated `effector-react/scope` in favor of isomorphic hooks ([PR #1084](https://github.com/effector/effector/pull/1084))
+- Delete deprecated `useStore`, `useEvent`, `connect`, `createComponent` and `createStoreConsumer` in favor of universal `useUnit` ([PR #1088](https://github.com/effector/effector/pull/1088))
+- Use regular import of `effector` in ESM version of `effector-react` ([PR #1096](https://github.com/effector/effector/pull/1096))
+- Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
 
 ## effector-solid 24.0.0
 
 - Delete deprecated `effector-solid/scope` in favor of isomorphic hooks ([PR #1084](https://github.com/effector/effector/pull/1084))
+- Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
 
 ## effector-vue 24.0.0
 
 - Delete deprecated `effector-vue/ssr` in favor of isomorphic hooks ([PR #1084](https://github.com/effector/effector/pull/1084))
 - Delete deprecated `VueSSRPlugin` in favor of `EffectorScopePlugin` ([PR #1084](https://github.com/effector/effector/pull/1084))
+- Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
+- Function `useStore` is deprecated in favor of `useUnit` ([PR #1099](https://github.com/effector/effector/pull/1099))
+
+## forest 0.22.0
+
+- Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
 
 ## effector 23.2.2
 
