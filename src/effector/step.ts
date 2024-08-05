@@ -10,7 +10,7 @@ import type {
 } from './index.h'
 import {nextStepID} from './id'
 import {EFFECT, REG_A, SAMPLER, STACK, STORE} from './tag'
-import type {BarrierPriorityTag} from './kernel'
+import type {BarrierPriorityTag, EffectorQueue} from './kernel'
 import {callStack} from './caller'
 
 const cmd = <Type extends 'compute' | 'mov'>(
@@ -117,7 +117,7 @@ export const compute = <
   filter = false,
   pure = false,
 }: {
-  fn?: (data: any, scope: LocalValues, stack: Stack) => any
+  fn?: (data: any, scope: LocalValues, stack: Stack, q: EffectorQueue) => any
   batch?: boolean
   priority?: BarrierPriorityTag | false
   safe?: boolean
@@ -142,7 +142,7 @@ export const run = ({
 export const calc = <
   LocalValues extends {[key: string]: any} = {[key: string]: any},
 >(
-  fn: (data: any, scope: LocalValues, stack: Stack) => any,
+  fn: (data: any, scope: LocalValues, stack: Stack, q: EffectorQueue) => any,
   filter?: boolean,
   isEffect?: boolean,
 ) => compute({fn, safe: true, filter, priority: isEffect && EFFECT})
@@ -170,7 +170,12 @@ export const read = (
   })
 
 export const userFnCall = (
-  fn: (data: any, scope: {[key: string]: any}, stack: Stack) => any = callStack,
+  fn: (
+    data: any,
+    scope: {[key: string]: any},
+    stack: Stack,
+    q: EffectorQueue,
+  ) => any = callStack,
   isFilter?: boolean,
 ) => compute({fn, pure: true, filter: isFilter})
 
