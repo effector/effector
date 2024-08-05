@@ -1,9 +1,8 @@
 import type {Node, NodeUnit, Cmd} from './index.h'
 import {getGraph, getOwners, getLinks, getValue} from './getter'
 import {nextNodeID} from './id'
-import {CROSSLINK} from './tag'
+import {CROSSLINK, DOMAIN} from './tag'
 import {regionStack} from './region'
-import {own} from './own'
 import {add, forEach} from './collection'
 
 export const arrifyNodes = (
@@ -63,4 +62,32 @@ export function createNode({
     own(getValue(regionStack), [result])
   }
   return result
+}
+
+/** simplified version of createNode for common cases */
+export const createLinkNode = (
+  parent: NodeUnit | NodeUnit[],
+  child: NodeUnit | NodeUnit[],
+  node?: Array<Cmd | false | void | null>,
+  op?: string,
+  scopeFn?: Function,
+) =>
+  createNode({
+    node,
+    parent,
+    child,
+    scope: {fn: scopeFn},
+    meta: {op},
+    family: {owners: [parent, child], links: child},
+    regional: true,
+  })
+
+export const own = (ownerUnit: NodeUnit, links: NodeUnit[]) => {
+  const owner = getGraph(ownerUnit)
+  forEach(links, _link => {
+    const link = getGraph(_link)
+    if (owner.family.type !== DOMAIN) link.family.type = CROSSLINK
+    add(getOwners(link), owner)
+    add(getLinks(owner), link)
+  })
 }

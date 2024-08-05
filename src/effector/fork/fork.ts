@@ -1,5 +1,4 @@
-import {is} from '../is'
-import {assert} from '../throw'
+import {is, assert} from '../validate'
 import type {ValuesMap, HandlersMap, Store} from '../unit.h'
 import {createScope} from './createScope'
 import {forEach} from '../collection'

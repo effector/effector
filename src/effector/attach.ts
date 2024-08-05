@@ -10,13 +10,12 @@ import {
   setMeta,
   getCompositeName,
 } from './getter'
-import {own} from './own'
-import {is, isVoid} from './is'
+import {own} from './createNode'
+import {is, isVoid, assert} from './validate'
 import {read, calc} from './step'
 import {launch, type EffectorQueue} from './kernel'
 import {EFFECT} from './tag'
 import {createName, generateErrorTitle} from './naming'
-import {assert} from './throw'
 import {Cmd, Node, Stack} from './index.h'
 
 export function attach(config: any) {

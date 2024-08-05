@@ -1,6 +1,6 @@
 import type {Scope, Store} from '../unit.h'
 import {forIn, includes} from '../collection'
-import {assert} from '../throw'
+import {assert} from '../validate'
 
 const noopSerializer = (x: any) => x
 /**
