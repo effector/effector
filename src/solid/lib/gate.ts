@@ -2,7 +2,7 @@ import {Gate} from '../index.h'
 import {createEvent, createStore, Domain, launch, Scope} from 'effector'
 import {onCleanup, onMount, createEffect, createMemo} from 'solid-js'
 import {flattenConfig, processArgsToConfig} from '../../effector/config'
-import {isObject} from '../../effector/is'
+import {isObject} from '../../effector/validate'
 import {useUnitBase} from './base'
 
 function useGate<Props>(GateComponent: Gate<Props>, props: Props = {} as any) {
