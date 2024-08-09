@@ -3,7 +3,7 @@ import type {Effect} from './unit.h'
 import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {createNode, own} from './createNode'
-import {launch, setForkPage, forkPage, isWatch, type EffectorQueue} from './kernel'
+import {launch, setForkPage, forkPage, isWatch, type QueueInstance} from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction, assert} from './validate'
@@ -235,7 +235,7 @@ export const onSettled =
     ok: boolean,
     anyway: Unit,
     stack: Stack,
-    q: EffectorQueue,
+    q: QueueInstance,
   ) =>
   (data: any) => {
     launch({
