@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.2.3
+
+- Fix types for `attach({ effect })`, allowing to pass explicit `name` in this overload
+
 ## effector 23.2.2
 
 - Fix types for createEffect and attach in factories with generics ([issue #1069](https://github.com/effector/effector/issues/1069)). Cases like this now works correctly:
