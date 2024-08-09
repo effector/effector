@@ -80,7 +80,7 @@ const sendWithAuthFx = createEffect(async () => {
 });
 ```
 
-:::note
+:::tip{title="Keep in mind"}
 Remember to clear setInterval after finishing work with the scope to avoid memory leaks. You can clear setInterval with a separate effect by first returning its id from the first effect and storing it in a separate store.
 :::
 
