@@ -863,7 +863,7 @@ const another = demo;
 This property contains the full internal chain of units. For example, event can be created by the domain, so the
 composite name will contain a domain name inside it.
 
-:::note
+:::tip{title="Keep in mind"}
 Usually, if long name is needed, is better to pass it explicitly to `name` field
 :::
 
