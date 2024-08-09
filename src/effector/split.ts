@@ -6,7 +6,7 @@ import {addRefOp, createStateRef} from './stateRef'
 import {processArgsToConfig} from './config'
 import {compute, userFnCall, calc, read} from './step'
 import {createNode, createLinkNode} from './createNode'
-import {launch, type EffectorQueue} from './kernel'
+import {launch, type QueueInstance} from './kernel'
 import {getStoreState} from './getter'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
@@ -18,7 +18,7 @@ const launchCase = (
   field: string,
   data: any,
   stack: Stack,
-  q: EffectorQueue,
+  q: QueueInstance,
 ) => {
   const target = scopeTargets[field]
   if (target) {
