@@ -34,15 +34,14 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — Reactive UI engine for web.
-- [effector-utils](https://github.com/Kelin2025/effector-utils) ⛔ — Effector utilities library.
 
 ## DX
 
 - [eslint-plugin-effector](https://eslint.effector.dev) 🛠 — Enforcing best practices.
+- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 🛠 — Third-party SWC plugin.
 - [SWC plugin](https://github.com/effector/swc-plugin) ☢️ — SWC plugin to efficiently work with effector.
 - [effector-logger](https://github.com/effector/logger) 🛠 — Simple logger for stores, events, effects and domains.
 - [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Simple adapter, which logs updates to Redux DevTools.
-- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 🛠 — Third-party SWC plugin.
 
 ## Form management
 
@@ -50,12 +49,9 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [filledout](https://filledout.github.io) ☢️ — Form manager with easy-to-use yup validation
 - [effector-forms](https://github.com/aanation/effector-forms) ☢️ — Form manager for effector.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form) ☢️ — Connect your forms with state manager.
-- [efform](https://github.com/tehSLy/efform) ⛔ — Form manager, based on effector state manager, designed to deliver high-quality DX.
 - [effector-reform](https://github.com/qvelty/effector-reform) ☢️️ — form manager, which implements composable forms concept
 
 ## Templates
 
 - [ViteJS+React Template](https://github.com/effector/vite-react-template) 💚 — Try effector with React and TypeScript in seconds!
 - [ViteJS+TypeScript Template](https://github.com/mmnkuh/effector-vite-template) 🛠 — Another ViteJS + TypeScript template.
-- [effector SSR](https://github.com/effector/razzle-template) ⛔️ — SSR on React, TypeScript, Razzle and Styled.
-- [CRA template](https://github.com/effector/cra-template) ⛔️ — Simple CreateReactApp template.
