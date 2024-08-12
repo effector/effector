@@ -37,7 +37,7 @@ possible approach to include static typing. This chat application will have API 
 Давайте определим простой тип, который наша импровизированная API будет возвращать.
 
 ```ts
-// File: /src/shared/api/message.ts
+// Файл: /src/shared/api/message.ts
 interface Author {
   id: string;
   name: string;
@@ -54,7 +54,7 @@ export interface Message {
 Наша API будет загружать и сохранять данные в `localStorage`, и нам нужны некоторые функции для загрузки данных:
 
 ```ts
-// File: /src/shared/api/message.ts
+// Файл: /src/shared/api/message.ts
 const LocalStorageKey = "effector-example-history";
 
 function loadHistory(): Message[] | void {
@@ -72,14 +72,14 @@ function saveHistory(messages: Message[]) {
 Также нам надо создать несколько библиотек для генерации идентификатров и ожидания для имитации сетевых запросов.
 
 ```ts
-// File: /src/shared/lib/oid.ts
+// Файл: /src/shared/lib/oid.ts
 export const createOid = () =>
   ((new Date().getTime() / 1000) | 0).toString(16) +
   "xxxxxxxxxxxxxxxx".replace(/[x]/g, () => ((Math.random() * 16) | 0).toString(16)).toLowerCase();
 ```
 
 ```ts
-// File: /src/shared/lib/wait.ts
+// Файл: /src/shared/lib/wait.ts
 export function wait(timeout = Math.random() * 1500) {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 }
@@ -88,7 +88,7 @@ export function wait(timeout = Math.random() * 1500) {
 Отлично! Теперь мы можем создать эффекты, которые будут загружать сообщения.
 
 ```ts
-// File: /src/shared/api/message.ts
+// Файл: /src/shared/api/message.ts
 // Здесь эффект определен со статическими типами. Void определяет отсутствие аргументов.
 // Второй аргумент в типе определяет тип успешного результата.
 // Третий аргумент является необязательным и определяет тип неудачного результата.
@@ -134,7 +134,7 @@ export const messageDeleteFx = createEffect(async (message: Message) => {
 На самом деле я предпочитаю начинать написание кода с реализации интерфейсов:
 
 ```ts
-// File: /src/shared/api/session.ts
+// Файл: /src/shared/api/session.ts
 // Это называется сессией, потому что описывает текущую сессию пользователя, а не Пользователя в целом. 
 export interface Session {
   id: string;
@@ -145,7 +145,7 @@ export interface Session {
 Кроме того, чтобы генерировать уникальные имена пользователей и не требовать от них ввода вручную, импортируйте `unique-names-generator`:
 
 ```ts
-// File: /src/shared/api/session.ts
+// Файл: /src/shared/api/session.ts
 import { uniqueNamesGenerator, Config, starWars } from "unique-names-generator";
 
 const nameGenerator: Config = { dictionaries: [starWars] };
@@ -155,7 +155,7 @@ const createName = () => uniqueNamesGenerator(nameGenerator);
 Создадим эффекты для управления сессией:
 
 ```ts
-// File: /src/shared/api/session.ts
+// Файл: /src/shared/api/session.ts
 const LocalStorageKey = "effector-example-session";
 
 // Обратите внимание, что в этом случае требуется явное определение типов, поскольку `JSON.parse()` возвращает `any`
@@ -175,12 +175,12 @@ export const sessionDeleteFx = createEffect(async () => {
   await wait();
 });
 
-// Look at the type of the `sessionCreateFx` constant.
-// It will be `Effect<void, Session, Error>` because TypeScript can infer type from `session` constant
+// Взгляните на тип переменной `sessionCreateFx`.
+// Там будет `Effect<void, Session, Error>` потому что TypeScript может вывести тип из переменной `session`
 export const sessionCreateFx = createEffect(async () => {
-  // I explicitly set type for the next constant, because it allows TypeScript help me
-  // If I forgot to set property, I'll see error in the place of definition
-  // Also it allows IDE to autocomplete property names
+  // Я явно установил тип для следующей переменной, это позволит TypeScript помочь мне
+  // Если я забуду установить свойство, то я увижу ошибку в месте определения
+  // Это также позволяет IDE автоматически дополнять и завершать имена свойств
   const session: Session = {
     id: createOid(),
     name: createName(),
@@ -190,14 +190,14 @@ export const sessionCreateFx = createEffect(async () => {
 });
 ```
 
-How we need to import these effects?
+Как нам нужно импортировать эти эффекты?
 
-I surely recommend writing short imports and using reexports.
-It allows to securely refactor code structure inside `shared/api` and the same slices,
-and don't worry about refactoring other imports and unnecessary changes in the git history.
+Я настоятельно рекомендую писать короткие импорты и использовать реэкспорты.
+Это позволяет безопасно рефакторить структуру кода внутри `shared/api` и тех же слайсов,
+и не беспокоиться о рефакторинге других импортов и ненужных изменениях в истории git.
 
 ```ts
-// File: /src/shared/api/index.ts
+// Файл: /src/shared/api/index.ts
 export * as messageApi from "./message";
 export * as sessionApi from "./session";
 
@@ -206,24 +206,24 @@ export type { Message } from "./message";
 export type { Session } from "./session";
 ```
 
-## Create a page with the logic
+## Создадим страницу с логикой
 
-Typical structure of the pages:
+Типичная структура страниц:
 
 ```
 src/
   pages/
     <page-name>/
-      page.tsx — just the View layer
-      model.ts — a business-logic code
-      index.ts — reexports, sometimes there will be a connection-glue code
+      page.tsx — только View-слой (представление)
+      model.ts — код бизнес-логики (модель)
+      index.ts — реэкспорт, иногда здесь может быть связующий код
 ```
 
-I recommend writing code in the view layer from the top to bottom, more common code at the top.
-Let's model our view layer. We will have two main sections at the page: messages history and a message form.
+Я рекомендую писать код в слое представления сверху вниз, более общий код - сверху.
+Моделируем наш слой представления. На странице у нас будет два основных раздела: история сообщений и форма сообщения.
 
 ```tsx
-// File: /src/pages/chat/page.tsx
+// Файл: /src/pages/chat/page.tsx
 export function ChatPage() {
   return (
     <div className="parent">
@@ -236,7 +236,7 @@ export function ChatPage() {
 function ChatHistory() {
   return (
     <div className="chat-history">
-      <div>There will be messages list</div>
+      <div>Тут будет список сообщений</div>
     </div>
   );
 }
@@ -244,21 +244,21 @@ function ChatHistory() {
 function MessageForm() {
   return (
     <div className="message-form">
-      <div>There will be message form</div>
+      <div>Тут будет форма сообщения</div>
     </div>
   );
 }
 ```
 
-OK. Now we know what kind of structure we have, and we can start to model business-logic processes.
-The view layer should do two tasks: render data from stores and report events to the model.
-The view layer doesn't know how data are loaded, how it should be converted and sent back.
+Отлично. Теперь мы знаем, какую структуру мы имеем, и мы можем начать моделировать процессы бизнес-логики.
+Слой представления должен выполнять две задачи: отображать данные из хранилищ и сообщать события модели.
+Слой представления не знает, как загружаются данные, как их следует преобразовывать и отправлять обратно.
 
 ```ts
-// File: /src/pages/chat/model.ts
+// Файл: /src/pages/chat/model.ts
 import { createEvent, createStore } from "effector";
 
-// And the events report just what happened
+// События просто сообщают о том, что что-то произошло
 export const messageDeleteClicked = createEvent<Message>();
 export const messageSendClicked = createEvent();
 export const messageEnterPressed = createEvent();
@@ -266,24 +266,24 @@ export const messageTextChanged = createEvent<string>();
 export const loginClicked = createEvent();
 export const logoutClicked = createEvent();
 
-// At the moment, there is just raw data without any knowledge how to load
+// В данный момент есть только сырые данные без каких-либо знаний о том, как их загрузить.
 export const $loggedIn = createStore<boolean>(false);
 export const $userName = createStore("");
 export const $messages = createStore<Message[]>([]);
 export const $messageText = createStore("");
 
-// Page should NOT know where the data came from.
-// That's why we just reexport them.
-// We can rewrite this code to `combine` or independent store,
-// page should NOT be changed, just because we changed the implementation
+// Страница НЕ должна знать, откуда пришли данные.
+// Поэтому мы просто реэкспортируем их.
+// Мы можем переписать этот код с использованием `combine` или оставить независимые хранилища,
+// страница НЕ должна меняться, просто потому что мы изменили реализацию
 export const $messageDeleting = messageApi.messageDeleteFx.pending;
 export const $messageSending = messageApi.messageSendFx.pending;
 ```
 
-Now we can implement components.
+Теперь мы можем реализовать компоненты.
 
 ```tsx
-// File: /src/pages/chat/page.tsx
+// Файл: /src/pages/chat/page.tsx
 import { useList, useUnit } from "effector-react";
 import * as model from "./model";
 
@@ -292,7 +292,7 @@ import * as model from "./model";
 function ChatHistory() {
   const [messageDeleting, onMessageDelete] = useUnit([model.$messageDeleting, model.messageDeleteClicked]);
 
-  // Hook `useList` allows React not rerender messages really doesn't changed
+  // Хук `useList` позволяет React не перерендерить сообщения, которые действительно не изменились.
   const messages = useList(model.$messages, (message) => (
     <div className="message-item" key={message.timestamp}>
       <h3>From: {message.author.name}</h3>
@@ -302,16 +302,16 @@ function ChatHistory() {
       </button>
     </div>
   ));
-  // We don't need `useCallback` here because we pass function to an HTML-element, not a custom component
+  // Здесь не нужен `useCallback` потому что мы передаем функцию в HTML-элемент, а не в кастомный компонент
 
   return <div className="chat-history">{messages}</div>;
 }
 ```
 
-I split `MessageForm` to the different components, to simplify code:
+Я разделил `MessageForm` на разные компоненты, чтобы упростить код:
 
 ```tsx
-// File: /src/pages/chat/page.tsx
+// Файл: /src/pages/chat/page.tsx
 function MessageForm() {
   const isLogged = useUnit(model.$loggedIn);
   return isLogged ? <SendMessage /> : <LoginForm />;
@@ -363,47 +363,47 @@ function LoginForm() {
 }
 ```
 
-## Manage user session like a Pro
+## Управляем сессией пользователя как Про
 
-Let's create a session entity. An entity is a business unit.
+Создадим сущность сессии. Сущность (entity) - это бизнес-юнит.
 
 ```ts
-// File: /src/entities/session/index.ts
+// Файл: /src/entities/session/index.ts
 import { Session } from "shared/api";
 import { createStore } from "effector";
 
-// Entity just stores session and some internal knowledge about it
+// Сущность просто хранит сессию и некоторую внутреннюю информацию о ней
 export const $session = createStore<Session | null>(null);
-// When store `$session` is updated, store `$isLogged` will be updated too
-// They are in sync. Derived store are depends on data from original.
+// Когда стор `$session` обновляется, то стор `$isLogged` тоже будет обновлен
+// Они синхронизированы. Производный стор зависит от данных из исходного
 export const $isLogged = $session.map((session) => session !== null);
 ```
 
-Now we can implement login or logout features on the page. Why not here?
-If we place login logic here, we will have a very implicit scenario,
-when you call `sessionCreateFx` you won't see code called after effect.
-But consequences will be visible in the DevTools and application behaviour.
+Теперь мы можем реализовать функции входа в систему или выхода на странице. Почему не здесь?
+Если мы разместим логику входа здесь, у нас будет очень неявная ситуация,
+когда вы вызываете `sessionCreateFx` вы не увидите код, который вызывается после эффекта.
+Но последствия будут видны в DevTools и поведении приложения.
 
-Try to write the code in as obvious a way as possible in one file,
-so that you and any teammate can trace the sequence of execution.
+Попробуйте написать код таким очевидным способом в одном файле,
+чтобы вы и любой член команды могли отследить последовательность выполнения.
 
-## Implement logic
+## Реализуем логику
 
-OK. Now we can load a user session and the messages lists on the page mount.
-But, we don't have any event when we can start. Let's fix it.
+Отлично. Теперь мы можем загрузить сеанс пользователя и список сообщений на странице.
+Но у нас нет никакого события, когда мы можем начать это делать. Давайте исправим это.
 
-You can use [Gate](/en/recipes/react/gate), but I prefer to use explicit events.
+Вы можете использовать [Gate](/ru/recipes/react/gate), но я предпочитаю использовать явные события.
 
 ```ts
-// File: /src/pages/chat/model.ts
-// Just add a new event
+// Файл: /src/pages/chat/model.ts
+// Просто добавьте новое событие
 export const pageMounted = createEvent();
 ```
 
-Just add `useEffect` and call bound event inside.
+Просто добавте `useEffect` и вызовите связанное событие внутри.
 
 ```tsx
-// File: /src/pages/chat/page.tsx
+// Файл: /src/pages/chat/page.tsx
 export function ChatPage() {
   const handlePageMount = useUnit(model.pageMounted);
 
@@ -420,58 +420,58 @@ export function ChatPage() {
 }
 ```
 
-> Note: if you don't plan to write tests for effector code and/or implement SSR you can omit any usage of `useEvent`.
+> Примечание: если вы не планируете писать тесты для кода эффектора и/или реализовывать SSR, вы можете опустить любое использование `useEvent`.
 
-At the moment we can load a session and the messages list.
+В данный момент мы можем загрузить сеанс и список сообщений.
 
-Just add reaction to the event, and any other code should be written in chronological order after each event:
+Просто добавьте реакцию на событие, и любой другой код должен быть написан в хронологическом порядке после каждого события:
 
 ```ts
-// File: /src/pages/chat/model.ts
-// Don't forget to import { sample } from "effector"
+// Файл: /src/pages/chat/model.ts
+// Не забудьте про import { sample } from "effector"
 import { Message, messageApi, sessionApi } from "shared/api";
 import { $session } from "entities/session";
 
 // export stores
 // export events
 
-// Here the logic place
+// Здесь место для логики
 
-// You can read this code like:
-// When page mounted, call messages load and session load simultaneously
+// Вы можете прочитать этот код так:
+// При загрузке страницы, одновременно вызываются загрузка сообщений и сессия пользователя
 sample({
   clock: pageMounted,
   target: [messageApi.messagesLoadFx, sessionApi.sessionLoadFx],
 });
 ```
 
-After that we need to define reactions on `messagesLoadFx.done` and `messagesLoadFx.fail`, and the same for `sessionLoadFx`.
+После этого нужно определить реакции на `messagesLoadFx.done` и `messagesLoadFx.fail`, а также то же самое для `sessionLoadFx`.
 
 ```ts
-// File: /src/pages/chat/model.ts
-// `.doneData` is a shortcut for `.done`, because `.done` returns `{ params, result }`
-// Do not name your arguments like `state` or `payload`
-// Use explicit names of the content they contain
+// Файл: /src/pages/chat/model.ts
+// `.doneData` это сокращение для `.done`, поскольку `.done` returns `{ params, result }`
+// Постарайтесь не называть свои аргументы как `state` или `payload`
+// Используйте явные имена для содержимого
 $messages.on(messageApi.messagesLoadFx.doneData, (_, messages) => messages);
 
 $session.on(sessionApi.sessionLoadFx.doneData, (_, session) => session);
 ```
 
-OK. Session and messages loaded. Let's allow the users to log in.
+Отлично. Сессия и сообщения получены. Давайте позволим пользователям войти.
 
 ```ts
-// File: /src/pages/chat/model.ts
-// When login clicked we need to create a new session
+// Файл: /src/pages/chat/model.ts
+// Когда пользователь нажимает кнопку входа, нам нужно создать новую сессию
 sample({
   clock: loginClicked,
   target: sessionApi.sessionCreateFx,
 });
-// When session created, just write it to a session store
+// Когда сессия создана, просто положите его в хранилище сессий
 sample({
   clock: sessionApi.sessionCreateFx.doneData,
   target: $session,
 });
-// If session create is failed, just reset the session
+// Если создание сессии не удалось, просто сбросьте сессию
 sample({
   clock: sessionApi.sessionCreateFx.fail,
   fn: () => null,
@@ -479,16 +479,16 @@ sample({
 });
 ```
 
-Now we'll implement a logout process:
+Давайте реализуем процесс выхода:
 
 ```ts
-// File: /src/pages/chat/model.ts
-// When logout clicked we need to reset session and clear our storage
+// Файл: /src/pages/chat/model.ts
+// Когда пользователь нажал на кнопку выхода, нам нужно сбросить сессию и очистить наше хранилище
 sample({
   clock: logoutClicked,
   target: sessionApi.sessionDeleteFx,
 });
-// In any case, failed or not, we need to reset session store
+// В любом случае, успешно или нет, нам нужно сбросить хранилище сессий
 sample({
   clock: sessionApi.sessionDeleteFx.finally,
   fn: () => null,
@@ -496,36 +496,36 @@ sample({
 });
 ```
 
-> Note: most of the comments wrote just for educational purpose. In real life, application code will be self-describable
+> Примечание: большинство комментариев написано только для образовательных целей. В реальной жизни код приложения будет самодокументируемым
 
-But if we start the dev server and try to log in, we see nothing changed.
-This is because we created `$loggedIn` store in the model, but don't change it. Let's fix:
+Но если мы запустим dev-сервер и попытаемся войти в систему, то мы ничего не увидим.
+Это связано с тем, что мы создали стор `$loggedIn` в модели, но не изменяем его. Давайте исправим:
 
 ```ts
-// File: /src/pages/chat/model.ts
+// Файл: /src/pages/chat/model.ts
 import { $isLogged, $session } from "entities/session";
 
-// At the moment, there is just raw data without any knowledge how to load
+// В данный момент есть только сырые данные без каких-либо знаний о том, как их загрузить
 export const $loggedIn = $isLogged;
 export const $userName = $session.map((session) => session?.name ?? "");
 ```
 
-Here we just reexported our custom store from the session entity, but our View layer doesn't change.
-The same situation with `$userName` store. Just reload the page, and you'll see, that session loaded correctly.
+Здесь мы просто реэкспортировали наш собственный стор из сущности сессии, но слой представления не меняется.
+Такая же ситуация и со стором `$userName`. Просто перезагрузите страницу, и вы увидите, что сессия загружена правильно.
 
-## Send message
+## Отправка сообщений
 
-Now we can log in and log out. I think you want to send a message. This is pretty simple:
+Теперь мы можем войти в систему и выйти из нее. Думаю, что вы захотите отправить сообщение. Это довольно просто:
 
 ```ts
-// File: /src/pages/chat/model.ts
+// Файл: /src/pages/chat/model.ts
 $messageText.on(messageTextChanged, (_, text) => text);
 
-// We have two different events to send message
-// Let event `messageSend` react on any of them
+// У нас есть два разных события для отправки сообщения
+// Пусть событие `messageSend` реагирует на любое из них
 const messageSend = merge([messageEnterPressed, messageSendClicked]);
 
-// We need to take a message text and author info then send it to the effect
+// Нам нужно взять текст сообщения и информацию об авторе, а затем отправить ее в эффект
 sample({
   clock: messageSend,
   source: { author: $session, text: $messageText },
@@ -533,14 +533,14 @@ sample({
 });
 ```
 
-But if in the `tsconfig.json` you set `"strictNullChecks": true`, you will see the error there.
-It is because store `$session` contains `Session | null` and `messageSendFx` wants `Author` in the arguments.
-`Author` and `Session` are compatible, but not the `null`.
+Но если в файле `tsconfig.json` вы установите `"strictNullChecks": true`, вы получите ошибку.
+Это связано с тем, что стор `$session` содержит `Session | null`, а `messageSendFx` хочет `Author` в аргументах.
+`Author` и `Session` совместимы, но не должны быть `null`.
 
-To fix this strange behaviour, we need to use `filter` there:
+Чтобы исправить странное поведение, нам нужно использовать `filter`:
 
 ```ts
-// File: /src/pages/chat/model.ts
+// Файл: /src/pages/chat/model.ts
 sample({
   clock: messageSend,
   source: { author: $session, text: $messageText },
@@ -551,19 +551,19 @@ sample({
 });
 ```
 
-I want to focus your attention on the return type `form is {author: Session; text: string}`.
-This feature called [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards)
-and allows TypeScript to reduce `Session | null` type to more specific `Session` via condition inside the function.
+Я хочу обратить ваше внимание на тип возвращаемого значения `form is {author: Session; text: string}`.
+Эта функция называется [type guard](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards)
+и позволяет TypeScript сузить тип `Session | null` до более конкретного `Session` через условие внутри функции.
 
-Now we can read this like: when a message should be sent, take session and message text, check that session exists, and send it.
+Теперь мы можем прочитать это так: когда сообщение должно быть отправлено, возьмите сессию и текст сообщения, проверьте, существует ли сессия, и отправьте его.
 
-OK. Now we can write a new message to a server.
-But if we don't call `messagesLoadFx` again we didn't see any changes,
-because `$messages` store didn't update. We can write generic code for this case.
-The easiest way is to return the sent message from the effect.
+Отлично. Теперь мы можем отправить новое сообщение на сервер.
+Но если мы не вызовем `messagesLoadFx` снова, мы не увидим никаких изменений,
+потому что стор `$messages` не обновился. Мы можем написать универсальный код для этого случая.
+Самый простой способ - вернуть отправленное сообщение из эффекта.
 
 ```ts
-// File: /src/shared/api/message.ts
+// Файл: /src/shared/api/message.ts
 export const messageSendFx = createEffect(async ({ text, author }: SendMessage) => {
   const message: Message = {
     id: createOid(),
@@ -578,23 +578,23 @@ export const messageSendFx = createEffect(async ({ text, author }: SendMessage) 
 });
 ```
 
-Now we can just append a message to the end of the list:
+Теперь мы можем просто добавить сообщение в конец списка:
 
 ```ts
-// File: /src/pages/chat/model.ts
+// Файл: /src/pages/chat/model.ts
 $messages.on(messageApi.messageSendFx.doneData, (messages, newMessage) => [
   ...messages,
   newMessage,
 ]);
 ```
 
-But at the moment, sent a message still left in the input.
+Но в данный момент отправленное сообщение все еще остается в поле ввода.
 
 ```ts
-// File: /src/pages/chat/model.ts
+// Файл: /src/pages/chat/model.ts
 $messageText.on(messageSendFx, () => "");
 
-// If message sending is failed, just restore the message
+// Если отправка сообщения не удалась, просто восстановите сообщение
 sample({
   clock: messageSendFx.fail,
   fn: ({ params }) => params.text,
@@ -602,12 +602,12 @@ sample({
 });
 ```
 
-## Deleting the message
+## Удаление сообщения
 
-It is pretty simple.
+Это довольно просто.
 
 ```ts
-// File: /src/pages/chat/model.ts
+// Файл: /src/pages/chat/model.ts
 sample({
   clock: messageDeleteClicked,
   target: messageApi.messageDeleteFx,
@@ -618,12 +618,12 @@ $messages.on(messageApi.messageDeleteFx.done, (messages, { params: toDelete }) =
 );
 ```
 
-But you can see the bug, when "Deleting" state doesn't disable.
-This is because `useList` caches renders, and doesn't know about dependency on `messageDeleting` state.
-To fix it, we need to provide `keys`:
+Но вы можете заметить ошибку, когда состояние "Deleting" не отклчено.
+Это связано с тем, что `useList` кэширует рендеры, и не знает о зависимости от состояния `messageDeleting`.
+Чтобы исправить это, нам нужно предоставить `keys`:
 
 ```tsx
-// File: /src/pages/chat/page.tsx
+// Файл: /src/pages/chat/page.tsx
 const messages = useList(model.$messages, {
   keys: [messageDeleting],
   fn: (message) => (
@@ -638,8 +638,8 @@ const messages = useList(model.$messages, {
 });
 ```
 
-## Conclusion
+## Заключение
 
-This is a simple example of an application on effector with React and TypeScript.
+Это простой пример приложения на эффекторе с использованием React и TypeScript.
 
-You can clone this [effector/examples/react-and-ts](https://github.com/effector/effector/tree/master/examples/react-and-ts) and run this example on your computer.
+Вы можете склонировать себе репозиторий [effector/examples/react-and-ts](https://github.com/effector/effector/tree/master/examples/react-and-ts) и запустить пример самостоятельно на собственном компьютере.
