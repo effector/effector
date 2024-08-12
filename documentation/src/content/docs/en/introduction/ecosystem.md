@@ -45,11 +45,10 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 
 ## Form management
 
-- [effector-final-form](https://github.com/binjospookie/effector-final-form) 🛠️ – Effector bindings for Final Form.
+- [effector-final-form](https://github.com/binjospookie/effector-final-form) ☢️ – Effector bindings for Final Form.
 - [filledout](https://filledout.github.io) ☢️ — Form manager with easy-to-use yup validation
 - [effector-forms](https://github.com/aanation/effector-forms) ☢️ — Form manager for effector.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form) ☢️ — Connect your forms with state manager.
-- [effector-reform](https://github.com/qvelty/effector-reform) ☢️️ — form manager, which implements composable forms concept
 
 ## Templates
 
