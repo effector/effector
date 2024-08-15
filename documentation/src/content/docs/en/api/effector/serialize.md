@@ -17,7 +17,7 @@ import { serialize, type Scope } from "effector";
 A companion method for [_fork_](/en/api/effector/fork). It allows us to get a serialized value for all the store states within a [scope](/en/api/effector/Scope). The main purpose is an application state serialization on the server side during SSR.
 
 :::warning{title="Requirements"}
-[_Babel plugin_](/en/api/effector/babel-plugin) or [_SWC plugin_](https://github.com/effector/swc-plugin) is required for using this method, as these plugins provide the SIDs for stores, which are required for stable state serialization.
+[_Babel plugin_](/en/api/effector/babel-plugin) or [_SWC plugin_](https://github.com/kireevmp/effector-swc-plugin) is required for using this method, as these plugins provide the SIDs for stores, which are required for stable state serialization.
 
 You can find deep-dive [explanation here](/en/explanation/sids)
 :::

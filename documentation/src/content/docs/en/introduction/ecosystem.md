@@ -31,15 +31,14 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [@effector/next](https://github.com/effector/next) 🛠 - Official bindings for Next.js
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) 🛠 — Module for effector that sync stores with localStorage.
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Hotkeys made easy.
-- [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — View-library agnostic router.
+- [atomic-router](https://github.com/atomic-router/atomic-router) 🛠️ — View-library agnostic router.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Simple undo/redo functionality.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — Reactive UI engine for web.
 
 ## DX
 
-- [eslint-plugin-effector](https://eslint.effector.dev) 🛠 — Enforcing best practices.
-- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 🛠 — Third-party SWC plugin.
-- [SWC plugin](https://github.com/effector/swc-plugin) ☢️ — SWC plugin to efficiently work with effector.
+- [eslint-plugin-effector](https://eslint.effector.dev) 💚 — Enforcing best practices.
+- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 💚 — SWC plugin to efficiently work with effector.
 - [effector-logger](https://github.com/effector/logger) 🛠 — Simple logger for stores, events, effects and domains.
 - [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Simple adapter, which logs updates to Redux DevTools.
 

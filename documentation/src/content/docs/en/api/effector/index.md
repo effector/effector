@@ -41,7 +41,7 @@ List of the methods
 ## Plugins (#plugins)
 
 - [effector/babel-plugin](/en/api/effector/babel-plugin)
-- [@effector/swc-plugin](https://github.com/effector/swc-plugin)
+- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin)
 
 ## Utilities (#utilities)
 
