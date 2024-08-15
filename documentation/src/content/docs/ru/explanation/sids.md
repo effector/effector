@@ -119,12 +119,12 @@ const scope = fork({
 
 Безусловно, создание уникальных идентификаторов вручную — это довольно скучная работа.
 
-К счастью, существуют [`effector/babel-plugin`](/api/effector/babel-plugin) и [`effector-swc-plugin`](https://github.com/kireevmp/effector-swc-plugin), которые автоматически создадут SIDs.
+К счастью, существуют [`effector/babel-plugin`](/api/effector/babel-plugin) и [`@effector/swc-plugin`](/api/effector/swc-plugin), которые автоматически создадут SIDs.
 
 Поскольку инструменты трансляции кода работают на уровне файла и запускаются до этапа сборки, возможно сделать SIDs **стабильными** для каждого окружения.
 
 :::tip
-Предпочтительно использовать [`effector/babel-plugin`](/api/effector/babel-plugin) или [`effector-swc-plugin`](https://github.com/kireevmp/effector-swc-plugin) вместо добавления SIDs вручную.
+Предпочтительно использовать [`effector/babel-plugin`](/api/effector/babel-plugin) или [`@effector/swc-plugin`](/api/effector/swc-plugin) вместо добавления SIDs вручную.
 :::
 
 **Пример кода**
