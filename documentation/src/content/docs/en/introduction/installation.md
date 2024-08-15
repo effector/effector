@@ -78,10 +78,10 @@ To use Babel plugin, you don't need to install additional packages, plugin bundl
 ### SWC
 
 ```bash
-npm install --development @effector/swc-plugin @swc/core
+npm install --development effector-swc-plugin @swc/core
 ```
 
-[Documentation](https://github.com/effector/swc-plugin).
+[Documentation](https://github.com/kireevmp/effector-swc-plugin).
 
 ## Compatibility
 

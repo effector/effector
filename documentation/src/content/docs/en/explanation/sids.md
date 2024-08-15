@@ -32,12 +32,12 @@ It is important, that all SIDs are also **unique**. If you are using the manual 
 
 For sure, manually creating unique ids is a quite boring job.
 
-Thankfully, there are [`effector/babel-plugin`](/api/effector/babel-plugin) and [`@effector/swc-plugin`](https://github.com/effector/swc-plugin), which will provide SIDs automatically.
+Thankfully, there are [`effector/babel-plugin`](/api/effector/babel-plugin) and [`effector-swc-plugin`](https://github.com/kireevmp/effector-swc-plugin), which will provide SIDs automatically.
 
 Because code-transpilation tools are working at the file level and are run before bundling happens – it is possible to make SIDs **stable** for every environment.
 
 :::tip
-It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin) instead of adding SIDs manually.
+It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or [`effector-swc-plugin`](https://github.com/kireevmp/effector-swc-plugin) instead of adding SIDs manually.
 :::
 
 ## Why do we need Stable Identifiers (#why-do-we-need-sids)

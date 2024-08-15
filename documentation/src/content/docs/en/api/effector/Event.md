@@ -826,7 +826,7 @@ Read more:
 ## Properties (#event-properties)
 
 These set of property is mostly set by [`effector/babel-plugin`](/en/api/effector/babel-plugin)
-or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin). So they are exist only when babel or SWC is used.
+or [`effector-swc-plugin`](https://github.com/kireevmp/effector-swc-plugin). So they are exist only when babel or SWC is used.
 
 ### `.sid` (#event-properties-sid)
 
