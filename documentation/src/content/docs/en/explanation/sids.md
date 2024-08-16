@@ -118,12 +118,12 @@ Of course, it's a lot of boring jobs to write `sid` for every store. Effector pr
 
 For sure, manually creating unique ids is a quite boring job.
 
-Thankfully, there are [`effector/babel-plugin`](/api/effector/babel-plugin) and [`effector-swc-plugin`](https://github.com/kireevmp/effector-swc-plugin), which will provide SIDs automatically.
+Thankfully, there are [`effector/babel-plugin`](/api/effector/babel-plugin) and [`@effector/swc-plugin`](/en/api/effector/swc-plugin), which will provide SIDs automatically.
 
 Because code-transpilation tools are working at the file level and are run before bundling happens – it is possible to make SIDs **stable** for every environment.
 
 :::tip
-It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or [`effector-swc-plugin`](https://github.com/kireevmp/effector-swc-plugin) instead of adding SIDs manually.
+It is preferable to use [`effector/babel-plugin`](/api/effector/babel-plugin) or [`@effector/swc-plugin`](/en/api/effector/swc-plugin) instead of adding SIDs manually.
 :::
 
 **Code example**

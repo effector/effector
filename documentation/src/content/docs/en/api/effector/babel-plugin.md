@@ -255,7 +255,7 @@ Adds location to methods' calls. Used by devtools, for example [effector-logger]
 
 Adds a file path and variable name of a unit definition to a sid. Useful for debugging SSR.
 
-## Formulae (#configuration-debugSids-formulae)
+### Formulae (#configuration-debugSids-formulae)
 
 ```json
 [

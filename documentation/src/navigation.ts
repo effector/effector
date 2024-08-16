@@ -666,7 +666,7 @@ const effector = [
       },
       {
         text: { en: "SWC plugin" },
-        link: "https://github.com/kireevmp/effector-swc-plugin",
+        link: "/api/effector/swc-plugin",
       },
     ],
   },
