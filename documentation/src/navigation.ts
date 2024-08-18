@@ -237,17 +237,17 @@ const effectorReact: LSidebarGroup[] = [
       {
         text: { en: "useUnit", ru: "useUnit", uz: "useUnit" },
         link: "/api/effector-react/useUnit",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useList", ru: "useList", uz: "useList" },
         link: "/api/effector-react/useList",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useStoreMap", ru: "useStoreMap", uz: "useStoreMap" },
         link: "/api/effector-react/useStoreMap",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useStore ⚠️", ru: "useStore ⚠️", uz: "useStore ⚠️" },
@@ -265,7 +265,7 @@ const effectorReact: LSidebarGroup[] = [
       {
         text: { en: "Provider", ru: "Provider", uz: "Provider" },
         link: "/api/effector-react/Provider",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -275,12 +275,12 @@ const effectorReact: LSidebarGroup[] = [
       {
         text: { en: "Gate" },
         link: "/api/effector-react/Gate",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createGate", uz: "createGate" },
         link: "/api/effector-react/createGate",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useGate", uz: "useGate" },
@@ -338,12 +338,12 @@ const effectorSolid: LSidebarGroup[] = [
       {
         text: { en: "useUnit" },
         link: "/api/effector-solid/useUnit",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useStoreMap" },
         link: "/api/effector-solid/useStoreMap",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -353,17 +353,17 @@ const effectorSolid: LSidebarGroup[] = [
       {
         text: { en: "Gate" },
         link: "/api/effector-solid/Gate",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createGate" },
         link: "/api/effector-solid/createGate",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useGate" },
         link: "/api/effector-solid/useGate",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -385,17 +385,17 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "VueEffector" },
         link: "/api/effector-vue/VueEffector",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "EffectorScopePlugin" },
         link: "/api/effector-vue/EffectorScopePlugin",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createComponent" },
         link: "/api/effector-vue/createComponent",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -405,7 +405,7 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "ComponentOptions" },
         link: "/api/effector-vue/ComponentOptions",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -415,17 +415,17 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "Gate" },
         link: "/api/effector-vue/Gate",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createGate" },
         link: "/api/effector-vue/createGate",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useGate" },
         link: "/api/effector-vue/useGate",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -435,7 +435,7 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "useUnit" },
         link: "/api/effector-vue/useUnit",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useStore" },
@@ -444,12 +444,12 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "useStoreMap" },
         link: "/api/effector-vue/useStoreMap",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "useVModel" },
         link: "/api/effector-vue/useVModel",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -514,17 +514,17 @@ const effector: LSidebarGroup[] = [
         text: { en: "createEvent" },
         link: "/api/effector/createEvent",
         // TODO: change to tags: ['actual', 'creators'], then in any place filter out by these tags
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createStore" },
         link: "/api/effector/createStore",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createEffect" },
         link: "/api/effector/createEffect",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createDomain" },
@@ -533,12 +533,12 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "attach" },
         link: "/api/effector/attach",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "merge" },
         link: "/api/effector/merge",
-        quickMenu: true,
+        tags: ["useful"],
       },
     ],
   },
@@ -548,27 +548,27 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "sample" },
         link: "/api/effector/sample",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "combine" },
         link: "/api/effector/combine",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "split" },
         link: "/api/effector/split",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "createApi" },
         link: "/api/effector/createApi",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "restore" },
         link: "/api/effector/restore",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "forward ⚠️" },
@@ -587,22 +587,22 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "fork" },
         link: "/api/effector/fork",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "serialize" },
         link: "/api/effector/serialize",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "allSettled" },
         link: "/api/effector/allSettled",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "scopeBind" },
         link: "/api/effector/scopeBind",
-        quickMenu: true,
+        tags: ["useful"],
       },
       {
         text: { en: "hydrate" },
@@ -728,10 +728,53 @@ const api: LSidebarGroup[] = [
 //   },
 // };
 
-function navigationToQuickMenu(nav: LSidebarGroup[]) {
-  return nav
-    .map((element) => element.items.filter((item) => item.quickMenu))
-    .filter((items) => items.length > 0);
+export const MOST_USEFUL = [
+  {
+    text: { en: "effector" },
+    icon: IconEffector,
+    description: {
+      en: "The core library forms the foundation for most written code.",
+      ru: "Фундамент основного кода логики в приложениях.",
+    },
+    items: filterSidebarGroups(["useful"], effector),
+  },
+  {
+    text: { en: "effector-react" },
+    icon: IconReact,
+    description: {
+      en: "Specialized hooks and gates, designed to seamlessly integrate with React.",
+      ru: "Хуки для компактной и удобной интеграции с React компонентами.",
+    },
+    items: filterSidebarGroups(["useful"], effectorReact),
+  },
+  {
+    text: { en: "effector-solid" },
+    icon: IconSolid,
+    description: {
+      en: "Bindings for performant reactivity framework",
+      ru: "Интеграция с сигналами фреймворка Solid.",
+    },
+    items: filterSidebarGroups(["useful"], effectorSolid),
+  },
+  {
+    text: { en: "effector-vue" },
+    icon: IconVue,
+    description: {
+      en: "Bindings for progressive framework",
+      ru: "Хуки, методы, плагины для работы в рамках Vue.",
+    },
+    items: filterSidebarGroups(["useful"], effectorVue),
+  },
+];
+
+export function filterSidebarGroups(tags: ItemTag[], groups: LSidebarGroup[]) {
+  return groups
+    .map((group) => ({ ...group, items: filterSidebarItems(tags, group.items) }))
+    .filter((group) => group.items.length > 0);
+}
+
+export function filterSidebarItems(tags: ItemTag[], items: LSidebarItem[]) {
+  return items.filter((item) => item.tags?.some((tag) => tags.includes(tag)));
 }
 
 // Be careful: order of the items is important.
@@ -907,10 +950,12 @@ export function isSidebarGroup(item: LSidebarGroup | LSidebarItem): item is LSid
   return "items" in item && "text" in item;
 }
 
+export type ItemTag = "useful";
+
 type LSidebarItem = {
   text: LText;
   link: string;
-  quickMenu?: boolean;
+  tags?: ItemTag[];
 };
 
 type LSidebarIconItem = LSidebarItem & { icon?: (opts: { size?: number }) => any };

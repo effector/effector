@@ -1,0 +1,78 @@
+---
+import { createLink, getPathParamsFromId, getTextLocalized } from "src/languages";
+import { MOST_USEFUL } from "src/navigation";
+
+const { lang, slug } = getPathParamsFromId(Astro.url.pathname);
+---
+
+<div class="flex flex-col gap-8">
+  {
+    MOST_USEFUL.map((packageGroup) => {
+      const PackageIcon = packageGroup.icon;
+      return (
+        <div class="package">
+          <div class="flex flex-nowrap gap-6">
+            <PackageIcon class="package-icon" size={64} />
+            <div class="flex flex-col gap-1">
+              <h3 class="package-title">{getTextLocalized(packageGroup, lang)}</h3>
+              <p>{getTextLocalized({ text: packageGroup.description }, lang)}</p>
+            </div>
+          </div>
+          <div class="groups">
+            {packageGroup.items.map((group) => {
+              const text = getTextLocalized(group, lang);
+
+              return (
+                <div class="group">
+                  <h5 class="title">{text}</h5>
+                  <div class="operators">
+                    {group.items.map((operator) => {
+                      const href = createLink(operator, lang);
+                      const text = getTextLocalized(operator, lang);
+
+                      return (
+                        <a href={href} class="operator">
+                          <span>{text}</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })
+  }
+</div>
+
+<style>
+  .package {
+    @apply relative flex flex-col gap-4 rounded-xl p-4;
+    background-color: var(--theme-card-divider);
+  }
+  .package h3.package-title {
+    @apply m-0;
+  }
+  .package .package-icon {
+  }
+  .package .groups {
+    @apply flex flex-wrap gap-6;
+  }
+
+  .group {
+    @apply flex min-w-0 flex-col gap-1;
+  }
+  .group > .title {
+    @apply text-sm font-medium uppercase;
+    min-width: 18ch;
+  }
+  .group .operators {
+    @apply flex flex-wrap gap-3;
+  }
+
+  .operator {
+    @apply font-mono text-sm;
+  }
+</style>
