@@ -749,7 +749,7 @@ export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
 ];
 
 export const DESKTOP_NAVIGATION: LSidebarItem[] = [
-  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/installation" },
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/motivation" },
   // TODO: replace features to tags, it allows to reuse code
   { text: { en: "API" }, link: "/api", features: ["API"] },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
