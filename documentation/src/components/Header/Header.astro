@@ -7,7 +7,13 @@ import {
   translations,
 } from "../../languages";
 import { SITE } from "../../consts";
-import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS, QUICK_MENU } from "../../navigation";
+import {
+  DESKTOP_NAVIGATION,
+  SOCIAL_LINKS,
+  DOCS_VERSIONS,
+  QUICK_MENU,
+  hasFeature,
+} from "../../navigation";
 
 import MobileNavigation from "../MobileNavigation.astro";
 import DropDownMenu from "../DropDownMenu.astro";
@@ -59,7 +65,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         const external = navLink.link.startsWith("https://") || navLink.link.startsWith("http://");
         const href = external ? navLink.link : createLink(navLink, lang);
         const text = getTextLocalized(navLink, lang);
-        const quickMenu = Boolean(navLink.features?.includes("API"));
+        const quickMenu = hasFeature(navLink, "API");
 
         if (external) {
           return (
@@ -72,6 +78,14 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
 
         if (quickMenu) {
           return (
+            <DropDownMenu links={QUICK_MENU}>
+              <a href={`/${lang}/api`} class="link">
+                API
+              </a>
+            </DropDownMenu>
+          );
+
+          return (
             <div class="group relative hidden md:flex">
               <a href={href} class="link">
                 {text}
@@ -79,41 +93,51 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
 
               <div class="absolute left-1/2 z-10 mt-6 hidden w-screen max-w-max -translate-x-1/2 -translate-y-2 group-hover:flex">
                 <div class="quick-menu mt-4">
-                  {Object.entries(QUICK_MENU).map(([name, { link, groups }]) => {
-                    const external = link.startsWith("https://") || link.startsWith("http://");
-                    const href = external ? link : createLink({ link, text: { en: name } }, lang);
+                  {Object.entries(QUICK_MENU).map(([name, menuItem]) => {
+                    const external =
+                      menuItem.link.startsWith("https://") || menuItem.link.startsWith("http://");
+                    const href = external
+                      ? menuItem.link
+                      : createLink({ link: menuItem.link, text: { en: name } }, lang);
 
                     return (
-                      <div class="quick-group">
-                        <h6 class="quick-group-header">
-                          <span>{name}</span>
-                          <a href={href} class="quick-link">
-                            {getTextLocalized(translations.More, lang)}
-                          </a>
-                        </h6>
-                        {groups.map((elements) => (
-                          <div class="flex flex-wrap gap-x-1">
-                            {elements.map((element) => {
-                              const external =
-                                element.link.startsWith("https://") ||
-                                element.link.startsWith("http://");
-                              const href = external ? element.link : createLink(element, lang);
-                              const text = getTextLocalized(element, lang);
-                              return (
-                                <a
-                                  href={href}
-                                  target={external ? "_blank" : undefined}
-                                  class="quick-link"
-                                >
-                                  <span>{text}</span>
-                                  {external ? <IconExternal /> : null}
-                                </a>
-                              );
-                            })}
-                          </div>
-                        ))}
-                      </div>
+                      <a href={href} target={external ? "_blank" : undefined} class="quick-link">
+                        <span>{name}</span>
+                        {external ? <IconExternal /> : null}
+                      </a>
                     );
+
+                    // return (
+                    //   <div class="quick-group">
+                    //     <h6 class="quick-group-header">
+                    //       <span>{name}</span>
+                    //       <a href={href} class="quick-link">
+                    //         {getTextLocalized(translations.More, lang)}
+                    //       </a>
+                    //     </h6>
+                    //     {groups.map((elements) => (
+                    //       <div class="flex flex-wrap gap-x-1">
+                    //         {elements.map((element) => {
+                    //           const external =
+                    //             element.link.startsWith("https://") ||
+                    //             element.link.startsWith("http://");
+                    //           const href = external ? element.link : createLink(element, lang);
+                    //           const text = getTextLocalized(element, lang);
+                    //           return (
+                    //             <a
+                    //               href={href}
+                    //               target={external ? "_blank" : undefined}
+                    //               class="quick-link"
+                    //             >
+                    //               <span>{text}</span>
+                    //               {external ? <IconExternal /> : null}
+                    //             </a>
+                    //           );
+                    //         })}
+                    //       </div>
+                    //     ))}
+                    //   </div>
+                    // );
                   })}
                 </div>
               </div>

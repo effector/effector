@@ -504,6 +504,7 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "createEvent" },
         link: "/api/effector/createEvent",
+        // TODO: change to tags: ['actual', 'creators'], then in any place filter out by these tags
         quickMenu: true,
       },
       {
@@ -672,42 +673,53 @@ const effector: LSidebarGroup[] = [
   },
 ];
 
+const apiPackages: LSidebarItem[] = [
+  { text: { en: "effector" }, link: "/api/effector" },
+  { text: { en: "effector-react" }, link: "/api/effector-react" },
+  { text: { en: "effector-solid" }, link: "/api/effector-solid" },
+  { text: { en: "effector-vue" }, link: "/api/effector-vue" },
+  { text: { en: "@effector/next" }, link: "https://github.com/effector/next" },
+];
+
 const api: LSidebarGroup[] = [
   {
     text: { en: "Packages", ru: "Пакеты", uz: "Paketlar" },
-    items: [
-      { text: { en: "effector" }, link: "/api/effector" },
-      { text: { en: "effector-react" }, link: "/api/effector-react" },
-      { text: { en: "effector-solid" }, link: "/api/effector-solid" },
-      { text: { en: "effector-vue" }, link: "/api/effector-vue" },
-      { text: { en: "@effector/next" }, link: "https://github.com/effector/next" },
-    ],
+    items: apiPackages,
   },
 ];
 
-interface QuickMenuItem {
-  link: string;
-  groups: LSidebarItem[][];
-}
+export const QUICK_MENU: LSidebarItem[] = [
+  {
+    text: { en: "Most Actual", ru: "Самые акутальные" },
+    link: "/api",
+  },
+  ...apiPackages,
+];
 
-export const QUICK_MENU: Record<string, QuickMenuItem> = {
-  effector: {
-    link: "/api/effector",
-    groups: navigationToQuickMenu(effector),
-  },
-  "effector-react": {
-    link: "/api/effector-react",
-    groups: navigationToQuickMenu(effectorReact),
-  },
-  "effector-solid": {
-    link: "/api/effector-solid",
-    groups: navigationToQuickMenu(effectorSolid),
-  },
-  "effector-vue": {
-    link: "/api/effector-vue",
-    groups: navigationToQuickMenu(effectorVue),
-  },
-};
+// {
+//   effector: {
+//     link: "/api/effector",
+//     groups: navigationToQuickMenu(effector),
+//   },
+//   "effector-react": {
+//     link: "/api/effector-react",
+//     groups: navigationToQuickMenu(effectorReact),
+//   },
+//   "effector-solid": {
+//     link: "/api/effector-solid",
+//     groups: navigationToQuickMenu(effectorSolid),
+//   },
+//   "effector-vue": {
+//     link: "/api/effector-vue",
+//     groups: navigationToQuickMenu(effectorVue),
+//   },
+// };
+
+function navigationToQuickMenu(nav: LSidebarGroup[]) {
+  return nav
+    .map((element) => element.items.filter((item) => item.quickMenu))
+    .filter((items) => items.length > 0);
+}
 
 // Be careful: order of the items is important.
 // Sidebar searches for the first matches.
@@ -738,6 +750,7 @@ export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
 
 export const DESKTOP_NAVIGATION: LSidebarItem[] = [
   { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/installation" },
+  // TODO: replace features to tags, it allows to reuse code
   { text: { en: "API" }, link: "/api", features: ["API"] },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
@@ -880,6 +893,10 @@ type LSidebarItem = {
   features?: NavigationFeatures[];
 };
 
+export function hasFeature<F, T extends { features?: F[] }>(item: T, feature: F): boolean {
+  return item.features?.includes(feature) ?? false;
+}
+
 export function getSidebarForSlug(slug: string): LSidebarGroup[] {
   const path = slug.startsWith("/") ? slug : `/${slug}`;
   return sidebarEntries.find(([prefix]) => path.startsWith(prefix))?.[1] ?? defaultSidebar;
@@ -995,10 +1012,4 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
   }
 
   return nav;
-}
-
-function navigationToQuickMenu(nav: LSidebarGroup[]) {
-  return nav
-    .map((element) => element.items.filter((item) => item.quickMenu))
-    .filter((items) => items.length > 0);
 }
