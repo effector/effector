@@ -1,17 +1,11 @@
 ---
-import {
-  createLink,
-  getPathParamsFromId,
-  getTextLocalized,
-  isExternal,
-  type LText,
-} from "../languages";
+import { getPathParamsFromId, getTextLocalized, type LText } from "../languages";
 import ChevronDown from "@icons/ChevronDown.astro";
-import External from "@icons/External.astro";
 import DropDownMenuItem from "./DropDownMenuItem.astro";
 
 interface Link {
   link: string;
+  icon?: (props: { size: number }) => any;
   text: LText;
 }
 
@@ -45,9 +39,9 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
               return (
                 <div class="group">
                   <p>{getTextLocalized(linkOrGroup, lang)}</p>
-                  {linkOrGroup.links.map((link) => {
-                    return <DropDownMenuItem link={link} lang={lang} />;
-                  })}
+                  {linkOrGroup.links.map((link) => (
+                    <DropDownMenuItem link={link} lang={lang} />
+                  ))}
                 </div>
               );
             }
@@ -111,7 +105,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     @apply rounded-xl p-3 shadow-xl;
     border: 1px solid var(--theme-divider);
     background-color: var(--theme-bg);
-    min-width: 8rem;
+    min-width: 10rem;
     overflow-y: auto;
   }
 
@@ -127,5 +121,6 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     text-transform: uppercase;
     font-weight: 700;
     font-family: var(--font-mono);
+    text-wrap: nowrap;
   }
 </style>

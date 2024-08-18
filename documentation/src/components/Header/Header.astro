@@ -8,7 +8,13 @@ import {
   translations,
 } from "../../languages";
 import { SITE } from "../../consts";
-import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS, isSidebarGroup } from "../../navigation";
+import {
+  DESKTOP_NAVIGATION,
+  SOCIAL_LINKS,
+  DOCS_VERSIONS,
+  isSidebarGroup,
+  isSidebarIconItem,
+} from "../../navigation";
 
 import MobileNavigation from "../MobileNavigation.astro";
 import DropDownMenu from "../DropDownMenu.astro";
@@ -19,21 +25,9 @@ import Search from "./Search.astro";
 import SkipToContent from "./SkipToContent.astro";
 import ThemeToggle from "./ThemeToggleButton";
 
-import IconExternal from "../../icons/External.astro";
-import IconLanguage from "../../icons/Language.astro";
-import IconDots from "../../icons/Dots.astro";
-
-import IconGithub from "../../icons/Github.astro";
-import IconTwitter from "../../icons/Twitter.astro";
-import IconDiscord from "../../icons/Discord.astro";
-import IconYoutube from "../../icons/Youtube.astro";
-
-const socialIcons = {
-  github: IconGithub,
-  twitter: IconTwitter,
-  discord: IconDiscord,
-  youtube: IconYoutube,
-};
+import IconExternal from "@icons/External.astro";
+import IconLanguage from "@icons/Language.astro";
+import IconDots from "@icons/Dots.astro";
 
 type Props = {
   currentPage: string;
@@ -155,7 +149,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     <ThemeToggle client:idle />
     {
       SOCIAL_LINKS.map((link) => {
-        const Icon = socialIcons[link.icon];
+        const Icon = link.icon;
         return (
           <a href={link.link} class="link only-medium" target="_blank">
             <Icon />

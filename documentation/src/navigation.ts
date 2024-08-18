@@ -2,10 +2,14 @@ import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
 import { SITE, LINKS } from "./consts";
 import { getTextLocalized, createLink, type LText, isExternal } from "./languages";
+
 import IconEffector from "@icons/Effector.astro";
 import IconReact from "@icons/React.astro";
 import IconVue from "@icons/Vue.astro";
 import IconSolid from "@icons/Solid.astro";
+import IconGithub from "@icons/Github.astro";
+import IconTwitter from "@icons/Twitter.astro";
+import IconDiscord from "@icons/Discord.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
@@ -737,11 +741,14 @@ export const DOCS_VERSIONS = [
   { text: { en: "v20.17.2" }, link: "https://v20.effector.dev" },
 ];
 
-type SocialIcon = "github" | "twitter" | "discord" | "youtube";
-export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
-  { text: { en: "GitHub" }, icon: "github", link: LINKS.github },
-  { text: { en: "Twitter" }, icon: "twitter", link: LINKS.twitter },
-  { text: { en: "Discord" }, icon: "discord", link: LINKS.discord },
+export const SOCIAL_LINKS: {
+  text: LText;
+  icon: (props: { size?: number }) => any;
+  link: string;
+}[] = [
+  { text: { en: "GitHub" }, icon: IconGithub, link: LINKS.github },
+  { text: { en: "Twitter" }, icon: IconTwitter, link: LINKS.twitter },
+  { text: { en: "Discord" }, icon: IconDiscord, link: LINKS.discord },
 ];
 
 export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
