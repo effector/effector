@@ -769,7 +769,7 @@ export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
   {
     text: { en: "API" },
     link: "/api",
-    items: [{ text: { en: "Overview", ru: "Самые используемые" }, link: "/api" }, ...apiPackages],
+    items: [{ text: { en: "Overview", ru: "Обзор" }, link: "/api" }, ...apiPackages],
   },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
