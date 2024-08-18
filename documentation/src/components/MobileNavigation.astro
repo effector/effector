@@ -22,7 +22,7 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
           const Icon = link.icon ?? IconExternal;
           return (
             <a class="social" href={link.link} class="link only-medium" target="_blank">
-              <Icon />
+              <Icon size={24} />
             </a>
           );
         })

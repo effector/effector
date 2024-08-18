@@ -65,11 +65,13 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
 
         if (isSidebarGroup(navLink)) {
           return (
-            <DropDownMenu links={navLink.items}>
-              <a href={`/${lang}/api`} class="link">
-                API
-              </a>
-            </DropDownMenu>
+            <div class="hidden md:flex">
+              <DropDownMenu links={navLink.items}>
+                <a href={`/${lang}/api`} class="link">
+                  API
+                </a>
+              </DropDownMenu>
+            </div>
           );
 
           // return (
@@ -152,7 +154,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         const Icon = link.icon;
         return (
           <a href={link.link} class="link only-medium" target="_blank">
-            <Icon />
+            <Icon size={24} />
           </a>
         );
       })
