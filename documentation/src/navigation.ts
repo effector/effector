@@ -140,7 +140,7 @@ const defaultSidebar: LSidebarGroup[] = [
   },
 ];
 
-const recipes = [
+const recipes: LSidebarGroup[] = [
   {
     text: { en: "Common", uz: "Umumiy" },
     items: [
@@ -221,7 +221,7 @@ const recipes = [
   },
 ];
 
-const effectorReact = [
+const effectorReact: LSidebarGroup[] = [
   {
     text: { en: "Hooks" },
     items: [
@@ -322,7 +322,7 @@ const effectorReact = [
   },
 ];
 
-const effectorSolid = [
+const effectorSolid: LSidebarGroup[] = [
   {
     text: { en: "Hooks" },
     items: [
@@ -369,7 +369,7 @@ const effectorSolid = [
   },
 ];
 
-const effectorVue = [
+const effectorVue: LSidebarGroup[] = [
   {
     text: { en: "Common methods" },
     items: [
@@ -472,7 +472,7 @@ const effectorVue = [
   },
 ];
 
-const effector = [
+const effector: LSidebarGroup[] = [
   {
     text: { en: "Unit Types", ru: "Юниты", uz: "Yunitlar" },
     items: [
@@ -672,7 +672,7 @@ const effector = [
   },
 ];
 
-const api = [
+const api: LSidebarGroup[] = [
   {
     text: { en: "Packages", ru: "Пакеты", uz: "Paketlar" },
     items: [
@@ -778,7 +778,7 @@ export const FOOTER_LINKS = [
         text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" },
         link: "/introduction/installation",
       },
-      { text: { en: "API Reference", uz: "API Havolasi" }, link: "/api" },
+      { text: { en: "API Reference", ru: "Справочник API", uz: "API Havolasi" }, link: "/api" },
       {
         text: { en: "Writings tests", ru: "Тестирование кода", uz: "Kodni testlash" },
         link: "/guides/testing",
@@ -809,8 +809,8 @@ export const FOOTER_LINKS = [
       { text: { en: "Reddit" }, link: LINKS.reddit },
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
-      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant"  },
-      { text: { en: "Made by Astro" }, link: "https://astro.build" },
+      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
+      { text: { en: "Docs powered by Astro" }, link: "https://astro.build" },
     ],
   },
 ] satisfies FooterGroup[];
