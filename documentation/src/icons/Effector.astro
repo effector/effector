@@ -1,16 +1,19 @@
 ---
 interface Props {
   class?: string;
+  size?: number | string;
 }
+
+const { class: className, size = "100%" } = Astro.props;
 ---
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="100%"
-  height="100%"
+  width={size}
+  height={size}
   viewBox="0 0 1600 1600"
   preserveAspectRatio="xMidYMid meet"
-  class={Astro.props.class}
+  class={className}
 >
   <g id="layer101" fill="#7f2400" stroke="none">
     <path

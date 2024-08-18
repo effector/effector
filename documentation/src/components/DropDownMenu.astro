@@ -8,6 +8,7 @@ import {
 } from "../languages";
 import ChevronDown from "@icons/ChevronDown.astro";
 import External from "@icons/External.astro";
+import DropDownMenuItem from "./DropDownMenuItem.astro";
 
 interface Link {
   link: string;
@@ -45,33 +46,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
                 <div class="group">
                   <p>{getTextLocalized(linkOrGroup, lang)}</p>
                   {linkOrGroup.links.map((link) => {
-                    return (
-                      <a
-                        class:list={{
-                          link: true,
-                          active: Astro.url.pathname.startsWith(link.link),
-                        }}
-                        href={createLink(link, lang)}
-                        target={link.link.startsWith("/") ? undefined : "_blank"}
-                      >
-                        {getTextLocalized(link, lang)}
-                        {isExternal(link) ? <External size={16} /> : null}
-                      </a>
-                    );
+                    return <DropDownMenuItem link={link} lang={lang} />;
                   })}
                 </div>
               );
             }
-            return (
-              <a
-                href={createLink(linkOrGroup, lang)}
-                class:list={{ link: true, active: Astro.url.pathname.startsWith(linkOrGroup.link) }}
-                target={linkOrGroup.link.startsWith("/") ? undefined : "_blank"}
-              >
-                {getTextLocalized(linkOrGroup, lang)}
-                {isExternal(linkOrGroup) ? <External size={16} /> : null}
-              </a>
-            );
+
+            return <DropDownMenuItem link={linkOrGroup} lang={lang} />;
           })
         }
       </div>
@@ -140,31 +121,11 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .group p {
+    @apply text-sm;
     margin-top: 1rem;
-  }
-
-  .link {
-    @apply rounded-md;
-    display: flex;
-    transition:
-      background-color 0.25s,
-      color 0.25s;
-    padding: 0 0.8rem;
-    color: currentColor;
-    font-weight: 500;
-    font-size: 0.9rem;
-    line-height: 2rem;
-    text-align: start;
-    white-space: nowrap;
-  }
-
-  .link:hover {
-    background-color: var(--theme-divider);
-    color: var(--theme-accent);
-  }
-
-  .link.active,
-  .group .link.active {
-    color: var(--theme-accent);
+    color: var(--theme-header-lighter);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: var(--font-mono);
   }
 </style>

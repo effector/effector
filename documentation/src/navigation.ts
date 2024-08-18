@@ -2,6 +2,10 @@ import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
 import { SITE, LINKS } from "./consts";
 import { getTextLocalized, createLink, type LText, isExternal } from "./languages";
+import IconEffector from "@icons/Effector.astro";
+import IconReact from "@icons/React.astro";
+import IconVue from "@icons/Vue.astro";
+import IconSolid from "@icons/Solid.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
@@ -673,11 +677,11 @@ const effector: LSidebarGroup[] = [
   },
 ];
 
-const apiPackages: LSidebarItem[] = [
-  { text: { en: "effector" }, link: "/api/effector" },
-  { text: { en: "effector-react" }, link: "/api/effector-react" },
-  { text: { en: "effector-solid" }, link: "/api/effector-solid" },
-  { text: { en: "effector-vue" }, link: "/api/effector-vue" },
+const apiPackages: LSidebarIconItem[] = [
+  { text: { en: "effector" }, link: "/api/effector", icon: IconEffector },
+  { text: { en: "effector-react" }, link: "/api/effector-react", icon: IconReact },
+  { text: { en: "effector-solid" }, link: "/api/effector-solid", icon: IconSolid },
+  { text: { en: "effector-vue" }, link: "/api/effector-vue", icon: IconVue },
   { text: { en: "@effector/next" }, link: "https://github.com/effector/next" },
 ];
 
@@ -686,14 +690,6 @@ const api: LSidebarGroup[] = [
     text: { en: "Packages", ru: "Пакеты", uz: "Paketlar" },
     items: apiPackages,
   },
-];
-
-export const QUICK_MENU: LSidebarItem[] = [
-  {
-    text: { en: "Most Useful", ru: "Самые используемые" },
-    link: "/api",
-  },
-  ...apiPackages,
 ];
 
 // {
@@ -748,10 +744,13 @@ export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
   { text: { en: "Discord" }, icon: "discord", link: LINKS.discord },
 ];
 
-export const DESKTOP_NAVIGATION: LSidebarItem[] = [
+export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
   { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/motivation" },
-  // TODO: replace features to tags, it allows to reuse code
-  { text: { en: "API" }, link: "/api", features: ["API"] },
+  {
+    text: { en: "API" },
+    link: "/api",
+    items: [{ text: { en: "Overview", ru: "Самые используемые" }, link: "/api" }, ...apiPackages],
+  },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
   { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
@@ -884,17 +883,20 @@ interface LSidebarGroup {
   collapsed?: boolean;
 }
 
-export type NavigationFeatures = "API";
+export function isSidebarGroup(item: LSidebarGroup | LSidebarItem): item is LSidebarGroup {
+  return "items" in item && "text" in item;
+}
 
 type LSidebarItem = {
   text: LText;
   link: string;
   quickMenu?: boolean;
-  features?: NavigationFeatures[];
 };
 
-export function hasFeature<F, T extends { features?: F[] }>(item: T, feature: F): boolean {
-  return item.features?.includes(feature) ?? false;
+type LSidebarIconItem = LSidebarItem & { icon?: (opts: { size?: number }) => any };
+
+export function isSidebarIconItem(item: LSidebarItem): item is LSidebarIconItem {
+  return "icon" in item;
 }
 
 export function getSidebarForSlug(slug: string): LSidebarGroup[] {
