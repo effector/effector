@@ -1,7 +1,7 @@
 import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
 import { SITE, LINKS } from "./consts";
-import { getTextLocalized, createLink, type LText } from "./languages";
+import { getTextLocalized, createLink, type LText, isExternal } from "./languages";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
@@ -690,7 +690,7 @@ const api: LSidebarGroup[] = [
 
 export const QUICK_MENU: LSidebarItem[] = [
   {
-    text: { en: "Most Actual", ru: "Самые акутальные" },
+    text: { en: "Most Useful", ru: "Самые используемые" },
     link: "/api",
   },
   ...apiPackages,
@@ -914,7 +914,7 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
       items: group.items.map((item) => {
         const itemTitle = getTextLocalized(item, lang);
 
-        if (isRemoteUrl(item.link)) {
+        if (isExternal(item)) {
           return {
             title: itemTitle,
             link: item.link,
@@ -952,10 +952,6 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
 
 function getSlugs() {
   return getCollection("docs").then((docs) => new Set(docs.map((doc) => `/${doc.slug}`)));
-}
-
-function isRemoteUrl(link: string) {
-  return link.startsWith("https://") || link.startsWith("http://");
 }
 
 function createMobileNavigation(nav: LMobileNavItem[]) {

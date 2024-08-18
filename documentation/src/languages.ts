@@ -31,7 +31,15 @@ export function getTextLocalized(item: { text: LText }, lang: string): string {
   return item.text.en;
 }
 
+export function isExternal(link: { link?: string }) {
+  return (link.link?.startsWith("https://") || link.link?.startsWith("http://")) ?? false;
+}
+
 export function createLink(item: { text: LText; link: string }, lang: string): string {
+  if (isExternal(item)) {
+    return item.link;
+  }
+
   if (item.link.startsWith("/")) {
     return `/${lang}${item.link}`;
   }

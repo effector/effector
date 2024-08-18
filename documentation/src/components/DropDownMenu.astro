@@ -1,5 +1,11 @@
 ---
-import { getPathParamsFromId, getTextLocalized, type LText } from "../languages";
+import {
+  createLink,
+  getPathParamsFromId,
+  getTextLocalized,
+  isExternal,
+  type LText,
+} from "../languages";
 import ChevronDown from "@icons/ChevronDown.astro";
 import External from "@icons/External.astro";
 
@@ -45,13 +51,11 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
                           link: true,
                           active: Astro.url.pathname.startsWith(link.link),
                         }}
-                        href={link.link}
+                        href={createLink(link, lang)}
                         target={link.link.startsWith("/") ? undefined : "_blank"}
                       >
                         {getTextLocalized(link, lang)}
-                        {link.link.startsWith("https://") || link.link.startsWith("http://") ? (
-                          <External size={16} />
-                        ) : null}
+                        {isExternal(link) ? <External size={16} /> : null}
                       </a>
                     );
                   })}
@@ -60,15 +64,12 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
             }
             return (
               <a
-                href={linkOrGroup.link}
+                href={createLink(linkOrGroup, lang)}
                 class:list={{ link: true, active: Astro.url.pathname.startsWith(linkOrGroup.link) }}
                 target={linkOrGroup.link.startsWith("/") ? undefined : "_blank"}
               >
                 {getTextLocalized(linkOrGroup, lang)}
-                {linkOrGroup.link.startsWith("https://") ||
-                linkOrGroup.link.startsWith("http://") ? (
-                  <External size={16} />
-                ) : null}
+                {isExternal(linkOrGroup) ? <External size={16} /> : null}
               </a>
             );
           })

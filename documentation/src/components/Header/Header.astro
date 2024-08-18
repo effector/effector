@@ -4,6 +4,7 @@ import {
   createLink,
   getPathParamsFromId,
   getTextLocalized,
+  isExternal,
   translations,
 } from "../../languages";
 import { SITE } from "../../consts";
@@ -62,12 +63,11 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     </div>
     {
       DESKTOP_NAVIGATION.map((navLink) => {
-        const external = navLink.link.startsWith("https://") || navLink.link.startsWith("http://");
-        const href = external ? navLink.link : createLink(navLink, lang);
+        const href = createLink(navLink, lang);
         const text = getTextLocalized(navLink, lang);
         const quickMenu = hasFeature(navLink, "API");
 
-        if (external) {
+        if (isExternal(navLink)) {
           return (
             <a href={href} target="_blank" class="link only-medium">
               <span>{text}</span>
@@ -94,11 +94,8 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
               <div class="absolute left-1/2 z-10 mt-6 hidden w-screen max-w-max -translate-x-1/2 -translate-y-2 group-hover:flex">
                 <div class="quick-menu mt-4">
                   {Object.entries(QUICK_MENU).map(([name, menuItem]) => {
-                    const external =
-                      menuItem.link.startsWith("https://") || menuItem.link.startsWith("http://");
-                    const href = external
-                      ? menuItem.link
-                      : createLink({ link: menuItem.link, text: { en: name } }, lang);
+                    const external = isExternal(menuItem);
+                    const href = createLink({ link: menuItem.link, text: { en: name } }, lang);
 
                     return (
                       <a href={href} target={external ? "_blank" : undefined} class="quick-link">
@@ -176,9 +173,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     <div class="hidden md:inline-block xl:hidden">
       <DropDownMenu
         links={[
-          ...DESKTOP_NAVIGATION.filter(
-            (navLink) => navLink.link.startsWith("https://") || navLink.link.startsWith("http://"),
-          ),
+          ...DESKTOP_NAVIGATION.filter(isExternal),
           {
             text: { en: "Language", ru: "Язык документации" },
             links: languageLinks,
