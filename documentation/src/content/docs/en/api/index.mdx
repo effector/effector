@@ -9,10 +9,11 @@ import IconSolid from "@icons/Solid.astro";
 import IconEffector from "@icons/Effector.astro";
 import IconNextJs from "@icons/NextJs.astro";
 import MostUsefulMethods from "@components/MostUsefulMethods.astro";
+import { MOST_USEFUL } from "src/navigation";
 
 Short overview of most useful methods and packages provided by Effector.
 
-<MostUsefulMethods />
+<MostUsefulMethods items={MOST_USEFUL} />
 {/*
 Effector provides a range of packages to accommodate your specific needs. There are packages supported by the core team.
 

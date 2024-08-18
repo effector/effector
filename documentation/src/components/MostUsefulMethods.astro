@@ -1,13 +1,18 @@
 ---
 import { createLink, getPathParamsFromId, getTextLocalized } from "src/languages";
-import { MOST_USEFUL } from "src/navigation";
+import { type MostUsefulItem } from "src/navigation";
 
-const { lang, slug } = getPathParamsFromId(Astro.url.pathname);
+interface Props {
+  items: MostUsefulItem[];
+}
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+const { items } = Astro.props;
 ---
 
 <div class="flex flex-col gap-8">
   {
-    MOST_USEFUL.map((packageGroup) => {
+    items.map((packageGroup) => {
       const PackageIcon = packageGroup.icon;
       return (
         <div class="package">

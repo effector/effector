@@ -1,0 +1,75 @@
+---
+title: effector
+description: Перечень основных методов API, по группам
+lang: ru
+---
+
+import MostUsefulMethods from "@components/MostUsefulMethods.astro";
+import { MOST_USEFUL_EFFECTOR } from "src/navigation";
+
+<MostUsefulMethods items={[MOST_USEFUL_EFFECTOR]} />
+
+<br />
+Перечень методов API, по группам:
+
+## Типы юнитов
+
+- [`Event<T>`](/ru/api/effector/Event)
+- [`Effect<Params, Done, Fail>`](/ru/api/effector/Effect)
+- [`Store<T>`](/ru/api/effector/Store)
+- [`Domain`](/ru/api/effector/Domain)
+- [`Scope`](/ru/api/effector/Scope)
+
+## Создание юнитов
+
+- [`createEvent()`](/ru/api/effector/createEvent)
+- [`createStore(default)`](/ru/api/effector/createStore)
+- [`createEffect(handler)`](/ru/api/effector/createEffect)
+- [`createDomain()`](/ru/api/effector/createDomain)
+
+## Основные методы библиотеки
+
+- [`combine(...stores, f)`](/ru/api/effector/combine)
+- [`attach({effect, mapParams?, source?})`](/ru/api/effector/attach)
+- [`sample({clock, source, fn, target})`](/ru/api/effector/sample)
+- [`merge([eventA, eventB])`](/ru/api/effector/merge)
+- [`split(event, cases)`](/ru/api/effector/split)
+- [`createApi(store, api)`](/ru/api/effector/createApi)
+
+## Fork API
+
+- [`fork()`](/ru/api/effector/fork)
+- [`serialize(scope)`](/ru/api/effector/serialize)
+- [`allSettled(unit, { scope })`](/ru/api/effector/allSettled)
+- [`scopeBind(event)`](/ru/api/effector/scopeBind)
+- [`hydrate(domain)`](/ru/api/effector/hydrate)
+
+## Плагины для компилятора
+
+- [effector/babel-plugin](/ru/api/effector/babel-plugin)
+- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin)
+
+## Служебные функции
+
+- [is](/ru/api/effector/is)
+- [`fromObservable(observable)`](/ru/api/effector/fromObservable)
+
+## Низкоуровневый API
+
+- [`clearNode()`](/ru/api/effector/clearNode)
+- [`withRegion()`](/ru/api/effector/withRegion)
+- [`launch()`](/ru/api/effector/launch)
+- [`inspect()`](/ru/api/effector/inspect)
+
+## Import Map (#import-map)
+
+Пакет `effector` предоставляет несколько дополнительных модулей, которые могут быть полезны в различных сценариях:
+
+- [effector/compat](/ru/api/effector/module/compat)
+- [effector/inspect](/ru/api/effector/module/inspect)
+- [effector/babel-plugin](/ru/api/effector/module/babel-plugin)
+
+## Устаревшие методы
+
+- [`forward({from, to})`](/ru/api/effector/forward)
+- [`guard({source, filter, target})`](/ru/api/effector/guard)

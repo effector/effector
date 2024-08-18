@@ -728,43 +728,55 @@ const api: LSidebarGroup[] = [
 //   },
 // };
 
+export type MostUsefulItem = {
+  text: LText;
+  icon: (props: { size?: number | number; class?: string }) => any;
+  description: LText;
+  items: LSidebarGroup[];
+};
+
+export const MOST_USEFUL_EFFECTOR: MostUsefulItem = {
+  text: { en: "effector" },
+  icon: IconEffector,
+  description: {
+    en: "The core library forms the foundation for most written code.",
+    ru: "Фундамент основного кода логики в приложениях.",
+  },
+  items: filterSidebarGroups(["useful"], effector),
+};
+export const MOST_USEFUL_REACT: MostUsefulItem = {
+  text: { en: "effector-react" },
+  icon: IconReact,
+  description: {
+    en: "Specialized hooks and gates, designed to seamlessly integrate with React.",
+    ru: "Хуки для компактной и удобной интеграции с React компонентами.",
+  },
+  items: filterSidebarGroups(["useful"], effectorReact),
+};
+export const MOST_USEFUL_SOLID: MostUsefulItem = {
+  text: { en: "effector-solid" },
+  icon: IconSolid,
+  description: {
+    en: "Bindings for performant reactivity framework",
+    ru: "Интеграция с сигналами фреймворка Solid.",
+  },
+  items: filterSidebarGroups(["useful"], effectorSolid),
+};
+export const MOST_USEFUL_VUE: MostUsefulItem = {
+  text: { en: "effector-vue" },
+  icon: IconVue,
+  description: {
+    en: "Bindings for progressive framework",
+    ru: "Хуки, методы, плагины для работы в рамках Vue.",
+  },
+  items: filterSidebarGroups(["useful"], effectorVue),
+};
+
 export const MOST_USEFUL = [
-  {
-    text: { en: "effector" },
-    icon: IconEffector,
-    description: {
-      en: "The core library forms the foundation for most written code.",
-      ru: "Фундамент основного кода логики в приложениях.",
-    },
-    items: filterSidebarGroups(["useful"], effector),
-  },
-  {
-    text: { en: "effector-react" },
-    icon: IconReact,
-    description: {
-      en: "Specialized hooks and gates, designed to seamlessly integrate with React.",
-      ru: "Хуки для компактной и удобной интеграции с React компонентами.",
-    },
-    items: filterSidebarGroups(["useful"], effectorReact),
-  },
-  {
-    text: { en: "effector-solid" },
-    icon: IconSolid,
-    description: {
-      en: "Bindings for performant reactivity framework",
-      ru: "Интеграция с сигналами фреймворка Solid.",
-    },
-    items: filterSidebarGroups(["useful"], effectorSolid),
-  },
-  {
-    text: { en: "effector-vue" },
-    icon: IconVue,
-    description: {
-      en: "Bindings for progressive framework",
-      ru: "Хуки, методы, плагины для работы в рамках Vue.",
-    },
-    items: filterSidebarGroups(["useful"], effectorVue),
-  },
+  MOST_USEFUL_EFFECTOR,
+  MOST_USEFUL_REACT,
+  MOST_USEFUL_SOLID,
+  MOST_USEFUL_VUE,
 ];
 
 export function filterSidebarGroups(tags: ItemTag[], groups: LSidebarGroup[]) {
