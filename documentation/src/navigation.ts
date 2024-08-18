@@ -7,6 +7,7 @@ import IconEffector from "@icons/Effector.astro";
 import IconReact from "@icons/React.astro";
 import IconVue from "@icons/Vue.astro";
 import IconSolid from "@icons/Solid.astro";
+import IconNextJs from "@icons/NextJs.astro";
 import IconGithub from "@icons/Github.astro";
 import IconTwitter from "@icons/Twitter.astro";
 import IconDiscord from "@icons/Discord.astro";
@@ -686,13 +687,25 @@ const apiPackages: LSidebarIconItem[] = [
   { text: { en: "effector-react" }, link: "/api/effector-react", icon: IconReact },
   { text: { en: "effector-solid" }, link: "/api/effector-solid", icon: IconSolid },
   { text: { en: "effector-vue" }, link: "/api/effector-vue", icon: IconVue },
-  { text: { en: "@effector/next" }, link: "https://github.com/effector/next" },
+  { text: { en: "@effector/next" }, link: "https://github.com/effector/next", icon: IconNextJs },
+];
+
+const externalPackages: LSidebarItem[] = [
+  { text: { en: "effector patronum" }, link: "https://patronum.effector.dev" },
+  { text: { en: "effector with ease" }, link: "https://withease.effector.dev" },
+  { text: { en: "@effector/reflect" }, link: "https://reflect.effector.dev" },
+  { text: { en: "atomic router" }, link: "https://atomic-router.github.io/" },
+  { text: { en: "farfetched" }, link: "https://ff.effector.dev" },
 ];
 
 const api: LSidebarGroup[] = [
   {
     text: { en: "Packages", ru: "Пакеты", uz: "Paketlar" },
     items: apiPackages,
+  },
+  {
+    text: { en: "Official Ecosystem", ru: "Экосистема" },
+    items: externalPackages,
   },
 ];
 
