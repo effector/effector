@@ -76,10 +76,10 @@ import { createStore } from "https://cdn.jsdelivr.net/npm/effector/effector.mjs"
 ### SWC
 
 ```bash
-npm install --development effector-swc-plugin @swc/core
+npm install -ED @effector/swc-plugin @swc/core
 ```
 
-[Документация плагина](https://github.com/kireevmp/effector-swc-plugin).
+[Документация плагина](/ru/api/effector/swc-plugin).
 
 ## Совместимость
 

@@ -40,7 +40,7 @@ redirectFrom:
 ## DX
 
 - [eslint-plugin-effector](https://eslint.effector.dev) 💚 — Применение лучших практик.
-- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 💚 — SWC-плагин для эффективной работы с effector.
+- [@effector/swc-plugin](https://github.com/effector/swc-plugin) 💚 — Официальный SWC-плагин для Effector.
 - [effector-logger](https://github.com/effector/logger) 🛠 — Простой логгер сторов, событий, эффектов и доменов.
 - [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Простой адаптер, который логгирует обновления в Redux DevTools.
 
