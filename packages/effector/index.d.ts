@@ -1798,7 +1798,8 @@ type TargetConfigCheck<
         Target,
         Config & SomeFN,
         FN,
-        'noSrc'
+        'noSrc',
+        'noClk'
       >
     : [message: {error: 'function should accept data source types'; got: FN}]
     // mode with source only or with both clock and source
@@ -1810,7 +1811,8 @@ type TargetConfigCheck<
         Target,
         Config & SomeFN,
         'noFn',
-        Source
+        Source,
+        Clock
       >
     : [message: {error: 'source should be unit or object with stores'; got: Source}]
     // mode with clock only
@@ -1822,7 +1824,8 @@ type TargetConfigCheck<
         Target,
         Config & SomeFN,
         'noFn',
-        'noSrc'
+        'noSrc',
+        Clock
       >
     : [message: {error: 'clock should be unit or array of units'; got: Clock}]
   : never
@@ -1902,7 +1905,8 @@ type SampleFilterTargetDef<
               Target,
               TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN,
               FNAltArg,
-              'noSrc'
+              'noSrc',
+              'noClk'
             >
           : never
           // mode with source only or with both clock and source
@@ -1914,7 +1918,8 @@ type SampleFilterTargetDef<
               Target,
               TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN,
               'noFn',
-              Source
+              Source,
+              Clock
             >
           : [message: {error: 'source should be unit or object with stores'; got: Source}]
           // mode with clock only
@@ -1926,7 +1931,8 @@ type SampleFilterTargetDef<
               Target,
               TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN,
               'noFn',
-              'noSrc'
+              'noSrc',
+              Clock
             >
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : never
@@ -1972,7 +1978,8 @@ type SampleFilterTargetDef<
                   : any
               )> & SomeFN,
               FNInf,
-              'noSrc'
+              'noSrc',
+              'noClk'
             >
           : [message: {error: 'function should accept data source types'; got: FNInf}]
           // mode with source only or with both clock and source
@@ -1984,7 +1991,8 @@ type SampleFilterTargetDef<
               Target,
               TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN,
               'noFn',
-              'noSrc'
+              'noSrc',
+              'noClk'
             >
           : [message: {error: 'source should be unit or object with stores'; got: Source}]
           // mode with clock only
@@ -1996,7 +2004,8 @@ type SampleFilterTargetDef<
               Target,
               TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN,
               'noFn',
-              'noSrc'
+              'noSrc',
+              Clock
             >
           : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : never
@@ -2025,7 +2034,8 @@ type SampleFilterTargetDef<
                 Target,
                 TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN,
                 FN,
-                'noSrc'
+                'noSrc',
+                'noClk'
               >
             : [message: {error: 'function should accept data source types'; got: FN}]
             // mode with source only or with both clock and source
@@ -2037,7 +2047,8 @@ type SampleFilterTargetDef<
                 Target,
                 TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN,
                 'noFn',
-                Source
+                Source,
+                Clock
               >
             : [message: {error: 'source should be unit or object with stores'; got: Source}]
             // mode with clock only
@@ -2049,7 +2060,8 @@ type SampleFilterTargetDef<
                 Target,
                 TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN,
                 'noFn',
-                'noSrc'
+                'noSrc',
+                Clock
               >
             : [message: {error: 'clock should be unit or array of units'; got: Clock}]
           : never
@@ -2085,6 +2097,7 @@ type TargetOrError<
   ResultConfig,
   FN,
   Source,
+  Clock
 > = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
     ? [config: ResultConfig]
     : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
@@ -2103,7 +2116,7 @@ type TargetOrError<
                     [K in keyof Target]: Unit<MatchingValue>
                   }
                   : Unit<MatchingValue>
-                error: 'source should extend target type'
+                error: 'fallback: source should extend target type'
               }]
               : [error: {
                 source: GetSourceExtendedByTarget<
@@ -2128,9 +2141,29 @@ type TargetOrError<
                 : Unit<MatchingValue>
               error: 'source should extend target type'
             }]
-          : [message: {
+          : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
+            ? [error: {
+                clock: GetClockExtendedByTarget<
+                  Clock,
+                  Target extends UnitTargetable<any>
+                  ? Target extends UnitTargetable<infer TargetType>
+                    ? TargetType
+                    : never
+                  : Target extends RoTuple<infer TU>
+                    ? TU extends UnitTargetable<infer TargetType>
+                      ? TargetType
+                      : never
+                    : never
+                >
+                error: 'clock should extend target type'
+              }]
+            : [error: {
+              target: Target extends readonly any[]
+                ? {
+                  [K in keyof Target]: Unit<MatchingValue>
+                }
+                : Unit<MatchingValue>
               error: 'clock should extend target type'
-              targets: Show<TypeOfTarget<MatchingValue, Target, Mode>>
             }]
 
 type SampleFilterDef<
@@ -2392,6 +2425,13 @@ type GetSourceExtendedByTarget<Source, TargetType> =
   Source extends (Record<string, Store<any>> | RoTuple<Store<any>>)
   ? {
     [K in keyof TargetType]: Store<TargetType[K]>
+  }
+  : Unit<TargetType>
+
+type GetClockExtendedByTarget<Clock, TargetType> =
+  Clock extends RoTuple<Unit<any>>
+  ? {
+    [K in keyof Clock]: Unit<TargetType>
   }
   : Unit<TargetType>
 

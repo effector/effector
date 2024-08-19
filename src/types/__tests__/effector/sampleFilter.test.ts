@@ -533,7 +533,11 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: User; targetType: string; }; }'.
+          Unmarked error at test line 9 'target,'
+          lack of expected error at test line 7 'clock: trigger,'
+          Type 'StoreWritable<string>' is not assignable to type 'Unit<User>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'User'.
           "
         `)
       })
