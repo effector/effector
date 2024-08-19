@@ -1442,106 +1442,106 @@ describe('untyped fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 12 'source: num,'
+      Unmarked error at test line 9 'fn: (src) => src + 1,'
       lack of expected error at test line 7 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 38 'source: num,'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 17 'fn: (src) => src + 1,'
       lack of expected error at test line 15 'strBool,'
+      Type 'number' is not assignable to type 'string | boolean'.
+      Unmarked error at test line 44 'fn: (src) => src + 1,'
       lack of expected error at test line 24 'str,'
       lack of expected error at test line 33 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 47 'source: num,'
       lack of expected error at test line 41 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 92 'source: str,'
+      Type 'number' is not assignable to type 'string | boolean | void'.
+      Unmarked error at test line 53 'fn: (src) => src + 1,'
       lack of expected error at test line 50 'str,'
+      Type 'number' is not assignable to type 'string | void'.
+      Unmarked error at test line 97 'fn: (src) => src + 1,'
       lack of expected error at test line 60 'str,'
       lack of expected error at test line 69 'str,'
       lack of expected error at test line 78 'strBool,'
       lack of expected error at test line 87 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 100 'source: str,'
       lack of expected error at test line 95 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 145 'clock: num,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 106 'fn: (src) => src + 1,'
       lack of expected error at test line 103 'num,'
+      Type 'string' is not assignable to type 'number | void'.
+      Unmarked error at test line 150 'fn: (clk) => clk + 1,'
       lack of expected error at test line 112 'num,'
       lack of expected error at test line 122 'num,'
       lack of expected error at test line 130 'num,'
       lack of expected error at test line 139 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 153 'clock: num,'
       lack of expected error at test line 148 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 179 'clock: num,'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 158 'fn: (clk) => clk + 1,'
       lack of expected error at test line 156 'strBool,'
+      Type 'number' is not assignable to type 'string | boolean'.
+      Unmarked error at test line 185 'fn: (clk) => clk + 1,'
       lack of expected error at test line 165 'str,'
       lack of expected error at test line 174 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 188 'clock: num,'
       lack of expected error at test line 182 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 233 'clock: str,'
+      Type 'number' is not assignable to type 'string | boolean | void'.
+      Unmarked error at test line 194 'fn: (clk) => clk + 1,'
       lack of expected error at test line 191 'str,'
+      Type 'number' is not assignable to type 'string | void'.
+      Unmarked error at test line 238 'fn: (clk) => clk + 1,'
       lack of expected error at test line 201 'str,'
       lack of expected error at test line 210 'str,'
       lack of expected error at test line 219 'strBool,'
       lack of expected error at test line 228 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 241 'clock: str,'
       lack of expected error at test line 236 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 286 'source: num,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 247 'fn: (clk) => clk + 1,'
       lack of expected error at test line 244 'num,'
+      Type 'string' is not assignable to type 'number | void'.
+      Unmarked error at test line 292 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 253 'num,'
       lack of expected error at test line 263 'num,'
       lack of expected error at test line 271 'num,'
       lack of expected error at test line 280 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 295 'source: num,'
       lack of expected error at test line 290 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 324 'source: num,'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 301 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 299 'strBool,'
+      Type 'number' is not assignable to type 'string | boolean'.
+      Unmarked error at test line 331 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 309 'str,'
       lack of expected error at test line 319 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 334 'source: num,'
       lack of expected error at test line 328 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 384 'source: num,'
+      Type 'number' is not assignable to type 'string | boolean | void'.
+      Unmarked error at test line 341 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 338 'str,'
+      Type 'number' is not assignable to type 'string | void'.
+      Unmarked error at test line 390 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 349 'str,'
       lack of expected error at test line 359 'str,'
       lack of expected error at test line 369 'strBool,'
       lack of expected error at test line 379 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 393 'source: num,'
       lack of expected error at test line 388 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 443 'source: str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 400 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 397 'num,'
+      Type 'string' is not assignable to type 'number | void'.
+      Unmarked error at test line 449 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 407 'num,'
       lack of expected error at test line 418 'num,'
       lack of expected error at test line 427 'num,'
       lack of expected error at test line 437 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 452 'source: str,'
       lack of expected error at test line 447 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 502 'source: str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 459 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 456 'num,'
+      Type 'string' is not assignable to type 'number | void'.
+      Unmarked error at test line 508 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 466 'num,'
       lack of expected error at test line 477 'num,'
       lack of expected error at test line 486 'num,'
       lack of expected error at test line 496 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 511 'source: str,'
       lack of expected error at test line 506 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 518 'fn: (src,clk) => src + clk,'
       lack of expected error at test line 515 'num,'
+      Type 'string' is not assignable to type 'number | void'.
       lack of expected error at test line 525 'num,'
       lack of expected error at test line 536 'num,'
       lack of expected error at test line 545 'num,'
@@ -1871,56 +1871,68 @@ describe('typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 12 'source: num,'
+      Unmarked error at test line 9 'fn: (src:number) => src+1,'
       lack of expected error at test line 7 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 38 'source: num,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 17 'fn: (src:number) => src+1,'
       lack of expected error at test line 15 'strBool,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string | boolean'.
+        Type 'number' is not assignable to type 'string | boolean'.
+      Unmarked error at test line 44 'fn: (src:number) => src+1,'
       lack of expected error at test line 24 'str,'
       lack of expected error at test line 33 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 47 'source: num,'
       lack of expected error at test line 41 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 92 'clock: num,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string | boolean | void'.
+        Type 'number' is not assignable to type 'string | boolean | void'.
+      Unmarked error at test line 53 'fn: (src:number) => src+1,'
       lack of expected error at test line 50 'str,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string | void'.
+        Type 'number' is not assignable to type 'string | void'.
+      Unmarked error at test line 97 'fn: (clk:number) => clk+1,'
       lack of expected error at test line 60 'str,'
       lack of expected error at test line 69 'str,'
       lack of expected error at test line 78 'strBool,'
       lack of expected error at test line 87 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 100 'clock: num,'
       lack of expected error at test line 95 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 126 'clock: num,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 105 'fn: (clk:number) => clk+1,'
       lack of expected error at test line 103 'strBool,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string | boolean'.
+        Type 'number' is not assignable to type 'string | boolean'.
+      Unmarked error at test line 132 'fn: (clk:number) => clk+1,'
       lack of expected error at test line 112 'str,'
       lack of expected error at test line 121 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 135 'clock: num,'
       lack of expected error at test line 129 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 180 'source: num,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string | boolean | void'.
+        Type 'number' is not assignable to type 'string | boolean | void'.
+      Unmarked error at test line 141 'fn: (clk:number) => clk+1,'
       lack of expected error at test line 138 'str,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string | void'.
+        Type 'number' is not assignable to type 'string | void'.
+      Unmarked error at test line 186 'fn: (src:number,clk:number) => src+clk,'
       lack of expected error at test line 148 'str,'
       lack of expected error at test line 157 'str,'
       lack of expected error at test line 166 'strBool,'
       lack of expected error at test line 175 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 189 'source: num,'
       lack of expected error at test line 184 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 218 'source: num,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 195 'fn: (src:number,clk:number) => src+clk,'
       lack of expected error at test line 193 'strBool,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string | boolean'.
+        Type 'number' is not assignable to type 'string | boolean'.
+      Unmarked error at test line 225 'fn: (src:number,clk:number) => src+clk,'
       lack of expected error at test line 203 'str,'
       lack of expected error at test line 213 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 228 'source: num,'
       lack of expected error at test line 222 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string | boolean | void'.
+        Type 'number' is not assignable to type 'string | boolean | void'.
+      Unmarked error at test line 235 'fn: (src:number,clk:number) => src+clk,'
       lack of expected error at test line 232 'str,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string | void'.
+        Type 'number' is not assignable to type 'string | void'.
       lack of expected error at test line 243 'str,'
       lack of expected error at test line 253 'str,'
       lack of expected error at test line 263 'strBool,'

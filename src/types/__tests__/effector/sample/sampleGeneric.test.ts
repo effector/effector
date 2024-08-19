@@ -8,7 +8,6 @@ import {
   Event,
   StoreWritable,
   EventCallable,
-  EventAsReturnType,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -152,12 +151,12 @@ test('generic edge cases (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; target: EventCallable<B>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }>'.
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => A; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"fnRet\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => A; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }>'.
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => B; target: StoreWritable<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => B; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }>'.
-    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<NonFalsy<A>, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }>'.
-    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: BooleanConstructor | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }>'.
-    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: ((source: A, clock: B) => true) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }>'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; target: EventCallable<B>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => A; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"fnRet\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => A; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock: B) => A>'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => B; target: StoreWritable<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => B; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock: B) => B>'.
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<NonFalsy<A>, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: BooleanConstructor | undefined; fn?: ((source: NonFalsy<...>, clock: B) => B) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: NonFalsy<....'.
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: ((source: A, clock: B) => true) | undefined; fn?: ((source: A, clock: B) => B) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock:...'.
     "
   `)
 })
@@ -168,74 +167,22 @@ describe('generic with either type', () => {
   ): item is {type: 'right'; right: R} {
     return item.type === 'right'
   }
-  test('return type with clock (should pass)', () => {
+  test('return type (should pass)', () => {
     function whenSuccess<L, R>(trigger: Event<Either<L, R>>) {
-      const resultRaw = sample({
+      const result = sample({
         clock: trigger,
         fn: data => (isRight(data) ? data.right : null),
-      })
-      const result = resultRaw as EventAsReturnType<R | null>
-      const result2 = resultRaw as Event<R | null>
-      sample({
-        clock: resultRaw,
-        fn: data => ({data}),
       })
       sample({
         clock: result,
         fn: data => ({data}),
       })
-      sample({
-        clock: result2,
-        fn: data => ({data}),
-      })
-      sample({
-        clock: [result],
-        fn: data => ({data}),
-      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 8 'sample({'
+      Unmarked error at test line 6 'sample({'
       Argument of type '[{ clock: NoInfer<EventAsReturnType<R | null>>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends NoInfer<EventAsReturnType<R | null>> ? [message: { error: \\"either target, clock or source should exists\\"; }] : NoInfer<EventAsReturnType<R | null>> extends Units ? (NoInfer<...> extends Units ? ((clk: TypeOfClock<...>) => clk is NoInfer<...> extends Units ? TypeOfClock<...> : never) | ((clk: TypeOfCl...'.
-      Unmarked error at test line 10 'fn: data => ({data}),'
-      Parameter 'data' implicitly has an 'any' type.
-      Unmarked error at test line 12 'sample({'
-      Argument of type '[{ clock: EventAsReturnType<R | null>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends EventAsReturnType<R | null> ? [message: { error: \\"either target, clock or source should exists\\"; }] : EventAsReturnType<R | null> extends Units ? (EventAsReturnType<...> extends Units ? ((clk: TypeOfClock<...>) => boolean) | ((clk: TypeOfClock<...>) => clk is EventAsReturnType<...> extends Units ? Ty...'.
-      Unmarked error at test line 14 'fn: data => ({data}),'
-      Parameter 'data' implicitly has an 'any' type.
-      "
-    `)
-  })
-  test('return type with source (should pass)', () => {
-    function whenSuccess<L, R>(trigger: Event<Either<L, R>>) {
-      const resultRaw = sample({
-        source: trigger,
-        fn: data => (isRight(data) ? data.right : null),
-      })
-      const result = resultRaw as EventAsReturnType<R | null>
-      const result2 = resultRaw as Event<R | null>
-      sample({
-        source: resultRaw,
-        fn: data => ({data}),
-      })
-      sample({
-        source: result,
-        fn: data => ({data}),
-      })
-      sample({
-        source: result2,
-        fn: data => ({data}),
-      })
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      Unmarked error at test line 8 'sample({'
-      Argument of type '[{ source: NoInfer<EventAsReturnType<R | null>>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends NoInfer<EventAsReturnType<R | null>> ? [message: { error: \\"either target, clock or source should exists\\"; }] : NoInfer<EventAsReturnType<R | null>> extends Unit<...> | SourceRecord ? (NoInfer<...> extends Unit<...> | SourceRecord ? ((src: TypeOfSource<...>) => src is NoInfer<...> extends Unit<...> | ...'.
-      Unmarked error at test line 10 'fn: data => ({data}),'
-      Parameter 'data' implicitly has an 'any' type.
-      Unmarked error at test line 12 'sample({'
-      Argument of type '[{ source: EventAsReturnType<R | null>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends EventAsReturnType<R | null> ? [message: { error: \\"either target, clock or source should exists\\"; }] : EventAsReturnType<R | null> extends Unit<...> | SourceRecord ? (EventAsReturnType<...> extends Unit<...> | SourceRecord ? ((src: TypeOfSource<...>) => boolean) | ((src: TypeOfSource<...>) => src is E...'.
-      Unmarked error at test line 14 'fn: data => ({data}),'
+      Unmarked error at test line 8 'fn: data => ({data}),'
       Parameter 'data' implicitly has an 'any' type.
       "
     `)
@@ -268,7 +215,7 @@ describe('generic with either type', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 3 'sample({'
-      Argument of type '[{ clock: Event<Either<L, R>>; fn: (data: Either<L, R>) => R | null; target: EventCallable<L | null>; }]' is not assignable to parameter of type 'TargetOrError<R | null, \\"fnRet\\", EventCallable<L | null>, { clock: Event<Either<L, R>>; source?: undefined; filter?: undefined; fn: (data: Either<L, R>) => R | null; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }>'.
+      Argument of type '[{ clock: Event<Either<L, R>>; fn: (data: Either<L, R>) => R | null; target: EventCallable<L | null>; }]' is not assignable to parameter of type 'TargetOrError<R | null, \\"fnRet\\", EventCallable<L | null>, { clock: Event<Either<L, R>>; source?: undefined; filter?: undefined; fn: (data: Either<L, R>) => R | null; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (data: Either<...>) => R | null>'.
       lack of expected error at test line 7 'target: onFail,'
       "
     `)
@@ -324,7 +271,7 @@ describe('generic union', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 3 'sample({'
-      Argument of type '[{ clock: Event<L | R>; filter: (data: L | R) => data is R; target: EventCallable<L>; }]' is not assignable to parameter of type 'TargetOrError<R extends L | R ? R : never, \\"clk\\", EventCallable<L>, { clock: Event<L | R>; source?: undefined; filter: (data: L | R) => data is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }>'.
+      Argument of type '[{ clock: Event<L | R>; filter: (data: L | R) => data is R; target: EventCallable<L>; }]' is not assignable to parameter of type 'TargetOrError<R extends L | R ? R : never, \\"clk\\", EventCallable<L>, { clock: Event<L | R>; source?: undefined; filter: (data: L | R) => data is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
       lack of expected error at test line 7 'target: onFail,'
       "
     `)
@@ -350,7 +297,7 @@ describe('generic union', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 6 'sample({'
-      Argument of type '[{ clock: Event<L | R>; filter: <L, R>(item: L | R) => item is R; target: EventCallable<R>; }]' is not assignable to parameter of type 'TargetOrError<unknown extends L | R ? L | R : never, \\"clk\\", EventCallable<R>, { clock: Event<L | R>; source?: undefined; filter: <L, R>(item: L | R) => item is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }>'.
+      Argument of type '[{ clock: Event<L | R>; filter: <L, R>(item: L | R) => item is R; target: EventCallable<R>; }]' is not assignable to parameter of type 'TargetOrError<unknown extends L | R ? L | R : never, \\"clk\\", EventCallable<R>, { clock: Event<L | R>; source?: undefined; filter: <L, R>(item: L | R) => item is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
       lack of expected error at test line 9 'filter: isRight,'
       "
     `)
