@@ -38,7 +38,7 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 ## DX
 
 - [eslint-plugin-effector](https://eslint.effector.dev) 💚 — Enforcing best practices.
-- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 💚 — SWC plugin to efficiently work with effector.
+- [@effector/swc-plugin](https://github.com/effector/swc-plugin) 💚 — An official SWC plugin for Effector.
 - [effector-logger](https://github.com/effector/logger) 🛠 — Simple logger for stores, events, effects and domains.
 - [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Simple adapter, which logs updates to Redux DevTools.
 

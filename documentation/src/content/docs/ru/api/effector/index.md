@@ -41,7 +41,7 @@ lang: ru
 ## Плагины для компилятора
 
 - [effector/babel-plugin](/ru/api/effector/babel-plugin)
-- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin)
+- [@effector/swc-plugin](/ru/api/effector/swc-plugin)
 
 ## Служебные функции
 
