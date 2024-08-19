@@ -229,7 +229,13 @@ describe('basic cases', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        lack of expected error at test line 4 'sample({filter: () => true, source:str, clock:num, target:[num,strBool]   })'
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'string'.
+              Type 'boolean' is not assignable to type 'string'.
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
@@ -245,10 +251,26 @@ describe('basic cases', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-        lack of expected error at test line 14 'sample({filter: () => true, source:str, clock:str, target:[num,numStr]    })'
-        lack of expected error at test line 16 'sample({filter: () => true, source:str, clock:str, target:[num,strBool]   })'
-        lack of expected error at test line 18 'sample({filter: () => true, source:str, clock:str, target:[num,anyt]      })'
-        lack of expected error at test line 20 'sample({filter: () => true, source:str, clock:str, target:[num,str]       })'
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'string | number' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'string'.
+              Type 'boolean' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
@@ -258,11 +280,25 @@ describe('basic cases', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-        lack of expected error at test line 26 'sample({filter: () => true, source:str, clock:num, target:[num,str]       })'
-        lack of expected error at test line 28 'sample({filter: () => true, source:str, clock:num, target:[num,anyt]      })'
-        lack of expected error at test line 30 'sample({filter: () => true, source:num, clock:num, target:[num,str]       })'
-        lack of expected error at test line 32 'sample({filter: () => true, source:num, clock:str, target:[num,str]       })'
-        lack of expected error at test line 34 'sample({filter: () => true, source:str, clock:num, target:[num,numStr]    })'
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'string | number' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
@@ -276,9 +312,24 @@ describe('basic cases', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-        lack of expected error at test line 40 'sample({filter: () => true, source:num, clock:num, target:[num,strBool]   })'
-        lack of expected error at test line 42 'sample({filter: () => true, source:num, clock:num, target:[str,numStr]    })'
-        lack of expected error at test line 44 'sample({filter: () => true, source:num, clock:str, target:[str,numStr]    })'
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | number' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | number' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
@@ -293,8 +344,14 @@ describe('basic cases', () => {
           Types of property '__' are incompatible.
             Type 'string | boolean' is not assignable to type 'number'.
               Type 'string' is not assignable to type 'number'.
-        lack of expected error at test line 52 'sample({filter: () => true, source:num, clock:str, target:[num,strBool]   })'
-        lack of expected error at test line 54 'sample({filter: () => true, source:num, clock:num, target:[strBool,anyt]  })'
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
         Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string | boolean' is not assignable to type 'number'.
@@ -309,10 +366,24 @@ describe('basic cases', () => {
           Types of property '__' are incompatible.
             Type 'string | boolean' is not assignable to type 'number'.
               Type 'string' is not assignable to type 'number'.
-        lack of expected error at test line 60 'sample({filter: () => true, source:num, clock:str, target:[strBool,anyt]  })'
-        lack of expected error at test line 62 'sample({filter: () => true, source:num, clock:num, target:[strBool,numStr]})'
-        lack of expected error at test line 64 'sample({filter: () => true, source:num, clock:num, target:[str,anyt]      })'
-        lack of expected error at test line 66 'sample({filter: () => true, source:num, clock:str, target:[str,anyt]      })'
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | number' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
@@ -320,7 +391,14 @@ describe('basic cases', () => {
           Types of property '__' are incompatible.
             Type 'string | boolean' is not assignable to type 'number'.
               Type 'string' is not assignable to type 'number'.
-        lack of expected error at test line 70 'sample({filter: () => true, source:num, clock:str, target:[strBool,numStr]})'
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | number' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
         "
       `)
     })
@@ -346,18 +424,26 @@ describe('combinable', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Unmarked error at test line 9 'sample({filter: () => true, source:[$num,$str]    , target:[l_num_str]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Unmarked error at test line 10 'sample({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num_str]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         Unmarked error at test line 11 'sample({filter: () => true, source:[$num,$str]    , target:[l_num]               })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
         Unmarked error at test line 12 'sample({filter: () => true, source:[$num,$str]    , target:[l_num,l_num_str]     })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
         Unmarked error at test line 13 'sample({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num]    })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
         Unmarked error at test line 14 'sample({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num,l_num_str]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
         "
       `)
     })
@@ -431,56 +517,168 @@ describe('combinable', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           The types of '__.b' are incompatible between these types.
             Type 'number' is not assignable to type 'string'.
-        lack of expected error at test line 6 'sample({filter: () => true, source:{a:$num,b:$str}, target:[a_num,a_str]        })'
-        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           The types of '__.b' are incompatible between these types.
             Type 'number' is not assignable to type 'string'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           Types of property '__' are incompatible.
-            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           Types of property '__' are incompatible.
-            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
-        lack of expected error at test line 12 'sample({filter: () => true, source:{a:$num,b:$str}, target:[a_num,abn]          })'
-        lack of expected error at test line 14 'sample({filter: () => true, source:{a:$num,b:$str}, target:[abn,ab]             })'
-        lack of expected error at test line 16 'sample({filter: () => true, source:{a:$num,b:$str}, target:[ab,a_str]           })'
-        lack of expected error at test line 18 'sample({filter: () => true, source:{a:$num,b:$str}, target:[a_str,ab]           })'
-        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           The types of '__.b' are incompatible between these types.
             Type 'number' is not assignable to type 'string'.
-        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           The types of '__.b' are incompatible between these types.
             Type 'number' is not assignable to type 'string'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           Types of property '__' are incompatible.
-            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
-        lack of expected error at test line 24 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[ab,a_str]           })'
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
           Types of property '__' are incompatible.
-            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
-        lack of expected error at test line 28 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[a_num,abn]          })'
-        lack of expected error at test line 30 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[abn,ab]             })'
-        lack of expected error at test line 32 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[a_str,ab]           })'
-        lack of expected error at test line 34 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[a_num,a_str]        })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number, string]'.
+              Source has 1 element(s) but target requires 2.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Type at position 1 in source is not compatible with type at position 1 in target.
+            The types of '__' are incompatible between these types.
+              Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -496,10 +694,7 @@ describe('combinable', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Unmarked error at test line 5 'sample({filter: () => true, source:[$num]  , target:[l_num]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
-        Unmarked error at test line 6 'sample({filter: () => true, source:[$num]  , clock:num, target:[l_num]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
+        no errors
         "
       `)
     })
@@ -589,127 +784,159 @@ describe('combinable', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
         Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
         Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
-        lack of expected error at test line 10 'sample({filter: () => true, source:{a:$num}, target:[a_num,a_str]        })'
-        lack of expected error at test line 12 'sample({filter: () => true, source:{a:$num}, target:[a_num,abn]          })'
-        lack of expected error at test line 14 'sample({filter: () => true, source:{a:$num}, target:[a_num,ab]           })'
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<number>; }; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<string>; }; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
         Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: Store<number>; b: Store<string>; } | { a: Store<number>; b: Store<number>; }'.
           Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
-        lack of expected error at test line 26 'sample({filter: () => true, source:{a:$num}, clock:num, target:[a_num,abn]          })'
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<number>; }; error: \\"source should extend target type\\"; }'.
         Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: Store<number>; b: Store<string>; } | { a: Store<number>; b: Store<number>; }'.
           Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
         Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
-        lack of expected error at test line 36 'sample({filter: () => true, source:{a:$num}, clock:num, target:[a_num,a_str]        })'
-        lack of expected error at test line 38 'sample({filter: () => true, source:{a:$num}, clock:num, target:[a_num,ab]           })'
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<string>; }; error: \\"source should extend target type\\"; }'.
         Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
-        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[number, string]' is not assignable to type 'number[]'.
-              Type 'string | number' is not assignable to type 'number'.
-                Type 'string' is not assignable to type 'number'.
-        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+            Type '[number, string]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
-            Type '[string]' is not assignable to type 'number[]'.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'readonly [number]'.
               Type 'string' is not assignable to type 'number'.
         "
       `)
