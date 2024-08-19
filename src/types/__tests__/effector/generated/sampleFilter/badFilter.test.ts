@@ -57,7 +57,10 @@ describe('no source', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 4 'clock: nullableAB,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+      Type 'EventCallable<AB | null>' is not assignable to type 'Unit<AB>'.
+        Types of property '__' are incompatible.
+          Type 'AB | null' is not assignable to type 'AB'.
+            Type 'null' is not assignable to type 'AB'.
       Unmarked error at test line 9 'sample({'
       lack of expected error at test line 7 'filter: null,'
       Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: null; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
@@ -113,7 +116,10 @@ describe('no source', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 4 'clock: nullableAB,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+      Type 'EventCallable<AB | null>' is not assignable to type 'Unit<AB>'.
+        Types of property '__' are incompatible.
+          Type 'AB | null' is not assignable to type 'AB'.
+            Type 'null' is not assignable to type 'AB'.
       Unmarked error at test line 9 'sample({'
       lack of expected error at test line 7 'filter: () => 1,'
       Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
