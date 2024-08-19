@@ -186,9 +186,7 @@ describe('clock without source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'clock: foo,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
-      lack of expected error at test line 6 'fn: foo => foo,'
+      Type 'string' is not assignable to type 'number'.
       lack of expected error at test line 8 'target,'
       "
     `)
@@ -208,9 +206,7 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 6 'clock: [foo, bar],'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
-      lack of expected error at test line 8 'fn: foo => true,'
+      Type 'boolean' is not assignable to type 'number'.
       lack of expected error at test line 10 'target,'
       "
     `)
@@ -1309,9 +1305,8 @@ describe('fn return cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 2 'clock: trigger,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { name: string; }; targetType: { name: string; age: number; }; }[]; }'.
-      lack of expected error at test line 5 'fn: ({name}) => {'
+      Type '({ name }: { name: string; }) => { name: string; }' is not assignable to type '(args_0: { name: string; }) => { name: string; age: number; }'.
+        Property 'age' is missing in type '{ name: string; }' but required in type '{ name: string; age: number; }'.
       "
     `)
   })

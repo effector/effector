@@ -613,17 +613,35 @@ describe('source:wide, fn:untyped', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 6 'sample({source:[$num,$str]         , target:[a_num]   , fn:([a,b]) => ({a,b})})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 7 'sample({source:[$num,$str]         , target:[ab]      , fn:([a,b]) => ({a,b})})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB; }[]; }'.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 7 'sample({source:[$num,$str]         , target:[ab]      , fn:([a,b]) => ({a,b})})'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
       Unmarked error at test line 8 'sample({source:[$num,$str]         , target:[a_num,ab], fn:([a,b]) => ({a,b})})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 8 'sample({source:[$num,$str]         , target:[a_num,ab], fn:([a,b]) => ({a,b})})'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
       Unmarked error at test line 15 'sample({source:[$num,$str]         , clock:num, target:[a_num]   , fn:([a,b]) => ({a,b})})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 16 'sample({source:[$num,$str]         , clock:num, target:[ab]      , fn:([a,b]) => ({a,b})})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB; }[]; }'.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 16 'sample({source:[$num,$str]         , clock:num, target:[ab]      , fn:([a,b]) => ({a,b})})'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
       Unmarked error at test line 17 'sample({source:[$num,$str]         , clock:num, target:[a_num,ab], fn:([a,b]) => ({a,b})})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 17 'sample({source:[$num,$str]         , clock:num, target:[a_num,ab], fn:([a,b]) => ({a,b})})'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -1026,105 +1044,137 @@ describe('source:wide, fn:untyped', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: {a:$num,b:$str},'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 12 'source: {a:$num,b:$str},'
+      Unmarked error at test line 9 'fn: ({a,b}) => ({a,b}),'
       lack of expected error at test line 7 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 47 'source: {a:$num,b:$str},'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 17 'fn: ({a,b}) => ({a,b}),'
       lack of expected error at test line 15 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 54 'fn: ({a,b}) => ({a,b}),'
       lack of expected error at test line 24 'a_str,'
       lack of expected error at test line 33 'abn,'
       lack of expected error at test line 41 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 66 'source: [$num,$str],'
       lack of expected error at test line 50 'abn,'
       lack of expected error at test line 52 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 71 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 60 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 74 'source: [$num,$str],'
       lack of expected error at test line 69 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 82 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 79 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 77 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN | AS; }[]; }'.
-      Unmarked error at test line 91 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 79 'fn: ([a,b]) => ({a,b}),'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 88 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 86 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
-      Unmarked error at test line 100 'source: [$num,$str],'
+      Type '{ a: string | number; b: string | number; }' is not assignable to type 'AN | AS'.
+        Type '{ a: string | number; b: string | number; }' is not assignable to type 'AS'.
+          Types of property 'a' are incompatible.
+            Type 'string | number' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 97 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 95 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
-      Unmarked error at test line 109 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 97 'fn: ([a,b]) => ({a,b}),'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 106 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 103 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 119 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 116 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 112 'abn,'
       lack of expected error at test line 114 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB | ABN; }[]; }'.
-      Unmarked error at test line 128 'source: [$num,$str] as const,'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 125 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 122 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 136 'source: [$num,$str] as const,'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 133 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 131 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 171 'source: [$num,$str] as const,'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 141 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 139 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 178 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 148 'a_str,'
       lack of expected error at test line 157 'abn,'
       lack of expected error at test line 165 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 190 'source: {a:$num,b:$str},'
       lack of expected error at test line 174 'abn,'
       lack of expected error at test line 176 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 196 'fn: ({a,b}) => ({a,b}),'
       lack of expected error at test line 184 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 199 'source: {a:$num,b:$str},'
       lack of expected error at test line 194 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 238 'source: {a:$num,b:$str},'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 205 'fn: ({a,b}) => ({a,b}),'
       lack of expected error at test line 203 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 246 'fn: ({a,b}) => ({a,b}),'
       lack of expected error at test line 213 'a_str,'
       lack of expected error at test line 223 'abn,'
       lack of expected error at test line 232 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 259 'source: [$num,$str],'
       lack of expected error at test line 242 'abn,'
       lack of expected error at test line 244 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 265 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 253 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 268 'source: [$num,$str],'
       lack of expected error at test line 263 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 277 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 274 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 272 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN | AS; }[]; }'.
-      Unmarked error at test line 287 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 274 'fn: ([a,b]) => ({a,b}),'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 284 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 282 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AN; }[]; }'.
-      Unmarked error at test line 297 'source: [$num,$str],'
+      Type '{ a: string | number; b: string | number; }' is not assignable to type 'AN | AS'.
+        Type '{ a: string | number; b: string | number; }' is not assignable to type 'AS'.
+          Types of property 'a' are incompatible.
+            Type 'string | number' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 294 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 292 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
-      Unmarked error at test line 307 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 294 'fn: ([a,b]) => ({a,b}),'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 304 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 301 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 318 'source: [$num,$str],'
+      Type 'string | number' is not assignable to type 'string'.
+        Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 315 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 311 'abn,'
       lack of expected error at test line 313 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB | ABN; }[]; }'.
-      Unmarked error at test line 328 'source: [$num,$str] as const,'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 325 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 322 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 337 'source: [$num,$str] as const,'
+      Type 'string | number' is not assignable to type 'number'.
+        Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 334 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 332 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 376 'source: [$num,$str] as const,'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 343 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 341 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 384 'fn: ([a,b]) => ({a,b}),'
       lack of expected error at test line 351 'a_str,'
       lack of expected error at test line 361 'abn,'
       lack of expected error at test line 370 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
       lack of expected error at test line 380 'abn,'
       lack of expected error at test line 382 'a_str,'
+      Type 'string' is not assignable to type 'number'.
       lack of expected error at test line 391 'abn,'
       "
     `)
@@ -2203,89 +2253,89 @@ describe('source:same, fn:untyped', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: {a:$num},'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 12 'source: {a:$num},'
+      Unmarked error at test line 9 'fn: ({a}) => ({a,b:''}),'
       lack of expected error at test line 7 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 47 'source: {a:$num},'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 17 'fn: ({a}) => ({a,b:''}),'
       lack of expected error at test line 15 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 54 'fn: ({a}) => ({a,b:''}),'
       lack of expected error at test line 24 'a_str,'
       lack of expected error at test line 33 'abn,'
       lack of expected error at test line 41 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 66 'source: [$num],'
       lack of expected error at test line 50 'abn,'
       lack of expected error at test line 52 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 71 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 60 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 74 'source: [$num],'
       lack of expected error at test line 69 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 109 'source: [$num],'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 79 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 77 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 116 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 86 'a_str,'
       lack of expected error at test line 95 'abn,'
       lack of expected error at test line 103 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 128 'source: [$num] as const,'
       lack of expected error at test line 112 'abn,'
       lack of expected error at test line 114 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 133 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 122 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 136 'source: [$num] as const,'
       lack of expected error at test line 131 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 171 'source: [$num] as const,'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 141 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 139 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 178 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 148 'a_str,'
       lack of expected error at test line 157 'abn,'
       lack of expected error at test line 165 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 190 'source: {a:$num},'
       lack of expected error at test line 174 'abn,'
       lack of expected error at test line 176 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 196 'fn: ({a}) => ({a,b:''}),'
       lack of expected error at test line 184 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 199 'source: {a:$num},'
       lack of expected error at test line 194 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 238 'source: {a:$num},'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 205 'fn: ({a}) => ({a,b:''}),'
       lack of expected error at test line 203 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 246 'fn: ({a}) => ({a,b:''}),'
       lack of expected error at test line 213 'a_str,'
       lack of expected error at test line 223 'abn,'
       lack of expected error at test line 232 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 259 'source: [$num],'
       lack of expected error at test line 242 'abn,'
       lack of expected error at test line 244 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 265 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 253 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 268 'source: [$num],'
       lack of expected error at test line 263 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 307 'source: [$num],'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 274 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 272 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 315 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 282 'a_str,'
       lack of expected error at test line 292 'abn,'
       lack of expected error at test line 301 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-      Unmarked error at test line 328 'source: [$num] as const,'
       lack of expected error at test line 311 'abn,'
       lack of expected error at test line 313 'a_str,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 334 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 322 'abn,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
-      Unmarked error at test line 337 'source: [$num] as const,'
       lack of expected error at test line 332 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
-      Unmarked error at test line 376 'source: [$num] as const,'
+      Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 343 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 341 'abn,'
+      Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 384 'fn: ([a]) => ({a,b:''}),'
       lack of expected error at test line 351 'a_str,'
       lack of expected error at test line 361 'abn,'
       lack of expected error at test line 370 'a_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
       lack of expected error at test line 380 'abn,'
       lack of expected error at test line 382 'a_str,'
+      Type 'string' is not assignable to type 'number'.
       lack of expected error at test line 391 'abn,'
       "
     `)

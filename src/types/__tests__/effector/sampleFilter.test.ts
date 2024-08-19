@@ -772,9 +772,7 @@ test('type inference issue', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 5 'clock: nullableAB,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string | number; }; targetType: number; }; }'.
-    lack of expected error at test line 9 'fn: val => ({a: 1, b: val ? val.b : ''}),'
+    Type '{ a: number; b: string | number; }' is not assignable to type 'number'.
     "
   `)
 })
