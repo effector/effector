@@ -251,7 +251,7 @@ test('narrow object combined (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }'.
+    Property 'bar' is missing in type '{ foo: StoreWritable<string>; }' but required in type '{ foo: Store<string>; bar: Store<string>; }'.
     "
   `)
 })
@@ -301,8 +301,18 @@ test('narrow tuple (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
+    Unmarked error at test line 9 'target,'
+    lack of expected error at test line 7 'source: trigger,'
+    Type 'EventCallable<[1, 2, 3]>' is not assignable to type 'Unit<[1, 2]>'.
+      Types of property '__' are incompatible.
+        Type '[1, 2, 3]' is not assignable to type '[1, 2]'.
+          Source has 3 element(s) but target allows only 2.
+    Unmarked error at test line 16 'target: [target],'
+    lack of expected error at test line 14 'source: trigger,'
+    Type 'EventCallable<[1, 2, 3]>' is not assignable to type 'Unit<[1, 2]>'.
+      Types of property '__' are incompatible.
+        Type '[1, 2, 3]' is not assignable to type '[1, 2]'.
+          Source has 3 element(s) but target allows only 2.
     "
   `)
 })

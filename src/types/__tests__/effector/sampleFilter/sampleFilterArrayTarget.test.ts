@@ -230,38 +230,96 @@ describe('basic cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         lack of expected error at test line 4 'sample({filter: () => true, source:str, clock:num, target:[num,strBool]   })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
         lack of expected error at test line 14 'sample({filter: () => true, source:str, clock:str, target:[num,numStr]    })'
         lack of expected error at test line 16 'sample({filter: () => true, source:str, clock:str, target:[num,strBool]   })'
         lack of expected error at test line 18 'sample({filter: () => true, source:str, clock:str, target:[num,anyt]      })'
         lack of expected error at test line 20 'sample({filter: () => true, source:str, clock:str, target:[num,str]       })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
         lack of expected error at test line 26 'sample({filter: () => true, source:str, clock:num, target:[num,str]       })'
         lack of expected error at test line 28 'sample({filter: () => true, source:str, clock:num, target:[num,anyt]      })'
         lack of expected error at test line 30 'sample({filter: () => true, source:num, clock:num, target:[num,str]       })'
         lack of expected error at test line 32 'sample({filter: () => true, source:num, clock:str, target:[num,str]       })'
         lack of expected error at test line 34 'sample({filter: () => true, source:str, clock:num, target:[num,numStr]    })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
         lack of expected error at test line 40 'sample({filter: () => true, source:num, clock:num, target:[num,strBool]   })'
         lack of expected error at test line 42 'sample({filter: () => true, source:num, clock:num, target:[str,numStr]    })'
         lack of expected error at test line 44 'sample({filter: () => true, source:num, clock:str, target:[str,numStr]    })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
         lack of expected error at test line 52 'sample({filter: () => true, source:num, clock:str, target:[num,strBool]   })'
         lack of expected error at test line 54 'sample({filter: () => true, source:num, clock:num, target:[strBool,anyt]  })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
         lack of expected error at test line 60 'sample({filter: () => true, source:num, clock:str, target:[strBool,anyt]  })'
         lack of expected error at test line 62 'sample({filter: () => true, source:num, clock:num, target:[strBool,numStr]})'
         lack of expected error at test line 64 'sample({filter: () => true, source:num, clock:num, target:[str,anyt]      })'
         lack of expected error at test line 66 'sample({filter: () => true, source:num, clock:str, target:[str,anyt]      })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+        Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string | boolean' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
         lack of expected error at test line 70 'sample({filter: () => true, source:num, clock:str, target:[strBool,numStr]})'
         "
       `)
@@ -289,17 +347,17 @@ describe('combinable', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Unmarked error at test line 9 'sample({filter: () => true, source:[$num,$str]    , target:[l_num_str]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         Unmarked error at test line 10 'sample({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num_str]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         Unmarked error at test line 11 'sample({filter: () => true, source:[$num,$str]    , target:[l_num]               })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         Unmarked error at test line 12 'sample({filter: () => true, source:[$num,$str]    , target:[l_num,l_num_str]     })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         Unmarked error at test line 13 'sample({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num]    })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         Unmarked error at test line 14 'sample({filter: () => true, source:[$num,$str]    , clock:num, target:[l_num,l_num_str]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         "
       `)
     })
@@ -373,38 +431,56 @@ describe('combinable', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
         lack of expected error at test line 6 'sample({filter: () => true, source:{a:$num,b:$str}, target:[a_num,a_str]        })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: AS; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         lack of expected error at test line 12 'sample({filter: () => true, source:{a:$num,b:$str}, target:[a_num,abn]          })'
         lack of expected error at test line 14 'sample({filter: () => true, source:{a:$num,b:$str}, target:[abn,ab]             })'
         lack of expected error at test line 16 'sample({filter: () => true, source:{a:$num,b:$str}, target:[ab,a_str]           })'
         lack of expected error at test line 18 'sample({filter: () => true, source:{a:$num,b:$str}, target:[a_str,ab]           })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         lack of expected error at test line 24 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[ab,a_str]           })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: AS; }[]; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
         lack of expected error at test line 28 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[a_num,abn]          })'
         lack of expected error at test line 30 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[abn,ab]             })'
         lack of expected error at test line 32 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[a_str,ab]           })'
         lack of expected error at test line 34 'sample({filter: () => true, source:{a:$num,b:$str}, clock:num, target:[a_num,a_str]        })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<(string | number)[]>[]; error: \\"source should extend target type\\"; }'.
         "
       `)
     })
@@ -421,9 +497,9 @@ describe('combinable', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Unmarked error at test line 5 'sample({filter: () => true, source:[$num]  , target:[l_num]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
         Unmarked error at test line 6 'sample({filter: () => true, source:[$num]  , clock:num, target:[l_num]})'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
         "
       `)
     })
@@ -513,46 +589,128 @@ describe('combinable', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }[]; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
         lack of expected error at test line 10 'sample({filter: () => true, source:{a:$num}, target:[a_num,a_str]        })'
         lack of expected error at test line 12 'sample({filter: () => true, source:{a:$num}, target:[a_num,abn]          })'
         lack of expected error at test line 14 'sample({filter: () => true, source:{a:$num}, target:[a_num,ab]           })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS; }[]; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: Store<number>; b: Store<string>; } | { a: Store<number>; b: Store<number>; }'.
+          Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
         lack of expected error at test line 26 'sample({filter: () => true, source:{a:$num}, clock:num, target:[a_num,abn]          })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
+        Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: Store<number>; b: Store<string>; } | { a: Store<number>; b: Store<number>; }'.
+          Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
         lack of expected error at test line 36 'sample({filter: () => true, source:{a:$num}, clock:num, target:[a_num,a_str]        })'
         lack of expected error at test line 38 'sample({filter: () => true, source:{a:$num}, clock:num, target:[a_num,ab]           })'
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
+        Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ target: Unit<number[]>[]; error: \\"source should extend target type\\"; }'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[number, string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[number, string]' is not assignable to type 'number[]'.
+              Type 'string | number' is not assignable to type 'number'.
+                Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<[string]>' is not assignable to type 'Unit<number[]>'.
+          Types of property '__' are incompatible.
+            Type '[string]' is not assignable to type 'number[]'.
+              Type 'string' is not assignable to type 'number'.
         "
       `)
     })

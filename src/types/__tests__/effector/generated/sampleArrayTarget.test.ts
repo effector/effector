@@ -652,31 +652,45 @@ describe('no fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
-      Unmarked error at test line 11 'source: num,'
-      lack of expected error at test line 7 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 34 'source: num,'
-      lack of expected error at test line 14 'strBool,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       lack of expected error at test line 22 'str,'
       lack of expected error at test line 30 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 42 'source: num,'
-      lack of expected error at test line 37 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 82 'source: str,'
-      lack of expected error at test line 45 'str,'
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 38 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 46 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
       lack of expected error at test line 54 'str,'
       lack of expected error at test line 62 'str,'
       lack of expected error at test line 70 'strBool,'
       lack of expected error at test line 78 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-      Unmarked error at test line 89 'source: str,'
-      lack of expected error at test line 85 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 93 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
       Unmarked error at test line 129 'clock: num,'
-      lack of expected error at test line 92 'num,'
       lack of expected error at test line 100 'num,'
       lack of expected error at test line 109 'num,'
       lack of expected error at test line 116 'num,'
@@ -703,63 +717,91 @@ describe('no fn', () => {
       Unmarked error at test line 214 'clock: str,'
       lack of expected error at test line 210 'num,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 254 'source: num,'
       lack of expected error at test line 217 'num,'
       lack of expected error at test line 225 'num,'
       lack of expected error at test line 234 'num,'
       lack of expected error at test line 241 'num,'
       lack of expected error at test line 249 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
-      Unmarked error at test line 262 'source: num,'
-      lack of expected error at test line 258 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 288 'source: num,'
-      lack of expected error at test line 266 'strBool,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       lack of expected error at test line 275 'str,'
       lack of expected error at test line 284 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 297 'source: num,'
-      lack of expected error at test line 292 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 342 'source: num,'
-      lack of expected error at test line 301 'str,'
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 293 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 302 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
       lack of expected error at test line 311 'str,'
       lack of expected error at test line 320 'str,'
       lack of expected error at test line 329 'strBool,'
       lack of expected error at test line 338 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
-      Unmarked error at test line 350 'source: num,'
-      lack of expected error at test line 346 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 376 'source: num,'
-      lack of expected error at test line 354 'strBool,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       lack of expected error at test line 363 'str,'
       lack of expected error at test line 372 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 385 'source: num,'
-      lack of expected error at test line 380 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 430 'source: str,'
-      lack of expected error at test line 389 'str,'
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 381 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 390 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
       lack of expected error at test line 399 'str,'
       lack of expected error at test line 408 'str,'
       lack of expected error at test line 417 'strBool,'
       lack of expected error at test line 426 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-      Unmarked error at test line 438 'source: str,'
-      lack of expected error at test line 434 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 483 'source: str,'
-      lack of expected error at test line 442 'num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 443 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
       lack of expected error at test line 451 'num,'
       lack of expected error at test line 461 'num,'
       lack of expected error at test line 469 'num,'
       lack of expected error at test line 478 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-      Unmarked error at test line 491 'source: str,'
-      lack of expected error at test line 487 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
-      lack of expected error at test line 495 'num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 496 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
       lack of expected error at test line 504 'num,'
       lack of expected error at test line 514 'num,'
       lack of expected error at test line 522 'num,'

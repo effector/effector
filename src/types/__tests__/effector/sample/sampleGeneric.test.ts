@@ -151,10 +151,10 @@ test('generic edge cases (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; target: EventCallable<B>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => A; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"fnRet\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => A; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock: B) => A>'.
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => B; target: StoreWritable<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => B; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock: B) => B>'.
-    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<NonFalsy<A>, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; target: EventCallable<B>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\", StoreWritable<...>>'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => A; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<A, \\"fnRet\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => A; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock: B) => A, \\"noSrc\\">'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => B; target: StoreWritable<A>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: undefined; fn: (source: A, clock: B) => B; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock: B) => B, \\"noSrc\\">'.
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<B>; }]' is not assignable to parameter of type 'TargetOrError<NonFalsy<A>, \\"src\\", EventCallable<B>, { clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\", StoreWritable<...>>'.
     Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: BooleanConstructor | undefined; fn?: ((source: NonFalsy<...>, clock: B) => B) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: NonFalsy<....'.
     Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type 'TargetOrError<B, \\"fnRet\\", StoreWritable<A>, { clock: EventCallable<B>; source: StoreWritable<A>; filter?: ((source: A, clock: B) => true) | undefined; fn?: ((source: A, clock: B) => B) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (source: A, clock:...'.
     "
@@ -215,7 +215,7 @@ describe('generic with either type', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 3 'sample({'
-      Argument of type '[{ clock: Event<Either<L, R>>; fn: (data: Either<L, R>) => R | null; target: EventCallable<L | null>; }]' is not assignable to parameter of type 'TargetOrError<R | null, \\"fnRet\\", EventCallable<L | null>, { clock: Event<Either<L, R>>; source?: undefined; filter?: undefined; fn: (data: Either<L, R>) => R | null; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (data: Either<...>) => R | null>'.
+      Argument of type '[{ clock: Event<Either<L, R>>; fn: (data: Either<L, R>) => R | null; target: EventCallable<L | null>; }]' is not assignable to parameter of type 'TargetOrError<R | null, \\"fnRet\\", EventCallable<L | null>, { clock: Event<Either<L, R>>; source?: undefined; filter?: undefined; fn: (data: Either<L, R>) => R | null; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, (data: Either<...>) => R | null, \\"noSrc\\">'.
       lack of expected error at test line 7 'target: onFail,'
       "
     `)
@@ -271,7 +271,7 @@ describe('generic union', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 3 'sample({'
-      Argument of type '[{ clock: Event<L | R>; filter: (data: L | R) => data is R; target: EventCallable<L>; }]' is not assignable to parameter of type 'TargetOrError<R extends L | R ? R : never, \\"clk\\", EventCallable<L>, { clock: Event<L | R>; source?: undefined; filter: (data: L | R) => data is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
+      Argument of type '[{ clock: Event<L | R>; filter: (data: L | R) => data is R; target: EventCallable<L>; }]' is not assignable to parameter of type 'TargetOrError<R extends L | R ? R : never, \\"clk\\", EventCallable<L>, { clock: Event<L | R>; source?: undefined; filter: (data: L | R) => data is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\", \\"noSrc\\">'.
       lack of expected error at test line 7 'target: onFail,'
       "
     `)
@@ -297,7 +297,7 @@ describe('generic union', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 6 'sample({'
-      Argument of type '[{ clock: Event<L | R>; filter: <L, R>(item: L | R) => item is R; target: EventCallable<R>; }]' is not assignable to parameter of type 'TargetOrError<unknown extends L | R ? L | R : never, \\"clk\\", EventCallable<R>, { clock: Event<L | R>; source?: undefined; filter: <L, R>(item: L | R) => item is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\">'.
+      Argument of type '[{ clock: Event<L | R>; filter: <L, R>(item: L | R) => item is R; target: EventCallable<R>; }]' is not assignable to parameter of type 'TargetOrError<unknown extends L | R ? L | R : never, \\"clk\\", EventCallable<R>, { clock: Event<L | R>; source?: undefined; filter: <L, R>(item: L | R) => item is R; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }, \\"noFn\\", \\"noSrc\\">'.
       lack of expected error at test line 9 'filter: isRight,'
       "
     `)
