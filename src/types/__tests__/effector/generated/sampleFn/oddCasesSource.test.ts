@@ -279,12 +279,12 @@ describe('source exact', () => {
       lack of expected error at test line 15 'exactBadNarrow,'
       lack of expected error at test line 18 'fn: ({c, d}) => ({a: c, b: d}),'
       lack of expected error at test line 24 'exactBad,'
-      lack of expected error at test line 28 'fn: ({c, d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 34 'exactBad,'
       lack of expected error at test line 36 'exactBadNarrow,'
-      lack of expected error at test line 39 'fn: ({c, d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 45 'exactBad,'
-      lack of expected error at test line 49 'fn: ({c, d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 56 'exactBadNarrow,'
       lack of expected error at test line 59 'fn: ({c, d}) => ({a: c, b: d}),'
       lack of expected error at test line 66 'exactBadNarrow,'
@@ -298,12 +298,12 @@ describe('source exact', () => {
       lack of expected error at test line 103 'exactBadNarrow,'
       lack of expected error at test line 106 'fn: ({c, d}) => ({a: c, b: d}),'
       lack of expected error at test line 112 'exactBad,'
-      lack of expected error at test line 116 'fn: ({c, d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 122 'exactBad,'
       lack of expected error at test line 124 'exactBadNarrow,'
-      lack of expected error at test line 127 'fn: ({c, d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 133 'exactBad,'
-      lack of expected error at test line 137 'fn: ({c, d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 144 'exactBadNarrow,'
       lack of expected error at test line 147 'fn: ({c, d}) => ({a: c, b: d}),'
       lack of expected error at test line 154 'exactBadNarrow,'
@@ -546,48 +546,48 @@ test('source exactBad (should fail)', () => {
     lack of expected error at test line 16 'exactNarrow,'
     Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 25 'exact,'
-    lack of expected error at test line 29 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 35 'exact,'
-    lack of expected error at test line 39 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 46 'exactNarrow,'
-    lack of expected error at test line 49 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 55 'narrow,'
-    lack of expected error at test line 59 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 65 'narrow,'
-    lack of expected error at test line 69 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 75 'exactNullable,'
-    lack of expected error at test line 79 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 85 'exactNarrow,'
     lack of expected error at test line 87 'exactNullable,'
     Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 96 'exactNarrow,'
-    lack of expected error at test line 100 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 107 'exactNullable,'
-    lack of expected error at test line 110 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 115 'target: exactNarrow,'
     Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 123 'exact,'
     lack of expected error at test line 125 'exactNarrow,'
     Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 134 'exact,'
-    lack of expected error at test line 138 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 144 'exact,'
-    lack of expected error at test line 148 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 155 'exactNarrow,'
-    lack of expected error at test line 158 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 164 'narrow,'
-    lack of expected error at test line 168 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 174 'narrow,'
-    lack of expected error at test line 178 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 184 'exactNullable,'
-    lack of expected error at test line 188 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 194 'exactNarrow,'
     lack of expected error at test line 196 'exactNullable,'
     Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 205 'exactNarrow,'
-    lack of expected error at test line 209 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 216 'exactNullable,'
-    lack of expected error at test line 219 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -841,62 +841,70 @@ test('source narrow (should fail)', () => {
     Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 14 'exact,'
-    lack of expected error at test line 18 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 24 'exact,'
-    lack of expected error at test line 28 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 34 'exact,'
     lack of expected error at test line 36 'exactExactBad,'
     Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 45 'exactBad,'
-    lack of expected error at test line 49 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 55 'exactBad,'
-    lack of expected error at test line 59 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 65 'exactBad,'
     lack of expected error at test line 67 'exactExactBad,'
     Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 77 'exactExactBad,'
-    lack of expected error at test line 80 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 86 'exactNullable,'
-    lack of expected error at test line 90 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 97 'exactNullable,'
-    lack of expected error at test line 100 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }> | null'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 106 'exactExactBad,'
     lack of expected error at test line 108 'exactNullable,'
     Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 117 'exactExactBad,'
-    lack of expected error at test line 121 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 126 'target: exactExactBad,'
     Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 134 'exact,'
-    lack of expected error at test line 138 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 144 'exact,'
-    lack of expected error at test line 148 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 154 'exact,'
     lack of expected error at test line 156 'exactExactBad,'
     Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 165 'exactBad,'
-    lack of expected error at test line 169 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 175 'exactBad,'
-    lack of expected error at test line 179 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 185 'exactBad,'
     lack of expected error at test line 187 'exactExactBad,'
     Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 197 'exactExactBad,'
-    lack of expected error at test line 200 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 206 'exactNullable,'
-    lack of expected error at test line 210 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 217 'exactNullable,'
-    lack of expected error at test line 220 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }> | null'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 226 'exactExactBad,'
     lack of expected error at test line 228 'exactNullable,'
     Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 237 'exactExactBad,'
-    lack of expected error at test line 241 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -1270,15 +1278,18 @@ test('source exactNullable (should fail)', () => {
     Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; b: string; } | { a: string; b: string; }'.
       Type 'null' is not assignable to type '{ a: number; } | { a: number; b: string; } | { a: string; b: string; }'.
     lack of expected error at test line 117 'exactBadNarrow,'
-    lack of expected error at test line 120 'fn: ({c, d}): ExactNullable => null as any,'
+    Type 'ExactNullable' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: string; b: string; } | { a: number; }'.
     lack of expected error at test line 126 'exactNarrow,'
-    lack of expected error at test line 130 'fn: ({c, d}): ExactNullable => null as any,'
+    Type 'ExactNullable' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: number; }'.
     lack of expected error at test line 136 'exactNarrow,'
     lack of expected error at test line 138 'exactBadNarrow,'
     Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; } | { a: string; b: string; } | { a: number; }'.
       Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; } | { a: string; b: string; } | { a: number; }'.
     lack of expected error at test line 147 'exactExactBad,'
-    lack of expected error at test line 151 'fn: ({c, d}): ExactNullable => null as any,'
+    Type 'ExactNullable' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: string; b: string; }'.
     lack of expected error at test line 157 'exactExactBad,'
     lack of expected error at test line 159 'exactBadNarrow,'
     Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; } | { a: number; b: string; } | { a: string; b: string; }'.
@@ -1325,15 +1336,18 @@ test('source exactNullable (should fail)', () => {
     Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; b: string; } | { a: string; b: string; }'.
       Type 'null' is not assignable to type '{ a: number; } | { a: number; b: string; } | { a: string; b: string; }'.
     lack of expected error at test line 278 'exactBadNarrow,'
-    lack of expected error at test line 281 'fn: ({c, d}): ExactNullable => null as any,'
+    Type 'ExactNullable' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: string; b: string; } | { a: number; }'.
     lack of expected error at test line 287 'exactNarrow,'
-    lack of expected error at test line 291 'fn: ({c, d}): ExactNullable => null as any,'
+    Type 'ExactNullable' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: number; }'.
     lack of expected error at test line 297 'exactNarrow,'
     lack of expected error at test line 299 'exactBadNarrow,'
     Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; } | { a: string; b: string; } | { a: number; }'.
       Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; } | { a: string; b: string; } | { a: number; }'.
     lack of expected error at test line 308 'exactExactBad,'
-    lack of expected error at test line 312 'fn: ({c, d}): ExactNullable => null as any,'
+    Type 'ExactNullable' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type 'EventCallable<{ a: number; b: string; } | null> | { a: number; b: string; } | { a: string; b: string; }'.
     lack of expected error at test line 318 'exactExactBad,'
     lack of expected error at test line 320 'exactBadNarrow,'
     Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; } | { a: number; b: string; } | { a: string; b: string; }'.
@@ -1784,17 +1798,23 @@ test('source exactNarrow (should fail)', () => {
       Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 46 'exact,'
-    lack of expected error at test line 50 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; }>'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; }>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 56 'exact,'
     lack of expected error at test line 58 'exactNullable,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | null'.
       Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | null'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 67 'exact,'
-    lack of expected error at test line 71 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 77 'exact,'
     lack of expected error at test line 79 'exactBadNarrow,'
-    lack of expected error at test line 82 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 88 'exact,'
     lack of expected error at test line 90 'exactExactBad,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
@@ -1806,26 +1826,46 @@ test('source exactNarrow (should fail)', () => {
       Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | null'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 110 'exactBad,'
-    lack of expected error at test line 114 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 120 'exactBad,'
     lack of expected error at test line 122 'exactBadNarrow,'
-    lack of expected error at test line 125 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 131 'exactBad,'
     lack of expected error at test line 133 'exactExactBad,'
     Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
       Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 143 'exactBad,'
-    lack of expected error at test line 146 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; }>'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; }>'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 153 'exactNullable,'
-    lack of expected error at test line 156 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | null'.
+      Type '{ a: number; }' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | null'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 163 'exactExactBad,'
-    lack of expected error at test line 166 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 172 'exactNullable,'
     lack of expected error at test line 174 'exactBadNarrow,'
-    lack of expected error at test line 177 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 184 'exactNullable,'
-    lack of expected error at test line 187 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }> | null'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }> | null'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 193 'exactExactBad,'
     lack of expected error at test line 195 'exactNullable,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; } | null'.
@@ -1833,7 +1873,9 @@ test('source exactNarrow (should fail)', () => {
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 204 'exactExactBad,'
     lack of expected error at test line 206 'exactBadNarrow,'
-    lack of expected error at test line 209 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type 'EventCallable<{ a: string; b: string; } | { a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type 'EventCallable<{ a: string; b: string; } | { a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 214 'target: exact,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
@@ -1855,17 +1897,23 @@ test('source exactNarrow (should fail)', () => {
       Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 254 'exact,'
-    lack of expected error at test line 258 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; }>'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; }>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 264 'exact,'
     lack of expected error at test line 266 'exactNullable,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | null'.
       Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | null'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 275 'exact,'
-    lack of expected error at test line 279 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 285 'exact,'
     lack of expected error at test line 287 'exactBadNarrow,'
-    lack of expected error at test line 290 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 296 'exact,'
     lack of expected error at test line 298 'exactExactBad,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
@@ -1877,26 +1925,46 @@ test('source exactNarrow (should fail)', () => {
       Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | null'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 318 'exactBad,'
-    lack of expected error at test line 322 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }>'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 328 'exactBad,'
     lack of expected error at test line 330 'exactBadNarrow,'
-    lack of expected error at test line 333 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 339 'exactBad,'
     lack of expected error at test line 341 'exactExactBad,'
     Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
       Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 351 'exactBad,'
-    lack of expected error at test line 354 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; }>'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | EventCallable<{ a: number; }>'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 361 'exactNullable,'
-    lack of expected error at test line 364 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | null'.
+      Type '{ a: number; }' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | null'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 371 'exactExactBad,'
-    lack of expected error at test line 374 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type 'EventCallable<{ a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 380 'exactNullable,'
     lack of expected error at test line 382 'exactBadNarrow,'
-    lack of expected error at test line 385 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 392 'exactNullable,'
-    lack of expected error at test line 395 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }> | null'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: number; }> | null'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     lack of expected error at test line 401 'exactExactBad,'
     lack of expected error at test line 403 'exactNullable,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; } | null'.
@@ -1904,7 +1972,9 @@ test('source exactNarrow (should fail)', () => {
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 412 'exactExactBad,'
     lack of expected error at test line 414 'exactBadNarrow,'
-    lack of expected error at test line 417 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type 'EventCallable<{ a: string; b: string; } | { a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type 'EventCallable<{ a: string; b: string; } | { a: number; }> | { a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -2283,7 +2353,11 @@ test('source exactBadNarrow (should fail)', () => {
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 65 'exact,'
-    lack of expected error at test line 69 'fn: ({c, d}): ExactBadNarrow => null as any,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 75 'exact,'
     lack of expected error at test line 77 'exactExactBad,'
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
@@ -2294,9 +2368,13 @@ test('source exactBadNarrow (should fail)', () => {
     Type 'ExactBadNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | null'.
       Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | null'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Unmarked error at test line 94 'source: $dataExact,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: string; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Unmarked error at test line 105 'source: $dataExact,'
     lack of expected error at test line 97 'exactBad,'
     lack of expected error at test line 99 'exactNarrow,'
     lack of expected error at test line 102 'fn: ({c, d}): ExactBadNarrow => null as any,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 108 'narrow,'
     lack of expected error at test line 110 'exactBad,'
     lack of expected error at test line 113 'fn: ({c, d}): ExactBadNarrow => null as any,'
@@ -2307,11 +2385,17 @@ test('source exactBadNarrow (should fail)', () => {
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 127 'source: $dataExact,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 130 'narrow,'
     lack of expected error at test line 132 'exactExactBad,'
     lack of expected error at test line 135 'fn: ({c, d}): ExactBadNarrow => null as any,'
     lack of expected error at test line 141 'exactNullable,'
-    lack of expected error at test line 145 'fn: ({c, d}): ExactBadNarrow => null as any,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 151 'exactNarrow,'
     lack of expected error at test line 153 'exactNullable,'
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; } | null'.
@@ -2361,7 +2445,11 @@ test('source exactBadNarrow (should fail)', () => {
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 231 'exact,'
-    lack of expected error at test line 235 'fn: ({c, d}): ExactBadNarrow => null as any,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 241 'exact,'
     lack of expected error at test line 243 'exactExactBad,'
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
@@ -2372,9 +2460,13 @@ test('source exactBadNarrow (should fail)', () => {
     Type 'ExactBadNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | null'.
       Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; } | null'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Unmarked error at test line 260 'source: {c: $c, d: $d},'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; readonly d: string; }) => { a: string; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Unmarked error at test line 271 'source: {c: $c, d: $d},'
     lack of expected error at test line 263 'exactBad,'
     lack of expected error at test line 265 'exactNarrow,'
     lack of expected error at test line 268 'fn: ({c, d}): ExactBadNarrow => null as any,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; readonly d: string; }) => { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 274 'narrow,'
     lack of expected error at test line 276 'exactBad,'
     lack of expected error at test line 279 'fn: ({c, d}): ExactBadNarrow => null as any,'
@@ -2385,11 +2477,17 @@ test('source exactBadNarrow (should fail)', () => {
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 293 'source: {c: $c, d: $d},'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; readonly d: string; }) => { a: number; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 296 'narrow,'
     lack of expected error at test line 298 'exactExactBad,'
     lack of expected error at test line 301 'fn: ({c, d}): ExactBadNarrow => null as any,'
     lack of expected error at test line 307 'exactNullable,'
-    lack of expected error at test line 311 'fn: ({c, d}): ExactBadNarrow => null as any,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 317 'exactNarrow,'
     lack of expected error at test line 319 'exactNullable,'
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; } | null'.
@@ -2834,6 +2932,8 @@ test('source exactExactBad (should fail)', () => {
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 32 'source: $dataExact,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 35 'exact,'
     lack of expected error at test line 37 'exactBad,'
     lack of expected error at test line 40 'fn: ({c, d}): ExactExactBad => null as any,'
@@ -2860,15 +2960,29 @@ test('source exactExactBad (should fail)', () => {
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 79 'exact,'
     lack of expected error at test line 81 'exactBadNarrow,'
-    lack of expected error at test line 84 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 90 'exact,'
-    lack of expected error at test line 94 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 97 'source: $dataExact,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: string; b: string; } | { a: number; b: string; } | null; error: \\"fn result should extend target type\\"; }'.
+    Unmarked error at test line 108 'source: $dataExact,'
     lack of expected error at test line 100 'exactBad,'
     lack of expected error at test line 102 'exactNullable,'
     lack of expected error at test line 105 'fn: ({c, d}): ExactExactBad => null as any,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: string; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Unmarked error at test line 119 'source: $dataExact,'
     lack of expected error at test line 111 'exactBad,'
     lack of expected error at test line 113 'exactNarrow,'
     lack of expected error at test line 116 'fn: ({c, d}): ExactExactBad => null as any,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 122 'narrow,'
     lack of expected error at test line 124 'exactBad,'
     lack of expected error at test line 127 'fn: ({c, d}): ExactExactBad => null as any,'
@@ -2881,12 +2995,24 @@ test('source exactExactBad (should fail)', () => {
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 144 'narrow,'
     lack of expected error at test line 146 'exactBadNarrow,'
-    lack of expected error at test line 149 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 155 'narrow,'
-    lack of expected error at test line 159 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 165 'exactNullable,'
     lack of expected error at test line 167 'exactBadNarrow,'
-    lack of expected error at test line 170 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 176 'exactNarrow,'
     lack of expected error at test line 178 'exactNullable,'
     Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; } | null'.
@@ -2896,9 +3022,17 @@ test('source exactExactBad (should fail)', () => {
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 187 'exactNarrow,'
     lack of expected error at test line 189 'exactBadNarrow,'
-    lack of expected error at test line 192 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 199 'exactNullable,'
-    lack of expected error at test line 202 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }> | null'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }> | null'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 207 'target: exact,'
     Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
@@ -2920,6 +3054,8 @@ test('source exactExactBad (should fail)', () => {
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 233 'source: {c: $c, d: $d},'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; readonly d: string; }) => { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 236 'exact,'
     lack of expected error at test line 238 'exactBad,'
     lack of expected error at test line 241 'fn: ({c, d}): ExactExactBad => null as any,'
@@ -2946,15 +3082,29 @@ test('source exactExactBad (should fail)', () => {
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 280 'exact,'
     lack of expected error at test line 282 'exactBadNarrow,'
-    lack of expected error at test line 285 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 291 'exact,'
-    lack of expected error at test line 295 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 298 'source: {c: $c, d: $d},'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; readonly d: string; }) => { a: string; b: string; } | { a: number; b: string; } | null; error: \\"fn result should extend target type\\"; }'.
+    Unmarked error at test line 309 'source: {c: $c, d: $d},'
     lack of expected error at test line 301 'exactBad,'
     lack of expected error at test line 303 'exactNullable,'
     lack of expected error at test line 306 'fn: ({c, d}): ExactExactBad => null as any,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; readonly d: string; }) => { a: string; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Unmarked error at test line 320 'source: {c: $c, d: $d},'
     lack of expected error at test line 312 'exactBad,'
     lack of expected error at test line 314 'exactNarrow,'
     lack of expected error at test line 317 'fn: ({c, d}): ExactExactBad => null as any,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; readonly d: string; }) => { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 323 'narrow,'
     lack of expected error at test line 325 'exactBad,'
     lack of expected error at test line 328 'fn: ({c, d}): ExactExactBad => null as any,'
@@ -2967,12 +3117,24 @@ test('source exactExactBad (should fail)', () => {
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 345 'narrow,'
     lack of expected error at test line 347 'exactBadNarrow,'
-    lack of expected error at test line 350 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 356 'narrow,'
-    lack of expected error at test line 360 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 366 'exactNullable,'
     lack of expected error at test line 368 'exactBadNarrow,'
-    lack of expected error at test line 371 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: string; b: string; } | { a: number; }> | null'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 377 'exactNarrow,'
     lack of expected error at test line 379 'exactNullable,'
     Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; } | null'.
@@ -2982,9 +3144,17 @@ test('source exactExactBad (should fail)', () => {
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 388 'exactNarrow,'
     lack of expected error at test line 390 'exactBadNarrow,'
-    lack of expected error at test line 393 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; } | EventCallable<{ a: string; b: string; } | { a: number; }>'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 400 'exactNullable,'
-    lack of expected error at test line 403 'fn: ({c, d}): ExactExactBad => null as any,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }> | null'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | EventCallable<{ a: number; b: string; } | { a: string; b: string; }> | null'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     "
   `)
 })

@@ -1394,21 +1394,21 @@ type SampleRet<
  * ```
  */
 export function sample<
-  Target,
-  Source,
+  const Target,
+  const Source,
   Clock,
-  FLBool,
-  FNInfSource extends (
+  const FLBool,
+  const FNInfSource extends (
     Source extends Unit<any> | SourceRecord
       ? TypeOfSource<Source>
       : never
     ),
-  FNInfClock extends (
+  const FNInfClock extends (
     Clock extends Units
       ? TypeOfClock<Clock>
       : never
   ),
-  FilterFun extends (
+  const FilterFun extends (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (
@@ -1429,7 +1429,7 @@ export function sample<
       )
       : never
   ),
-  FN extends (
+  const FN extends (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
@@ -1438,7 +1438,7 @@ export function sample<
       ? (clk: TypeOfClock<Clock>) => any
       : never
   ),
-  FNInf extends (
+  const FNInf extends (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
@@ -1447,14 +1447,14 @@ export function sample<
       ? (clk: FNInfClock) => any
       : never
   ),
-  FNNonFalsy extends (
+  const FNNonFalsy extends (
     Source extends Unit<any> | SourceRecord
     ? NonFalsy<TypeOfSource<Source>>
     : Clock extends Units
       ? NonFalsy<TypeOfClock<Clock>>
       : never
   ),
-  FNAltArg extends (
+  const FNAltArg extends (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (src: FNNonFalsy, clk: TypeOfClock<Clock>) => any
@@ -1463,24 +1463,24 @@ export function sample<
       ? (clk: FNNonFalsy) => any
       : never
   ),
-  SomeFN,
-  SourceNoConf,
-  ClockNoConf,
-  FNSrcNoConf extends (
+  const SomeFN,
+  const SourceNoConf,
+  const ClockNoConf,
+  const FNSrcNoConf extends (
     SourceNoConf extends Unit<any> | SourceRecord
       ? (src: TypeOfSource<SourceNoConf>) => any
       : never
   ),
-  FNBothNoConf extends (
+  const FNBothNoConf extends (
     SourceNoConf extends Unit<any> | SourceRecord
       ? ClockNoConf extends Units
         ? ((src: TypeOfSource<SourceNoConf>, clk: TypeOfClock<ClockNoConf>) => any)
         : never
       : never
   ),
-  FLUnit,
-  Args extends any[],
-  InferTarget,
+  const FLUnit,
+  const Args extends any[],
+  const InferTarget,
 >(...args:
   SourceNoConf extends Unit<any> | SourceRecord
     ? ClockNoConf extends Units
@@ -1904,7 +1904,7 @@ type TargetOrError<
             ? Source extends 'noSrc'
               // fallback for unhandled cases with filterFn
               ? [error: {
-                target: Target extends any[]
+                target: Target extends readonly any[]
                   ? {
                     [K in keyof Target]: Unit<MatchingValue>
                   }
@@ -1927,7 +1927,7 @@ type TargetOrError<
                 error: 'source should extend target type'
               }]
             : [error: {
-              target: Target extends any[]
+              target: Target extends readonly any[]
                 ? {
                   [K in keyof Target]: Unit<MatchingValue>
                 }
@@ -2239,7 +2239,7 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
 
 type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
-type Units = Unit<any> | Tuple<Unit<any>>
+type Units = Unit<any> | RoTuple<Unit<any>>
 type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
 type InvalidUnitsTarget = Unit<any> | Tuple<Unit<any>> | ReadonlyArray<Unit<any>>
 

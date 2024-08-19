@@ -268,10 +268,10 @@ describe('with target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { a: string; }, clk: any) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
-        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { a: string; }, clk: any) => any'.
+      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { readonly a: string; }, clk: any) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
+        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { readonly a: string; }, clk: any) => any'.
           Types of parameters '__0' and 'src' are incompatible.
-            Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+            Type '{ readonly a: string; }' is not assignable to type '{ a: number; }'.
               Types of property 'a' are incompatible.
                 Type 'string' is not assignable to type 'number'.
       "
@@ -415,10 +415,10 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { a: string; }, clk: any) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
-        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { a: string; }, clk: any) => any'.
+      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { readonly a: string; }, clk: any) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
+        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { readonly a: string; }, clk: any) => any'.
           Types of parameters '__0' and 'src' are incompatible.
-            Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+            Type '{ readonly a: string; }' is not assignable to type '{ a: number; }'.
               Types of property 'a' are incompatible.
                 Type 'string' is not assignable to type 'number'.
       "

@@ -83,7 +83,22 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Unmarked error at test line 25 'targetVoid,'
+    Type 'EventCallable<void>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Type 'void' is not assignable to type '{ field: string | number; data: number; }'.
+    Unmarked error at test line 27 'targetB,'
+    Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      The types of '__.data' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 28 'targetC,'
+    Type 'EventCallable<{ field: unknown; data: number; }>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'unknown' is not assignable to type 'string | number'.
+    Unmarked error at test line 30 'targetE,'
+    Type 'EventCallable<{ field: any; }>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Property 'data' is missing in type '{ field: any; }' but required in type '{ field: string | number; data: number; }'.
     "
   `)
 })
@@ -126,7 +141,32 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Unmarked error at test line 26 'targetVoid,'
+    Type 'EventCallable<void>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Type 'void' is not assignable to type '{ field: number; data: number; }'.
+    Unmarked error at test line 27 'targetA,'
+    Type 'Effect<{ field: string | number; data: number; }, void, Error>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'string | number' is not assignable to type 'number'.
+          Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 28 'targetB,'
+    Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'string | number' is not assignable to type 'number'.
+          Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 29 'targetC,'
+    Type 'EventCallable<{ field: unknown; data: number; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'unknown' is not assignable to type 'number'.
+    Unmarked error at test line 30 'targetD,'
+    Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 31 'targetE,'
+    Type 'EventCallable<{ field: any; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Property 'data' is missing in type '{ field: any; }' but required in type '{ field: number; data: number; }'.
     "
   `)
 })
