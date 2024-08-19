@@ -737,54 +737,91 @@ describe('no fn', () => {
         Types of property '__' are incompatible.
           Type 'string | number' is not assignable to type 'string'.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 129 'clock: num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: number; targetType: string; }]; }'.
-      Unmarked error at test line 136 'clock: num,'
-      lack of expected error at test line 132 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: number; targetType: string | boolean; }]; }'.
-      Unmarked error at test line 143 'clock: num,'
-      lack of expected error at test line 139 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [EventCallable<number>, { clockType: number; targetType: string; }]; }'.
-      Unmarked error at test line 151 'clock: num,'
-      lack of expected error at test line 147 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [EventCallable<number>, { clockType: number; targetType: string | boolean; }]; }'.
-      Unmarked error at test line 159 'clock: num,'
-      lack of expected error at test line 155 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: number; targetType: string | boolean; }, EventCallable<void>]; }'.
-      Unmarked error at test line 167 'clock: num,'
-      lack of expected error at test line 162 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: number; targetType: string; }, EventCallable<void>]; }'.
-      Unmarked error at test line 175 'clock: num,'
-      lack of expected error at test line 170 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [EventCallable<any>, { clockType: number; targetType: string; }]; }'.
-      Unmarked error at test line 183 'clock: num,'
-      lack of expected error at test line 179 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [EventCallable<string | number>, { clockType: number; targetType: string; }]; }'.
-      Unmarked error at test line 191 'clock: num,'
-      lack of expected error at test line 187 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [EventCallable<any>, { clockType: number; targetType: string | boolean; }]; }'.
-      Unmarked error at test line 199 'clock: num,'
-      lack of expected error at test line 195 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [EventCallable<string | number>, { clockType: number; targetType: string | boolean; }]; }'.
-      Unmarked error at test line 207 'clock: str,'
-      lack of expected error at test line 203 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: string; targetType: number; }]; }'.
-      Unmarked error at test line 214 'clock: str,'
-      lack of expected error at test line 210 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: string; targetType: number; }, EventCallable<void>]; }'.
-      Unmarked error at test line 222 'clock: str,'
-      lack of expected error at test line 217 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: string; targetType: number; }, EventCallable<string>]; }'.
-      Unmarked error at test line 230 'clock: str,'
-      lack of expected error at test line 225 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [EventCallable<any>, { clockType: string; targetType: number; }]; }'.
-      Unmarked error at test line 238 'clock: str,'
-      lack of expected error at test line 234 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: string; targetType: number; }, EventCallable<string | boolean>]; }'.
-      Unmarked error at test line 246 'clock: str,'
-      lack of expected error at test line 241 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: readonly [{ clockType: string; targetType: number; }, EventCallable<string | number>]; }'.
-      lack of expected error at test line 249 'num,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 163 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 171 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 185 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 201 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 218 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 242 'strBool,'
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'string'.
+            Type 'boolean' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 250 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string'.
+            Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
