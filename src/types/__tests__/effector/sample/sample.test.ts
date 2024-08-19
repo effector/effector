@@ -472,7 +472,9 @@ test('from unknown to known type (should fail)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: unknown; targetType: number; }; }'.
+    Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+      Types of property '__' are incompatible.
+        Type 'unknown' is not assignable to type 'number'.
     "
   `)
 })

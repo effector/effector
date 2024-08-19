@@ -107,7 +107,7 @@ it('supports a list of stores as a source + target forwarding (should pass)', ()
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Unmarked error at test line 7 'source: [a, b],'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ target: Unit<(string | number)[]>; error: \\"source should extend target type\\"; }'.
     "
   `)
 })
