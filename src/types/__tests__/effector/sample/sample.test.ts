@@ -186,8 +186,10 @@ describe('clock without source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'string' is not assignable to type 'number'.
-      lack of expected error at test line 8 'target,'
+      lack of expected error at test line 6 'fn: foo => foo,'
+      Type 'StoreWritable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -206,8 +208,10 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'boolean' is not assignable to type 'number'.
-      lack of expected error at test line 10 'target,'
+      lack of expected error at test line 8 'fn: foo => true,'
+      Type 'StoreWritable<number>' is not assignable to type 'Unit<boolean>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'boolean'.
       "
     `)
   })
@@ -1368,9 +1372,9 @@ describe('fn return cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ name }: { readonly name: string; }) => { name: string; }' is not assignable to type '(args_0: { readonly name: string; }) => { name: string; age: number; } | EventCallable<{ name: string; }>'.
-        Type '{ name: string; }' is not assignable to type '{ name: string; age: number; } | EventCallable<{ name: string; }>'.
-          Property 'age' is missing in type '{ name: string; }' but required in type '{ name: string; age: number; }'.
+      Unmarked error at test line 2 'clock: trigger,'
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { readonly name: string; }) => { name: string; age: number; } | { name: string; }; error: \\"fn result should extend target type\\"; }'.
+      lack of expected error at test line 5 'fn: ({name}) => {'
       "
     `)
   })
