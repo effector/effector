@@ -370,12 +370,20 @@ test('wide union in array (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ target: Unit<(string | number | boolean)[]>; error: \\"clock should extend target type\\"; }'.
+    Type 'EventCallable<(string | number | boolean)[]>' is not assignable to type 'Unit<(string | number)[]>'.
+      Types of property '__' are incompatible.
+        Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
+          Type 'string | number | boolean' is not assignable to type 'string | number'.
+            Type 'boolean' is not assignable to type 'string | number'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
       Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
         Type 'string | number | boolean' is not assignable to type 'string | number'.
           Type 'boolean' is not assignable to type 'string | number'.
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ target: readonly [Unit<(string | number | boolean)[]>]; error: \\"clock should extend target type\\"; }'.
+    Type 'EventCallable<(string | number | boolean)[]>' is not assignable to type 'Unit<(string | number)[]>'.
+      Types of property '__' are incompatible.
+        Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
+          Type 'string | number | boolean' is not assignable to type 'string | number'.
+            Type 'boolean' is not assignable to type 'string | number'.
     "
   `)
 })
