@@ -1700,7 +1700,7 @@ type SampleFilterTargetDef<
             : never,
             SomeFN
           >
-          : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
+          : [error: {filter: Unit<boolean>; error: 'filter unit should has boolean type'}]
         : [message: {error: 'function should accept data source types'; got: FN}]
     : FLBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn_Trg
@@ -2012,7 +2012,7 @@ type SampleFilterDef<
           ? {clock: Clock; source?: never; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
           : never
         ) & SomeFN]
-      : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
+      : [error: {filter: Unit<boolean>; error: 'filter unit should has boolean type'}]
     : FLBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn
         ? [config: (
