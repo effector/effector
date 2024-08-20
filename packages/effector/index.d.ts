@@ -1943,21 +1943,15 @@ type TargetOrError<
                   : Unit<MatchingValue>
                 error: 'fallback: source should extend target type'
               }]
-              : [error: {
-                source: GetSourceExtendedByTarget<
-                  Source,
-                  Target extends UnitTargetable<any>
-                  ? Target extends UnitTargetable<infer TargetType>
-                    ? TargetType
-                    : never
-                  : Target extends RoTuple<infer TU>
-                    ? TU extends UnitTargetable<infer TargetType>
-                      ? TargetType
-                      : never
-                    : never
-                >
-                error: 'source should extend target type'
-              }]
+              : IsUnion<GetSourceExtendedByTarget<Source, Target>> extends true
+                ? [error: {
+                  source: GetSourceExtendedByTargetOnlyIncorrect<Source, Target>
+                  error: 'union: source should extend target type'
+                }]
+                : [error: {
+                  source: GetSourceExtendedByTarget<Source, Target>
+                  error: 'noUnion: source should extend target type'
+                }]
             : [error: {
               target: Target extends readonly any[]
                 ? {
@@ -1968,18 +1962,7 @@ type TargetOrError<
             }]
           : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
             ? [error: {
-                clock: GetClockExtendedByTarget<
-                  Clock,
-                  Target extends UnitTargetable<any>
-                  ? Target extends UnitTargetable<infer TargetType>
-                    ? TargetType
-                    : never
-                  : Target extends RoTuple<infer TU>
-                    ? TU extends UnitTargetable<infer TargetType>
-                      ? TargetType
-                      : never
-                    : never
-                >
+                clock: GetClockExtendedByTarget<Clock, Target>
                 error: 'clock should extend target type'
               }]
             : [error: {
@@ -2246,14 +2229,96 @@ type IsTargetWiderThanSource<SourceType, Target extends UnitsTarget | ReadonlyAr
         : never
       : never
 
-type GetSourceExtendedByTarget<Source, TargetType> =
+// @link https://ghaiklor.github.io/type-challenges-solutions/en/medium-isunion.html
+type IsUnion<T, U = T> =
+(
+	WhichType<T> extends 'never'
+		? false
+		: T extends any
+			? [U] extends [T]
+				? false
+				: true
+			: never
+) extends infer Result
+	// In some cases `Result` will return `false | true` which is `boolean`,
+	// that means `T` has at least two types and it's a union type,
+	// so we will return `true` instead of `boolean`.
+	? boolean extends Result
+    ? true
+		: Result
+  // Should never happen
+	: never;
+
+type UnionToIntersection<union> = (
+  union extends any ? (k: union) => void : never
+) extends (k: infer intersection) => void
+  ? intersection
+  : never;
+
+type GetUnionLast<Union> = UnionToIntersection<
+  Union extends any ? () => Union : never
+> extends () => infer Last
+  ? Last
+  : never;
+
+type UnionToTuple<Union, Tuple extends unknown[] = []> = [
+  Union
+] extends [never]
+  ? Tuple
+  : UnionToTuple<
+      Exclude<Union, GetUnionLast<Union>>,
+      [GetUnionLast<Union>, ...Tuple]
+    >;
+
+type GetSourceExtendedByTargetOnlyIncorrect<
+  Source,
+  Target
+> = Target extends RoTuple<Unit<any>>
+  ? GetSourceExtendedByTarget<Source, {
+    [K in keyof Target]: UnitValue<Target[K]> extends GetShapeValue<Source>
+      ? GetShapeValue<Source> extends UnitValue<Target[K]>
+        ? never
+        : Target[K]
+      : Target[K]
+  }>
+  : GetSourceExtendedByTarget<Source, Target>
+
+type GetSourceExtendedByTarget<
+  Source,
+  Target,
+  TargetType = Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
+      ? TargetType
+      : never
+    : Target extends RoTuple<infer TU>
+      ? TU extends UnitTargetable<infer TargetType>
+        ? TargetType
+        : never
+      : never
+> =
   Source extends (Record<string, Store<any>> | RoTuple<Store<any>>)
   ? {
-    [K in keyof TargetType]: Store<TargetType[K]>
+    [K in keyof TargetType]: K extends keyof Source
+      ? Source[K] extends StoreWritable<any>
+        ? StoreWritable<TargetType[K]>
+        : Store<TargetType[K]>
+      : Store<TargetType[K]>
   }
   : Unit<TargetType>
 
-type GetClockExtendedByTarget<Clock, TargetType> =
+type GetClockExtendedByTarget<
+  Clock,
+  Target,
+  TargetType = Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
+      ? TargetType
+      : never
+    : Target extends RoTuple<infer TU>
+      ? TU extends UnitTargetable<infer TargetType>
+        ? TargetType
+        : never
+      : never
+> =
   Clock extends RoTuple<Unit<any>>
   ? {
     [K in keyof Clock]: Unit<TargetType>

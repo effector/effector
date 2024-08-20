@@ -277,7 +277,7 @@ test('narrow object combined (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Property 'bar' is missing in type '{ foo: StoreWritable<string>; }' but required in type '{ foo: Store<string>; bar: Store<string>; }'.
+    Property 'bar' is missing in type '{ foo: StoreWritable<string>; }' but required in type '{ foo: StoreWritable<string>; bar: Store<string>; }'.
     "
   `)
 })
