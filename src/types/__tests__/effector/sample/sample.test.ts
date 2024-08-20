@@ -518,15 +518,10 @@ describe('derived unit in target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 10 'clock: trigger,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Event<boolean>; }'.
-      Unmarked error at test line 16 'clock: trigger,'
-      lack of expected error at test line 12 'target: started,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Store<boolean>; }'.
-      Unmarked error at test line 22 'clock: trigger,'
-      lack of expected error at test line 18 'target: $storeMap,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: readonly [Event<boolean>, StoreWritable<boolean>, Store<boolean>]; }'.
-      lack of expected error at test line 25 'target: [started, $store, $storeMap],'
+      Type 'Event<boolean>' is missing the following properties from type 'EventCallable<boolean>': prepend, targetable
+      Type 'Store<boolean>' is missing the following properties from type 'StoreWritable<boolean>': ____, on, off, reset, and 2 more.
+      Type 'Event<boolean>' is missing the following properties from type 'EventCallable<boolean>': prepend, targetable
+      Type 'Store<boolean>' is missing the following properties from type 'StoreWritable<boolean>': ____, on, off, reset, and 2 more.
       "
     `)
   })

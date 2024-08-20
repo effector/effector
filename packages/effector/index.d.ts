@@ -1157,7 +1157,14 @@ type SampleImpl<
               >
             : [message: {error: 'clock should be unit or array of units'; got: Clock}]
         : [message: {error: 'source should be unit or object with stores'; got: Source}]
-    : Target extends InvalidUnitsTarget ? [message: {error: 'derived units are not allowed in target'; got: Target}] : [message: {error: 'target should be unit or array of units'; got: Target}]
+    : Target extends InvalidUnitsTarget
+      ? [error: {
+          target: Target extends RoTuple<Unit<any>>
+            ? {[K in keyof Target]: ReplaceDerivedUnitWithWritable<Target[K]>}
+            : ReplaceDerivedUnitWithWritable<Target>
+          error: 'derived units are not allowed in target'
+        }]
+      : [message: {error: 'target should be unit or array of units'; got: Target}]
 
 type ModeSelector<
   FilterAndFN,
@@ -2240,6 +2247,16 @@ type GetClockExtendedByTarget<Clock, TargetType> =
     [K in keyof Clock]: Unit<TargetType>
   }
   : Unit<TargetType>
+
+type ReplaceDerivedUnitWithWritable<Target> =
+  Target extends Unit<any>
+  ? Target extends Store<infer T>
+    ? StoreWritable<T>
+    : Target extends Event<infer T>
+      ? EventCallable<T>
+      // case for effects
+      : Target
+  : never
 
 type ClockValueOf<T> = T[keyof T]
 
