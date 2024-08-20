@@ -417,7 +417,7 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
       "
     `)
   })
@@ -433,7 +433,7 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ source: { a: Store<number>; b: Store<number>; } | { a: Store<number>; }; error: \\"source should extend target type\\"; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
       "
     `)
   })

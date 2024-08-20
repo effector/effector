@@ -1845,19 +1845,19 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 11 'source: {a:$num},'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
       Unmarked error at test line 18 'source: {a:$num},'
       lack of expected error at test line 14 'abn,'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
       lack of expected error at test line 21 'ab,'
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 34 'target: ['
-      Object literal may only specify known properties, and 'target' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<number>; }; error: \\"source should extend target type\\"; }'.
-      Unmarked error at test line 42 'target: ['
+      Unmarked error at test line 33 'source: {a:$num},'
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
+      Unmarked error at test line 41 'source: {a:$num},'
       lack of expected error at test line 37 'abn,'
-      Object literal may only specify known properties, and 'target' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<string>; }; error: \\"source should extend target type\\"; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
       lack of expected error at test line 45 'ab,'
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
         The types of '__.a' are incompatible between these types.
@@ -1868,8 +1868,8 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 67 'source: {a:$num},'
-      Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: Store<number>; b: Store<string>; } | { a: Store<number>; b: Store<number>; }'.
-        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+      Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: StoreWritable<number>; b: Store<string>; } | { a: StoreWritable<number>; b: Store<number>; }'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
       lack of expected error at test line 70 'abn,'
       lack of expected error at test line 72 'ab,'
       Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
@@ -1972,19 +1972,19 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 228 'source: {a:$num},'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
       Unmarked error at test line 236 'source: {a:$num},'
       lack of expected error at test line 232 'abn,'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
       lack of expected error at test line 240 'ab,'
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 254 'clock: num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<number>; }; error: \\"source should extend target type\\"; }'.
-      Unmarked error at test line 263 'clock: num,'
+      Unmarked error at test line 253 'source: {a:$num},'
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
+      Unmarked error at test line 262 'source: {a:$num},'
       lack of expected error at test line 258 'abn,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ source: { a: Store<number>; } | { a: Store<number>; b: Store<string>; }; error: \\"source should extend target type\\"; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
       lack of expected error at test line 267 'ab,'
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
         The types of '__.a' are incompatible between these types.
@@ -1995,8 +1995,8 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 291 'source: {a:$num},'
-      Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: Store<number>; b: Store<string>; } | { a: Store<number>; b: Store<number>; }'.
-        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
+      Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: StoreWritable<number>; b: Store<string>; } | { a: StoreWritable<number>; b: Store<number>; }'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
       lack of expected error at test line 295 'abn,'
       lack of expected error at test line 297 'ab,'
       Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
