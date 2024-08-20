@@ -1590,7 +1590,7 @@ type SampleRet<
 export function sample<
   const Target,
   const Source,
-  Clock,
+  const Clock,
   const FLBool,
   const FNInfSource extends (
     Source extends Unit<any> | SourceRecord
@@ -2409,13 +2409,13 @@ type TypeOfTargetVal<SourceType, Target extends UnitsTarget | ReadonlyArray<Unit
 type IsTargetWiderThanSource<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
   Target extends UnitTargetable<any>
     ? Target extends UnitTargetable<infer TargetType>
-      ? [Readonly<TargetType>] extends [SourceType]
+      ? [TargetType] extends [SourceType]
         ? 'yes'
         : 'no'
       : never
     : Target extends RoTuple<infer TU>
       ? TU extends UnitTargetable<infer TargetType>
-        ? [Readonly<TargetType>] extends [SourceType]
+        ? [TargetType] extends [SourceType]
           ? 'yes'
           : 'no'
         : never
