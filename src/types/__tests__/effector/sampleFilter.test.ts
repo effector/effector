@@ -800,7 +800,11 @@ test('type inference issue', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '{ a: number; b: string | number; }' is not assignable to type 'number'.
+    Unmarked error at test line 6 'target: strt,'
+    Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: string | number; }>'.
+      Types of property '__' are incompatible.
+        Type 'number' is not assignable to type '{ a: number; b: string | number; }'.
+    lack of expected error at test line 9 'fn: val => ({a: 1, b: val ? val.b : ''}),'
     "
   `)
 })
