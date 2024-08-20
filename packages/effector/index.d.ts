@@ -1918,7 +1918,19 @@ type TargetOrError<
       : Mode extends 'fnRet'
         ? FN extends 'noFn'
           ? never
-          : [error: {fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>; error: 'fn result should extend target type'}]
+          : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
+            ? [error: {
+                fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
+                error: 'fn result should extend target type'
+              }]
+            : [error: {
+                target: Target extends readonly any[]
+                  ? {
+                    [K in keyof Target]: Unit<MatchingValue>
+                  }
+                  : Unit<MatchingValue>
+                error: 'fn result should extend target type'
+              }]
         : Mode extends 'src'
           ? IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
             ? Source extends 'noSrc'
@@ -2204,7 +2216,7 @@ type TypeOfTargetVal<SourceType, Target extends UnitsTarget | ReadonlyArray<Unit
   Target extends UnitTargetable<any>
     ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
-        ? Target
+        ? TargetType
         : WhichType<TargetType> extends 'any'
           ? unknown
           : TargetType
@@ -2212,7 +2224,7 @@ type TypeOfTargetVal<SourceType, Target extends UnitsTarget | ReadonlyArray<Unit
     : Target extends RoTuple<infer TU>
       ? TU extends UnitTargetable<infer TargetType>
         ? [SourceType] extends [Readonly<TargetType>]
-          ? TU
+          ? TargetType
           : WhichType<TargetType> extends 'any'
             ? unknown
             : TargetType
