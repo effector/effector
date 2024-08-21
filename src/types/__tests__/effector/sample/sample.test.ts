@@ -765,6 +765,80 @@ describe('derived unit in target', () => {
       "
     `)
   })
+  // clock types are failing when target is narrower so probably source should behave in that way too
+  test('source exact, target union with narrower and exact (should pass)', () => {
+    const exact = createEvent<{a: string; b: string}>()
+    const narrower = createEvent<{a: string}>()
+    const narrowerUnion = createEvent<{a: number} | {a: string; b: string}>()
+
+    sample({clock: exact, target: narrower})
+    sample({clock: exact, target: [narrower]})
+    sample({clock: exact, target: narrowerUnion})
+    sample({clock: exact, target: [narrowerUnion]})
+    sample({clock: exact, target: [narrowerUnion, narrower]})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('should not mark correct case near incorrect with source (should pass)', () => {
+    const source = createEvent<{a: string; b: string}>()
+    const incorrect = createEvent<{a: number}>()
+    const correct = createEvent<{a: string; b: string} | {a: number}>()
+
+    sample({
+      source,
+      target: [correct],
+    })
+
+    sample({
+      source,
+      target: [
+        correct,
+        //@ts-expect-error
+        incorrect,
+      ],
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('should not mark correct case near incorrect with clock (should pass)', () => {
+    const clock = createEvent<{a: string; b: string}>()
+    const incorrect = createEvent<{a: number}>()
+    const correct = createEvent<{a: string; b: string} | {a: number}>()
+
+    sample({
+      clock,
+      target: [correct],
+    })
+
+    sample({
+      clock,
+      target: [
+        correct,
+        //@ts-expect-error
+        incorrect,
+      ],
+    })
+    sample({
+      clock: [clock],
+      target: [
+        correct,
+        //@ts-expect-error
+        incorrect,
+      ],
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
 })
 
 describe('mix of wider and narrower types', () => {
