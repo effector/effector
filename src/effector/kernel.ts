@@ -182,6 +182,7 @@ const getPriority = (t: PriorityTag) => {
 const barriers = new Set<string | number>()
 
 let isRoot = true
+export let isKernelCall = false;
 export let isWatch = false
 export let isPure = false
 export let currentPage: Leaf | null = null
@@ -191,6 +192,9 @@ export const setForkPage = (newForkPage: Scope | void | null) => {
 }
 export const setCurrentPage = (newPage: Leaf | null) => {
   currentPage = newPage
+}
+export const setIsKernelCall = (newValue: boolean) => {
+  isKernelCall = newValue;
 }
 
 const getPageForRef = (page: Leaf | null, id: string) => {
@@ -384,9 +388,11 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (data.fn) {
             isWatch = node.meta.op === 'watch'
             isPure = data.pure
+            setIsKernelCall(true);
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
               : tryRun(local, data.fn, stack)
+            setIsKernelCall(false);
             if (data.filter) {
               /**
                * handled edge case: if step.fn will throw,

@@ -284,3 +284,42 @@ test('scopeBind allows $store.getState as a callback', () => {
 
   expect(getCount()).toBe(42)
 })
+
+test('scopebind must not throw in safe context', async () => {
+  const $store = createStore(1);
+  const event = createEvent();
+
+  $store.map(() => {
+    scopeBind(event)
+    return 5;
+  });
+
+  const fx1 = createEffect(() => {
+    scopeBind(event)
+  });
+
+  const fx2 = createEffect((ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  });
+
+  const fx3 = createEffect(async () => {
+    scopeBind(event)
+
+    await fx2(50);
+
+    let e;
+
+    try {
+    e = scopeBind(event)
+    } catch {}
+
+    if (e) {
+      throw new Error()
+    }
+  });
+
+  fx1.watch(() => scopeBind(event));
+
+  await fx1();
+  await fx3();
+});
