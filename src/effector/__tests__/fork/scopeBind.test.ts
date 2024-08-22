@@ -285,52 +285,85 @@ test('scopeBind allows $store.getState as a callback', () => {
   expect(getCount()).toBe(42)
 })
 
-test('scopeBind should not throw in safe context', async () => {
-  const $store = createStore(1);
-  const event = createEvent();
-
-  const anotherEvent = createEvent();
-
-  $store.map(() => {
-    scopeBind(event)
-    return 5;
+describe('scopeBind should not throw in safe context', () => {
+  test('in map without scope', () => {
+    const event = createEvent();
+    
+    createStore(0).map(() => {
+      scopeBind(event)
+      return 0;
+    });
   });
 
-  anotherEvent.map(() => {
-    scopeBind(event)
-    return 5;
+  test('in effect without scope', async () => {
+    const event = createEvent();
+
+    const fx = createEffect(() => {
+      scopeBind(event)
+    });
+
+    await fx();
   });
 
-  const fx1 = createEffect(() => {
-    scopeBind(event)
+  test('after nested effect call without scope', async () => {
+    const event = createEvent();
+
+    const sleepFx = createEffect((ms: number) => {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    });
+  
+    const fx = createEffect(async () => {
+      scopeBind(event)
+  
+      await sleepFx(50);
+  
+      scopeBind(event)
+    });
+
+    await fx();
   });
 
-  const fx2 = createEffect((ms: number) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  test('after nested event call without scope', async () => {
+    const evt = createEvent()
+    const trigger = evt.prepend(() => {})
+    
+    const fx = createEffect(() => {
+      trigger()
+      scopeBind(trigger)
+    })
+
+    await fx();
   });
 
-  const fx3 = createEffect(async () => {
-    scopeBind(event)
+  test('in effect "map" or "watch" without scope', async () => {
+    const event = createEvent();
+    const fx3 = createEffect(async () => {});
 
-    await fx2(50);
-
-    let e;
-
-    try {
-    e = scopeBind(event)
-    } catch {}
-
-    if (e) {
-      throw new Error()
-    }
+    fx3.watch(() => scopeBind(event));
+    fx3.map(() => scopeBind(event));
   });
 
-  fx1.watch(() => scopeBind(event));
-  fx1.map(() => () => {
-    scopeBind(event)
-    return 5;
-  });
+  test('flag is not leaked', async () => {
+    const event = createEvent();
 
-  await fx1();
-  await fx3();
+    const sleepFx = createEffect((ms: number) => {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    });
+  
+    const fx = createEffect(async () => {
+      scopeBind(event)
+  
+      await sleepFx(50);
+      
+      console.log('after')
+  
+      scopeBind(event)
+    });
+
+    await fx();
+
+    expect(() => {
+      scopeBind(event)
+    }).toThrowErrorMatchingInlineSnapshot(`"scopeBind: scope not found"`)
+  })
 });

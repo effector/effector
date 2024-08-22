@@ -388,11 +388,16 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           if (data.fn) {
             isWatch = node.meta.op === 'watch'
             isPure = data.pure
-            setIsKernelCall(true);
+
+            const prevIsKernelCall = isKernelCall;
+            isKernelCall = true;
+
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
               : tryRun(local, data.fn, stack)
-            setIsKernelCall(false);
+
+            isKernelCall = prevIsKernelCall;
+
             if (data.filter) {
               /**
                * handled edge case: if step.fn will throw,
