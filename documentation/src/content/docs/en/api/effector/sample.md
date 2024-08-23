@@ -88,7 +88,7 @@ TBD
   - If event or effect: call given event or effect upon `clock` is triggered
   - If store: update given store upon `clock` is triggered
   - If array of units: trigger every given unit upon `clock` is triggered
-  - If not passed: new unit will be created under the hood and will be returned as a result of the `sample()` call. Type of created target is described [in table beyond](/en/api/effector/sample#sample-types-target)
+  - If not passed: new unit will be created under the hood and will be returned as a result of the `sample()` call. Type of created target is described [in table above](/en/api/effector/sample#methods-sample-config-types-target)
 - `filter?` _(Function or [Store](/en/api/effector/Store))_ `((sourceData, clockData) => result): boolean | Store<boolean>`: If returns value of the function or store contains `true` continue execution otherwise cancel
 - `fn?` _(Function)_ `((sourceData, clockData) => result)`: Combinator function, which will transform data from `source` and `clock` before passing it to `target`, [should be **pure**](/en/explanation/glossary#purity). If not passed, data from `source` will be passed to `target` as it is
 - `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to `clock`, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
