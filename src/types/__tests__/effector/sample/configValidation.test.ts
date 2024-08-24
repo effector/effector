@@ -240,10 +240,12 @@ describe('filter', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 3 'sample({'
-      Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
-        Type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
-          Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
-            The intersection '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[Omit<never, \\"target\\" | \\"clock\\"> & { clock: EventCallable<void>; target: EventCallable<void>; }] | [Omit<never, \\"target\\" | \\"clock\\"> & { ...; }]'.
+        Type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to type '[Omit<never, \\"target\\" | \\"clock\\"> & { clock: EventCallable<void>; target: EventCallable<void>; }]'.
+          Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }' is not assignable to type 'Omit<never, \\"target\\" | \\"clock\\"> & { clock: EventCallable<void>; target: EventCallable<void>; }'.
+            Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }' is not assignable to type 'Omit<never, \\"target\\" | \\"clock\\">'.
+              Property 'clock' is incompatible with index signature.
+                Type 'EventCallable<void>' is not assignable to type 'never'.
       Unmarked error at test line 9 'sample({'
       lack of expected error at test line 7 'filter: null,'
       Argument of type '[{ clock: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
