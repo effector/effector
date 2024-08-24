@@ -55,6 +55,7 @@ export default () => {
       },
     } as const,
     cases: {
+      //@ts-expect-error
       noClock: {
         boolFilter: union(['unit']),
         nonBool: union(['unit', 'object', 'tuple']),
@@ -163,7 +164,6 @@ export default () => {
   })
   const wrongTarget = flag({
     needs: targetIsTyped,
-    avoid: noSource,
   })
   const targetSubtype = separate({
     source: {sourceSubtype, wrongTarget},
@@ -263,6 +263,49 @@ export default () => {
     }),
     sort: [false, true],
   })
+
+  const badFilter = bool({
+    source: {
+      targetAny,
+      targetVoid,
+      clockIsArray: bool({source: {clockType}, true: {clockType: 'array'}}),
+      fnType,
+      wrongTarget,
+    },
+    true: [
+      {
+        targetAny: false,
+        targetVoid: false,
+        clockIsArray: false,
+        wrongTarget: false,
+        fnType: 'good untyped',
+      },
+      {
+        targetAny: false,
+        targetVoid: false,
+        clockIsArray: false,
+        wrongTarget: false,
+        fnType: 'no',
+      },
+    ],
+  })
+
+  const badFilterType = separate({
+    source: {
+      isFn: flag({needs: badFilter}),
+    },
+    variant: {
+      byFlag: {
+        isFn: {isFn: true},
+        isNull: {},
+      },
+    },
+    cases: {
+      isFn: value('isFn' as const),
+      isNull: value('isNull' as const),
+    },
+  })
+
   //@ts-expect-error
   const filterFnType: Separate<
     | 'no'
@@ -271,9 +314,15 @@ export default () => {
     | 'good typed'
     | 'bad untyped'
     | 'bad typed'
-    | 'bad return'
+    | 'bad filter'
   > = separate({
-    source: {sourceType, clockType, filterType, inferByFilter},
+    source: {
+      sourceType,
+      clockType,
+      filterType,
+      inferByFilter,
+      badFilter,
+    },
     variant: {
       src: {
         noSource: {sourceType: 'no'},
@@ -285,6 +334,7 @@ export default () => {
       } as const,
       infer: {
         infer: {inferByFilter: true},
+        noInferNoLooseTypes: {badFilter: true},
         noInfer: {},
       } as const,
     } as const,
@@ -293,12 +343,18 @@ export default () => {
       noSource: {
         fn: {
           infer: union(['infer']),
+          noInferNoLooseTypes: union([
+            'good untyped',
+            'good typed',
+            'bad untyped',
+            'bad typed',
+            'bad filter',
+          ]),
           noInfer: union([
             'good untyped',
             'good typed',
             'bad untyped',
             'bad typed',
-            'bad return',
           ]),
         },
         rest: union(['no']),
@@ -669,6 +725,7 @@ export default () => {
       sourceSubtype,
       inferByFilter,
       filterFnType,
+      badFilterType,
     },
     variant: {
       Afilter: {
@@ -700,7 +757,8 @@ export default () => {
         goodTyped: {filterFnType: 'good typed'},
         badUntyped: {filterFnType: 'bad untyped'},
         badTyped: {filterFnType: 'bad typed'},
-        badReturn: {filterFnType: 'bad return'},
+        badReturn: {filterFnType: 'bad filter', badFilterType: 'isFn'},
+        badFilter: {filterFnType: 'bad filter', badFilterType: 'isNull'},
       },
     },
     cases: {
@@ -742,6 +800,7 @@ export default () => {
               badUntyped: value('(clk) => clk.a > 0'),
               badTyped: value('(clk: AB) => clk.a > 0'),
               badReturn: value('() => 1'),
+              badFilter: value('null'),
             },
           },
           unit: {
@@ -784,6 +843,8 @@ export default () => {
       targetType,
       targetCode,
       fnType,
+      filterFnType,
+      badFilterType,
     },
     fn({
       sourceIsWiderThatTarget,
@@ -792,16 +853,21 @@ export default () => {
       targetType,
       targetCode,
       fnType,
+      filterFnType,
+      badFilterType,
     }) {
-      return `${
-        sourceType === 'no'
-          ? ''
-          : `${sourceType}${clockType === 'no' ? '' : ' + '}`
-      }${clockType === 'no' ? '' : clockType === 'unit' ? 'clock' : '[clock]'}${
-        fnType === 'no' ? '' : ', fn'
-      } -> ${targetCode ? targetType : 'new unit'} ${
-        sourceIsWiderThatTarget ? 'wide' : 'same'
-      }`
+      if (filterFnType === 'bad filter') {
+        if (badFilterType === 'isFn') return 'bad return'
+        if (badFilterType === 'isNull') return 'not a function'
+      }
+      const src = sourceType === 'no' ? '' : sourceType
+      const srcClkSep = sourceType === 'no' || clockType === 'no' ? '' : ' + '
+      const clk =
+        clockType === 'no' ? '' : clockType === 'unit' ? 'clock' : '[clock]'
+      const fn = fnType === 'no' ? '' : ', fn'
+      const trg = targetCode ? targetType : 'new unit'
+      const isWider = sourceIsWiderThatTarget ? 'wide' : 'same'
+      return `${src}${srcClkSep}${clk}${fn} -> ${trg} ${isWider}`
     },
   })
 
@@ -860,7 +926,7 @@ export default () => {
           {sourceType: 'no', targetType: 'unit', fnType: 'bad return'},
           {sourceType: 'no', filterFnType: 'bad typed'},
           {sourceType: 'no', filterFnType: 'bad untyped'},
-          {sourceType: 'no', filterFnType: 'bad return'},
+          {sourceType: 'no', filterFnType: 'bad filter'},
         ],
       }),
       getHash: [
@@ -872,6 +938,8 @@ export default () => {
         fnType,
         targetType,
         clockType,
+        filterFnType,
+        badFilterType,
       ],
       tags: {
         inferByFilter,
@@ -885,9 +953,12 @@ export default () => {
         filterFn: filterFnType,
       },
       describeGroup: computeFn({
-        source: {groupTokens, sourceType},
-        fn: ({groupTokens, sourceType}) => ({
-          largeGroup: `${sourceType} source`,
+        source: {groupTokens, sourceType, filterFnType},
+        fn: ({groupTokens, sourceType, filterFnType}) => ({
+          largeGroup:
+            filterFnType === 'bad filter'
+              ? 'bad filter'
+              : `${sourceType} source`,
           description: groupTokens,
         }),
       }),

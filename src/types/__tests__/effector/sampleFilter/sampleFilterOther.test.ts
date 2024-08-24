@@ -15,19 +15,19 @@ test('clock param name in the function', () => {
   const allow: StoreWritable<string> = createStore('no')
 
   const result1 = sample({
-    //@ts-expect-error
     source: trigger,
+    //@ts-expect-error
     filter: allow,
   })
   const result2 = sample({
-    //@ts-expect-error
     source: trigger,
     clock: trigger,
+    //@ts-expect-error
     filter: allow,
   })
   const result3 = sample({
-    //@ts-expect-error
     clock: trigger,
+    //@ts-expect-error
     filter: allow,
   })
 
@@ -46,7 +46,7 @@ test('custom typeguards: target array support (1)', () => {
   }
   const $store = createStore<string | number>(0)
   const $flag = createStore(false)
-  const trigger = createEvent<{a: number}>()
+  const trigger = createEvent<number>()
 
   const targetA = createEffect<{field: number | string; data: number}, void>()
   const targetB = createEvent<{field: number | string; data: string}>()
@@ -77,10 +77,7 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
-        Types of property 'data' are incompatible.
-          Type 'number' is not assignable to type '{ a: number; }'.
+    no errors
     "
   `)
 })
@@ -91,7 +88,7 @@ test('custom typeguards: target array support (2)', () => {
   }
   const $store = createStore<string | number>(0)
   const $flag = createStore(false)
-  const trigger = createEvent<{a: number}>()
+  const trigger = createEvent<number>()
 
   const targetA = createEffect<{field: number | string; data: number}, void>()
   const targetB = createEvent<{field: number | string; data: string}>()
@@ -123,10 +120,7 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
-        Types of property 'data' are incompatible.
-          Type 'number' is not assignable to type '{ a: number; }'.
+    no errors
     "
   `)
 })
