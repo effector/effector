@@ -19,7 +19,8 @@ test('generics support', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Unmarked error at test line 4 'sample({clock: fx.doneData, target: $data})'
+    Type 'StoreWritable<T | null>' is not assignable to type 'RebuildTargetClockLoop<[Event<Awaited<T>>], StoreWritable<T | null>, T | null, \\"noFilter\\">'.
     "
   `)
 })
