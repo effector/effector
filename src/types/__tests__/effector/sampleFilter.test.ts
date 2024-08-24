@@ -541,9 +541,11 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
+          Type 'EventCallable<User>' is not assignable to type 'Unit<string>'.
+            Types of property '__' are incompatible.
+              Type 'User' is not assignable to type 'string'.
           Unmarked error at test line 9 'target,'
-          lack of expected error at test line 7 'clock: trigger,'
-          Type 'StoreWritable<string>' is not assignable to type 'Unit<User>'.
+          Type 'StoreWritable<string>' is not assignable to type 'UnitTargetable<User>'.
             Types of property '__' are incompatible.
               Type 'string' is not assignable to type 'User'.
           "

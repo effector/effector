@@ -4912,7 +4912,12 @@ describe('no source', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<AB | null>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'AB'.
-        Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
+        Unmarked error at test line 33 'clock: nullableAB,'
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'number'.
+              Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<AB | null>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'AB'.
         Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
@@ -5259,7 +5264,16 @@ describe('no source', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<AB | null>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'AB'.
-        Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
+        Unmarked error at test line 33 'clock: [ab,nullableAB],'
+        Type 'EventCallable<AB>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'AB' is not assignable to type 'number'.
+        Unmarked error at test line 33 'clock: [ab,nullableAB],'
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'number'.
+              Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<AB>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'AB'.
         Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
