@@ -1903,6 +1903,72 @@ type SampleFilterTargetDef<
       : [message: {error: 'function should accept data source types'; got: FN}]
     : never
 
+type RebuildClockTargetLoop<
+  ClockUnit,
+  ClockType,
+  Target extends readonly unknown[]
+> = Target extends readonly [Unit<infer TargetType>, ...infer TargetRest]
+  ? [ClockType] extends [TargetType]
+    ? RebuildClockTargetLoop<ClockUnit, ClockType, TargetRest>
+    : WhichType<TargetType> extends 'void'
+      ? ClockUnit
+      : Unit<TargetType>
+  : ClockUnit
+
+type RebuildClockLoop<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<Unit<any>>
+> = Clock extends readonly [infer ClockUnit, ...infer ClockRest]
+  ? ClockUnit extends Unit<infer ClockType>
+    ? RebuildClockLoop<
+      ClockRest,
+      Target,
+      [...Result, RebuildClockTargetLoop<ClockUnit, ClockType, Target>]
+    >
+    : never
+  : Result
+
+type RebuildClockSingle<
+  Clock,
+  Target extends readonly unknown[]
+> = Clock extends Unit<infer ClockType>
+    ? RebuildClockTargetLoop<Clock, ClockType, Target>
+    : never
+
+type RebuildTargetClockLoop<
+  Clock extends readonly unknown[],
+  TargetUnit,
+  TargetType
+> = WhichType<TargetType> extends 'void'
+  ? TargetUnit
+  : Clock extends readonly [Unit<infer ClockType>, ...infer ClockRest]
+    ? [ClockType] extends [TargetType]
+      ? RebuildTargetClockLoop<ClockRest, TargetUnit, TargetType>
+      : UnitTargetable<ClockType>
+    : TargetUnit
+
+type RebuildTargetLoop<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<UnitTargetable<any>>
+> = Target extends readonly [infer TargetUnit, ...infer TargetRest]
+  ? TargetUnit extends UnitTargetable<infer TargetType>
+    ? RebuildTargetLoop<
+      Clock,
+      TargetRest,
+      [...Result, RebuildTargetClockLoop<Clock, TargetUnit, TargetType>]
+    >
+    : never
+  : Result
+
+type RebuildTargetSingle<
+  Clock extends readonly unknown[],
+  Target
+> = Target extends Unit<infer TargetType>
+    ? RebuildTargetClockLoop<Clock, Target, TargetType>
+    : never
+
 type TargetOrError<
   MatchingValue,
   Mode extends 'fnRet' | 'src' | 'clk',
@@ -1911,68 +1977,104 @@ type TargetOrError<
   FN,
   Source,
   Clock
-> = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
-    ? [config: ResultConfig]
-    : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
+> = [
+    Mode,
+    Source,
+    ResultConfig extends {fn: any} ? 'fn' : 'noFn',
+    ResultConfig extends {filter: any} ? 'filter' : 'noFilter'
+  ] extends ['clk', 'noSrc', 'noFn', 'noFilter']
+    ? [Omit<ResultConfig, 'clock' | 'target'> & {
+        clock: Clock extends readonly unknown[]
+          ? RebuildClockLoop<
+            Clock,
+            Target extends ReadonlyArray<UnitTargetable<any>>
+              ? Target
+              : [Target],
+            []
+          >
+          : RebuildClockSingle<
+            Clock,
+            Target extends ReadonlyArray<UnitTargetable<any>>
+              ? Target
+              : [Target]
+          >
+        target: Target extends readonly unknown[]
+          ? RebuildTargetLoop<
+            Clock extends ReadonlyArray<Unit<any>>
+              ? Clock
+              : [Clock],
+            Target,
+            []
+          >
+          : RebuildTargetSingle<
+            Clock extends ReadonlyArray<Unit<any>>
+              ? Clock
+              : [Clock],
+            Target
+          >
+      }]
+    : [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
       ? [config: ResultConfig]
-      : Mode extends 'fnRet'
-        ? FN extends 'noFn'
-          ? never
-          : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
-            ? [error: {
-                fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
-                error: 'fn result should extend target type'
-              }]
-            : [error: {
-                target: Target extends readonly any[]
-                  ? {
-                    [K in keyof Target]: Unit<MatchingValue>
-                  }
-                  : Unit<MatchingValue>
-                error: 'fn result should extend target type'
-              }]
-        : Mode extends 'src'
-          ? IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
-            ? Source extends 'noSrc'
-              // fallback for unhandled cases with filterFn
+      : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
+        ? [config: ResultConfig]
+        : Mode extends 'fnRet'
+          ? FN extends 'noFn'
+            ? never
+            : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
               ? [error: {
+                  fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
+                  error: 'fn result should extend target type'
+                }]
+              : [error: {
+                  target: Target extends readonly any[]
+                    ? {
+                      [K in keyof Target]: Unit<MatchingValue>
+                    }
+                    : Unit<MatchingValue>
+                  error: 'fn result should extend target type'
+                }]
+          : Mode extends 'src'
+            ? IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
+              ? Source extends 'noSrc'
+                // fallback for unhandled cases with filterFn
+                ? [error: {
+                  target: Target extends readonly any[]
+                    ? {
+                      [K in keyof Target]: Unit<MatchingValue>
+                    }
+                    : Unit<MatchingValue>
+                  error: 'fallback: source should extend target type'
+                }]
+                : IsUnion<GetSourceExtendedByTarget<Source, Target>> extends true
+                  ? [error: {
+                    source: GetSourceExtendedByTargetOnlyIncorrect<Source, Target>
+                    error: 'union: source should extend target type'
+                  }]
+                  : [error: {
+                    source: GetSourceExtendedByTarget<Source, Target>
+                    error: 'noUnion: source should extend target type'
+                  }]
+              : [error: {
                 target: Target extends readonly any[]
                   ? {
                     [K in keyof Target]: Unit<MatchingValue>
                   }
                   : Unit<MatchingValue>
-                error: 'fallback: source should extend target type'
+                error: 'source should extend target type'
               }]
-              : IsUnion<GetSourceExtendedByTarget<Source, Target>> extends true
-                ? [error: {
-                  source: GetSourceExtendedByTargetOnlyIncorrect<Source, Target>
-                  error: 'union: source should extend target type'
+            : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
+              ? [error: {
+                  clock: GetClockExtendedByTarget<Clock, Target>
+                  error: 'clock should extend target type'
                 }]
-                : [error: {
-                  source: GetSourceExtendedByTarget<Source, Target>
-                  error: 'noUnion: source should extend target type'
-                }]
-            : [error: {
-              target: Target extends readonly any[]
-                ? {
-                  [K in keyof Target]: Unit<MatchingValue>
-                }
-                : Unit<MatchingValue>
-              error: 'source should extend target type'
-            }]
-          : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
-            ? [error: {
-                clock: GetClockExtendedByTarget<Clock, Target>
+              : [error: {
+                target: Target extends readonly any[]
+                  ? {
+                    [K in keyof Target]: Unit<MatchingValue>
+                  }
+                  : Unit<MatchingValue>
                 error: 'clock should extend target type'
               }]
-            : [error: {
-              target: Target extends readonly any[]
-                ? {
-                  [K in keyof Target]: Unit<MatchingValue>
-                }
-                : Unit<MatchingValue>
-              error: 'clock should extend target type'
-            }]
 
 type SampleFilterDef<
   Mode extends Mode_NoTrg,
