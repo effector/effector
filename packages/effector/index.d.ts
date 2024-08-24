@@ -1918,55 +1918,78 @@ type RebuildClockTargetLoop<
 type RebuildClockLoop<
   Clock extends readonly unknown[],
   Target extends readonly unknown[],
-  Result extends RoTuple<Unit<any>>
+  Result extends RoTuple<Unit<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
 > = Clock extends readonly [infer ClockUnit, ...infer ClockRest]
   ? ClockUnit extends Unit<infer ClockType>
     ? RebuildClockLoop<
       ClockRest,
       Target,
-      [...Result, RebuildClockTargetLoop<ClockUnit, ClockType, Target>]
+      [
+        ...Result,
+        RebuildClockTargetLoop<
+          ClockUnit,
+          FilterMode extends 'noFilter' ? ClockType : NonNullable<ClockType>,
+          Target
+        >
+      ],
+      FilterMode
     >
     : never
   : Result
 
 type RebuildClockSingle<
   Clock,
-  Target extends readonly unknown[]
+  Target extends readonly unknown[],
+  FilterMode extends ('noFilter' | 'Boolean')
 > = Clock extends Unit<infer ClockType>
-    ? RebuildClockTargetLoop<Clock, ClockType, Target>
+    ? RebuildClockTargetLoop<
+      Clock,
+      FilterMode extends 'noFilter' ? ClockType : NonNullable<ClockType>,
+      Target
+    >
     : never
 
 type RebuildTargetClockLoop<
   Clock extends readonly unknown[],
   TargetUnit,
-  TargetType
+  TargetType,
+  FilterMode extends ('noFilter' | 'Boolean')
 > = WhichType<TargetType> extends 'void'
   ? TargetUnit
-  : Clock extends readonly [Unit<infer ClockType>, ...infer ClockRest]
-    ? [ClockType] extends [TargetType]
-      ? RebuildTargetClockLoop<ClockRest, TargetUnit, TargetType>
-      : UnitTargetable<ClockType>
+  : Clock extends readonly [Unit<infer ClockTypeRaw>, ...infer ClockRest]
+    ? (FilterMode extends 'Boolean' ? NonNullable<ClockTypeRaw> : ClockTypeRaw) extends infer ClockType
+      ? [ClockType] extends [TargetType]
+        ? RebuildTargetClockLoop<ClockRest, TargetUnit, TargetType, FilterMode>
+        : UnitTargetable<ClockTypeRaw>
+      : never
     : TargetUnit
 
 type RebuildTargetLoop<
   Clock extends readonly unknown[],
   Target extends readonly unknown[],
-  Result extends RoTuple<UnitTargetable<any>>
+  Result extends RoTuple<UnitTargetable<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
 > = Target extends readonly [infer TargetUnit, ...infer TargetRest]
   ? TargetUnit extends UnitTargetable<infer TargetType>
     ? RebuildTargetLoop<
       Clock,
       TargetRest,
-      [...Result, RebuildTargetClockLoop<Clock, TargetUnit, TargetType>]
+      [
+        ...Result,
+        RebuildTargetClockLoop<Clock, TargetUnit, TargetType, FilterMode>
+      ],
+      FilterMode
     >
     : never
   : Result
 
 type RebuildTargetSingle<
   Clock extends readonly unknown[],
-  Target
+  Target,
+  FilterMode extends ('noFilter' | 'Boolean')
 > = Target extends Unit<infer TargetType>
-    ? RebuildTargetClockLoop<Clock, Target, TargetType>
+    ? RebuildTargetClockLoop<Clock, Target, TargetType, FilterMode>
     : never
 
 type TargetOrError<
@@ -1981,38 +2004,83 @@ type TargetOrError<
     Mode,
     Source,
     ResultConfig extends {fn: any} ? 'fn' : 'noFn',
-    ResultConfig extends {filter: any} ? 'filter' : 'noFilter'
-  ] extends ['clk', 'noSrc', 'noFn', 'noFilter']
-    ? [Omit<ResultConfig, 'clock' | 'target'> & {
-        clock: Clock extends readonly unknown[]
-          ? RebuildClockLoop<
-            Clock,
-            Target extends ReadonlyArray<UnitTargetable<any>>
-              ? Target
-              : [Target],
-            []
-          >
-          : RebuildClockSingle<
-            Clock,
-            Target extends ReadonlyArray<UnitTargetable<any>>
-              ? Target
-              : [Target]
-          >
-        target: Target extends readonly unknown[]
-          ? RebuildTargetLoop<
-            Clock extends ReadonlyArray<Unit<any>>
-              ? Clock
-              : [Clock],
-            Target,
-            []
-          >
-          : RebuildTargetSingle<
-            Clock extends ReadonlyArray<Unit<any>>
-              ? Clock
-              : [Clock],
-            Target
-          >
-      }]
+    ResultConfig extends {filter: any}
+      ? ResultConfig extends {filter: BooleanConstructor}
+        ? 'boolOrNoFilter'
+        : 'hasFilter'
+      : 'boolOrNoFilter'
+  ] extends ['clk', 'noSrc', 'noFn', 'boolOrNoFilter']
+    ? ResultConfig extends {filter: any}
+      ? ResultConfig extends {filter: BooleanConstructor}
+        ? [Omit<ResultConfig, 'clock' | 'target'> & {
+          clock: Clock extends readonly unknown[]
+            ? RebuildClockLoop<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              [],
+              'Boolean'
+            >
+            : RebuildClockSingle<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              'Boolean'
+            >
+          target: Target extends readonly unknown[]
+            ? RebuildTargetLoop<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              [],
+              'Boolean'
+            >
+            : RebuildTargetSingle<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              'Boolean'
+            >
+        }]
+        : [{error: 'not implemented'}]
+      : [Omit<ResultConfig, 'clock' | 'target'> & {
+          clock: Clock extends readonly unknown[]
+            ? RebuildClockLoop<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              [],
+              'noFilter'
+            >
+            : RebuildClockSingle<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              'noFilter'
+            >
+          target: Target extends readonly unknown[]
+            ? RebuildTargetLoop<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              [],
+              'noFilter'
+            >
+            : RebuildTargetSingle<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              'noFilter'
+            >
+        }]
     : [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
       ? [config: ResultConfig]
       : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
