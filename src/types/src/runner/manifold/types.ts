@@ -91,8 +91,8 @@ export type ComputeVariant<T> = Ref<T, 'computeVariant'> & {
 
 export type Bool = Ref<boolean, 'bool'> & {
   bool: {
-    true: Record<string, any> | void
-    false: Record<string, any> | void
+    true: Record<string, any> | Record<string, any>[] | void
+    false: Record<string, any> | Record<string, any>[] | void
   }
   decls: {
     true: Value<boolean>
@@ -456,6 +456,14 @@ export type Grouping<T extends Record<string, any>> = {
         noGroup?: boolean
         largeGroup?: string | null
       }>
+    | DataDecl<
+        | string
+        | {
+            description: string
+            noGroup?: boolean
+            largeGroup?: string | null
+          }
+      >
   createTestLines:
     | ((obj: T) => any[])
     | {
@@ -511,12 +519,14 @@ export type CtxConfig = {
   grouping: Grouping<any>
   file?: string
   usedMethods?: string[]
+  skipCases?: BoolDecl[]
 }
 export type PartialCtxConfig = {
   header?: string
   grouping?: Partial<Grouping<any>>
   file?: string
   usedMethods?: string[]
+  skipCases?: BoolDecl[]
 }
 
 export type ConfigStructShape = {

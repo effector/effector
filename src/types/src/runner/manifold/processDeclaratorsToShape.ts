@@ -7,6 +7,9 @@ function getDeclsReferencedByConfig(): string[] {
   const results: Ref<unknown, unknown>[] = []
   const grouping = ctx.config.grouping!
   const {pass, getHash, describeGroup, createTestLines, tags} = grouping
+  if (ctx.config.skipCases) {
+    results.push(...ctx.config.skipCases)
+  }
   if (isRef(pass)) {
     results.push(pass)
   }
