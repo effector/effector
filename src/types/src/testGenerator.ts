@@ -5,6 +5,7 @@ import sampleArrayTargetCombinable from './generator/sampleArrayTargetCombinable
 import sampleArrayTargetPlain from './generator/sampleArrayTargetPlain.generator'
 import sampleReturn from './generator/sampleReturn.generator'
 import sampleFilterGenerator from './generator/sampleFilter.generator'
+import sampleFn from './generator/sampleFn.generator'
 
 generateFile({
   //prettier-ignore
@@ -14,5 +15,6 @@ generateFile({
     sampleReturn,
     sampleFilterGenerator,
     sampleClockArray,
+    sampleFn,
   ],
 })

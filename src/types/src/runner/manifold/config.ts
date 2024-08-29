@@ -24,6 +24,7 @@ const Conf = {
 export const confStruct = Conf.shape({
   header: Conf.val(),
   file: Conf.val(),
+  skipCases: Conf.val(),
   grouping: Conf.shape({
     filter: Conf.val(),
     getHash: Conf.val(true),
@@ -38,6 +39,7 @@ export const fileGeneratorConfStruct = Conf.shape({
   header: Conf.val(true),
   file: Conf.val(true),
   usedMethods: Conf.val(true),
+  skipCases: Conf.val(),
   grouping: Conf.shape({
     filter: Conf.val(),
     getHash: Conf.val(true),

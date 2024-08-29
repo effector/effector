@@ -1032,8 +1032,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:{a:$num,b:$str}     , target:[abn,ab]             })
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[ab,a_str]           })
-        //@ts-expect-error
         sample({source:[$num,$str]         , target:[l_str]              })
         //@ts-expect-error
         sample({source:[$num,$str]         , target:[l_num_num]          })
@@ -1047,8 +1045,6 @@ const typecheck = '{global}'
         sample({source:[$num,$str]         , target:[l_num_str,l_str]    })
         //@ts-expect-error
         sample({source:[$num,$str]         , target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_num_num,l_str]    })
         //@ts-expect-error
         sample({source:[$num,$str] as const, target:[l_str]              })
         //@ts-expect-error
@@ -1064,8 +1060,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num,$str] as const, target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_num_num,l_str]    })
-        //@ts-expect-error
         sample({source:{a:$num,b:$str}     , clock:num, target:[a_str]              })
         //@ts-expect-error
         sample({source:{a:$num,b:$str}     , clock:num, target:[abn]                })
@@ -1079,8 +1073,6 @@ const typecheck = '{global}'
         sample({source:{a:$num,b:$str}     , clock:num, target:[abn,a_str]          })
         //@ts-expect-error
         sample({source:{a:$num,b:$str}     , clock:num, target:[abn,ab]             })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[ab,a_str]           })
         //@ts-expect-error
         sample({source:[$num,$str]         , clock:num, target:[l_str]              })
         //@ts-expect-error
@@ -1096,8 +1088,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num,$str]         , clock:num, target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_num_num,l_str]    })
-        //@ts-expect-error
         sample({source:[$num,$str] as const, clock:num, target:[l_str]              })
         //@ts-expect-error
         sample({source:[$num,$str] as const, clock:num, target:[l_num_num]          })
@@ -1111,8 +1101,6 @@ const typecheck = '{global}'
         sample({source:[$num,$str] as const, clock:num, target:[l_num_str,l_str]    })
         //@ts-expect-error
         sample({source:[$num,$str] as const, clock:num, target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_num_num,l_str]    })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1126,12 +1114,10 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [string] | [number]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: AS; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
@@ -1143,12 +1129,10 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [string] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [string] | [number]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number] | [string]; }[]; }'.
         "
       `)
@@ -1206,8 +1190,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:{a:$num,b:$str}     , target:[abn,ab]     , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[ab,a_str]   , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
         sample({source:[$num,$str]         , target:[a_str]      , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
         sample({source:[$num,$str]         , target:[abn]        , fn:([a,b]) => ({a,b})})
@@ -1221,8 +1203,6 @@ const typecheck = '{global}'
         sample({source:[$num,$str]         , target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
         sample({source:[$num,$str]         , target:[abn,ab]     , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
         sample({source:[$num,$str] as const, target:[a_str]      , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
@@ -1238,8 +1218,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num,$str] as const, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
         sample({source:{a:$num,b:$str}     , clock:num, target:[a_str]      , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
         sample({source:{a:$num,b:$str}     , clock:num, target:[abn]        , fn:({a,b}) => ({a,b})})
@@ -1253,8 +1231,6 @@ const typecheck = '{global}'
         sample({source:{a:$num,b:$str}     , clock:num, target:[abn,a_str]  , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
         sample({source:{a:$num,b:$str}     , clock:num, target:[abn,ab]     , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[ab,a_str]   , fn:({a,b}) => ({a,b})})
         //@ts-expect-error
         sample({source:[$num,$str]         , clock:num, target:[a_str]      , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
@@ -1270,8 +1246,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num,$str]         , clock:num, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
         sample({source:[$num,$str] as const, clock:num, target:[a_str]      , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
         sample({source:[$num,$str] as const, clock:num, target:[abn]        , fn:([a,b]) => ({a,b})})
@@ -1285,8 +1259,6 @@ const typecheck = '{global}'
         sample({source:[$num,$str] as const, clock:num, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
         //@ts-expect-error
         sample({source:[$num,$str] as const, clock:num, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[ab,a_str]   , fn:([a,b]) => ({a,b})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1300,7 +1272,6 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | ABN; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
@@ -1314,7 +1285,6 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | ABN; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AB | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string | number; b: string | number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: ABN; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: AS | ABN; }[]; }'.
@@ -1362,8 +1332,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:{a:$num}       , target:[abn,ab]             })
         //@ts-expect-error
-        sample({source:{a:$num}       , target:[ab,a_str]           })
-        //@ts-expect-error
         sample({source:[$num]         , target:[l_str]              })
         //@ts-expect-error
         sample({source:[$num]         , target:[l_num_str]          })
@@ -1381,8 +1349,6 @@ const typecheck = '{global}'
         sample({source:[$num]         , target:[l_num_str,l_str]    })
         //@ts-expect-error
         sample({source:[$num]         , target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num_num,l_str]    })
         //@ts-expect-error
         sample({source:[$num] as const, target:[l_str]              })
         //@ts-expect-error
@@ -1402,8 +1368,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num] as const, target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num_num,l_str]    })
-        //@ts-expect-error
         sample({source:{a:$num}       , clock:num, target:[a_str]              })
         //@ts-expect-error
         sample({source:{a:$num}       , clock:num, target:[abn]                })
@@ -1421,8 +1385,6 @@ const typecheck = '{global}'
         sample({source:{a:$num}       , clock:num, target:[abn,a_str]          })
         //@ts-expect-error
         sample({source:{a:$num}       , clock:num, target:[abn,ab]             })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[ab,a_str]           })
         //@ts-expect-error
         sample({source:[$num]         , clock:num, target:[l_str]              })
         //@ts-expect-error
@@ -1442,8 +1404,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num]         , clock:num, target:[l_num_str,l_num_num]})
         //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num_num,l_str]    })
-        //@ts-expect-error
         sample({source:[$num] as const, clock:num, target:[l_str]              })
         //@ts-expect-error
         sample({source:[$num] as const, clock:num, target:[l_num_str]          })
@@ -1461,8 +1421,6 @@ const typecheck = '{global}'
         sample({source:[$num] as const, clock:num, target:[l_num_str,l_str]    })
         //@ts-expect-error
         sample({source:[$num] as const, clock:num, target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num_num,l_str]    })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1472,7 +1430,6 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | ABN; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
@@ -1482,21 +1439,18 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [string] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: ABN; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | ABN; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AS | AB; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
@@ -1506,14 +1460,12 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [string] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number] | [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number] | [string]; }[]; }'.
         "
       `)
     })
@@ -1565,8 +1517,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:{a:$num}       , target:[abn,ab]     , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:{a:$num}       , target:[ab,a_str]   , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
         sample({source:[$num]         , target:[a_str]      , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
         sample({source:[$num]         , target:[abn]        , fn:([a]) => ({a,b:''})})
@@ -1580,8 +1530,6 @@ const typecheck = '{global}'
         sample({source:[$num]         , target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
         sample({source:[$num]         , target:[abn,ab]     , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
         sample({source:[$num] as const, target:[a_str]      , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
@@ -1597,8 +1545,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num] as const, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num] as const, target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
         sample({source:{a:$num}       , clock:num, target:[a_str]      , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
         sample({source:{a:$num}       , clock:num, target:[abn]        , fn:({a}) => ({a,b:''})})
@@ -1612,8 +1558,6 @@ const typecheck = '{global}'
         sample({source:{a:$num}       , clock:num, target:[abn,a_str]  , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
         sample({source:{a:$num}       , clock:num, target:[abn,ab]     , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[ab,a_str]   , fn:({a}) => ({a,b:''})})
         //@ts-expect-error
         sample({source:[$num]         , clock:num, target:[a_str]      , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
@@ -1629,8 +1573,6 @@ const typecheck = '{global}'
         //@ts-expect-error
         sample({source:[$num]         , clock:num, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
         sample({source:[$num] as const, clock:num, target:[a_str]      , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
         sample({source:[$num] as const, clock:num, target:[abn]        , fn:([a]) => ({a,b:''})})
@@ -1644,8 +1586,6 @@ const typecheck = '{global}'
         sample({source:[$num] as const, clock:num, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
         //@ts-expect-error
         sample({source:[$num] as const, clock:num, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[ab,a_str]   , fn:([a]) => ({a,b:''})})
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "

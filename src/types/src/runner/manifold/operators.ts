@@ -26,8 +26,10 @@ import {
   Word,
   WordValue,
   WordDecl,
+  BoolDecl,
+  DataDecl,
 } from './types'
-import {isRef} from './isRef'
+import {isDeclarator, isRef} from './isRef'
 import {processDeclaratorsToShape} from './processDeclaratorsToShape'
 import {ctx, ctxWrap} from './ctx'
 import {applyConfigStruct, confStruct, validateRequiredFields} from './config'
@@ -42,6 +44,19 @@ function getName(id: string, name?: string) {
   let result = name ?? id
   if (result in ctx.shape) result = `${id}_${result}`
   return result
+}
+
+function assertSource<Src extends SourceRec | Tuple<Declarator>>(
+  source: Src,
+  methodName: string,
+) {
+  for (const key in source) {
+    const decl = source[key]
+    assert(
+      isDeclarator(decl),
+      `key "${key}" in ${methodName} source is not declarator`,
+    )
+  }
 }
 
 // ------
@@ -63,6 +78,7 @@ export function separate<
   cases: Cases
   sort?: Array<TypeofSepCases<Src, Variants, Cases>> | 'string'
 }): Separate<TypeofSepCases<Src, Variants, Cases>> {
+  assertSource(source, 'separate')
   const id = nextID()
   const sources: Declarator[] = Object.values(source)
   const variants = {} as any
@@ -153,7 +169,9 @@ function traverseCases(
       if (!(branchName in cases)) continue
       const caseValue = cases[branchName]
       if (isRef(caseValue)) {
+        //@ts-expect-error
         resultCases[branchName] = caseValue
+        //@ts-expect-error
         addCasesRefs(id, [caseValue])
       } else if (typeof caseValue === 'object' && caseValue !== null) {
         if (nextVariants.length > 0) {
@@ -290,6 +308,7 @@ export function bool<Src extends SourceRec>({
     (!onTrue && onFalse) || (onTrue && !onFalse),
     'either true or false should be defined but not both',
   )
+  assertSource(source, 'bool')
   const id = nextID()
   let boolDef: Bool['bool']
   let decls: Bool['decls']
@@ -389,6 +408,7 @@ export function computeFn<Src extends Tuple<Declarator> | SourceRec, T>({
   name?: string
   sort?: T[] | 'string'
 }) {
+  assertSource(source, 'computeFn')
   const id = nextID()
   const val: Fn<T> = {
     id,
@@ -433,7 +453,7 @@ export function computeVariants<
   sort?: Array<TypeOfCaseLayer<Src, Variants, Cases>> | 'string'
 }): ComputeVariant<TypeOfCaseLayer<Src, Variants, Cases>> {
   const id = nextID()
-
+  assertSource(source, 'computeVariants')
   const variants = {} as any
   for (const variantName in variant) {
     variants[variantName] = matcher(source, variant[variantName])
@@ -473,6 +493,7 @@ export function computeVariant<
   name?: string
   sort?: Array<Cases[keyof Cases]> | 'string'
 }): ComputeVariant<Cases[keyof Cases]> {
+  assertSource(source, 'computeVariant')
   //@ts-ignore
   return computeVariants({
     source,
@@ -510,6 +531,8 @@ export function sortOrder(decls: Declarator[]) {
       const missedDecls = declNames
         .filter(name => !keys.includes(name))
         .join(',')
+      const missedDeclsFull = decls.filter(e => !keys.includes(e.name))
+      console.log(...missedDeclsFull)
       return `decls ${missedDecls} are not sorted`
     },
   )
@@ -657,7 +680,7 @@ export function matcher<
 >(source: Src, cases: Variant) {
   const result = {} as any
   for (const key in cases) {
-    result[key] = singleMatcher(source, cases[key]) as any
+    result[key] = singleMatcher(source, cases[key] as any)
   }
   return result
 }
@@ -704,23 +727,33 @@ export function config(data: {
   file?: string
   usedMethods?: string[]
   grouping?: Partial<Grouping<any>>
+  skipCases?: BoolDecl | BoolDecl[]
 }): void
-export function config<T>(data: {
+export function config<
+  T extends Record<string, any>,
+  Src extends SourceRec,
+>(data: {
   header?: string
   file?: string
   usedMethods?: string[]
   grouping: Partial<Grouping<T>>
+  skipCases?: BoolDecl | BoolDecl[]
 }): void
 export function config(data: {
   header?: string
   file?: string
   usedMethods?: string[]
   grouping?: Partial<Grouping<any>>
+  skipCases?: BoolDecl | BoolDecl[]
 }) {
+  const resultData =
+    data.skipCases && !Array.isArray(data.skipCases)
+      ? {...data, skipCases: [data.skipCases]}
+      : data
   const configUpdated = applyConfigStruct(
     ctx.configValidator.shape,
     ctx.config,
-    data,
+    resultData,
   )
   if (configUpdated) ctx.configUsed = true
 }
@@ -774,7 +807,66 @@ export function exec(fn: () => void, struct: ConfigStructShape = confStruct) {
         file: currCtx.config.file ?? null,
         config: currCtx.config,
         usedMethods: currCtx.config.usedMethods ?? null,
+        skipCases: currCtx.config.skipCases ?? null,
       }
     },
   )
+}
+
+export function matchUnion<Cases extends string>(
+  decl: DataDecl<Cases>,
+  matchCases: Cases[] | Cases,
+) {
+  const matches = Array.isArray(matchCases) ? matchCases : [matchCases]
+  const cases = [] as any
+  for (const matchCase of matches) {
+    cases.push({decl: matchCase})
+  }
+  return bool({
+    source: {decl},
+    true: cases,
+  })
+}
+
+export function some(decls: BoolDecl[]) {
+  const source = {} as Record<string, any>
+  const cases = [] as any
+  for (const [idx, decl] of Object.entries(decls)) {
+    source[`some_${idx}`] = decl
+    cases.push({[`some_${idx}`]: true})
+  }
+  return bool({
+    source,
+    true: cases,
+  })
+}
+
+export function every(decls: BoolDecl[]) {
+  const source = {} as Record<string, any>
+  const cases = {} as any
+  for (const [idx, decl] of Object.entries(decls)) {
+    source[`every_${idx}`] = decl
+    cases[`every_${idx}`] = true
+  }
+  return bool({
+    source,
+    true: cases,
+  })
+}
+
+export function none(decls: BoolDecl[]) {
+  const source = {} as Record<string, any>
+  const cases = {} as any
+  for (const [idx, decl] of Object.entries(decls)) {
+    source[`none_${idx}`] = decl
+    cases[`none_${idx}`] = false
+  }
+  return bool({
+    source,
+    true: cases,
+  })
+}
+
+export function not(decl: BoolDecl) {
+  return none([decl])
 }
