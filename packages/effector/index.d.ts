@@ -1007,40 +1007,6 @@ type Source<A> = Unit<A> | Combinable
 type Clock<B> = Unit<B> | Tuple<Unit<any>>
 type Target = UnitTargetable<any> | Tuple<any>
 
-type GetTupleWithoutAny<T> = T extends Array<infer U>
-  ? U extends Unit<infer Value>
-    ? IfAny<Value, never, Value>
-    : never
-  : never
-
-type GetMergedValue<T> = GetTupleWithoutAny<T> extends never ? any : GetTupleWithoutAny<T>
-
-type GetSource<S> = S extends Unit<infer Value> ? Value : GetCombinedValue<S>
-type GetClock<C> = C extends Unit<infer Value> ? Value : GetMergedValue<C>
-
-/** Replaces incompatible unit type with string error message.
- *  There is no error message if target type is void.
- */
-type ReplaceUnit<Target, Result, Value> = IfAssignable<Result, Value,
-  Target,
-  Value extends void
-    ? Target
-    : 'incompatible unit in target'
->
-
-// [...T] is used to show sample result as a tuple (not array)
-type TargetTuple<Target extends Array<unknown>, Result> = [...{
-  [Index in keyof Target]: Target[Index] extends UnitTargetable<infer Value>
-    ? ReplaceUnit<Target[Index], Result, Value>
-    : 'non-unit item in target'
-}]
-
-type MultiTarget<Target, Result> = Target extends UnitTargetable<infer Value>
-  ? ReplaceUnit<Target, Result, Value>
-  : Target extends Tuple<unknown>
-    ? TargetTuple<Target, Result>
-    : 'non-unit item in target'
-
 type SampleImpl<
   Target,
   Source,
