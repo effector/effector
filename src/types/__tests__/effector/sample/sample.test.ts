@@ -664,7 +664,6 @@ describe('clock without source', () => {
     sample({
       //@ts-expect-error
       clock: [foo, bar, baz],
-      //@ts-expect-error
       target,
     })
 
