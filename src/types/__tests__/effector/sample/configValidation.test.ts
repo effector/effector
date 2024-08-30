@@ -1,0 +1,765 @@
+/* eslint-disable no-unused-vars */
+import {createEvent, sample} from 'effector'
+
+const typecheck = '{global}'
+
+describe('fn', () => {
+  test('fn is null', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        target: evt,
+        //@ts-expect-error
+        fn: null,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        fn: null,
+      })
+      sample({
+        source: evt,
+        target: evt,
+        //@ts-expect-error
+        fn: null,
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        fn: null,
+      })
+      sample({
+        clock: evt,
+        target: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: null,
+      })
+      sample({
+        clock: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: null,
+      })
+      sample({
+        source: evt,
+        target: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: null,
+      })
+      sample({
+        source: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: null,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type '() => boolean' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type '() => boolean' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type '() => boolean' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type '() => boolean' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      "
+    `)
+  })
+  test('fn is object', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        target: evt,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+      sample({
+        source: evt,
+        target: evt,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+      sample({
+        clock: evt,
+        target: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+      sample({
+        clock: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+      sample({
+        source: evt,
+        target: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+      sample({
+        source: evt,
+        filter: () => true,
+        //@ts-expect-error
+        fn: {a: 0},
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type '{ a: number; }' is not assignable to type '((clk: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(clk: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(clk: void): any'.
+      Type '{ a: number; }' is not assignable to type '((clk: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(clk: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(clk: void): any'.
+      Type '{ a: number; }' is not assignable to type '((src: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(src: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(src: void): any'.
+      Type '{ a: number; }' is not assignable to type '((src: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(src: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(src: void): any'.
+      Type '{ a: number; }' is not assignable to type '((clk: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(clk: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(clk: void): any'.
+      Type '{ a: number; }' is not assignable to type '((clk: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(clk: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(clk: void): any'.
+      Type '{ a: number; }' is not assignable to type '((src: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(src: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(src: void): any'.
+      Type '{ a: number; }' is not assignable to type '((src: void) => any) & { a: number; }'.
+        Type '{ a: number; }' is not assignable to type '(src: void) => any'.
+          Type '{ a: number; }' provides no match for the signature '(src: void): any'.
+      "
+    `)
+  })
+})
+
+describe('filter', () => {
+  test('filter is null', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        target: evt,
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        source: evt,
+        target: evt,
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        clock: evt,
+        target: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        clock: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        source: evt,
+        target: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        source: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: null,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ clock: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ clock: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ clock: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ source: EventCallable<void>; target: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ source: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ source: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ source: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ clock: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ clock: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ clock: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Argument of type '[{ source: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
+        Type '[{ source: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
+          Type '{ source: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
+            The intersection '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      "
+    `)
+  })
+  test('filter is object', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        target: evt,
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+      sample({
+        source: evt,
+        target: evt,
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+      sample({
+        clock: evt,
+        target: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+      sample({
+        clock: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+      sample({
+        source: evt,
+        target: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+      sample({
+        source: evt,
+        fn: () => {},
+        //@ts-expect-error
+        filter: {a: 0},
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => clk is void; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
+          Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
+            Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Argument of type '[{ clock: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => clk is void; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ clock: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
+          Type '{ clock: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
+            Type '{ clock: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => src is void; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
+          Type '{ source: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
+            Type '{ source: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(src: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(src: void): boolean'.
+      Argument of type '[{ source: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => src is void; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ source: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
+          Type '{ source: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
+            Type '{ source: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(src: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(src: void): boolean'.
+      Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter?: (((clk: void) => clk is void) & ((clk: void) => clk is void)) | undefined; fn?: ((() => void) & ((clk: void) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
+          Type '{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
+            Type '{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Argument of type '[{ clock: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => clk is void) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ clock: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
+          Type '{ clock: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
+            Type '{ clock: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter?: (((src: void) => src is void) & ((src: void) => src is void)) | undefined; fn?: ((() => void) & ((src: void) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
+          Type '{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
+            Type '{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(src: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(src: void): boolean'.
+      Argument of type '[{ source: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => src is void) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
+        Type '[{ source: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
+          Type '{ source: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
+            Type '{ source: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+              Types of property 'filter' are incompatible.
+                Type '{ a: number; }' is not assignable to type '(src: void) => boolean'.
+                  Type '{ a: number; }' provides no match for the signature '(src: void): boolean'.
+      "
+    `)
+  })
+})
+
+describe('target', () => {
+  test('target is null', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        target: null,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        target: null,
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        target: null,
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        target: null,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        target: null,
+        fn: () => {},
+        filter: Boolean,
+      })
+      sample({
+        clock: evt,
+        fn: () => {},
+        //@ts-expect-error
+        target: null,
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        target: null,
+        fn: () => {},
+        filter: Boolean,
+      })
+      sample({
+        source: evt,
+        fn: () => {},
+        //@ts-expect-error
+        target: null,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      "
+    `)
+  })
+  test('target is object', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        target: {a: 0},
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        target: {a: 0},
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        target: {a: 0},
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        target: {a: 0},
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        target: {a: 0},
+        fn: () => {},
+        filter: Boolean,
+      })
+      sample({
+        clock: evt,
+        fn: () => {},
+        //@ts-expect-error
+        target: {a: 0},
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        target: {a: 0},
+        fn: () => {},
+        filter: Boolean,
+      })
+      sample({
+        source: evt,
+        fn: () => {},
+        //@ts-expect-error
+        target: {a: 0},
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      "
+    `)
+  })
+})
+
+describe('clock', () => {
+  test('clock is null', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        target: evt,
+        //@ts-expect-error
+        clock: null,
+        fn: () => {},
+      })
+      sample({
+        fn: () => {},
+        //@ts-expect-error
+        clock: null,
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        clock: null,
+      })
+      sample({
+        target: evt,
+        //@ts-expect-error
+        clock: null,
+      })
+      sample({
+        target: evt,
+        //@ts-expect-error
+        clock: null,
+        filter: () => true,
+      })
+      sample({
+        filter: () => true,
+        //@ts-expect-error
+        clock: null,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'fn' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      "
+    `)
+  })
+  test('clock is object', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        target: evt,
+        //@ts-expect-error
+        clock: {a: 0},
+        fn: () => {},
+      })
+      sample({
+        fn: () => {},
+        //@ts-expect-error
+        clock: {a: 0},
+      })
+      sample({
+        source: evt,
+        //@ts-expect-error
+        clock: {a: 0},
+      })
+      sample({
+        target: evt,
+        //@ts-expect-error
+        clock: {a: 0},
+      })
+      sample({
+        target: evt,
+        //@ts-expect-error
+        clock: {a: 0},
+        filter: () => true,
+      })
+      sample({
+        filter: () => true,
+        //@ts-expect-error
+        clock: {a: 0},
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'fn' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      "
+    `)
+  })
+})
+
+describe('source', () => {
+  test('source is null', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: null,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: null,
+        target: evt,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: null,
+        target: evt,
+        filter: Boolean,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: null,
+        target: evt,
+        fn: () => {},
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: null,
+        target: evt,
+        fn: () => {},
+        filter: Boolean,
+      })
+      sample({
+        target: evt,
+        //@ts-expect-error
+        source: null,
+        fn: () => {},
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      "
+    `)
+  })
+  test('source is function', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: () => {},
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: () => {},
+        target: evt,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: () => {},
+        target: evt,
+        filter: Boolean,
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: () => {},
+        target: evt,
+        fn: () => {},
+      })
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: () => {},
+        target: evt,
+        fn: () => {},
+        filter: Boolean,
+      })
+      sample({
+        target: evt,
+        //@ts-expect-error
+        source: () => {},
+        fn: () => {},
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      "
+    `)
+  })
+})
+
+describe('multiple errors', () => {
+  test('source and clock', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        target: evt,
+        //@ts-expect-error
+        source: null,
+        //@ts-expect-error
+        clock: null,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      "
+    `)
+  })
+  test('source and target', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        clock: evt,
+        //@ts-expect-error
+        source: null,
+        //@ts-expect-error
+        target: null,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      "
+    `)
+  })
+  test('clock and target', () => {
+    const evt = createEvent()
+    function factory() {
+      sample({
+        source: evt,
+        //@ts-expect-error
+        clock: null,
+        //@ts-expect-error
+        target: null,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      "
+    `)
+  })
+})
