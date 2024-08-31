@@ -149,7 +149,7 @@ const currentPage = Astro.url.pathname;
   </style>
 
   <main class="layout">
-    <aside id="grid-left" title="Site Navigation" data-pagefind-ignore>
+    <aside id="grid-left" title="Site Navigation" data-pagefind-ignore="all">
       <LeftSidebar currentPage={currentPage} headings={headings} />
     </aside>
     <div id="grid-main">
@@ -166,7 +166,7 @@ const currentPage = Astro.url.pathname;
       </PageContent>
       <Contributors documentId={documentId} />
     </div>
-    <aside id="grid-right" title="Table of Contents" data-pagefind-ignore>
+    <aside id="grid-right" title="Table of Contents" data-pagefind-ignore="all">
       <RightSidebar lang={lang} headings={headings} documentId={documentId} />
     </aside>
   </main>
