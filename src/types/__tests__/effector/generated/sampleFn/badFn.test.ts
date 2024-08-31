@@ -81,35 +81,11 @@ describe('bad fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'clock: clockExact,'
-      Type 'EventCallable<{ c: number; d: string; }>' is not assignable to type 'never'.
-      Unmarked error at test line 5 'target: exact,'
-      Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'never'.
-      Type 'null' is not assignable to type 'never'.
-      Unmarked error at test line 10 'source: $dataExact,'
-      Type 'StoreWritable<{ c: number; d: string; }>' is not assignable to type 'never'.
-      Unmarked error at test line 11 'target: exact,'
-      Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'never'.
-      Type 'null' is not assignable to type 'never'.
-      Unmarked error at test line 16 'source: {c: $c, d: $d},'
-      Type '{ c: StoreWritable<number>; d: StoreWritable<string>; }' is not assignable to type 'never'.
-      Unmarked error at test line 17 'target: exact,'
-      Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'never'.
-      Type 'null' is not assignable to type 'never'.
-      Unmarked error at test line 22 'source: $dataSrc,'
-      Type 'StoreWritable<{ c: number; }>' is not assignable to type 'never'.
-      Unmarked error at test line 23 'clock: dataClock,'
-      Type 'EventCallable<{ d: string; }>' is not assignable to type 'never'.
-      Unmarked error at test line 24 'target: exact,'
-      Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'never'.
-      Type 'null' is not assignable to type 'never'.
-      Unmarked error at test line 29 'source: {c: $c},'
-      Type '{ c: StoreWritable<number>; }' is not assignable to type 'never'.
-      Unmarked error at test line 30 'clock: dataClock,'
-      Type 'EventCallable<{ d: string; }>' is not assignable to type 'never'.
-      Unmarked error at test line 31 'target: exact,'
-      Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'never'.
-      Type 'null' is not assignable to type 'never'.
+      Type 'null' is not assignable to type '() => any'.
+      Type 'null' is not assignable to type '() => any'.
+      Type 'null' is not assignable to type '() => any'.
+      Type 'null' is not assignable to type '() => any'.
+      Type 'null' is not assignable to type '() => any'.
       "
     `)
   })
