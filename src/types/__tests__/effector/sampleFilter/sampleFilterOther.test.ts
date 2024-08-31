@@ -33,15 +33,27 @@ test('clock param name in the function', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'StoreWritable<string>' is not assignable to type 'Unit<boolean>'.
-      Types of property '__' are incompatible.
-        Type 'string' is not assignable to type 'boolean'.
-    Type 'StoreWritable<string>' is not assignable to type 'Unit<boolean>'.
-      Types of property '__' are incompatible.
-        Type 'string' is not assignable to type 'boolean'.
-    Type 'StoreWritable<string>' is not assignable to type 'Unit<boolean>'.
-      Types of property '__' are incompatible.
-        Type 'string' is not assignable to type 'boolean'.
+    Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+      Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+        Types of property 'map' are incompatible.
+          Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+            Types of parameters 'fn' and 'fn' are incompatible.
+              Types of parameters 'state' and 'state' are incompatible.
+                Type 'string' is not assignable to type 'boolean'.
+    Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+      Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+        Types of property 'map' are incompatible.
+          Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+            Types of parameters 'fn' and 'fn' are incompatible.
+              Types of parameters 'state' and 'state' are incompatible.
+                Type 'string' is not assignable to type 'boolean'.
+    Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+      Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+        Types of property 'map' are incompatible.
+          Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+            Types of parameters 'fn' and 'fn' are incompatible.
+              Types of parameters 'state' and 'state' are incompatible.
+                Type 'string' is not assignable to type 'boolean'.
     "
   `)
 })
