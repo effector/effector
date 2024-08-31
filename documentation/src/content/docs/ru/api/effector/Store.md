@@ -31,7 +31,7 @@ $items.on(addItem, (items, newItem) => {
 $items.on(addItem, (items, newItem) => {
   // ❌ ошибка! Ссылка на массив осталась та же, обновления store не произойдёт
   items.push(newItem);
-  return updatedItems;
+  return items;
 });
 ```
 
