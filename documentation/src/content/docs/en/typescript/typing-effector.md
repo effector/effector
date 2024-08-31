@@ -8,7 +8,7 @@ redirectFrom:
 
 Best practices for writing well-typed code
 
-## `createEvent`
+## `createEvent` (#typing-createEvent)
 
 By default, this method returns `Event<void>`.
 
@@ -26,7 +26,7 @@ const event = createEvent<number>();
 event(0);
 ```
 
-## `createEffect`
+## `createEffect` (#typing-createEffect)
 
 TypeScript can infer an effect result type from a given handler, but the argument type should be defined either in handler argument or as generic type
 
@@ -44,7 +44,7 @@ const sendWarningFx = createEffect<{ warn: string }, string>(async ({ warn }) =>
 // sendWarningFx has type Effect<{warn: string}, string>
 ```
 
-## `createEffect` and custom errors
+## `createEffect` and custom errors (#typing-createEffect-with-errors)
 
 When you need custom error types (`Fail` type in `Effect`) you can define all generics explicitly:
 
@@ -72,7 +72,7 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 [effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
 :::
 
-## `event.prepend`
+## `event.prepend` (#typing-event-prepend)
 
 To add types to events, created by [event.prepend](/en/api/effector/Event#prepend-fn), you need to add a type either by prepending function argument or as generic type
 
@@ -86,7 +86,7 @@ const warningMessage = message.prepend<{ warn: string }>(({ warn }) => warn);
 // warningMessage has type Event<{warn: string}>
 ```
 
-## `attach`
+## `attach` (#typing-attach)
 
 To allow typescript to infer types of created effect, add a type to `mapParams` first argument, which will become effect `params` type
 
@@ -100,7 +100,7 @@ const sendWarningFx = attach({
 // sendWarningFx has type Effect<{warn: string}, 'ok'>
 ```
 
-## `split`
+## `split` (#typing-split)
 
 [TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) can be used to split a common event type to several cases (hence the name)
 
@@ -118,7 +118,7 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage has type Event<WarnMessage>
 ```
 
-## `sample`
+## `sample` (#typing-sample)
 
 Since `effector@22.2.0` update `sample` also supports a `filter` field, which can also be a [TypeScript type predicate](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates).
 
@@ -136,7 +136,7 @@ sample({
 });
 ```
 
-### `filter + fn`
+### `filter + fn` (#typing-sample-with-filter-fn)
 
 However, `sample` also has a `fn` field to apply custom transformations.
 There is a caveat with TypeScript type inference mechanic, which requires user to explicitly type `filter` arguments for type inference to work
@@ -179,7 +179,7 @@ sample({
 });
 ```
 
-## `createApi`
+## `createApi` (#typing-createApi)
 
 To allow TypeScript to infer types of created events, adding a type to second argument of given reducers
 
@@ -195,7 +195,7 @@ const { add, sub } = createApi($count, {
 // sub has type Event<number>
 ```
 
-## `is`
+## `is` (#typing-is)
 
 `is` methods can help to infer a unit type (thereby `is` methods acts as [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)) which can help to write strongly-typed helper functions
 

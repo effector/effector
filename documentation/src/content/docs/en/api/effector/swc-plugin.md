@@ -34,13 +34,13 @@ For better stability, we recommend pinning both your runtime (like Next.js or `@
 Use the `--exact`/`--save-exact` option in your package manager to install specific, compatible versions. This ensures updates to one dependency don't break your application.
 :::
 
-| `@swc/core` version | Next.js version      | Correct plugin version |
-| ------------------- | -------------------- | ---------------------- |
-| `>=1.3.63 <1.3.106` | `>=13.4.8 <=14.1.4`  | `@swc1.3.63`           |
-| `>=1.3.106 <1.4.0`  |                      | `@swc1.3.106`          |
-| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.5`  | `@swc1.4.0`            |
-| `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37` | `@swc1.6.0`            |
-| `>=1.7.0`           |                      | `@swc1.7.0`            |
+| `@swc/core` version | Next.js version                          | Correct plugin version |
+| ------------------- | ---------------------------------------- | ---------------------- |
+| `>=1.3.63 <1.3.106` | `>=13.4.8 <=14.1.4`                      | `@swc1.3.63`           |
+| `>=1.3.106 <1.4.0`  |                                          | `@swc1.3.106`          |
+| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.6`                      | `@swc1.4.0`            |
+| `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`            |
+| `>=1.7.0`           | `>=15.0.0-canary.122`                    | `@swc1.7.0`            |
 
 For more information on compatibility, refer to the SWC documentation on [Selecting the SWC Version](https://swc.rs/docs/plugin/selecting-swc-core).
 
