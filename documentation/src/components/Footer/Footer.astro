@@ -1,5 +1,5 @@
 ---
-import { createLink, getPathParamsFromId, getTextLocalized } from "../../languages";
+import { createLink, getPathParamsFromId, getTextLocalized, isExternal } from "../../languages";
 import { FOOTER_LINKS } from "../../navigation";
 import IconExternal from "../../icons/External.astro";
 import { LINKS } from "../../consts";
@@ -7,7 +7,7 @@ import { LINKS } from "../../consts";
 const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
-<footer data-pagefind-ignore>
+<footer data-pagefind-ignore="all">
   <div class="collection">
     {
       FOOTER_LINKS.map((group) => {
@@ -18,10 +18,9 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
             <h3 class="title">{text}</h3>
             {group.items.map((link) => {
               const text = getTextLocalized(link, lang);
-              const external = link.link.startsWith("https://") || link.link.startsWith("http://");
-              const href = external ? link.link : createLink(link, lang);
+              const href = createLink(link, lang);
 
-              if (external) {
+              if (isExternal(link)) {
                 return (
                   <div>
                     <a href={href} target="_blank" class="link">

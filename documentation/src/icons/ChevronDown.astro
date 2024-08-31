@@ -1,16 +1,14 @@
 ---
 interface Props {
   size?: number;
-  class?: string;
 }
-const { size = 20, class: className } = Astro.props;
+const { size = 24 } = Astro.props;
 ---
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
   width={size}
   height={size}
-  class={className}
   viewBox="0 0 24 24"
   stroke-width="1.5"
   stroke="currentColor"
@@ -19,7 +17,5 @@ const { size = 20, class: className } = Astro.props;
   stroke-linejoin="round"
 >
   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-  <circle cx="5" cy="12" r="1"></circle>
-  <circle cx="12" cy="12" r="1"></circle>
-  <circle cx="19" cy="12" r="1"></circle>
+  <polyline points="6 9 12 15 18 9"></polyline>
 </svg>

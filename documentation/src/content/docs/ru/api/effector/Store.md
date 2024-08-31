@@ -10,7 +10,7 @@ import { type Store, type StoreWritable } from "effector";
 
 _Store_ — это объект, который хранит значение состояния. Store обновляется, когда получает значение, которое не равно (`!==`) текущему и не равно `undefined`. Store является [Unit](/ru/explanation/glossary#common-unit). Некоторые stores могут быть [derived](#store-derived).
 
-# Иммутабельность (#immutability)
+## Иммутабельность (#immutability)
 
 Store в effector иммутабелен. Это значит, что обновления в нём будут происходить только если в функции-обработчике (например `combine`, `sample` или `on`) вернуть новый объект
 
@@ -39,7 +39,7 @@ $items.on(addItem, (items, newItem) => {
 
 Store в effector должен быть размером как можно меньше, чтобы отвечать за конкретную часть в бизнес логике, в отличии от например redux, store которого имеет тенденцию к тому чтобы держать рядом всё и сразу. Когда состояние атомарное, то необходимости в спредах объектов становится меньше. Однако, если возникает потребность часто обновлять сильно вложенные данные, для обновления состояния допустимо применять [immer](https://immerjs.github.io/immer/produce) чтобы упростить повторяющийся код
 
-# Методы (#methods)
+# Методы Store (#methods)
 
 ## `.map(fn)` (#methods-map-fn)
 
@@ -152,7 +152,7 @@ const unwatch = $store.watch(watcher);
 #### Основной пример (#methods-watch-watcher-examples-basic)
 
 ```js
-import {createEvent, createStore} from 'effector';
+import { createEvent, createStore } from "effector";
 
 const add = createEvent();
 const $store = createStore(0).on(add, (state, payload) => state + payload);
@@ -242,7 +242,7 @@ $store.off(changed);
 
 [Попробовать](https://share.effector.dev/bzdoyLHm)
 
-# Свойства (#properties)
+# Свойства Store (#properties)
 
 ## `.updates` (#properties-updates)
 

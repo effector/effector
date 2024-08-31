@@ -1,5 +1,5 @@
 ---
-import { createLink, getPathParamsFromId, getTextLocalized } from "../languages";
+import { createLink, getPathParamsFromId, getTextLocalized, isExternal } from "../languages";
 import { isNavGroup, isNavLink, isNavLinkGroup, type LMobileNavItem } from "../navigation";
 
 import IconChevronRight from "../icons/Chevron.astro";
@@ -27,7 +27,7 @@ const instanceId = nanoid(5);
       const expanded = expandDefault ? expandDefault : item.active;
 
       if (isLink) {
-        const external = item.link.startsWith("https://") || item.link.startsWith("http://");
+        const external = isExternal(item);
         return (
           <li>
             <div class="line">

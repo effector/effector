@@ -1,14 +1,19 @@
 ---
+import { isExternal } from "src/languages";
+import IconExternal from "@icons/External.astro";
+
 interface Props {
   title: string;
   description: string;
   link: string;
 }
+
+const external = isExternal({ link: Astro.props.link });
 ---
 
-<a href={Astro.props.link} class="feature">
+<a href={Astro.props.link} target={external ? "_blank" : undefined} class="feature">
   <div class="icon"><slot name="icon" /></div>
-  <div class="title">{Astro.props.title}</div>
+  <div class="title">{Astro.props.title} {external ? <IconExternal size={24} /> : null}</div>
   <div class="description">{Astro.props.description}</div>
 </a>
 
@@ -29,7 +34,7 @@ interface Props {
   }
 
   .title {
-    @apply py-2 text-2xl;
+    @apply flex flex-nowrap text-nowrap py-2 text-2xl;
   }
 
   .description {

@@ -29,8 +29,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 <article
   id="article"
   class="content"
-  data-pagefind-body={indexing ? true : null}
-  data-pagefind-sort="weight[data-weight]"
+  {...indexing ? { "data-pagefind-body": "" } : {}}
   data-weight={pagefindWeight}
 >
   <section class="main-section">

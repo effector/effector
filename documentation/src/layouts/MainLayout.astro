@@ -28,7 +28,7 @@ const {
   lang,
   documentId,
   pagefindWeight,
-  indexing = true,
+  indexing = false,
   ...data
 } = Astro.props;
 const currentPage = Astro.url.pathname;
@@ -140,16 +140,10 @@ const currentPage = Astro.url.pathname;
       width: 100%;
       height: 100%;
     }
-
-    @media (max-width: 768px) {
-      body.mobile-menu-opened {
-        overflow: hidden;
-      }
-    }
   </style>
 
   <main class="layout">
-    <aside id="grid-left" title="Site Navigation" data-pagefind-ignore>
+    <aside id="grid-left" title="Site Navigation" data-pagefind-ignore="all">
       <LeftSidebar currentPage={currentPage} headings={headings} />
     </aside>
     <div id="grid-main">
@@ -166,7 +160,7 @@ const currentPage = Astro.url.pathname;
       </PageContent>
       <Contributors documentId={documentId} />
     </div>
-    <aside id="grid-right" title="Table of Contents" data-pagefind-ignore>
+    <aside id="grid-right" title="Table of Contents" data-pagefind-ignore="all">
       <RightSidebar lang={lang} headings={headings} documentId={documentId} />
     </aside>
   </main>

@@ -5,7 +5,7 @@ import IconMenu from "../../icons/Menu.astro";
 ---
 
 <button id="mobile-menu" type="button">
-  <IconMenu class="icon" />
+  <IconMenu class="icon" size={20} />
 </button>
 
 <style>
@@ -18,7 +18,8 @@ import IconMenu from "../../icons/Menu.astro";
 
 <style is:global>
   #mobile-menu {
-    @apply p-2;
+    padding: 6px;
+    aspect-ratio: 1;
   }
 
   #mobile-menu svg g {
