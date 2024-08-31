@@ -36,7 +36,7 @@ This approach should not be used, as the store **will not be updated**:
 $items.on(addItem, (items, newItem) => {
   // ❌ Error! The array reference remains the same, the store will not be updated
   items.push(newItem);
-  return updatedItems;
+  return items;
 });
 ```
 
