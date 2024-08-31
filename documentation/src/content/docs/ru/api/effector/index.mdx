@@ -6,7 +6,7 @@ lang: ru
 
 Перечень методов API, по группам:
 
-## Типы юнитов
+## Типы юнитов (#unit-definitions)
 
 - [`Event<T>`](/ru/api/effector/Event)
 - [`Effect<Params, Done, Fail>`](/ru/api/effector/Effect)
@@ -14,14 +14,14 @@ lang: ru
 - [`Domain`](/ru/api/effector/Domain)
 - [`Scope`](/ru/api/effector/Scope)
 
-## Создание юнитов
+## Создание юнитов (#unit-creators)
 
 - [`createEvent()`](/ru/api/effector/createEvent)
 - [`createStore(default)`](/ru/api/effector/createStore)
 - [`createEffect(handler)`](/ru/api/effector/createEffect)
 - [`createDomain()`](/ru/api/effector/createDomain)
 
-## Основные методы библиотеки
+## Основные методы библиотеки (#common-methods)
 
 - [`combine(...stores, f)`](/ru/api/effector/combine)
 - [`attach({effect, mapParams?, source?})`](/ru/api/effector/attach)
@@ -30,7 +30,7 @@ lang: ru
 - [`split(event, cases)`](/ru/api/effector/split)
 - [`createApi(store, api)`](/ru/api/effector/createApi)
 
-## Fork API
+## Fork API (#fork-api)
 
 - [`fork()`](/ru/api/effector/fork)
 - [`serialize(scope)`](/ru/api/effector/serialize)
@@ -38,17 +38,17 @@ lang: ru
 - [`scopeBind(event)`](/ru/api/effector/scopeBind)
 - [`hydrate(domain)`](/ru/api/effector/hydrate)
 
-## Плагины для компилятора
+## Плагины для компилятора (#plugins)
 
 - [effector/babel-plugin](/ru/api/effector/babel-plugin)
-- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin)
+- [@effector-swc-plugin](/ru/api/effector/swc-plugin)
 
-## Служебные функции
+## Служебные функции (#utilities)
 
 - [is](/ru/api/effector/is)
 - [`fromObservable(observable)`](/ru/api/effector/fromObservable)
 
-## Низкоуровневый API
+## Низкоуровневый API (#low-level-api)
 
 - [`clearNode()`](/ru/api/effector/clearNode)
 - [`withRegion()`](/ru/api/effector/withRegion)
@@ -63,7 +63,7 @@ lang: ru
 - [effector/inspect](/ru/api/effector/module/inspect)
 - [effector/babel-plugin](/ru/api/effector/module/babel-plugin)
 
-## Устаревшие методы
+## Устаревшие методы (#deprecated-methods)
 
 - [`forward({from, to})`](/ru/api/effector/forward)
 - [`guard({source, filter, target})`](/ru/api/effector/guard)
