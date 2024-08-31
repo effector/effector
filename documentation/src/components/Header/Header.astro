@@ -38,7 +38,7 @@ const languageLinks = createChangeLangLinks({ slug });
 const homeLink = lang === "en" ? "/" : `/${lang}`;
 ---
 
-<header data-pagefind-ignore>
+<header data-pagefind-ignore="all">
   <SkipToContent />
 
   <nav>
@@ -131,72 +131,72 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
       <MobileMenuButton />
     </div>
   </nav>
-
-  <MobileNavigation />
-
-  <style>
-    header {
-      @apply fixed left-0 right-0 top-0 flex w-full items-center justify-center overflow-visible shadow;
-
-      z-index: 110;
-      height: var(--theme-navbar-height);
-
-      -webkit-backdrop-filter: saturate(50%) blur(12px);
-      backdrop-filter: saturate(50%) blur(12px);
-      background-color: var(--theme-navbar-bg);
-      font-family: "Lexend Deca", sans-serif;
-    }
-
-    nav {
-      @apply mx-auto flex items-center justify-end gap-2;
-
-      padding-left: max(env(safe-area-inset-left), 1.5rem);
-      padding-right: max(env(safe-area-inset-right), 1.5rem);
-      /* max-width: 84rem; */
-      width: 100%;
-      max-width: var(--header-max-width, 84rem);
-      height: var(--theme-navbar-height);
-    }
-
-    .logo {
-      @apply flex items-center rounded-3xl hover:opacity-75 focus:no-underline;
-      transition: opacity 100ms ease-out;
-    }
-
-    .logo span {
-      @apply mx-2 select-none text-2xl font-extrabold;
-      color: var(--theme-text);
-    }
-
-    @media (max-width: 512px) {
-      .logo span {
-        display: none;
-      }
-    }
-
-    nav {
-      @apply flex gap-4 text-base font-normal;
-      font-stretch: normal;
-      font-optical-sizing: auto;
-    }
-
-    nav .link {
-      @apply flex items-center justify-center gap-1 text-base font-normal;
-      color: var(--theme-text);
-    }
-    nav .link:hover,
-    nav .link:focus,
-    nav .link.active {
-      color: var(--theme-accent);
-    }
-    nav .link.active:hover,
-    nav .link.active:focus {
-      color: var(--theme-text-accent);
-    }
-
-    .link.only-medium,
-    .only-medium {
-      @apply hidden xl:flex;
-    }
-  </style>
 </header>
+
+<MobileNavigation />
+
+<style>
+  header {
+    @apply fixed left-0 right-0 top-0 flex w-full items-center justify-center overflow-visible shadow;
+
+    z-index: 110;
+    height: var(--theme-navbar-height);
+
+    -webkit-backdrop-filter: saturate(50%) blur(12px);
+    backdrop-filter: saturate(50%) blur(12px);
+    background-color: var(--theme-navbar-bg);
+    font-family: "Lexend Deca", sans-serif;
+  }
+
+  nav {
+    @apply mx-auto flex items-center justify-end gap-2;
+
+    padding-left: max(env(safe-area-inset-left), 1.5rem);
+    padding-right: max(env(safe-area-inset-right), 1.5rem);
+    /* max-width: 84rem; */
+    width: 100%;
+    max-width: var(--header-max-width, 84rem);
+    height: var(--theme-navbar-height);
+  }
+
+  .logo {
+    @apply flex items-center rounded-3xl hover:opacity-75 focus:no-underline;
+    transition: opacity 100ms ease-out;
+  }
+
+  .logo span {
+    @apply mx-2 select-none text-2xl font-extrabold;
+    color: var(--theme-text);
+  }
+
+  @media (max-width: 512px) {
+    .logo span {
+      display: none;
+    }
+  }
+
+  nav {
+    @apply flex gap-4 text-base font-normal;
+    font-stretch: normal;
+    font-optical-sizing: auto;
+  }
+
+  nav .link {
+    @apply flex items-center justify-center gap-1 text-base font-normal;
+    color: var(--theme-text);
+  }
+  nav .link:hover,
+  nav .link:focus,
+  nav .link.active {
+    color: var(--theme-accent);
+  }
+  nav .link.active:hover,
+  nav .link.active:focus {
+    color: var(--theme-text-accent);
+  }
+
+  .link.only-medium,
+  .only-medium {
+    @apply hidden xl:flex;
+  }
+</style>

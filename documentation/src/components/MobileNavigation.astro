@@ -48,10 +48,11 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
   }
 
   .navigation {
-    @apply fixed z-50 hidden w-screen flex-col overflow-hidden overflow-y-auto;
+    @apply fixed hidden w-screen flex-col overflow-hidden overflow-y-auto;
 
     top: var(--theme-navbar-height);
     bottom: 0;
+    z-index: 1000;
 
     will-change: transform, opacity;
     contain: layout style;
