@@ -54,7 +54,7 @@ const { items } = Astro.props;
 
 <style>
   .package {
-    @apply relative flex flex-col gap-4 rounded-xl p-4;
+    @apply relative flex flex-col gap-6 rounded-xl p-4 shadow;
     background-color: var(--theme-card);
   }
   .package h3.package-title {
@@ -74,10 +74,16 @@ const { items } = Astro.props;
     min-width: 18ch;
   }
   .group .operators {
-    @apply flex flex-wrap gap-3;
+    @apply flex flex-wrap gap-2;
   }
 
   .operator {
-    @apply font-mono text-sm;
+    @apply rounded-full border px-2 py-1 text-sm;
+    color: var(--theme-text);
+    border-color: var(--theme-divider);
+  }
+
+  .operator:hover {
+    background-color: var(--theme-divider);
   }
 </style>
