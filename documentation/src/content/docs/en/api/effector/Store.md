@@ -15,6 +15,35 @@ import { type Store, type StoreWritable } from "effector";
 
 _Store_ is an object that holds the state value. Store gets updates when it receives a value that is not equal (`!==`) to the current one and to `undefined`. Store is a [Unit](/en/explanation/glossary#common-unit). Some stores can be [derived](#store-derived).
 
+# Immutability (#immutability)
+
+A store in effector is immutable. This means that updates will only occur if the handler function (such as `combine`, `sample`, or `on`) returns a new object.
+
+For example, before using array methods, you need to create a new reference to it. Here’s how to do it correctly:
+
+```ts
+$items.on(addItem, (items, newItem) => {
+  const updatedItems = [...items];
+  // ✅ .push method is called on a new array
+  updatedItems.push(newItem);
+  return updatedItems;
+});
+```
+
+This approach should not be used, as the store **will not be updated**:
+
+```ts
+$items.on(addItem, (items, newItem) => {
+  // ❌ Error! The array reference remains the same, the store will not be updated
+  items.push(newItem);
+  return updatedItems;
+});
+```
+
+Updating objects works in a similar way.
+
+A store in effector should be as small as possible, responsible for a specific part of the business logic, unlike, for example, Redux, whose store tends to hold everything together. When the state is atomic, the need for spreading objects becomes less frequent. However, if there is a need to frequently update deeply nested data, it is acceptable to use [immer](https://immerjs.github.io/immer/produce) to simplify repetitive code when updating the state.
+
 # Methods (#methods)
 
 ## `.map(fn)` (#methods-map-fn)
