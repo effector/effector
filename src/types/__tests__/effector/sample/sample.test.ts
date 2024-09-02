@@ -685,6 +685,7 @@ describe('clock without source', () => {
       "
       Unmarked error at test line 4 'clock: foo,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
+      lack of expected error at test line 7 'target,'
       "
     `)
   })
@@ -704,6 +705,7 @@ describe('clock without source', () => {
       "
       Unmarked error at test line 6 'clock: [foo, bar],'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
+      lack of expected error at test line 9 'target,'
       "
     `)
   })
@@ -721,6 +723,7 @@ describe('clock without source', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }; }'.
+      lack of expected error at test line 8 'target,'
       "
     `)
   })
@@ -832,9 +835,12 @@ describe('derived unit in target', () => {
       Unmarked error at test line 10 'clock: trigger,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Event<boolean>; }'.
       Unmarked error at test line 16 'clock: trigger,'
+      lack of expected error at test line 12 'target: started,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: Store<boolean>; }'.
       Unmarked error at test line 22 'clock: trigger,'
+      lack of expected error at test line 18 'target: $storeMap,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"derived units are not allowed in target\\"; got: (Store<boolean> | Event<boolean>)[]; }'.
+      lack of expected error at test line 25 'target: [started, $store, $storeMap],'
       "
     `)
   })
@@ -876,7 +882,7 @@ describe('derived unit in target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 15 'incorrect,'
       "
     `)
   })
@@ -908,7 +914,8 @@ describe('derived unit in target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 15 'incorrect,'
+      lack of expected error at test line 23 'incorrect,'
       "
     `)
   })
@@ -943,7 +950,7 @@ describe('mix of wider and narrower types', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 6 'clock: [exact, narrower],'
       "
     `)
   })
@@ -993,7 +1000,9 @@ describe('mix of wider and narrower types', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: string; b: string; } | null; targetType: { a: string; }; }[]; }'.
+      lack of expected error at test line 9 'target: [exact, narrower],'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: string; b: string; } | null; targetType: { a: string; }; }[]; }'.
+      lack of expected error at test line 15 'target: [exact, narrower],'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: string; b: string; } | null; targetType: { a: string; b: string; }; }[]; }'.
       "
     `)
@@ -1059,7 +1068,9 @@ describe('mix of wider and narrower types', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 21 'clock: ['
+      lack of expected error at test line 10 'clockNarrower,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: string; b: string; } | { a: string; }; targetType: { a: string; b: string; }; }[]; }'.
+      lack of expected error at test line 24 'clockNarrower,'
       "
     `)
   })
@@ -1123,7 +1134,7 @@ describe('mix of wider and narrower types', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 15 'incorrect,'
       "
     `)
   })
@@ -1158,7 +1169,10 @@ describe('mix of wider and narrower types', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 13 'clock,'
+      lack of expected error at test line 17 'incorrect,'
+      lack of expected error at test line 22 'clock: [clock],'
+      lack of expected error at test line 26 'incorrect,'
       "
     `)
   })
@@ -1193,7 +1207,12 @@ test('edge cases from issue #957 (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    lack of expected error at test line 8 'clock,'
+    lack of expected error at test line 10 'target: [target1, target2],'
+    lack of expected error at test line 15 'clock,'
+    lack of expected error at test line 17 'target: [target2, target1],'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: number; targetType: string; }[]; }'.
+    lack of expected error at test line 24 'target: [target2],'
     "
   `)
 })
@@ -1212,7 +1231,8 @@ describe('cross mismatch', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 6 'clock: [str, num],'
+      lack of expected error at test line 8 'target: [str, num],'
       "
     `)
   })

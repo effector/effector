@@ -104,6 +104,10 @@ describe('fn clock assertion', () => {
         Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: unknown) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 31 'fn: (a:string, clock:string) => ({a,clock}),'
+      lack of expected error at test line 37 'fn: (a:string, clock:string) => ({a,clock}),'
+      lack of expected error at test line 43 'fn: (a:string, clock:string) => ({a,clock}),'
+      lack of expected error at test line 49 'fn: (a:string, clock:string) => ({a,clock}),'
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
         Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
@@ -207,6 +211,10 @@ describe('fn clock assertion', () => {
         Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: unknown) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 36 'fn: (a:string, clock:string) => ({a,clock}),'
+      lack of expected error at test line 43 'fn: (a:string, clock:string) => ({a,clock}),'
+      lack of expected error at test line 50 'fn: (a:string, clock:string) => ({a,clock}),'
+      lack of expected error at test line 57 'fn: (a:string, clock:string) => ({a,clock}),'
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
         Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
@@ -301,6 +309,10 @@ describe('fn clock assertion', () => {
         Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { a: string; b: number; }, clk: unknown) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 31 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
+      lack of expected error at test line 37 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
+      lack of expected error at test line 43 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
+      lack of expected error at test line 49 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
       Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '((src: { a: string; b: number; }, clk: number | void) => any) & (({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; })'.
         Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { a: string; b: number; }, clk: number | void) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
@@ -404,6 +416,10 @@ describe('fn clock assertion', () => {
         Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { a: string; b: number; }, clk: unknown) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 36 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
+      lack of expected error at test line 43 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
+      lack of expected error at test line 50 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
+      lack of expected error at test line 57 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
       Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '((src: { a: string; b: number; }, clk: number | void) => any) & (({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; })'.
         Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { a: string; b: number; }, clk: number | void) => any'.
           Types of parameters 'clock' and 'clk' are incompatible.

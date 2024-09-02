@@ -366,15 +366,25 @@ describe('unit source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 6 'sample({source:ab        , target:[abn,anyt]      , filter:(val) => val.a > 0                })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 10 'sample({source:ab        , target:[abn,anyt,voidt], filter:(val) => val.a > 0                })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 14 'sample({source:ab        , target:[abn,anyt]      , filter:$filter                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 18 'sample({source:ab        , target:[abn,anyt,voidt], filter:$filter                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 22 'sample({source:ab        , target:[abn,anyt]      , filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 26 'sample({source:ab        , target:[abn,anyt,voidt], filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 30 'sample({source:abNull    , target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 34 'sample({source:abNull    , target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 38 'sample({source:nullableAB, target:[abn,anyt]      , filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 42 'sample({source:nullableAB, target:[abn,anyt,voidt], filter:Boolean                           })'
         "
       `)
     })
@@ -444,10 +454,22 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 4 'sample({source:ab        , target:[aStr,ab]        , filter:(val) => val.a > 0})'
+        lack of expected error at test line 6 'sample({source:ab        , target:[aStr,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 10 'sample({source:ab        , target:[aStr,anyt,voidt], filter:(val) => val.a > 0})'
+        lack of expected error at test line 12 'sample({source:ab        , target:[aStr,ab]        , filter:$filter           })'
+        lack of expected error at test line 14 'sample({source:ab        , target:[aStr,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 18 'sample({source:ab        , target:[aStr,anyt,voidt], filter:$filter           })'
+        lack of expected error at test line 20 'sample({source:ab        , target:[aStr,ab]        , filter:Boolean           })'
+        lack of expected error at test line 22 'sample({source:ab        , target:[aStr,anyt]      , filter:Boolean           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 26 'sample({source:ab        , target:[aStr,anyt,voidt], filter:Boolean           })'
+        lack of expected error at test line 28 'sample({source:nullableAB, target:[aStr,ab]        , filter:Boolean           })'
+        lack of expected error at test line 30 'sample({source:nullableAB, target:[aStr,anyt]      , filter:Boolean           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 34 'sample({source:nullableAB, target:[aStr,anyt,voidt], filter:Boolean           })'
         "
       `)
     })
@@ -538,15 +560,25 @@ describe('unit source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 6 'sample({source:ab        , clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0                })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 10 'sample({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0                })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 14 'sample({source:ab        , clock:anyt, target:[abn,anyt]      , filter:$filter                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 18 'sample({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:$filter                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 22 'sample({source:ab        , clock:anyt, target:[abn,anyt]      , filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 26 'sample({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 30 'sample({source:abNull    , clock:anyt, target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 34 'sample({source:abNull    , clock:anyt, target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 38 'sample({source:nullableAB, clock:anyt, target:[abn,anyt]      , filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 42 'sample({source:nullableAB, clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })'
         "
       `)
     })
@@ -620,10 +652,22 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 4 'sample({source:ab        , clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})'
+        lack of expected error at test line 6 'sample({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 10 'sample({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})'
+        lack of expected error at test line 12 'sample({source:ab        , clock:anyt, target:[aStr,ab]        , filter:$filter           })'
+        lack of expected error at test line 14 'sample({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 18 'sample({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })'
+        lack of expected error at test line 20 'sample({source:ab        , clock:anyt, target:[aStr,ab]        , filter:Boolean           })'
+        lack of expected error at test line 22 'sample({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:Boolean           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 26 'sample({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })'
+        lack of expected error at test line 28 'sample({source:nullableAB, clock:anyt, target:[aStr,ab]        , filter:Boolean           })'
+        lack of expected error at test line 30 'sample({source:nullableAB, clock:anyt, target:[aStr,anyt]      , filter:Boolean           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 34 'sample({source:nullableAB, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })'
         "
       `)
     })
@@ -714,15 +758,25 @@ describe('unit source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 6 'sample({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0                })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 10 'sample({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0                })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 14 'sample({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:$filter                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 18 'sample({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:$filter                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 22 'sample({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 26 'sample({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 30 'sample({source:abNull    , clock:[anyt], target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 34 'sample({source:abNull    , clock:[anyt], target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
+        lack of expected error at test line 38 'sample({source:nullableAB, clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 42 'sample({source:nullableAB, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })'
         "
       `)
     })
@@ -796,10 +850,22 @@ describe('unit source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 4 'sample({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})'
+        lack of expected error at test line 6 'sample({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 10 'sample({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})'
+        lack of expected error at test line 12 'sample({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:$filter           })'
+        lack of expected error at test line 14 'sample({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 18 'sample({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })'
+        lack of expected error at test line 20 'sample({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:Boolean           })'
+        lack of expected error at test line 22 'sample({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 26 'sample({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })'
+        lack of expected error at test line 28 'sample({source:nullableAB, clock:[anyt], target:[aStr,ab]        , filter:Boolean           })'
+        lack of expected error at test line 30 'sample({source:nullableAB, clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 34 'sample({source:nullableAB, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })'
         "
       `)
     })
@@ -848,9 +914,13 @@ describe('object source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
+        lack of expected error at test line 6 'sample({source:{a,b}, target:[abn,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 10 'sample({source:{a,b}, target:[abn,anyt,voidt], filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
+        lack of expected error at test line 14 'sample({source:{a,b}, target:[abn,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 18 'sample({source:{a,b}, target:[abn,anyt,voidt], filter:$filter           })'
         "
       `)
     })
@@ -896,8 +966,14 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 4 'sample({source:{a,b}, target:[aStr,ab]        , filter:(val) => val.a > 0})'
+        lack of expected error at test line 6 'sample({source:{a,b}, target:[aStr,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 10 'sample({source:{a,b}, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})'
+        lack of expected error at test line 12 'sample({source:{a,b}, target:[aStr,ab]        , filter:$filter           })'
+        lack of expected error at test line 14 'sample({source:{a,b}, target:[aStr,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 18 'sample({source:{a,b}, target:[aStr,anyt,voidt], filter:$filter           })'
         "
       `)
     })
@@ -948,9 +1024,13 @@ describe('object source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
+        lack of expected error at test line 6 'sample({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 10 'sample({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
+        lack of expected error at test line 14 'sample({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 18 'sample({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:$filter           })'
         "
       `)
     })
@@ -1000,8 +1080,14 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 4 'sample({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})'
+        lack of expected error at test line 6 'sample({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 10 'sample({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})'
+        lack of expected error at test line 12 'sample({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:$filter           })'
+        lack of expected error at test line 14 'sample({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 18 'sample({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })'
         "
       `)
     })
@@ -1052,9 +1138,13 @@ describe('object source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
+        lack of expected error at test line 6 'sample({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 10 'sample({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
+        lack of expected error at test line 14 'sample({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        lack of expected error at test line 18 'sample({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:$filter           })'
         "
       `)
     })
@@ -1104,8 +1194,14 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 4 'sample({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})'
+        lack of expected error at test line 6 'sample({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 10 'sample({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})'
+        lack of expected error at test line 12 'sample({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:$filter           })'
+        lack of expected error at test line 14 'sample({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:$filter           })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        lack of expected error at test line 18 'sample({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })'
         "
       `)
     })
@@ -1762,7 +1858,9 @@ describe('tuple source', () => {
         Operator '>' cannot be applied to types 'string | number' and 'number'.
         Operator '>' cannot be applied to types 'string | number' and 'number'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
+        lack of expected error at test line 14 'sample({source:[a,b], target:[lNumNum,anyt]      , filter:$filter            })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        lack of expected error at test line 18 'sample({source:[a,b], target:[lNumNum,anyt,voidt], filter:$filter            })'
         "
       `)
     })
@@ -1846,7 +1944,9 @@ describe('tuple source', () => {
         Operator '>' cannot be applied to types 'string | number' and 'number'.
         Operator '>' cannot be applied to types 'string | number' and 'number'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
+        lack of expected error at test line 14 'sample({source:[a,b], clock:anyt, target:[lNumNum,anyt]      , filter:$filter            })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        lack of expected error at test line 18 'sample({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:$filter            })'
         "
       `)
     })
@@ -1930,7 +2030,9 @@ describe('tuple source', () => {
         Operator '>' cannot be applied to types 'string | number' and 'number'.
         Operator '>' cannot be applied to types 'string | number' and 'number'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
+        lack of expected error at test line 14 'sample({source:[a,b], clock:[anyt], target:[lNumNum,anyt]      , filter:$filter            })'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        lack of expected error at test line 18 'sample({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:$filter            })'
         "
       `)
     })
@@ -2270,7 +2372,9 @@ describe('no source', () => {
         Unmarked error at test line 24 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Unmarked error at test line 30 'clock: nullableAB,'
+        lack of expected error at test line 27 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: number; }; }'.
+        lack of expected error at test line 33 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB; targetType: number; }; }'.
@@ -2509,6 +2613,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 28 'sample({'
+        lack of expected error at test line 25 'filter: (clk: AB) => clk.a > 0,'
         Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
           Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
             Type '{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
@@ -2517,6 +2622,7 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 32 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
         Parameter 'clk' implicitly has an 'any' type.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
@@ -2535,7 +2641,9 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 61 'clock: nullableAB,'
+        lack of expected error at test line 57 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
+        lack of expected error at test line 64 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
@@ -2576,6 +2684,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 94 'fn: (val) => ({a:val.c, b:val.b}),'
+        lack of expected error at test line 93 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Unmarked error at test line 94 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
@@ -2591,6 +2700,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 101 'fn: (val) => ({a:val.c, b:val.b}),'
+        lack of expected error at test line 100 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Unmarked error at test line 101 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
@@ -2661,6 +2771,7 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 130 'fn: (val: ABN) => ({a:val.c, b:''}),'
+        lack of expected error at test line 129 'filter: (clk: AB) => clk.a > 0,'
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 132 'sample({'
         Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
@@ -2673,6 +2784,7 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 137 'fn: (val: ABN) => ({a:val.c, b:''}),'
+        lack of expected error at test line 136 'filter: (clk: AB) => clk.a > 0,'
         Property 'c' does not exist on type 'ABN'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
@@ -2831,7 +2943,9 @@ describe('no source', () => {
         Unmarked error at test line 24 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Unmarked error at test line 30 'clock: [ab,nullableAB],'
+        lack of expected error at test line 27 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: number; }; }'.
+        lack of expected error at test line 33 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB; targetType: number; }; }'.
@@ -3070,6 +3184,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 28 'sample({'
+        lack of expected error at test line 25 'filter: (clk: AB) => clk.a > 0,'
         Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | unde...'.
           Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
             Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
@@ -3078,6 +3193,7 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 32 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
         Parameter 'clk' implicitly has an 'any' type.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
@@ -3096,7 +3212,9 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 61 'clock: [ab,nullableAB],'
+        lack of expected error at test line 57 'filter: (clk: AB) => clk.a > 0,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
+        lack of expected error at test line 64 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
@@ -3137,6 +3255,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 94 'fn: (val) => ({a:val.c, b:val.b}),'
+        lack of expected error at test line 93 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Unmarked error at test line 94 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
@@ -3152,6 +3271,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 101 'fn: (val) => ({a:val.c, b:val.b}),'
+        lack of expected error at test line 100 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Unmarked error at test line 101 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
@@ -3222,6 +3342,7 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 130 'fn: (val: ABN) => ({a:val.c, b:''}),'
+        lack of expected error at test line 129 'filter: (clk: AB) => clk.a > 0,'
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 132 'sample({'
         Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | unde...'.
@@ -3234,6 +3355,7 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 137 'fn: (val: ABN) => ({a:val.c, b:''}),'
+        lack of expected error at test line 136 'filter: (clk: AB) => clk.a > 0,'
         Property 'c' does not exist on type 'ABN'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
@@ -3361,6 +3483,7 @@ describe('no source', () => {
                     Types of parameters 'clk' and 'clk' are incompatible.
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 11 'filter: (clk: AB) => clk.a > 0,'
         "
       `)
     })
@@ -3464,6 +3587,7 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 12 'filter: (clk: AB) => clk.a > 0,'
         'clk' is possibly 'null'.
         Unmarked error at test line 21 'sample({'
         Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [con...'.
@@ -3475,6 +3599,7 @@ describe('no source', () => {
                     Types of parameters 'clk' and 'clk' are incompatible.
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 24 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
@@ -3498,6 +3623,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 41 'fn: (val) => ({a:val.c, b:val.b}),'
+        lack of expected error at test line 40 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Unmarked error at test line 41 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
@@ -3541,6 +3667,7 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 57 'fn: (val: ABN) => ({a:val.c, b:''}),'
+        lack of expected error at test line 56 'filter: (clk: AB) => clk.a > 0,'
         Property 'c' does not exist on type 'ABN'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
@@ -3604,6 +3731,7 @@ describe('no source', () => {
                     Types of parameters 'clk' and 'clk' are incompatible.
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 11 'filter: (clk: AB) => clk.a > 0,'
         "
       `)
     })
@@ -3707,6 +3835,7 @@ describe('no source', () => {
                   Types of parameters 'clk' and 'clk' are incompatible.
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 12 'filter: (clk: AB) => clk.a > 0,'
         'clk' is possibly 'null'.
         Unmarked error at test line 21 'sample({'
         Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
@@ -3718,6 +3847,7 @@ describe('no source', () => {
                     Types of parameters 'clk' and 'clk' are incompatible.
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
+        lack of expected error at test line 24 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
@@ -3741,6 +3871,7 @@ describe('no source', () => {
                     Type 'AB | null' is not assignable to type 'AB'.
                       Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 41 'fn: (val) => ({a:val.c, b:val.b}),'
+        lack of expected error at test line 40 'filter: (clk: AB) => clk.a > 0,'
         'val' is possibly 'null'.
         Unmarked error at test line 41 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
@@ -3784,6 +3915,7 @@ describe('no source', () => {
                       Type 'AB | null' is not assignable to type 'AB'.
                         Type 'null' is not assignable to type 'AB'.
         Unmarked error at test line 57 'fn: (val: ABN) => ({a:val.c, b:''}),'
+        lack of expected error at test line 56 'filter: (clk: AB) => clk.a > 0,'
         Property 'c' does not exist on type 'ABN'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
@@ -3839,22 +3971,26 @@ describe('bad filter', () => {
       Unmarked error at test line 4 'clock: nullableAB,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
       Unmarked error at test line 9 'sample({'
+      lack of expected error at test line 7 'filter: null,'
       Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: null; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
         Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: null; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
           Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: null; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
             Types of property 'filter' are incompatible.
               Type 'null' is not assignable to type '((clk: AB | null) => boolean) | undefined'.
       Unmarked error at test line 16 'sample({'
+      lack of expected error at test line 13 'filter: null,'
       Argument of type '[{ clock: EventCallable<AB | null>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ clock: EventCallable<AB | null>; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ clock: EventCallable<AB | null>; filter: null; }' is not assignable to type 'never'.
             The intersection '{ clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
       Unmarked error at test line 21 'sample({'
+      lack of expected error at test line 19 'filter: null,'
       Argument of type '[{ clock: EventCallable<AB | null>; filter: null; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
         Type '[{ clock: EventCallable<AB | null>; filter: null; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
           Type '{ clock: EventCallable<AB | null>; filter: null; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
             Types of property 'filter' are incompatible.
               Type 'null' is not assignable to type '((clk: AB | null) => boolean) | undefined'.
+      lack of expected error at test line 24 'filter: null,'
       "
     `)
   })
@@ -3891,12 +4027,14 @@ describe('bad filter', () => {
       Unmarked error at test line 4 'clock: nullableAB,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
       Unmarked error at test line 9 'sample({'
+      lack of expected error at test line 7 'filter: () => 1,'
       Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
         Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
           Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
             The types returned by 'filter(...)' are incompatible between these types.
               Type 'number' is not assignable to type 'boolean'.
       Unmarked error at test line 16 'sample({'
+      lack of expected error at test line 13 'filter: () => 1,'
       Argument of type '[{ clock: EventCallable<AB | null>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => clk is AB | null; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ clock: EventCallable<AB | null>; filter: () => number; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
           Type '{ clock: EventCallable<AB | null>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -3904,11 +4042,13 @@ describe('bad filter', () => {
               The types returned by 'filter(...)' are incompatible between these types.
                 Type 'number' is not assignable to type 'boolean'.
       Unmarked error at test line 21 'sample({'
+      lack of expected error at test line 19 'filter: () => 1,'
       Argument of type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
         Type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
           Type '{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
             The types returned by 'filter(...)' are incompatible between these types.
               Type 'number' is not assignable to type 'boolean'.
+      lack of expected error at test line 24 'filter: () => 1,'
       "
     `)
   })
