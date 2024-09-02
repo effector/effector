@@ -132,10 +132,28 @@ export async function compile({
         name: relative(__dirname, name),
         code: await fs
           .readFile(name, 'utf8')
-          .then(code => code.replace(/\@ts\-expect\-error/gm, '')),
+          .then(code =>
+            code.replace(/\@ts\-expect\-error/gm, '//expected-error'),
+          ),
       })),
     ),
   ])
+  const expectErrorsLines = filesContents.map(({name, code}) => {
+    const linesOfCode = code.split(`\n`)
+    return {
+      name,
+      expectedErrors: linesOfCode
+        .map((e, idx) => (e.includes('//expected-error') ? idx : -1))
+        .filter(e => e !== -1),
+      testLines: linesOfCode
+        .map((e, idx) => {
+          if (e.includes('test(') || e.includes('it(')) return idx
+          return -1
+        })
+        .filter(e => e !== -1),
+      linesOfCode,
+    }
+  })
   const options = ts.convertCompilerOptionsFromJson(
     tsConfig,
     '../../..',
@@ -182,14 +200,28 @@ export async function compile({
         '\n',
       )
       if (diagnostic.file) {
+        const fileName = diagnostic.file.fileName
+        const fileExpectErrors = expectErrorsLines.find(
+          e => e.name === fileName,
+        )!
         let {line, character} = diagnostic.file.getLineAndCharacterOfPosition(
           diagnostic.start!,
         )
-        messages.push(
-          `Error ${diagnostic.file.fileName} (${line + 1},${
-            character + 1
-          }): ${message}`,
-        )
+        const expectedErrorLine = line - 1
+        const errorPosition = `${line + 1},${character + 1}`
+
+        if (!fileExpectErrors.expectedErrors.includes(expectedErrorLine)) {
+          const testLineOffset = fileExpectErrors.testLines.findLast(
+            testLine => testLine < line,
+          )
+          const errorOffset =
+            testLineOffset === undefined ? line : line - testLineOffset
+          const content = fileExpectErrors.linesOfCode[line].trim()
+          messages.push(
+            `Error ${fileName} (${errorPosition}): Unmarked error at test line ${errorOffset} '${content}'`,
+          )
+        }
+        messages.push(`Error ${fileName} (${errorPosition}): ${message}`)
       } else {
         messages.push(`Error: ${message}`)
       }

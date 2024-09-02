@@ -42,6 +42,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 9 'return this.name * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -82,6 +83,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 7 'return this.state * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -128,6 +130,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 11 'return this.state * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -168,6 +171,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 7 'return this.state * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -212,6 +216,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 7 'return this.$name * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)

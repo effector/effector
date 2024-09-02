@@ -142,9 +142,12 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:aNum    , target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:a       , target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:{a:$num}, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
       "
     `)
@@ -158,8 +161,11 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:aNum    , clock:num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:a       , clock:num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:{a:$num}, clock:num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
       "
     `)
@@ -173,8 +179,11 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:aNum    , clock:$num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:a       , clock:$num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:{a:$num}, clock:$num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
       "
     `)
@@ -188,8 +197,11 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:aNum    , clock:[num,$num], target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:a       , clock:[num,$num], target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({filter: () => true, source:{a:$num}, clock:[num,$num], target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
       "
     `)

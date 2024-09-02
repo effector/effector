@@ -23,7 +23,9 @@ test('createGate', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 7 'useGate(Bar, 1)'
     Argument of type 'number' is not assignable to parameter of type '{ a: number; }'.
+    Unmarked error at test line 9 'useGate(Bar, {})'
     Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
       Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
     "
@@ -102,6 +104,7 @@ test('useUnit should not allow non-unit values', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'wrong: 'plain string','
     No overload matches this call.
       The last overload gave the following error.
         Type 'string' is not assignable to type 'Store<any> | Effect<any, any, any> | EventCallable<any>'.
@@ -172,7 +175,9 @@ test('useUnit should not allow to call void events with arguments', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 2 'runEvent(1)'
     Expected 0 arguments, but got 1.
+    Unmarked error at test line 3 'runEvent1('')'
     Expected 0 arguments, but got 1.
     "
   `)
@@ -191,7 +196,9 @@ test('useUnit should not allow to call void effects with arguments', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 2 'runEffect(1)'
     Expected 0 arguments, but got 1.
+    Unmarked error at test line 3 'runEffect1('')'
     Expected 0 arguments, but got 1.
     "
   `)
@@ -222,11 +229,17 @@ test('useUnit should not allow wrong types for events or effects with arguments'
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 2 'runEvent('')'
     Argument of type 'string' is not assignable to parameter of type 'number'.
+    Unmarked error at test line 3 'runEffect(1)'
     Argument of type 'number' is not assignable to parameter of type 'string'.
+    Unmarked error at test line 4 'runEvent1('')'
     Argument of type 'string' is not assignable to parameter of type 'number'.
+    Unmarked error at test line 5 'runEffect1(1)'
     Argument of type 'number' is not assignable to parameter of type 'string'.
+    Unmarked error at test line 6 'runConstEvent(0)'
     Argument of type '0' is not assignable to parameter of type '42'.
+    Unmarked error at test line 7 'runConstEffect({})'
     Argument of type '{}' is not assignable to parameter of type '42'.
     "
   `)

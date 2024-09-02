@@ -310,6 +310,7 @@ describe('string subtyping', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 8 'string: 'one','
       No overload matches this call.
         The last overload gave the following error.
           Type 'string' is not assignable to type '\\"one\\" | \\"two\\" | \\"three\\"'.
