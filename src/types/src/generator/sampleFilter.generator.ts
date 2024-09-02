@@ -184,7 +184,7 @@ export default () => {
     cases: {
       smallObject: {
         correct: value('smallObject' as const),
-        wrong: union(['tooWideObject', 'wrongFieldSmall']),
+        wrong: union(['tooWideObject', 'wrongFieldSmall'] as const),
       },
       nullableField: {
         correct: value('smallObject' as const),
@@ -384,6 +384,20 @@ export default () => {
     ],
     sort: [false, true],
   })
+  type TargetType =
+    | 'aNum'
+    | 'lNum'
+    | 'ab'
+    | 'aNum'
+    | 'aStr'
+    | 'voidt'
+    | 'anyt'
+    | '$ab'
+    | 'strt'
+    | 'abn'
+    | 'lNumStr'
+    | 'lNumNum'
+    | 'lStr'
   function permuteTargets({
     correctObject,
     correctObjectWide,
@@ -394,14 +408,14 @@ export default () => {
     wrongTuple,
     wrongTupleWide,
   }: {
-    correctObject: string[]
-    correctObjectWide: string[]
-    wrongObject: string[]
-    wrongObjectWide: string[]
-    correctTuple: string[]
-    correctTupleWide: string[]
-    wrongTuple: string[]
-    wrongTupleWide: string[]
+    correctObject: TargetType[]
+    correctObjectWide: TargetType[]
+    wrongObject: TargetType[]
+    wrongObjectWide: TargetType[]
+    correctTuple: TargetType[]
+    correctTupleWide: TargetType[]
+    wrongTuple: TargetType[]
+    wrongTupleWide: TargetType[]
   }) {
     return {
       nonTuple: {
@@ -427,7 +441,7 @@ export default () => {
     }
   }
   //@ts-expect-error
-  const targetValue: Separate<string | string[]> = separate({
+  const targetValue: Separate<TargetType | TargetType[]> = separate({
     source: {
       targetType,
       targetSubtype,
@@ -471,7 +485,7 @@ export default () => {
       },
     } as const,
     cases: {
-      //@ts-ignore
+      //@ts-expect-error
       smallObject: value('aNum'),
       smallTuple: value('lNum'),
       tooWideObject: value('ab'),
@@ -628,12 +642,6 @@ export default () => {
         },
       },
       __: value(null),
-    },
-  })
-  const targetCode = computeFn({
-    source: {targetValue},
-    fn({targetValue}) {
-      return Array.isArray(targetValue) ? printArray(targetValue) : targetValue
     },
   })
   const clockCode = separate({
@@ -844,7 +852,7 @@ export default () => {
       sourceType,
       clockType,
       targetType,
-      targetCode,
+      targetValue,
       fnType,
       filterFnType,
       badFilterType,
@@ -854,7 +862,7 @@ export default () => {
       sourceType,
       clockType,
       targetType,
-      targetCode,
+      targetValue,
       fnType,
       filterFnType,
       badFilterType,
@@ -868,7 +876,7 @@ export default () => {
       const clk =
         clockType === 'no' ? '' : clockType === 'unit' ? 'clock' : '[clock]'
       const fn = fnType === 'no' ? '' : ', fn'
-      const trg = targetCode ? targetType : 'new unit'
+      const trg = targetValue ? targetType : 'new unit'
       const isWider = sourceIsWiderThatTarget ? 'wide' : 'same'
       return `${src}${srcClkSep}${clk}${fn} -> ${trg} ${isWider}`
     },
@@ -973,7 +981,27 @@ export default () => {
         shape: {
           source: sourceCode,
           clock: clockCode,
-          target: targetCode,
+          target: {
+            field: targetValue,
+            markError: separate({
+              source: {pass},
+              variant: {
+                _: {
+                  pass: {pass: true},
+                },
+              },
+              cases: {
+                pass: value(false),
+                __: value<TargetType[]>([
+                  'abn',
+                  'voidt',
+                  'strt',
+                  'aStr',
+                  'lNumNum',
+                ]),
+              },
+            }),
+          },
           filter: {
             field: filterCode,
             markError: matchUnion(filterFnType, [
