@@ -1,13 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  sample,
-  Store,
-  Event,
-  guard,
-} from 'effector'
+import {createStore, createEvent, createEffect, sample} from 'effector'
 
 const typecheck = '{global}'
 
