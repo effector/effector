@@ -33,6 +33,7 @@ describe('text', () => {
     expect(dropInconsistentLine(typecheck)).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 6 'text: store.map(data => data),'
+      lack of expected error at test line 5 'h('div', {'
       No overload matches this call.
         Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 5 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Type 'Store<{ value: string; } | null>' is not assignable to type 'DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined'.

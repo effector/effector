@@ -194,6 +194,29 @@ export async function compile({
 
   function createReport(allDiagnostics: ts.Diagnostic[]) {
     const messages: string[] = []
+    const unprocessedExpectErrors = expectErrorsLines.map(
+      ({name, expectedErrors}) => ({
+        fileName: name,
+        expectedErrors: [...expectedErrors],
+      }),
+    )
+    function pushExpectedErrorMessage(
+      expectedErrorLine: number,
+      fileName: string,
+    ) {
+      const fileExpectErrors = expectErrorsLines.find(e => e.name === fileName)!
+      const testLineOffset = fileExpectErrors.testLines.findLast(
+        testLine => testLine < expectedErrorLine,
+      )
+      /** error is expected at line next to line with expect error mark */
+      const targetLine = expectedErrorLine + 1
+      const errorOffset =
+        testLineOffset === undefined ? targetLine : targetLine - testLineOffset
+      const content = fileExpectErrors.linesOfCode[targetLine].trim()
+      messages.push(
+        `Error ${fileName} (${targetLine},4): lack of expected error at test line ${errorOffset} '${content}'`,
+      )
+    }
     for (const diagnostic of allDiagnostics) {
       const message = ts.flattenDiagnosticMessageText(
         diagnostic.messageText,
@@ -204,6 +227,8 @@ export async function compile({
         const fileExpectErrors = expectErrorsLines.find(
           e => e.name === fileName,
         )!
+        const {expectedErrors: fileUnprocessedExpectErrors} =
+          unprocessedExpectErrors.find(e => e.fileName === fileName)!
         let {line, character} = diagnostic.file.getLineAndCharacterOfPosition(
           diagnostic.start!,
         )
@@ -220,10 +245,32 @@ export async function compile({
           messages.push(
             `Error ${fileName} (${errorPosition}): Unmarked error at test line ${errorOffset} '${content}'`,
           )
+        } else {
+          /** there could be more than one error per line, protect from removing twice */
+          if (fileUnprocessedExpectErrors.includes(expectedErrorLine)) {
+            fileUnprocessedExpectErrors.splice(
+              fileUnprocessedExpectErrors.indexOf(expectedErrorLine),
+              1,
+            )
+          }
+        }
+        const unprocessedExpectErrorsBehind =
+          fileUnprocessedExpectErrors.filter(e => e < expectedErrorLine)
+        for (const expectedErrorLine of unprocessedExpectErrorsBehind) {
+          pushExpectedErrorMessage(expectedErrorLine, fileName)
+          fileUnprocessedExpectErrors.splice(
+            fileUnprocessedExpectErrors.indexOf(expectedErrorLine),
+            1,
+          )
         }
         messages.push(`Error ${fileName} (${errorPosition}): ${message}`)
       } else {
         messages.push(`Error: ${message}`)
+      }
+    }
+    for (const {fileName, expectedErrors} of unprocessedExpectErrors) {
+      for (const expectedErrorLine of expectedErrors) {
+        pushExpectedErrorMessage(expectedErrorLine, fileName)
       }
     }
     return messages.join(`\n`)
