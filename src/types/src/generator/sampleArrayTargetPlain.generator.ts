@@ -28,7 +28,15 @@ export default () => {
       ],
     }),
   })
-  const targets = permute({
+  const wrongFnArgs = bool({
+    source: {mode, source, clock, typedFn},
+    true: [
+      {mode: 'src/clk', typedFn: true, source: 'str'},
+      {mode: 'src/clk', typedFn: true, clock: 'str'},
+    ],
+  })
+  type TargetType = 'num' | 'voidt' | 'str' | 'anyt' | 'strBool' | 'numStr'
+  const targets = permute<TargetType>({
     items: ['num', 'voidt', 'str', 'anyt', 'strBool', 'numStr'],
     amount: {min: 1, max: 2},
     noReorder: true,
@@ -163,18 +171,20 @@ export default () => {
     },
   })
   const fnToken = computeVariant({
-    source: {fn, typedFn},
+    source: {fn, typedFn, wrongFnArgs},
     variant: {
+      wrongArgs: {wrongFnArgs: true},
       noFn: {fn: false},
       typed: {typedFn: true},
       untyped: {typedFn: false},
     },
     cases: {
+      wrongArgs: 'wrong args' as const,
       noFn: 'no fn' as const,
       typed: 'typed fn' as const,
       untyped: 'untyped fn' as const,
     },
-    sort: ['no fn', 'untyped fn', 'typed fn'],
+    sort: ['no fn', 'untyped fn', 'typed fn', 'wrong args'],
   })
   const sourceClockToken = computeFn({
     source: {mode, source, clock},
@@ -199,7 +209,7 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       pass,
-      getHash: {mode, fn, typedFn, pass},
+      getHash: {mode, fn, typedFn, pass, wrongFnArgs},
       tags: {
         sourceClockToken,
         targetToken,
@@ -222,8 +232,31 @@ export default () => {
               true: [{mode: 'src/clk'}, {mode: 'clk'}],
             }),
           },
-          target: targets,
-          fn: fnCode,
+          target: {
+            field: targets,
+            markError: separate({
+              source: {mode, clock, source, fn, wrongFnArgs},
+              variant: {
+                _: {
+                  numberTrigger: [
+                    {mode: 'clk', clock: 'num'},
+                    {mode: 'src', source: 'num'},
+                    {mode: 'src/clk', source: 'num', fn: false},
+                    {mode: 'src/clk', source: 'num', clock: 'num', fn: true},
+                  ],
+                  stringTrigger: {wrongFnArgs: false},
+                },
+              } as const,
+              cases: {
+                numberTrigger: value<TargetType[]>(['str', 'strBool']),
+                stringTrigger: value<TargetType[]>(['num']),
+              },
+            }),
+          },
+          fn: {
+            field: fnCode,
+            markError: wrongFnArgs,
+          },
         },
       },
       describeGroup: fnToken,

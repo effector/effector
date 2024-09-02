@@ -11,6 +11,9 @@ import {
   config,
   sortOrder,
   fmt,
+  every,
+  not,
+  matchUnion,
 } from '../runner/manifold/operators'
 import {Separate} from 'runner/manifold/types'
 
@@ -871,6 +874,48 @@ export default () => {
     },
   })
 
+  const pass = bool({
+    source: {
+      wrongTarget,
+      sourceType,
+      targetType,
+      sourceSubtype,
+      filterType,
+      inferByFilter,
+      fnType,
+      filterFnType,
+    },
+    //prettier-ignore
+    false: [
+      {wrongTarget: true},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad typed'},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad untyped'},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad return'},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'no'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad typed'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad untyped'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad return'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'no'},
+      {sourceSubtype: 'nullableField', fnType: 'bad typed'},
+      {sourceSubtype: 'nullableField', fnType: 'bad untyped'},
+      {sourceSubtype: 'nullableField', fnType: 'bad return'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad typed'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad untyped'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad return'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'no'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad typed'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad untyped'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad return'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', inferByFilter: false, fnType: 'no'},
+      {sourceType: 'no', fnType: 'bad typed'},
+      {sourceType: 'no', fnType: 'bad untyped'},
+      {sourceType: 'no', targetType: 'unit', fnType: 'bad return'},
+      {sourceType: 'no', filterFnType: 'bad typed'},
+      {sourceType: 'no', filterFnType: 'bad untyped'},
+      {sourceType: 'no', filterFnType: 'bad filter'},
+    ],
+  })
+
   sortOrder([
     inferByFilter,
     sourceType,
@@ -888,47 +933,7 @@ export default () => {
     usedMethods: ['createStore', 'createEvent', 'sample'],
     header,
     grouping: {
-      pass: bool({
-        source: {
-          wrongTarget,
-          sourceType,
-          targetType,
-          sourceSubtype,
-          filterType,
-          inferByFilter,
-          fnType,
-          filterFnType,
-        },
-        //prettier-ignore
-        false: [
-          {wrongTarget: true},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad typed'},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad untyped'},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad return'},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'no'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad typed'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad untyped'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad return'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'no'},
-          {sourceSubtype: 'nullableField', fnType: 'bad typed'},
-          {sourceSubtype: 'nullableField', fnType: 'bad untyped'},
-          {sourceSubtype: 'nullableField', fnType: 'bad return'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad typed'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad untyped'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad return'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'no'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad typed'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad untyped'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad return'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', inferByFilter: false, fnType: 'no'},
-          {sourceType: 'no', fnType: 'bad typed'},
-          {sourceType: 'no', fnType: 'bad untyped'},
-          {sourceType: 'no', targetType: 'unit', fnType: 'bad return'},
-          {sourceType: 'no', filterFnType: 'bad typed'},
-          {sourceType: 'no', filterFnType: 'bad untyped'},
-          {sourceType: 'no', filterFnType: 'bad filter'},
-        ],
-      }),
+      pass,
       getHash: [
         inferByFilter,
         sourceIsWiderThatTarget,
@@ -969,7 +974,14 @@ export default () => {
           source: sourceCode,
           clock: clockCode,
           target: targetCode,
-          filter: filterCode,
+          filter: {
+            field: filterCode,
+            markError: matchUnion(filterFnType, [
+              'bad filter',
+              'bad typed',
+              'bad untyped',
+            ]),
+          },
           fn: fnCode,
         },
       },

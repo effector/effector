@@ -11,6 +11,8 @@ import {
   config,
   permute,
   sortOrder,
+  every,
+  not,
 } from '../runner/manifold/operators'
 
 const header = `
@@ -26,10 +28,8 @@ const aTarget = createEvent<{a: string}>()
 const abTarget = createEvent<AB>()
 const aclock = createEvent<{a: string; clock: any}>()
 const abclock = createEvent<{a: string; b: number; clock: any}>()
-const fnAbClockString = ({a,b}:AB, clock:string) => ({a,b,clock})
 const fnAbClockAny = ({a,b}:AB, clock:any) => ({a,b,clock})
 const fnAString = (a:string) => ({a})
-const fnAStringClockString = (a:string, clock:string) => ({a,clock})
 const fnAStringClockAny = (a:string, clock:any) => ({a,clock})
 const fnAb = ({a,b}:AB) => ({a,b})
 `
@@ -256,7 +256,7 @@ export default () => {
       shape: {
         noArgs: value("()=>({a:'',b:2})"),
         typedFnClock: {
-          assert: value('fnAbClockString'),
+          assert: value('({a,b}:AB, clock:string) => ({a,b,clock})'),
           keep: value('fnAbClockAny'),
         },
         untypedFnClock: value('({a,b}, clock) => ({a,b,clock})'),
@@ -266,7 +266,7 @@ export default () => {
       plain: {
         noArgs: value("()=>({a:''})"),
         typedFnClock: {
-          assert: value('fnAStringClockString'),
+          assert: value('(a:string, clock:string) => ({a,clock})'),
           keep: value('fnAStringClockAny'),
         },
         untypedFnClock: value('(a,clock) => ({a,clock})'),
@@ -342,7 +342,10 @@ export default () => {
           source: sourceCode,
           clock,
           target,
-          fn: fnCode,
+          fn: {
+            field: fnCode,
+            markError: every([fnClockTypeAssertion, not(pass)]),
+          },
         },
       },
     },

@@ -138,7 +138,16 @@ export default () => {
     },
   })
 
-  const [targetCode, targetCases] = unitArray({
+  type TargetCases =
+    | 'exact'
+    | 'exactBad'
+    | 'narrow'
+    | 'exactNullable'
+    | 'exactNarrow'
+    | 'exactBadNarrow'
+    | 'exactExactBad'
+
+  const [targetCode, targetCases] = unitArray<TargetCases>({
     isArray: targetIsArray,
     cases: [
       'exact',
@@ -179,7 +188,7 @@ export default () => {
         clockOnly: {testCase: 'clock'},
         both: {testCase: 'source and clock'},
       },
-    },
+    } as const,
     cases: {
       clockOnly: clockOnlyCode,
       both: value('dataClock'),
@@ -394,8 +403,41 @@ export default () => {
         shape: {
           source: sourceCode,
           clock: clockCode,
-          target: targetCode,
-          fn: fnCode,
+          target: {
+            field: targetCode,
+            markError: separate({
+              source: {fnReturnType},
+              variant: {
+                _: {
+                  exact: {fnReturnType: 'exact'},
+                  exactBad: {fnReturnType: 'exact bad'},
+                  exactNullable: {fnReturnType: 'exact nullable'},
+                },
+              } as const,
+              cases: {
+                exact: value<TargetCases[]>(['exactBad', 'exactBadNarrow']),
+                exactBad: value<TargetCases[]>([
+                  'exact',
+                  'narrow',
+                  'exactNullable',
+                  'exactNarrow',
+                ]),
+                exactNullable: value<TargetCases[]>([
+                  'exact',
+                  'exactBad',
+                  'exactBadNarrow',
+                  'exactExactBad',
+                  'exactNarrow',
+                  'narrow',
+                ]),
+                _: value(false),
+              },
+            }),
+          },
+          fn: {
+            field: fnCode,
+            markError: bool({source: {goodFn}, true: {goodFn: false}}),
+          },
         },
       },
     },
@@ -491,11 +533,11 @@ function unitArray<Cases extends string>({
       __: value([] as Cases[]),
     },
   })
-  const rendered = computeFn({
+  const currentValue = computeFn({
     source: {selectedItems, isArray},
     fn({selectedItems, isArray}) {
       if (isArray) {
-        return `[${selectedItems.join(',')}]`
+        return selectedItems
       } else {
         return selectedItems[0]
       }
@@ -513,5 +555,5 @@ function unitArray<Cases extends string>({
         isActive ? selectedItems.includes(key) : false,
     })
   }
-  return [rendered, flags, selectedItems] as const
+  return [currentValue, flags] as const
 }
