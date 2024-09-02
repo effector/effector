@@ -186,7 +186,7 @@ describe('clock without source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      lack of expected error at test line 6 'fn: foo => foo,'
+      Type 'string' is not assignable to type 'number'.
       Type 'StoreWritable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -208,10 +208,10 @@ describe('clock without source', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      lack of expected error at test line 8 'fn: foo => true,'
-      Type 'StoreWritable<number>' is not assignable to type 'Unit<boolean>'.
+      Type 'boolean' is not assignable to type 'number'.
+      Type 'StoreWritable<number>' is not assignable to type 'Unit<true>'.
         Types of property '__' are incompatible.
-          Type 'number' is not assignable to type 'boolean'.
+          Type 'number' is not assignable to type 'true'.
       "
     `)
   })
@@ -1385,7 +1385,7 @@ describe('fn return cases', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 2 'clock: trigger,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { readonly name: string; }) => { name: string; age: number; } | { name: string; }; error: \\"fn result should extend target type\\"; }'.
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { readonly name: string; }) => { name: string; age: number; } | { name: string; }; target: readonly [Unit<{ name: string; }>, Unit<{ name: string; }>]; error: \\"fn result should extend target type\\"; }'.
       lack of expected error at test line 5 'fn: ({name}) => {'
       "
     `)

@@ -1705,10 +1705,14 @@ describe('untyped fn', () => {
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 9 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 17 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -1724,6 +1728,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 44 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'true | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -1731,33 +1737,31 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 53 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 67 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 71 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 85 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 89 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 97 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1765,6 +1769,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 106 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number | void'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1774,26 +1780,24 @@ describe('untyped fn', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 131 'strBool,'
-      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | boolean' is not assignable to type 'string'.
-            Type 'boolean' is not assignable to type 'string'.
+      Unmarked error at test line 133 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 140 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 142 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 150 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 158 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -1809,6 +1813,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 185 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'true | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -1816,33 +1822,31 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 194 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 208 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 212 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 226 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 230 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 238 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1850,6 +1854,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 247 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number | void'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1859,26 +1865,24 @@ describe('untyped fn', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 272 'strBool,'
-      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | boolean' is not assignable to type 'string'.
-            Type 'boolean' is not assignable to type 'string'.
+      Unmarked error at test line 274 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 281 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 283 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 292 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 301 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -1894,6 +1898,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 331 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'true | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -1901,33 +1907,31 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 341 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 357 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 361 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 377 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 381 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 390 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1935,6 +1939,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 400 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number | void'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1944,22 +1950,18 @@ describe('untyped fn', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 428 'strBool,'
-      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | boolean' is not assignable to type 'string'.
-            Type 'boolean' is not assignable to type 'string'.
+      Unmarked error at test line 430 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 438 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 440 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 449 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1967,6 +1969,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 459 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number | void'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1976,22 +1980,18 @@ describe('untyped fn', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 487 'strBool,'
-      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | boolean' is not assignable to type 'string'.
-            Type 'boolean' is not assignable to type 'string'.
+      Unmarked error at test line 489 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 497 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 499 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 508 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -1999,6 +1999,8 @@ describe('untyped fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 518 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number | void'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
@@ -2008,19 +2010,13 @@ describe('untyped fn', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 546 'strBool,'
-      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | boolean' is not assignable to type 'string'.
-            Type 'boolean' is not assignable to type 'string'.
+      Unmarked error at test line 548 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number | true'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 556 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 558 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -2349,10 +2345,16 @@ describe('typed fn', () => {
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 9 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 17 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => true'.
+        Type 'number' is not assignable to type 'true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -2368,6 +2370,9 @@ describe('typed fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 44 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => true | void'.
+        Type 'number' is not assignable to type 'true | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -2375,37 +2380,42 @@ describe('typed fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 53 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string | void'.
+        Type 'number' is not assignable to type 'string | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 67 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 71 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 85 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 89 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string | true'.
+        Type 'number' is not assignable to type 'string | true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 97 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 105 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -2421,6 +2431,9 @@ describe('typed fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 132 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => true | void'.
+        Type 'number' is not assignable to type 'true | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -2428,37 +2441,42 @@ describe('typed fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 141 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string | void'.
+        Type 'number' is not assignable to type 'string | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 155 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 159 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 173 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 177 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string | true'.
+        Type 'number' is not assignable to type 'string | true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 186 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 195 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -2474,6 +2492,9 @@ describe('typed fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 225 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => true | void'.
+        Type 'number' is not assignable to type 'true | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -2481,30 +2502,29 @@ describe('typed fn', () => {
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 235 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string | void'.
+        Type 'number' is not assignable to type 'string | void'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 251 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 255 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 271 'numStr,'
-      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'number'.
-            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string | boolean' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 275 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string | true'.
+        Type 'number' is not assignable to type 'string | true'.
       "
     `)
   })
