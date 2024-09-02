@@ -478,7 +478,12 @@ export type Grouping<T extends Record<string, any>> = {
         method: string
         shape: Record<
           string,
-          Declarator | {field: Declarator; when: Declarator}
+          | Declarator
+          | {
+              field: Declarator
+              when?: Declarator
+              markError?: DataDecl<string | string[] | boolean> | BoolDecl
+            }
         >
         addExpectError?: boolean | BoolDecl
       }
