@@ -485,7 +485,7 @@ describe('clock exact', () => {
     `)
   })
 })
-test('clock exact bad (should fail)', () => {
+test('clock exactBad (should fail)', () => {
   //prettier-ignore
   {
     sample({
@@ -713,76 +713,243 @@ test('clock exact bad (should fail)', () => {
 test('clock narrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({clock:clockExact, target:exact                         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactBad                      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactNullable                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactExactBad                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBad]              , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,narrow]                , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNullable]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactExactBad]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNullable]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactExactBad]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactExactBad,exactNullable] , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'clock: clockExact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'clock: clockExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 16 'clock: clockExact,'
+    lack of expected error at test line 12 'target: exactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 22 'clock: clockExact,'
+    lack of expected error at test line 18 'target: exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 28 'clock: clockExact,'
+    lack of expected error at test line 24 'target: exactExactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 14 'sample({clock:clockExact, target:[exact,narrow]                , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 47 'clock: clockExact,'
+    lack of expected error at test line 31 'exact,'
+    lack of expected error at test line 33 'exactBad,'
+    lack of expected error at test line 41 'exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 18 'sample({clock:clockExact, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 20 'sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 75 'clock: clockExact,'
+    lack of expected error at test line 50 'exact,'
+    lack of expected error at test line 52 'exactNullable,'
+    lack of expected error at test line 60 'exact,'
+    lack of expected error at test line 69 'exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 85 'clock: clockExact,'
+    lack of expected error at test line 78 'exact,'
+    lack of expected error at test line 80 'exactExactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 26 'sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 28 'sample({clock:clockExact, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 113 'clock: clockExact,'
+    lack of expected error at test line 88 'exactBad,'
+    lack of expected error at test line 90 'exactNullable,'
+    lack of expected error at test line 98 'exactBad,'
+    lack of expected error at test line 107 'exactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 32 'sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 34 'sample({clock:clockExact, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 36 'sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 38 'sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})'
-    lack of expected error at test line 40 'sample({clock:clockExact, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 168 'clock: clockExact,'
+    lack of expected error at test line 116 'exactBad,'
+    lack of expected error at test line 118 'exactExactBad,'
+    lack of expected error at test line 127 'exactBad,'
+    lack of expected error at test line 136 'exactNullable,'
+    lack of expected error at test line 145 'exactExactBad,'
+    lack of expected error at test line 153 'exactNullable,'
+    lack of expected error at test line 163 'exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 44 'sample({clock:clockExact, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})'
+    lack of expected error at test line 171 'exactExactBad,'
+    lack of expected error at test line 173 'exactNullable,'
+    lack of expected error at test line 181 'exactExactBad,'
     "
   `)
 })
-test('clock exact nullable (should fail)', () => {
+test('clock exactNullable (should fail)', () => {
   //prettier-ignore
   {
     sample({
@@ -1087,201 +1254,700 @@ test('clock exact nullable (should fail)', () => {
     "
   `)
 })
-test('clock exact / narrow (should fail)', () => {
+test('clock exactNarrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({clock:clockExact, target:exact                         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactBad                      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactNullable                 , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactExactBad                 , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBad]              , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,narrow]                , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNullable]         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNarrow]           , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactExactBad]         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNullable]      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactBadNarrow]     , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactExactBad]      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactNullable]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactExactBad,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'clock: clockExact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'clock: clockExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 16 'clock: clockExact,'
+    lack of expected error at test line 12 'target: exactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 22 'clock: clockExact,'
+    lack of expected error at test line 18 'target: exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 28 'clock: clockExact,'
+    lack of expected error at test line 24 'target: exactExactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 14 'sample({clock:clockExact, target:[exact,narrow]                , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 47 'clock: clockExact,'
+    lack of expected error at test line 31 'exact,'
+    lack of expected error at test line 33 'exactBad,'
+    lack of expected error at test line 41 'exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 18 'sample({clock:clockExact, target:[exact,exactNarrow]           , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 20 'sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 76 'clock: clockExact,'
+    lack of expected error at test line 50 'exact,'
+    lack of expected error at test line 52 'exactNullable,'
+    lack of expected error at test line 60 'exact,'
+    lack of expected error at test line 69 'exact,'
+    lack of expected error at test line 71 'exactBadNarrow,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 86 'clock: clockExact,'
+    lack of expected error at test line 79 'exact,'
+    lack of expected error at test line 81 'exactExactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 26 'sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 28 'sample({clock:clockExact, target:[exactBad,exactBadNarrow]     , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 115 'clock: clockExact,'
+    lack of expected error at test line 89 'exactBad,'
+    lack of expected error at test line 91 'exactNullable,'
+    lack of expected error at test line 99 'exactBad,'
+    lack of expected error at test line 108 'exactBad,'
+    lack of expected error at test line 110 'exactBadNarrow,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 32 'sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 34 'sample({clock:clockExact, target:[narrow,exactNullable]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 36 'sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 38 'sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 40 'sample({clock:clockExact, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 171 'clock: clockExact,'
+    lack of expected error at test line 118 'exactBad,'
+    lack of expected error at test line 120 'exactExactBad,'
+    lack of expected error at test line 129 'exactBad,'
+    lack of expected error at test line 138 'exactNullable,'
+    lack of expected error at test line 147 'exactExactBad,'
+    lack of expected error at test line 155 'exactNullable,'
+    lack of expected error at test line 157 'exactBadNarrow,'
+    lack of expected error at test line 166 'exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 44 'sample({clock:clockExact, target:[exactExactBad,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})'
+    lack of expected error at test line 174 'exactExactBad,'
+    lack of expected error at test line 176 'exactNullable,'
+    lack of expected error at test line 184 'exactExactBad,'
+    lack of expected error at test line 186 'exactBadNarrow,'
     "
   `)
 })
-test('clock exact bad / narrow (should fail)', () => {
+test('clock exactBadNarrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({clock:clockExact, target:exact                         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactNullable                 , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBad]              , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,narrow]                , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNullable]         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNarrow]           , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactExactBad]         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNullable]      , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactNullable]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactBadNarrow => null as any})
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'clock: clockExact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'clock: clockExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 16 'clock: clockExact,'
+    lack of expected error at test line 12 'target: exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 26 'clock: clockExact,'
+    lack of expected error at test line 19 'exact,'
+    lack of expected error at test line 21 'exactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 36 'clock: clockExact,'
+    lack of expected error at test line 29 'exact,'
+    lack of expected error at test line 31 'narrow,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 46 'clock: clockExact,'
+    lack of expected error at test line 39 'exact,'
+    lack of expected error at test line 41 'exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 16 'sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 65 'clock: clockExact,'
+    lack of expected error at test line 49 'exact,'
+    lack of expected error at test line 51 'exactNarrow,'
+    lack of expected error at test line 59 'exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 75 'clock: clockExact,'
+    lack of expected error at test line 68 'exact,'
+    lack of expected error at test line 70 'exactExactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 22 'sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 24 'sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 105 'clock: clockExact,'
+    lack of expected error at test line 78 'exactBad,'
+    lack of expected error at test line 80 'exactNullable,'
+    lack of expected error at test line 88 'exactBad,'
+    lack of expected error at test line 90 'exactNarrow,'
+    lack of expected error at test line 98 'narrow,'
+    lack of expected error at test line 100 'exactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 28 'sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c, d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 30 'sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 134 'clock: clockExact,'
+    lack of expected error at test line 108 'narrow,'
+    lack of expected error at test line 110 'exactNullable,'
+    lack of expected error at test line 118 'narrow,'
+    lack of expected error at test line 120 'exactExactBad,'
+    lack of expected error at test line 128 'exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
+    Unmarked error at test line 144 'clock: clockExact,'
+    lack of expected error at test line 137 'exactNarrow,'
+    lack of expected error at test line 139 'exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
+    lack of expected error at test line 147 'exactExactBad,'
+    lack of expected error at test line 149 'exactNullable,'
     "
   `)
 })
-test('clock exact / exact bad (should fail)', () => {
+test('clock exactExactBad (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({clock:clockExact, target:exact                         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:narrow                        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactNullable                 , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:exactNarrow                   , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBad]              , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,narrow]                , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNullable]         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactNarrow]           , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exact,exactExactBad]         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNullable]      , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactNullable]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactBadNarrow]       , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactNarrow,exactBadNarrow]  , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({clock:clockExact, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactExactBad => null as any})
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: narrow,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      //@ts-expect-error
+      target: exactNarrow,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      clock: clockExact,
+      target: [
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'clock: clockExact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'clock: clockExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }; }'.
+    Unmarked error at test line 16 'clock: clockExact,'
+    lack of expected error at test line 12 'target: narrow,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 22 'clock: clockExact,'
+    lack of expected error at test line 18 'target: exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | { a: number; }; }; }'.
-    lack of expected error at test line 12 'sample({clock:clockExact, target:[exact,exactBad]              , fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 38 'clock: clockExact,'
+    lack of expected error at test line 24 'target: exactNarrow,'
+    lack of expected error at test line 31 'exact,'
+    lack of expected error at test line 33 'exactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 48 'clock: clockExact,'
+    lack of expected error at test line 41 'exact,'
+    lack of expected error at test line 43 'narrow,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 58 'clock: clockExact,'
+    lack of expected error at test line 51 'exact,'
+    lack of expected error at test line 53 'exactNullable,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 20 'sample({clock:clockExact, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 22 'sample({clock:clockExact, target:[exact,exactExactBad]         , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 24 'sample({clock:clockExact, target:[exactBad,exactNullable]      , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 26 'sample({clock:clockExact, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 28 'sample({clock:clockExact, target:[narrow,exactBad]             , fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 117 'clock: clockExact,'
+    lack of expected error at test line 61 'exact,'
+    lack of expected error at test line 63 'exactNarrow,'
+    lack of expected error at test line 71 'exact,'
+    lack of expected error at test line 73 'exactBadNarrow,'
+    lack of expected error at test line 81 'exact,'
+    lack of expected error at test line 90 'exactBad,'
+    lack of expected error at test line 92 'exactNullable,'
+    lack of expected error at test line 100 'exactBad,'
+    lack of expected error at test line 102 'exactNarrow,'
+    lack of expected error at test line 110 'narrow,'
+    lack of expected error at test line 112 'exactBad,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 32 'sample({clock:clockExact, target:[narrow,exactBadNarrow]       , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 34 'sample({clock:clockExact, target:[narrow,exactExactBad]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 36 'sample({clock:clockExact, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 156 'clock: clockExact,'
+    lack of expected error at test line 120 'narrow,'
+    lack of expected error at test line 122 'exactNullable,'
+    lack of expected error at test line 130 'narrow,'
+    lack of expected error at test line 132 'exactBadNarrow,'
+    lack of expected error at test line 140 'narrow,'
+    lack of expected error at test line 149 'exactNullable,'
+    lack of expected error at test line 151 'exactBadNarrow,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 40 'sample({clock:clockExact, target:[exactNarrow,exactBadNarrow]  , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 42 'sample({clock:clockExact, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactExactBad => null as any})'
+    lack of expected error at test line 159 'exactNarrow,'
+    lack of expected error at test line 161 'exactNullable,'
+    lack of expected error at test line 169 'exactNarrow,'
+    lack of expected error at test line 171 'exactBadNarrow,'
+    lack of expected error at test line 180 'exactNullable,'
     "
   `)
 })
@@ -1592,7 +2258,7 @@ describe('source exact', () => {
     `)
   })
 })
-test('source exact bad (should fail)', () => {
+test('source exactBad (should fail)', () => {
   //prettier-ignore
   {
     sample({
@@ -2036,139 +2702,473 @@ test('source exact bad (should fail)', () => {
 test('source narrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exact                         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactBad                      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactNullable                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactExactBad                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBad]              , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,narrow]                , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNullable]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactExactBad]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNullable]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactExactBad]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactExactBad,exactNullable] , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exact                         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactBad                      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactNullable                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactExactBad                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBad]              , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,narrow]                , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNullable]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactExactBad]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNullable]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactExactBad]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactExactBad,exactNullable] , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataExact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'source: $dataExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 16 'source: $dataExact,'
+    lack of expected error at test line 12 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 22 'source: $dataExact,'
+    lack of expected error at test line 18 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 28 'source: $dataExact,'
+    lack of expected error at test line 24 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 14 'sample({source:$dataExact    , target:[exact,narrow]                , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 47 'source: $dataExact,'
+    lack of expected error at test line 31 'exact,'
+    lack of expected error at test line 33 'exactBad,'
+    lack of expected error at test line 41 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 18 'sample({source:$dataExact    , target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 20 'sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 75 'source: $dataExact,'
+    lack of expected error at test line 50 'exact,'
+    lack of expected error at test line 52 'exactNullable,'
+    lack of expected error at test line 60 'exact,'
+    lack of expected error at test line 69 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 85 'source: $dataExact,'
+    lack of expected error at test line 78 'exact,'
+    lack of expected error at test line 80 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 26 'sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 28 'sample({source:$dataExact    , target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 113 'source: $dataExact,'
+    lack of expected error at test line 88 'exactBad,'
+    lack of expected error at test line 90 'exactNullable,'
+    lack of expected error at test line 98 'exactBad,'
+    lack of expected error at test line 107 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 32 'sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 34 'sample({source:$dataExact    , target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 36 'sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 38 'sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})'
-    lack of expected error at test line 40 'sample({source:$dataExact    , target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 168 'source: $dataExact,'
+    lack of expected error at test line 116 'exactBad,'
+    lack of expected error at test line 118 'exactExactBad,'
+    lack of expected error at test line 127 'exactBad,'
+    lack of expected error at test line 136 'exactNullable,'
+    lack of expected error at test line 145 'exactExactBad,'
+    lack of expected error at test line 153 'exactNullable,'
+    lack of expected error at test line 163 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 44 'sample({source:$dataExact    , target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})'
+    Unmarked error at test line 187 'source: {c: $c, d: $d},'
+    lack of expected error at test line 171 'exactExactBad,'
+    lack of expected error at test line 173 'exactNullable,'
+    lack of expected error at test line 181 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 193 'source: {c: $c, d: $d},'
+    lack of expected error at test line 189 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 199 'source: {c: $c, d: $d},'
+    lack of expected error at test line 195 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 205 'source: {c: $c, d: $d},'
+    lack of expected error at test line 201 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 211 'source: {c: $c, d: $d},'
+    lack of expected error at test line 207 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 56 'sample({source:{c: $c, d: $d}, target:[exact,narrow]                , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 230 'source: {c: $c, d: $d},'
+    lack of expected error at test line 214 'exact,'
+    lack of expected error at test line 216 'exactBad,'
+    lack of expected error at test line 224 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c, d: $d}, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 62 'sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 258 'source: {c: $c, d: $d},'
+    lack of expected error at test line 233 'exact,'
+    lack of expected error at test line 235 'exactNullable,'
+    lack of expected error at test line 243 'exact,'
+    lack of expected error at test line 252 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 268 'source: {c: $c, d: $d},'
+    lack of expected error at test line 261 'exact,'
+    lack of expected error at test line 263 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 68 'sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 70 'sample({source:{c: $c, d: $d}, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 296 'source: {c: $c, d: $d},'
+    lack of expected error at test line 271 'exactBad,'
+    lack of expected error at test line 273 'exactNullable,'
+    lack of expected error at test line 281 'exactBad,'
+    lack of expected error at test line 290 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 74 'sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 76 'sample({source:{c: $c, d: $d}, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 78 'sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 80 'sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})'
-    lack of expected error at test line 82 'sample({source:{c: $c, d: $d}, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 351 'source: {c: $c, d: $d},'
+    lack of expected error at test line 299 'exactBad,'
+    lack of expected error at test line 301 'exactExactBad,'
+    lack of expected error at test line 310 'exactBad,'
+    lack of expected error at test line 319 'exactNullable,'
+    lack of expected error at test line 328 'exactExactBad,'
+    lack of expected error at test line 336 'exactNullable,'
+    lack of expected error at test line 346 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 86 'sample({source:{c: $c, d: $d}, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})'
+    lack of expected error at test line 354 'exactExactBad,'
+    lack of expected error at test line 356 'exactNullable,'
+    lack of expected error at test line 364 'exactExactBad,'
     "
   `)
 })
-test('source exact nullable (should fail)', () => {
+test('source exactNullable (should fail)', () => {
   //prettier-ignore
   {
     sample({
@@ -2769,372 +3769,1370 @@ test('source exact nullable (should fail)', () => {
     "
   `)
 })
-test('source exact / narrow (should fail)', () => {
+test('source exactNarrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exact                         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactBad                      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactNullable                 , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactExactBad                 , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBad]              , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,narrow]                , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNullable]         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNarrow]           , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactExactBad]         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNullable]      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactBadNarrow]     , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactExactBad]      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactNullable]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactExactBad,exactNullable] , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactExactBad,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exact                         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactBad                      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactNullable                 , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactExactBad                 , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBad]              , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,narrow]                , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNullable]         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNarrow]           , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactExactBad]         , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNullable]      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactBadNarrow]     , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactExactBad]      , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactNullable]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactExactBad,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactNarrow => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataExact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'source: $dataExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 16 'source: $dataExact,'
+    lack of expected error at test line 12 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 22 'source: $dataExact,'
+    lack of expected error at test line 18 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 28 'source: $dataExact,'
+    lack of expected error at test line 24 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 14 'sample({source:$dataExact    , target:[exact,narrow]                , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 47 'source: $dataExact,'
+    lack of expected error at test line 31 'exact,'
+    lack of expected error at test line 33 'exactBad,'
+    lack of expected error at test line 41 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 18 'sample({source:$dataExact    , target:[exact,exactNarrow]           , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 20 'sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 76 'source: $dataExact,'
+    lack of expected error at test line 50 'exact,'
+    lack of expected error at test line 52 'exactNullable,'
+    lack of expected error at test line 60 'exact,'
+    lack of expected error at test line 69 'exact,'
+    lack of expected error at test line 71 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 86 'source: $dataExact,'
+    lack of expected error at test line 79 'exact,'
+    lack of expected error at test line 81 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 26 'sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 28 'sample({source:$dataExact    , target:[exactBad,exactBadNarrow]     , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 115 'source: $dataExact,'
+    lack of expected error at test line 89 'exactBad,'
+    lack of expected error at test line 91 'exactNullable,'
+    lack of expected error at test line 99 'exactBad,'
+    lack of expected error at test line 108 'exactBad,'
+    lack of expected error at test line 110 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 32 'sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 34 'sample({source:$dataExact    , target:[narrow,exactNullable]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 36 'sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 38 'sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 40 'sample({source:$dataExact    , target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 171 'source: $dataExact,'
+    lack of expected error at test line 118 'exactBad,'
+    lack of expected error at test line 120 'exactExactBad,'
+    lack of expected error at test line 129 'exactBad,'
+    lack of expected error at test line 138 'exactNullable,'
+    lack of expected error at test line 147 'exactExactBad,'
+    lack of expected error at test line 155 'exactNullable,'
+    lack of expected error at test line 157 'exactBadNarrow,'
+    lack of expected error at test line 166 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 44 'sample({source:$dataExact    , target:[exactExactBad,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 191 'source: {c: $c, d: $d},'
+    lack of expected error at test line 174 'exactExactBad,'
+    lack of expected error at test line 176 'exactNullable,'
+    lack of expected error at test line 184 'exactExactBad,'
+    lack of expected error at test line 186 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 197 'source: {c: $c, d: $d},'
+    lack of expected error at test line 193 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 203 'source: {c: $c, d: $d},'
+    lack of expected error at test line 199 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 209 'source: {c: $c, d: $d},'
+    lack of expected error at test line 205 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 215 'source: {c: $c, d: $d},'
+    lack of expected error at test line 211 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 56 'sample({source:{c: $c, d: $d}, target:[exact,narrow]                , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 234 'source: {c: $c, d: $d},'
+    lack of expected error at test line 218 'exact,'
+    lack of expected error at test line 220 'exactBad,'
+    lack of expected error at test line 228 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c, d: $d}, target:[exact,exactNarrow]           , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 62 'sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 263 'source: {c: $c, d: $d},'
+    lack of expected error at test line 237 'exact,'
+    lack of expected error at test line 239 'exactNullable,'
+    lack of expected error at test line 247 'exact,'
+    lack of expected error at test line 256 'exact,'
+    lack of expected error at test line 258 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 273 'source: {c: $c, d: $d},'
+    lack of expected error at test line 266 'exact,'
+    lack of expected error at test line 268 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 68 'sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 70 'sample({source:{c: $c, d: $d}, target:[exactBad,exactBadNarrow]     , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 302 'source: {c: $c, d: $d},'
+    lack of expected error at test line 276 'exactBad,'
+    lack of expected error at test line 278 'exactNullable,'
+    lack of expected error at test line 286 'exactBad,'
+    lack of expected error at test line 295 'exactBad,'
+    lack of expected error at test line 297 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 74 'sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 76 'sample({source:{c: $c, d: $d}, target:[narrow,exactNullable]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 78 'sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 80 'sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})'
-    lack of expected error at test line 82 'sample({source:{c: $c, d: $d}, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactNarrow => null as any})'
+    Unmarked error at test line 358 'source: {c: $c, d: $d},'
+    lack of expected error at test line 305 'exactBad,'
+    lack of expected error at test line 307 'exactExactBad,'
+    lack of expected error at test line 316 'exactBad,'
+    lack of expected error at test line 325 'exactNullable,'
+    lack of expected error at test line 334 'exactExactBad,'
+    lack of expected error at test line 342 'exactNullable,'
+    lack of expected error at test line 344 'exactBadNarrow,'
+    lack of expected error at test line 353 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 86 'sample({source:{c: $c, d: $d}, target:[exactExactBad,exactBadNarrow], fn:({c, d}): ExactNarrow => null as any})'
+    lack of expected error at test line 361 'exactExactBad,'
+    lack of expected error at test line 363 'exactNullable,'
+    lack of expected error at test line 371 'exactExactBad,'
+    lack of expected error at test line 373 'exactBadNarrow,'
     "
   `)
 })
-test('source exact bad / narrow (should fail)', () => {
+test('source exactBadNarrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exact                         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactNullable                 , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBad]              , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,narrow]                , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNullable]         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNarrow]           , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactExactBad]         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNullable]      , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactNullable]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactExactBad,exactNullable] , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exact                         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactNullable                 , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBad]              , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,narrow]                , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNullable]         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNarrow]           , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactExactBad]         , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNullable]      , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactNullable]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactBadNarrow => null as any})
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactBadNarrow => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataExact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'source: $dataExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 16 'source: $dataExact,'
+    lack of expected error at test line 12 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 26 'source: $dataExact,'
+    lack of expected error at test line 19 'exact,'
+    lack of expected error at test line 21 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 36 'source: $dataExact,'
+    lack of expected error at test line 29 'exact,'
+    lack of expected error at test line 31 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 46 'source: $dataExact,'
+    lack of expected error at test line 39 'exact,'
+    lack of expected error at test line 41 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 16 'sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 65 'source: $dataExact,'
+    lack of expected error at test line 49 'exact,'
+    lack of expected error at test line 51 'exactNarrow,'
+    lack of expected error at test line 59 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 75 'source: $dataExact,'
+    lack of expected error at test line 68 'exact,'
+    lack of expected error at test line 70 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 22 'sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 24 'sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 105 'source: $dataExact,'
+    lack of expected error at test line 78 'exactBad,'
+    lack of expected error at test line 80 'exactNullable,'
+    lack of expected error at test line 88 'exactBad,'
+    lack of expected error at test line 90 'exactNarrow,'
+    lack of expected error at test line 98 'narrow,'
+    lack of expected error at test line 100 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 28 'sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c, d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 30 'sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 134 'source: $dataExact,'
+    lack of expected error at test line 108 'narrow,'
+    lack of expected error at test line 110 'exactNullable,'
+    lack of expected error at test line 118 'narrow,'
+    lack of expected error at test line 120 'exactExactBad,'
+    lack of expected error at test line 128 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
+    Unmarked error at test line 144 'source: $dataExact,'
+    lack of expected error at test line 137 'exactNarrow,'
+    lack of expected error at test line 139 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
+    Unmarked error at test line 154 'source: {c: $c, d: $d},'
+    lack of expected error at test line 147 'exactExactBad,'
+    lack of expected error at test line 149 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 160 'source: {c: $c, d: $d},'
+    lack of expected error at test line 156 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 166 'source: {c: $c, d: $d},'
+    lack of expected error at test line 162 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 176 'source: {c: $c, d: $d},'
+    lack of expected error at test line 169 'exact,'
+    lack of expected error at test line 171 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 186 'source: {c: $c, d: $d},'
+    lack of expected error at test line 179 'exact,'
+    lack of expected error at test line 181 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 196 'source: {c: $c, d: $d},'
+    lack of expected error at test line 189 'exact,'
+    lack of expected error at test line 191 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 48 'sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 215 'source: {c: $c, d: $d},'
+    lack of expected error at test line 199 'exact,'
+    lack of expected error at test line 201 'exactNarrow,'
+    lack of expected error at test line 209 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 225 'source: {c: $c, d: $d},'
+    lack of expected error at test line 218 'exact,'
+    lack of expected error at test line 220 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 54 'sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 56 'sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 255 'source: {c: $c, d: $d},'
+    lack of expected error at test line 228 'exactBad,'
+    lack of expected error at test line 230 'exactNullable,'
+    lack of expected error at test line 238 'exactBad,'
+    lack of expected error at test line 240 'exactNarrow,'
+    lack of expected error at test line 248 'narrow,'
+    lack of expected error at test line 250 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c, d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 62 'sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 284 'source: {c: $c, d: $d},'
+    lack of expected error at test line 258 'narrow,'
+    lack of expected error at test line 260 'exactNullable,'
+    lack of expected error at test line 268 'narrow,'
+    lack of expected error at test line 270 'exactExactBad,'
+    lack of expected error at test line 278 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
+    Unmarked error at test line 294 'source: {c: $c, d: $d},'
+    lack of expected error at test line 287 'exactNarrow,'
+    lack of expected error at test line 289 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
+    lack of expected error at test line 297 'exactExactBad,'
+    lack of expected error at test line 299 'exactNullable,'
     "
   `)
 })
-test('source exact / exact bad (should fail)', () => {
+test('source exactExactBad (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exact                         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:narrow                        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactNullable                 , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:exactNarrow                   , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBad]              , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,narrow]                , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNullable]         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactNarrow]           , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exact,exactExactBad]         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNullable]      , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactNullable]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactBadNarrow]       , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactNarrow,exactBadNarrow]  , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataExact    , target:[exactExactBad,exactNullable] , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exact                         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:narrow                        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactNullable                 , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:exactNarrow                   , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBad]              , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,narrow]                , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNullable]         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactNarrow]           , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exact,exactExactBad]         , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNullable]      , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactNullable]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactBadNarrow]       , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNarrow,exactNullable]   , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactNarrow,exactBadNarrow]  , fn:({c, d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c, d: $d}, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactExactBad => null as any})
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: narrow,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      //@ts-expect-error
+      target: exactNarrow,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        narrow,
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataExact,
+      target: [
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exact,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: narrow,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      //@ts-expect-error
+      target: exactNarrow,
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exact,
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        narrow,
+        exactExactBad,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c, d: $d},
+      target: [
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c, d}): ExactExactBad => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataExact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 10 'source: $dataExact,'
+    lack of expected error at test line 6 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }; }'.
+    Unmarked error at test line 16 'source: $dataExact,'
+    lack of expected error at test line 12 'target: narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 22 'source: $dataExact,'
+    lack of expected error at test line 18 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | { a: number; }; }; }'.
-    lack of expected error at test line 12 'sample({source:$dataExact    , target:[exact,exactBad]              , fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 38 'source: $dataExact,'
+    lack of expected error at test line 24 'target: exactNarrow,'
+    lack of expected error at test line 31 'exact,'
+    lack of expected error at test line 33 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 48 'source: $dataExact,'
+    lack of expected error at test line 41 'exact,'
+    lack of expected error at test line 43 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 58 'source: $dataExact,'
+    lack of expected error at test line 51 'exact,'
+    lack of expected error at test line 53 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 20 'sample({source:$dataExact    , target:[exact,exactBadNarrow]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 22 'sample({source:$dataExact    , target:[exact,exactExactBad]         , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 24 'sample({source:$dataExact    , target:[exactBad,exactNullable]      , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 26 'sample({source:$dataExact    , target:[exactBad,exactNarrow]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 28 'sample({source:$dataExact    , target:[narrow,exactBad]             , fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 117 'source: $dataExact,'
+    lack of expected error at test line 61 'exact,'
+    lack of expected error at test line 63 'exactNarrow,'
+    lack of expected error at test line 71 'exact,'
+    lack of expected error at test line 73 'exactBadNarrow,'
+    lack of expected error at test line 81 'exact,'
+    lack of expected error at test line 90 'exactBad,'
+    lack of expected error at test line 92 'exactNullable,'
+    lack of expected error at test line 100 'exactBad,'
+    lack of expected error at test line 102 'exactNarrow,'
+    lack of expected error at test line 110 'narrow,'
+    lack of expected error at test line 112 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 32 'sample({source:$dataExact    , target:[narrow,exactBadNarrow]       , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 34 'sample({source:$dataExact    , target:[narrow,exactExactBad]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 36 'sample({source:$dataExact    , target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 156 'source: $dataExact,'
+    lack of expected error at test line 120 'narrow,'
+    lack of expected error at test line 122 'exactNullable,'
+    lack of expected error at test line 130 'narrow,'
+    lack of expected error at test line 132 'exactBadNarrow,'
+    lack of expected error at test line 140 'narrow,'
+    lack of expected error at test line 149 'exactNullable,'
+    lack of expected error at test line 151 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 40 'sample({source:$dataExact    , target:[exactNarrow,exactBadNarrow]  , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 42 'sample({source:$dataExact    , target:[exactExactBad,exactNullable] , fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 185 'source: {c: $c, d: $d},'
+    lack of expected error at test line 159 'exactNarrow,'
+    lack of expected error at test line 161 'exactNullable,'
+    lack of expected error at test line 169 'exactNarrow,'
+    lack of expected error at test line 171 'exactBadNarrow,'
+    lack of expected error at test line 180 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 191 'source: {c: $c, d: $d},'
+    lack of expected error at test line 187 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }; }'.
+    Unmarked error at test line 197 'source: {c: $c, d: $d},'
+    lack of expected error at test line 193 'target: narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 203 'source: {c: $c, d: $d},'
+    lack of expected error at test line 199 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | { a: number; }; }; }'.
-    lack of expected error at test line 52 'sample({source:{c: $c, d: $d}, target:[exact,exactBad]              , fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 219 'source: {c: $c, d: $d},'
+    lack of expected error at test line 205 'target: exactNarrow,'
+    lack of expected error at test line 212 'exact,'
+    lack of expected error at test line 214 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 229 'source: {c: $c, d: $d},'
+    lack of expected error at test line 222 'exact,'
+    lack of expected error at test line 224 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 239 'source: {c: $c, d: $d},'
+    lack of expected error at test line 232 'exact,'
+    lack of expected error at test line 234 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c, d: $d}, target:[exact,exactBadNarrow]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 62 'sample({source:{c: $c, d: $d}, target:[exact,exactExactBad]         , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 64 'sample({source:{c: $c, d: $d}, target:[exactBad,exactNullable]      , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 66 'sample({source:{c: $c, d: $d}, target:[exactBad,exactNarrow]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 68 'sample({source:{c: $c, d: $d}, target:[narrow,exactBad]             , fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 298 'source: {c: $c, d: $d},'
+    lack of expected error at test line 242 'exact,'
+    lack of expected error at test line 244 'exactNarrow,'
+    lack of expected error at test line 252 'exact,'
+    lack of expected error at test line 254 'exactBadNarrow,'
+    lack of expected error at test line 262 'exact,'
+    lack of expected error at test line 271 'exactBad,'
+    lack of expected error at test line 273 'exactNullable,'
+    lack of expected error at test line 281 'exactBad,'
+    lack of expected error at test line 283 'exactNarrow,'
+    lack of expected error at test line 291 'narrow,'
+    lack of expected error at test line 293 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 72 'sample({source:{c: $c, d: $d}, target:[narrow,exactBadNarrow]       , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 74 'sample({source:{c: $c, d: $d}, target:[narrow,exactExactBad]        , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 76 'sample({source:{c: $c, d: $d}, target:[exactNullable,exactBadNarrow], fn:({c, d}): ExactExactBad => null as any})'
+    Unmarked error at test line 337 'source: {c: $c, d: $d},'
+    lack of expected error at test line 301 'narrow,'
+    lack of expected error at test line 303 'exactNullable,'
+    lack of expected error at test line 311 'narrow,'
+    lack of expected error at test line 313 'exactBadNarrow,'
+    lack of expected error at test line 321 'narrow,'
+    lack of expected error at test line 330 'exactNullable,'
+    lack of expected error at test line 332 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 80 'sample({source:{c: $c, d: $d}, target:[exactNarrow,exactBadNarrow]  , fn:({c, d}): ExactExactBad => null as any})'
-    lack of expected error at test line 82 'sample({source:{c: $c, d: $d}, target:[exactExactBad,exactNullable] , fn:({c, d}): ExactExactBad => null as any})'
+    lack of expected error at test line 340 'exactNarrow,'
+    lack of expected error at test line 342 'exactNullable,'
+    lack of expected error at test line 350 'exactNarrow,'
+    lack of expected error at test line 352 'exactBadNarrow,'
+    lack of expected error at test line 361 'exactNullable,'
     "
   `)
 })
@@ -3471,7 +5469,7 @@ describe('source and clock exact', () => {
     `)
   })
 })
-test('source and clock exact bad (should fail)', () => {
+test('source and clock exactBad (should fail)', () => {
   //prettier-ignore
   {
     sample({
@@ -3955,139 +5953,515 @@ test('source and clock exact bad (should fail)', () => {
 test('source and clock narrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exact                         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactBad                      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactNullable                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactExactBad                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBad]              , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,narrow]                , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNullable]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactExactBad]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactExactBad]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exact                         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactBad                      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactNullable                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactExactBad                 , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBad]              , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,narrow]                , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNullable]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactExactBad]         , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactExactBad]      , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}) => ({a: c})})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        exactBadNarrow,
+      ],
+      fn: ({c}) => ({a: c}),
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataSrc,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 11 'source: $dataSrc,'
+    lack of expected error at test line 7 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 18 'source: $dataSrc,'
+    lack of expected error at test line 14 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 25 'source: $dataSrc,'
+    lack of expected error at test line 21 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 32 'source: $dataSrc,'
+    lack of expected error at test line 28 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 14 'sample({source:$dataSrc, clock:dataClock, target:[exact,narrow]                , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 53 'source: $dataSrc,'
+    lack of expected error at test line 36 'exact,'
+    lack of expected error at test line 38 'exactBad,'
+    lack of expected error at test line 47 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 18 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 20 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 84 'source: $dataSrc,'
+    lack of expected error at test line 57 'exact,'
+    lack of expected error at test line 59 'exactNullable,'
+    lack of expected error at test line 68 'exact,'
+    lack of expected error at test line 78 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 95 'source: $dataSrc,'
+    lack of expected error at test line 88 'exact,'
+    lack of expected error at test line 90 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 26 'sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 28 'sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 126 'source: $dataSrc,'
+    lack of expected error at test line 99 'exactBad,'
+    lack of expected error at test line 101 'exactNullable,'
+    lack of expected error at test line 110 'exactBad,'
+    lack of expected error at test line 120 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 32 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 34 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 36 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 38 'sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})'
-    lack of expected error at test line 40 'sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 187 'source: $dataSrc,'
+    lack of expected error at test line 130 'exactBad,'
+    lack of expected error at test line 132 'exactExactBad,'
+    lack of expected error at test line 142 'exactBad,'
+    lack of expected error at test line 152 'exactNullable,'
+    lack of expected error at test line 162 'exactExactBad,'
+    lack of expected error at test line 171 'exactNullable,'
+    lack of expected error at test line 182 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 44 'sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})'
+    Unmarked error at test line 208 'source: {c: $c},'
+    lack of expected error at test line 191 'exactExactBad,'
+    lack of expected error at test line 193 'exactNullable,'
+    lack of expected error at test line 202 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 215 'source: {c: $c},'
+    lack of expected error at test line 211 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 222 'source: {c: $c},'
+    lack of expected error at test line 218 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 229 'source: {c: $c},'
+    lack of expected error at test line 225 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 236 'source: {c: $c},'
+    lack of expected error at test line 232 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 56 'sample({source:{c: $c} , clock:dataClock, target:[exact,narrow]                , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 257 'source: {c: $c},'
+    lack of expected error at test line 240 'exact,'
+    lack of expected error at test line 242 'exactBad,'
+    lack of expected error at test line 251 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactNarrow]           , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 62 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 288 'source: {c: $c},'
+    lack of expected error at test line 261 'exact,'
+    lack of expected error at test line 263 'exactNullable,'
+    lack of expected error at test line 272 'exact,'
+    lack of expected error at test line 282 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 299 'source: {c: $c},'
+    lack of expected error at test line 292 'exact,'
+    lack of expected error at test line 294 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 68 'sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 70 'sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 330 'source: {c: $c},'
+    lack of expected error at test line 303 'exactBad,'
+    lack of expected error at test line 305 'exactNullable,'
+    lack of expected error at test line 314 'exactBad,'
+    lack of expected error at test line 324 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 74 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 76 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactNullable]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 78 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}) => ({a: c})})'
-    lack of expected error at test line 80 'sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}) => ({a: c})})'
-    lack of expected error at test line 82 'sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}) => ({a: c})})'
+    Unmarked error at test line 391 'source: {c: $c},'
+    lack of expected error at test line 334 'exactBad,'
+    lack of expected error at test line 336 'exactExactBad,'
+    lack of expected error at test line 346 'exactBad,'
+    lack of expected error at test line 356 'exactNullable,'
+    lack of expected error at test line 366 'exactExactBad,'
+    lack of expected error at test line 375 'exactNullable,'
+    lack of expected error at test line 386 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; }; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 86 'sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}) => ({a: c})})'
+    lack of expected error at test line 395 'exactExactBad,'
+    lack of expected error at test line 397 'exactNullable,'
+    lack of expected error at test line 406 'exactExactBad,'
     "
   `)
 })
-test('source and clock exact nullable (should fail)', () => {
+test('source and clock exactNullable (should fail)', () => {
   //prettier-ignore
   {
     sample({
@@ -4738,372 +7112,1484 @@ test('source and clock exact nullable (should fail)', () => {
     "
   `)
 })
-test('source and clock exact / narrow (should fail)', () => {
+test('source and clock exactNarrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exact                         , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactBad                      , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactNullable                 , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactExactBad                 , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNullable]         , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactExactBad]      , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exact                         , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactBad                      , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactNullable                 , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactExactBad                 , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNullable]         , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactExactBad]      , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactBad,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactExactBad,
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        narrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactNarrow => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataSrc,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 11 'source: $dataSrc,'
+    lack of expected error at test line 7 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 18 'source: $dataSrc,'
+    lack of expected error at test line 14 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 25 'source: $dataSrc,'
+    lack of expected error at test line 21 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 32 'source: $dataSrc,'
+    lack of expected error at test line 28 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 14 'sample({source:$dataSrc, clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 53 'source: $dataSrc,'
+    lack of expected error at test line 36 'exact,'
+    lack of expected error at test line 38 'exactBad,'
+    lack of expected error at test line 47 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 18 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 20 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 85 'source: $dataSrc,'
+    lack of expected error at test line 57 'exact,'
+    lack of expected error at test line 59 'exactNullable,'
+    lack of expected error at test line 68 'exact,'
+    lack of expected error at test line 78 'exact,'
+    lack of expected error at test line 80 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 96 'source: $dataSrc,'
+    lack of expected error at test line 89 'exact,'
+    lack of expected error at test line 91 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 26 'sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 28 'sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 128 'source: $dataSrc,'
+    lack of expected error at test line 100 'exactBad,'
+    lack of expected error at test line 102 'exactNullable,'
+    lack of expected error at test line 111 'exactBad,'
+    lack of expected error at test line 121 'exactBad,'
+    lack of expected error at test line 123 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 32 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 34 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 36 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 38 'sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 40 'sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 190 'source: $dataSrc,'
+    lack of expected error at test line 132 'exactBad,'
+    lack of expected error at test line 134 'exactExactBad,'
+    lack of expected error at test line 144 'exactBad,'
+    lack of expected error at test line 154 'exactNullable,'
+    lack of expected error at test line 164 'exactExactBad,'
+    lack of expected error at test line 173 'exactNullable,'
+    lack of expected error at test line 175 'exactBadNarrow,'
+    lack of expected error at test line 185 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 44 'sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 212 'source: {c: $c},'
+    lack of expected error at test line 194 'exactExactBad,'
+    lack of expected error at test line 196 'exactNullable,'
+    lack of expected error at test line 205 'exactExactBad,'
+    lack of expected error at test line 207 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 219 'source: {c: $c},'
+    lack of expected error at test line 215 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; }; }; }'.
+    Unmarked error at test line 226 'source: {c: $c},'
+    lack of expected error at test line 222 'target: exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 233 'source: {c: $c},'
+    lack of expected error at test line 229 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }; }'.
+    Unmarked error at test line 240 'source: {c: $c},'
+    lack of expected error at test line 236 'target: exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
-    lack of expected error at test line 56 'sample({source:{c: $c} , clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 261 'source: {c: $c},'
+    lack of expected error at test line 244 'exact,'
+    lack of expected error at test line 246 'exactBad,'
+    lack of expected error at test line 255 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 62 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 293 'source: {c: $c},'
+    lack of expected error at test line 265 'exact,'
+    lack of expected error at test line 267 'exactNullable,'
+    lack of expected error at test line 276 'exact,'
+    lack of expected error at test line 286 'exact,'
+    lack of expected error at test line 288 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 304 'source: {c: $c},'
+    lack of expected error at test line 297 'exact,'
+    lack of expected error at test line 299 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 68 'sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 70 'sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactBadNarrow]     , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 336 'source: {c: $c},'
+    lack of expected error at test line 308 'exactBad,'
+    lack of expected error at test line 310 'exactNullable,'
+    lack of expected error at test line 319 'exactBad,'
+    lack of expected error at test line 329 'exactBad,'
+    lack of expected error at test line 331 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: string; b: string; } | { a: number; b: string; }; }[]; }'.
-    lack of expected error at test line 74 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 76 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 78 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 80 'sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})'
-    lack of expected error at test line 82 'sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactNarrow => null as any})'
+    Unmarked error at test line 398 'source: {c: $c},'
+    lack of expected error at test line 340 'exactBad,'
+    lack of expected error at test line 342 'exactExactBad,'
+    lack of expected error at test line 352 'exactBad,'
+    lack of expected error at test line 362 'exactNullable,'
+    lack of expected error at test line 372 'exactExactBad,'
+    lack of expected error at test line 381 'exactNullable,'
+    lack of expected error at test line 383 'exactBadNarrow,'
+    lack of expected error at test line 393 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
-    lack of expected error at test line 86 'sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactBadNarrow], fn:({c}, {d}): ExactNarrow => null as any})'
+    lack of expected error at test line 402 'exactExactBad,'
+    lack of expected error at test line 404 'exactNullable,'
+    lack of expected error at test line 413 'exactExactBad,'
+    lack of expected error at test line 415 'exactBadNarrow,'
     "
   `)
 })
-test('source and clock exact bad / narrow (should fail)', () => {
+test('source and clock exactBadNarrow (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exact                         , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactNullable                 , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNullable]         , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exact                         , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactNullable                 , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNullable]         , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactBadNarrow => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactBadNarrow => null as any})
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactBadNarrow => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataSrc,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 11 'source: $dataSrc,'
+    lack of expected error at test line 7 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 18 'source: $dataSrc,'
+    lack of expected error at test line 14 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 29 'source: $dataSrc,'
+    lack of expected error at test line 22 'exact,'
+    lack of expected error at test line 24 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 40 'source: $dataSrc,'
+    lack of expected error at test line 33 'exact,'
+    lack of expected error at test line 35 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 51 'source: $dataSrc,'
+    lack of expected error at test line 44 'exact,'
+    lack of expected error at test line 46 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 16 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 72 'source: $dataSrc,'
+    lack of expected error at test line 55 'exact,'
+    lack of expected error at test line 57 'exactNarrow,'
+    lack of expected error at test line 66 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 83 'source: $dataSrc,'
+    lack of expected error at test line 76 'exact,'
+    lack of expected error at test line 78 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 22 'sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 24 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 116 'source: $dataSrc,'
+    lack of expected error at test line 87 'exactBad,'
+    lack of expected error at test line 89 'exactNullable,'
+    lack of expected error at test line 98 'exactBad,'
+    lack of expected error at test line 100 'exactNarrow,'
+    lack of expected error at test line 109 'narrow,'
+    lack of expected error at test line 111 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 28 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 30 'sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 148 'source: $dataSrc,'
+    lack of expected error at test line 120 'narrow,'
+    lack of expected error at test line 122 'exactNullable,'
+    lack of expected error at test line 131 'narrow,'
+    lack of expected error at test line 133 'exactExactBad,'
+    lack of expected error at test line 142 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
+    Unmarked error at test line 159 'source: $dataSrc,'
+    lack of expected error at test line 152 'exactNarrow,'
+    lack of expected error at test line 154 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
+    Unmarked error at test line 170 'source: {c: $c},'
+    lack of expected error at test line 163 'exactExactBad,'
+    lack of expected error at test line 165 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 177 'source: {c: $c},'
+    lack of expected error at test line 173 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 184 'source: {c: $c},'
+    lack of expected error at test line 180 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 195 'source: {c: $c},'
+    lack of expected error at test line 188 'exact,'
+    lack of expected error at test line 190 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 206 'source: {c: $c},'
+    lack of expected error at test line 199 'exact,'
+    lack of expected error at test line 201 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 217 'source: {c: $c},'
+    lack of expected error at test line 210 'exact,'
+    lack of expected error at test line 212 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 48 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 238 'source: {c: $c},'
+    lack of expected error at test line 221 'exact,'
+    lack of expected error at test line 223 'exactNarrow,'
+    lack of expected error at test line 232 'exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; }; }[]; }'.
+    Unmarked error at test line 249 'source: {c: $c},'
+    lack of expected error at test line 242 'exact,'
+    lack of expected error at test line 244 'exactExactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: string; b: string; } | { a: number; b: string; } | null; }[]; }'.
-    lack of expected error at test line 54 'sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 56 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 282 'source: {c: $c},'
+    lack of expected error at test line 253 'exactBad,'
+    lack of expected error at test line 255 'exactNullable,'
+    lack of expected error at test line 264 'exactBad,'
+    lack of expected error at test line 266 'exactNarrow,'
+    lack of expected error at test line 275 'narrow,'
+    lack of expected error at test line 277 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactBadNarrow => null as any})'
-    lack of expected error at test line 62 'sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactBadNarrow => null as any})'
+    Unmarked error at test line 314 'source: {c: $c},'
+    lack of expected error at test line 286 'narrow,'
+    lack of expected error at test line 288 'exactNullable,'
+    lack of expected error at test line 297 'narrow,'
+    lack of expected error at test line 299 'exactExactBad,'
+    lack of expected error at test line 308 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; } | null; }[]; }'.
+    Unmarked error at test line 325 'source: {c: $c},'
+    lack of expected error at test line 318 'exactNarrow,'
+    lack of expected error at test line 320 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactBadNarrow; targetType: { a: number; b: string; } | { a: string; b: string; } | null; }[]; }'.
+    lack of expected error at test line 329 'exactExactBad,'
+    lack of expected error at test line 331 'exactNullable,'
     "
   `)
 })
-test('source and clock exact / exact bad (should fail)', () => {
+test('source and clock exactExactBad (should fail)', () => {
   //prettier-ignore
   {
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exact                         , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:narrow                        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactNullable                 , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:exactNarrow                   , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNullable]         , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBadNarrow]       , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactBadNarrow]  , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exact                         , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:narrow                        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactNullable                 , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:exactNarrow                   , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,narrow]                , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNullable]         , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactNarrow]           , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactNullable]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBadNarrow]       , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactNullable]   , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactBadNarrow]  , fn:({c}, {d}): ExactExactBad => null as any})
-    //@ts-expect-error
-    sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactExactBad => null as any})
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: narrow,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNarrow,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: $dataSrc,
+      clock: dataClock,
+      target: [
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exact,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: narrow,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNullable,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      //@ts-expect-error
+      target: exactNarrow,
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        narrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exact,
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactBad,
+        //@ts-expect-error
+        exactNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        narrow,
+        exactExactBad,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNullable,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        //@ts-expect-error
+        exactNarrow,
+        //@ts-expect-error
+        exactBadNarrow,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
+    sample({
+      source: {c: $c},
+      clock: dataClock,
+      target: [
+        exactExactBad,
+        //@ts-expect-error
+        exactNullable,
+      ],
+      fn: ({c}, {d}): ExactExactBad => null as any,
+    })
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 4 'source: $dataSrc,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 11 'source: $dataSrc,'
+    lack of expected error at test line 7 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }; }'.
+    Unmarked error at test line 18 'source: $dataSrc,'
+    lack of expected error at test line 14 'target: narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 25 'source: $dataSrc,'
+    lack of expected error at test line 21 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | { a: number; }; }; }'.
-    lack of expected error at test line 12 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactExactBad => null as any})'
+    Unmarked error at test line 43 'source: $dataSrc,'
+    lack of expected error at test line 28 'target: exactNarrow,'
+    lack of expected error at test line 36 'exact,'
+    lack of expected error at test line 38 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 54 'source: $dataSrc,'
+    lack of expected error at test line 47 'exact,'
+    lack of expected error at test line 49 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 65 'source: $dataSrc,'
+    lack of expected error at test line 58 'exact,'
+    lack of expected error at test line 60 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 20 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 22 'sample({source:$dataSrc, clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 24 'sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 26 'sample({source:$dataSrc, clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 28 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactExactBad => null as any})'
+    Unmarked error at test line 130 'source: $dataSrc,'
+    lack of expected error at test line 69 'exact,'
+    lack of expected error at test line 71 'exactNarrow,'
+    lack of expected error at test line 80 'exact,'
+    lack of expected error at test line 82 'exactBadNarrow,'
+    lack of expected error at test line 91 'exact,'
+    lack of expected error at test line 101 'exactBad,'
+    lack of expected error at test line 103 'exactNullable,'
+    lack of expected error at test line 112 'exactBad,'
+    lack of expected error at test line 114 'exactNarrow,'
+    lack of expected error at test line 123 'narrow,'
+    lack of expected error at test line 125 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 32 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactBadNarrow]       , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 34 'sample({source:$dataSrc, clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 36 'sample({source:$dataSrc, clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactExactBad => null as any})'
+    Unmarked error at test line 173 'source: $dataSrc,'
+    lack of expected error at test line 134 'narrow,'
+    lack of expected error at test line 136 'exactNullable,'
+    lack of expected error at test line 145 'narrow,'
+    lack of expected error at test line 147 'exactBadNarrow,'
+    lack of expected error at test line 156 'narrow,'
+    lack of expected error at test line 166 'exactNullable,'
+    lack of expected error at test line 168 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 40 'sample({source:$dataSrc, clock:dataClock, target:[exactNarrow,exactBadNarrow]  , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 42 'sample({source:$dataSrc, clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactExactBad => null as any})'
+    Unmarked error at test line 205 'source: {c: $c},'
+    lack of expected error at test line 177 'exactNarrow,'
+    lack of expected error at test line 179 'exactNullable,'
+    lack of expected error at test line 188 'exactNarrow,'
+    lack of expected error at test line 190 'exactBadNarrow,'
+    lack of expected error at test line 200 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; }; }; }'.
+    Unmarked error at test line 212 'source: {c: $c},'
+    lack of expected error at test line 208 'target: exact,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }; }'.
+    Unmarked error at test line 219 'source: {c: $c},'
+    lack of expected error at test line 215 'target: narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }; }'.
+    Unmarked error at test line 226 'source: {c: $c},'
+    lack of expected error at test line 222 'target: exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | { a: number; }; }; }'.
-    lack of expected error at test line 52 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactBad]              , fn:({c}, {d}): ExactExactBad => null as any})'
+    Unmarked error at test line 244 'source: {c: $c},'
+    lack of expected error at test line 229 'target: exactNarrow,'
+    lack of expected error at test line 237 'exact,'
+    lack of expected error at test line 239 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
+    Unmarked error at test line 255 'source: {c: $c},'
+    lack of expected error at test line 248 'exact,'
+    lack of expected error at test line 250 'narrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; b: string; } | null; }[]; }'.
+    Unmarked error at test line 266 'source: {c: $c},'
+    lack of expected error at test line 259 'exact,'
+    lack of expected error at test line 261 'exactNullable,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; }; }[]; }'.
-    lack of expected error at test line 60 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactBadNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 62 'sample({source:{c: $c} , clock:dataClock, target:[exact,exactExactBad]         , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 64 'sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNullable]      , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 66 'sample({source:{c: $c} , clock:dataClock, target:[exactBad,exactNarrow]        , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 68 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBad]             , fn:({c}, {d}): ExactExactBad => null as any})'
+    Unmarked error at test line 331 'source: {c: $c},'
+    lack of expected error at test line 270 'exact,'
+    lack of expected error at test line 272 'exactNarrow,'
+    lack of expected error at test line 281 'exact,'
+    lack of expected error at test line 283 'exactBadNarrow,'
+    lack of expected error at test line 292 'exact,'
+    lack of expected error at test line 302 'exactBad,'
+    lack of expected error at test line 304 'exactNullable,'
+    lack of expected error at test line 313 'exactBad,'
+    lack of expected error at test line 315 'exactNarrow,'
+    lack of expected error at test line 324 'narrow,'
+    lack of expected error at test line 326 'exactBad,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 72 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactBadNarrow]       , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 74 'sample({source:{c: $c} , clock:dataClock, target:[narrow,exactExactBad]        , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 76 'sample({source:{c: $c} , clock:dataClock, target:[exactNullable,exactBadNarrow], fn:({c}, {d}): ExactExactBad => null as any})'
+    Unmarked error at test line 374 'source: {c: $c},'
+    lack of expected error at test line 335 'narrow,'
+    lack of expected error at test line 337 'exactNullable,'
+    lack of expected error at test line 346 'narrow,'
+    lack of expected error at test line 348 'exactBadNarrow,'
+    lack of expected error at test line 357 'narrow,'
+    lack of expected error at test line 367 'exactNullable,'
+    lack of expected error at test line 369 'exactBadNarrow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: ExactExactBad; targetType: { a: number; } | null; }[]; }'.
-    lack of expected error at test line 80 'sample({source:{c: $c} , clock:dataClock, target:[exactNarrow,exactBadNarrow]  , fn:({c}, {d}): ExactExactBad => null as any})'
-    lack of expected error at test line 82 'sample({source:{c: $c} , clock:dataClock, target:[exactExactBad,exactNullable] , fn:({c}, {d}): ExactExactBad => null as any})'
+    lack of expected error at test line 378 'exactNarrow,'
+    lack of expected error at test line 380 'exactNullable,'
+    lack of expected error at test line 389 'exactNarrow,'
+    lack of expected error at test line 391 'exactBadNarrow,'
+    lack of expected error at test line 401 'exactNullable,'
     "
   `)
 })

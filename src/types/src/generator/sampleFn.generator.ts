@@ -29,6 +29,24 @@ import {
   BoolDecl,
 } from 'runner/manifold/types'
 
+type TargetCases =
+  | 'exact'
+  | 'exactBad'
+  | 'narrow'
+  | 'exactNullable'
+  | 'exactNarrow'
+  | 'exactBadNarrow'
+  | 'exactExactBad'
+
+type FnReturnCases =
+  | 'exact'
+  | 'exactBad'
+  | 'narrow'
+  | 'exactNullable'
+  | 'exactNarrow'
+  | 'exactBadNarrow'
+  | 'exactExactBad'
+
 export default () => {
   const goodFn = flag({sort: [true, false], name: 'goodFn'})
   const assertFnArgs = flag({
@@ -59,24 +77,24 @@ export default () => {
    * type ExactExactBad = {a: number; b: string} | {a: string; b: string}
    * ```
    */
-  const fnReturnType = union({
+  const fnReturnType = union<FnReturnCases>({
     oneOf: [
       'exact',
-      'exact bad',
+      'exactBad',
       'narrow',
-      'exact nullable',
-      'exact / narrow',
-      'exact bad / narrow',
-      'exact / exact bad',
+      'exactNullable',
+      'exactNarrow',
+      'exactBadNarrow',
+      'exactExactBad',
     ],
     sort: [
       'exact',
-      'exact bad',
+      'exactBad',
       'narrow',
-      'exact nullable',
-      'exact / narrow',
-      'exact bad / narrow',
-      'exact / exact bad',
+      'exactNullable',
+      'exactNarrow',
+      'exactBadNarrow',
+      'exactExactBad',
     ],
   })
 
@@ -101,12 +119,12 @@ export default () => {
       },
       returnType: {
         exact: {fnReturnType: 'exact'},
-        exactBad: {fnReturnType: 'exact bad'},
+        exactBad: {fnReturnType: 'exactBad'},
         narrow: {fnReturnType: 'narrow'},
-        exactNullable: {fnReturnType: 'exact nullable'},
-        exactNarrow: {fnReturnType: 'exact / narrow'},
-        exactBadNarrow: {fnReturnType: 'exact bad / narrow'},
-        exactExactBad: {fnReturnType: 'exact / exact bad'},
+        exactNullable: {fnReturnType: 'exactNullable'},
+        exactNarrow: {fnReturnType: 'exactNarrow'},
+        exactBadNarrow: {fnReturnType: 'exactBadNarrow'},
+        exactExactBad: {fnReturnType: 'exactExactBad'},
       },
     } as const,
     cases: {
@@ -137,15 +155,6 @@ export default () => {
       },
     },
   })
-
-  type TargetCases =
-    | 'exact'
-    | 'exactBad'
-    | 'narrow'
-    | 'exactNullable'
-    | 'exactNarrow'
-    | 'exactBadNarrow'
-    | 'exactExactBad'
 
   const [targetCode, targetCases] = unitArray<TargetCases>({
     isArray: targetIsArray,
@@ -307,23 +316,37 @@ export default () => {
   ])
   const fnReturnNarrowCases = matchUnion(fnReturnType, [
     'narrow',
-    'exact / narrow',
-    'exact bad / narrow',
+    'exactNarrow',
+    'exactBadNarrow',
   ])
   const fnReturnExactBadCases = matchUnion(fnReturnType, [
-    'exact / exact bad',
-    'exact bad',
-    'exact bad / narrow',
+    'exactExactBad',
+    'exactBad',
+    'exactBadNarrow',
   ])
-  const fnReturnNullableCases = matchUnion(fnReturnType, 'exact nullable')
-  function whenTargetMatchFn({
-    target,
-    fnReturn,
-  }: {
-    target: BoolDecl[]
-    fnReturn: Array<typeof fnReturnType extends Union<infer T> ? T : never>
-  }) {
-    return every([some(target), matchUnion(fnReturnType, fnReturn)])
+  const fnReturnNullableCases = matchUnion(fnReturnType, 'exactNullable')
+  function targetCasesByFnReturn<
+    Cases extends Partial<Record<FnReturnCases, TargetCases[]>>,
+  >(cases: Cases) {
+    const variantMatch = {} as Record<
+      FnReturnCases,
+      {fnReturnType: FnReturnCases}
+    >
+    const casesFinal = {} as Record<FnReturnCases, DataDecl<TargetCases[]>>
+    for (const _key in cases) {
+      const key = _key as FnReturnCases
+      variantMatch[key] = {fnReturnType: key}
+      casesFinal[key] = value(cases[key]!)
+    }
+    //@ts-expect-error
+    const result: DataDecl<TargetCases[]> = separate({
+      source: {fnReturnType},
+      variant: {
+        _: variantMatch,
+      } as const,
+      cases: casesFinal,
+    })
+    return result
   }
   sortOrder([testCase, fnReturnType, goodFn])
   config({
@@ -405,33 +428,41 @@ export default () => {
           clock: clockCode,
           target: {
             field: targetCode,
-            markError: separate({
-              source: {fnReturnType},
-              variant: {
-                _: {
-                  exact: {fnReturnType: 'exact'},
-                  exactBad: {fnReturnType: 'exact bad'},
-                  exactNullable: {fnReturnType: 'exact nullable'},
-                },
-              } as const,
-              cases: {
-                exact: value<TargetCases[]>(['exactBad', 'exactBadNarrow']),
-                exactBad: value<TargetCases[]>([
-                  'exact',
-                  'narrow',
-                  'exactNullable',
-                  'exactNarrow',
-                ]),
-                exactNullable: value<TargetCases[]>([
-                  'exact',
-                  'exactBad',
-                  'exactBadNarrow',
-                  'exactExactBad',
-                  'exactNarrow',
-                  'narrow',
-                ]),
-                _: value(false),
-              },
+            markError: targetCasesByFnReturn({
+              exact: ['exactBad', 'exactBadNarrow'],
+              exactBad: ['exact', 'narrow', 'exactNullable', 'exactNarrow'],
+              exactNullable: [
+                'exact',
+                'exactBad',
+                'exactBadNarrow',
+                'exactExactBad',
+                'exactNarrow',
+                'narrow',
+              ],
+              narrow: ['exact', 'exactBad', 'exactExactBad', 'exactNullable'],
+              exactNarrow: [
+                'exact',
+                'exactBad',
+                'exactNullable',
+                'exactBadNarrow',
+                'exactExactBad',
+              ],
+              exactBadNarrow: [
+                'exact',
+                'exactBad',
+                'exactExactBad',
+                'exactNarrow',
+                'exactNullable',
+                'narrow',
+              ],
+              exactExactBad: [
+                'exact',
+                'exactBad',
+                'exactBadNarrow',
+                'exactNarrow',
+                'exactNullable',
+                'narrow',
+              ],
             }),
           },
           fn: {
