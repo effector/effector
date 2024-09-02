@@ -58,28 +58,44 @@ describe('fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'clock: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
-      Type 'EventCallable<void>' is not assignable to type 'never'.
-      Type 'null' is not assignable to type 'never'.
-      Type 'EventCallable<void>' is not assignable to type 'never'.
-      Type 'null' is not assignable to type 'never'.
-      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 5 'target: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
       Type 'null' is not assignable to type 'never'.
+      Unmarked error at test line 10 'clock: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
       Type 'null' is not assignable to type 'never'.
+      Unmarked error at test line 15 'source: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 16 'target: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Unmarked error at test line 21 'source: evt,'
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Type 'null' is not assignable to type 'never'.
+      Unmarked error at test line 26 'clock: evt,'
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 27 'target: evt,'
+      Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 28 'filter: () => true,'
       Type '() => boolean' is not assignable to type 'never'.
       Type 'null' is not assignable to type 'never'.
+      Unmarked error at test line 33 'clock: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 34 'filter: () => true,'
       Type '() => boolean' is not assignable to type 'never'.
       Type 'null' is not assignable to type 'never'.
+      Unmarked error at test line 39 'source: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 40 'target: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 41 'filter: () => true,'
       Type '() => boolean' is not assignable to type 'never'.
       Type 'null' is not assignable to type 'never'.
+      Unmarked error at test line 46 'source: evt,'
       Type 'EventCallable<void>' is not assignable to type 'never'.
+      Unmarked error at test line 47 'filter: () => true,'
       Type '() => boolean' is not assignable to type 'never'.
       Type 'null' is not assignable to type 'never'.
       "
@@ -223,34 +239,42 @@ describe('filter', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 'sample({'
       Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
             The intersection '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Unmarked error at test line 9 'sample({'
       Argument of type '[{ clock: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ clock: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ clock: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
             The intersection '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Unmarked error at test line 14 'sample({'
       Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ source: EventCallable<void>; target: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
             The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Unmarked error at test line 20 'sample({'
       Argument of type '[{ source: EventCallable<void>; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ source: EventCallable<void>; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ source: EventCallable<void>; filter: null; }' is not assignable to type 'never'.
             The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Unmarked error at test line 25 'sample({'
       Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
             The intersection '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Unmarked error at test line 32 'sample({'
       Argument of type '[{ clock: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ clock: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ clock: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
             The intersection '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Unmarked error at test line 38 'sample({'
       Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
             The intersection '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+      Unmarked error at test line 45 'sample({'
       Argument of type '[{ source: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
         Type '[{ source: EventCallable<void>; fn: () => void; filter: null; }]' is not assignable to type '[config: never]'.
           Type '{ source: EventCallable<void>; fn: () => void; filter: null; }' is not assignable to type 'never'.
@@ -312,6 +336,7 @@ describe('filter', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 'sample({'
       Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => clk is void; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ clock: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
           Type '{ clock: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
@@ -319,6 +344,7 @@ describe('filter', () => {
               Types of property 'filter' are incompatible.
                 Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
                   Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Unmarked error at test line 9 'sample({'
       Argument of type '[{ clock: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => clk is void; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ clock: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
           Type '{ clock: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter: (clk: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -326,6 +352,7 @@ describe('filter', () => {
               Types of property 'filter' are incompatible.
                 Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
                   Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Unmarked error at test line 14 'sample({'
       Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => src is void; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ source: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
           Type '{ source: EventCallable<void>; target: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
@@ -333,6 +360,7 @@ describe('filter', () => {
               Types of property 'filter' are incompatible.
                 Type '{ a: number; }' is not assignable to type '(src: void) => boolean'.
                   Type '{ a: number; }' provides no match for the signature '(src: void): boolean'.
+      Unmarked error at test line 20 'sample({'
       Argument of type '[{ source: EventCallable<void>; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => src is void; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ source: EventCallable<void>; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
           Type '{ source: EventCallable<void>; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -340,6 +368,7 @@ describe('filter', () => {
               Types of property 'filter' are incompatible.
                 Type '{ a: number; }' is not assignable to type '(src: void) => boolean'.
                   Type '{ a: number; }' provides no match for the signature '(src: void): boolean'.
+      Unmarked error at test line 25 'sample({'
       Argument of type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter?: (((clk: void) => clk is void) & ((clk: void) => clk is void)) | undefined; fn?: ((() => void) & ((clk: void) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
           Type '{ clock: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
@@ -347,6 +376,7 @@ describe('filter', () => {
               Types of property 'filter' are incompatible.
                 Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
                   Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Unmarked error at test line 32 'sample({'
       Argument of type '[{ clock: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => clk is void) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ clock: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
           Type '{ clock: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ clock: EventCallable<void>; source?: undefined; filter?: ((clk: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -354,6 +384,7 @@ describe('filter', () => {
               Types of property 'filter' are incompatible.
                 Type '{ a: number; }' is not assignable to type '(clk: void) => boolean'.
                   Type '{ a: number; }' provides no match for the signature '(clk: void): boolean'.
+      Unmarked error at test line 38 'sample({'
       Argument of type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter?: (((src: void) => src is void) & ((src: void) => src is void)) | undefined; fn?: ((() => void) & ((src: void) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }]'.
           Type '{ source: EventCallable<void>; target: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }'.
@@ -361,6 +392,7 @@ describe('filter', () => {
               Types of property 'filter' are incompatible.
                 Type '{ a: number; }' is not assignable to type '(src: void) => boolean'.
                   Type '{ a: number; }' provides no match for the signature '(src: void): boolean'.
+      Unmarked error at test line 45 'sample({'
       Argument of type '[{ source: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to parameter of type '[config: { source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => src is void) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
         Type '[{ source: EventCallable<void>; fn: () => void; filter: { a: number; }; }]' is not assignable to type '[config: { source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
           Type '{ source: EventCallable<void>; fn: () => void; filter: { a: number; }; }' is not assignable to type '{ source: EventCallable<void>; clock?: undefined; filter?: ((src: void) => boolean) | undefined; fn?: (() => void) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
@@ -426,13 +458,21 @@ describe('target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 9 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 14 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 19 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 24 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 31 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 37 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 44 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
       "
     `)
@@ -489,13 +529,21 @@ describe('target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 9 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 14 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 19 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 24 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 31 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 37 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 44 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: { a: number; }; }'.
       "
     `)
@@ -541,11 +589,17 @@ describe('clock', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 10 'fn: () => {},'
       Object literal may only specify known properties, and 'fn' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 15 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 20 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 25 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
+      Unmarked error at test line 31 'filter: () => true,'
       Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: null; }'.
       "
     `)
@@ -588,11 +642,17 @@ describe('clock', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 10 'fn: () => {},'
       Object literal may only specify known properties, and 'fn' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 15 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 20 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 25 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
+      Unmarked error at test line 31 'filter: () => true,'
       Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"clock should be unit or array of units\\"; got: { a: number; }; }'.
       "
     `)
@@ -645,11 +705,17 @@ describe('source', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Unmarked error at test line 9 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Unmarked error at test line 15 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Unmarked error at test line 22 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Unmarked error at test line 29 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
+      Unmarked error at test line 37 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
       "
     `)
@@ -699,11 +765,17 @@ describe('source', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Unmarked error at test line 9 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Unmarked error at test line 15 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Unmarked error at test line 22 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Unmarked error at test line 29 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
+      Unmarked error at test line 37 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: () => void; }'.
       "
     `)
@@ -724,6 +796,7 @@ describe('multiple errors', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'target: evt,'
       Object literal may only specify known properties, and 'target' does not exist in type '{ error: \\"source should be unit or object with stores\\"; got: null; }'.
       "
     `)
@@ -741,6 +814,7 @@ describe('multiple errors', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'clock: evt,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
       "
     `)
@@ -758,6 +832,7 @@ describe('multiple errors', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'source: evt,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"target should be unit or array of units\\"; got: null; }'.
       "
     `)

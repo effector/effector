@@ -33,8 +33,11 @@ test('clock param name in the function', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 5 'source: trigger,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Unmarked error at test line 10 'source: trigger,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Unmarked error at test line 16 'clock: trigger,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
     "
   `)
@@ -349,6 +352,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 5 'fn: ({a}) => a,'
         Property 'a' does not exist on type 'AN | null'.
         "
       `)
@@ -404,6 +408,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 5 'fn: ({a}) => a,'
         Property 'a' does not exist on type 'AN | null'.
         "
       `)
