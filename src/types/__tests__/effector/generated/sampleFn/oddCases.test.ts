@@ -366,31 +366,16 @@ describe('clock exact', () => {
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 24 'exactNarrow,'
-      Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: number; b: string; }'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; b: string; }'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-      lack of expected error at test line 37 'fn: ({c, d}) => ({a: c, b: d}),'
+      lack of expected error at test line 34 'exactBadNarrow,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 44 'exactExactBad,'
-      Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 46 'fn: ({c, d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 53 'exactBadNarrow,'
       lack of expected error at test line 56 'fn: ({c, d}) => ({a: c, b: d}),'
       lack of expected error at test line 63 'exactBadNarrow,'
@@ -520,7 +505,7 @@ test('clock exactBad (should fail)', () => {
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 8 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
@@ -530,27 +515,15 @@ test('clock exactBad (should fail)', () => {
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 19 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 26 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 29 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 36 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 39 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -560,33 +533,16 @@ test('clock exactBad (should fail)', () => {
     Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 55 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 58 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 65 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 68 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    Unmarked error at test line 75 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 78 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -597,31 +553,19 @@ test('clock exactBad (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    lack of expected error at test line 89 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 96 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 104 'exactExactBad,'
-    lack of expected error at test line 99 'fn: ({d}) => ({a: \\"no\\", b: d}),'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    lack of expected error at test line 109 'fn: ({d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -753,19 +697,13 @@ test('clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
+    Type 'number' is not assignable to type 'string'.
     Unmarked error at test line 11 'clock: clockExact,'
-    lack of expected error at test line 8 'fn: ({c}) => ({a: c}),'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    Unmarked error at test line 24 'exactBadNarrow,'
+    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: number; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; b: string; } | { a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 14 'exact,'
     lack of expected error at test line 23 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 27 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 33 'exact,'
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
@@ -773,21 +711,15 @@ test('clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 38 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 54 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 57 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
@@ -797,7 +729,7 @@ test('clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 68 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
@@ -808,14 +740,8 @@ test('clock narrow (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
           Type 'null' is not assignable to type '{ a: number; }'.
-    Unmarked error at test line 84 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 87 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
@@ -830,21 +756,15 @@ test('clock narrow (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
           Type 'null' is not assignable to type '{ a: number; }'.
-    lack of expected error at test line 107 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 114 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 117 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -1015,138 +935,134 @@ test('clock exactNullable (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 8 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 15 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 22 'fn: ({c, d}): ExactNullable => null as any,'
-    lack of expected error at test line 28 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 33 'fn: ({c, d}): ExactNullable => null as any,'
-    lack of expected error at test line 39 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 44 'fn: ({c, d}): ExactNullable => null as any,'
-    lack of expected error at test line 50 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 55 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 66 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 77 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 88 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 99 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 110 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 120 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 130 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 141 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 151 'fn: ({c, d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 162 'fn: ({c, d}): ExactNullable => null as any,'
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
     "
   `)
 })
@@ -1360,169 +1276,151 @@ test('clock exactNarrow (should fail)', () => {
     lack of expected error at test line 6 'target: exact,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 15 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 22 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 29 'fn: ({c, d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 35 'exact,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Unmarked error at test line 43 'clock: clockExact,'
-    lack of expected error at test line 40 'fn: ({c, d}): ExactNarrow => null as any,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => ExactNarrow | { a: number; b: string; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 46 'exact,'
     lack of expected error at test line 55 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     Unmarked error at test line 63 'clock: clockExact,'
-    lack of expected error at test line 60 'fn: ({c, d}): ExactNarrow => null as any,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => ExactNarrow | { a: number; b: string; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; b: string; } | { a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 66 'exact,'
     lack of expected error at test line 75 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 80 'fn: ({c, d}): ExactNarrow => null as any,'
+    lack of expected error at test line 77 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 86 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 91 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 102 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    lack of expected error at test line 119 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 122 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    lack of expected error at test line 168 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 133 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 171 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 191 'fn: ({c, d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 202 'fn: ({c, d}): ExactNarrow => null as any,'
+    lack of expected error at test line 199 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -1701,87 +1599,156 @@ test('clock exactBadNarrow (should fail)', () => {
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
         Types of property 'a' are incompatible.
           Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 15 'fn: ({c, d}): ExactBadNarrow => null as any,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 21 'exact,'
-    lack of expected error at test line 23 'exactBad,'
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
       Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 32 'exact,'
-    lack of expected error at test line 34 'narrow,'
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 43 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 48 'fn: ({c, d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 54 'exact,'
-    lack of expected error at test line 56 'exactNarrow,'
-    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; }'.
-      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 62 'clock: clockExact,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    lack of expected error at test line 54 'exact,'
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 68 'fn: ({c, d}): ExactBadNarrow => null as any,'
     lack of expected error at test line 65 'exact,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 74 'exact,'
-    lack of expected error at test line 76 'exactExactBad,'
-    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
-      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 85 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    Unmarked error at test line 93 'clock: clockExact,'
-    lack of expected error at test line 90 'fn: ({c, d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: string; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    Unmarked error at test line 104 'clock: clockExact,'
-    lack of expected error at test line 96 'exactBad,'
-    lack of expected error at test line 98 'exactNarrow,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 101 'fn: ({c, d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 107 'narrow,'
-    lack of expected error at test line 109 'exactBad,'
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 112 'fn: ({c, d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 118 'narrow,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    Unmarked error at test line 126 'clock: clockExact,'
-    lack of expected error at test line 123 'fn: ({c, d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 129 'narrow,'
-    lack of expected error at test line 131 'exactExactBad,'
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 134 'fn: ({c, d}): ExactBadNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 149 'exactNarrow,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Unmarked error at test line 143 'fn: ({c, d}): ExactBadNarrow => null as any,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 154 'fn: ({c, d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 160 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 165 'fn: ({c, d}): ExactBadNarrow => null as any,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -1985,134 +1952,180 @@ test('clock exactExactBad (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    lack of expected error at test line 6 'target: exact,'
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
     Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
         Types of property 'a' are incompatible.
           Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 15 'fn: ({c, d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 22 'fn: ({c, d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 32 'clock: clockExact,'
-    lack of expected error at test line 29 'fn: ({c, d}): ExactExactBad => null as any,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 35 'exact,'
-    lack of expected error at test line 37 'exactBad,'
-    lack of expected error at test line 45 'exact,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 50 'fn: ({c, d}): ExactExactBad => null as any,'
-    lack of expected error at test line 56 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 61 'fn: ({c, d}): ExactExactBad => null as any,'
-    lack of expected error at test line 67 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 72 'fn: ({c, d}): ExactExactBad => null as any,'
-    lack of expected error at test line 78 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 80 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 86 'clock: clockExact,'
-    lack of expected error at test line 83 'fn: ({c, d}): ExactExactBad => null as any,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { c: number; d: string; }) => { a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 89 'exact,'
-    lack of expected error at test line 98 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 108 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 120 'exactBad,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 133 'fn: ({c, d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    lack of expected error at test line 141 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 144 'fn: ({c, d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    lack of expected error at test line 161 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 164 'fn: ({c, d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 183 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 175 'fn: ({c, d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 186 'fn: ({c, d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -2335,31 +2348,16 @@ describe('source and clock exact', () => {
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 27 'exactNarrow,'
-      Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: number; b: string; }'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; b: string; }'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-      lack of expected error at test line 41 'fn: ({c}, {d}) => ({a: c, b: d}),'
+      lack of expected error at test line 38 'exactBadNarrow,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 49 'exactExactBad,'
-      Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 51 'fn: ({c}, {d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 59 'exactBadNarrow,'
       lack of expected error at test line 62 'fn: ({c}, {d}) => ({a: c, b: d}),'
       lack of expected error at test line 70 'exactBadNarrow,'
@@ -2371,31 +2369,16 @@ describe('source and clock exact', () => {
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 118 'exactNarrow,'
-      Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: number; b: string; }'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; b: string; }'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-      lack of expected error at test line 132 'fn: ({c}, {d}) => ({a: c, b: d}),'
+      lack of expected error at test line 129 'exactBadNarrow,'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 140 'exactExactBad,'
-      Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 142 'fn: ({c}, {d}) => ({a: c, b: d}),'
+      Type 'number' is not assignable to type 'string'.
       lack of expected error at test line 150 'exactBadNarrow,'
       lack of expected error at test line 153 'fn: ({c}, {d}) => ({a: c, b: d}),'
       lack of expected error at test line 161 'exactBadNarrow,'
@@ -2655,7 +2638,7 @@ test('source and clock exactBad (should fail)', () => {
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 9 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
@@ -2665,27 +2648,15 @@ test('source and clock exactBad (should fail)', () => {
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 21 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 29 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 32 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 40 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 43 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -2695,33 +2666,16 @@ test('source and clock exactBad (should fail)', () => {
     Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 61 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 64 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 72 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 75 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    Unmarked error at test line 83 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 86 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -2732,38 +2686,26 @@ test('source and clock exactBad (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    lack of expected error at test line 98 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 106 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 115 'exactExactBad,'
-    lack of expected error at test line 109 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    lack of expected error at test line 120 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 128 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
@@ -2773,27 +2715,15 @@ test('source and clock exactBad (should fail)', () => {
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 140 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 148 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 151 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 159 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 162 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -2803,33 +2733,16 @@ test('source and clock exactBad (should fail)', () => {
     Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 180 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 183 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 191 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
-    lack of expected error at test line 194 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    Unmarked error at test line 202 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 205 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
@@ -2840,31 +2753,19 @@ test('source and clock exactBad (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    lack of expected error at test line 217 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
           Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
             Types of property 'a' are incompatible.
               Type 'number' is not assignable to type 'string'.
-    Unmarked error at test line 225 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 234 'exactExactBad,'
-    lack of expected error at test line 228 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'number' is not assignable to type 'string'.
+    Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
           Type 'null' is not assignable to type '{ a: string; b: string; }'.
-    lack of expected error at test line 239 'fn: (_, {d}) => ({a: \\"no\\", b: d}),'
+    Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -3136,19 +3037,13 @@ test('source and clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
+    Type 'number' is not assignable to type 'string'.
     Unmarked error at test line 12 'source: $dataSrc,'
-    lack of expected error at test line 9 'fn: ({c}) => ({a: c}),'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }) => { a: number; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    Unmarked error at test line 27 'exactBadNarrow,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }) => { a: number; b: string; } | { a: number; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; b: string; } | { a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 16 'exact,'
     lack of expected error at test line 26 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 30 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 37 'exact,'
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
@@ -3156,21 +3051,15 @@ test('source and clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 42 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 60 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 63 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
@@ -3180,7 +3069,7 @@ test('source and clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 75 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
@@ -3191,14 +3080,8 @@ test('source and clock narrow (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
           Type 'null' is not assignable to type '{ a: number; }'.
-    Unmarked error at test line 93 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 96 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
@@ -3213,40 +3096,28 @@ test('source and clock narrow (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
           Type 'null' is not assignable to type '{ a: number; }'.
-    lack of expected error at test line 118 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 126 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 129 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
+    Type 'number' is not assignable to type 'string'.
     Unmarked error at test line 140 'source: {c: $c},'
-    lack of expected error at test line 137 'fn: ({c}) => ({a: c}),'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }) => { a: number; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    Unmarked error at test line 155 'exactBadNarrow,'
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }) => { a: number; b: string; } | { a: number; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; b: string; } | { a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 144 'exact,'
     lack of expected error at test line 154 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 158 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 165 'exact,'
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
@@ -3254,21 +3125,15 @@ test('source and clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 170 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 188 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 191 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
@@ -3278,7 +3143,7 @@ test('source and clock narrow (should fail)', () => {
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 203 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
@@ -3289,14 +3154,8 @@ test('source and clock narrow (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
           Type 'null' is not assignable to type '{ a: number; }'.
-    Unmarked error at test line 221 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 224 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
@@ -3311,21 +3170,15 @@ test('source and clock narrow (should fail)', () => {
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
           Type 'null' is not assignable to type '{ a: number; }'.
-    lack of expected error at test line 246 'fn: ({c}) => ({a: c}),'
+    Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
         Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
           Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 254 'exactBadNarrow,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: number; }>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: number; }'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 257 'fn: ({c}) => ({a: c}),'
+    Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -3689,270 +3542,262 @@ test('source and clock exactNullable (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 9 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 17 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 25 'fn: ({c}, {d}): ExactNullable => null as any,'
-    lack of expected error at test line 32 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 37 'fn: ({c}, {d}): ExactNullable => null as any,'
-    lack of expected error at test line 44 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 49 'fn: ({c}, {d}): ExactNullable => null as any,'
-    lack of expected error at test line 56 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 61 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 73 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 85 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 97 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 109 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 121 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 132 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 143 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 155 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 166 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 178 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 186 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 194 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 202 'fn: ({c}, {d}): ExactNullable => null as any,'
-    lack of expected error at test line 209 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 214 'fn: ({c}, {d}): ExactNullable => null as any,'
-    lack of expected error at test line 221 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 226 'fn: ({c}, {d}): ExactNullable => null as any,'
-    lack of expected error at test line 233 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 238 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 250 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 262 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
       The types of '__.a' are incompatible between these types.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 274 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 286 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 298 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 309 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    lack of expected error at test line 320 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 332 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 343 'fn: ({c}, {d}): ExactNullable => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNullable>'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'null'.
+          Type '{ a: number; b: string; }' is not assignable to type 'null'.
+    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<null>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNullable'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNullable'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 355 'fn: ({c}, {d}): ExactNullable => null as any,'
+        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'null'.
+          Type '{ a: string; b: string; }' is not assignable to type 'null'.
+    Type 'ExactNullable' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
+      Type 'null' is not assignable to type '{ a: number; } | { a: string; b: string; }'.
     "
   `)
 })
@@ -4409,335 +4254,299 @@ test('source and clock exactNarrow (should fail)', () => {
     lack of expected error at test line 7 'target: exact,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 17 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 25 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 33 'fn: ({c}, {d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 40 'exact,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Unmarked error at test line 48 'source: $dataSrc,'
-    lack of expected error at test line 45 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => ExactNarrow | { a: number; b: string; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 52 'exact,'
     lack of expected error at test line 62 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     Unmarked error at test line 70 'source: $dataSrc,'
-    lack of expected error at test line 67 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => ExactNarrow | { a: number; b: string; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; b: string; } | { a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 74 'exact,'
     lack of expected error at test line 84 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 89 'fn: ({c}, {d}): ExactNarrow => null as any,'
+    lack of expected error at test line 86 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 96 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 101 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 113 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    lack of expected error at test line 132 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 135 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    lack of expected error at test line 186 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 147 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 189 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 211 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 223 'fn: ({c}, {d}): ExactNarrow => null as any,'
+    lack of expected error at test line 220 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 229 'target: exact,'
     Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; }'.
       Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; }'.
+      Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 239 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 247 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 255 'fn: ({c}, {d}): ExactNarrow => null as any,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 262 'exact,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-            Types of property 'a' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Unmarked error at test line 270 'source: {c: $c},'
-    lack of expected error at test line 267 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => ExactNarrow | { a: number; b: string; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 274 'exact,'
     lack of expected error at test line 284 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
     Unmarked error at test line 292 'source: {c: $c},'
-    lack of expected error at test line 289 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => ExactNarrow | { a: number; b: string; }; target: readonly [Unit<{ a: number; }>, Unit<{ a: number; b: string; } | { a: number; }>]; error: \\"fn result should extend target type\\"; }'.
     lack of expected error at test line 296 'exact,'
     lack of expected error at test line 306 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 311 'fn: ({c}, {d}): ExactNarrow => null as any,'
+    lack of expected error at test line 308 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 318 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 323 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 335 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    lack of expected error at test line 354 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 357 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    lack of expected error at test line 408 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 369 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
             Types of property 'a' are incompatible.
               Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 411 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactNarrow'.
-          Type 'null' is not assignable to type 'ExactNarrow'.
-    lack of expected error at test line 433 'fn: ({c}, {d}): ExactNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactNarrow>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactNarrow'.
-          Type '{ a: string; b: string; }' is not assignable to type 'ExactNarrow'.
-            Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
-    lack of expected error at test line 445 'fn: ({c}, {d}): ExactNarrow => null as any,'
+    lack of expected error at test line 442 'exactBadNarrow,'
+    Type 'ExactNarrow' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; } | { a: string; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -5112,173 +4921,311 @@ test('source and clock exactBadNarrow (should fail)', () => {
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
         Types of property 'a' are incompatible.
           Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 17 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 24 'exact,'
-    lack of expected error at test line 26 'exactBad,'
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
       Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 36 'exact,'
-    lack of expected error at test line 38 'narrow,'
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 48 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 53 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 60 'exact,'
-    lack of expected error at test line 62 'exactNarrow,'
-    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; }'.
-      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 68 'source: $dataSrc,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    lack of expected error at test line 60 'exact,'
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 75 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
     lack of expected error at test line 72 'exact,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 82 'exact,'
-    lack of expected error at test line 84 'exactExactBad,'
-    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
-      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 94 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    Unmarked error at test line 102 'source: $dataSrc,'
-    lack of expected error at test line 99 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: string; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    Unmarked error at test line 114 'source: $dataSrc,'
-    lack of expected error at test line 106 'exactBad,'
-    lack of expected error at test line 108 'exactNarrow,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 111 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 118 'narrow,'
-    lack of expected error at test line 120 'exactBad,'
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 123 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 130 'narrow,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    Unmarked error at test line 138 'source: $dataSrc,'
-    lack of expected error at test line 135 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: number; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 142 'narrow,'
-    lack of expected error at test line 144 'exactExactBad,'
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 147 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 164 'exactNarrow,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Unmarked error at test line 157 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 169 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 176 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 181 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 187 'target: exact,'
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
         Types of property 'a' are incompatible.
           Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 197 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 204 'exact,'
-    lack of expected error at test line 206 'exactBad,'
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
       Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     lack of expected error at test line 216 'exact,'
-    lack of expected error at test line 218 'narrow,'
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 228 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 233 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 240 'exact,'
-    lack of expected error at test line 242 'exactNarrow,'
-    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; }'.
-      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: number; }'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
         Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
           Types of property 'a' are incompatible.
             Type 'string' is not assignable to type 'number'.
-    Unmarked error at test line 248 'source: {c: $c},'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
+    lack of expected error at test line 240 'exact,'
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 255 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
     lack of expected error at test line 252 'exact,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 262 'exact,'
-    lack of expected error at test line 264 'exactExactBad,'
-    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
-      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
         Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 274 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    Unmarked error at test line 282 'source: {c: $c},'
-    lack of expected error at test line 279 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: string; b: string; } | { a: number; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    Unmarked error at test line 294 'source: {c: $c},'
-    lack of expected error at test line 286 'exactBad,'
-    lack of expected error at test line 288 'exactNarrow,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: string; b: string; } | { a: number; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
     lack of expected error at test line 291 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: string; b: string; } | { a: number; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 298 'narrow,'
-    lack of expected error at test line 300 'exactBad,'
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 303 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 310 'narrow,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    Unmarked error at test line 318 'source: {c: $c},'
-    lack of expected error at test line 315 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: number; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 322 'narrow,'
-    lack of expected error at test line 324 'exactExactBad,'
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
     lack of expected error at test line 327 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 344 'exactNarrow,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Unmarked error at test line 337 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 349 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
-    lack of expected error at test line 356 'exactExactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactBadNarrow>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactBadNarrow'.
-          Type 'null' is not assignable to type 'ExactBadNarrow'.
-    lack of expected error at test line 361 'fn: ({c}, {d}): ExactBadNarrow => null as any,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: number; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: number; }'.
+          Type 'null' is not assignable to type '{ a: number; }'.
+    Type 'ExactBadNarrow' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+      Type '{ a: number; }' is not assignable to type '{ a: number; b: string; } | { a: string; b: string; }'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -5716,262 +5663,354 @@ test('source and clock exactExactBad (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    lack of expected error at test line 7 'target: exact,'
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
     Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
         Types of property 'a' are incompatible.
           Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 17 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 25 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 36 'source: $dataSrc,'
-    lack of expected error at test line 33 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 40 'exact,'
-    lack of expected error at test line 42 'exactBad,'
-    lack of expected error at test line 51 'exact,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 56 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    lack of expected error at test line 63 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 68 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    lack of expected error at test line 75 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 80 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    lack of expected error at test line 87 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 95 'source: $dataSrc,'
-    lack of expected error at test line 92 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 99 'exact,'
-    lack of expected error at test line 109 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 120 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 133 'exactBad,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 147 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 159 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 181 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 193 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 205 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
-      Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 221 'target: exact,'
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
     Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; }'.
       Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
         Types of property 'a' are incompatible.
           Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 231 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 239 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 250 'source: {c: $c},'
-    lack of expected error at test line 247 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 254 'exact,'
-    lack of expected error at test line 256 'exactBad,'
-    lack of expected error at test line 265 'exact,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 270 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    lack of expected error at test line 277 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 89 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 282 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    lack of expected error at test line 289 'exact,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 294 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    lack of expected error at test line 301 'exact,'
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Unmarked error at test line 309 'source: {c: $c},'
-    lack of expected error at test line 306 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (args_0: { readonly c: number; }, args_1: { d: string; }) => { a: number; b: string; } | { a: number; b: string; } | { a: string; b: string; }; error: \\"fn result should extend target type\\"; }'.
-    lack of expected error at test line 313 'exact,'
-    lack of expected error at test line 323 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 334 'exactBad,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 347 'exactBad,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    lack of expected error at test line 156 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 361 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    lack of expected error at test line 178 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 373 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-          Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 202 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 395 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
-    lack of expected error at test line 407 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+        Types of property 'a' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<ExactExactBad>'.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: string; b: string; } | { a: number; }' is not assignable to type 'ExactExactBad'.
-          Type '{ a: number; }' is not assignable to type 'ExactExactBad'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-    lack of expected error at test line 419 'fn: ({c}, {d}): ExactExactBad => null as any,'
-    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<ExactExactBad>'.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
       Types of property '__' are incompatible.
-        Type '{ a: number; b: string; } | null' is not assignable to type 'ExactExactBad'.
-          Type 'null' is not assignable to type 'ExactExactBad'.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 303 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+      The types of '__.a' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; b: string; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    lack of expected error at test line 370 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    lack of expected error at test line 392 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
+    Type 'ExactExactBad' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; b: string; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Type '{ a: number; b: string; }' is not assignable to type '{ a: string; b: string; }'.
+            Types of property 'a' are incompatible.
+              Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 416 'exactBadNarrow,'
+    Type 'ExactExactBad' is not assignable to type '{ a: number; } | { a: number; }'.
+      Type '{ a: string; b: string; }' is not assignable to type '{ a: number; } | { a: number; }'.
+        Type '{ a: string; b: string; }' is not assignable to type '{ a: number; }'.
+          Types of property 'a' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+    Type 'EventCallable<{ a: number; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: number; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
+          Type 'null' is not assignable to type '{ a: string; b: string; }'.
     "
   `)
 })

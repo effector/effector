@@ -1905,6 +1905,37 @@ type RebuildClockLoop<
     : never
   : Result
 
+type IsFnRetSubtypeExtendsTarget<
+  FnRetSubtype,
+  TargetType,
+  TargetSubtype = GetUnionLast<TargetType>
+> =
+  [FnRetSubtype] extends [TargetType]
+  ? [TargetSubtype] extends [never]
+    ? [TargetType] extends [never]
+      ? 'no'
+      : [FnRetSubtype] extends [TargetType]
+        ? 'yes'
+        : 'no'
+    : [FnRetSubtype] extends [TargetSubtype]
+      ? 'yes'
+      : IsFnRetSubtypeExtendsTarget<FnRetSubtype, Exclude<TargetType, TargetSubtype>>
+  : 'no'
+
+type RebuildTargetValueByFnReturn<
+  TargetType,
+  FnRetType,
+  FnRetSubtype = GetUnionLast<FnRetType>
+> = [FnRetSubtype] extends [never]
+  ? [FnRetType] extends [never]
+    ? TargetType
+    : IsFnRetSubtypeExtendsTarget<FnRetType, TargetType> extends 'no'
+      ? FnRetType
+      : TargetType
+  : IsFnRetSubtypeExtendsTarget<FnRetSubtype, TargetType> extends 'no'
+    ? FnRetSubtype
+    : RebuildTargetValueByFnReturn<TargetType, Exclude<FnRetType, FnRetSubtype>>
+
 type RebuildClockSingle<
   Clock,
   Target extends readonly unknown[],
@@ -2055,19 +2086,17 @@ type TargetOrError<
         : Mode extends 'fnRet'
           ? FN extends 'noFn'
             ? never
-            : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
-              ? [error: {
-                  fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
-                  error: 'fn result should extend target type'
-                }]
-              : [error: {
-                  target: Target extends readonly any[]
-                    ? {
-                      [K in keyof Target]: Unit<MatchingValue>
-                    }
-                    : Unit<MatchingValue>
-                  error: 'fn result should extend target type'
-                }]
+            : [error: {
+                fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
+                target: Target extends readonly any[]
+                  ? {
+                    [K in keyof Target]: Unit<
+                      RebuildTargetValueByFnReturn<UnitValue<Target[K]>, MatchingValue>
+                    >
+                  }
+                  : Unit<RebuildTargetValueByFnReturn<UnitValue<Target>, MatchingValue>>
+                error: 'fn result should extend target type'
+              }]
           : Mode extends 'src'
             ? IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
               ? Source extends 'noSrc'
@@ -2318,23 +2347,26 @@ type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTar
         : never
     }
 
+type RebuildFnReturnByTarget<FnReturn, TargetType, TargetTypeSubset = GetUnionLast<TargetType>> =
+  [TargetType] extends [never]
+  ? FnReturn
+  : [TargetTypeSubset] extends [never]
+    ? [FnReturn] extends [TargetType]
+      ? FnReturn
+      : TargetType
+    : [FnReturn] extends [TargetTypeSubset]
+      ? RebuildFnReturnByTarget<FnReturn, Exclude<TargetType, TargetTypeSubset>>
+      : TargetTypeSubset
+
 type TypeOfTargetVal<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
   Target extends UnitTargetable<any>
     ? Target extends UnitTargetable<infer TargetType>
-      ? [SourceType] extends [Readonly<TargetType>]
-        ? TargetType
-        : WhichType<TargetType> extends 'any'
-          ? unknown
-          : TargetType
+      ? RebuildFnReturnByTarget<SourceType, TargetType>
       : never
     : Target extends RoTuple<infer TU>
       ? TU extends UnitTargetable<infer TargetType>
-        ? [SourceType] extends [Readonly<TargetType>]
-          ? TargetType
-          : WhichType<TargetType> extends 'any'
-            ? unknown
-            : TargetType
-          : never
+        ? RebuildFnReturnByTarget<SourceType, TargetType>
+        : never
       : never
 
 type IsTargetWiderThanSource<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
