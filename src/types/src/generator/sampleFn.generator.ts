@@ -325,6 +325,39 @@ export default () => {
     'exactBadNarrow',
   ])
   const fnReturnNullableCases = matchUnion(fnReturnType, 'exactNullable')
+  const pass = every([
+    goodFn,
+    some([matchUnion(fnReturnType, 'exact'), assertFnArgs]),
+    some([
+      targetCases.hasExact,
+      targetCases.hasExactExactBad,
+      targetCases.hasExactNullable,
+      targetCases.hasExactNarrow,
+    ]),
+    not(
+      every([
+        matchUnion(fnReturnType, 'exact'),
+        some([
+          targetCases.hasExactBad,
+          targetCases.hasExactBadNarrow,
+          // targetCases.hasNarrow,
+        ]),
+      ]),
+    ),
+    not(
+      every([
+        isClockOnly,
+        some([
+          clockOnlyCases.hasClockNarrow,
+          clockOnlyCases.hasClockExactBad,
+          clockOnlyCases.hasClockExactBadNarrow,
+          clockOnlyCases.hasClockExactExactBad,
+          clockOnlyCases.hasClockExactNarrow,
+          clockOnlyCases.hasClockExactNullable,
+        ]),
+      ]),
+    ),
+  ])
   function targetCasesByFnReturn<
     Cases extends Partial<Record<FnReturnCases, TargetCases[]>>,
   >(cases: Cases) {
@@ -347,6 +380,38 @@ export default () => {
       cases: casesFinal,
     })
     return result
+  }
+  function whenFnResultExistInTargetType<
+    Cases extends Partial<Record<FnReturnCases, TargetCases[]>>,
+  >(cases: Cases) {
+    const variantMatch = {} as Record<
+      FnReturnCases,
+      {fnReturnType: FnReturnCases}
+    >
+    const casesFinal = {} as Record<FnReturnCases, BoolDecl>
+    for (const _key in cases) {
+      const key = _key as FnReturnCases
+      variantMatch[key] = {fnReturnType: key}
+      const boolDecls = [] as BoolDecl[]
+      const caseItems = cases[key]!
+      if (caseItems.length > 0) {
+        for (const caseName of caseItems) {
+          const flagName: `has${Capitalize<TargetCases>}` =
+            `has${caseName[0].toUpperCase()}${caseName.slice(1)}` as any
+          boolDecls.push(targetCases[flagName])
+        }
+      } else {
+        boolDecls.push(value(false))
+      }
+      casesFinal[key] = some(boolDecls)
+    }
+    return separate({
+      source: {fnReturnType},
+      variant: {
+        _: variantMatch,
+      } as const,
+      cases: casesFinal,
+    })
   }
   sortOrder([testCase, fnReturnType, goodFn])
   config({
@@ -377,39 +442,7 @@ export default () => {
       ]),
     ],
     grouping: {
-      pass: every([
-        goodFn,
-        some([matchUnion(fnReturnType, 'exact'), assertFnArgs]),
-        some([
-          targetCases.hasExact,
-          targetCases.hasExactExactBad,
-          targetCases.hasExactNullable,
-          targetCases.hasExactNarrow,
-        ]),
-        not(
-          every([
-            matchUnion(fnReturnType, 'exact'),
-            some([
-              targetCases.hasExactBad,
-              targetCases.hasExactBadNarrow,
-              // targetCases.hasNarrow,
-            ]),
-          ]),
-        ),
-        not(
-          every([
-            isClockOnly,
-            some([
-              clockOnlyCases.hasClockNarrow,
-              clockOnlyCases.hasClockExactBad,
-              clockOnlyCases.hasClockExactBadNarrow,
-              clockOnlyCases.hasClockExactExactBad,
-              clockOnlyCases.hasClockExactNarrow,
-              clockOnlyCases.hasClockExactNullable,
-            ]),
-          ]),
-        ),
-      ]),
+      pass,
       getHash: {goodFn, assertFnArgs, testCase, fnReturnType},
       describeGroup: computeFn({
         source: {testCase, fnReturnType, goodFn, assertFnArgs},
@@ -467,7 +500,29 @@ export default () => {
           },
           fn: {
             field: fnCode,
-            markError: bool({source: {goodFn}, true: {goodFn: false}}),
+            markError: some([
+              bool({source: {goodFn}, true: {goodFn: false}}),
+              every([
+                goodFn,
+                not(pass),
+                not(
+                  whenFnResultExistInTargetType({
+                    exact: [
+                      'exact',
+                      'exactExactBad',
+                      'exactNarrow',
+                      'exactNullable',
+                    ],
+                    exactBad: ['exactBad'],
+                    exactNullable: [],
+                    narrow: ['narrow', 'exactNarrow'],
+                    exactNarrow: ['exactNarrow', 'narrow'],
+                    exactBadNarrow: ['exactBadNarrow'],
+                    exactExactBad: ['exactBad', 'exactExactBad'],
+                  }),
+                ),
+              ]),
+            ]),
           },
         },
       },
