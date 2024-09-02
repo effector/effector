@@ -677,6 +677,7 @@ describe('clock without source', () => {
     const target = createStore(1)
     sample({
       clock: foo,
+      //@ts-expect-error
       fn: foo => foo,
       //@ts-expect-error
       target,
@@ -685,7 +686,8 @@ describe('clock without source', () => {
       "
       Unmarked error at test line 4 'clock: foo,'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }; }'.
-      lack of expected error at test line 7 'target,'
+      lack of expected error at test line 6 'fn: foo => foo,'
+      lack of expected error at test line 8 'target,'
       "
     `)
   })
@@ -696,6 +698,7 @@ describe('clock without source', () => {
 
     sample({
       clock: [foo, bar],
+      //@ts-expect-error
       fn: foo => true,
       //@ts-expect-error
       target,
@@ -705,7 +708,8 @@ describe('clock without source', () => {
       "
       Unmarked error at test line 6 'clock: [foo, bar],'
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: boolean; targetType: number; }; }'.
-      lack of expected error at test line 9 'target,'
+      lack of expected error at test line 8 'fn: foo => true,'
+      lack of expected error at test line 10 'target,'
       "
     `)
   })
