@@ -2150,14 +2150,30 @@ describe('no source', () => {
         sample({clock:nullableAB, target:$ab , filter:(clk: AB | null) => clk !== null})
         //@ts-expect-error
         sample({clock:nullableAB, target:strt, filter:(clk: AB | null) => clk !== null})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk) => clk.a > 0              })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk) => clk.a > 0              })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk: AB) => clk.a > 0          })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk: AB) => clk.a > 0          })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+        })
         //@ts-expect-error
         sample({clock:nullableAB, target:$ab , filter:$filter                         })
         //@ts-expect-error
@@ -2216,26 +2232,66 @@ describe('no source', () => {
         sample({clock:nullableAB, target:strt, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
         //@ts-expect-error
         sample({clock:nullableAB, target:strt, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
         //@ts-expect-error
         sample({clock:nullableAB, target:strt, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
         //@ts-expect-error
         sample({clock:nullableAB, target:strt, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
         //@ts-expect-error
         sample({clock:nullableAB, target:$ab , filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
@@ -2244,14 +2300,34 @@ describe('no source', () => {
         sample({clock:nullableAB, target:$ab , filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
         sample({clock:nullableAB, target:strt, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         //@ts-expect-error
         sample({clock:nullableAB, target:$ab , filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
         //@ts-expect-error
@@ -2260,14 +2336,34 @@ describe('no source', () => {
         sample({clock:nullableAB, target:$ab , filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
         //@ts-expect-error
         sample({clock:nullableAB, target:strt, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
         //@ts-expect-error
         sample({clock:nullableAB, target:strt, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
         //@ts-expect-error
@@ -2580,14 +2676,30 @@ describe('no source', () => {
         sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB | null) => clk !== null})
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB | null) => clk !== null})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk) => clk.a > 0              })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk) => clk.a > 0              })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB) => clk.a > 0          })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB) => clk.a > 0          })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:$ab , filter:$filter                         })
         //@ts-expect-error
@@ -2646,26 +2758,66 @@ describe('no source', () => {
         sample({clock:[ab,nullableAB], target:strt, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:strt, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:$ab , filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
@@ -2674,14 +2826,34 @@ describe('no source', () => {
         sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:$ab , filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
         //@ts-expect-error
@@ -2690,14 +2862,34 @@ describe('no source', () => {
         sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab , filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:strt, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: strt,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:strt, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
         //@ts-expect-error
@@ -3003,10 +3195,16 @@ describe('no source', () => {
     test('clock -> new unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0    })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0})
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3046,30 +3244,62 @@ describe('no source', () => {
     test('clock, fn -> new unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
         //@ts-expect-error
         sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
         sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         //@ts-expect-error
         sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
         //@ts-expect-error
         sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
         //@ts-expect-error
         sample({clock:nullableAB, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
@@ -3194,10 +3424,16 @@ describe('no source', () => {
     test('[clock] -> new unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0    })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0})
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -3237,30 +3473,62 @@ describe('no source', () => {
     test('[clock], fn -> new unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk: AB) => clk.a > 0,
+          fn: (val: ABN) => ({a:val.c, b:''}),
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
         //@ts-expect-error
@@ -3371,14 +3639,30 @@ describe('bad filter', () => {
   test('not a function (should fail)', () => {
     //prettier-ignore
     {
-      //@ts-expect-error
-      sample({clock:nullableAB, target:$ab, filter:null})
-      //@ts-expect-error
-      sample({clock:nullableAB, target:$ab, filter:null, fn:(val) => ({a:1, b: val ? val.b : ''})})
-      //@ts-expect-error
-      sample({clock:nullableAB, filter:null})
-      //@ts-expect-error
-      sample({clock:nullableAB, filter:null, fn:(val) => ({a:1, b: val ? val.b : ''})})
+      sample({
+        clock: nullableAB,
+        target: $ab,
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        clock: nullableAB,
+        target: $ab,
+        //@ts-expect-error
+        filter: null,
+        fn: (val) => ({a:1, b: val ? val.b : ''}),
+      })
+      sample({
+        clock: nullableAB,
+        //@ts-expect-error
+        filter: null,
+      })
+      sample({
+        clock: nullableAB,
+        //@ts-expect-error
+        filter: null,
+        fn: (val) => ({a:1, b: val ? val.b : ''}),
+      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -3403,14 +3687,30 @@ describe('bad filter', () => {
   test('bad return (should fail)', () => {
     //prettier-ignore
     {
-      //@ts-expect-error
-      sample({clock:nullableAB, target:$ab, filter:() => 1})
-      //@ts-expect-error
-      sample({clock:nullableAB, target:$ab, filter:() => 1, fn:(val) => ({a:1, b: val ? val.b : ''})})
-      //@ts-expect-error
-      sample({clock:nullableAB, filter:() => 1})
-      //@ts-expect-error
-      sample({clock:nullableAB, filter:() => 1, fn:(val) => ({a:1, b: val ? val.b : ''})})
+      sample({
+        clock: nullableAB,
+        target: $ab,
+        //@ts-expect-error
+        filter: () => 1,
+      })
+      sample({
+        clock: nullableAB,
+        target: $ab,
+        //@ts-expect-error
+        filter: () => 1,
+        fn: (val) => ({a:1, b: val ? val.b : ''}),
+      })
+      sample({
+        clock: nullableAB,
+        //@ts-expect-error
+        filter: () => 1,
+      })
+      sample({
+        clock: nullableAB,
+        //@ts-expect-error
+        filter: () => 1,
+        fn: (val) => ({a:1, b: val ? val.b : ''}),
+      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "

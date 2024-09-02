@@ -118,134 +118,538 @@ const typecheck = '{global}'
     test('no fn (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:num, target:[str]           })
-        //@ts-expect-error
-        sample({source:num, target:[strBool]       })
-        //@ts-expect-error
-        sample({source:num, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:num, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({source:num, target:[str,voidt]     })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,str]      })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,strBool]  })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,strBool]})
-        //@ts-expect-error
-        sample({source:str, target:[num]           })
-        //@ts-expect-error
-        sample({source:str, target:[num,voidt]     })
-        //@ts-expect-error
-        sample({source:str, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:str, target:[anyt,num]      })
-        //@ts-expect-error
-        sample({source:str, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:str, target:[num,numStr]    })
-        //@ts-expect-error
-        sample({clock:num, target:[str]           })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool]       })
-        //@ts-expect-error
-        sample({clock:num, target:[num,str]       })
-        //@ts-expect-error
-        sample({clock:num, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({clock:num, target:[str,voidt]     })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,str]      })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,strBool]  })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,strBool]})
-        //@ts-expect-error
-        sample({clock:str, target:[num]           })
-        //@ts-expect-error
-        sample({clock:str, target:[num,voidt]     })
-        //@ts-expect-error
-        sample({clock:str, target:[num,str]       })
-        //@ts-expect-error
-        sample({clock:str, target:[anyt,num]      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({clock:str, target:[num,numStr]    })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[str]           })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool]       })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[str,voidt]     })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[anyt,str]      })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[anyt,strBool]  })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[numStr,strBool]})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[str]           })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[strBool]       })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[strBool,voidt] })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[str,voidt]     })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,str]      })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[numStr,str]    })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,strBool]  })
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[numStr,strBool]})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num]           })
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,voidt]     })
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,num]      })
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,numStr]    })
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num]           })
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,voidt]     })
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,str]       })
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[anyt,num]      })
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,strBool]   })
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,numStr]    })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+        })
+        sample({
+          source: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+        })
+        sample({
+          clock: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -391,126 +795,563 @@ const typecheck = '{global}'
     test('untyped fn (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:num, target:[str]           , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[strBool]       , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[num,str]       , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[num,strBool]   , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[str,voidt]     , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,str]      , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,str]    , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,strBool]  , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,strBool], fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num]           , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,voidt]     , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,str]       , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[anyt,num]      , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,strBool]   , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({source:str, target:[num,numStr]    , fn:(src) => src + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[str]           , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool]       , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[num,str]       , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[num,strBool]   , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[str,voidt]     , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,str]      , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,str]    , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,strBool]  , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,strBool], fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num]           , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,voidt]     , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,str]       , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[anyt,num]      , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,strBool]   , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({clock:str, target:[num,numStr]    , fn:(clk) => clk + 1      })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[str]           , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool]       , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[num,str]       , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[num,strBool]   , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool,voidt] , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[str,voidt]     , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[anyt,str]      , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[numStr,str]    , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[anyt,strBool]  , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[numStr,strBool], fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num]           , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,voidt]     , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,str]       , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,num]      , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,strBool]   , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,numStr]    , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num]           , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,voidt]     , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,str]       , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,num]      , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,strBool]   , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,numStr]    , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num]           , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,voidt]     , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,str]       , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[anyt,num]      , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,strBool]   , fn:(src,clk) => src + clk})
-        //@ts-expect-error
-        sample({source:str, clock:str, target:[num,numStr]    , fn:(src,clk) => src + clk})
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          source: str,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+          fn: (src) => src + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+          fn: (clk) => clk + 1,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: num,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            voidt,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            str,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            anyt,
+            //@ts-expect-error
+            num,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            strBool,
+          ],
+          fn: (src,clk) => src + clk,
+        })
+        sample({
+          source: str,
+          clock: str,
+          target: [
+            //@ts-expect-error
+            num,
+            numStr,
+          ],
+          fn: (src,clk) => src + clk,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -584,146 +1425,280 @@ const typecheck = '{global}'
     test('typed fn (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:num, target:[str]           , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[strBool]       , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[num,str]       , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[num,strBool]   , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[strBool,voidt] , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[str,voidt]     , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,str]      , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,str]    , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[anyt,strBool]  , fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({source:num, target:[numStr,strBool], fn:(src:number) => src+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[str]           , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool]       , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[num,str]       , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[num,strBool]   , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[strBool,voidt] , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[str,voidt]     , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,str]      , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,str]    , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[anyt,strBool]  , fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({clock:num, target:[numStr,strBool], fn:(clk:number) => clk+1             })
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[str]           , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool]       , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[num,str]       , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[num,strBool]   , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[strBool,voidt] , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[str,voidt]     , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[anyt,str]      , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[numStr,str]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[anyt,strBool]  , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:num, target:[numStr,strBool], fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num]           , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[voidt]         , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[str]           , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt]          , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[strBool]       , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[numStr]        , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,voidt]     , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,str]       , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,num]      , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,strBool]   , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[num,numStr]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,voidt]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[strBool,voidt] , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[numStr,voidt]  , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[str,voidt]     , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,str]      , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[numStr,str]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,numStr]   , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[anyt,strBool]  , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:num, clock:str, target:[numStr,strBool], fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num]           , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[voidt]         , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[str]           , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt]          , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[strBool]       , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[numStr]        , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,voidt]     , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,str]       , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,num]      , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,strBool]   , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[num,numStr]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,voidt]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[strBool,voidt] , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[numStr,voidt]  , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[str,voidt]     , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,str]      , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[numStr,str]    , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,numStr]   , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[anyt,strBool]  , fn:(src:number,clk:number) => src+clk})
-        //@ts-expect-error
-        sample({source:str, clock:num, target:[numStr,strBool], fn:(src:number,clk:number) => src+clk})
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          source: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number) => src+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (clk:number) => clk+1,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            num,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            strBool,
+            voidt,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            str,
+            voidt,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            str,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            anyt,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
+        sample({
+          source: num,
+          clock: num,
+          target: [
+            numStr,
+            //@ts-expect-error
+            strBool,
+          ],
+          fn: (src:number,clk:number) => src+clk,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -739,169 +1714,458 @@ const typecheck = '{global}'
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
         Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-            Types of parameters 'clk' and 'clk' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
-        Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-          Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-            Types of parameters 'src' and 'src' are incompatible.
-              Type 'string' is not assignable to type 'number'.
         "
       `)
     })
+  })
+  test('wrong args (should fail)', () => {
+    //prettier-ignore
+    {
+      sample({
+        source: num,
+        clock: str,
+        target: [num],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [anyt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [numStr],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [num,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [num,str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [anyt,num],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [num,strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [num,numStr],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [anyt,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [strBool,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [numStr,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [str,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [anyt,str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [numStr,str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [anyt,numStr],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [anyt,strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: num,
+        clock: str,
+        target: [numStr,strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [num],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [anyt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [numStr],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [num,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [num,str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [anyt,num],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [num,strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [num,numStr],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [anyt,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [strBool,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [numStr,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [str,voidt],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [anyt,str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [numStr,str],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [anyt,numStr],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [anyt,strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+      sample({
+        source: str,
+        clock: num,
+        target: [numStr,strBool],
+        //@ts-expect-error
+        fn: (src:number,clk:number) => src+clk,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+          Types of parameters 'clk' and 'clk' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
+        Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'src' and 'src' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      "
+    `)
   })
 }
 {
@@ -1017,90 +2281,357 @@ const typecheck = '{global}'
     test('source:wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_str]              })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[abn]                })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_num,a_str]        })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_num,abn]          })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_str,ab]           })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[abn,a_str]          })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[abn,ab]             })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str]              })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[abn]                })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,a_str]        })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,abn]          })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str,ab]           })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,a_str]          })
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,ab]             })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[l_num_str,l_num_num]})
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1175,90 +2706,399 @@ const typecheck = '{global}'
     test('source:wide, fn:untyped (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_str]      , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[abn]        , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_num,a_str], fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_num,abn]  , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[a_str,ab]   , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[abn,a_str]  , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , target:[abn,ab]     , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[a_str]      , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[abn]        , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[a_num,a_str], fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , target:[abn,ab]     , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[a_str]      , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[abn]        , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[a_num,a_str], fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str]      , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[abn]        , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,a_str], fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_num,abn]  , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[a_str,ab]   , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,a_str]  , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:{a:$num,b:$str}     , clock:num, target:[abn,ab]     , fn:({a,b}) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[a_str]      , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[abn]        , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[a_num,a_str], fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str]         , clock:num, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[a_str]      , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[abn]        , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[a_num,a_str], fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[a_num,abn]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[a_str,ab]   , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[abn,a_str]  , fn:([a,b]) => ({a,b})})
-        //@ts-expect-error
-        sample({source:[$num,$str] as const, clock:num, target:[abn,ab]     , fn:([a,b]) => ({a,b})})
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: {a:$num,b:$str},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ({a,b}) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
+        sample({
+          source: [$num,$str] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a,b]) => ({a,b}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1313,114 +3153,465 @@ const typecheck = '{global}'
     test('source:same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_str]              })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[abn]                })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[ab]                 })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_num,a_str]        })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_num,abn]          })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_num,ab]           })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_str,ab]           })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[abn,a_str]          })
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[abn,ab]             })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num_str]          })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num,l_num_str]    })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num]         , target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num_str]          })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num,l_num_str]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_str]              })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[abn]                })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[ab]                 })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_num,a_str]        })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_num,abn]          })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_num,ab]           })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_str,ab]           })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[abn,a_str]          })
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[abn,ab]             })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num_str]          })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num,l_num_str]    })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[l_num_str,l_num_num]})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_str]              })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num_str]          })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num_num]          })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num,l_str]        })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num,l_num_str]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_str,l_num_num]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num_str,l_str]    })
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[l_num_str,l_num_num]})
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            a_num,
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            a_str,
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            ab,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            l_num,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_str,
+          ],
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            l_num_str,
+            //@ts-expect-error
+            l_num_num,
+          ],
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -1502,90 +3693,399 @@ const typecheck = '{global}'
     test('source:same, fn:untyped (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_str]      , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[abn]        , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_num,a_str], fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_num,abn]  , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[a_str,ab]   , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[abn,a_str]  , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , target:[abn,ab]     , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[a_str]      , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[abn]        , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[a_num,a_str], fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , target:[abn,ab]     , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[a_str]      , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[abn]        , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[a_num,a_str], fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_str]      , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[abn]        , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_num,a_str], fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_num,abn]  , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[a_str,ab]   , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[abn,a_str]  , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:{a:$num}       , clock:num, target:[abn,ab]     , fn:({a}) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[a_str]      , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[abn]        , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[a_num,a_str], fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num]         , clock:num, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[a_str]      , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[abn]        , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[a_num,a_str], fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[a_num,abn]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[a_str,ab]   , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[abn,a_str]  , fn:([a]) => ({a,b:''})})
-        //@ts-expect-error
-        sample({source:[$num] as const, clock:num, target:[abn,ab]     , fn:([a]) => ({a,b:''})})
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: {a:$num},
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ({a}) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num],
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            a_num,
+            //@ts-expect-error
+            abn,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            a_str,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            a_str,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
+        sample({
+          source: [$num] as const,
+          clock: num,
+          target: [
+            //@ts-expect-error
+            abn,
+            ab,
+          ],
+          fn: ([a]) => ({a,b:''}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "

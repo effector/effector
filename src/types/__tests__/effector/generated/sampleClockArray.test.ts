@@ -13,16 +13,14 @@ const aTarget = createEvent<{a: string}>()
 const abTarget = createEvent<AB>()
 const aclock = createEvent<{a: string; clock: any}>()
 const abclock = createEvent<{a: string; b: number; clock: any}>()
-const fnAbClockString = ({a, b}: AB, clock: string) => ({a, b, clock})
 const fnAbClockAny = ({a, b}: AB, clock: any) => ({a, b, clock})
 const fnAString = (a: string) => ({a})
-const fnAStringClockString = (a: string, clock: string) => ({a, clock})
 const fnAStringClockAny = (a: string, clock: any) => ({a, clock})
 const fnAb = ({a, b}: AB) => ({a, b})
 describe('fn clock assertion', () => {
   test('plain, noTarget (should pass)', () => {
     //prettier-ignore
-    sample({source:a, clock:[anyt], fn:fnAStringClockString})
+    sample({source:a, clock:[anyt], fn:(a:string, clock:string) => ({a,clock})})
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
@@ -32,24 +30,60 @@ describe('fn clock assertion', () => {
   test('plain, noTarget (should fail)', () => {
     //prettier-ignore
     {
-      //@ts-expect-error
-      sample({source:a, clock:[voidt]     , fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[num]       , fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[voidt,num] , fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[]          , fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[anyt,voidt], fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[anyt,num]  , fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[voidt,anyt], fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[num,anyt]  , fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[num,voidt] , fn:fnAStringClockString})
+      sample({
+        source: a,
+        clock: [voidt],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [num],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [voidt,num],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [anyt,voidt],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [anyt,num],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [voidt,anyt],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [num,anyt],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [num,voidt],
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -71,12 +105,16 @@ describe('fn clock assertion', () => {
           Types of parameters 'clock' and 'clk' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
+        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'number | void' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
       "
     `)
   })
   test('plain (should pass)', () => {
     //prettier-ignore
-    sample({source:a, clock:[anyt], target:aclock, fn:fnAStringClockString})
+    sample({source:a, clock:[anyt], target:aclock, fn:(a:string, clock:string) => ({a,clock})})
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
@@ -86,38 +124,100 @@ describe('fn clock assertion', () => {
   test('plain (should fail)', () => {
     //prettier-ignore
     {
-      //@ts-expect-error
-      sample({source:a, clock:[voidt]     , target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[num]       , target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[voidt,num] , target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[]          , target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[anyt,voidt], target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[anyt,num]  , target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[voidt,anyt], target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[num,anyt]  , target:aclock, fn:fnAStringClockString})
-      //@ts-expect-error
-      sample({source:a, clock:[num,voidt] , target:aclock, fn:fnAStringClockString})
+      sample({
+        source: a,
+        clock: [voidt],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [num],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [voidt,num],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [anyt,voidt],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [anyt,num],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [voidt,anyt],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [num,anyt],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
+      sample({
+        source: a,
+        clock: [num,voidt],
+        target: aclock,
+        //@ts-expect-error
+        fn: (a:string, clock:string) => ({a,clock}),
+      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
+        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'void' is not assignable to type 'string'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
+        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'number' is not assignable to type 'string'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
+        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'number | void' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: unknown) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
+        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: unknown) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '((src: string, clk: number | void) => any) & ((a: string, clock: string) => { a: string; clock: string; })'.
+        Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
+          Types of parameters 'clock' and 'clk' are incompatible.
+            Type 'number | void' is not assignable to type 'string'.
+              Type 'number' is not assignable to type 'string'.
       "
     `)
   })
   test('combinable, noTarget (should pass)', () => {
     //prettier-ignore
-    sample({source:{a,b}, clock:[anyt], fn:fnAbClockString})
+    sample({source:{a,b}, clock:[anyt], fn:({a,b}:AB, clock:string) => ({a,b,clock})})
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
@@ -127,24 +227,60 @@ describe('fn clock assertion', () => {
   test('combinable, noTarget (should fail)', () => {
     //prettier-ignore
     {
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[voidt]     , fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[num]       , fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[voidt,num] , fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[]          , fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[anyt,voidt], fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[anyt,num]  , fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[voidt,anyt], fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[num,anyt]  , fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[num,voidt] , fn:fnAbClockString})
+      sample({
+        source: {a,b},
+        clock: [voidt],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [num],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [voidt,num],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [anyt,voidt],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [anyt,num],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [voidt,anyt],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [num,anyt],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [num,voidt],
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -175,7 +311,7 @@ describe('fn clock assertion', () => {
   })
   test('combinable (should pass)', () => {
     //prettier-ignore
-    sample({source:{a,b}, clock:[anyt], target:abclock, fn:fnAbClockString})
+    sample({source:{a,b}, clock:[anyt], target:abclock, fn:({a,b}:AB, clock:string) => ({a,b,clock})})
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
@@ -185,24 +321,69 @@ describe('fn clock assertion', () => {
   test('combinable (should fail)', () => {
     //prettier-ignore
     {
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[voidt]     , target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[num]       , target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[voidt,num] , target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[]          , target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[anyt,voidt], target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[anyt,num]  , target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[voidt,anyt], target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[num,anyt]  , target:abclock, fn:fnAbClockString})
-      //@ts-expect-error
-      sample({source:{a,b}, clock:[num,voidt] , target:abclock, fn:fnAbClockString})
+      sample({
+        source: {a,b},
+        clock: [voidt],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [num],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [voidt,num],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [anyt,voidt],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [anyt,num],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [voidt,anyt],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [num,anyt],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
+      sample({
+        source: {a,b},
+        clock: [num,voidt],
+        target: abclock,
+        //@ts-expect-error
+        fn: ({a,b}:AB, clock:string) => ({a,b,clock}),
+      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
