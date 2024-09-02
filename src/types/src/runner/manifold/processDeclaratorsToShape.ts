@@ -39,7 +39,15 @@ function getDeclsReferencedByConfig(): string[] {
   } else if (createTestLines && 'method' in createTestLines) {
     forIn(createTestLines.shape, value => {
       if (isRef(value)) results.push(value)
-      else results.push(value.field, value.when)
+      else {
+        results.push(value.field)
+        if (value.when) {
+          results.push(value.when)
+        }
+        if (value.markError) {
+          results.push(value.markError)
+        }
+      }
     })
     if (isRef(createTestLines.addExpectError)) {
       results.push(createTestLines.addExpectError)
