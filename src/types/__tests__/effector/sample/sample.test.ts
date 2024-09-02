@@ -669,12 +669,14 @@ describe('clock without source', () => {
     sample({
       //@ts-expect-error
       clock: [foo, bar, baz],
+      //@ts-expect-error
       target,
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string | number | boolean; targetType: number; }; }'.
+      lack of expected error at test line 10 'target,'
       "
     `)
   })
