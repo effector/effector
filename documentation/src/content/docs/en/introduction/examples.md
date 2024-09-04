@@ -26,7 +26,7 @@ When we need to cancel our effect since it's pointless at the time
 
 -->
 
-### [Modal dialog](https://share.effector.dev/4ATpafwV)
+### [Modal dialog](https://share.effector.dev/8xsWOCeS)
 
 To connect react modal with state
 
