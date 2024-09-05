@@ -39,6 +39,7 @@ To connect a custom range input component with state
 - [Snake game (interactive A\* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
 - [Ballcraft game](https://ballcraft.now.sh/) ([source code](https://github.com/kobzarvs/effector-craftball))
 - [Client-server interaction with effects](https://github.com/effector/effector/tree/master/examples/worker-rpc) GitHub
+- [Tree folder structure](https://share.effector.dev/V1kjLxzx)
 - [Reddit reader](https://share.effector.dev/aW7ESkZ0) With effects for data fetching and effector-react hooks <!-- Reddit api is disabled, example not working! -->
 <!-- - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook Example with forbidden event calls in pure functions -->
 <!-- - [Dynamic typing status](https://share.effector.dev/tAnzG5oJ) example with watch calls in effect for aborting -->
