@@ -16,7 +16,11 @@ import { useList } from "effector-react";
 Hook function for efficient rendering of list store.
 Every item will be memoized and updated only when their data change.
 
-# Methods (#methods)
+# When should you use `useList`?
+
+`useList` is designed to solve the specific task of efficiently rendering lists. With `useList`, you don’t need to manually set `key` for list components, and it implements a more optimized re-rendering process. If you feel that something else is needed, it means the feature has outgrown `useList`, and you should use [`useStoreMap`](/en/api/effector-react/useStoreMap). With `useStoreMap`, you can extract specific data from the store in an optimal way, especially if you don’t need the entire store, but only a part of it
+
+# API (#api)
 
 ## `useList($store, fn)` (#methods-useList-store-fn)
 
