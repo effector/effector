@@ -1029,6 +1029,19 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
   });
 }
 
+export const getPrevNext = (
+  sidebar: Awaited<ReturnType<typeof getLocalizedSidebar>>,
+  currentPath: string
+) => {
+  const flatItems = sidebar.flatMap(group => group.items);
+  const currentIndex = flatItems.findIndex(item => item.link === currentPath);
+
+  const prevPage = currentIndex > 0 ? flatItems[currentIndex - 1] : null;
+  const nextPage = currentIndex < flatItems.length - 1 ? flatItems[currentIndex + 1] : null;
+
+  return { prevPage, nextPage };
+};
+
 function getSlugs() {
   return getCollection("docs").then((docs) => new Set(docs.map((doc) => `/${doc.slug}`)));
 }
