@@ -105,6 +105,10 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
         width: 100%;
     }
 
+    .content > section {
+        margin-bottom: 4rem;
+    }
+
     .main-section .navigation {
         display: flex;
         flex-direction: column;
@@ -115,6 +119,10 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
             flex-direction: row;
             align-items: center;
         }
+    }
+
+    .main-section .navigation .translations {
+        font-size: 1rem;
     }
 
     .breadcrumbs {
@@ -132,7 +140,47 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
         align-items: center;
     }
 
+    .breadcrumbs li a {
+        text-wrap: nowrap;
+    }
+
+    .breadcrumbs li:last-child span {
+        font-weight: 600;
+    }
+
+    .breadcrumbs li:not(:last-child)::after {
+        content: " ";
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="black" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
+        center;
+        display: inline-block;
+        height: 1ch;
+        width: 1ch;
+        margin-left: 0.5rem;
+        opacity: 0.5;
+    }
+
+    :root.theme-dark .breadcrumbs li:not(:last-child)::after {
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="white" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
+        center;
+    }
+
+    .breadcrumbs li a svg {
+        display: inline-block;
+        width: 2ch;
+        height: 2ch;
+        margin-top: -4px;
+    }
+
     .breadcrumbs li a.active {
         text-decoration: underline;
+    }
+
+    .translations a:hover {
+        text-decoration: underline;
+    }
+
+    .translations a:not(:last-child)::after {
+        content: ", ";
+        color: var(--theme-text-light);
     }
 </style>
