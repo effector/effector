@@ -1,14 +1,23 @@
 ---
 title: sample
-description: Метод для связывания юнитов связью вида "при срабатывании `clock` прочитать значение из `source` и передать в `target`"
-lang: ru
+redirectFrom:
+  - Пример
+  - Пример
 ---
 
-Метод для связывания [юнитов](/ru/explanation/glossary#common-unit) связью вида _"при срабатывании `clock` прочитать значение из `source` и передать в `target`"_
+```ts
+import { sample } from "effector";
+```
 
-Типичный вариант использования – когда необходимо обработать какое-либо событие используя данные из стора. Вместо использования `store.getState()`, которое может вызвать несогласованность состояния, лучше использовать метод `sample`
+# Methods (#methods)
 
-## Формула
+## **`fn?`**: `(sourceData, clockData) => result` Основная запись метода
+
+This method can be used for linking two nodes, resulting in the third one, which will fire only upon the `clock` node trigger.
+
+Quite a common case, when you need to handle an event with some store's state. Вместо использования `store.getState()`, которое может вызвать несогласованность состояния, лучше использовать метод `sample`
+
+### Formulae (#methods-sample-config-formulae)
 
 ```ts
 sample({ source?, clock?, filter?, fn?, target?}): target
@@ -21,11 +30,13 @@ sample({ source?, clock?, filter?, fn?, target?}): target
 - Если передан `fn`, то при срабатывании передать значения из `source` и `clock` в эту функцию, а в `target` передать результат вычисления
 - Если `target` не передан, то `sample` создаст и вернёт новый [юнит](/ru/explanation/glossary#common-unit)
 
-## Иллюстрация принципа работы
+### Schema (#methods-sample-config-schema)
 
 ![Иллюстрация принципа работы](/images/sample-visualization.gif)
 
-## Тип создаваемого `target`
+### Types (#methods-sample-config-types)
+
+#### Тип создаваемого `target`
 
 Если `target` не передан, то он будет создан при вызове. Тип создаваемого юнита описан в данной таблице:
 
@@ -35,7 +46,7 @@ sample({ source?, clock?, filter?, fn?, target?}): target
 | [_Event_](/ru/api/effector/Event)   | `Event`                           | `Event`                           | `Event`                             |
 | [_Effect_](/ru/api/effector/Effect) | `Event`                           | `Event`                           | `Event`                             |
 
-Использование таблицы:
+How to read it:
 
 1. Выбираем тип источника `source`, это столбец
 2. Тип `clock` – это строка
@@ -53,57 +64,48 @@ const event = sample({ clock: event, source: $store });
 
 ## `sample({clock?, source?, fn?, target?, greedy?})`
 
-Основная запись метода
+### Formulae (#methods-sample-greedy-formulae)
 
-**Аргументы**
+TBD
+
+### Arguments (#methods-sample-greedy-arguments)
 
 `params` (_Object_): Объект конфигурации
 
 - **`clock?`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
-
-  **Разновидности**:
-
   - **событие или эффект**: срабатывание этого события/эффекта будет запускать `target`
-  - **стор**: обновление этого стора будет запускать `target`
-  - **массив юнитов**: срабатывание любого из юнитов будет запускать `target`. Сокращение для вызова [merge](/ru/api/effector/merge)
+  - If store: trigger `target` upon store is updated
+  - If array of units: trigger `target` upon any given unit is called or updated. Сокращение для вызова [merge](/ru/api/effector/merge)
   - **поле отсутствует**: `source` будет использоваться в качестве `clock`
-
 - **`source?`**: [Юнит](/ru/explanation/glossary#common-unit) или массив/объект со сторами
-
-  **Разновидности**:
-
-  - **событие или эффект**: при срабатывании `clock` будет взято последнее значение с которым запускался этот юнит (перед этим он должен будет запуститься хотя бы раз)
-  - **стор**: при срабатывании `clock` будет взято текущее значение этого стора
+  - If event or effect: take last invocation argument value. That event or effect must be invoked at least once
+  - If store: take current state of given store
   - **массив или объект со сторами**: при срабатывании `clock` будут взяты текущие значения из заданных сторов, объединенных в объект или массив. Сокращение для вызова [combine](/ru/api/effector/combine)
-  - **поле отсутствует**: `clock` будет использоваться в качестве `source`
-
+  - **поле отсутствует**: `source` будет использоваться в качестве `clock`
 - **`target?`**: [Юнит](/ru/explanation/glossary#common-unit) или массив юнитов
-
-  **Разновидности**:
-
   - **событие или эффект**: при срабатывании `clock` будет вызван данный юнит
-  - **стор**: при срабатывании `clock` состояние юнита будет обновлено
-  - **массив юнитов**: при срабатывании `clock` будут запущены все юниты
-  - **поле отсутствует**: новый юнит будет создан и возвращен в результате вызова `sample`. Его тип [зависит от типов `clock` и `source`](#тип-создаваемого-target)
+  - If store: update given store upon `clock` is triggered
+  - If array of units: trigger every given unit upon `clock` is triggered
+  - **поле отсутствует**: новый юнит будет создан и возвращен в результате вызова `sample`. Type of created target is described [in table above](/en/api/effector/sample#methods-sample-config-types-target)
+- Правильнее будет поместить их в эффекты или в метод `watch` возвращаемого юнита
+- Функция-обработчик, которая будет преобразовывать данные из `source` и `clock` перед отправлением в `target`, [должна быть **чистой**](/ru/explanation/glossary#purity). В случае отсутствия этого поля, данные из `source` будут передаваться в `target` как есть
+- `greedy?` (boolean) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to `clock`, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger
 
-- **`fn?`**: `(sourceData, clockData) => result`
+:::warning{title="Deprecated"}
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) property `greedy` is deprecated.
 
-  Функция-обработчик, которая будет преобразовывать данные из `source` и `clock` перед отправлением в `target`, [должна быть **чистой**](/ru/explanation/glossary#purity). В случае отсутствия этого поля, данные из `source` будут передаваться в `target` как есть
+Use `batch` instead of `greedy`.
+:::
 
-- **`greedy?`**: `boolean`
-
-  Модификатор, определяющий, будет ли `target` ожидать окончательного значения `clock` прежде чем запуститься самому. При `greedy: false` `target` будет срабатывать только раз после каждой серии идущих подряд обновлений, а при `greedy: true`, `target` сработает по разу при каждом триггере `clock`. Иными словами, эта опция отключает стабилизацию апдейтов `clock` и вынуждает обрабатывать все промежуточные значения. Батчинг обновлений повышает общую эффективность работы системы, поэтому по умолчанию greedy установлен в `false`
-
-:::info
+:::info{title="since"}
 Поддержка массивов юнитов в `target` добавлена в effector 21.8.0
 :::
 
-**Возвращает**
+### Returns (#methods-sample-greedy-returns)
 
-([_Event_](/ru/api/effector/Event) | [_Store_](/ru/api/effector/Store)) – Юнит, который будет срабатывать при срабатывании `clock`, если `target` не передан.
-Тип возвращаемого юнита [зависит от типов clock и source](#тип-создаваемого-target)
+([_Event_](/ru/api/effector/Event) | [_Store_](/ru/api/effector/Store)) – Юнит, который будет срабатывать при срабатывании `clock`, если `target` не передан. Тип возвращаемого юнита [зависит от типов clock и source](#тип-создаваемого-target).
 
-#### Пример
+### Examples (#methods-sample-greedy-examples)
 
 ```js
 const $userName = createStore("john");
@@ -130,35 +132,28 @@ submitForm(12345678);
 
 ## `sample(source, clock, fn?): Unit`
 
-Альтернативная запись метода, всегда имеет неявный `target`
+It is just another form of the `sample` invocation, with the same sense.
 
-**Аргументы**
+### Формула
+
+TBD
+
+### Метод для связывания [юнитов](/ru/explanation/glossary#common-unit) связью вида _"при срабатывании `clock` прочитать значение из `source` и передать в `target`"_
 
 - **`source`**: [Юнит](/ru/explanation/glossary#common-unit)
-
-  **Разновидности**:
-
-  - **событие или эффект**: при срабатывании `clock` будет взято последнее значение с которым запускался этот юнит (перед этим он должен будет запуститься хотя бы раз)
-  - **стор**: при срабатывании `clock` будет взято текущее значение этого стора
-
-- **`clock`**: [Юнит](/ru/explanation/glossary#common-unit)
-
-  **Разновидности**:
-
-  - **событие или эффект**: срабатывание этого события/эффекта будет запускать `target`
-  - **стор**: обновление этого стора будет запускать `target`
-  - **поле отсутствует**: `source` будет использоваться в качестве `clock`
-
-- **`fn?`**: `(sourceData, clockData) => result`
-
-  Функция-обработчик, которая будет преобразовывать данные из `source` и `clock` перед отправлением в `target`, [должна быть **чистой**](/ru/explanation/glossary#purity). В случае отсутствия этого поля, данные из `source` будут передаваться в `target` как есть. Поскольку этот обработчик призван организовывать поток данных, следует избегать объявления в нём сайд-эффектов. Правильнее будет поместить их в эффекты или в метод `watch` возвращаемого юнита
+  - If event or effect. Take last invocation argument value. That event or effect must be invoked at least once
+  - If store. Take current store's state
+- **`clock`**: [Юнит](/ru/explanation/glossary#common-unit) **поле отсутствует**: `clock` будет использоваться в качестве `source`
+  - If event or effect. Trigger the sampled unit, upon event or effect is called
+  - If store. Trigger the sampled unit, upon store is updated
+- **`fn?`**: `(sourceData, clockData) => result` Поскольку этот обработчик призван организовывать поток данных, следует избегать объявления в нём сайд-эффектов. It's more appropriate to place it in `watch` method for sampled node.
 
 **Возвращает**
 
 ([_Event_](/ru/api/effector/Event) | [_Store_](/ru/api/effector/Store)) – Юнит, который будет срабатывать при срабатывании `clock`, если `target` не передан.
-Тип возвращаемого юнита [зависит от типов clock и source](#тип-создаваемого-target).
+Его тип [зависит от типов `clock` и `source`](#тип-создаваемого-target)
 
-#### Пример
+### Тип возвращаемого юнита [зависит от типов clock и source](#тип-создаваемого-target)
 
 ```js
 const $userName = createStore("john");
@@ -187,13 +182,14 @@ submitForm(12345678);
 
 [Запустить пример](https://share.effector.dev/YCTp2KLe)
 
-## `sample({name?})`
+### `sample({name?})`
 
-:::info
+:::info{title="since"}
 Добавлено в effector 20.4.0
 :::
 
 Любой [юнит](/ru/explanation/glossary#unit) в эффекторе может иметь имя, поле `name` в `sample` позволяет указать имя создаваемому `target`
+You now can name sampled entities in the same manner as basic ones.
 
 ```js
 import { createStore, sample } from "effector";
@@ -210,12 +206,13 @@ console.log(sampled.shortName); // 'sampled foo'
 
 ## Объекты и массивы в `source`
 
-### Объект со сторами
+### Object of Stores (#sample-source-object-stores)
 
-:::info
+:::info{title="since"}
 Добавлено в effector 20.8.0
 :::
-`sample` может быть вызван с объектом [сторов](/ru/api/effector/Store) в `source`:
+
+**событие или эффект**: срабатывание этого события/эффекта будет запускать `target`
 
 ```js
 import { createStore, createEvent, sample } from "effector";
@@ -240,14 +237,17 @@ trigger();
 
 [Запустить пример](https://share.effector.dev/Wp9nq14k)
 
-### Массив сторов
+### Array of Stores (#sample-source-array-stores)
 
-:::info
+:::info{title="since"}
 Добавлено в effector 20.8.0
 :::
-`sample` может быть вызван с массивом [сторов](/ru/api/effector/Store) в `source`:
 
-```js
+Передача массивов юнитов в `clock` работает как вызов [merge](/ru/api/effector/merge)
+
+> Note: Typescript requires adding `as const` after the array is entered.
+
+```ts
 import { createStore, createEvent, sample } from "effector";
 const trigger = createEvent();
 
@@ -276,13 +276,13 @@ trigger();
 
 [Запустить пример](https://share.effector.dev/duqTwRgT)
 
-## Массивы юнитов в `clock`
+### Массивы юнитов в `clock`
 
-:::info
+:::info{title="since"}
 Добавлено в effector 21.2.0
 :::
 
-Передача массивов юнитов в `clock` работает как вызов [merge](/ru/api/effector/merge)
+`clock` field in `sample` supports passing arrays of units, acting similarly to a `merge` call.
 
 ```js
 import {createStore, createEvent, createEffect, sample, merge} from 'effector'
@@ -317,7 +317,7 @@ sample({
 
 Новый вариант использования `sample` работает так же, но с одним дополнительным методом `filter`. Когда `filter` возвращает `true` продолжить выполнение, иначе отменить. Взглянем на пример ниже.
 
-Вася хочет отправить Пете деньги. Вася – отправитель, а Петя – получатель. Чтобы отправить деньги, отправитель должен знать адрес получателя, кроме того транзакция должна быть подписана. Пример показывает как работает `sample` с `filter`. Основные моменты, которые необходимо учесть:
+Henry wants to send money to William. Henry – sender and William – recipient. Чтобы отправить деньги, отправитель должен знать адрес получателя, кроме того транзакция должна быть подписана. Пример показывает как работает `sample` с `filter`. Основные моменты, которые необходимо учесть:
 
 1. Убедиться, что баланс положительный и больше чем отправляемая сумма.
 2. Наличие адреса получателя
@@ -369,3 +369,120 @@ sentMoney(1000);
 ```
 
 [Запустить пример](https://share.effector.dev/XTxkCYC0)
+
+<!-- ## Other examples
+
+### Example 2
+
+```js
+import {createEvent, createStore, sample} from 'effector'
+
+const clickButton = createEvent()
+const closeModal = clickButton.map(() => 'close modal')
+
+const lastEvent = createStore(null)
+  .on(clickButton, (_, data) => data)
+  .on(closeModal, () => 'modal')
+
+lastEvent.updates.watch(data => {
+  // here we need everything
+  //console.log(`sending important analytics event: ${data}`)
+})
+
+lastEvent.updates.watch(data => {
+  //here we need only final value
+  //console.log(`render <div class="yourstatus">${data}</div>`)
+})
+
+const analyticReportsEnabled = createStore(false)
+
+const commonSampling = sample({
+  clock: merge([clickButton, closeModal]),
+  source: analyticReportsEnabled,
+  fn: (isEnabled, data) => ({isEnabled, data}),
+})
+
+const greedySampling = sample({
+  clock: merge([clickButton, closeModal]),
+  source: analyticReportsEnabled,
+  fn: (isEnabled, data) => ({isEnabled, data}),
+  greedy: true,
+})
+
+commonSampling.watch(data => console.log('non greedy update', data))
+greedySampling.watch(data => console.log('greedy update', data))
+
+clickButton('click A')
+clickButton('click B')
+```
+
+[Try it](https://share.effector.dev/RCo60EEK)
+
+### Example `sample(sourceEvent, clockEvent, fn?)`
+
+```js
+import {createEvent, sample} from 'effector'
+
+const event1 = createEvent()
+const event2 = createEvent()
+
+const sampled = sample(event1, event2, (a, b) => `${a} ${b}`)
+sampled.watch(console.log)
+
+event1('Hello')
+event2('World') // => Hello World
+event2('effector!') // => Hello effector!
+
+sampled('Can be invoked too!') // => Can be invoked too!
+```
+
+[Try it](https://share.effector.dev/vXKWDhwL)
+
+### Example `sample(event, store, fn?)`
+
+```js
+import {createEvent, createStore, sample} from 'effector'
+
+const event = createEvent()
+const inc = createEvent()
+const count = createStore(0).on(inc, state => state + 1)
+
+const sampled = sample(
+  event,
+  count,
+  (c, i) => `Current count is ${i}, last event invocation: ${c}`,
+)
+sampled.watch(console.log)
+
+inc() // => nothing
+
+event('foo')
+inc() // => Current count is 2, last event invocation: foo
+
+event('bar')
+inc() // => Current count is 3, last event invocation: bar
+```
+
+[Try it](https://share.effector.dev/L4nbGjxM)
+
+### Example `sample(sourceStore, clockStore, fn?)`
+
+```js
+import {createEvent, createStore, sample} from 'effector'
+
+const inc = createEvent()
+const setName = createEvent()
+
+const name = createStore('John').on(setName, (_, v) => v)
+
+const clock = createStore(0).on(inc, i => i + 1)
+
+const sampled = sample(name, clock, (name, i) => `${name} has ${i} coins`)
+sampled.watch(console.log)
+// => John has 0 coins (initial store update triggered sampled store)
+
+setName('Doe')
+inc() // => Doe has 1 coins
+```
+
+[Try it](https://share.effector.dev/h3zED3yW) -->
