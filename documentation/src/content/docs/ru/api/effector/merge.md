@@ -1,40 +1,48 @@
 ---
 title: merge
 description: метод для объединения апдейтов массива юнитов в новое событие, которое будет срабатывать при запуске любой из переданных сущностей
-lang: ru
+redirectFrom:
+  - ru
+  - "[_Event_](/ru/api/effector/Event): Новое событие"
 ---
 
-Объединяет апдейты массива [юнитов](/ru/explanation/glossary#common-unit) в новое событие, которое будет срабатывать при запуске любой из переданных сущностей
+```ts
+import { merge, type Unit } from "effector";
+```
 
-:::info
+# Methods (#methods)
+
+## `merge(units)` (#methods-merge-units)
+
+:::info{title="since"}
 Добавлено в effector 20.0.0
 :::
 
-## Формула
+Merges an array of units (events, effects, or stores), returning a new event that triggers upon any of the given units being triggered.
 
 ```ts
-declare const $store: Store<T>; // триггер
-declare const event: Event<T>; // триггер
-declare const fx: Effect<T, any>; // триггер
-
-const result: Event<T> = merge(/*clock*/ [$store, event, fx]);
+merge(units: Unit[]): Event<T>
 ```
 
-### Аргументы
+### Arguments (#methods-merge-units-arguments)
 
-- **`clock`**: Массив [юнитов](/ru/explanation/glossary#common-unit) для объединения
+1. **`clock`**: Массив [юнитов](/ru/explanation/glossary#common-unit) для объединения
 
-### Возвращает
+### Returns (#methods-merge-units-returns)
 
-[_Event_](/ru/api/effector/Event): Новое событие
+Объединяет апдейты массива [юнитов](/ru/explanation/glossary#common-unit) в новое событие, которое будет срабатывать при запуске любой из переданных сущностей
 
 :::tip
 В случае передачи стора, итоговое событие будет срабатывать при обновлении этого стора
 :::
 
-## Примеры
+### Types (#methods-merge-units-types)
 
-#### Пример 1
+TBD
+
+### Examples (#methods-merge-units-examples)
+
+#### Basic Usage (#methods-merge-units-examples-basic-usage)
 
 ```js
 import { createEvent, merge } from "effector";
@@ -52,7 +60,7 @@ bar(2);
 
 [Запустить пример](https://share.effector.dev/WxUgr6dZ)
 
-#### Пример 2
+#### Working with Stores (#methods-merge-units-examples-working-with-stores)
 
 ```js
 import { createEvent, createStore, merge } from "effector";
@@ -73,7 +81,7 @@ setBar(123); // => state changed to: 123
 
 [Запустить пример](https://share.effector.dev/Rp9wuRvl)
 
-#### Пример 3
+#### Merging a Store and an Event (#methods-merge-units-examples-merging-a-store-and-an-event)
 
 ```js
 import { createEvent, createStore, merge } from "effector";
