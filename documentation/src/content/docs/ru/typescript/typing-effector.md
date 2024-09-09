@@ -1,7 +1,9 @@
 ---
 title: Типизация с эффектором
 description: Лучшие практики для написания хорошо типизированного кода
-lang: ru
+redirectFrom:
+  - /docs/typescript/typing-effector
+  - "Для его указания, в случае, когда тип аргумента и тип результата задаётся явно (первым и вторым дженериком метода [createEffect](/ru/api/effector/createEffect) соответственно), используется третий дженерик метода:"
 ---
 
 Лучшие практики для написания хорошо типизированного кода
@@ -44,9 +46,7 @@ const sendWarningFx = createEffect<{ warn: string }, string>(async ({ warn }) =>
 
 ## Типизация ошибок с `createEffect`
 
-Некоторый код может выдать исключения только некоторых типов, например библиотека axios в качестве ошибок использует только `AxiosError`. В эффектах для описания типов ошибок используется дженерик `Fail`.
-
-Для его указания, в случае, когда тип аргумента и тип результата задаётся явно (первым и вторым дженериком метода [createEffect](/ru/api/effector/createEffect) соответственно), используется третий дженерик метода:
+When you need custom error types (`Fail` type in `Effect`) you can define all generics explicitly:
 
 ```typescript
 const sendWarningFx = createEffect<{ warn: string }, string, AxiosError>(async ({ warn }) => {
@@ -56,7 +56,7 @@ const sendWarningFx = createEffect<{ warn: string }, string, AxiosError>(async (
 // => Effect<{warn: string}, string, AxiosError>
 ```
 
-В случае, когда обработчик эффекта определен до самого эффекта, TypeScript может определить тип `Params` и `Done` используя `typeof handler` в первом generic, не указывая сами типы явно. В таком случае описание типа ошибок можно передать в опциональный второй дженерик метода:
+В случае, когда обработчик эффекта определен до самого эффекта, TypeScript может определить тип `Params` и `Done` используя `typeof handler` в первом generic, не указывая сами типы явно.
 
 ```typescript
 const sendMessage = async (params: { text: string }) => {
@@ -68,8 +68,8 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 // => Effect<{text: string}, string, AxiosError>
 ```
 
-:::info
-`Fail` в качестве второго дженерика добавлен в effector 21.6.0
+:::info{title="since"}
+[effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
 :::
 
 ## `event.prepend`
@@ -118,7 +118,7 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage имеет тип Event<WarnMessage>
 ```
 
-## `guard`
+## `sample` (#typing-sample)
 
 [TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) можно использовать для вывода типа результата с помощью функции `filter`
 
@@ -133,6 +133,23 @@ const userMessage = guard(message, {
 });
 
 // userMessage имеет тип Event<UserMessage>
+```
+
+### `filter + fn` (#typing-sample-with-filter-fn)
+
+However, `sample` also has a `fn` field to apply custom transformations.
+Это применяется в написании типизированных утилит
+
+```typescript
+В эффектах для описания типов ошибок используется дженерик `Fail`.
+```
+
+Otherwise, TypeScript will fall back to `any`.
+
+В таком случае описание типа ошибок можно передать в опциональный второй дженерик метода:
+
+```typescript
+Некоторый код может выдать исключения только некоторых типов, например библиотека axios в качестве ошибок использует только `AxiosError`.
 ```
 
 ## `createApi`
@@ -151,9 +168,9 @@ const { add, sub } = createApi($count, {
 // sub имеет тип Event<number>
 ```
 
-## `is`
+## `is` (#typing-is)
 
-Методы группы [is](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит
+Методы группы [is](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types).
 
 ```typescript
 export function getUnitType(unit: unknown) {
