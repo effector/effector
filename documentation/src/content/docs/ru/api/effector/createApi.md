@@ -1,12 +1,21 @@
 ---
 title: createApi
-description: Способ массового создания событий-команд для обновления стора
-lang: ru
+redirectFrom:
+  - /api/effector/createApi
+  - /docs/api/effector/createApi
 ---
 
-Способ массового создания событий-команд для обновления стора на основе объекта с функциями-обработчиками. Если стор принадлежит какому-либо [домену](/ru/api/effector/Domain), то новые события также будут принадлежать ему
+```ts
+import { createApi } from "effector";
+```
 
-## Формула
+`createApi` is a shortcut for generating [events](/en/api/effector/Event) connected to a [store](/en/api/effector/Store) by supplying an object with [_reducers_](/en/explanation/glossary#reducer) for these events. Если стор принадлежит какому-либо [домену](/ru/api/effector/Domain), то новые события также будут принадлежать ему
+
+# Methods (#methods)
+
+## `createApi(store, api)` (#methods-createApi-store-api)
+
+### Formulae (#methods-createApi-store-api-formulae)
 
 ```ts
 declare const $store: Store<T>; // управляемый стор
@@ -23,31 +32,16 @@ const api: {
 );
 ```
 
-### Аргументы
+### Arguments (#methods-createApi-store-api-arguments)
 
 1. **`store`**: [Стор](/ru/api/effector/Store), чьим значением требуется управлять
-2. **`handlers`**: Объект с функциями-обработчиками, на каждую функцию будет создано по событию
+2. `api` (_Object_) An object with [_reducers_](/en/explanation/glossary#reducer)
 
-   **`handler`**: `(state: T, data: S) => T`
+### Returns (#methods-createApi-store-api-returns)
 
-   Функция-обработчик, которая будет вычислять новое состояние `store` на основе его предыдущего состояния и данных, отправленных в полученное событие-команду, [должна быть **чистой**](/ru/explanation/glossary#purity)
+(_Object_) An object with [events](/en/api/effector/Event)
 
-   **Аргументы**
-
-   - **`state`**: Текущее состояние стора
-   - **`data`**: Значение, с которым было вызвано событие
-
-   **Возвращает**
-
-   Новое значение для хранения в `store`. Если функция возвращает undefined или текущее состояние стора, то обновления не будет
-
-### Возвращает
-
-Объект с событиями, по событию на каждый переданный обработчик
-
-## Примеры
-
-### Управление позицией игрока
+### Examples (#methods-createApi-store-api-examples)
 
 ```js
 import { createStore, createApi } from "effector";
