@@ -1,6 +1,8 @@
 ---
 title: Служебные типы
-lang: ru
+redirectFrom:
+  - /docs/typescript/utility-types
+  - /typescript/utility-types
 ---
 
 Эффектор предоставляет несколько утилитарных типов для облегчения получения типа значения юнита.
