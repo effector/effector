@@ -1,9 +1,20 @@
 ---
-id: createWatch
 title: createWatch
+redirectFrom:
+  - /docs/api/effector/createwatch
 ---
 
+```ts
+import { createWatch } from "effector";
+```
+
+# Methods (#methods)
+
+## `createWatch(config)` (#methods-createWatch-config)
+
 Создает подписку на юнит (стор, ивент или эффект).
+
+### Formulae (#methods-createWatch-config-formulae)
 
 ```ts
 createWatch<T>(config: {
@@ -13,18 +24,20 @@ createWatch<T>(config: {
 }): Subscription
 ```
 
-**Аргументы**
+### Arguments (#methods-createWatch-config-arguments)
 
 1. `config` (_Object_): Конфигурация
    - `unit` (_Unit_): Целевой юнит (стор, ивент или эффект), за которым нужно наблюдать
-   - `fn` (_Function_): Функция, которая будет вызываться при каждом обновлении юнита. Первым аргументом получает содержимое обновления.
-   - `scope` ([_Scope_](/ru/api/effector/Scope)): Опциональный скоуп. Если передан, то функция будет вызываться только при обновлении юнита именно на этом скоупе.
+   - `fn` (_Function_): Функция, которая будет вызываться при каждом обновлении юнита. Accepts the unit's payload as the first argument.
+   - `scope` ([_Scope_](/ru/api/effector/Scope)): Опциональный скоуп.
 
-**Возвращает**
+### Returns (#methods-createWatch-config-returns)
 
 [_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки
 
-#### Пример (со скоупом)
+### Examples (#methods-createWatch-config-examples)
+
+#### With scope (#methods-createWatch-config-examples-scope)
 
 ```js
 import { createWatch, createEvent, fork, allSettled } from "effector";
@@ -39,7 +52,7 @@ await allSettled(changeName, { scope, params: "Иван" }); // output: Иван
 changeName("Иван"); // no output
 ```
 
-#### Пример (без скоупа)
+#### Without scope (#methods-createWatch-config-examples-no-scope)
 
 ```js
 import { createWatch, createEvent, fork, allSettled } from "effector";
