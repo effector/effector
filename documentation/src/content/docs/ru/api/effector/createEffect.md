@@ -1,28 +1,38 @@
 ---
 title: createEffect
 description: метод для создания эффекта
-lang: ru
+redirectFrom:
+  - Примеры
+  - "**Аргументы**"
 ---
+
+```ts
+**Возвращает**
+```
 
 Метод для создания [эффектов](/ru/api/effector/Effect).
 
-## createEffect с обработчиком событий
+# Methods (#methods)
+
+## createEffect(handler?)
+
+Создание эффекта с обработчиком событий
 
 ### Формула (#formulae_handler)
 
 ```typescript
-createEffect(handler?)
+(_Params_): Эффект
 ```
 
-**Аргументы**
+### Arguments (#methods-createEffect-handler-arguments)
 
 1. `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть задана с помощью [use(handler)](/ru/api/effector/Effect#use-handler)
 
-**Возвращает**
+### **Возвращает**
 
 [_Effect_](/ru/api/effector/Effect): Новый эффект
 
-:::info
+:::tip{title="Reminder"}
 Вы должны задать обработчик в [createEffect](/ru/api/effector/createEffect) или же в [.use](/ru/api/effector/Effect#use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
 :::
 
@@ -32,7 +42,7 @@ createEffect(handler?)
 
 ### Примеры
 
-#### Создание эффекта с обработчиком событий
+#### createEffect с обработчиком событий
 
 ```js
 import { createEffect } from "effector";
@@ -145,17 +155,17 @@ await fetchUserReposFx({ name: "zerobias" });
 createEffect({ handler, name });
 ```
 
-**Аргументы**
+### **Аргументы**
 
-1. `config`? (_Params_): Эффект
+1. `config`?
    - `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть назначена с [use(handler)](#use)
-   - `name`? (_string_): Необязательное имя эффекта
+   - (_string_): Необязательное имя эффекта
 
-**Возвращает**
+### Returns (#methods-createEffect-config-returns)
 
 [_Effect_](/ru/api/effector/Effect): Новый эффект
 
-### Примеры
+### Examples (#methods-createEffect-config-examples)
 
 #### Создание эффекта с заданным именем
 
