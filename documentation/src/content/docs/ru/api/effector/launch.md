@@ -1,22 +1,53 @@
 ---
 title: launch
-lang: ru
+redirectFrom:
+  - /api/effector/launch
+  - /docs/api/effector/launch
 ---
 
-Низкоуровневый метод для запуска вычислений в [юнитах](/ru/explanation/glossary#common-unit). В основном используется разработчиками библиотек для тонкого контроля вычислений
+```ts
+import { launch, type Unit, type Node } from "effector";
+```
 
-:::info
-Добавлен в effector 20.10.0
+:::info{title="since"}
+[effector 20.10.0](https://changelog.effector.dev/#effector-20-10-0)
 :::
 
-## Формула
+# Methods (#methods)
+
+## `launch({ target, params })` (#methods-launch-config)
+
+Low level method for running computation in units (events, effects or stores). В основном используется разработчиками библиотек для тонкого контроля вычислений
+
+### Formulae (#methods-launch-config-formulae)
 
 ```ts
-declare const $store: Store<T>
-declare const event: Event<T>
-declare const fx: Effect<T, any>
-
-launch({target: $store, params: T}): void
-launch({target: event, params: T}): void
-launch({target: fx, params: T}): void
+launch({
+  target,
+  params,
+  defer?: boolean,
+  page?: any,
+  scope?: Scope,
+  meta?: Record<string, any>,
+}): void
 ```
+
+### Arguments (#methods-launch-config-arguments)
+
+TBD
+
+### Returns (#methods-launch-config-returns)
+
+`void`
+
+## `launch(unit, params)` (#methods-launch-unit-params)
+
+### Formulae (#methods-launch-unit-params-formulae)
+
+```ts
+launch(unit: Unit | Node, params: T): void
+```
+
+### Returns (#methods-launch-unit-params-returns)
+
+`void`
