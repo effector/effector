@@ -1,7 +1,6 @@
 ---
 title: Экосистема effector
 description: Пакеты и шаблоны экосистемы эффектора
-lang: ru
 redirectFrom:
   - /ru/docs/ecosystem
   - /ru/introduction/ecosystem
@@ -11,12 +10,12 @@ redirectFrom:
 
 Больше контента - [awesome-effector repository](https://github.com/effector/awesome)
 
-:::info{title="Пометки"}
-4. 💚 — стабильный, поддерживается, крутой<br/>
-3. 🛠️ — стабильный, находиться в разработке, v0.x<br/>
-2. ☢️️ — Нестабильный/неполный, в большинстве случаев работает, может быть переработан.<br/>
-1. 🧨 — Ломается в большинстве случаев, надо переделывать, не использовать в production<br/>
-0. ⛔️ — Заброшен/нужен maintainer, может быть сломан<br/>
+:::info{title="Legend"}
+Stage 4. 💚 — Stable, supported, awesome<br/>
+Stage 3. 🛠️ — Stable, but still in development, v0.x<br/>
+Stage 2. ☢️️ — Unstable/Incomplete, works in most cases, may be redesigned<br/>
+Stage 1. 🧨 — Ломается в большинстве случаев, надо переделывать, не использовать в production<br/> ⛔️ — Заброшен/нужен maintainer, может быть сломан<br/>
+:::
 :::
 
 ## Пакеты
@@ -35,7 +34,6 @@ redirectFrom:
 - [atomic-router](https://github.com/atomic-router/atomic-router) 🛠 — Роутер, не привязанный к view.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Простая функция отмены/повтора.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — Реактивный движок ui для веб-приложений.
-- [effector-utils](https://github.com/Kelin2025/effector-utils) ⛔ — Библиотека утилит Effector.
 
 ## DX
 
