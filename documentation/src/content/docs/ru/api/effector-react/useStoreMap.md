@@ -1,11 +1,33 @@
 ---
 title: useStoreMap
-lang: ru
+redirectFrom:
+  - (_Result_)
+  - (_Result_)
 ---
+
+```ts
+**Возвращает**
+```
+
+:::info{title="since"}
+ru
+:::
 
 Реакт-хук, который подписывается на [стор](/ru/api/effector/Store) и трансформирует его значение с переданной функцией. Компонент будет обновляться только когда результат функции будет отличаться от предыдущего
 
-Типичный вариант использования: подписаться на изменения отдельного поля в сторе
+You can read the motivation in the [issue](https://github.com/effector/effector/issues/118).
+
+# Methods (#methods)
+
+## Типичный вариант использования: подписаться на изменения отдельного поля в сторе
+
+:::info{title="since"}
+Краткая форма `useStoreMap` добавлена в `effector-react@21.3.0`
+:::
+
+Common use case: subscribe to changes in selected part of store only
+
+### Formulae (#methods-useStoreMap-store-fn-formulae)
 
 ```ts
 useStoreMap<State, Result>(
@@ -14,18 +36,24 @@ useStoreMap<State, Result>(
 ): Result
 ```
 
-:::info
-Краткая форма `useStoreMap` добавлена в `effector-react@21.3.0`
-:::
-
-**Аргументы**
+### Arguments (#methods-useStoreMap-store-fn-arguments)
 
 1. `store`: Используемый [стор](/ru/api/effector/Store)
 2. `fn` (_(state) => result_): Функция-селектор
 
-**Возвращает**
+### Returns (#methods-useStoreMap-store-fn-returns)
 
-(_Result_)
+(`Result`): Value from the `fn` function call.
+
+### Examples (#methods-useStoreMap-store-fn-examples)
+
+TBD
+
+## `useStoreMap(config)` (#methods-useStoreMap-config)
+
+Перегрузка для случаев, когда требуется передать зависимости в React (для обновления элементов при изменении этих зависимостей)
+
+### Formulae (#methods-useStoreMap-config-formulae)
 
 ```ts
 useStoreMap<Source, Result>({
@@ -37,9 +65,7 @@ useStoreMap<Source, Result>({
 }): Result
 ```
 
-Перегрузка для случаев, когда требуется передать зависимости в React (для обновления элементов при изменении этих зависимостей)
-
-**Аргументы**
+### Arguments (#methods-useStoreMap-config-arguments)
 
 1. `params` (_Object_): Объект конфигурации
    - `store`: Используемый [стор](/ru/api/effector/Store)
@@ -48,19 +74,21 @@ useStoreMap<Source, Result>({
    - `updateFilter` (_(newResult, oldResult) => boolean_): _Опционально_ функция, используемая для сравнения старого и нового результата работы хука, предназначено для избежания лишних ререндеров. Реализация опции для работы использует [createStore updateFilter](/ru/api/effector/createStore)
    - `defaultValue`: Опциональное значение по умолчанию, используется когда `fn` возвращает undefined
 
-**Возвращает**
-
-(_Result_)
-
-:::info
+:::info{title="since"}
 Опция `updateFilter` добавлена в `effector-react@21.3.0`
 :::
 
-:::info
+:::info{title="since"}
 Опция `defaultValue` добавлена в `effector-react@22.1.0`
 :::
 
-#### Пример
+### Returns (#methods-useStoreMap-config-returns)
+
+(`Result`): Value from the `fn` function call, or the `defaultValue`.
+
+### Examples (#methods-useStoreMap-config-examples)
+
+#### Basic (#methods-useStoreMap-config-examples-basic)
 
 Этот хук полезен для работы со списками, особенно с большими
 
