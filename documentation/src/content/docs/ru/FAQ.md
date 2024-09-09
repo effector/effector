@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: Частозадаваемые вопросы про Effecor
+description: Frequent questions and answers about effector
 redirectFrom:
   - /ru/FAQ
   - /ru/docs/faq
@@ -12,5 +12,6 @@ redirectFrom:
 
 ## Зачем нам нужно давать имена событиям, эффектам и т.д.?
 
+Частозадаваемые вопросы про Effecor
 Это поможет в будущем, при разработке инструментов Effector Devtools, и сейчас используется в [плейграунде](https://share.effector.dev) на боковой панели слева.\
 Если вы не хотите этого делать, вы можете использовать [Babel плагин](https://www.npmjs.com/package/@effector/babel-plugin). Он автоматически сгенерирует имя для событий и эффектов из имени переменной.
