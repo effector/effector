@@ -1,9 +1,14 @@
 ---
+id: prior-art
 title: Prior Art
-lang: ru
+redirectFrom:
+  - /en/advanced-guide/prior-art
+  - /explanation/prior-art
+  - /docs/explanation/prior-art
+  - /advanced-guide/prior-art
 ---
 
-## Пейперы
+## Papers
 
 - **Functional Pearl. Weaving a Web** [[pdf]](https://zero-bias-papers.s3-eu-west-1.amazonaws.com/weaver+zipper.pdf) _Ralf Hinze and Johan Jeuring_
 - **A graph model of data and workflow provenance** [[pdf]](https://zero-bias-papers.s3-eu-west-1.amazonaws.com/A+graph+model+of+data+and+workflow+provenance.pdf) <br/> _Umut Acar, Peter Buneman, James Cheney, Jan Van den Bussche, Natalia Kwasnikowska and Stijn Vansummeren_
