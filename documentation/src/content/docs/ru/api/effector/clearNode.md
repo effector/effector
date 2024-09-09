@@ -1,34 +1,41 @@
 ---
 title: clearNode
-description: Низкоуровневый метод для уничтожения юнитов и их связей
-lang: ru
+description: Method for destroying stores, events, effects, subscriptions, and domains
+redirectFrom:
+  - /api/effector/clearNode
+  - /docs/api/effector/clearnode
 ---
 
-Низкоуровневый метод для уничтожения юнитов и их связей
+```ts
+import { clearNode } from "effector";
+```
 
-## Формула
+Method for destroying stores, events, effects, subscriptions, and domains.
+
+# Methods (#methods)
+
+## Низкоуровневый метод для уничтожения юнитов и их связей
+
+### Formulae (#methods-clearNode-unit-config-formulae)
 
 ```ts
 clearNode(unit: Unit): void
 clearNode(unit: Unit, config: {deep?: boolean}): void
 ```
 
-### Аргументы
+### Arguments (#methods-clearNode-unit-config-arguments)
 
-1. **`unit`**: Любой [юнит](/ru/explanation/glossary#unit) включая [домены](/ru/api/effector/Domain) и [scope](/ru/api/effector/Scope). Переданный юнит будет уничтожен и удалён из памяти
+1. **`unit`**: Любой [юнит](/ru/explanation/glossary#unit) включая [домены](/ru/api/effector/Domain) и [scope](/ru/api/effector/Scope).
 2. **`config?`**: Объект конфигурации
-
    - **`deep?`**: _boolean_
 
-     Глубокое удаление. Уничтожает юнит и _все_ его производные
-
-### Возвращает
+### Returns (#methods-clearNode-unit-config-returns)
 
 _void_
 
-## Примеры
+### Examples (#methods-clearNode-unit-config-examples)
 
-### Пример удаления стора
+#### Simple (#methods-clearNode-unit-config-examples-simple)
 
 ```js
 import { createStore, createEvent, clearNode } from "effector";
@@ -48,7 +55,7 @@ inc();
 
 [Запустить пример](https://share.effector.dev/WjuSl6aN)
 
-### Пример с deep
+#### Deep clear (#methods-clearNode-unit-config-examples-deep)
 
 ```js
 import { createStore, createEvent, clearNode } from "effector";
