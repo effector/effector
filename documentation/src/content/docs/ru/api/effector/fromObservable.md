@@ -1,27 +1,37 @@
 ---
 title: fromObservable
-lang: ru
+redirectFrom:
+  - /api/effector/fromObservable
+  - /docs/api/effector/fromObservable
 ---
 
-Создаёт [событие](/ru/api/effector/Event), которое будет срабатывать при каждом обновлении переданного observable. Применяется для реализации взаимодействия с библиотеками на основе стримов, например `rxjs` и `most`
+```ts
+import { fromObservable, type Observable } from "effector";
+```
 
-Для обратного действия подписки стримов на юниты эффектора можно воспользоваться методами вроде `from` из `rxjs`: юниты эффектора распознаются как сущности, на которые можно подписаться
+# Methods (#methods)
 
-## Формула
+## Применяется для реализации взаимодействия с библиотеками на основе стримов, например `rxjs` и `most`
+
+Creates an event containing all items from an Observable.
+
+### Formulae (#methods-fromObservable-formulae)
 
 ```ts
 function fromObservable(stream: Observable<T>): Event<T>;
 ```
 
-### Аргументы
+### Arguments (#methods-fromObservable-arguments)
 
 1. **`observable`**: Observable
 
-### Возвращает
+### Returns (#methods-fromObservable-returns)
 
 Новое [событие](/ru/api/effector/Event)
 
-## Пример
+### Examples (#methods-fromObservable-examples)
+
+#### Basic use case (#methods-fromObservable-examples-basic-use-case)
 
 ```js
 import { interval } from "rxjs";
