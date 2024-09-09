@@ -1,59 +1,56 @@
 ---
 title: createStore
-description: Метод для создания независимого стора
-lang: ru
+description: createStore is a method for creating a store
+redirectFrom:
+  - ru
+  - "**Аргументы**"
 ---
+
+```ts
+import { createStore, type Store, type StoreWritable } from "effector";
+```
+
+# Methods (#methods)
+
+## `createStore(defaultState)` (#methods-createStore-defaultState)
 
 Метод для создания независимого [стора](/ru/api/effector/Store)
 
-## Формула (#createStore-formulae)
+### Формула (#createStore-formulae)
 
 ```ts
-createStore<T>(defaultState: T): Store<T>
-createStore<T>(defaultState: T, config: {
-  name?: string
-  updateFilter?: (update: T, current: T) => boolean
-  serialize?: 'ignore'
-}): Store<T>
+**Возвращает**: `boolean`
 ```
 
 ### Аргументы (#createStore-args)
 
 1. **`defaultState`**: Исходное состояние
-2. **`config`**: Опциональный объект конфигурации
 
-   - **`name`**: Имя стора. Babel-plugin может определить его из имени переменной стора, если имя не передано явно в конфигурации
-   - **`updateFilter`**: `(update: T, current: T) => boolean`
+### Throws (#methods-createStore-defaultState-throws)
 
-     Функция, которая предотвращает обновление стора, если она возвращает `false`. Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в стор, равняется _undefined_ или текущему значению стора) недостаточно.
+#### unit call from pure function is not supported, use operators like sample instead (#methods-createStore-defaultState-throws-unit-call-from-pure)
 
-     **Аргументы**
+> Since: effector 23.0.0
 
-     - **`update`**: Значение, которое предлагается записать в стор
-     - **`current`**: Текущее значение стора
+Occurs when events or effects are called from [pure functions](/en/explanation/glossary#purity), like updateFilter:
 
-     **Возвращает**: `boolean`
+```ts
+Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в стор, равняется _undefined_ или текущему значению стора) недостаточно.
+```
 
-     Если возвращается _false_, то обновления не будет
+To resolve this, use `sample`:
 
-   - **`serialize`**: `'ignore'`
-
-     Опция, запрещающая сериализацию стора при вызовах [serialize](/ru/api/effector/serialize)
-
-   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стора к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
+```ts
+**`update`**: Значение, которое предлагается записать в стор
+```
 
 ### Возвращает (#createStore-return)
 
-Новый [стор](/ru/api/effector/Store)
+**`name`**: Имя стора.
 
-:::info
+### Examples (#methods-createStore-defaultState-examples)
 
-- Опция `updateFilter` добавлена в effector 21.8.0
-- Опция `serialize` добавлена в effector 22.0.0
-
-:::
-
-## Пример
+#### Basic (#methods-createStore-defaultState-examples-basic)
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -72,6 +69,87 @@ const $selectedTodos = $todos.map((todos) => {
 $todos.watch((state) => {
   console.log("todos", state);
 });
+```
+
+Опция `updateFilter` добавлена в effector 21.8.0
+
+## `createStore(defaultState, config)` (#methods-createStore-defaultState-config)
+
+Метод для создания независимого стора
+
+### Formulae (#methods-createStore-defaultState-config-formulae)
+
+```ts
+createStore<T>(defaultState: T): Store<T>
+createStore<T>(defaultState: T, config: {
+  name?: string
+  updateFilter?: (update: T, current: T) => boolean
+  serialize?: 'ignore'
+}): Store<T>
+```
+
+### Arguments (#methods-createStore-defaultState-config-arguments)
+
+1. **`current`**: Текущее значение стора
+2. **`config`**: Опциональный объект конфигурации
+   - `name` (_String_): Name for the store. Babel-plugin может определить его из имени переменной стора, если имя не передано явно в конфигурации
+   - Функция, которая предотвращает обновление стора, если она возвращает `false`. Accepts updated state as the first argument and current state as the second argument. Redundant for most cases since store already ensures that update is not `undefined` and not equal (`!==`) to current state _(since `effector 21.8.0`)_
+   - Опция, запрещающая сериализацию стора при вызовах [serialize](/ru/api/effector/serialize)
+   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стора к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
+   - `domain`: (_Domain_): Domain to attach store to after creation.
+   - `skipVoid`: (_boolean_): Flag to control how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will interpret `undefined` as a "skip update" command and will do nothing.
+
+### Throws (#methods-createStore-defaultState-config-throws)
+
+The same behaviour like for regular [`createStore(defaultState)`](#methods-createStore-defaultState-throws).
+
+### Если возвращается _false_, то обновления не будет
+
+Новый [стор](/ru/api/effector/Store)
+
+### Examples (#methods-createStore-defaultState-config-examples)
+
+#### **`updateFilter`**: `(update: T, current: T) => boolean`
+
+```js
+import { createEvent, createStore, sample } from "effector";
+
+const punch = createEvent();
+const veryStrongHit = createEvent();
+
+const $lastPunchStrength = createStore(0, {
+  // If store should be updated with strength less than 400 kg
+  // update will be skipped
+  updateFilter: (strength) => strength >= 400,
+});
+
+$lastPunchStrength.on(punch, (_, strength) => strength);
+
+// Each store update should trigger event `veryStrongHit`
+sample({ clock: $lastPunchStrength, target: veryStrongHit });
+
+// Watch on store prints initial state
+$lastPunchStrength.watch((strength) => console.log("Strength: %skg", strength));
+// => Strength: 0kg
+
+veryStrongHit.watch((strength) => {
+  console.log("Wooow! It was very strong! %skg", strength);
+});
+
+punch(200); // updateFilter prevented update
+punch(300); // Same here, store doesn't update, value remains `0`
+punch(500); // Yeeah! updateFilter allows store update
+// => Strength: 500kg
+// => Wooow! It was very strong! 500kg
+punch(100); // No update as well
+```
+
+Пример
+
+#### **`serialize`**: `'ignore'`
+
+```js
+Опция `serialize` добавлена в effector 22.0.0
 ```
 
 [Запустить пример](https://share.effector.dev/tquiUgdq)
