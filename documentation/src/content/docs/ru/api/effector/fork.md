@@ -1,6 +1,8 @@
 ---
 title: fork
-lang: ru
+redirectFrom:
+  - /api/effector/fork
+  - /docs/api/effector/fork
 ---
 
 ```ts
@@ -11,7 +13,7 @@ import { fork, type Scope } from "effector";
 
 ## `fork()` (#methods-fork)
 
-:::info{title="Время добавления"}
+:::info{title="since"}
 
 введен в [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 
@@ -61,7 +63,7 @@ console.log(scopeB.getState($counter)); // => -1
 
 Позволяет задать значения для stores в scope и заменить обработчики для effects.
 
-:::info{title="Время добавления"}
+:::info{title="since"}
 
 поддержка массива кортежей в `values` и `handlers` введена в [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 
@@ -83,7 +85,7 @@ fork(options: { values?, handlers? }): Scope
 
 Может использоваться тремя способами:
 
-1.  Массив кортежей со stores и значениями:
+1. Массив кортежей со stores и значениями:
 
 ```ts
 fork({
@@ -94,7 +96,7 @@ fork({
 });
 ```
 
-2.  Map со stores и значениями:
+2. Map со stores и значениями:
 
 ```ts
 fork({
@@ -102,7 +104,7 @@ fork({
 });
 ```
 
-3.  Обычный объект: `{[sid: string]: value}`
+3. Обычный объект: `{[sid: string]: value}`
 
 ```ts
 fork({
@@ -115,7 +117,7 @@ fork({
 
 <br />
 
-:::info{title="Примечание"}
+:::info{title="Explanation"}
 Такие объекты создаются с помощью [serialize](/en/api/effector/serialize), в коде приложения **предпочтителен массив кортежей**
 :::
 
@@ -125,7 +127,7 @@ fork({
 
 Может использоваться по-разному:
 
-1.  Массив кортежей с effects и обработчиками:
+1. Массив кортежей с effects и обработчиками:
 
 ```ts
 fork({
@@ -136,7 +138,7 @@ fork({
 });
 ```
 
-2.  Map с effects и обработчиками:
+2. Map с effects и обработчиками:
 
 ```ts
 fork({
@@ -146,7 +148,7 @@ fork({
 });
 ```
 
-3.  Обычный объект: `{[sid: string]: handler}`
+3. Обычный объект: `{[sid: string]: handler}`
 
 ```ts
 fork({
@@ -159,7 +161,7 @@ fork({
 
 <br />
 
-:::warning{title="Устарело"}
+:::warning{title="deprecation"}
 Такие объекты устарели с [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) и будут удалены в будущих версиях. Предпочтителен массив кортежей.
 :::
 
@@ -205,13 +207,13 @@ console.log(testScope.getState($friends));
 
 ## `fork(domain, options?)` (#methods-fork-domain)
 
-:::info{title="Время добавления"}
+:::info{title="since"}
 
 Введен в [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 
 :::
 
-:::warning{title="Устарело"}
+:::warning{title="Deprecated"}
 
 С [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
 
