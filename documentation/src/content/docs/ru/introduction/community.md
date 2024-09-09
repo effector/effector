@@ -1,6 +1,5 @@
 ---
 title: Сообщество
-lang: ru
 description: Статьи и команда, стоящая за проектом
 redirectFrom:
   - /ru/docs/introduction/community
@@ -10,6 +9,7 @@ redirectFrom:
 ## Материалы
 
 - [dev.to/effector](https://dev.to/effector) — пространство на публичной платформе
+- Sponsr — [sponsr.ru/effector](https://sponsr.ru/effector/)
 - [reddit.com/r/effectorjs](https://reddit.com/r/effectorjs) — сабреддит
 - [twitter.com/effectorJS](https://twitter.com/effectorJS) — ретвиты, релизы, анонсы
 
@@ -33,7 +33,7 @@ redirectFrom:
 - Видео:
   - Effector Meetup 1 — [youtube.com/watch?v=IacUIo9fXhI](https://www.youtube.com/watch?v=IacUIo9fXhI)
   - Effector Meetup 2 — [youtube.com/watch?v=nLYc4PaTXYk](https://www.youtube.com/watch?v=nLYc4PaTXYk)
-  - Пишем фичу в проекте с EffectorJS — [youtube.com/watch?v=dtrWzH8O_4k](https://www.youtube.com/watch?v=dtrWzH8O_4k)
+  - Implement feature in the project — [youtube.com/watch?v=dtrWzH8O_4k](https://www.youtube.com/watch?v=dtrWzH8O_4k)
   - Как и зачем мы мигрировали Авиасейлс на Effector — [youtube.com/watch?v=HYaSnVEZiFk](https://www.youtube.com/watch?v=HYaSnVEZiFk)
   - Делаем игру — [youtube.com/watch?v=tjjxIQd0E8c](https://www.youtube.com/watch?v=tjjxIQd0E8c)
   - Effector 22.2.0 Halley — [youtube.com/watch?v=pTq9AbmS0FI](https://www.youtube.com/watch?v=pTq9AbmS0FI)
@@ -41,7 +41,6 @@ redirectFrom:
 
 ## Поддержка и спонсирование
 
-- Sponsr — [sponsr.ru/effector](https://sponsr.ru/effector/)
 - OpenCollective — [opencollective.com/effector](https://opencollective.com/effector)
 - Patreon — [patreon.com/zero_bias](https://www.patreon.com/zero_bias)
 
