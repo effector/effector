@@ -1,17 +1,27 @@
 ---
 title: is
-lang: ru
+redirectFrom:
+  - /api/effector/is
+  - /docs/api/effector/is
 ---
 
-Объект с валидаторами юнитов
+```ts
+import { is, type Unit } from "effector";
+```
+
+Namespace for unit validators.
+
+# Methods (#methods)
 
 ## `is.store(value)`
 
 Проверяет, является ли переданное значение [_стором_](/ru/api/effector/Store)
 
-**Возвращает**
+### Returns (#methods-isStore-returns)
 
-boolean
+`boolean` — Type-guard
+
+### Examples (#methods-isStore-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -51,9 +61,11 @@ is.store(null);
 
 Проверяет, является ли переданное значение [_событием_](/ru/api/effector/Event)
 
-**Возвращает**
+### Returns (#methods-isEvent-returns)
 
-boolean
+`boolean` — Type-guard
+
+### Examples (#methods-isEvent-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -93,9 +105,11 @@ is.event(null);
 
 Проверяет, является ли переданное значение [_эффектом_](/ru/api/effector/Effect)
 
-**Возвращает**
+### Returns (#methods-isEffect-returns)
 
-boolean
+`boolean` — Type-guard
+
+### Examples (#methods-isEffect-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -122,13 +136,29 @@ is.effect(null);
 
 [Запустить пример](https://share.effector.dev/ZdZ2N6VG)
 
+## `is.targetable` (#methods-isTargetable)
+
+Checks if given value can be used in operators target (or be called as a function in case of events)
+
+### Returns (#methods-isTargetable-returns)
+
+`boolean` — Type-guard
+
+### Examples (#methods-isTargetable-examples)
+
+```js
+boolean
+```
+
 ## `is.domain(value)`
 
 Проверяет, является ли переданное значение [_доменом_](/ru/api/effector/Domain)
 
-**Возвращает**
+### Returns (#methods-isDomain-returns)
 
-boolean
+`boolean` — Type-guard
+
+### Examples (#methods-isDomain-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain } from "effector";
@@ -157,15 +187,17 @@ is.domain(null);
 
 ## `is.scope(value)`
 
-:::info
+:::info{title="since"}
 Добавлен в effector 22.0.0
 :::
 
 Проверяет, является ли переданное значение [_скоупом_](/ru/api/effector/Scope)
 
-**Возвращает**
+### Returns (#methods-isScope-returns)
 
-boolean
+`boolean` — Type-guard
+
+### Examples (#methods-isScope-examples)
 
 ```js
 import { fork } from "effector";
@@ -200,9 +232,11 @@ is.scope(null);
 
 Проверяет, является ли переданное значение [юнитом](/ru/explanation/glossary#unit): [стором](/ru/api/effector/Store), [эвентом](/ru/api/effector/Event), [эффектом](/ru/api/effector/Effect), [доменом](/ru/api/effector/Domain) или [скоупом](/ru/api/effector/Scope)
 
-**Возвращает**
+### Returns (#methods-isUnit-returns)
 
-boolean
+`boolean` — Type-guard
+
+### Examples (#methods-isUnit-examples)
 
 ```js
 import { is, createStore, createEvent, createEffect, createDomain, fork } from "effector";
@@ -244,50 +278,17 @@ is.unit(null);
 
 ## `is.attached(value)`
 
-:::info
+:::info{title="since"}
 Добавлен в effector 22.4.0
 :::
 
-Проверяет, что переданный [_effect_](/ru/api/effector/Effect) был создан с помощью метода [_attach_](/ru/api/effector/attach).
-Если в качестве аргумента был передан не effect, возвращает `false`.
+Проверяет, что переданный [_effect_](/ru/api/effector/Effect) был создан с помощью метода [_attach_](/ru/api/effector/attach). Если в качестве аргумента был передан не effect, возвращает `false`.
 
-**Возвращает**
+### Returns (#methods-isAttached-returns)
 
-boolean
+`boolean` — Type-guard
 
-```js
-import { is, createStore, createEvent, createEffect, createDomain, attach } from "effector";
-
-const $store = createStore(null);
-const event = createEvent();
-const fx = createEffect();
-
-const childFx = attach({
-  effect: fx,
-});
-
-is.attached(childFx);
-// => true
-
-is.attached(fx);
-// => false
-
-is.attached($store);
-// => false
-
-is.attached(event);
-// => false
-
-is.attached(createDomain());
-// => false
-
-is.attached(null);
-// => false
-```
-
-[Запустить пример](https://share.effector.dev/qsdTF7og)
-
-### Пример использования
+### Usage (#methods-isAttached-usage)
 
 Иногда нужно добавить отображение ошибок на эффекты, но только на те, которые были "локализованы" через `attach`.
 Если оставить `onCreateEffect` как есть, без проверок, то лог ошибки будет задублирован.
@@ -324,3 +325,37 @@ loadListFx();
 ```
 
 [Запустить пример](https://share.effector.dev/NxQseHOR)
+
+### Examples (#methods-isAttached-examples)
+
+```js
+import { is, createStore, createEvent, createEffect, createDomain, attach } from "effector";
+
+const $store = createStore(null);
+const event = createEvent();
+const fx = createEffect();
+
+const childFx = attach({
+  effect: fx,
+});
+
+is.attached(childFx);
+// => true
+
+is.attached(fx);
+// => false
+
+is.attached($store);
+// => false
+
+is.attached(event);
+// => false
+
+is.attached(createDomain());
+// => false
+
+is.attached(null);
+// => false
+```
+
+[Запустить пример](https://share.effector.dev/qsdTF7og)
