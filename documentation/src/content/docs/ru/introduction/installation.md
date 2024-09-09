@@ -1,7 +1,9 @@
 ---
 title: Установка
 description: Установка эффектора и сопутствующих пакетов
-lang: ru
+redirectFrom:
+  - /docs/introduction/installation
+  - /introduction/installation
 ---
 
 ## С помощью пакетного менеджера
@@ -39,11 +41,11 @@ Svelte работает с effector без установки дополните
 
 ## Online playground
 
-Все примеры в этой документации запускаются в [нашей онлайн песочнице](https://share.effector.dev). Она позволяет запускать, тестировать и распространять свои идеи бесплатно и без установки. React и синтаксис TypeScript поддерживаются без дополнительной настройки. [Репозиторий проекта](https://github.com/effector/repl).
+Все примеры в этой документации запускаются в [нашей онлайн песочнице](https://share.effector.dev). React и синтаксис TypeScript поддерживаются без дополнительной настройки. [Репозиторий проекта](https://github.com/effector/repl).
 
 ## Deno
 
-:::info{title="поддерживается с версии"}
+:::info{title="since"}
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 :::
 
@@ -93,7 +95,6 @@ npm install -ED @effector/swc-plugin @swc/core
 ```
 
 А также используя плагин [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver).
-Примерная конфигурация в `.babelrc`:
 
 ```json
 {
