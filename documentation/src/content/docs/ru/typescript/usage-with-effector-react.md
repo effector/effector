@@ -6,10 +6,9 @@ redirectFrom:
   - /ru/typescript/usage-with-effector-react
 ---
 
-**TypeScript** - это типизированное расширение JavaScript. Он стал популярным 
-в последнее время благодаря преимуществам, которые он может принести. Если вы новичок в TypeScript, 
-рекомендуется сначала ознакомиться с ним, прежде чем продолжить. 
-Вы можете ознакомиться с документацей 
+**TypeScript** - это типизированное расширение JavaScript. Он стал популярным
+в последнее время благодаря преимуществам, которые он может принести. Если вы новичок в TypeScript,
+рекомендуется сначала ознакомиться с ним, прежде чем продолжить. Вы можете ознакомиться с документацей
 [здесь](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
 Какие преимущества Typescript может принести вашему приложению:
@@ -22,9 +21,6 @@ redirectFrom:
 
 We will be going through a simplistic chat application to demonstrate a
 possible approach to include static typing. This chat application will have API mock that load and saves data from localStorage.
-
-Мы пройдемся по упрощенному приложению чата, 
-чтобы продемонстрировать возможный подход к включению статической типизации. Это приложение для чата будет иметь API-модель, которая загружает и сохраняет данные из локального хранилища localStorage.
 
 Полный исходный код можно посмотреть на
 [github](https://github.com/effector/effector/tree/master/examples/react-and-ts).
@@ -85,7 +81,7 @@ export function wait(timeout = Math.random() * 1500) {
 }
 ```
 
-Отлично! Теперь мы можем создать эффекты, которые будут загружать сообщения.
+Отлично. Теперь мы можем создать эффекты, которые будут загружать сообщения.
 
 ```ts
 // Файл: /src/shared/api/message.ts
@@ -457,7 +453,7 @@ $messages.on(messageApi.messagesLoadFx.doneData, (_, messages) => messages);
 $session.on(sessionApi.sessionLoadFx.doneData, (_, session) => session);
 ```
 
-Отлично. Сессия и сообщения получены. Давайте позволим пользователям войти.
+Отлично! Сессия и сообщения получены. Давайте позволим пользователям войти.
 
 ```ts
 // Файл: /src/pages/chat/model.ts
