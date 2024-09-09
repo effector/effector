@@ -1,7 +1,12 @@
 ---
 title: Store
+keywords:
+  - store
+  - unit
 description: Store, его методы и свойства
-lang: ru
+redirectFrom:
+  - ru
+  - "Как правильно:"
 ---
 
 ```ts
@@ -14,7 +19,7 @@ _Store_ — это объект, который хранит значение с
 
 Store в effector иммутабелен. Это значит, что обновления в нём будут происходить только если в функции-обработчике (например `combine`, `sample` или `on`) вернуть новый объект
 
-Например, прежде чем использовать методы массива, нужно создать новую ссылку на него. Как правильно:
+Например, прежде чем использовать методы массива, нужно создать новую ссылку на него. Here’s how to do it correctly:
 
 ```ts
 $items.on(addItem, (items, newItem) => {
@@ -25,7 +30,7 @@ $items.on(addItem, (items, newItem) => {
 });
 ```
 
-Так делать нельзя, обновления стора **не произойдёт**
+This approach should not be used, as the store **will not be updated**:
 
 ```ts
 $items.on(addItem, (items, newItem) => {
