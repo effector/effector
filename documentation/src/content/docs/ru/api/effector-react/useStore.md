@@ -1,28 +1,40 @@
 ---
 title: useStore
-description: Реакт-хук для подписки компонента на стор
-lang: ru
+redirectFrom:
+  - ru
+  - Реакт-хук для подписки компонента на стор
 ---
-:::warning{title="Устаревшее API "}
+
+```ts
+import { useStore } from "effector-react";
+```
+
+Реакт-хук, который подписывается на [стор](/ru/api/effector/Store) и возвращает его текущее значение, поэтому при обновлении стора, компонент также будет автоматически обновлён
+
+:::warning{title="This API "}
 
 Рекомендуется использовать хук [`useUnit`](/ru/api/effector-react/useUnit).
 :::
 
-Реакт-хук, который подписывается на [стор](/ru/api/effector/Store) и возвращает его текущее значение, поэтому при обновлении стора, компонент также будет автоматически обновлён
+# Methods (#methods)
+
+## **Аргументы**
+
+### Formulae (#methods-useStore-store-formulae)
 
 ```ts
 useStore(store: Store<T>): T
 ```
 
-**Аргументы**
+### Arguments (#methods-useStore-store-arguments)
 
 1. `store`: [Store](/ru/api/effector/Store)
 
-**Возвращает**
+### Returns (#methods-useStore-store-returns)
 
 (_`State`_): Значение из стора
 
-### Пример
+### Examples (#methods-useStore-store-examples)
 
 ```jsx
 import { createStore, createApi } from "effector";
