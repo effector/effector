@@ -1,7 +1,7 @@
 ---
 title: Testing effector
 redirectFrom:
-  - /guides/testing
+  - /en/guides/testing
 ---
 
 Effector's tests are usually written via [Fork API](/en/api/effector/fork).
