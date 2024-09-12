@@ -26,7 +26,7 @@ declare const $b: Store<B>;
 
 const $c: Store<C> = combine({ a: $a, b: $b }, (values: { a: A; b: B }) => C);
 
-const $c: Store<C> = combine([$a, $b], (values: [A, B]) => C);
+const $c: Store<C> = combine([ $a, $b ], (values: [A, B]) => C);
 
 const $c: Store<C> = combine($a, $b, (a: A, b: B) => C);
 
@@ -34,7 +34,7 @@ const $c: Store<C> = combine($a, $b, (a: A, b: B) => C);
 
 const $c: Store<{ a: A; b: B }> = combine({ a: $a, b: $b });
 
-const $c: Store<[A, B]> = combine([a: $a, b: $b]);
+const $c: Store<[A, B]> = combine([ $a, $b ]);
 ```
 
 # State transformation (#state-transformation-methods)
@@ -49,13 +49,13 @@ Result will be saved in created store. This function [must be **pure**](/en/expl
 ### Formulae (#methods-combine-stores-fn-formulae)
 
 ```ts
-const $first: Store<A>
-const $second: StoreWritable<B>
-const $third: Store<C> | StoreWritable<C>
+const $a: Store<A>
+const $b: StoreWritable<B>
+const $c: Store<C> | StoreWritable<C>
 
 $result: Store<D> = combine(
-  $first, $second, $third, ...,
-  (first: A, second: B, third: C, ...) => result
+  $a, $b, $c, ...,
+  (a: A, b: B, c: C, ...) => result
 )
 ```
 
@@ -80,17 +80,17 @@ import demo_combineStoresFn from "../../../../demo/combine/stores-fn.live.js?raw
 ### Formulae (#methods-combine-object-fn-formulae)
 
 ```ts
-const $first: Store<A>;
-const $second: StoreWritable<B>;
-const $third: Store<C> | StoreWritable<C>;
+const $a: Store<A>;
+const $b: StoreWritable<B>;
+const $c: Store<C> | StoreWritable<C>;
 
 $result: Store<D> = combine(
-  { a: $first, b: $second, c: $third },
+  { a: $a, b: $b, c: $c },
   ({ a, b, c }: { a: A; b: B; c: C }): D => result,
 );
 ```
 
-- Read state from stores `$first`, `$second`, `$third` and assign it to properties `a`, `b`, `c` accordingly, calls function with that object
+- Read state from stores `$a`, `$b`, `$c` and assign it to properties `a`, `b`, `c` accordingly, calls function with that object
 - The `result` of the function call saved in `$result` store
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
@@ -106,19 +106,19 @@ import demo_combineObjectFn from "../../../../demo/combine/object-fn.live.js?raw
 
 <LiveDemo client:only="preact" demoFile={demo_combineObjectFn} />
 
-## `combine([A, B, C], fn)` (#methods-combine-array-fn)
+## `combine([ A, B, C ], fn)` (#methods-combine-array-fn)
 
 ### Formulae (#methods-combine-array-fn-formulae)
 
 ```ts
-const $first: Store<A>;
-const $second: StoreWritable<B>;
-const $third: Store<C> | StoreWritable<C>;
+const $a: Store<A>;
+const $b: StoreWritable<B>;
+const $c: Store<C> | StoreWritable<C>;
 
-$result: Store<D> = combine([$first, $second, $third], ([A, B, C]): D => result);
+$result: Store<D> = combine([ $a, $b, $c ], ([A, B, C]): D => result);
 ```
 
-- Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, call function with that array
+- Read state from stores `$a`, `$b`, `$c` and assign it to array with the same order as passed stores, call function with that array
 - The `result` of the function call saved in `$result` store
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
@@ -147,14 +147,14 @@ Formerly known as `createStoreObject`
 ### Formulae (#methods-combine-object-formulae)
 
 ```ts
-const $first: Store<A>;
-const $second: StoreWritable<B>;
-const $third: Store<C> | StoreWritable<C>;
+const $a: Store<A>;
+const $b: StoreWritable<B>;
+const $c: Store<C> | StoreWritable<C>;
 
-$result: Store<{ a: A; b: B; c: C }> = combine({ a: $first, b: $second, c: $third });
+$result: Store<{ a: A; b: B; c: C }> = combine({ a: $a, b: $b, c: $c });
 ```
 
-- Read state from stores `$first`, `$second`, `$third` and assign it to properties `a`, `b`, `c` accordingly, that object will be saved to `$result` store
+- Read state from stores `$a`, `$b`, `$c` and assign it to properties `a`, `b`, `c` accordingly, that object will be saved to `$result` store
 - Store `$result` contain object `{a, b, c}` and will be updated on each update of passed stores
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
@@ -168,19 +168,19 @@ import demo_combineObject from "../../../../demo/combine/object.live.js?raw";
 
 <LiveDemo client:only="preact" demoFile={demo_combineObject} />
 
-## `combine([A, B, C])` (#methods-combine-array)
+## `combine([ A, B, C ])` (#methods-combine-array)
 
 ### Formulae (#methods-combine-array-formulae)
 
 ```ts
-const $first: Store<A>;
-const $second: StoreWritable<B>;
-const $third: Store<C> | StoreWritable<C>;
+const $a: Store<A>;
+const $b: StoreWritable<B>;
+const $c: Store<C> | StoreWritable<C>;
 
-$result: Store<[A, B, C]> = combine([$first, $second, $third]);
+$result: Store<[A, B, C]> = combine([ $a, $b, $c ]);
 ```
 
-- Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, that array will be saved to `$result` store
+- Read state from stores `$a`, `$b`, `$c` and assign it to array with the same order as passed stores, that array will be saved to `$result` store
 - Store `$result` will be updated on each update of passed stores
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
