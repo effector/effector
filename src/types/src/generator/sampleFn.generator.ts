@@ -441,6 +441,41 @@ export default () => {
         some([not(targetCases.hasExact), clockIsArray, targetIsArray]),
       ]),
     ],
+    childFile: separate({
+      source: {
+        goodFn,
+        oddCases: some([
+          targetCases.hasExactNarrow,
+          targetCases.hasExactBadNarrow,
+          targetCases.hasExactExactBad,
+          matchUnion(fnReturnType, [
+            'exactNarrow',
+            'exactBadNarrow',
+            'exactExactBad',
+          ]),
+          every([
+            isClockOnly,
+            some([
+              clockOnlyCases.hasClockExactNarrow,
+              clockOnlyCases.hasClockExactBadNarrow,
+              clockOnlyCases.hasClockExactExactBad,
+            ]),
+          ]),
+        ]),
+      },
+      variant: {
+        _: {
+          badFn: {goodFn: false},
+          oddCases: {oddCases: true},
+          commonCases: {},
+        },
+      } as const,
+      cases: {
+        badFn: value('badFn'),
+        oddCases: value('oddCases'),
+        commonCases: value(null),
+      },
+    }),
     grouping: {
       pass,
       getHash: {goodFn, assertFnArgs, testCase, fnReturnType},
