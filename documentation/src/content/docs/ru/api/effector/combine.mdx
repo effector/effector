@@ -38,7 +38,9 @@ const $c: Store<[A, B]> = combine([a: $a, b: $b]);
 # Преобразование состояния (#state-transformation-methods)
 
 Когда в `combine` передается функция, она будет действовать как функция трансформации состояния и вызываться при каждом обновлении `combine`.
-Результат будет сохранен в созданном сторе. Эта функция [должна быть **чистой**](/ru/explanation/glossary#purity). Функция `combine` вызывается синхронно во время вызова `combine`. Если эта функция вызовет ошибку, приложение завершится сбоем. Это будет исправлено в [24 релизе](https://github.com/effector/effector/issues/1163).
+Результат будет сохранен в созданном сторе. Эта функция [должна быть **чистой**](/ru/explanation/glossary#purity).
+
+Функция `combine` вызывается синхронно во время вызова `combine`. Если эта функция вызовет ошибку, приложение завершится сбоем. Это будет исправлено в [24 релизе](https://github.com/effector/effector/issues/1163).
 
 ## `combine(...stores, fn)` (#methods-combine-stores-fn)
 
@@ -202,7 +204,7 @@ import demo_combineNonStoresFn from "../../../../demo/combine/non-stores-fn.live
 
 <LiveDemo client:only="preact" demoFile={demo_combineNonStoresFn} />
 
-### Параметры (#parameters)
+# Параметры (#parameters)
 
 Все перегрузки `combine` с функцией поддерживают опциональный объект конфигурации в качестве последнего параметра.
 
@@ -210,7 +212,7 @@ import demo_combineNonStoresFn from "../../../../demo/combine/non-stores-fn.live
 
 Флаг для контроля обработки значений `undefined` в сторе _(начиная с версии `effector 23.0.0`)_. Если установить в `false`, стор будет использовать `undefined` как значение. Если установить в `true` (устарело), стор будет интерпретировать `undefined` как команду «пропустить обновление» и ничего не делать.
 
-### **Формула (#**parameters-skipVoid-formulae)
+### Формула (#parameters-skipVoid-formulae)
 
 ```ts
 combine($a, $b, callback, { skipVoid: true });

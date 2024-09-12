@@ -40,7 +40,9 @@ const $c: Store<[A, B]> = combine([a: $a, b: $b]);
 # State transformation (#state-transformation-methods)
 
 When function is passed to `combine` it will act as state transformation funciton which will be called at every `combine` update.
-Result will be saved in created store. This function [must be **pure**](/en/explanation/glossary#purity). `combine` function called synchronously during combine call, if this function will throw an error, application will crash. This will be fixed in [24 release](https://github.com/effector/effector/issues/1163)
+Result will be saved in created store. This function [must be **pure**](/en/explanation/glossary#purity).
+
+`combine` function called synchronously during combine call, if this function will throw an error, application will crash. This will be fixed in [24 release](https://github.com/effector/effector/issues/1163)
 
 ## `combine(...stores, fn)` (#methods-combine-stores-fn)
 
@@ -202,7 +204,7 @@ import demo_combineNonStoresFn from "../../../../demo/combine/non-stores-fn.live
 
 <LiveDemo client:only="preact" demoFile={demo_combineNonStoresFn} />
 
-### Parameters (#parameters)
+# Parameters (#parameters)
 
 All overloads of `combine` with `fn` provided are also supporting optional configuration object as the last parameter.
 
