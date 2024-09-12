@@ -728,6 +728,7 @@ export function config(data: {
   usedMethods?: string[]
   grouping?: Partial<Grouping<any>>
   skipCases?: BoolDecl | BoolDecl[]
+  childFile?: DataDecl<string | null | void>
 }): void
 export function config<
   T extends Record<string, any>,
@@ -738,6 +739,7 @@ export function config<
   usedMethods?: string[]
   grouping: Partial<Grouping<T>>
   skipCases?: BoolDecl | BoolDecl[]
+  childFile?: DataDecl<string | null | void>
 }): void
 export function config(data: {
   header?: string
@@ -745,6 +747,7 @@ export function config(data: {
   usedMethods?: string[]
   grouping?: Partial<Grouping<any>>
   skipCases?: BoolDecl | BoolDecl[]
+  childFile?: DataDecl<string | null | void>
 }) {
   const resultData =
     data.skipCases && !Array.isArray(data.skipCases)
@@ -808,6 +811,7 @@ export function exec(fn: () => void, struct: ConfigStructShape = confStruct) {
         config: currCtx.config,
         usedMethods: currCtx.config.usedMethods ?? null,
         skipCases: currCtx.config.skipCases ?? null,
+        childFile: currCtx.config.childFile ?? null,
       }
     },
   )

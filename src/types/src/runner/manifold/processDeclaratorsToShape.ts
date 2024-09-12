@@ -10,6 +10,9 @@ function getDeclsReferencedByConfig(): string[] {
   if (ctx.config.skipCases) {
     results.push(...ctx.config.skipCases)
   }
+  if (ctx.config.childFile) {
+    results.push(ctx.config.childFile)
+  }
   if (isRef(pass)) {
     results.push(pass)
   }

@@ -38,6 +38,7 @@ export const confStruct = Conf.shape({
 export const fileGeneratorConfStruct = Conf.shape({
   header: Conf.val(true),
   file: Conf.val(true),
+  childFile: Conf.val(),
   usedMethods: Conf.val(true),
   skipCases: Conf.val(),
   grouping: Conf.shape({
