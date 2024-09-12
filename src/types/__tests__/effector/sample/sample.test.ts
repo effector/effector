@@ -1155,6 +1155,53 @@ test('edge cases from issue #957 (should fail)', () => {
   `)
 })
 
+describe('void type with filter edge case', () => {
+  test('inline filter (should pass)', () => {
+    const $data = createStore<{data: any} | undefined>(undefined, {
+      skipVoid: false,
+    })
+
+    const target = createEvent<{data: any}>()
+
+    sample({
+      source: $data,
+      filter: (data): data is {data: any} => !!data,
+      fn: data => data.data,
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Unmarked error at test line 10 'fn: data => data.data,'
+      'data' is possibly 'undefined'.
+      "
+    `)
+  })
+  test('filter as value (should pass)', () => {
+    const $data = createStore<{data: any} | undefined>(undefined, {
+      skipVoid: false,
+    })
+
+    const target = createEvent<{data: any}>()
+
+    const hasData = (data: {data: any} | undefined): data is {data: any} =>
+      !!data
+
+    sample({
+      source: $data,
+      filter: hasData,
+      fn: data => data.data,
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
+
 describe('cross mismatch', () => {
   test('cloct target cross mismatch (should fail)', () => {
     const str = createEvent<string>()
