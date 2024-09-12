@@ -491,6 +491,7 @@ export type Grouping<T extends Record<string, any>> = {
   sortByFields?: {[K in keyof T]: Array<T[K]> | 'string'}
   pass?: boolean | BoolDecl | ((obj: T) => boolean)
   tags?: Record<string, Declarator>
+  childFile?: DataDecl<string | null | void>
 }
 
 export type ExecutionPlan = {
@@ -523,6 +524,7 @@ export type CtxConfig = {
   header?: string
   grouping: Grouping<any>
   file?: string
+  childFile?: DataDecl<string | null | void>
   usedMethods?: string[]
   skipCases?: BoolDecl[]
 }
@@ -530,6 +532,7 @@ export type PartialCtxConfig = {
   header?: string
   grouping?: Partial<Grouping<any>>
   file?: string
+  childFile?: DataDecl<string | null | void>
   usedMethods?: string[]
   skipCases?: BoolDecl[]
 }
