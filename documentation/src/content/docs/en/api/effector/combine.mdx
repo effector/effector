@@ -7,13 +7,40 @@ redirectFrom:
 
 import LiveDemo from "../../../../../components/LiveDemo.jsx";
 
-This method allows you to get state from each passed store and **combine** it to a single value and save into a single store, that updates every time like each passed store.
+This method allows retrieving the state from each passed store and combining them into a single value, storing it in a new derived store.
+The resulting store will update every time any of the passed stores is updated.
+
+If several stores update simultaneously, the method will process them all at once, meaning that `combine` batches updates, which leads to more efficient operation without unnecessary computations.
 
 :::warning{title="Caution"}
 `combine` returns not just a common store. Instead, it returns [DerivedStore](/en/api/effector/Store#readonly), it cannot be modified by the events or used as `target` in [sample](/en/api/effector/sample).
 :::
 
-# Methods (#methods)
+# Common formulae (#common-formulae)
+
+```ts
+declare const $a: Store<A>;
+declare const $b: Store<B>;
+
+// State transformation
+
+const $c: Store<C> = combine({ a: $a, b: $b }, (values: { a: A; b: B }) => C);
+
+const $c: Store<C> = combine([$a, $b], (values: [A, B]) => C);
+
+const $c: Store<C> = combine($a, $b, (a: A, b: B) => C);
+
+// State combination
+
+const $c: Store<{ a: A; b: B }> = combine({ a: $a, b: $b });
+
+const $c: Store<[A, B]> = combine([a: $a, b: $b]);
+```
+
+# State transformation (#state-transformation-methods)
+
+When function is passed to `combine` it will act as state transformation funciton which will be called at every `combine` update.
+Result will be saved in created store. This function [must be **pure**](/en/explanation/glossary#purity). `combine` function called synchronously during combine call, if this function will throw an error, application will crash. This will be fixed in [24 release](https://github.com/effector/effector/issues/1163)
 
 ## `combine(...stores, fn)` (#methods-combine-stores-fn)
 
@@ -34,6 +61,7 @@ $result: Store<D> = combine(
 - Any number of stores can be passed to `combine`, but the latest argument always should be function-reducer that returns new state
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
+- Function [must be **pure**](/en/explanation/glossary#purity)
 
 ### Returns (#methods-combine-stores-fn-returns)
 
@@ -41,31 +69,13 @@ $result: Store<D> = combine(
 
 ### Examples (#methods-combine-stores-fn-examples)
 
-import demo_combineStoresFn from "./demo/_combine-stores-fn.live.js?raw";
+import demo_combineStoresFn from "../../../../demo/combine/stores-fn.live.js?raw";
 
 <LiveDemo client:only="preact" demoFile={demo_combineStoresFn} />
 
-## `combine({ A, B, C }, fn?)` (#methods-combine-object-fn)
-
-:::info
-Formerly known as `createStoreObject`
-:::
+## `combine({ A, B, C }, fn)` (#methods-combine-object-fn)
 
 ### Formulae (#methods-combine-object-fn-formulae)
-
-```ts
-const $first: Store<A>;
-const $second: StoreWritable<B>;
-const $third: Store<C> | StoreWritable<C>;
-
-$result: Store<{ a: A; b: B; c: C }> = combine({ a: $first, b: $second, c: $third });
-```
-
-- Read state from stores `$first`, `$second`, `$third` and assign it to properties `a`, `b`, `c` accordingly, that object will be saved to `$result` store
-- Store `$result` contain object `{a, b, c}` and will be updated on each update of passed stores
-- If several stores updated at the same time (during one tick) there will be single update of `$result` store
-
-### Formulae with `fn` (#methods-combine-object-fn-formulae-fn)
 
 ```ts
 const $first: Store<A>;
@@ -82,6 +92,7 @@ $result: Store<D> = combine(
 - The `result` of the function call saved in `$result` store
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
+- Function [must be **pure**](/en/explanation/glossary#purity)
 
 ### Returns (#methods-combine-object-fn-returns)
 
@@ -89,11 +100,11 @@ $result: Store<D> = combine(
 
 ### Examples (#methods-combine-object-fn-examples)
 
-import demo_combineObjectFn from "./demo/_combine-object-fn.live.js?raw";
+import demo_combineObjectFn from "../../../../demo/combine/object-fn.live.js?raw";
 
 <LiveDemo client:only="preact" demoFile={demo_combineObjectFn} />
 
-## `combine([A, B, C], fn?)` (#methods-combine-array-fn)
+## `combine([A, B, C], fn)` (#methods-combine-array-fn)
 
 ### Formulae (#methods-combine-array-fn-formulae)
 
@@ -109,8 +120,55 @@ $result: Store<D> = combine([$first, $second, $third], ([A, B, C]): D => result)
 - The `result` of the function call saved in `$result` store
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
+- Function [must be **pure**](/en/explanation/glossary#purity)
 
-### Formulae without `fn` (#methods-combine-array-fn-formulae-no-fn)
+### Returns (#methods-combine-array-fn-returns)
+
+[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
+
+### Examples (#methods-combine-array-fn-examples)
+
+import demo_combineArrayFn from "../../../../demo/combine/array-fn.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineArrayFn} />
+
+# State combination
+
+When there is no function in `combine` it will act as state combinator, creating a store with array or object with fields from given stores
+
+## `combine({ A, B, C })` (#methods-combine-object)
+
+:::info
+Formerly known as `createStoreObject`
+:::
+
+### Formulae (#methods-combine-object-formulae)
+
+```ts
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<{ a: A; b: B; c: C }> = combine({ a: $first, b: $second, c: $third });
+```
+
+- Read state from stores `$first`, `$second`, `$third` and assign it to properties `a`, `b`, `c` accordingly, that object will be saved to `$result` store
+- Store `$result` contain object `{a, b, c}` and will be updated on each update of passed stores
+- If several stores updated at the same time (during one tick) there will be single update of `$result` store
+
+### Returns (#methods-combine-object-returns)
+
+[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
+
+### Examples (#methods-combine-object-examples)
+
+import demo_combineObject from "../../../../demo/combine/object.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineObject} />
+
+## `combine([A, B, C])` (#methods-combine-array)
+
+### Formulae (#methods-combine-array-formulae)
 
 ```ts
 const $first: Store<A>;
@@ -124,27 +182,27 @@ $result: Store<[A, B, C]> = combine([$first, $second, $third]);
 - Store `$result` will be updated on each update of passed stores
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
-### Returns (#methods-combine-array-fn-returns)
+### Returns (#methods-combine-array-returns)
 
 [_DerivedStore_](/en/api/effector/Store#readonly): New derived store
 
-### Examples (#methods-combine-array-fn-examples)
+### Examples (#methods-combine-array-examples)
 
-import demo_combineArrayFn from "./demo/_combine-array-fn.live.js?raw";
+import demo_combineArray from "../../../../demo/combine/array.live.js?raw";
 
-<LiveDemo client:only="preact" demoFile={demo_combineArrayFn} />
+<LiveDemo client:only="preact" demoFile={demo_combineArray} />
 
-## `combine` with primitives and objects (#methods-combine-primitives-objects)
+# `combine` with primitives and objects (#methods-combine-primitives-objects)
 
-It works the same as before. Now primitives and objects can be used in `combine`, and `combine` will not be triggered. Effector will not track mutations of objects and primitives.
+Primitives and objects can be used in `combine`, and `combine` will not be triggered. Effector will not track mutations of objects and primitives.
 
 ### Examples (#methods-combine-primitives-objects-examples)
 
-import demo_combineNonStoresFn from "./demo/_combine-non-stores-fn.live.js?raw";
+import demo_combineNonStoresFn from "../../../../demo/combine/non-stores-fn.live.js?raw";
 
 <LiveDemo client:only="preact" demoFile={demo_combineNonStoresFn} />
 
-# Parameters (#parameters)
+### Parameters (#parameters)
 
 All overloads of `combine` with `fn` provided are also supporting optional configuration object as the last parameter.
 

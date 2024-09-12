@@ -1,0 +1,225 @@
+---
+title: combine
+lang: ru
+---
+
+import LiveDemo from "../../../../../components/LiveDemo.jsx";
+
+Этот метод позволяет получить состояние из каждого переданного сторов и комбинировать их в одно значение, сохраняя в новом производном сторе.
+Полученный стор будет обновляться каждый раз, как обновляется любой из переданных сторов
+
+Если несколько сторов обновятся одновременно, то метод обработает их всех разом, то есть `combine` батчит обновления, что приводит к более эффективной работе без излишних вычислений
+
+:::warning{title="Внимание"}
+`combine` возвращает не просто обычный стор, он возвращает [DerivedStore](/ru/api/effector/Store#readonly), который нельзя изменять через события или использовать в качестве `target` в [sample](/ru/api/effector/sample).
+:::
+
+# Общая формула (#common-formulae)
+
+```ts
+declare const $a: Store<A>;
+declare const $b: Store<B>;
+
+// Трансформация состояний
+
+const $c: Store<C> = combine({ a: $a, b: $b }, (values: { a: A; b: B }) => C);
+
+const $c: Store<C> = combine([$a, $b], (values: [A, B]) => C);
+
+const $c: Store<C> = combine($a, $b, (a: A, b: B) => C);
+
+// Комбинирование состояний
+
+const $c: Store<{ a: A; b: B }> = combine({ a: $a, b: $b });
+
+const $c: Store<[A, B]> = combine([a: $a, b: $b]);
+```
+
+# Преобразование состояния (#state-transformation-methods)
+
+Когда в `combine` передается функция, она будет действовать как функция трансформации состояния и вызываться при каждом обновлении `combine`.
+Результат будет сохранен в созданном сторе. Эта функция [должна быть **чистой**](/ru/explanation/glossary#purity). Функция `combine` вызывается синхронно во время вызова `combine`. Если эта функция вызовет ошибку, приложение завершится сбоем. Это будет исправлено в [24 релизе](https://github.com/effector/effector/issues/1163).
+
+## `combine(...stores, fn)` (#methods-combine-stores-fn)
+
+### Формула (#methods-combine-stores-fn-formulae)
+
+```ts
+const $first: Store<A>
+const $second: StoreWritable<B>
+const $third: Store<C> | StoreWritable<C>
+
+$result: Store<D> = combine(
+  $first, $second, $third, ...,
+  (first: A, second: B, third: C, ...) => result
+)
+```
+
+- После вызова `combine` состояние каждого стора извлекается и передается в качестве аргументов функции, результат вызова функции станет состоянием стора `$result`.
+- В `combine` можно передавать любое количество сторов, но последним аргументом всегда должна быть функция-редуктор, возвращающая новое состояние.
+- Если функция вернула то же значение `result`, что и предыдущее, стор `$result` не будет обновлен.
+- Если несколько сторов обновляются одновременно (за один тик), будет единый вызов функции и единое обновление стора `$result`.
+- Функция [должна быть **чистой**](/ru/explanation/glossary#purity).
+
+### Возвращает (#methods-combine-stores-fn-returns)
+
+[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный стор.
+
+### Примеры (#methods-combine-stores-fn-examples)
+
+import demo_combineStoresFn from "../../../../demo/combine/stores-fn.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineStoresFn} />
+
+## `combine({ A, B, C }, fn)` (#methods-combine-object-fn)
+
+### Формула (#methods-combine-object-fn-formulae)
+
+```ts
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<D> = combine(
+  { a: $first, b: $second, c: $third },
+  ({ a, b, c }: { a: A; b: B; c: C }): D => result,
+);
+```
+
+- Читает состояние из сторов `$first`, `$second`, `$third` и присваивает его соответствующим полям `a`, `b`, `c`, затем вызывает функцию с этим объектом.
+- Результат вызова функции сохраняется в сторе `$result`.
+- Если функция вернула то же значение `result`, что и предыдущее, стор `$result` не будет обновлен.
+- Если несколько сторов обновляются одновременно (за один тик), будет единый вызов функции и единое обновление стора `$result`.
+- Функция [должна быть **чистой**](/ru/explanation/glossary#purity).
+
+### Возвращает (#methods-combine-object-fn-returns)
+
+[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный стор.
+
+### Примеры (#methods-combine-object-fn-examples)
+
+import demo_combineObjectFn from "../../../../demo/combine/object-fn.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineObjectFn} />
+
+## `combine([A, B, C], fn)` (#methods-combine-array-fn)
+
+### Формула (#methods-combine-array-fn-formulae)
+
+```ts
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<D> = combine([$first, $second, $third], ([A, B, C]): D => result);
+```
+
+- Читает состояние из сторов `$first`, `$second`, `$third` и присваивает его массиву в том порядке, в котором сторы были переданы, затем вызывает функцию с этим массивом.
+- Результат вызова функции сохраняется в сторе `$result`.
+- Если функция вернула то же значение `result`, что и предыдущее, стор `$result` не будет обновлен.
+- Если несколько сторов обновляются одновременно (за один тик), будет единый вызов функции и единое обновление стора `$result`.
+- Функция [должна быть **чистой**](/ru/explanation/glossary#purity).
+
+### Возвращает (#methods-combine-array-fn-returns)
+
+[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный стор.
+
+### Примеры (#methods-combine-array-fn-examples)
+
+import demo_combineArrayFn from "../../../../demo/combine/array-fn.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineArrayFn} />
+
+# Комбинирование состояний
+
+Когда в `combine` не передается функция, он действует как комбинатор состояний, создавая стор с массивом или объектом, содержащим поля переданных сторов.
+
+## `combine({ A, B, C })` (#methods-combine-object)
+
+:::info
+Ранее известен как `createStoreObject`.
+:::
+
+### Формула (#methods-combine-object-formulae)
+
+```ts
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<{ a: A; b: B; c: C }> = combine({ a: $first, b: $second, c: $third });
+```
+
+- Читает состояние из сторов `$first`, `$second`, `$third` и присваивает его соответствующим полям `a`, `b`, `c`, этот объект сохраняется в сторе `$result`.
+- Стор `$result` содержит объект `{a, b, c}` и будет обновляться при каждом обновлении переданных сторов.
+- Если несколько сторов обновляются одновременно (за один тик), будет единое обновление стора `$result`.
+
+### Возвращает (#methods-combine-object-returns)
+
+[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный стор.
+
+### Примеры (#methods-combine-object-examples)
+
+import demo_combineObject from "../../../../demo/combine/object.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineObject} />
+
+## `combine([A, B, C])` (#methods-combine-array)
+
+### Формула (#methods-combine-array-formulae)
+
+```ts
+const $first: Store<A>;
+const $second: StoreWritable<B>;
+const $third: Store<C> | StoreWritable<C>;
+
+$result: Store<[A, B, C]> = combine([$first, $second, $third]);
+```
+
+- Читает состояние из сторов `$first`, `$second`, `$third` и присваивает его массиву в том порядке, в котором сторы были переданы, этот массив сохраняется в сторе `$result`.
+- Стор `$result` будет обновляться при каждом обновлении переданных сторов.
+- Если несколько сторов обновляются одновременно (за один тик), будет единое обновление стора `$result`.
+
+### Возвращает (#methods-combine-array-returns)
+
+[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный стор.
+
+### Примеры (#methods-combine-array-examples)
+
+import demo_combineArray from "../../../../demo/combine/array.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineArray} />
+
+# `combine` с примитивами и объектами (#methods-combine-primitives-objects)
+
+Примитивы и объекты могут использоваться в `combine`, и `combine` не будет реагировать на их
+
+ изменения. Effector не отслеживает мутации объектов и примитивов.
+
+### Примеры (#methods-combine-primitives-objects-examples)
+
+import demo_combineNonStoresFn from "../../../../demo/combine/non-stores-fn.live.js?raw";
+
+<LiveDemo client:only="preact" demoFile={demo_combineNonStoresFn} />
+
+### Параметры (#parameters)
+
+Все перегрузки `combine` с функцией поддерживают опциональный объект конфигурации в качестве последнего параметра.
+
+## `.skipVoid` (#parameters-skipVoid)
+
+Флаг для контроля обработки значений `undefined` в сторе _(начиная с версии `effector 23.0.0`)_. Если установить в `false`, стор будет использовать `undefined` как значение. Если установить в `true` (устарело), стор будет интерпретировать `undefined` как команду «пропустить обновление» и ничего не делать.
+
+### **Формула (#**parameters-skipVoid-formulae)
+
+```ts
+combine($a, $b, callback, { skipVoid: true });
+```
+
+- Тип: `boolean`
+
+### Примеры (#parameters-skipVoid-examples)
+
+```js
+const $withFn = combine($a, $b, (a, b) => a || b, { skipVoid: false });
+```
