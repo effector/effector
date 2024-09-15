@@ -22,7 +22,8 @@
       "forest": ["packages/forest/index.d.ts"],
       "effector-vue/composition": ["packages/effector-vue/composition.d.ts"],
       "effector-vue": ["packages/effector-vue/index.d.ts"]
-    }
+    },
+    "noErrorTruncation": true
   },
   "exclude": [
     "./dist",
