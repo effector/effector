@@ -14,6 +14,7 @@ import {
   every,
   not,
   matchUnion,
+  some,
 } from '../runner/manifold/operators'
 import {Separate} from 'runner/manifold/types'
 
@@ -45,7 +46,8 @@ export default () => {
       'bad return',
     ],
   })
-  const sourceType = separate({
+  //@ts-expect-error
+  const sourceType: Separate<'no' | 'unit' | 'object' | 'tuple'> = separate({
     source: {clockType, filterType},
     variant: {
       clock: {
@@ -84,7 +86,6 @@ export default () => {
       },
     } as const,
     cases: {
-      //@ts-ignore
       object: {
         targetUnit: union(['fullObject', 'nullableField', 'smallObject']),
       },
@@ -924,6 +925,16 @@ export default () => {
     ],
   })
 
+  const isTypedArgs = every([
+    some([
+      matchUnion(filterFnType, ['good typed', 'bad typed']),
+      matchUnion(fnType, ['good typed', 'bad typed']),
+    ]),
+    not(fnSecondArg),
+    matchUnion(sourceType, 'no'),
+    not(inferByFilter),
+  ])
+
   sortOrder([
     inferByFilter,
     sourceType,
@@ -940,6 +951,15 @@ export default () => {
     file: 'generated/sampleFilter',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     header,
+    childFile: computeFn({
+      source: {filterFnType, isTypedArgs},
+      fn: ({filterFnType, isTypedArgs}) =>
+        filterFnType === 'bad filter'
+          ? 'badFilter'
+          : isTypedArgs
+          ? 'typedArgs'
+          : null,
+    }),
     grouping: {
       pass,
       getHash: [
@@ -966,12 +986,12 @@ export default () => {
         filterFn: filterFnType,
       },
       describeGroup: computeFn({
-        source: {groupTokens, sourceType, filterFnType},
-        fn: ({groupTokens, sourceType, filterFnType}) => ({
-          largeGroup:
-            filterFnType === 'bad filter'
-              ? 'bad filter'
-              : `${sourceType} source`,
+        source: {
+          groupTokens,
+          sourceType,
+        },
+        fn: ({groupTokens, sourceType}) => ({
+          largeGroup: `${sourceType} source`,
           description: groupTokens,
         }),
       }),
