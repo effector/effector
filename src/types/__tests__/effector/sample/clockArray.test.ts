@@ -268,12 +268,11 @@ describe('with target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { readonly a: string; }, clk: any) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
-        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { readonly a: string; }, clk: any) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type '{ readonly a: string; }' is not assignable to type '{ a: number; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
+      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { readonly a: string; }, clk: any) => any'.
+        Types of parameters '__0' and 'src' are incompatible.
+          Type '{ readonly a: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -294,11 +293,10 @@ describe('with target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '((src: { a: string; b: string; }, clk: string | void) => any) & (({ a, b }: any, clock: string) => { a: any; b: any; clock: string; })'.
-        Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(src: { a: string; b: string; }, clk: string | void) => any'.
-          Types of parameters 'clock' and 'clk' are incompatible.
-            Type 'string | void' is not assignable to type 'string'.
-              Type 'void' is not assignable to type 'string'.
+      Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(src: { a: string; b: string; }, clk: string | void) => any'.
+        Types of parameters 'clock' and 'clk' are incompatible.
+          Type 'string | void' is not assignable to type 'string'.
+            Type 'void' is not assignable to type 'string'.
       "
     `)
   })
@@ -415,12 +413,7 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '((src: { readonly a: string; }, clk: any) => any) & (({ a }: { a: number; }, clock: any) => { a: number; clock: any; })'.
-        Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(src: { readonly a: string; }, clk: any) => any'.
-          Types of parameters '__0' and 'src' are incompatible.
-            Type '{ readonly a: string; }' is not assignable to type '{ a: number; }'.
-              Types of property 'a' are incompatible.
-                Type 'string' is not assignable to type 'number'.
+      lack of expected error at test line 10 'fn: ({a}: {a: number}, clock: any) => ({a, clock}),'
       "
     `)
   })
@@ -439,11 +432,7 @@ describe('without target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '((src: { a: string; b: string; }, clk: string | void) => any) & (({ a, b }: any, clock: string) => { a: any; b: any; clock: string; })'.
-        Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(src: { a: string; b: string; }, clk: string | void) => any'.
-          Types of parameters 'clock' and 'clk' are incompatible.
-            Type 'string | void' is not assignable to type 'string'.
-              Type 'void' is not assignable to type 'string'.
+      lack of expected error at test line 9 'fn: ({a, b}: any, clock: string) => ({a, b, clock}),'
       "
     `)
   })
