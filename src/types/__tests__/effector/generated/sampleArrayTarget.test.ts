@@ -2815,166 +2815,126 @@ test('wrong args (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
     "
   `)
 })

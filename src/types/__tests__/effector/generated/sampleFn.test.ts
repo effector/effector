@@ -119,55 +119,46 @@ describe('assert fn args', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: string; d: string; }) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: string; d: string; }) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: string; d: string; }) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: string; d: string; }' is not assignable to type 'DataExact'.
+              Types of property 'c' are incompatible.
+                Type 'string' is not assignable to type 'number'.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; }) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Property 'd' is missing in type '{ c: number; }' but required in type 'DataExact'.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | null) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: number; d: string; } | null' is not assignable to type 'DataExact'.
+              Type 'null' is not assignable to type 'DataExact'.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | { c: string; d: string; }) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: number; d: string; } | { c: string; d: string; }' is not assignable to type 'DataExact'.
               Type '{ c: string; d: string; }' is not assignable to type 'DataExact'.
                 Types of property 'c' are incompatible.
                   Type 'string' is not assignable to type 'number'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: number; }) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; }) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | { c: number; }) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: number; d: string; } | { c: number; }' is not assignable to type 'DataExact'.
               Property 'd' is missing in type '{ c: number; }' but required in type 'DataExact'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: number; d: string; } | null) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | null) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
-              Type '{ c: number; d: string; } | null' is not assignable to type 'DataExact'.
-                Type 'null' is not assignable to type 'DataExact'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: number; d: string; } | { c: string; d: string; }) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | { c: string; d: string; }) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
-              Type '{ c: number; d: string; } | { c: string; d: string; }' is not assignable to type 'DataExact'.
-                Type '{ c: string; d: string; }' is not assignable to type 'DataExact'.
-                  Types of property 'c' are incompatible.
-                    Type 'string' is not assignable to type 'number'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: number; d: string; } | { c: number; }) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | { c: number; }) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
-              Type '{ c: number; d: string; } | { c: number; }' is not assignable to type 'DataExact'.
-                Property 'd' is missing in type '{ c: number; }' but required in type 'DataExact'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: number; d: string; } | { c: number; d: string; } | null) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | { c: number; d: string; } | null) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
-              Type '{ c: number; d: string; } | { c: number; d: string; } | null' is not assignable to type 'DataExact'.
-                Type 'null' is not assignable to type 'DataExact'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: string; d: string; } | { c: number; d: string; } | null) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: string; d: string; } | { c: number; d: string; } | null) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
-              Type '{ c: string; d: string; } | { c: number; d: string; } | null' is not assignable to type 'DataExact'.
-                Type 'null' is not assignable to type 'DataExact'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: string; d: string; } | { c: number; }) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: string; d: string; } | { c: number; }) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
-              Type '{ c: string; d: string; } | { c: number; }' is not assignable to type 'DataExact'.
-                Type '{ c: string; d: string; }' is not assignable to type 'DataExact'.
-                  Types of property 'c' are incompatible.
-                    Type 'string' is not assignable to type 'number'.
-        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '((clk: { c: number; } | { c: number; d: string; } | null) => any) & (({ c, d }: DataExact) => { a: number; b: string; })'.
-          Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; } | { c: number; d: string; } | null) => any'.
-            Types of parameters '__0' and 'clk' are incompatible.
-              Type '{ c: number; } | { c: number; d: string; } | null' is not assignable to type 'DataExact'.
-                Type 'null' is not assignable to type 'DataExact'.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; d: string; } | { c: number; d: string; } | null) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: number; d: string; } | { c: number; d: string; } | null' is not assignable to type 'DataExact'.
+              Type 'null' is not assignable to type 'DataExact'.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: string; d: string; } | { c: number; d: string; } | null) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: string; d: string; } | { c: number; d: string; } | null' is not assignable to type 'DataExact'.
+              Type 'null' is not assignable to type 'DataExact'.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: string; d: string; } | { c: number; }) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: string; d: string; } | { c: number; }' is not assignable to type 'DataExact'.
+              Type '{ c: string; d: string; }' is not assignable to type 'DataExact'.
+                Types of property 'c' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+        Type '({ c, d }: DataExact) => { a: number; b: string; }' is not assignable to type '(clk: { c: number; } | { c: number; d: string; } | null) => any'.
+          Types of parameters '__0' and 'clk' are incompatible.
+            Type '{ c: number; } | { c: number; d: string; } | null' is not assignable to type 'DataExact'.
+              Type 'null' is not assignable to type 'DataExact'.
         "
       `)
     })
