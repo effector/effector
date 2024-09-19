@@ -415,7 +415,14 @@ describe('unit target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      Unmarked error at test line 7 '{const result: Store<AN> = sample({source:aNumNull, target:aT   , filter:filterInf, fn:({a}:AN) => ({a})})}'
+      'fn' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+      Unmarked error at test line 8 '{const result: Event<AN> = sample({source:aNumNull, target:aNumT, filter:filterInf, fn:({a}:AN) => ({a})})}'
+      'fn' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+      Unmarked error at test line 13 '{const result: Store<AN> = sample({source:$aNull  , target:aT   , filter:filterInf, fn:({a}:AN) => ({a})})}'
+      'fn' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+      Unmarked error at test line 14 '{const result: Event<AN> = sample({source:$aNull  , target:aNumT, filter:filterInf, fn:({a}:AN) => ({a})})}'
+      'fn' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
       "
     `)
   })
@@ -956,12 +963,16 @@ describe('tuple target', () => {
       The type 'readonly [EventCallable<AN>, StoreWritable<{ a: number; }>]' is 'readonly' and cannot be assigned to the mutable type '[Event<AN>, Store<AN>]'.
       Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       The type 'readonly [EventCallable<AN>, StoreWritable<{ a: number; }>]' is 'readonly' and cannot be assigned to the mutable type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
+      'fn' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
       Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf})}'
       The type 'readonly [EventCallable<AN>, StoreWritable<{ a: number; }>]' is 'readonly' and cannot be assigned to the mutable type '[Event<AN>, Store<AN>]'.
       Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       The type 'readonly [EventCallable<AN>, StoreWritable<{ a: number; }>]' is 'readonly' and cannot be assigned to the mutable type '[Event<AN>, Store<AN>]'.
       Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       The type 'readonly [EventCallable<AN>, StoreWritable<{ a: number; }>]' is 'readonly' and cannot be assigned to the mutable type '[Event<AN>, Store<AN>]'.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
+      'fn' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
       Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean})}'
       The type 'readonly [EventCallable<AN>, StoreWritable<{ a: number; }>]' is 'readonly' and cannot be assigned to the mutable type '[Event<AN>, Store<AN>]'.
       Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:fn0})}'
