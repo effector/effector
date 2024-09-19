@@ -1435,15 +1435,6 @@ export function sample<
       )
       : never
   ),
-  const FN extends (
-    Source extends Unit<any> | SourceRecord
-    ? Clock extends Units
-      ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
-      : (src: TypeOfSource<Source>) => any
-    : Clock extends Units
-      ? (clk: TypeOfClock<Clock>) => any
-      : never
-  ),
   const FNNonFalsy extends (
     Source extends Unit<any> | SourceRecord
     ? NonFalsy<TypeOfSource<Source>>
@@ -1468,6 +1459,15 @@ export function sample<
   ),
   const FLUnitOrBool,
   const Args extends any[],
+  const FN = (
+    Source extends Unit<any> | SourceRecord
+    ? Clock extends Units
+      ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
+      : (src: TypeOfSource<Source>) => any
+    : Clock extends Units
+      ? (clk: TypeOfClock<Clock>) => any
+      : never
+  ),
   const FNInf = (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
@@ -1591,7 +1591,10 @@ type TargetConfigCheck<
         'noSrc',
         'noClk'
       >
-    : [message: {error: 'function should accept data source types'; got: FN}]
+    : [error: {
+        fn: DataSourceFunction<Source, Clock>
+        error: 'fn parameters should match clock/source types'
+      }]
     // mode with source only or with both clock and source
   : Mode extends Mode_Src
   ? TargetOrError<
@@ -1673,7 +1676,10 @@ type SampleFilterTargetDef<
           >,
           RawConfig
         >
-      : [message: {error: 'function should accept data source types'; got: FN}]
+      : [error: {
+        fn: DataSourceFunction<Source, Clock>
+        error: 'fn parameters should match clock/source types'
+      }]
     : FLUnitOrBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn_Trg
         ? FNAltArg extends (arg?: any, clk?: any) => any
@@ -1795,7 +1801,10 @@ type SampleFilterTargetDef<
             'noSrc',
             'noClk'
           >
-        : [message: {error: 'function should accept data source types'; got: FN}]
+        : [error: {
+            fn: DataSourceFunction<Source, Clock>
+            error: 'fn parameters should match clock/source types'
+          }]
         // mode with source only or with both clock and source
       : Mode extends Mode_Src_Flt_NoFn_Trg
       ? TargetOrError<
@@ -1829,7 +1838,10 @@ type SampleFilterTargetDef<
           ToResultConfig<Mode, Clock, Source, never, FN, Target>,
           RawConfig
         >
-      : [message: {error: 'function should accept data source types'; got: FN}]
+      : [error: {
+        fn: DataSourceFunction<Source, Clock>
+        error: 'fn parameters should match clock/source types'
+      }]
     : never
 
 type RebuildClockTargetLoop<
