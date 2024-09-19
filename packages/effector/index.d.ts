@@ -1444,29 +1444,11 @@ export function sample<
       ? (clk: TypeOfClock<Clock>) => any
       : never
   ),
-  const FNInf extends (
-    Source extends Unit<any> | SourceRecord
-    ? Clock extends Units
-      ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-      : (src: FNInfSource) => any
-    : Clock extends Units
-      ? (clk: FNInfClock) => any
-      : never
-  ),
   const FNNonFalsy extends (
     Source extends Unit<any> | SourceRecord
     ? NonFalsy<TypeOfSource<Source>>
     : Clock extends Units
       ? NonFalsy<TypeOfClock<Clock>>
-      : never
-  ),
-  const FNAltArg extends (
-    Source extends Unit<any> | SourceRecord
-    ? Clock extends Units
-      ? (src: FNNonFalsy, clk: TypeOfClock<Clock>) => any
-      : (src: FNNonFalsy) => any
-    : Clock extends Units
-      ? (clk: FNNonFalsy) => any
       : never
   ),
   const RawConfig,
@@ -1486,6 +1468,24 @@ export function sample<
   ),
   const FLUnitOrBool,
   const Args extends any[],
+  const FNInf = (
+    Source extends Unit<any> | SourceRecord
+    ? Clock extends Units
+      ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+      : (src: FNInfSource) => any
+    : Clock extends Units
+      ? (clk: FNInfClock) => any
+      : never
+  ),
+  const FNAltArg = (
+    Source extends Unit<any> | SourceRecord
+    ? Clock extends Units
+      ? (src: FNNonFalsy, clk: TypeOfClock<Clock>) => any
+      : (src: FNNonFalsy) => any
+    : Clock extends Units
+      ? (clk: FNNonFalsy) => any
+      : never
+  ),
 >(...args:
   SourceNoConf extends Unit<any> | SourceRecord
     ? ClockNoConf extends Units
@@ -1724,49 +1724,39 @@ type SampleFilterTargetDef<
       )
         // mode with fn
       ? Mode extends Mode_Flt_Fn_Trg
-        ? FNInf extends (
-            Source extends Unit<any> | SourceRecord
-            ? Clock extends Units
-              ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-              : (src: FNInfSource) => any
-            : Clock extends Units
-              ? (clk: FNInfClock) => any
-              : any
-          )
-          ? TargetOrError<
-              ReturnType<FNInf>,
-              'fnRet',
-              Target,
-              ToResultConfig<
-                Mode,
-                Clock,
-                Source,
-                FilterFun & (
-                  Source extends Unit<any> | SourceRecord
-                  ? Clock extends Units
-                    ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
-                    : (src: TypeOfSource<Source>) => src is FNInfSource
-                  : Clock extends Units
-                    ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
-                    : never
-                ),
-                FNInf & (
-                  Source extends Unit<any> | SourceRecord
-                  ? Clock extends Units
-                    ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-                    : (src: FNInfSource) => any
-                  : Clock extends Units
-                    ? (clk: FNInfClock) => any
-                    : any
-                ),
-                Target
-              >,
-              RawConfig,
-              FNInf,
-              'noSrc',
-              'noClk'
-            >
-          : [message: {error: 'function should accept data source types'; got: FNInf}]
+        ? TargetOrError<
+            SafeReturn<FNInf>,
+            'fnRet',
+            Target,
+            ToResultConfig<
+              Mode,
+              Clock,
+              Source,
+              FilterFun & (
+                Source extends Unit<any> | SourceRecord
+                ? Clock extends Units
+                  ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
+                  : (src: TypeOfSource<Source>) => src is FNInfSource
+                : Clock extends Units
+                  ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
+                  : never
+              ),
+              FNInf & (
+                Source extends Unit<any> | SourceRecord
+                ? Clock extends Units
+                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+                  : (src: FNInfSource) => any
+                : Clock extends Units
+                  ? (clk: FNInfClock) => any
+                  : any
+              ),
+              Target
+            >,
+            RawConfig,
+            FNInf,
+            'noSrc',
+            'noClk'
+          >
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
         ? TargetOrError<
@@ -2018,6 +2008,8 @@ type RebuildTargetSingle<
 > = Target extends Unit<infer TargetType>
     ? RebuildTargetClockLoop<Clock, Target, TargetType, FilterMode>
     : never
+
+type SafeReturn<F> = F extends () => void ? ReturnType<F> : never
 
 type TargetOrError<
   MatchingValue,
