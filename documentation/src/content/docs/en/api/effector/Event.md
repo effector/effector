@@ -467,7 +467,7 @@ const second = first.map((count) => count.toString());
 // second: Event<string>
 ```
 
-The `first` event can be represented as either `Event<T>` or `Event<T>`. <br/>
+The `first` event can be represented as either `Event<T>` or `EventCallable<T>`. <br/>
 The `second` event will always be represented as `Event<T>`.
 
 #### Examples (#event-methods-map-fn-examples)
