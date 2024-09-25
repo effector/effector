@@ -250,9 +250,7 @@ const someHappened = createEvent<string>();
 const another = createEvent<number>();
 const reversed = createEvent<number>();
 
-// То же самое
-
-, что и .prepend(), но с использованием `sample`
+// То же самое, что и .prepend(), но с использованием `sample`
 sample({
   clock: reversed,
   fn: (input) => String(input),
