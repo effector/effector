@@ -86,7 +86,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-groups > li + li {
-        margin-top: 2rem;
+        margin-top: 1rem;
     }
 
     .nav-groups > :first-child {
@@ -103,12 +103,13 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-group {
-        @apply flex flex-col gap-1;
+        @apply flex flex-col;
     }
 
     .nav-group-title {
+        @apply rounded-md;
         margin: 0;
-        padding: 0.5rem 1rem;
+        padding: 0.125rem 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -119,6 +120,11 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
         background: none;
         border: none;
         cursor: pointer;
+    }
+
+    .nav-group-title a:hover,
+    .nav-group-title a:focus {
+        background-color: var(--theme-bg-hover);
     }
 
     .nav-group-title .arrow {
@@ -134,7 +140,6 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     .nav-group ul {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
         transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
         max-height: 1000px;
         overflow: hidden;
@@ -148,7 +153,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-link a {
-        @apply flex items-center rounded-md px-4 py-1.5 text-base;
+        @apply flex items-center rounded-md px-7 py-0.5 text-base;
         color: inherit;
         font: inherit;
         text-decoration: none;
