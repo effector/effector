@@ -108,9 +108,8 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-group-title {
-        @apply rounded-md;
+        @apply rounded-md py-0.5 px-4;
         margin: 0;
-        padding: 0.125rem 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -121,6 +120,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
         background: none;
         border: none;
         cursor: pointer;
+        text-align: left;
     }
 
     .nav-group-title:hover,
