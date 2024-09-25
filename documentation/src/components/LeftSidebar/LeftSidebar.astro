@@ -76,6 +76,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-groups {
+        --theme-bg-hover: hsla(var(--color-gray-90), 1);
         position: sticky;
         top: calc(var(--theme-navbar-height) + 2rem);
         padding: 2rem 0;
@@ -122,8 +123,8 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
         cursor: pointer;
     }
 
-    .nav-group-title a:hover,
-    .nav-group-title a:focus {
+    .nav-group-title:hover,
+    .nav-group-title:focus {
         background-color: var(--theme-bg-hover);
     }
 

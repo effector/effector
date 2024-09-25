@@ -103,7 +103,7 @@
   --theme-header-lighter: hlsa(var(--color-gray-10), 1);
 
   --theme-bg: hsla(var(--color-stone-10), 1);
-  --theme-bg-hover: hsla(var(--color-gray-90), 1);
+  --theme-bg-hover: hsla(var(--color-gray-95), 1);
   --theme-bg-offset: hsla(var(--color-gray-90), 1);
   --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
 
