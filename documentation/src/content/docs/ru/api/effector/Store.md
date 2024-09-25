@@ -269,7 +269,7 @@ $clicksAmount.updates.watch((amount) => {
 
 ### Возвращает (#properties-reinit-returns)
 
-[_Event_](/ru/api/effector/Event): Событие, которое может реинициализировать store до значения по умолчанию.
+[_EventCallable_](/ru/api/effector/Event#eventCallable): Событие, которое может реинициализировать store до значения по умолчанию.
 
 ### Пример (#properties-reinit-example)
 

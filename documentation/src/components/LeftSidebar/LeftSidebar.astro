@@ -76,6 +76,8 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-groups {
+        --theme-bg-hover: hsla(var(--color-gray-90), 1);
+        --fast-ease: cubic-bezier(0, 0.18, 0.25, 1);
         position: sticky;
         top: calc(var(--theme-navbar-height) + 2rem);
         padding: 2rem 0;
@@ -86,7 +88,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-groups > li + li {
-        margin-top: 2rem;
+        margin-top: 1rem;
     }
 
     .nav-groups > :first-child {
@@ -103,12 +105,12 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-group {
-        @apply flex flex-col gap-1;
+        @apply flex flex-col;
     }
 
     .nav-group-title {
+        @apply rounded-md py-0.5 px-4;
         margin: 0;
-        padding: 0.5rem 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -119,12 +121,18 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
         background: none;
         border: none;
         cursor: pointer;
+        text-align: left;
+    }
+
+    .nav-group-title:hover,
+    .nav-group-title:focus {
+        background-color: var(--theme-bg-hover);
     }
 
     .nav-group-title .arrow {
         width: 1em;
         height: 1em;
-        transition: transform 0.3s ease-in-out;
+        transition: transform 0.2s var(--fast-ease);
     }
 
     .nav-group-title.collapsed .arrow {
@@ -134,8 +142,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     .nav-group ul {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+        transition: max-height 0.2s var(--fast-ease), opacity 0.2s var(--fast-ease);
         max-height: 1000px;
         overflow: hidden;
         opacity: 1;
@@ -148,7 +155,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     }
 
     .nav-link a {
-        @apply flex items-center rounded-md px-4 py-1.5 text-base;
+        @apply flex items-center rounded-md px-7 py-0.5 text-base;
         color: inherit;
         font: inherit;
         text-decoration: none;
