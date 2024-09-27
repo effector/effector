@@ -4596,8 +4596,6 @@ describe('no source', () => {
         sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})})
         sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})        })
         sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: AB) => ({a:val.a, b:val.b})    })
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})    })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -4616,6 +4614,7 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: (clk) => clk !== null,
+          //@ts-expect-error
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
         sample({
@@ -4631,15 +4630,22 @@ describe('no source', () => {
           target: strt,
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: nullableAB,
           //@ts-expect-error
           target: strt,
           filter: (clk) => clk !== null,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -4647,6 +4653,7 @@ describe('no source', () => {
           target: $ab,
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -4655,6 +4662,7 @@ describe('no source', () => {
           target: strt,
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -4662,15 +4670,22 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: $filter,
+          //@ts-expect-error
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: nullableAB,
           //@ts-expect-error
           target: strt,
           filter: $filter,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -4678,15 +4693,22 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: Boolean,
+          //@ts-expect-error
           fn: (val) => ({a:val.a, b:val.b}),
         })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: nullableAB,
           //@ts-expect-error
           target: strt,
           filter: Boolean,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -4694,32 +4716,23 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
           fn: (val) => ({a:val.a, b:val.b}),
         })
         sample({
           clock: nullableAB,
-          //@ts-expect-error
-          target: strt,
+          target: $ab,
           filter: (clk): clk is AB => clk !== null,
-          fn: (val: AB) => ({a:val.a, b:val.b}),
-        })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.c, b:val.b})        })
-        sample({
-          clock: nullableAB,
           //@ts-expect-error
-          target: strt,
-          filter: (clk): clk is AB => clk !== null,
           fn: (val) => ({a:val.c, b:val.b}),
         })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: ABN) => ({a:val.a, b:val.b})   })
         sample({
           clock: nullableAB,
           //@ts-expect-error
           target: strt,
           filter: (clk): clk is AB => clk !== null,
-          fn: (val: ABN) => ({a:val.a, b:val.b}),
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
         })
         //@ts-expect-error
         sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                   })
@@ -4728,23 +4741,8 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
           fn: () => ({a:0, b:1}),
-        })
-        sample({
-          clock: nullableAB,
-          //@ts-expect-error
-          target: strt,
-          filter: Boolean,
-          fn: (val: AB) => ({a:val.a, b:val.b}),
-        })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.a, b:val.b})   })
-        sample({
-          clock: nullableAB,
-          //@ts-expect-error
-          target: strt,
-          filter: Boolean,
-          fn: (val: ABN) => ({a:val.a, b:val.b}),
         })
         //@ts-expect-error
         sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                   })
@@ -4753,6 +4751,7 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: Boolean,
+          //@ts-expect-error
           fn: () => ({a:0, b:1}),
         })
       }
@@ -4761,132 +4760,82 @@ describe('no source', () => {
         Unmarked error at test line 4 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
         lack of expected error at test line 6 'target: strt,'
+        lack of expected error at test line 9 'fn: (val) => ({a:1, b: val ? val.b : ''}),'
         'clk' is possibly 'null'.
-        Unmarked error at test line 18 'clock: nullableAB,'
+        Unmarked error at test line 19 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 20 'target: strt,'
+        lack of expected error at test line 21 'target: strt,'
         'clk' is possibly 'null'.
+        lack of expected error at test line 25 'fn: (val) => ({a:1, b: val ? val.b : ''}),'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Unmarked error at test line 28 'clock: nullableAB,'
+        Unmarked error at test line 35 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 32 'fn: (val) => ({a:val.c, b:val.b}),'
-        lack of expected error at test line 30 'target: strt,'
+        lack of expected error at test line 37 'target: strt,'
         'val' is possibly 'null'.
-        Unmarked error at test line 32 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 32 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
         'clk' is possibly 'null'.
-        Unmarked error at test line 39 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 39 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 39 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 42 'clock: nullableAB,'
+        Unmarked error at test line 51 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 44 'target: strt,'
+        lack of expected error at test line 53 'target: strt,'
         'clk' is possibly 'null'.
-        Unmarked error at test line 47 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 47 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 47 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 50 'clock: nullableAB,'
+        Unmarked error at test line 60 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 52 'target: strt,'
+        lack of expected error at test line 62 'target: strt,'
+        lack of expected error at test line 65 'fn: (val) => ({a:1, b: val ? val.b : ''}),'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Unmarked error at test line 59 'clock: nullableAB,'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 63 'fn: (val) => ({a:val.c, b:val.b}),'
-        lack of expected error at test line 61 'target: strt,'
-        'val' is possibly 'null'.
-        Unmarked error at test line 63 'fn: (val) => ({a:val.c, b:val.b}),'
-        Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 63 'fn: (val) => ({a:val.c, b:val.b}),'
-        'val' is possibly 'null'.
-        Unmarked error at test line 66 'clock: nullableAB,'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 68 'target: strt,'
-        Property 'c' does not exist on type 'AB'.
         Unmarked error at test line 75 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 79 'fn: (val) => ({a:val.c, b:val.b}),'
         lack of expected error at test line 77 'target: strt,'
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 82 'clock: nullableAB,'
+        'val' is possibly 'null'.
+        Unmarked error at test line 83 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 86 'fn: (val) => ({a:val.a, b:val.b}),'
-        lack of expected error at test line 84 'target: strt,'
-        'val' is possibly 'null'.
-        Unmarked error at test line 86 'fn: (val) => ({a:val.a, b:val.b}),'
-        'val' is possibly 'null'.
-        Unmarked error at test line 89 'clock: nullableAB,'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }] | [message: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { a: number; b: string; }; }]' is not assignable to type '[message: { error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 91 'target: strt,'
-        'val' is possibly 'null'.
+        lack of expected error at test line 85 'target: strt,'
+        lack of expected error at test line 88 'fn: (val) => ({a:val.a, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
         Unmarked error at test line 98 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 102 'fn: (val) => ({a:val.c, b:val.b}),'
         lack of expected error at test line 100 'target: strt,'
-        'val' is possibly 'null'.
-        Unmarked error at test line 102 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 102 'fn: (val) => ({a:val.c, b:val.b}),'
+        Unmarked error at test line 106 'clock: nullableAB,'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
+        lack of expected error at test line 108 'target: strt,'
         'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Unmarked error at test line 106 'sample({'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean |...'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        lack of expected error at test line 109 'target: strt,'
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        Unmarked error at test line 121 'clock: nullableAB,'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
+        lack of expected error at test line 123 'target: strt,'
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
         Parameter 'clk' implicitly has an 'any' type.
-        Unmarked error at test line 116 'clock: nullableAB,'
+        Unmarked error at test line 131 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: number; }; }'.
-        Unmarked error at test line 119 'filter: (clk): clk is AB => clk !== null,'
-        lack of expected error at test line 118 'target: strt,'
+        Unmarked error at test line 134 'filter: (clk): clk is AB => clk !== null,'
+        lack of expected error at test line 133 'target: strt,'
         Parameter 'clk' implicitly has an 'any' type.
-        Unmarked error at test line 123 'clock: nullableAB,'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 125 'target: strt,'
-        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: number; b: number; })'.
-          Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Unmarked error at test line 136 'fn: (val: ABN) => ({a:val.a, b:val.b}),'
-        lack of expected error at test line 134 'target: strt,'
-        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: number; b: number; })'.
-          Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
+        lack of expected error at test line 136 'fn: () => ({a:0, b:1}),'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
         Unmarked error at test line 141 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: number; }; }'.
         lack of expected error at test line 143 'target: strt,'
+        lack of expected error at test line 146 'fn: () => ({a:0, b:1}),'
         "
       `)
     })
@@ -4984,8 +4933,6 @@ describe('no source', () => {
         sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})})
         sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})        })
         sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: AB) => ({a:val.a, b:val.b})    })
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})    })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5004,6 +4951,7 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: (clk) => clk !== null,
+          //@ts-expect-error
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
         sample({
@@ -5019,15 +4967,22 @@ describe('no source', () => {
           target: strt,
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: [ab,nullableAB],
           //@ts-expect-error
           target: strt,
           filter: (clk) => clk !== null,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -5035,6 +4990,7 @@ describe('no source', () => {
           target: $ab,
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -5043,6 +4999,7 @@ describe('no source', () => {
           target: strt,
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -5050,15 +5007,22 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: $filter,
+          //@ts-expect-error
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: [ab,nullableAB],
           //@ts-expect-error
           target: strt,
           filter: $filter,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -5066,15 +5030,22 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: Boolean,
+          //@ts-expect-error
           fn: (val) => ({a:val.a, b:val.b}),
         })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: [ab,nullableAB],
           //@ts-expect-error
           target: strt,
           filter: Boolean,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
         sample({
@@ -5082,32 +5053,23 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
           fn: (val) => ({a:val.a, b:val.b}),
         })
         sample({
           clock: [ab,nullableAB],
-          //@ts-expect-error
-          target: strt,
+          target: $ab,
           filter: (clk): clk is AB => clk !== null,
-          fn: (val: AB) => ({a:val.a, b:val.b}),
-        })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.c, b:val.b})        })
-        sample({
-          clock: [ab,nullableAB],
           //@ts-expect-error
-          target: strt,
-          filter: (clk): clk is AB => clk !== null,
           fn: (val) => ({a:val.c, b:val.b}),
         })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: ABN) => ({a:val.a, b:val.b})   })
         sample({
           clock: [ab,nullableAB],
           //@ts-expect-error
           target: strt,
           filter: (clk): clk is AB => clk !== null,
-          fn: (val: ABN) => ({a:val.a, b:val.b}),
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
         })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                   })
@@ -5116,23 +5078,8 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
           fn: () => ({a:0, b:1}),
-        })
-        sample({
-          clock: [ab,nullableAB],
-          //@ts-expect-error
-          target: strt,
-          filter: Boolean,
-          fn: (val: AB) => ({a:val.a, b:val.b}),
-        })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.a, b:val.b})   })
-        sample({
-          clock: [ab,nullableAB],
-          //@ts-expect-error
-          target: strt,
-          filter: Boolean,
-          fn: (val: ABN) => ({a:val.a, b:val.b}),
         })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                   })
@@ -5141,6 +5088,7 @@ describe('no source', () => {
           //@ts-expect-error
           target: strt,
           filter: Boolean,
+          //@ts-expect-error
           fn: () => ({a:0, b:1}),
         })
       }
@@ -5149,130 +5097,82 @@ describe('no source', () => {
         Unmarked error at test line 4 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
         lack of expected error at test line 6 'target: strt,'
+        lack of expected error at test line 9 'fn: (val) => ({a:1, b: val ? val.b : ''}),'
         'clk' is possibly 'null'.
-        Unmarked error at test line 18 'clock: [ab,nullableAB],'
+        Unmarked error at test line 19 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 20 'target: strt,'
+        lack of expected error at test line 21 'target: strt,'
         'clk' is possibly 'null'.
+        lack of expected error at test line 25 'fn: (val) => ({a:1, b: val ? val.b : ''}),'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Unmarked error at test line 28 'clock: [ab,nullableAB],'
+        Unmarked error at test line 35 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 32 'fn: (val) => ({a:val.c, b:val.b}),'
-        lack of expected error at test line 30 'target: strt,'
+        lack of expected error at test line 37 'target: strt,'
         'val' is possibly 'null'.
-        Unmarked error at test line 32 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 32 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
         'clk' is possibly 'null'.
-        Unmarked error at test line 39 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 39 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 39 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 42 'clock: [ab,nullableAB],'
+        Unmarked error at test line 51 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 44 'target: strt,'
+        lack of expected error at test line 53 'target: strt,'
         'clk' is possibly 'null'.
-        Unmarked error at test line 47 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 47 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 47 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 50 'clock: [ab,nullableAB],'
+        Unmarked error at test line 60 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 52 'target: strt,'
+        lack of expected error at test line 62 'target: strt,'
+        lack of expected error at test line 65 'fn: (val) => ({a:1, b: val ? val.b : ''}),'
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Unmarked error at test line 59 'clock: [ab,nullableAB],'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 63 'fn: (val) => ({a:val.c, b:val.b}),'
-        lack of expected error at test line 61 'target: strt,'
-        'val' is possibly 'null'.
-        Unmarked error at test line 63 'fn: (val) => ({a:val.c, b:val.b}),'
-        Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 63 'fn: (val) => ({a:val.c, b:val.b}),'
-        'val' is possibly 'null'.
-        Unmarked error at test line 66 'clock: [ab,nullableAB],'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 68 'target: strt,'
-        Property 'c' does not exist on type 'AB'.
         Unmarked error at test line 75 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 79 'fn: (val) => ({a:val.c, b:val.b}),'
         lack of expected error at test line 77 'target: strt,'
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 82 'clock: [ab,nullableAB],'
+        'val' is possibly 'null'.
+        Unmarked error at test line 83 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 86 'fn: (val) => ({a:val.a, b:val.b}),'
-        lack of expected error at test line 84 'target: strt,'
-        'val' is possibly 'null'.
-        Unmarked error at test line 86 'fn: (val) => ({a:val.a, b:val.b}),'
-        'val' is possibly 'null'.
-        Unmarked error at test line 89 'clock: [ab,nullableAB],'
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }] | [message: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { ...; }; }]' is not assignable to type '[message: { error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 91 'target: strt,'
-        'val' is possibly 'null'.
+        lack of expected error at test line 85 'target: strt,'
+        lack of expected error at test line 88 'fn: (val) => ({a:val.a, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
         Unmarked error at test line 98 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
-        Unmarked error at test line 102 'fn: (val) => ({a:val.c, b:val.b}),'
         lack of expected error at test line 100 'target: strt,'
-        'val' is possibly 'null'.
-        Unmarked error at test line 102 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 102 'fn: (val) => ({a:val.c, b:val.b}),'
+        Unmarked error at test line 106 'clock: [ab,nullableAB],'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
+        lack of expected error at test line 108 'target: strt,'
         'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: StoreWritable<...>; greedy?: boolean | unde...'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Unmarked error at test line 106 'sample({'
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; fn?: (((clk: AB | null) => any) & ((clk: AB | null) => any)) | undefined; target: EventCallable<...>; greedy?: boolean | unde...'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        lack of expected error at test line 109 'target: strt,'
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        Unmarked error at test line 121 'clock: [ab,nullableAB],'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: any; b: string; }; targetType: number; }; }'.
+        lack of expected error at test line 123 'target: strt,'
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
         Parameter 'clk' implicitly has an 'any' type.
-        Unmarked error at test line 116 'clock: [ab,nullableAB],'
+        Unmarked error at test line 131 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: number; }; }'.
-        Unmarked error at test line 119 'filter: (clk): clk is AB => clk !== null,'
-        lack of expected error at test line 118 'target: strt,'
+        Unmarked error at test line 134 'filter: (clk): clk is AB => clk !== null,'
+        lack of expected error at test line 133 'target: strt,'
         Parameter 'clk' implicitly has an 'any' type.
-        Unmarked error at test line 123 'clock: [ab,nullableAB],'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string; }; targetType: number; }; }'.
-        lack of expected error at test line 125 'target: strt,'
-        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: number; b: number; })'.
-          Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-        Unmarked error at test line 136 'fn: (val: ABN) => ({a:val.a, b:val.b}),'
-        lack of expected error at test line 134 'target: strt,'
-        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: number; b: number; })'.
-          Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
+        lack of expected error at test line 136 'fn: () => ({a:0, b:1}),'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
         Unmarked error at test line 141 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: number; }; }'.
         lack of expected error at test line 143 'target: strt,'
+        lack of expected error at test line 146 'fn: () => ({a:0, b:1}),'
         "
       `)
     })
@@ -5329,18 +5229,31 @@ describe('no source', () => {
           filter: (clk) => clk.a > 0,
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk !== null, fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: nullableAB,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: nullableAB,
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:$filter              , fn:(val) => ({a:val.c, b:val.b})        })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:Boolean              , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: nullableAB,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5349,11 +5262,8 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
         'clk' is possibly 'null'.
-        Unmarked error at test line 15 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 15 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 15 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
@@ -5415,18 +5325,31 @@ describe('no source', () => {
           filter: (clk) => clk.a > 0,
           fn: (val) => ({a:1, b: val ? val.b : ''}),
         })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null, fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: [ab,nullableAB],
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         sample({
           clock: [ab,nullableAB],
           //@ts-expect-error
           filter: (clk) => clk.a > 0,
+          //@ts-expect-error
           fn: (val) => ({a:val.c, b:val.b}),
         })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:$filter              , fn:(val) => ({a:val.c, b:val.b})        })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:Boolean              , fn:(val) => ({a:val.c, b:val.b})        })
+        sample({
+          clock: [ab,nullableAB],
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -5435,11 +5358,8 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
         'clk' is possibly 'null'.
-        Unmarked error at test line 15 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
-        Unmarked error at test line 15 'fn: (val) => ({a:val.c, b:val.b}),'
         Property 'c' does not exist on type 'AB'.
-        Unmarked error at test line 15 'fn: (val) => ({a:val.c, b:val.b}),'
         'val' is possibly 'null'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.

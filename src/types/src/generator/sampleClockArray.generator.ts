@@ -308,6 +308,11 @@ export default () => {
     header,
     file: 'generated/sampleClockArray',
     usedMethods: ['createStore', 'createEvent', 'sample'],
+    childFile: computeFn({
+      source: {fnClockTypeAssertion, explicitArgumentTypes},
+      fn: ({fnClockTypeAssertion, explicitArgumentTypes}) =>
+        fnClockTypeAssertion || explicitArgumentTypes ? 'typedArgs' : null,
+    }),
     grouping: {
       getHash: {descriptionTokens, noTarget, noClock, noSource},
       pass,
