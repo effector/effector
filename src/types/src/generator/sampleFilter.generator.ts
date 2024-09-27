@@ -932,7 +932,6 @@ export default () => {
     ]),
     not(fnSecondArg),
     matchUnion(sourceType, 'no'),
-    not(inferByFilter),
   ])
 
   sortOrder([
@@ -1030,7 +1029,23 @@ export default () => {
               'bad untyped',
             ]),
           },
-          fn: fnCode,
+          fn: {
+            field: fnCode,
+            markError: some([
+              bool({
+                source: {targetType, sourceType, wrongTarget},
+                true: {
+                  targetType: 'unit',
+                  sourceType: 'no',
+                  wrongTarget: true,
+                },
+              }),
+              every([
+                matchUnion(sourceType, 'no'),
+                matchUnion(fnType, ['bad typed', 'bad untyped']),
+              ]),
+            ]),
+          },
         },
       },
     },
