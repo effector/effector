@@ -1414,27 +1414,6 @@ export function sample<
       ? TypeOfClock<Clock>
       : never
   ),
-  const FilterFun extends (
-    Source extends Unit<any> | SourceRecord
-    ? Clock extends Units
-      ? (
-        | never
-        | ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource)
-        | ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
-      )
-      : (
-        | never
-        | ((src: TypeOfSource<Source>) => src is FNInfSource)
-        | ((src: TypeOfSource<Source>) => boolean)
-      )
-    : Clock extends Units
-      ? (
-        | never
-        | ((clk: TypeOfClock<Clock>) => clk is FNInfClock)
-        | ((clk: TypeOfClock<Clock>) => boolean)
-      )
-      : never
-  ),
   const FNNonFalsy extends (
     Source extends Unit<any> | SourceRecord
     ? NonFalsy<TypeOfSource<Source>>
@@ -1459,6 +1438,27 @@ export function sample<
   ),
   const FLUnitOrBool,
   const Args extends any[],
+  const FilterFun = (
+    Source extends Unit<any> | SourceRecord
+    ? Clock extends Units
+      ? (
+        | never
+        | ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource)
+        | ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => boolean)
+      )
+      : (
+        | never
+        | ((src: TypeOfSource<Source>) => src is FNInfSource)
+        | ((src: TypeOfSource<Source>) => boolean)
+      )
+    : Clock extends Units
+      ? (
+        | never
+        | ((clk: TypeOfClock<Clock>) => clk is FNInfClock)
+        | ((clk: TypeOfClock<Clock>) => boolean)
+      )
+      : never
+  ),
   const FN = (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
