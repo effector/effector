@@ -12,6 +12,7 @@ import {forIn} from './collection'
 import {MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
+import {setIsKernelContext} from './kernel'
 
 export function combine(...args: any[]): Store<any> {
   let handler
@@ -169,6 +170,7 @@ const storeCombination = (
      *  basically, this makes `sample` and `combine` priorities equal
      */
     read(rawShape, true, true),
+
     fn && userFnCall(),
     softReader,
   ]
@@ -199,7 +201,9 @@ const storeCombination = (
   })
   if (!readTemplate()) {
     if (fn) {
+      setIsKernelContext(true)
       const computedValue = fn(stateNew)
+      setIsKernelContext(false)
 
       if (isVoid(computedValue) && (!extConfig || !('skipVoid' in extConfig))) {
         console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
