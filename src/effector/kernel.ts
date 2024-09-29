@@ -182,7 +182,7 @@ const getPriority = (t: PriorityTag) => {
 const barriers = new Set<string | number>()
 
 let isRoot = true
-export let isKernelCall = false;
+export let isKernelContext = false
 export let isWatch = false
 export let isPure = false
 export let currentPage: Leaf | null = null
@@ -193,8 +193,8 @@ export const setForkPage = (newForkPage: Scope | void | null) => {
 export const setCurrentPage = (newPage: Leaf | null) => {
   currentPage = newPage
 }
-export const setIsKernelCall = (newValue: boolean) => {
-  isKernelCall = newValue;
+export const setIsKernelContext = (newValue: boolean) => {
+  isKernelContext = newValue
 }
 
 const getPageForRef = (page: Leaf | null, id: string) => {
@@ -389,14 +389,14 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             isWatch = node.meta.op === 'watch'
             isPure = data.pure
 
-            const prevIsKernelCall = isKernelCall;
-            isKernelCall = true;
+            const prevIsKernelContext = isKernelContext
+            isKernelContext = true
 
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
               : tryRun(local, data.fn, stack)
 
-            isKernelCall = prevIsKernelCall;
+            isKernelContext = prevIsKernelContext
 
             if (data.filter) {
               /**
@@ -512,7 +512,13 @@ export const initRefInScope = (
               if (from) initRefInScope(scope, from, isGetState, isKernelCall)
               if (needToAssign) {
                 const value = from && refsMap[from.id].current
+
+                const prevIsKernelContext = isKernelContext
+                isKernelContext = true
+
                 ref.current = cmd.fn ? cmd.fn(value) : value
+
+                isKernelContext = prevIsKernelContext
               }
             }
             break

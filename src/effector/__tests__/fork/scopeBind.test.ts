@@ -3,6 +3,7 @@ import {
   createStore,
   createEffect,
   scopeBind,
+  combine,
   fork,
   allSettled,
 } from 'effector'
@@ -287,83 +288,80 @@ test('scopeBind allows $store.getState as a callback', () => {
 
 describe('scopeBind should not throw in safe context', () => {
   test('in map without scope', () => {
-    const event = createEvent();
-    
-    createStore(0).map(() => {
-      scopeBind(event)
-      return 0;
-    });
-  });
+    const event = createEvent()
+
+    expect(() =>
+      createStore(0).map(() => {
+        scopeBind(event)
+
+        return 0
+      }),
+    ).not.toThrow()
+  })
 
   test('in effect without scope', async () => {
-    const event = createEvent();
+    const event = createEvent()
 
     const fx = createEffect(() => {
       scopeBind(event)
-    });
+    })
 
-    await fx();
-  });
+    expect(fx()).resolves.not.toThrow()
+  })
 
-  test('after nested effect call without scope', async () => {
-    const event = createEvent();
+  test('in effect "map" or "watch" without scope', async () => {
+    const event = createEvent()
+    const fx3 = createEffect(async () => {})
 
-    const sleepFx = createEffect((ms: number) => {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    });
-  
-    const fx = createEffect(async () => {
-      scopeBind(event)
-  
-      await sleepFx(50);
-  
-      scopeBind(event)
-    });
-
-    await fx();
-  });
+    expect(() => fx3.watch(() => scopeBind(event))).not.toThrow()
+    expect(() => fx3.map(() => scopeBind(event))).not.toThrow()
+  })
 
   test('after nested event call without scope', async () => {
     const evt = createEvent()
     const trigger = evt.prepend(() => {})
-    
+
     const fx = createEffect(() => {
       trigger()
       scopeBind(trigger)
     })
 
-    await fx();
-  });
-
-  test('in effect "map" or "watch" without scope', async () => {
-    const event = createEvent();
-    const fx3 = createEffect(async () => {});
-
-    fx3.watch(() => scopeBind(event));
-    fx3.map(() => scopeBind(event));
-  });
-
-  test('flag is not leaked', async () => {
-    const event = createEvent();
-
-    const sleepFx = createEffect((ms: number) => {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    });
-  
-    const fx = createEffect(async () => {
-      scopeBind(event)
-  
-      await sleepFx(50);
-      
-      console.log('after')
-  
-      scopeBind(event)
-    });
-
-    await fx();
-
-    expect(() => {
-      scopeBind(event)
-    }).toThrowErrorMatchingInlineSnapshot(`"scopeBind: scope not found"`)
+    expect(fx()).resolves.not.toThrow()
   })
-});
+
+  test('in combine', async () => {
+    const event = createEvent()
+    const $store = createStore(0)
+
+    const $combinedStore = combine($store, () => scopeBind(event))
+
+    expect(() => $combinedStore.getState()).not.toThrow()
+  })
+
+  test('in combine with scope', async () => {
+    const event = createEvent()
+    const scope = fork()
+
+    const $store = createStore(0)
+    const $combinedStore = combine($store, () => {
+      return scopeBind(event)
+    })
+
+    expect(() => scope.getState($combinedStore)).not.toThrow()
+  })
+
+  test('scopebind throw after call effect in effeoct', async () => {
+    const event = createEvent()
+
+    const fx1 = createEffect(
+      async () => new Promise(resolve => setTimeout(resolve, 50)),
+    )
+
+    const fx2 = createEffect(async () => {
+      await fx1()
+      scopeBind(event)
+    })
+
+    expect(fx2).rejects.toThrow()
+  })
+})

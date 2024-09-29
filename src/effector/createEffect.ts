@@ -4,7 +4,7 @@ import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, setForkPage, forkPage, isWatch, setIsKernelCall, isKernelCall} from './kernel'
+import {launch, setForkPage, forkPage, isWatch} from './kernel'
 import {createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
@@ -173,16 +173,15 @@ export function createEffect<Params, Done, Fail = Error>(
     const payload = {params, req}
 
     const savedFork = forkPage
-    const savedIsKernelCall = isKernelCall;
 
-    if (!isWatch) {
-      req.req.finally(() => {
-        if (savedFork) {
-          setForkPage(savedFork)
-        }
-  
-        setIsKernelCall(savedIsKernelCall);
-      }).catch(() => {});
+    if (forkPage) {
+      if (!isWatch) {
+        req.req
+          .finally(() => {
+            setForkPage(savedFork)
+          })
+          .catch(() => {})
+      }
     }
 
     launch({

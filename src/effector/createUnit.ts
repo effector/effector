@@ -25,7 +25,7 @@ import {
   setCurrentPage,
   initRefInScope,
   isPure,
-  setIsKernelCall,
+  setIsKernelContext,
 } from './kernel'
 
 import {createName, generateErrorTitle} from './naming'
@@ -321,13 +321,13 @@ export function createStore<State>(
       const storeState = store.getState()
       const parentStateVoid = isVoid(storeState)
       const template = readTemplate()
-      setIsKernelCall(true);
+      setIsKernelContext(true)
       if (template) {
         lastResult = null
       } else if (!parentStateVoid || (parentStateVoid && voidValueAllowed)) {
         lastResult = fn(storeState)
       }
-      setIsKernelCall(false);
+      setIsKernelContext(false)
 
       const innerStore: Store<any> = createStore(lastResult, {
         name: `${store.shortName} → *`,
