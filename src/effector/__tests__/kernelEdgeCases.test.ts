@@ -5,6 +5,9 @@ import {
   step,
   createNode,
   createEffect,
+  fork,
+  allSettled,
+  split,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -147,4 +150,94 @@ test('stale reads', async () => {
       "a, true, a/end, false, b, true, b/end, false",
     ]
   `)
+})
+
+describe('kernel doesnt messes up the callstack', () => {
+  test('simple case', () => {
+    let callStackVariable: any = null
+    const readCallStackValue = () => callStackVariable
+    const withCallStackValue = (value: any, cb: any) => {
+      const prev = callStackVariable
+      callStackVariable = value
+      cb()
+      callStackVariable = prev
+    }
+
+    const logs: any[] = []
+    const logStackFx = createEffect(() => {
+      logs.push(readCallStackValue())
+    })
+    const eff1 = createEffect(() => {
+      withCallStackValue('eff1', () => {
+        logStackFx()
+      })
+    })
+
+    const eff2 = createEffect(() => {
+      withCallStackValue('eff2', () => {
+        logStackFx()
+      })
+    })
+
+    const start = createEvent()
+
+    sample({
+      clock: start,
+      target: [eff1, eff2],
+    })
+
+    start()
+
+    // on master:
+    // expect(logs).toMatchInlineSnapshot(`
+    //   Array [
+    //     "eff2",
+    //     "eff2",
+    //   ]
+    // `)
+    expect(logs).toMatchInlineSnapshot(`
+      Array [
+        "eff1",
+        "eff2",
+      ]
+    `)
+  })
+})
+
+test('queue-isolation edge-case from the wild', async () => {
+  const externalMessage = createEvent()
+
+  const startFx = createEffect(() => {
+    externalMessage()
+  })
+
+  const parallelFx = createEffect(() => {
+    externalMessage()
+  })
+
+  const $mode = createStore('a')
+
+  sample({
+    clock: startFx.done,
+    fn: () => 'a',
+    target: $mode,
+  })
+
+  sample({
+    clock: startFx,
+    target: parallelFx,
+  })
+
+  sample({
+    clock: externalMessage,
+    fn: () => 'b',
+    target: $mode,
+  })
+
+  const scope = fork()
+
+  await allSettled(startFx, {scope})
+
+  // on master: expect(scope.getState($mode)).toBe('a')
+  expect(scope.getState($mode)).toBe('b')
 })

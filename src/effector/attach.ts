@@ -10,13 +10,12 @@ import {
   setMeta,
   getCompositeName,
 } from './getter'
-import {own} from './own'
-import {is, isVoid} from './is'
+import {own} from './createNode'
+import {is, isVoid, assert} from './validate'
 import {read, calc} from './step'
-import {launch} from './kernel'
+import {launch, type QueueInstance} from './kernel'
 import {EFFECT} from './tag'
 import {createName, generateErrorTitle} from './naming'
-import {assert} from './throw'
 import {Cmd, Node, Stack} from './index.h'
 
 export function attach(config: any) {
@@ -35,10 +34,10 @@ export function attach(config: any) {
   setMeta(attached, 'attached', true)
   const {runner} = getGraph(attached).scope as {runner: Node}
   let runnerSteps: Array<Cmd>
-  const runnerFnStep = (upd: any, _: any, stack: Stack) => {
+  const runnerFnStep = (upd: any, _: any, stack: Stack, q: QueueInstance) => {
     const {params, req, handler} = upd
     const anyway = attached.finally
-    const rj = onSettled(params, req, false, anyway, stack)
+    const rj = onSettled(params, req, false, anyway, stack, q)
     const sourceData = stack.a
     const isEffectHandler = is.effect(handler)
     let ok = true
@@ -55,12 +54,13 @@ export function attach(config: any) {
           params: {
             params: computedParams,
             req: {
-              rs: onSettled(params, req, true, anyway, stack),
+              rs: onSettled(params, req, true, anyway, stack, q),
               rj,
             },
           },
           page: stack.page,
           defer: true,
+          queue: q,
           meta: stack.meta,
         })
       } else {

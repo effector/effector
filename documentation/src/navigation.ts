@@ -1,16 +1,7 @@
 import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
 import { SITE, LINKS } from "./consts";
-import { getTextLocalized, createLink, type LText, isExternal } from "./languages";
-
-import IconEffector from "@icons/Effector.astro";
-import IconReact from "@icons/React.astro";
-import IconVue from "@icons/Vue.astro";
-import IconSolid from "@icons/Solid.astro";
-import IconNextJs from "@icons/NextJs.astro";
-import IconGithub from "@icons/Github.astro";
-import IconTwitter from "@icons/Twitter.astro";
-import IconDiscord from "@icons/Discord.astro";
+import { getTextLocalized, createLink, type LText } from "./languages";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
@@ -85,7 +76,7 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: { en: "Migration guide" },
-        link: "/guides/migration-guide-v23",
+        link: "/guides/migration-guide-v24",
       },
       {
         text: { en: "Migrating from Redux" },
@@ -149,7 +140,7 @@ const defaultSidebar: LSidebarGroup[] = [
   },
 ];
 
-const recipes: LSidebarGroup[] = [
+const recipes = [
   {
     text: { en: "Common", uz: "Umumiy" },
     items: [
@@ -230,32 +221,24 @@ const recipes: LSidebarGroup[] = [
   },
 ];
 
-const effectorReact: LSidebarGroup[] = [
+const effectorReact = [
   {
     text: { en: "Hooks" },
     items: [
       {
         text: { en: "useUnit", ru: "useUnit", uz: "useUnit" },
         link: "/api/effector-react/useUnit",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useList", ru: "useList", uz: "useList" },
         link: "/api/effector-react/useList",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useStoreMap", ru: "useStoreMap", uz: "useStoreMap" },
         link: "/api/effector-react/useStoreMap",
-        tags: ["useful"],
-      },
-      {
-        text: { en: "useStore ⚠️", ru: "useStore ⚠️", uz: "useStore ⚠️" },
-        link: "/api/effector-react/useStore",
-      },
-      {
-        text: { en: "useEvent ⚠️", ru: "useEvent ⚠️", uz: "useEvent ⚠️" },
-        link: "/api/effector-react/useEvent",
+        quickMenu: true,
       },
     ],
   },
@@ -265,7 +248,7 @@ const effectorReact: LSidebarGroup[] = [
       {
         text: { en: "Provider", ru: "Provider", uz: "Provider" },
         link: "/api/effector-react/Provider",
-        tags: ["useful"],
+        quickMenu: true,
       },
     ],
   },
@@ -275,12 +258,12 @@ const effectorReact: LSidebarGroup[] = [
       {
         text: { en: "Gate" },
         link: "/api/effector-react/Gate",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createGate", uz: "createGate" },
         link: "/api/effector-react/createGate",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useGate", uz: "useGate" },
@@ -295,10 +278,6 @@ const effectorReact: LSidebarGroup[] = [
         text: { en: "effector-react/compat" },
         link: "/api/effector-react/module/сompat",
       },
-      {
-        text: { en: "effector-react/scope" },
-        link: "/api/effector-react/module/scope",
-      },
     ],
   },
   {
@@ -311,39 +290,21 @@ const effectorReact: LSidebarGroup[] = [
       },
     ],
   },
-  {
-    text: { en: "HOC-like APIs", uz: "HOCsimon APIlar" },
-    collapsed: true,
-    items: [
-      {
-        text: { en: "connect" },
-        link: "/api/effector-react/connect",
-      },
-      {
-        text: { en: "createComponent" },
-        link: "/api/effector-react/createComponent",
-      },
-      {
-        text: { en: "createStoreConsumer" },
-        link: "/api/effector-react/createStoreConsumer",
-      },
-    ],
-  },
 ];
 
-const effectorSolid: LSidebarGroup[] = [
+const effectorSolid = [
   {
     text: { en: "Hooks" },
     items: [
       {
         text: { en: "useUnit" },
         link: "/api/effector-solid/useUnit",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useStoreMap" },
         link: "/api/effector-solid/useStoreMap",
-        tags: ["useful"],
+        quickMenu: true,
       },
     ],
   },
@@ -353,49 +314,40 @@ const effectorSolid: LSidebarGroup[] = [
       {
         text: { en: "Gate" },
         link: "/api/effector-solid/Gate",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createGate" },
         link: "/api/effector-solid/createGate",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useGate" },
         link: "/api/effector-solid/useGate",
-        tags: ["useful"],
-      },
-    ],
-  },
-  {
-    text: { en: "Import map" },
-    items: [
-      {
-        text: { en: "effector-solid/scope" },
-        link: "/api/effector-solid/module/scope",
+        quickMenu: true,
       },
     ],
   },
 ];
 
-const effectorVue: LSidebarGroup[] = [
+const effectorVue = [
   {
     text: { en: "Common methods" },
     items: [
       {
         text: { en: "VueEffector" },
         link: "/api/effector-vue/VueEffector",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "EffectorScopePlugin" },
         link: "/api/effector-vue/EffectorScopePlugin",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createComponent" },
         link: "/api/effector-vue/createComponent",
-        tags: ["useful"],
+        quickMenu: true,
       },
     ],
   },
@@ -405,7 +357,7 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "ComponentOptions" },
         link: "/api/effector-vue/ComponentOptions",
-        tags: ["useful"],
+        quickMenu: true,
       },
     ],
   },
@@ -415,17 +367,17 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "Gate" },
         link: "/api/effector-vue/Gate",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createGate" },
         link: "/api/effector-vue/createGate",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useGate" },
         link: "/api/effector-vue/useGate",
-        tags: ["useful"],
+        quickMenu: true,
       },
     ],
   },
@@ -435,7 +387,7 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "useUnit" },
         link: "/api/effector-vue/useUnit",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useStore" },
@@ -444,12 +396,12 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "useStoreMap" },
         link: "/api/effector-vue/useStoreMap",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "useVModel" },
         link: "/api/effector-vue/useVModel",
-        tags: ["useful"],
+        quickMenu: true,
       },
     ],
   },
@@ -460,10 +412,6 @@ const effectorVue: LSidebarGroup[] = [
         text: { en: "useEvent" },
         link: "/api/effector-vue/useEvent",
       },
-      {
-        text: { en: "VueSSRPlugin" },
-        link: "/api/effector-vue/VueSSRPlugin",
-      },
     ],
   },
   {
@@ -473,15 +421,11 @@ const effectorVue: LSidebarGroup[] = [
         text: { en: "effector-vue/composition" },
         link: "/api/effector-vue/module/composition",
       },
-      {
-        text: { en: "effector-vue/ssr" },
-        link: "/api/effector-vue/module/ssr",
-      },
     ],
   },
 ];
 
-const effector: LSidebarGroup[] = [
+const effector = [
   {
     text: { en: "Unit Types", ru: "Юниты", uz: "Yunitlar" },
     items: [
@@ -513,18 +457,17 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "createEvent" },
         link: "/api/effector/createEvent",
-        // TODO: change to tags: ['actual', 'creators'], then in any place filter out by these tags
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createStore" },
         link: "/api/effector/createStore",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createEffect" },
         link: "/api/effector/createEffect",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createDomain" },
@@ -533,12 +476,12 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "attach" },
         link: "/api/effector/attach",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "merge" },
         link: "/api/effector/merge",
-        tags: ["useful"],
+        quickMenu: true,
       },
     ],
   },
@@ -548,35 +491,27 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "sample" },
         link: "/api/effector/sample",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "combine" },
         link: "/api/effector/combine",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "split" },
         link: "/api/effector/split",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "createApi" },
         link: "/api/effector/createApi",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "restore" },
         link: "/api/effector/restore",
-        tags: ["useful"],
-      },
-      {
-        text: { en: "forward ⚠️" },
-        link: "/api/effector/forward",
-      },
-      {
-        text: { en: "guard ⚠️" },
-        link: "/api/effector/guard",
+        quickMenu: true,
       },
     ],
   },
@@ -587,26 +522,22 @@ const effector: LSidebarGroup[] = [
       {
         text: { en: "fork" },
         link: "/api/effector/fork",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "serialize" },
         link: "/api/effector/serialize",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "allSettled" },
         link: "/api/effector/allSettled",
-        tags: ["useful"],
+        quickMenu: true,
       },
       {
         text: { en: "scopeBind" },
         link: "/api/effector/scopeBind",
-        tags: ["useful"],
-      },
-      {
-        text: { en: "hydrate" },
-        link: "/api/effector/hydrate",
+        quickMenu: true,
       },
     ],
   },
@@ -676,118 +607,48 @@ const effector: LSidebarGroup[] = [
       },
       {
         text: { en: "SWC plugin" },
-        link: "/api/effector/swc-plugin",
+        link: "https://github.com/effector/swc-plugin",
       },
     ],
   },
 ];
 
-const apiPackages: LSidebarIconItem[] = [
-  { text: { en: "effector" }, link: "/api/effector", icon: IconEffector },
-  { text: { en: "effector-react" }, link: "/api/effector-react", icon: IconReact },
-  { text: { en: "effector-solid" }, link: "/api/effector-solid", icon: IconSolid },
-  { text: { en: "effector-vue" }, link: "/api/effector-vue", icon: IconVue },
-  { text: { en: "@effector/next" }, link: "https://github.com/effector/next", icon: IconNextJs },
-];
-
-const externalPackages: LSidebarItem[] = [
-  { text: { en: "effector patronum" }, link: "https://patronum.effector.dev" },
-  { text: { en: "effector with ease" }, link: "https://withease.effector.dev" },
-  { text: { en: "@effector/reflect" }, link: "https://reflect.effector.dev" },
-  { text: { en: "atomic router" }, link: "https://atomic-router.github.io/" },
-  { text: { en: "farfetched" }, link: "https://ff.effector.dev" },
-];
-
-const api: LSidebarGroup[] = [
+const api = [
   {
     text: { en: "Packages", ru: "Пакеты", uz: "Paketlar" },
-    items: apiPackages,
-  },
-  {
-    text: { en: "Official Ecosystem", ru: "Экосистема" },
-    items: externalPackages,
+    items: [
+      { text: { en: "effector" }, link: "/api/effector" },
+      { text: { en: "effector-react" }, link: "/api/effector-react" },
+      { text: { en: "effector-solid" }, link: "/api/effector-solid" },
+      { text: { en: "effector-vue" }, link: "/api/effector-vue" },
+      { text: { en: "@effector/next" }, link: "https://github.com/effector/next" },
+    ],
   },
 ];
 
-// {
-//   effector: {
-//     link: "/api/effector",
-//     groups: navigationToQuickMenu(effector),
-//   },
-//   "effector-react": {
-//     link: "/api/effector-react",
-//     groups: navigationToQuickMenu(effectorReact),
-//   },
-//   "effector-solid": {
-//     link: "/api/effector-solid",
-//     groups: navigationToQuickMenu(effectorSolid),
-//   },
-//   "effector-vue": {
-//     link: "/api/effector-vue",
-//     groups: navigationToQuickMenu(effectorVue),
-//   },
-// };
-
-export type MostUsefulItem = {
-  text: LText;
-  icon: (props: { size?: number | number; class?: string }) => any;
-  description: LText;
-  items: LSidebarGroup[];
-};
-
-export const MOST_USEFUL_EFFECTOR: MostUsefulItem = {
-  text: { en: "effector" },
-  icon: IconEffector,
-  description: {
-    en: "The core library forms the foundation for most written code.",
-    ru: "Фундамент основного кода логики в приложениях.",
-  },
-  items: filterSidebarGroups(["useful"], effector),
-};
-export const MOST_USEFUL_REACT: MostUsefulItem = {
-  text: { en: "effector-react" },
-  icon: IconReact,
-  description: {
-    en: "Specialized hooks and gates, designed to seamlessly integrate with React.",
-    ru: "Хуки для компактной и удобной интеграции с React компонентами.",
-  },
-  items: filterSidebarGroups(["useful"], effectorReact),
-};
-export const MOST_USEFUL_SOLID: MostUsefulItem = {
-  text: { en: "effector-solid" },
-  icon: IconSolid,
-  description: {
-    en: "Bindings for performant reactivity framework",
-    ru: "Интеграция с сигналами фреймворка Solid.",
-  },
-  items: filterSidebarGroups(["useful"], effectorSolid),
-};
-export const MOST_USEFUL_VUE: MostUsefulItem = {
-  text: { en: "effector-vue" },
-  icon: IconVue,
-  description: {
-    en: "Bindings for progressive framework",
-    ru: "Хуки, методы, плагины для работы в рамках Vue.",
-  },
-  items: filterSidebarGroups(["useful"], effectorVue),
-};
-
-export const MOST_USEFUL = [
-  MOST_USEFUL_EFFECTOR,
-  MOST_USEFUL_REACT,
-  MOST_USEFUL_SOLID,
-  MOST_USEFUL_VUE,
-];
-
-export function filterSidebarGroups(tags: ItemTag[], groups: LSidebarGroup[]) {
-  return groups
-    .map((group) => ({ ...group, items: filterSidebarItems(tags, group.items) }))
-    .filter((group) => group.items.length > 0);
+interface QuickMenuItem {
+  link: string;
+  groups: LSidebarItem[][];
 }
 
-export function filterSidebarItems(tags: ItemTag[], items: LSidebarItem[]) {
-  return items.filter((item) => item.tags?.some((tag) => tags.includes(tag)));
-}
+export const QUICK_MENU: Record<string, QuickMenuItem> = {
+  effector: {
+    link: "/api/effector",
+    groups: navigationToQuickMenu(effector),
+  },
+  "effector-react": {
+    link: "/api/effector-react",
+    groups: navigationToQuickMenu(effectorReact),
+  },
+  "effector-solid": {
+    link: "/api/effector-solid",
+    groups: navigationToQuickMenu(effectorSolid),
+  },
+  "effector-vue": {
+    link: "/api/effector-vue",
+    groups: navigationToQuickMenu(effectorVue),
+  },
+};
 
 // Be careful: order of the items is important.
 // Sidebar searches for the first matches.
@@ -809,23 +670,16 @@ export const DOCS_VERSIONS = [
   { text: { en: "v20.17.2" }, link: "https://v20.effector.dev" },
 ];
 
-export const SOCIAL_LINKS: {
-  text: LText;
-  icon: (props: { size?: number }) => any;
-  link: string;
-}[] = [
-  { text: { en: "GitHub" }, icon: IconGithub, link: LINKS.github },
-  { text: { en: "Twitter" }, icon: IconTwitter, link: LINKS.twitter },
-  { text: { en: "Discord" }, icon: IconDiscord, link: LINKS.discord },
+type SocialIcon = "github" | "twitter" | "discord" | "youtube";
+export const SOCIAL_LINKS: { text: LText; icon: SocialIcon; link: string }[] = [
+  { text: { en: "GitHub" }, icon: "github", link: LINKS.github },
+  { text: { en: "Twitter" }, icon: "twitter", link: LINKS.twitter },
+  { text: { en: "Discord" }, icon: "discord", link: LINKS.discord },
 ];
 
-export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
-  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/motivation" },
-  {
-    text: { en: "API" },
-    link: "/api",
-    items: [{ text: { en: "Overview", ru: "Обзор" }, link: "/api" }, ...apiPackages],
-  },
+export const DESKTOP_NAVIGATION: LSidebarItem[] = [
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/installation" },
+  { text: { en: "API" }, link: "/api", features: ["API"] },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
   { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
@@ -865,7 +719,7 @@ export const FOOTER_LINKS = [
         text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" },
         link: "/introduction/installation",
       },
-      { text: { en: "API Reference", ru: "Справочник API", uz: "API Havolasi" }, link: "/api" },
+      { text: { en: "API Reference", uz: "API Havolasi" }, link: "/api" },
       {
         text: { en: "Writings tests", ru: "Тестирование кода", uz: "Kodni testlash" },
         link: "/guides/testing",
@@ -897,7 +751,7 @@ export const FOOTER_LINKS = [
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
       { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
-      { text: { en: "Docs powered by Astro" }, link: "https://astro.build" },
+      { text: { en: "Made by Astro" }, link: "https://astro.build" },
     ],
   },
 ] satisfies FooterGroup[];
@@ -958,23 +812,14 @@ interface LSidebarGroup {
   collapsed?: boolean;
 }
 
-export function isSidebarGroup(item: LSidebarGroup | LSidebarItem): item is LSidebarGroup {
-  return "items" in item && "text" in item;
-}
-
-export type ItemTag = "useful";
+export type NavigationFeatures = "API";
 
 type LSidebarItem = {
   text: LText;
   link: string;
-  tags?: ItemTag[];
+  quickMenu?: boolean;
+  features?: NavigationFeatures[];
 };
-
-type LSidebarIconItem = LSidebarItem & { icon?: (opts: { size?: number }) => any };
-
-export function isSidebarIconItem(item: LSidebarItem): item is LSidebarIconItem {
-  return "icon" in item;
-}
 
 export function getSidebarForSlug(slug: string): LSidebarGroup[] {
   const path = slug.startsWith("/") ? slug : `/${slug}`;
@@ -993,7 +838,7 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
       items: group.items.map((item) => {
         const itemTitle = getTextLocalized(item, lang);
 
-        if (isExternal(item)) {
+        if (isRemoteUrl(item.link)) {
           return {
             title: itemTitle,
             link: item.link,
@@ -1029,21 +874,12 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
   });
 }
 
-export const getPrevNext = (
-  sidebar: Awaited<ReturnType<typeof getLocalizedSidebar>>,
-  currentPath: string
-) => {
-  const flatItems = sidebar.flatMap(group => group.items);
-  const currentIndex = flatItems.findIndex(item => item.link === currentPath);
-
-  const prevPage = currentIndex > 0 ? flatItems[currentIndex - 1] : null;
-  const nextPage = currentIndex < flatItems.length - 1 ? flatItems[currentIndex + 1] : null;
-
-  return { prevPage, nextPage };
-};
-
 function getSlugs() {
   return getCollection("docs").then((docs) => new Set(docs.map((doc) => `/${doc.slug}`)));
+}
+
+function isRemoteUrl(link: string) {
+  return link.startsWith("https://") || link.startsWith("http://");
 }
 
 function createMobileNavigation(nav: LMobileNavItem[]) {
@@ -1100,4 +936,10 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
   }
 
   return nav;
+}
+
+function navigationToQuickMenu(nav: LSidebarGroup[]) {
+  return nav
+    .map((element) => element.items.filter((item) => item.quickMenu))
+    .filter((items) => items.length > 0);
 }

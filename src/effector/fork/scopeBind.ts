@@ -1,5 +1,5 @@
-import {assert} from '../throw'
 import {forkPage, isKernelContext, setForkPage} from '../kernel'
+import {assert} from '../validate'
 import type {Scope} from '../unit.h'
 
 /** bind event to scope */

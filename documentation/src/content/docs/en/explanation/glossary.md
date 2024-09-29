@@ -147,7 +147,7 @@ type Subscription = {
 };
 ```
 
-**Function**, returned by [forward](/en/api/effector/forward), [Event.watch](/en/api/effector/Event#event-watch-watcher), [Store.watch](/en/api/effector/Store#methods-watch-watcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing.
+**Function**, returned by [Event.watch](/en/api/effector/Event#event-watch-watcher), [Store.watch](/en/api/effector/Store#methods-watch-watcher) and some other methods. Used for cancelling a subscription. After the first call, subscription will do nothing.
 
 :::warning
 **Managing subscriptions manually distracts from business logic improvements.**

@@ -11,6 +11,13 @@ type PriorityTag = 'child' | 'pure' | 'read' | 'barrier' | 'sampler' | 'effect'
 
 export type BarrierPriorityTag = 'read' | 'barrier' | 'sampler' | 'effect'
 
+/** Dedicated local metadata */
+type Local = {
+  fail: boolean
+  failReason?: unknown
+  scope: {[key: string]: any}
+}
+
 /**
  * Position in the current branch,
  * including call stack, priority type
@@ -21,6 +28,33 @@ type Layer = {
   stack: Stack
   type: PriorityTag
   id: number
+}
+
+const getPriority = (t: PriorityTag) => {
+  switch (t) {
+    case 'child':
+      return 0
+    case 'pure':
+      return 1
+    case 'read':
+      return 2
+    case 'barrier':
+      return 3
+    case 'sampler':
+      return 4
+    case 'effect':
+      return 5
+    default:
+      return -1
+  }
+}
+
+/** Object with heaps and queues for single execution launch */
+export type QueueInstance = {
+  heap: QueueItem | null
+  /** queue buckets for each PriorityType */
+  queue: QueueBucket[]
+  barriers: Set<string | number>
 }
 
 /** Queue as linked list or skew heap */
@@ -37,15 +71,6 @@ type QueueBucket = {
   last: QueueItem | null
   size: number
 }
-
-/** Dedicated local metadata */
-type Local = {
-  fail: boolean
-  failReason?: unknown
-  scope: {[key: string]: any}
-}
-
-let heap: QueueItem | null = null
 
 const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
   if (!a) return b
@@ -75,21 +100,9 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
   return a
 }
 
-/** queue buckets for each PriorityType */
-const queue: QueueBucket[] = []
-let ix = 0
-while (ix < 6) {
-  /**
-   * although "sampler" and "barrier" are using heap instead of linked list,
-   * their buckets are still useful: they maintains size of heap queue
-   */
-  add(queue, {first: null, last: null, size: 0})
-  ix += 1
-}
-
-const deleteMin = () => {
+const deleteMin = (q: QueueInstance) => {
   for (let i = 0; i < 6; i++) {
-    const list = queue[i]
+    const list = q.queue[i]
     if (list.size > 0) {
       /**
        * bucket 3 is for "barrier" PriorityType (used in combine)
@@ -97,8 +110,8 @@ const deleteMin = () => {
        */
       if (i === 3 || i === 4) {
         list.size -= 1
-        const value = heap!.v
-        heap = merge(heap!.l, heap!.r)
+        const value = q.heap!.v
+        q.heap = merge(q.heap!.l, q.heap!.r)
         return value
       }
       if (list.size === 1) {
@@ -112,6 +125,7 @@ const deleteMin = () => {
   }
 }
 const pushFirstHeapItem = (
+  q: QueueInstance,
   type: PriorityTag,
   page: Leaf | null,
   node: Node,
@@ -121,6 +135,7 @@ const pushFirstHeapItem = (
   meta?: Record<string, any> | void,
 ) =>
   pushHeap(
+    q,
     0,
     {
       a: null,
@@ -135,9 +150,15 @@ const pushFirstHeapItem = (
     type,
     0,
   )
-const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id: number) => {
+const pushHeap = (
+  q: QueueInstance,
+  idx: number,
+  stack: Stack,
+  type: PriorityTag,
+  id: number,
+) => {
   const priority = getPriority(type)
-  const bucket: QueueBucket = queue[priority]
+  const bucket: QueueBucket = q.queue[priority]
   const item: QueueItem = {
     v: {idx, stack, type, id},
     l: null,
@@ -148,7 +169,7 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id: number) => {
    * bucket 4 is for "sampler" PriorityType (used in sample and guard)
    */
   if (priority === 3 || priority === 4) {
-    heap = merge(heap, item)
+    q.heap = merge(q.heap, item)
   } else {
     if (bucket.size === 0) {
       bucket.first = item
@@ -160,26 +181,25 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id: number) => {
   bucket.size += 1
 }
 
-const getPriority = (t: PriorityTag) => {
-  switch (t) {
-    case 'child':
-      return 0
-    case 'pure':
-      return 1
-    case 'read':
-      return 2
-    case 'barrier':
-      return 3
-    case 'sampler':
-      return 4
-    case 'effect':
-      return 5
-    default:
-      return -1
+function createEffectorQueue(): QueueInstance {
+  /** queue buckets for each PriorityType */
+  const queue: QueueBucket[] = []
+  let ix = 0
+  while (ix < 6) {
+    /**
+     * although "sampler" and "barrier" are using heap instead of linked list,
+     * their buckets are still useful: they maintains size of heap queue
+     */
+    add(queue, {first: null, last: null, size: 0})
+    ix += 1
+  }
+
+  return {
+    barriers: new Set<string | number>(),
+    heap: null,
+    queue,
   }
 }
-
-const barriers = new Set<string | number>()
 
 let isRoot = true
 export let isKernelContext = false
@@ -187,6 +207,7 @@ export let isWatch = false
 export let isPure = false
 export let currentPage: Leaf | null = null
 export let forkPage: Scope | void | null
+let currentQueue: QueueInstance | null = null
 export const setForkPage = (newForkPage: Scope | void | null) => {
   forkPage = newForkPage
 }
@@ -232,6 +253,7 @@ export function launch(config: {
   target: NodeUnit | NodeUnit[]
   params?: any
   defer?: boolean
+  queue?: QueueInstance
   page?: Leaf | void | null
   scope?: Scope | void | null
   stack?: Stack | void
@@ -243,7 +265,10 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
   let meta: Record<string, any> | undefined
+  let executionQueue: QueueInstance | null = null
   if (unit.target) {
+    executionQueue = unit.queue
+
     payload = unit.params
     upsert = unit.defer
     meta = unit.meta
@@ -252,12 +277,21 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     forkPageForLaunch = getForkPage(unit) || forkPageForLaunch
     unit = unit.target
   }
+  if (upsert && !executionQueue) {
+    executionQueue = currentQueue
+  }
   if (forkPageForLaunch && forkPage && forkPageForLaunch !== forkPage) {
     forkPage = null
   }
+
+  if (!executionQueue) {
+    executionQueue = createEffectorQueue()
+  }
+
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
       pushFirstHeapItem(
+        executionQueue,
         'pure',
         pageForLaunch,
         getGraph(unit[i]),
@@ -269,6 +303,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     }
   } else {
     pushFirstHeapItem(
+      executionQueue,
       'pure',
       pageForLaunch,
       getGraph(unit),
@@ -286,6 +321,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     scope: forkPage,
     isWatch,
     isPure,
+    currentQueue,
   }
   isRoot = false
   let stop: boolean
@@ -294,11 +330,12 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let value: Layer | undefined
   let page: Leaf | null
   let reg: Record<string, StateRef> | undefined
-  kernelLoop: while ((value = deleteMin())) {
+  kernelLoop: while ((value = deleteMin(executionQueue))) {
     const {idx, stack, type} = value
     node = stack.node
     currentPage = page = stack.page
     forkPage = getForkPage(stack)
+    currentQueue = executionQueue
     if (page) reg = page.reg
     else if (forkPage) reg = forkPage.reg
     // reg = (page ? page : forkPage ? forkPage : node).reg
@@ -320,16 +357,16 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           : 0
         if (stepn !== idx || type !== priority) {
           if (barrierID) {
-            if (!barriers.has(id)) {
-              barriers.add(id)
-              pushHeap(stepn, stack, priority, barrierID)
+            if (!executionQueue.barriers.has(id)) {
+              executionQueue.barriers.add(id)
+              pushHeap(executionQueue, stepn, stack, priority, barrierID)
             }
           } else {
-            pushHeap(stepn, stack, priority, 0)
+            pushHeap(executionQueue, stepn, stack, priority, 0)
           }
           continue kernelLoop
         }
-        barrierID && barriers.delete(id)
+        barrierID && executionQueue.barriers.delete(id)
       }
       switch (step.type) {
         case 'mov': {
@@ -393,8 +430,13 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
             isKernelContext = true
 
             const computationResult = data.safe
-              ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
-              : tryRun(local, data.fn, stack)
+              ? (0 as any, data.fn)(
+                  getValue(stack),
+                  local.scope,
+                  stack,
+                  executionQueue,
+                )
+              : tryRun(local, data.fn, stack, executionQueue)
 
             isKernelContext = prevIsKernelContext
 
@@ -422,11 +464,20 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       const finalValue = getValue(stack)
       const forkPage = getForkPage(stack)
       forEach(node.next, nextNode => {
-        pushFirstHeapItem('child', page, nextNode, stack, finalValue, forkPage)
+        pushFirstHeapItem(
+          executionQueue,
+          'child',
+          page,
+          nextNode,
+          stack,
+          finalValue,
+          forkPage,
+        )
       })
       if (forkPage) {
         if (node.meta.needFxCounter)
           pushFirstHeapItem(
+            executionQueue,
             'child',
             page,
             forkPage.fxCount,
@@ -436,6 +487,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           )
         if (node.meta.storeChange)
           pushFirstHeapItem(
+            executionQueue,
             'child',
             page,
             forkPage.storeChange,
@@ -445,6 +497,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
           )
         if (node.meta.warnSerialize)
           pushFirstHeapItem(
+            executionQueue,
             'child',
             page,
             forkPage.warnSerializeNode,
@@ -456,6 +509,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         if (additionalLinks) {
           forEach(additionalLinks, nextNode => {
             pushFirstHeapItem(
+              executionQueue,
               'child',
               page,
               nextNode,
@@ -471,6 +525,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
+  currentQueue = lastStartedState.currentQueue
 }
 
 const noopParser = (x: any) => x
@@ -550,9 +605,9 @@ export const initRefInScope = (
 }
 
 /** try catch for external functions */
-const tryRun = (local: Local, fn: Function, stack: Stack) => {
+const tryRun = (local: Local, fn: Function, stack: Stack, q: QueueInstance) => {
   try {
-    return fn(getValue(stack), local.scope, stack)
+    return fn(getValue(stack), local.scope, stack, q)
   } catch (err) {
     console.error(err)
     local.fail = true

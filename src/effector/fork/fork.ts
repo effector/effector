@@ -1,71 +1,61 @@
-import {is} from '../is'
-import {assert, deprecate} from '../throw'
-import type {Domain, ValuesMap, HandlersMap, Scope, Store} from '../unit.h'
-import {normalizeValues} from './util'
+import {is, assert} from '../validate'
+import type {ValuesMap, HandlersMap, Store} from '../unit.h'
 import {createScope} from './createScope'
 import {forEach} from '../collection'
 import {getMeta} from '../getter'
 
-type ForkConfig = {
-  values?: ValuesMap
-  handlers?: HandlersMap
-}
-
-export function fork(
-  domainOrConfig?: Domain | ForkConfig,
-  optionalConfig?: ForkConfig,
-) {
-  let config: ForkConfig | void = domainOrConfig as any
-  let domain: Domain
-  if (is.domain(domainOrConfig)) {
-    deprecate(false, 'fork(domain)', 'fork()')
-    domain = domainOrConfig
-    config = optionalConfig
-  }
-
-  const scope = createScope(domain!)
+export function fork(config?: {values?: ValuesMap; handlers?: HandlersMap}) {
+  const scope = createScope()
 
   if (config) {
-    if (config.values) {
-      const {sidMap, unitMap, hasSidDoubles} = normalizeValues(
-        config.values,
-        unit => 
-          assert(is.store(unit) && is.targetable(unit), 'Values map can contain only writable stores as keys'),
-      )
-      Object.assign(scope.values.sidMap, sidMap)
-      forEach(unitMap, (value, unit) => {
-        scope.values.idMap[(unit as Store<any>).stateRef.id] = value
+    const values = config.values
+    if (values) {
+      const mapOrRecordValues = Array.isArray(values)
+        ? new Map(values as [Store<any>, any][])
+        : values
+      const sidMap = scope.values.sidMap
+      if (mapOrRecordValues instanceof Map) {
+        forEach(mapOrRecordValues, (value, store) => {
+          assert(
+            is.store(store) && is.targetable(store),
+            'Values map can contain only writable stores as keys',
+          )
+          scope.values.idMap[store.stateRef.id] = value
+          const sid = store.sid
+          if (sid) {
+            if (sid in sidMap) scope.hasSidDoubles = true
+            sidMap[sid] = value
+            /**
+             * If store values were provided as tuple or map,
+             * but unit has sid anyway, we should add it to sidIdMap,
+             *
+             * It is needed to avoid issues, if there are duplicated sids in the code + values is a tuple or map
+             */
+            scope.sidIdMap[sid] = store.stateRef.id
 
-        /**
-         * If store values were provided as tuple or map,
-         * but unit has sid anyway, we should add it to sidIdMap,
-         * 
-         * It is needed to avoid issues, if there are duplicated sids in the code + values is a tuple or map
-         */
-        scope.sidIdMap[getMeta(unit, 'sid')] = (unit as Store<any>).stateRef.id
-
-        const serialize = getMeta(unit, 'serialize')
-        if (serialize === 'ignore') {
-          const sid = getMeta(unit, 'sid')
-          scope.sidSerializeSettings.set(sid, {ignore: true})
-        }
-      })
-      scope.fromSerialize =
-        !Array.isArray(config.values) && !(config.values instanceof Map)
-      scope.hasSidDoubles = hasSidDoubles
+            const serialize = getMeta(store, 'serialize')
+            if (serialize === 'ignore') {
+              scope.sidSerializeSettings.set(sid, {ignore: true})
+            }
+          }
+        })
+      } else {
+        scope.fromSerialize = true
+        Object.assign(sidMap, mapOrRecordValues)
+      }
     }
-    if (config.handlers) {
-      deprecate(
-        config.handlers instanceof Map || Array.isArray(config.handlers),
-        'object with handlers',
-        'array',
+    const handlers = config.handlers
+    if (handlers) {
+      assert(
+        handlers instanceof Map || Array.isArray(handlers),
+        '"handlers" could be array or map with effect',
+        'fork',
       )
-      scope.handlers = normalizeValues(config.handlers, unit =>
-        assert(
-          is.effect(unit),
-          `Handlers map can contain only effects as keys`,
-        ),
-      )
+      const mapValues = Array.isArray(handlers) ? new Map(handlers) : handlers
+      forEach(mapValues, (value, key) => {
+        assert(is.effect(key), 'Handlers map can contain only effects as keys')
+      })
+      scope.handlers = mapValues
     }
   }
   return scope

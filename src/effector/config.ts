@@ -1,5 +1,5 @@
 import {forIn} from './collection'
-import {assertObject, isObject, isVoid} from './is'
+import {assertObject, isObject, isVoid} from './validate'
 
 export function processArgsToConfig(
   arg: any,

@@ -1,6 +1,5 @@
 import {
   createEvent,
-  forward,
   attach,
   fork,
   allSettled,
@@ -9,14 +8,10 @@ import {
   createStore,
   combine,
   createDomain,
-  hydrate,
   sample,
 } from 'effector'
-import {debounce} from 'patronum19'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-// guard is used in patronum 19, need to remove it entirely
-muteErrors(['forward', 'guard'])
+import {and} from 'patronum19'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
@@ -184,27 +179,6 @@ describe('imperative call support', () => {
         expect(scope.getState(count)).toBe(2)
         expect(count.getState()).toBe(0)
       })
-    })
-    test('with forward', async () => {
-      const inc = createEffect(async () => {})
-      const count = createStore(0).on(inc.done, x => x + 1)
-
-      const start = createEffect(async () => {
-        await inc()
-      })
-
-      const next = createEffect(async () => {
-        await inc()
-      })
-
-      forward({from: start.doneData, to: next})
-
-      const scope = fork()
-
-      await allSettled(start, {scope})
-
-      expect(scope.getState(count)).toBe(2)
-      expect(count.getState()).toBe(0)
     })
     test('attach imperative call', async () => {
       const add = createEffect((_: number) => _)
@@ -627,7 +601,7 @@ test('fork should pass through attach', () => {
     mapParams: (param, timeout) => [param, timeout],
     effect: createEffect(() => 0),
   })
-  forward({from: source, to: fx})
+  sample({clock: source, target: fx})
   expect(() => {
     fork()
   }).not.toThrow()
@@ -733,56 +707,12 @@ describe('no-scope events should not affect scoped stores', () => {
   })
 })
 
-describe(`fork(domain) and related api's are deprecated`, () => {
-  let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
-  beforeEach(() => {
-    warn = jest.spyOn(console, 'error').mockImplementation(() => {})
-  })
-  afterEach(() => {
-    warn.mockRestore()
-  })
-
-  function getWarning() {
-    return warn.mock.calls.map(([msg]) => msg).join('\n')
-  }
-
-  test('fork(domain) is deprecated', () => {
-    const d = createDomain()
-
-    fork(d)
-
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"fork(domain) is deprecated, use fork() instead"`,
-    )
-  })
-
-  test('hydrate(domain) is deprecated', () => {
-    const d = createDomain()
-
-    hydrate(d, {values: {}})
-
-    expect(getWarning()).toMatchInlineSnapshot(
-      `"hydrate(domain, { values }) is deprecated, use fork({ values }) instead"`,
-    )
-  })
-
-  test('hydrate(fork(domain)) is deprecated', () => {
-    const d = createDomain()
-
-    hydrate(fork(d), {values: {}})
-
-    expect(getWarning()).toMatchInlineSnapshot(`
-      "fork(domain) is deprecated, use fork() instead
-      hydrate(fork(domain), { values }) is deprecated, use fork({ values }) instead"
-    `)
-  })
-})
-
 describe('babel-plugin-update', () => {
   test('patronum 19 doesn not blows up', () => {
     expect(() => {
-      const event = createEvent()
-      const deb = debounce({source: event, timeout: 1000})
+      const $a = createStore(true)
+      const $b = createStore(true)
+      const deb = and($a, $b)
     }).not.toThrow()
   })
 })

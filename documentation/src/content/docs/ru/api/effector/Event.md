@@ -12,279 +12,113 @@ keywords:
 description: Event, его методы и свойства
 lang: ru
 ---
+
+_Event (событие, эвент)_ это декларация намерения сделать что-либо: запустить вычисления, отправить сообщение другой секции приложения или обновить состояния в приложении. Одна из основных управляющих сущностей, при срабатывании запускает цепочки реактивных вычислений в приложении. Является [юнитом](/ru/explanation/glossary#common-unit)
+
+События можно вызывать как обычные функции (_императивный вызов_) а также подключать в различные методы api включая [sample](/ru/api/effector/sample) и [split](/ru/api/effector/split) (_декларативное подключение_). При императивном вызове принимают максимум один аргумент и всегда возвращают переданные данные
+
+# Методы (#methods)
+
+## `map(fn)` (#map-fn)
+
+Создает производное событие на основе данных из исходного
+
+### Формула (#map-fn-formulae)
+
 ```ts
-import { type Event, type EventCallable } from "effector";
+declare const eventA: Event<T>
+
+const eventB = eventA.map(/*fn*/(data: T) => S)
+-> Event<S>
 ```
 
-**Event** в effector представляет действие пользователя, шаг в процессе приложения, команду к выполнению или намерение внести изменения и многое другое. Этот юнит предназначен для переноса информации/намерений/состояния в приложении, а не для хранения состояния.
+При вызове исходного события `eventA`, функция-обработчик `fn` будет вызвана с поступившими данными, после чего производный эвент `eventB` будет вызван с результатом вычислений
 
-# `EventCallable<T>` (#eventCallable)
+```
 
-## Создание (#eventCallable-construction)
+    eventA -> fn -> eventB
 
-Существует множество способов создания события:
+```
 
-- Самый распространенный [`createEvent`](/ru/api/effector/createEvent)
-- С помощью [Domain `createEvent`](/ru/api/effector/Domain#unit-creators-createEvent-name)
-- Через [методы Event](#eventCallable-methods) и его суперкласс [методы EventCallable](#eventCallable-methods)
-- Некоторые [методы Effect](/ru/api/effector/Effect#methods) возвращают новые события и события только для чтения
-- Операторы, такие как: [`createApi`](/ru/api/effector/createApi)
+### Аргументы (#map-fn-arguments)
 
-### Объявление типов (#eventCallable-declaringTypes)
+1.  **`fn`**: `(data: T) => S`
 
-Событие переносит данные, и в экосистеме TypeScript каждый набор данных должен иметь определенный тип. Когда событие создается явно с помощью [`createEvent`](/ru/api/effector/createEvent), тип аргумента должен быть указан в качестве дженерика:
+    Функция-обработчик, которая будет вычислять данные для передачи в производное событие `eventB` на основе данных из исходного эвента `eventA`. [Должна быть **чистой**](/ru/explanation/glossary#purity)
 
-```ts
+    **Аргументы**
+
+    - **`data`**: Данные с которыми сработало исходное событие `eventA`
+
+    **Возвращает**
+
+    Данные для передачи в производное событие `eventB`
+
+### Возвращает (#map-fn-returns)
+
+Новое, производное событие
+
+### Пример (#map-fn-example)
+
+```js
 import { createEvent } from "effector";
 
-interface ItemAdded {
-  id: string;
-  title: string;
-}
+const updateUser = createEvent();
+const userNameUpdated = updateUser.map(({ name }) => name);
+const userRoleUpdated = updateUser.map(({ role }) => role.toUpperCase());
 
-const itemAdded = createEvent<ItemAdded>();
+userNameUpdated.watch((name) => console.log(`Имя пользователя изменено на ${name}`));
+userRoleUpdated.watch((role) => console.log(`Роль пользователя изменена на ${role}`));
+
+updateUser({ name: "john", role: "admin" });
+// => Имя пользователя изменено на john
+// => Роль пользователя изменена на ADMIN
 ```
 
-В большинстве случаев нет необходимости использовать `void` вместе с другим типом (~~`Event<void | number>`~~). Используйте `void` только для объявления Event или EventCallable вообще без аргумента. Поэтому можно отправить данные из события с аргументом в событие без аргумента.
+[Запустить пример](https://share.effector.dev/U3w3dlbO)
+
+## `prepend(fn)` (#prepend-fn)
+
+Создаёт событие-триггер для преобразования данных _перед_ запуском исходного эвента. По сравнению с [map](#map), работает в обратном направлении
+
+### Формула (#prepend-fn-formulae)
 
 ```ts
-sample({
-  clock: withData, // Event<number>
-  target: withoutData, // Event<void>
-});
+declare const targetEvent: Event<S>
+
+const trigger = targetEvent.prepend(/*fn*/(data: T) => S)
+-> Event<T>
 ```
 
-Мы **настоятельно рекомендуем** использовать `null` для пустых значений, если это подразумевается:
+При вызове события `trigger`, функция-обработчик `fn` будет вызвана с поступившими данными, после чего эвент `targetEvent` будет вызван с результатом вычислений
 
-```ts
-import { createEvent } from "effector";
-
-const maybeDataReceived = createEvent<Data | null>();
-// maybeDataReceived: EventCallable<Data | null>
 ```
 
-[Подробнее в разделе объяснений](/ru/explanation/events#typescript).
+    trigger -> fn -> targetEvent
 
-## Вызов как функция `event(argument)` (#eventCallable-call-argument)
-
-Инициирует событие с переданным аргументом, который, в свою очередь, активирует всех зарегистрированных подписчиков.
-
-[Подробнее в разделе объяснений](/ru/explanation/events#event-calling).
-
-### Formulae (#eventCallable-call-argument-formulae)
-
-```ts
-const event: EventCallable<T>;
-event(argument: T): T;
 ```
 
-- `event`, вызываемый как функция, всегда возвращает свой `argument` как есть
-- все подписчики события получают переданный аргумент
-- когда `T` — это `void`, `event` можно вызывать без аргументов
-- `T` по умолчанию — это `void`, поэтому дженерик можно опустить
+### Аргументы (#prepend-fn-arguments)
 
-:::warning{title="Важно"}
+1.  **`fn`**: `(data: T) => S`
 
-В Effector любое событие поддерживает только **один аргумент**.
-Вызов события с двумя или более аргументами, как в случае `someEvent(first, second)`, невозможен.
+    Функция-обработчик, которая будет вычислять данные для передачи в исходное событие `targetEvent` на основе данных эвента `trigger`. [Должна быть **чистой**](/ru/explanation/glossary#purity)
 
-Все аргументы, кроме первого, будут проигнорированы.
-Основная команда внедрила это правило по специфическим причинам, связанным с проектированием и функциональностью.
-:::
+    **Аргументы**
 
-### Аргументы (#eventCallable-call-argument-arguments)
+    - **`data`**: Данные с которыми сработало событие `trigger`
 
-1. `argument` — значение типа `T`. Он необязателен, если событие определено как `EventCallable<void>`.
+    **Возвращает**
 
-### Ошибки (#eventCallable-call-argument-throws)
+    Данные для передачи в исходное событие `targetEvent`
 
-#### eventCallable-call-argument-throws (#eventCallable-call-argument-throws-call-of-readonly-event)
+### Возвращает (#prepend-fn-returns)
 
-:::info{title="с версии"}
-[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
-:::
+Новое событие
 
-Когда пользователь попытался вызвать `Event`. В большинстве случаев это происходит, когда вы пытаетесь вызвать производное событие:
+### Пример (#prepend-fn-example)
 
-```ts
-const numberReceived = createEvent<number>(); // EventCallable<number>
-const stringifiedReceived = numberReceived.map((number) => String(number)); // Event<string>
-
-stringifiedReceived("123"); // ВЫЗЫВАЕТ ОШИБКУ!
-```
-
-То же самое относится ко всем методам, возвращающим `Event`.
-
-Корректное использование: создайте отдельное событие через `createEvent` и свяжите их с помощью `sample`:
-
-```ts
-const numberReceived = createEvent<number>();
-const stringifiedReceived = createEvent<string>();
-
-sample({
-  clock: numberReceived,
-  fn: (number) => String(number),
-  target: stringifiedReceived,
-});
-
-stringifiedReceived("123"); // ОК
-```
-
-#### вызов юнита из чистой функции не поддерживается, используйте вместо этого операторы, такие как sample (#eventCallable-call-argument-throws-unit-call-from-pure)
-
-:::info{title="с версии"}
-[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
-:::
-
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
-
-```ts
-const someHappened = createEvent<number>();
-const another = createEvent();
-
-const derived = someHappened.map((number) => {
-  another(); // ВЫЗЫВАЕТ ОШИБКУ!
-  return String(number);
-});
-```
-
-Корректное использование: используйте `sample`:
-
-```ts
-const someHappened = createEvent<number>();
-const another = createEvent();
-const derived = createEvent<string>();
-
-sample({
-  clock: someHappened,
-  target: another,
-});
-
-// То же самое, что и .map(), но с использованием `target`
-sample({
-  clock: someHappened,
-  fn: (number) => String(number),
-  target: derived,
-});
-```
-
-### Возвращает (#eventCallable-call-argument-returns)
-
-`T`: Представляет то же значение, которое передается в `event`.
-
-### Типы (#eventCallable-call-argument-types)
-
-```ts
-import { createEvent, Event } from "effector";
-
-const someHappened = createEvent<number>();
-// someHappened: EventCallable<number>
-someHappened(1);
-
-const anotherHappened = createEvent();
-// anotherHappened: EventCallable<void>
-anotherHappened();
-```
-
-Событие может быть создано с одним дженериком. По умолчанию этот аргумент установлен в `void`, что означает, что событие не принимает параметры.
-
-## Методы (#eventCallable-methods)
-
-Поскольку фабрика `createEvent` создает `EventCallable` для вас, сначала будут описаны его методы, даже несмотря на то, что это расширение типа `Event`.
-
-Все методы и свойства из [Event](#event-methods) также доступны на экземпляре `EventCallable`.
-
-:::tip
-Вы можете считать EventCallable и Event типом и его суперклассом:
-
-`EventCallable<T> extends Event<T>`
-:::
-
-### `.prepend(fn)` (#eventCallable-methods-prepend-fn)
-
-Создает новый `EventCallable`, который вызывается, при его срабатывании передает преобразованные данные в исходное событие.
-
-Работает как обратный `.map`. В случае `.prepend` данные преобразуются **до срабатывания исходного события**, а в случае `.map` данные преобразуются **после срабатывания исходного события**.
-
-Если исходное событие принадлежит какому-либо [домену](/ru/api/effector/Domain), то новое событие также будет ему принадлежать.
-
-#### Formulae (#eventCallable-methods-prepend-fn-formulae)
-
-```ts
-const first: EventCallable<T>;
-const second: EventCallable<T> = first.prepend(fn);
-```
-
-- Когда второе событие срабатывает
-- Вызвать `fn` с аргументом второго события
-- Вызвать первое событие с результатом `fn()`
-
-#### Аргументы (#eventCallable-methods-prepend-fn-arguments)
-
-1. `fn` (_Function_): Функция, которая получает `argument`, и должна быть **чистой**.
-
-#### Ошибки (#eventCallable-methods-prepend-fn-throws)
-
-##### unit call from pure function is not supported, use operators like sample instead (#eventCallable-methods-prepend-fn-throws-unit-call-from-pure)
-
-:::info{title="с версии"}
-[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
-:::
-
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
-
-```ts
-const someHappened = createEvent<string>();
-const another = createEvent<number>();
-
-const reversed = someHappened.prepend((input: number) => {
-  another(input); // ВЫЗЫВАЕТ ОШИБКУ!
-  return String(input);
-});
-```
-
-Корректное использование: используйте `sample`:
-
-```ts
-const someHappened = createEvent<string>();
-const another = createEvent<number>();
-const reversed = createEvent<number>();
-
-// То же самое, что и .prepend(), но с использованием `sample`
-sample({
-  clock: reversed,
-  fn: (input) => String(input),
-  target: someHappened,
-});
-
-sample({
-  clock: reversed,
-  target: another,
-});
-```
-
-#### Возвращает (#eventCallable-methods-prepend-fn-returns)
-
-[`EventCallable<T>`](/ru/api/effector/Event): Новое событие.
-
-#### Типы (#eventCallable-methods-prepend-fn-types)
-
-TypeScript требует явного указания типа аргумента функции `fn`:
-
-```ts
-import { createEvent } from "effector";
-
-const original = createEvent<{ input: string }>();
-
-const prepended = original.prepend((input: string) => ({ input }));
-//                                         ^^^^^^ здесь
-```
-
-Тип аргумента исходного события и результирующий тип функции `fn` должны совпадать.
-
-#### Примеры (#eventCallable-methods-prepend-fn-examples)
-
-##### Базовый пример (#eventCallable-methods-prepend-fn-examples-basic)
+##### Пример использования (#prepend-fn-examples-usage)
 
 ```js
 import { createEvent } from "effector";
@@ -292,7 +126,7 @@ import { createEvent } from "effector";
 const userPropertyChanged = createEvent();
 
 userPropertyChanged.watch(({ field, value }) => {
-  console.log(`Свойство пользователя "${field}" изменилось на ${value}`);
+  console.log(`Свойство пользователя "${field}" изменено на ${value}`);
 });
 
 const changeName = userPropertyChanged.prepend((name) => ({
@@ -305,289 +139,168 @@ const changeRole = userPropertyChanged.prepend((role) => ({
 }));
 
 changeName("john");
-// => Свойство пользователя "name" изменилось на john
+// => Свойство пользователя "name" изменено на john
 
 changeRole("admin");
-// => Свойство пользователя "role" изменилось на ADMIN
+// => Свойство пользователя "role" изменено на ADMIN
 
 changeName("alice");
-// => Свойство пользователя "name" изменилось на alice
+// => Свойство пользователя "name" изменено на alice
 ```
 
-[Открыть пример](https://share.effector.dev/XGxlG4LD)
+[Запустить пример](https://share.effector.dev/ets1GxTA)
 
-##### Содержательный пример (#eventCallable-methods-prepend-fn-examples-meaningful)
+## `filterMap(fn)` (#filterMap-fn)
 
-Вы можете считать этот метод функцией-обёрткой. Допустим, у нас есть функция с неидеальным API, но нам нужно часто её вызывать:
-
-```ts
-import { sendAnalytics } from "./analytics";
-
-export function reportClick(item: string) {
-  const argument = { type: "click", container: { items: [arg] } };
-  return sendAnalytics(argument);
-}
-```
-
-Это именно то, как работает `.prepend()`:
-
-```ts
-import { sendAnalytics } from "./analytics";
-
-export const reportClick = sendAnalytics.prepend((item: string) => {
-  return { type: "click", container: { items: [arg] } };
-});
-
-reportClick("example");
-// reportClick сработал "example"
-// sendAnalytics сработал с { type: "click", container: { items: ["example"] } }
-```
-
-Ознакомьтесь со всеми другими методами в [Event](#event-methods).
-
-# `Event<T>` (#event)
-
-**Event** — это суперкласс `EventCallable` с иным подходом. Вызов Event не разрешен, и он не может быть использован в качестве `target` в операторе `sample` и т.д.
-
-Основная цель Event — быть вызванным внутренним кодом в библиотеке effector или её экосистеме.
-Например, метод `.map()` возвращает Event, который затем вызывается самим методом `.map()`.
+Создает производное событие на основе данных из исходного с возможностью отмены вызова
 
 :::info
-Нет необходимости для кода пользователя напрямую вызывать такой Event.
-
-Если вам необходимо вызвать Event, возможно, следует пересмотреть и реорганизовать логику вашего приложения.
+Метод добавлен в effector 20.0.0
 :::
 
-Все функции, предоставляемые Event, также поддерживаются в EventCallable.
-
-## Создание (#event-construction)
-
-Невозможно вручную создать Event, но некоторые методы и операторы возвращают производные события, они возвращают тип
-`Event<T>`:
-
-- Методы Event, такие как: [`.map(fn)`](#event-map-fn), [`.filter({fn})`](#event-methods-filterMap-fn) и т.д.
-- Свойство Store: ['.updates'](/ru/api/effector/Store#updates)
-- Методы и [свойства](/ru/api/effector/Effect#properties) Effect
-- операторы, такие как: [`sample`](/ru/api/effector/sample), [`merge`](/ru/api/effector/merge)
-
-## Ошибки (#event-throws)
-
-- **Ошибки, связанные с некорректным использованием**: Подробнее в разделах, посвящённых конкретным методам.
-
-## Объявление типов (#event-types)
-
-Это становится необходимым в тех случаях, когда фабрика или библиотека требует события для подписки на его обновления, чтобы обеспечить надлежащую интеграцию и взаимодействие с предоставленным функционалом:
+### Формула (#filterMap-formulae)
 
 ```ts
-const event: Event<T>;
+declare const eventA: Event<T>
+
+const eventB = eventA.filterMap(
+  /*fn*/ (data: T) => S | void
+)
+-> Event<S>
 ```
 
-## Методы (#event-methods)
+При вызове исходного события `eventA`, функция-обработчик `fn` будет вызвана с поступившими данными, после чего, если функция вернула не _undefined_, производный эвент `eventB` будет вызван с результатом вычислений
 
-### `.map(fn)` (#event-methods-map-fn)
-
-Создает новое производное событие, которое будет вызвано после того, как будет вызвано исходное событие, используя результат функции `fn` в качестве его аргумента. Эта специальная функция позволяет вам разбивать и управлять потоком данных, а также извлекать или преобразовывать данные в рамках вашей модели бизнес-логики.
-
-#### Formulae (#event-methods-map-fn-formulae)
-
-```ts
-const first: Event<T> | EventCallable<T>;
-const second: Event<F> = first.map(fn);
 ```
 
-- Когда `first` срабатывает, передайте данные из `first` в `fn`.
-- Вызовите `second` с результатом вызова `fn()` в качестве полезной нагрузки.
-- Функция `fn` вызывается каждый раз, когда срабатывает `first`.
-- Также `second` срабатывает каждый раз, когда срабатывает `first`.
+    eventA -> fn -> eventB
 
-#### Аргументы (#event-methods-map-fn-arguments)
+```
 
-1. `fn` (_Function_): Функция, получающая `argument`, и [должна быть **чистой**](/ru/explanation/glossary#purity).
+### Аргументы (#filterMap-fn-arguments)
 
-#### Ошибки (#event-methods-map-fn-throws)
+1.  **`fn`**: `(data: T) => S | void`
 
-##### unit call from pure function is not supported, use operators like sample instead (#event-methods-map-fn-throws-unit-call-from-pure)
+    Функция-обработчик, которая будет вычислять данные для передачи в производное событие `eventB` на основе данных из исходного эвента `eventA`. [Должна быть **чистой**](/ru/explanation/glossary#purity)
 
-:::info{title="с версии"}
-[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
+    **Аргументы**
+
+    - **`data`**: Данные с которыми сработало исходное событие `eventA`
+
+    **Возвращает**
+
+    Данные для передачи в производное событие `eventB` либо _undefined_, если вызов `eventB` не требуется
+
+### Возвращает (#filterMap-fn-returns)
+
+Новое, производное событие
+
+### Пример (#filterMap-fn-example)
+
+#### Использование с методами JavaScript возвращающими undefined (#filterMap-fn-example-usage-with-functions-returning-undefined)
+
+```jsx
+const listReceived = createEvent<string[]>()
+const effectorFound = listReceived.filterMap(list => list.find(name => name === 'effector'))
+
+effectorFound.watch(name => console.info("found", name))
+listReceived(["redux", "effector", "mobx"]) // found effector
+listReceived(["redux", "mobx"])
+```
+
+[Запустить пример](https://share.effector.dev/ARDanMAM)
+
+#### Использование c nullable React ref (#filterMap-fn-example-usage-with-nullable-ref)
+
+:::info
+Методы _modal.showModal_ и _modal.close_ – стандартные возможности dom-элемента `<dialog>`
+
+[Статья в MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal) про _showModal_
 :::
 
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
+```jsx
+import React from "react";
+import { createEvent, createStore } from "effector";
 
-```ts
-const someHappened = createEvent<number>();
-const another = createEvent();
+const openModal = createEvent();
+const closeModal = createEvent();
 
-const derived = someHappened.map((number) => {
-  another(); // ВЫЗЫВАЕТ ОШИБКУ!
-  return String(number);
+const openModalUnboxed = openModal.filterMap((ref) => {
+  if (ref.current) return ref.current;
 });
-```
-
-Корректное использование: используйте `sample`:
-
-```ts
-const someHappened = createEvent<number>();
-const another = createEvent();
-const derived = createEvent<string>();
-
-sample({
-  clock: someHappened,
-  target: another,
+const closeModalUnboxed = closeModal.filterMap((ref) => {
+  if (ref.current) return ref.current;
 });
 
-// То же самое, что и .map(), но с использованием `target`
-sample({
-  clock: someHappened,
-  fn: (number) => String(number),
-  target: derived,
-});
+openModalUnboxed.watch((modal) => modal.showModal());
+closeModalUnboxed.watch((modal) => modal.close());
+
+const App = () => {
+  const modalRef = React.useRef(null);
+  return (
+    <>
+      <dialog ref={modalRef}>
+        <form method="dialog">
+          <fieldset>
+            <legend>Модальное окно</legend>
+            Нажмите для закрытия
+            <button onSubmit={() => closeModal(modalRef)} type="submit">
+              ❌
+            </button>
+          </fieldset>
+        </form>
+      </dialog>
+
+      <button onClick={() => openModal(modalRef)}>Открыть модальное окно</button>
+    </>
+  );
+};
 ```
 
-#### Возвращает (#event-methods-map-fn-returns)
+[Запустить пример](https://share.effector.dev/OzA9AbpY)
 
-[`Event<T>`](#event): Новое событие.
+## `filter({fn})` (#filter-fn)
 
-#### Типы (#event-methods-map-fn-types)
-
-Результирующий тип функции `fn` будет использован для определения типа производного события.
-
-```ts
-import { createEvent } from "effector";
-
-const first = createEvent<number>();
-// first: Event<number>
-
-const second = first.map((count) => count.toString());
-// second: Event<string>
-```
-
-Событие `first` может быть представлено как `Event<T>`, так и `EventCallable<T>`. <br/>
-Событие `second` всегда будет представлено как `Event<T>`.
-
-#### Примеры (#event-methods-map-fn-examples)
-
-```js
-import { createEvent } from "effector";
-
-const userUpdated = createEvent();
-
-// вы можете разбить поток данных с помощью метода .map()
-const userNameUpdated = userUpdated.map(({ user }) => name);
-
-// либо преобразовать данные
-const userRoleUpdated = userUpdated.map((user) => user.role.toUpperCase());
-
-userNameUpdated.watch((name) => console.log(`Имя пользователя теперь [${name}]`));
-userRoleUpdated.watch((role) => console.log(`Роль пользователя теперь [${role}]`));
-
-userUpdated({ name: "john", role: "admin" });
-// => Имя пользователя теперь [john]
-// => Роль пользователя теперь [ADMIN]
-```
-
-[Открыть пример](https://share.effector.dev/duDut6nR)
-
-### `.filter({ fn })` (#event-methods-filter-fn)
-
-Этот метод генерирует новое производное событие, которое будет вызвано после исходного события, но только если функция `fn` вернет `true`. Эта специальная функция позволяет вам разбить поток данных на ветви и подписаться на них в рамках модели бизнес-логики.
+Создает производное событие с возможностью отмены вызова
 
 :::tip
-[sample](/ru/api/effector/sample) с аргументом `filter` является предпочтительным методом фильтрации.
+Более гибким способом фильтрации является [sample](/ru/api/effector/sample), рекомендуется использовать именно его.
 :::
 
-#### Formulae (#event-methods-filter-fn-formulae)
+### Формула (#filter-fn-formulae)
 
 ```ts
-const first: Event<T> | EventCallable<T>;
-const second: Event<T> = first.filter({ fn });
+declare const eventA: Event<T>
+
+const eventB = eventA.filter(/*config*/ {fn: (data: T) => boolean})
+-> Event<T>
 ```
 
-- Когда `first` срабатывает, передайте данные из `first` в `fn`.
-- Событие `second` будет срабатывать только если `fn` вернет `true`, с аргументом из события `first`.
-- Функция `fn` вызывается каждый раз, когда срабатывает `first`.
-- Также событие `second` срабатывает каждый раз, когда срабатывает `first` и **fn** возвращает `true`.
+При вызове исходного события `eventA`, функция-обработчик `fn` будет вызвана с поступившими данными, после чего, если функция вернула [истинное значение](https://developer.mozilla.org/ru/docs/Glossary/Truthy), производный эвент `eventB` будет вызван с теми же данными
 
-#### Аргументы (#event-methods-filter-fn-arguments)
+### Аргументы (#filter-fn-arguments)
 
-1. `fn` (_Function_): Функция, получающая `argument`, и [должна быть **чистой**](/ru/explanation/glossary#purity).
+1. **`config`**: Объект конфигурации
 
-:::info{title="Примечание"}
-По историческим причинам `fn` должен использовать объектную форму, потому что `event.filter(fn)` был псевдонимом для [Event filterMap](/ru/api/effector/Event#event-methods-filterMap-fn).
+   - **`fn`**: `(data: T) => boolean`
 
-Используйте его всегда так `.filter({ fn })`.
+     Функция-предикат, которая определяет необходимость вызова производного события `eventB` возвращая [истинное значение](https://developer.mozilla.org/ru/docs/Glossary/Truthy),[должна быть **чистой**](/ru/explanation/glossary#purity)
+
+### Возвращает (#filter-fn-returns)
+
+Новое, производное событие
+
+:::info
+Объектная форма аргумента используется потому что _event.filter(fn)_ был сокращённой формой [_filterMap_](#filterMap)
 :::
 
-#### Ошибки (#event-methods-filter-fn-throws)
-
-##### unit call from pure function is not supported, use operators like sample instead (#event-methods-filter-fn-throws-unit-call-from-pure)
-
-:::info{title="с версии"}
-[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
-:::
-
-Происходит, когда события или эффекты вызываются из [чистых функций](/glossary#purity), таких как guards:
-
-```ts
-const countReceived = createEvent<number>();
-const eachReceived = createEvent<number>();
-
-const receivedEven = someHappened.filter({
-  fn(count) {
-    eachReceived(count); // ВЫЗЫВАЕТ ОШИБКУ!
-    return count % 2 === 0;
-  },
-});
-```
-
-Корректное использование: используйте `sample` для вызова `eachReceived`:
-
-```ts
-const countReceived = createEvent<number>();
-const eachReceived = createEvent<number>();
-
-const receivedEven = someHappened.filter({
-  fn(count) {
-    return count % 2 === 0;
-  },
-});
-
-sample({
-  clock: someHappened,
-  target: eachReceived,
-});
-```
-
-#### Возвращает (#event-methods-filter-fn-returns)
-
-[`Event<T>`](#event): Новое событие.
-
-#### Типы (#event-methods-filter-fn-types)
-
-Метод `.filter()` всегда возвращает Event. Также это событие будет иметь тот же тип, что и исходный:
-
-```ts
-import { createEvent } from "effector";
-
-const numberReceived = createEvent<number>();
-// numberReceived: Event<number>
-
-const evenReceived = numberReceived.filter({
-  fn: (number) => number % 2 === 0,
-});
-// evenReceived: Event<number>
-
-evenReceived.watch(console.info);
-numberReceived(5); // ничего
-numberReceived(2); // => 2
-```
-
-#### Примеры (#event-methods-filter-fn-examples)
+### Пример (#filter-fn-example)
 
 ```js
 import { createEvent, createStore } from "effector";
 
 const numbers = createEvent();
+
 const positiveNumbers = numbers.filter({
   fn: ({ x }) => x > 0,
 });
@@ -595,285 +308,96 @@ const positiveNumbers = numbers.filter({
 const $lastPositive = createStore(0).on(positiveNumbers, (n, { x }) => x);
 
 $lastPositive.watch((x) => {
-  console.log("последнее положительное:", x);
+  console.log("последнее положительное значение:", x);
 });
 
-// => последнее положительное: 0
+// => последнее положительное значение: 0
 
 numbers({ x: 0 });
-// нет реакции
+// ничего не произошло
 
 numbers({ x: -10 });
-// нет реакции
+// ничего не произошло
 
 numbers({ x: 10 });
-// => последнее положительное: 10
+// => последнее положительное значение: 10
 ```
 
-[Открыть пример](https://share.effector.dev/H2Iu4iJH)
+[Запустить пример](https://share.effector.dev/NjKNAxmz)
 
-#### Содержательный пример (#event-methods-filter-fn-examples-meaningful)
 
-Предположим стандартную ситуацию, когда вы хотите купить кроссовки в магазине, но нужного размера нет. Вы подписываетесь на конкретный размер модели кроссовок и, кроме того, хотите получать уведомления, если они появятся, и игнорировать любые другие уведомления. В таком случае фильтрация будет полезной. Фильтрация событий работает аналогично. Если `filter` возвращает `true`, событие будет вызвано.
+## `watch(watcher)` (#watch-watcher)
 
-```ts
-const sneackersReceived = createEvent<Sneakers>();
-const uniqueSizeReceived = sneackersReceived.filter({
-  fn: (sneackers) => sneackers.size === 48,
-});
-```
+Вызывает функцию с сайд-эффектами при каждом срабатывании события
 
-### `.filterMap(fn)` (#event-methods-filterMap-fn)
-
-:::info{title="с версии"}
-[effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
+:::info
+По мере усложнения логики проекта оптимальнее заменить на комбинацию [эффекта](/ru/api/effector/Effect) и [sample](/ru/api/effector/sample)
 :::
 
-Этот метод генерирует новое производное событие, которое **может быть вызвано** после исходного события, но с преобразованным аргументом. Этот специальный метод позволяет одновременно преобразовывать данные и фильтровать срабатывание события.
-
-Этот метод похож на объединение `.filter()` и `.map()`. Это и есть причина его создания: невозможность фильтрации событий.
-
-Этот метод наиболее полезен с API JavaScript, которые иногда возвращают `undefined`.
-
-#### Formulae (#event-methods-filterMap-fn-formulae)
+### Формула (#watch-watcher-formulae)
 
 ```ts
-const first: Event<T> | EventCallable<T>;
-const second: Event<F> = first.filterMap(fn);
+declare const event: Event<T>
+
+event.watch(/*watcher*/ (data: T) => any)
+-> Subscription
 ```
 
-- Когда `first` срабатывает, вызовите `fn` с полезной нагрузкой из `first`.
-- Если `fn()` вернул `undefined`, не вызывайте `second`.
-- Если `fn()` вернул какие-либо данные, вызовите `second` с данными из `fn()`.
+### Аргументы (#watch-watcher-arguments)
 
-#### Аргументы (#event-methods-filterMap-fn-arguments)
+1. **`watcher`**: `(data: T) => any`
 
-1. `fn` (_Function_): Функция, получающая `argument`, [должна быть **чистой**](/ru/explanation/glossary#purity).
+   Функция с сайд-эффектами, в качестве первого аргумента получает значение с которым было вызвано событие. Возвращаемое значение не используется
 
-Функция `fn` должна возвращать некоторые данные. Если возвращается `undefined`, обновление производного события будет пропущено.
+### Возвращает (#watch-watcher-returns)
 
-#### Ошибки (#event-methods-filterMap-fn-throws)
+[_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки, после её вызова `watcher` перестаёт получать обновления и удаляется из памяти. Повторные вызовы функции отмены подписки не делают ничего
 
-##### unit call from pure function is not supported, use operators like sample instead (#event-methods-filterMap-fn-throws-unit-call-from-pure)
-
-:::info{title="с версии"}
-[effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
-:::
-
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
-
-```ts
-const countReceived = createEvent<number>();
-const eachReceived = createEvent<number>();
-
-const receivedEven = someHappened.filterMap((count) => {
-  eachReceived(count); // ВЫЗЫВАЕТ ОШИБКУ!
-  return count % 2 === 0 ? Math.abs(count) : undefined;
-});
-```
-
-Корректное использование: используйте `sample` для вызова `eachReceived`:
-
-```ts
-const countReceived = createEvent<number>();
-const eachReceived = createEvent<number>();
-
-const receivedEven = someHappened.filterMap((count) => {
-  return count % 2 === 0 ? Math.abs(count) : undefined;
-});
-
-sample({
-  clock: someHappened,
-  target: eachReceived,
-});
-```
-
-#### Возвращает (#event-methods-filterMap-fn-returns)
-
-[`Event<T>`](#event): Новое событие.
-
-#### Типы (#event-methods-filterMap-fn-types)
-
-Тип для производного события автоматически выводится из объявления функции `fn`.
-Нет необходимости явно задавать тип для переменной или дженерика:
-
-```ts
-import { createEvent } from "effector";
-
-const first = createEvent<number>();
-// first: Event<number>
-
-const second = first.filterMap((count) => {
-  if (count === 0) return;
-  return count.toString();
-});
-// second: Event<string>
-```
-
-Событие `first` может быть представлено как `Event<T>`, так и `EventCallable<T>`. <br/>
-Событие `second` всегда будет представлено как `Event<T>`.
-
-#### Примеры (#event-methods-filterMap-fn-examples)
-
-```tsx
-import { createEvent } from "effector";
-
-const listReceived = createEvent<string[]>();
-
-// Array.prototype.find() возвращает `undefined`, когда элемент не найден
-const effectorFound = listReceived.filterMap((list) => list.find((name) => name === "effector"));
-
-effectorFound.watch((name) => console.info("найден", name));
-
-listReceived(["redux", "effector", "mobx"]); // => найден effector
-listReceived(["redux", "mobx"]);
-```
-
-[Открыть пример](https://share.effector.dev/ARDanMAM)
-
-#### Задача в терминах эффектора (#event-methods-filterMap-fn-examples-meaningful)
-
-Рассмотрим сценарий, когда вы заходите в продуктовый магазин с конкретной задачей: вам нужно купить 10 яблок, но только если они красные. Если они не красные, вам не повезло.
-Рассмотрим шаги:
-
-1. Возьмите одно яблоко;
-2. Посмотрите, красное ли оно (положите в пакет) или нет (возьмите другое).
-
-И вы повторяете это, пока не выполните задачу
-
-. Теперь подумайте об этом в терминах effector, и мы рассмотрим положительный случай:
-
-1. Взять яблоко — событие;
-2. Посмотреть, красное ли оно — фильтр;
-3. Вы сохраняете его — маппинг;
-4. Положить в пакет — событие.
-5. Пакет — стор.
-
-### `.watch(watcher)` (#event-methods-watch-watcher)
-
-Этот метод позволяет вам вызывать обратный вызов при каждом срабатывании события с аргументом события.
-
-:::tip{title="Помните"}
-Метод `watch` не обрабатывает и не сообщает о исключениях, не управляет завершением асинхронных операций и не решает проблемы сгона данных.
-
-Его основное предназначение — для краткосрочного отладки и логирования.
-:::
-
-[Подробнее в разделе объяснений](/ru/explanation/events#event-watch).
-
-#### Formulae (#event-methods-watch-watcher-formulae)
-
-```ts
-const event: Event<T> | EventCallable<T>;
-const unwatch: () => void = event.watch(fn);
-```
-
-- Функция `fn` будет вызвана при каждом срабатывании `event`, передав аргумент события в `fn`.
-- Когда `unwatch` вызывается, перестаньте вызывать `fn` при каждом срабатывании `event`.
-
-#### Аргументы (#event-methods-watch-watcher-arguments)
-
-1. `watcher` ([_Watcher_](/ru/explanation/glossary#watcher)): Функция, получающая `argument` из события.
-
-#### Возвращает (#event-methods-watch-watcher-returns)
-
-[_Subscription_](/ru/explanation/glossary#subscription): Функция для отмены подписки.
-
-#### Примеры (#event-methods-watch-watcher-examples)
+### Пример (#watch-watcher-example)
 
 ```js
 import { createEvent } from "effector";
 
 const sayHi = createEvent();
-const unwatch = sayHi.watch((name) => console.log(`${name}, привет!`));
+const stop = sayHi.watch((name) => {
+  console.log(`Привет, ${name}!`);
+});
 
-sayHi("Питер"); // => Питер, привет!
-unwatch();
+sayHi("Боб");
+// => Привет, Боб!
 
-sayHi("Дрю"); // => ничего не произошло
+stop();
+
+sayHi("Алиса");
+// => ничего не произошло
 ```
 
-[Открыть пример](https://share.effector.dev/9YVgCl4C)
+[Запустить пример](https://share.effector.dev/FeEWVUbj)
 
-### `.subscribe(observer)` (#event-methods-subscribe-observer)
+# Свойства (#properties)
 
-Это низкоуровневый метод для интеграции события со стандартным шаблоном `Observable`.
+## `shortName` (#shortName)
 
-:::tip{title="Помните"}
-Вам не нужно использовать этот метод самостоятельно. Он используется под капотом движками рендеринга и так далее.
-:::
+Имя события. Задаётся либо явно, через поле `name` [в createEvent](/ru/api/effector/createEvent), либо автоматически через [Babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEvent)
 
-Подробнее:
-
-- https://rxjs.dev/guide/observable
-- https://github.com/tc39/proposal-observable
-
-## Свойства (#event-properties)
-
-Этот набор свойств в основном задается [`effector/babel-plugin`](/ru/api/effector/babel-plugin) или [`@effector/swc-plugin`](/ru/api/effector/swc-plugin). Таким образом, они существуют только при использовании Babel или SWC.
-
-### `.sid` (#event-properties-sid)
-
-Это уникальный идентификатор для каждого события.
-
-Важно отметить, что SID не изменяется при каждом запуске приложения, он статически записывается в пакет вашего приложения для абсолютной идентификации юнитов.
-
-Это может быть полезно для отправки событий между рабочими или
-сервером/браузером: [examples/worker-rpc](https://github.com/effector/effector/tree/master/examples/worker-rpc).
-
-Имеет тип `string | null`.
-
-### `.shortName` (#event-properties-shortName)
-
-Это свойство типа `string`, содержащее имя переменной, в которой объявлено событие.
+### Формула (#shortName-formulae)
 
 ```ts
-import { createEvent } from "effector";
+declare const event: Event<any>
 
-const demo = createEvent();
-// demo.shortName === 'demo'
+event.shortName
+-> string
 ```
 
-Но переопределение события в другую переменную ничего не изменит:
+## `sid` (#sid)
+
+Стабильный идентификатор события. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
+
+### Формула (#sid-formulae)
 
 ```ts
-const another = demo;
-// another.shortName === 'demo'
-```
+declare const event: Event<any>
 
-### `.compositeName` (#event-properties-compositeName)
-
-Это свойство содержит полную внутреннюю цепочку юнитов. Например, событие может быть создано доменом, поэтому составное имя будет содержать имя домена внутри него.
-
-:::tip{title="Помните"}
-Обычно, если требуется длинное имя, лучше передать его явно в поле `name`.
-:::
-
-```ts
-import { createEvent, createDomain } from "effector";
-
-const first = createEvent();
-const domain = createDomain();
-const second = domain.createEvent();
-
-console.log(first.compositeName);
-// => { shortName: "first", fullName: "first", path: ["first"] }
-
-console.log(second.compositeName);
-// => { shortName: "second", fullName: "domain/second", path: ["domain", "second"] }
-```
-
-# Типы (#types)
-
-```ts
-import { type EventPayload } from "effector";
-```
-
-## `EventPayload<E>` (#types-EventPayload)
-
-Извлекает тип полезной нагрузки из `Event` или `EventCallable`.
-
-```ts
-const event: Event<Payload>;
-type Payload = EventPayload<typeof event>;
+event.sid
+-> string | null
 ```

@@ -272,6 +272,7 @@ describe('is guards', () => {
         "
         Type 'Event<number> | EventCallable<number>' is not assignable to type 'Event<string>'.
           Type 'Event<number>' is not assignable to type 'Event<string>'.
+            Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           Overload 1 of 2, '(payload: number): number', gave the following error.
             Argument of type 'string' is not assignable to parameter of type 'number'.

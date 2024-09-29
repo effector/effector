@@ -152,17 +152,6 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 
 Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривается как фабричная функция, поэтому каждый созданный ею стор получит свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize) независимо, в то время как без `factories` они все будут иметь один и тот же `sid`.
 
-### reactSsr
-
-:::info
-Добавлено в effector 21.5.0
-:::
-
-- Type: `boolean`
-- Default: `false`
-
-Заменяет импорты из `effector-react` на `effector-react/scope`. Полезно для создания серверных и клиентских сборок из одной и той же кодовой базы.
-
 ### addNames
 
 :::info

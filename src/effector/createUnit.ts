@@ -2,7 +2,7 @@ import type {Template} from '../forest/index.h'
 import type {Store, Event, CommonUnit, Effect} from './unit.h'
 import type {Subscriber, Config, Cmd, Kind} from './index.h'
 
-import {observableSymbol} from './observable'
+import {observableSymbol} from './fromObservable'
 
 import {
   is,
@@ -11,13 +11,14 @@ import {
   assertObject,
   assertNodeSet,
   isVoid,
-} from './is'
+  assert,
+  deprecate,
+} from './validate'
 import {calc, mov, read, userFnCall} from './step'
 import {createStateRef, readRef, addRefOp} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
-import {own} from './own'
-import {createNode} from './createNode'
+import {createNode, createLinkNode, own} from './createNode'
 import {
   launch,
   currentPage,
@@ -29,9 +30,7 @@ import {
 } from './kernel'
 
 import {createName, generateErrorTitle} from './naming'
-import {createLinkNode} from './forward'
-import {watchUnit} from './watch'
-import {createSubscription} from './subscription'
+import {watchUnit, createSubscription} from './createWatch'
 import {readTemplate, readSidRoot, reportDeclaration} from './region'
 import {
   getSubscribers,
@@ -41,7 +40,6 @@ import {
   setMeta,
   getMeta,
 } from './getter'
-import {assert, deprecate} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
@@ -279,7 +277,6 @@ export function createStore<State>(
       launch({
         target: store,
         params: state,
-        defer: true,
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {

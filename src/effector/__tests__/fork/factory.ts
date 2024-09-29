@@ -18,3 +18,7 @@ export function createFieldset(fn: () => ReturnType<typeof createField>[]) {
   const fieldset = combine(shape)
   return {shape, fieldset, reset}
 }
+
+export function topLevelFactory(fn: any) {
+  return fn()
+}
