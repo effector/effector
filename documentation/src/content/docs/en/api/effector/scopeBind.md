@@ -70,8 +70,15 @@ sample({
 
 Binds arbitrary callback to a scope to be called later. The bound version of the function retains all properties of the original, e.g., if the original function would throw when called with a certain argument, the bound version will also throw under the same circumstances.
 
-:::info{title="since"}
-Feature is available since `effector 23.1.0` release.
+:::info{title="Since"}
+`effector 24` scopeBind can be called without `scope` in `map`, `watch`, `combine`
+
+```ts
+const event = createEvent();
+
+const $store = createStore(0);
+const $combined = combine($store, () => scopeBind(event));
+```
 :::
 
 :::warning
@@ -80,6 +87,7 @@ To be compatible with the Fork API, callbacks **must** adhere to the same rules 
 - Synchronous functions can be used as they are.
 - Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/scope/).
 
+Feature is available since `effector 23.1.0` release.
 :::
 
 ### Formulae (#scopeBind-methods-scopeBind-callback-formulae)
