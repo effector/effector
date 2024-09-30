@@ -8,6 +8,7 @@ import {
   Event,
   StoreWritable,
   EventCallable,
+  UnitTargetable,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -957,5 +958,255 @@ describe('cross mismatch', () => {
       lack of expected error at test line 8 'target: [str, num],'
       "
     `)
+  })
+})
+
+test('void target', () => {
+  const clock = createEvent<number>()
+  const voidt = createEvent<void>()
+  sample({clock, target: voidt})
+  sample({clock, target: [voidt]})
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
+describe('partial edge case', () => {
+  type Data = {
+    type: 'ticket' | 'search'
+    source: string
+  }
+  type SpreadData = Partial<{
+    type: 'ticket' | 'search' | null
+    source: string | null
+  }>
+  function spread<Payload>(
+    targets: {
+      [Key in keyof Payload]?: UnitTargetable<Payload[Key]>
+    },
+  ): EventCallable<Partial<Payload>> {
+    return createEvent<Partial<Payload>>()
+  }
+  const clock = createEvent<Data>()
+  const target = createEvent<SpreadData>()
+  const $filter = createStore(true)
+  const $type = createStore<'ticket' | 'search' | null>(null)
+  const $source = createStore<string | null>(null)
+  const voidTarget = createEvent()
+  describe('no inline', () => {
+    test('with filter, without array target (should pass)', () => {
+      sample({clock, filter: $filter, target})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('with filter, with array target (should pass)', () => {
+      sample({clock, filter: $filter, target: [target]})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('without filter, without array target (should pass)', () => {
+      sample({clock, target})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('without filter, with array target (should pass)', () => {
+      sample({clock, target: [target]})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+  })
+  describe('with inline', () => {
+    describe('with filter', () => {
+      describe('without array target', () => {
+        test('argument type (should pass)', () => {
+          sample({
+            clock,
+            filter: $filter,
+            target: voidTarget.prepend((args: SpreadData) => {}),
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+        test('generic type (should pass)', () => {
+          sample({
+            clock,
+            filter: $filter,
+            target: voidTarget.prepend<SpreadData>(args => {}),
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+        test('spread type (should pass)', () => {
+          sample({
+            clock,
+            filter: $filter,
+            target: spread({
+              type: $type,
+              source: $source,
+            }),
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+      })
+      describe('with array target', () => {
+        test('argument type (should pass)', () => {
+          sample({
+            clock,
+            filter: $filter,
+            target: [voidTarget.prepend((args: SpreadData) => {})],
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            Unmarked error at test line 4 'target: [voidTarget.prepend((args: SpreadData) => {})],'
+            Type 'EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]' is not assignable to type 'undefined'.
+            "
+          `)
+        })
+        test('generic type (should pass)', () => {
+          sample({
+            clock,
+            filter: $filter,
+            target: [voidTarget.prepend<SpreadData>(args => {})],
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+        test('spread type (should pass)', () => {
+          sample({
+            clock,
+            filter: $filter,
+            target: [
+              spread({
+                type: $type,
+                source: $source,
+              }),
+            ],
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            Unmarked error at test line 4 'target: ['
+            Type 'EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]' is not assignable to type 'undefined'.
+            "
+          `)
+        })
+      })
+    })
+    describe('without filter', () => {
+      describe('without array target', () => {
+        test('argument type (should pass)', () => {
+          sample({
+            clock,
+            target: voidTarget.prepend((args: SpreadData) => {}),
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+        test('generic type (should pass)', () => {
+          sample({
+            clock,
+            target: voidTarget.prepend<SpreadData>(args => {}),
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+        test('generic type (should pass)', () => {
+          sample({
+            clock,
+            target: spread({
+              type: $type,
+              source: $source,
+            }),
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+      })
+      describe('with array target', () => {
+        test('argument type (should pass)', () => {
+          sample({
+            clock,
+            target: [voidTarget.prepend((args: SpreadData) => {})],
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            Unmarked error at test line 1 'sample({'
+            Argument of type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to parameter of type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => clk is Data) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
+              Type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
+                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+                  Types of property 'target' are incompatible.
+                    Type 'EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]' is not assignable to type 'undefined'.
+            "
+          `)
+        })
+        test('generic type (should pass)', () => {
+          sample({
+            clock,
+            target: [voidTarget.prepend<SpreadData>(args => {})],
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            no errors
+            "
+          `)
+        })
+        test('spread type (should pass)', () => {
+          sample({
+            clock,
+            target: [
+              spread({
+                type: $type,
+                source: $source,
+              }),
+            ],
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            Unmarked error at test line 1 'sample({'
+            Argument of type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to parameter of type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => clk is Data) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
+              Type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
+                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+                  Types of property 'target' are incompatible.
+                    Type 'EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]' is not assignable to type 'undefined'.
+            "
+          `)
+        })
+      })
+    })
   })
 })
