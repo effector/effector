@@ -4563,9 +4563,9 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Unmarked error at test line 6 'clock: nullableAB,'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: number; }; }'.
+        lack of expected error at test line 4 'sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           })'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB; targetType: number; }; }'.
         Unmarked error at test line 12 'clock: nullableAB,'
         lack of expected error at test line 8 'target: strt,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
@@ -4900,9 +4900,9 @@ describe('no source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
         Unmarked error at test line 6 'clock: [ab,nullableAB],'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: number; }; }'.
+        lack of expected error at test line 4 'sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           })'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB; targetType: number; }; }'.
         Unmarked error at test line 12 'clock: [ab,nullableAB],'
         lack of expected error at test line 8 'target: strt,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.

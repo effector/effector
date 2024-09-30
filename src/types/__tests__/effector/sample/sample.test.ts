@@ -268,6 +268,7 @@ describe('no config', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -298,6 +299,7 @@ describe('no config', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -328,6 +330,7 @@ describe('no config', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<string>' is not assignable to type 'Event<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -394,6 +397,7 @@ describe('no config', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Store<string>' is not assignable to type 'Store<number>'.
+          Type 'string' is not assignable to type 'number'.
         "
       `)
     })
@@ -416,6 +420,7 @@ describe('no config', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           Type 'Event<string>' is not assignable to type 'Event<number>'.
+            Type 'string' is not assignable to type 'number'.
           "
         `)
       })
@@ -1168,7 +1173,7 @@ describe('partial edge case', () => {
             Unmarked error at test line 1 'sample({'
             Argument of type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to parameter of type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => clk is Data) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
               Type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"ticket\\" | \\"search\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
                   Types of property 'target' are incompatible.
                     Type 'EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]' is not assignable to type 'undefined'.
             "

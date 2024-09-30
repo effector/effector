@@ -100,6 +100,7 @@ describe('split', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           Type 'Event<string[]>' is not assignable to type 'Event<number>'.
+            Type 'string[]' is not assignable to type 'number'.
           "
         `)
       })
@@ -303,6 +304,7 @@ describe('is guards', () => {
         "
         Type 'Event<number> | EventCallable<number>' is not assignable to type 'Event<string>'.
           Type 'Event<number>' is not assignable to type 'Event<string>'.
+            Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           Overload 1 of 2, '(payload: number): number', gave the following error.
             Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -407,6 +409,11 @@ describe('is guards', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'StoreWritable<number>' is not assignable to type 'Store<string>'.
+          Types of property 'map' are incompatible.
+            Type '<T>(fn: (state: number) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+              Types of parameters 'fn' and 'fn' are incompatible.
+                Types of parameters 'state' and 'state' are incompatible.
+                  Type 'number' is not assignable to type 'string'.
         "
       `)
     })

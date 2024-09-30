@@ -150,6 +150,7 @@ describe('remap', () => {
         "
         Unmarked error at test line 3 'const foo1: Store<number> = foo'
         Type 'Store<string>' is not assignable to type 'Store<number>'.
+          Type 'string' is not assignable to type 'number'.
         Unmarked error at test line 6 'const bar2: Store<string> = bar'
         Type 'Store<number>' is not assignable to type 'Store<string>'.
           Type 'number' is not assignable to type 'string'.
