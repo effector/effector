@@ -462,16 +462,19 @@ export default () => {
             ]),
           ]),
         ]),
+        testCase,
       },
       variant: {
         _: {
           badFn: {goodFn: false},
+          oddCasesSource: {oddCases: true, testCase: 'source'},
           oddCases: {oddCases: true},
           commonCases: {},
         },
       } as const,
       cases: {
         badFn: value('badFn'),
+        oddCasesSource: value('oddCasesSource'),
         oddCases: value('oddCases'),
         commonCases: value(null),
       },
