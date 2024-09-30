@@ -4,7 +4,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector 23.2.3
 
-- Fix types for `attach({ effect })`, allowing to pass explicit `name` in this overload
+- Fix types for `attach({ effect })`, allowing to pass explicit `name` in this overload ([issue #1000](https://github.com/effector/effector/issues/1000))
 
 ## effector 23.2.2
 
