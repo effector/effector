@@ -40,6 +40,10 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
 
+## effector 23.2.3
+
+- Fix types for `attach({ effect })`, allowing to pass explicit `name` in this overload ([issue #1000](https://github.com/effector/effector/issues/1000))
+
 ## effector 23.2.2
 
 - Fix types for createEffect and attach in factories with generics ([issue #1069](https://github.com/effector/effector/issues/1069)). Cases like this now works correctly:

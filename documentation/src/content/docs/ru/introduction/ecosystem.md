@@ -32,18 +32,17 @@ redirectFrom:
 - [@effector/next](https://github.com/effector/next) 🛠 - Официальные привязки для Next.js
 - [effector-localstorage](https://github.com/lessmess-dev/effector-localstorage) 🛠 — Модуль для effector, который синхронизирует хранилища с localStorage.
 - [effector-hotkey](https://github.com/kelin2025/effector-hotkey) 🛠 — Горячие клавиши — это просто.
-- [atomic-router](https://github.com/atomic-router/atomic-router) ☢️ — Маршрутизатор, независимый от библиотеки.
+- [atomic-router](https://github.com/atomic-router/atomic-router) 🛠 — Роутер, не привязанный к view.
 - [effector-undo](https://github.com/tanyaisinmybed/effector-undo) ☢️ — Простая функция отмены/повтора.
 - [forest](https://github.com/effector/effector/tree/master/packages/forest) ☢️ — Реактивный движок ui для веб-приложений.
 - [effector-utils](https://github.com/Kelin2025/effector-utils) ⛔ — Библиотека утилит Effector.
 
 ## DX
 
-- [eslint-plugin-effector](https://eslint.effector.dev) 🛠 — Применение лучших практик.
-- [SWC plugin](https://github.com/effector/swc-plugin) ☢️ — Плагин SWC для эффективной работы с effector.
-- [effector-logger](https://github.com/effector/logger) 🛠 — Простой регистратор сторов, событий, эффектов и доменов.
-- [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Простой адаптер, который регистрирует обновления Redux DevTools..
-- [effector-swc-plugin](https://github.com/kireevmp/effector-swc-plugin) 🛠 — Сторонний плагин SWC.
+- [eslint-plugin-effector](https://eslint.effector.dev) 💚 — Применение лучших практик.
+- [@effector/swc-plugin](https://github.com/effector/swc-plugin) 💚 — Официальный SWC-плагин для Effector.
+- [effector-logger](https://github.com/effector/logger) 🛠 — Простой логгер сторов, событий, эффектов и доменов.
+- [@effector/redux-devtools-adapter](https://github.com/effector/redux-devtools-adapter) 🛠 - Простой адаптер, который логгирует обновления в Redux DevTools.
 
 ## Управление формами
 
@@ -58,5 +57,3 @@ redirectFrom:
 
 - [ViteJS+React Template](https://github.com/effector/vite-react-template) 💚 — Попробуйте эффектор с React и TypeScript за считанные секунды!
 - [ViteJS+TypeScript Template](https://github.com/mmnkuh/effector-vite-template) 🛠 — Еще один шаблон ViteJS + TypeScript.
-- [effector SSR](https://github.com/effector/razzle-template) ⛔️ — SSR на React, TypeScript, Razzle и Styled.
-- [CRA template](https://github.com/effector/cra-template) ⛔️ — Простой шаблон CreateReactApp.

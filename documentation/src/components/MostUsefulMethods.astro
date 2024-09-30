@@ -1,0 +1,89 @@
+---
+import { createLink, getPathParamsFromId, getTextLocalized } from "src/languages";
+import { type MostUsefulItem } from "src/navigation";
+
+interface Props {
+  items: MostUsefulItem[];
+}
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+const { items } = Astro.props;
+---
+
+<div class="flex flex-col gap-8">
+  {
+    items.map((packageGroup) => {
+      const PackageIcon = packageGroup.icon;
+      return (
+        <div class="package">
+          <div class="flex flex-nowrap gap-6">
+            <PackageIcon class="package-icon" size={64} />
+            <div class="flex flex-col gap-1">
+              <h3 class="package-title">{getTextLocalized(packageGroup, lang)}</h3>
+              <p>{getTextLocalized({ text: packageGroup.description }, lang)}</p>
+            </div>
+          </div>
+          <div class="groups">
+            {packageGroup.items.map((group) => {
+              const text = getTextLocalized(group, lang);
+
+              return (
+                <div class="group">
+                  <h5 class="title">{text}</h5>
+                  <div class="operators">
+                    {group.items.map((operator) => {
+                      const href = createLink(operator, lang);
+                      const text = getTextLocalized(operator, lang);
+
+                      return (
+                        <a href={href} class="operator">
+                          <span>{text}</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })
+  }
+</div>
+
+<style>
+  .package {
+    @apply relative flex flex-col gap-6 rounded-xl p-4 shadow;
+    background-color: var(--theme-card);
+  }
+  .package h3.package-title {
+    @apply m-0;
+  }
+  .package .package-icon {
+  }
+  .package .groups {
+    @apply flex flex-wrap gap-6;
+  }
+
+  .group {
+    @apply flex min-w-0 flex-col gap-1;
+  }
+  .group > .title {
+    @apply text-sm font-medium uppercase;
+    min-width: 18ch;
+  }
+  .group .operators {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .operator {
+    @apply rounded-full border px-2 py-1 text-sm;
+    color: var(--theme-text);
+    border-color: var(--theme-divider);
+  }
+
+  .operator:hover {
+    background-color: var(--theme-divider);
+  }
+</style>

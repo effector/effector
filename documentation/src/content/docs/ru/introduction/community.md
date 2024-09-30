@@ -19,7 +19,7 @@ redirectFrom:
 
 ## Где я могу задать вопрос?
 
-1. Прежде всего, вы можете посмотреть [ишью](https://github.com/effector/effector/issues) and [дискуссии](https://github.com/effector/effector/discussions) в репозитории
+1. Прежде всего, вы можете посмотреть [ишью](https://github.com/effector/effector/issues) и [дискуссии](https://github.com/effector/effector/discussions) в репозитории
 2. У нас есть несколько чатов:
    - Telegram — [t.me/effector_en](https://t.me/effector_en)
    - Discord — [discord.gg/t3KkcQdt](https://discord.gg/t3KkcQdt)
@@ -93,9 +93,6 @@ redirectFrom:
 <img width="256" src="https://avatars.githubusercontent.com/u/26767722?v=4" />
 
 [Github](https://github.com/igorkamyshev) • [Telegram](https://t.me/igorkamyshev) • [Commits](https://github.com/effector/effector/commits?author=igorkamyshev)
-
-Igor is working on [Farfetched](https://ff.effector.dev) is the advanced data fetching tool.
-Igor made [eslint-plugin-effector](https://eslint.effector.dev) and reviewed many of the PRs and issues of the effector and ecosystem packages.
 
 Игорь работает над [Farfetched](https://ff.effector.dev) - это продвинутый инструмент для получения данных.
 Игорь сделал [eslint-plugin-effector](https://eslint.effector.dev) и ревьюит многие PR и ишью пакетов effector и экосистемы.

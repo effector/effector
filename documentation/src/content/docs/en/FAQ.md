@@ -6,6 +6,10 @@ redirectFrom:
   - /en/docs/faq
 ---
 
+## Why do we need babel/swc plugin for SSR?
+
+Effector plugins inserts special tags - SIDs - into the code, it help to automate serialization and deserialization of stores, so users doesn't have to think about it. See [article about sids](/en/explanation/sids) for more info.
+
 ## Why do we need to give names to events, effects etc. ?
 
 This will help in the future, in the development of the effector devtools, and now it is used in the [playground](https://share.effector.dev) on the left sidebar.

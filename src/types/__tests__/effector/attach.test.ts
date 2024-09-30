@@ -180,6 +180,16 @@ test('without source and mapParams (should pass)', () => {
   `)
 })
 
+test('effect with explicit name (should pass)', () => {
+  const effect: Effect<void, void, Error> = createEffect()
+  const fx: Effect<void, void, Error> = attach({effect, name: 'fx'})
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
 describe('unknown params type', () => {
   test('unknown params type [with source] (?)', () => {
     const source = createStore(0)
