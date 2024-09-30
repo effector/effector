@@ -24,6 +24,11 @@ const transform = {
   '^.+\\.tsx?$': 'babel-jest',
 }
 
+const typeTestsTransform = {
+  '^.+\\.jsx?$': ['babel-jest', {sourceMaps: true}],
+  '^.+\\.tsx?$': ['babel-jest', {sourceMaps: true}],
+}
+
 // babel-jest defaults `root` to jest rootDir, so it has to be pointed at the
 // solid config explicitly, otherwise the root babel.config.js wins
 const solidBabelRoot = resolvePath(__dirname, 'src/solid')
@@ -250,7 +255,7 @@ module.exports = {
           ],
           globalSetup: './src/types/src/globalSetup.ts',
           globalTeardown: './src/types/src/globalTeardown.ts',
-          transform,
+          transform: typeTestsTransform,
         },
       },
     ],
