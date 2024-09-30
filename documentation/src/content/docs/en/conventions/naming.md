@@ -2,8 +2,8 @@
 title: Naming
 description: Naming conventions for stores, events and effects
 redirectFrom:
-  - /docs/conventions/naming
-  - /conventions/naming
+  - /en/docs/conventions/naming
+  - /en/conventions/naming
 ---
 
 First of all, to avoid any misconceptions and get better developer experience for all of us. This document contains several pretty simple rules to keep consistency between different projects written with effector.

@@ -100,8 +100,10 @@
   --theme-text-light: hsla(var(--color-gray-30), 1);
   --theme-text-lighter: hsla(var(--color-gray-80), 1);
 
+  --theme-header-lighter: hlsa(var(--color-gray-10), 1);
+
   --theme-bg: hsla(var(--color-stone-10), 1);
-  --theme-bg-hover: hsla(var(--color-gray-95), 1);
+  --theme-bg-hover: hsla(var(--color-gray-90), 1);
   --theme-bg-offset: hsla(var(--color-gray-90), 1);
   --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
 
@@ -166,6 +168,8 @@ body {
   --theme-text: hsla(var(--color-gray-90), 1);
   --theme-text-light: hsla(var(--color-gray-80), 1);
   --theme-text-lighter: hsla(var(--color-gray-40), 1);
+
+  --theme-header-lighter: hlsa(var(--color-gray-10), 1);
 
   --theme-bg: hsla(var(--color-zinc-80), 1);
   --theme-bg-hover: hsla(var(--color-zinc-90), 1);

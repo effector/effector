@@ -467,7 +467,7 @@ const second = first.map((count) => count.toString());
 // second: Event<string>
 ```
 
-The `first` event can be represented as either `Event<T>` or `Event<T>`. <br/>
+The `first` event can be represented as either `Event<T>` or `EventCallable<T>`. <br/>
 The `second` event will always be represented as `Event<T>`.
 
 #### Examples (#event-methods-map-fn-examples)
@@ -826,7 +826,7 @@ Read more:
 ## Properties (#event-properties)
 
 These set of property is mostly set by [`effector/babel-plugin`](/en/api/effector/babel-plugin)
-or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin). So they are exist only when babel or SWC is used.
+or [`@effector/swc-plugin`](/en/api/effector/swc-plugin). So they are exist only when babel or SWC is used.
 
 ### `.sid` (#event-properties-sid)
 
@@ -863,7 +863,7 @@ const another = demo;
 This property contains the full internal chain of units. For example, event can be created by the domain, so the
 composite name will contain a domain name inside it.
 
-:::note
+:::tip{title="Keep in mind"}
 Usually, if long name is needed, is better to pass it explicitly to `name` field
 :::
 
