@@ -2050,14 +2050,14 @@ type RebuildClockTargetLoop<
       : Unit<TargetType>
   : ClockUnit
 
-type RebuildClockLoop<
+type RebuildClockLoopBranch<
   Clock extends readonly unknown[],
   Target extends readonly unknown[],
   Result extends RoTuple<Unit<any>>,
   FilterMode extends ('noFilter' | 'Boolean')
 > = Clock extends readonly [infer ClockUnit, ...infer ClockRest]
   ? ClockUnit extends Unit<infer ClockType>
-    ? RebuildClockLoop<
+    ? RebuildClockLoopBranch<
       ClockRest,
       Target,
       [
@@ -2072,6 +2072,40 @@ type RebuildClockLoop<
     >
     : never
   : Result
+
+type RebuildClockLoop<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<Unit<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Clock extends readonly [infer ForceFirst, ...infer ForceRest]
+  ? RebuildClockLoopBranch<
+    Clock,
+    Target,
+    Result,
+    FilterMode
+  >
+  // non-inline array unable to match condition above
+  // so we handle it in separate branch
+  : Clock extends Array<UnitTargetable<infer ClockType>>
+    ? Array<RebuildClockTargetLoop<
+      UnitTargetable<ClockType>,
+      ClockType,
+      Target
+    >>
+    : never
+
+type RebuildClockSingle<
+  Clock,
+  Target extends readonly unknown[],
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Clock extends Unit<infer ClockType>
+    ? RebuildClockTargetLoop<
+      Clock,
+      FilterMode extends 'noFilter' ? ClockType : NonNullable<ClockType>,
+      Target
+    >
+    : never
 
 type ToResultConfig<
   Mode,
@@ -2161,18 +2195,6 @@ type RebuildTargetValueByFnReturn<
     ? FnRetSubtype
     : RebuildTargetValueByFnReturn<TargetType, Exclude<FnRetType, FnRetSubtype>>
 
-type RebuildClockSingle<
-  Clock,
-  Target extends readonly unknown[],
-  FilterMode extends ('noFilter' | 'Boolean')
-> = Clock extends Unit<infer ClockType>
-    ? RebuildClockTargetLoop<
-      Clock,
-      FilterMode extends 'noFilter' ? ClockType : NonNullable<ClockType>,
-      Target
-    >
-    : never
-
 type RebuildTargetClockLoopBranch<
   FilterMode extends ('noFilter' | 'Boolean'),
   ClockTypeRaw,
@@ -2201,14 +2223,14 @@ type RebuildTargetClockLoop<
     >
     : TargetUnit
 
-type RebuildTargetLoop<
+type RebuildTargetLoopBranch<
   Clock extends readonly unknown[],
   Target extends readonly unknown[],
   Result extends RoTuple<UnitTargetable<any>>,
   FilterMode extends ('noFilter' | 'Boolean')
 > = Target extends readonly [infer TargetUnit, ...infer TargetRest]
   ? TargetUnit extends UnitTargetable<infer TargetType>
-    ? RebuildTargetLoop<
+    ? RebuildTargetLoopBranch<
       Clock,
       TargetRest,
       [
@@ -2219,6 +2241,29 @@ type RebuildTargetLoop<
     >
     : never
   : Result
+
+type RebuildTargetLoop<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<UnitTargetable<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Target extends readonly [infer TargetUnit, ...infer TargetRest]
+  ? RebuildTargetLoopBranch<
+    Clock,
+    Target,
+    Result,
+    FilterMode
+  >
+  // non-inline array unable to match condition above
+  // so we handle it in separate branch
+  : Target extends Array<UnitTargetable<infer TargetType>>
+    ? Array<RebuildTargetClockLoop<
+      Clock,
+      UnitTargetable<TargetType>,
+      TargetType,
+      FilterMode
+    >>
+    : never
 
 type RebuildTargetSingle<
   Clock extends readonly unknown[],

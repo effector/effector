@@ -1211,9 +1211,7 @@ test('sample should accept non-inline arrays in clock (should pass)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 4 'clock,'
-    Type 'EventCallable<void>[]' is not assignable to type '[]'.
-      Target allows only 0 element(s) but source may have more.
+    no errors
     "
   `)
 })
@@ -1243,9 +1241,7 @@ test('sample should accept non-inline arrays in target (should pass)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 5 'target,'
-    Type 'EventCallable<void>[]' is not assignable to type '[]'.
-      Target allows only 0 element(s) but source may have more.
+    no errors
     "
   `)
 })
