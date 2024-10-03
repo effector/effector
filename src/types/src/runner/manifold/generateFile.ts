@@ -55,22 +55,45 @@ export function generateFileData({cases}: {cases: Array<() => void>}) {
   > = {}
   for (const caseFn of cases) {
     const execResult = exec(caseFn, fileGeneratorConfStruct)
-    const {finalLines: generatedLines, resultCasesItems} = createGroupedCases(
-      byFields(execResult.plan, execResult.config, execResult.items).map(
-        e => e.value,
-      ),
-      execResult.grouping,
-    )
-    const file = execResult.file!
     const header = execResult.header!.trim()
     const usedMethods = execResult.usedMethods!
-    if (!(file in fileMap)) fileMap[file] = []
-    fileMap[file].push({
-      header,
-      usedMethods,
-      generatedLines,
-      caseItems: resultCasesItems,
-    })
+    const file = execResult.file!
+    const childFileDecl = execResult.childFile
+    const generatedValues = byFields(
+      execResult.plan,
+      execResult.config,
+      execResult.items,
+    ).map(e => e.value)
+    const filesGeneratedValues = new Map<string, typeof generatedValues>([
+      [file, []],
+    ])
+    if (childFileDecl) {
+      for (const generatedValue of generatedValues) {
+        const childFileValue = generatedValue[childFileDecl.name]
+        const currentFile =
+          typeof childFileValue === 'string'
+            ? `${file}/${childFileValue}`
+            : file
+        const values = filesGeneratedValues.get(currentFile) ?? []
+        values.push(generatedValue)
+        filesGeneratedValues.set(currentFile, values)
+      }
+    } else {
+      filesGeneratedValues.set(file, generatedValues)
+    }
+    for (const [currentFile, values] of filesGeneratedValues) {
+      const {finalLines: generatedLines, resultCasesItems} = createGroupedCases(
+        values,
+        execResult.grouping,
+      )
+      if (!(currentFile in fileMap)) fileMap[currentFile] = []
+      fileMap[currentFile].push({
+        header,
+        usedMethods,
+        generatedLines,
+        caseItems: resultCasesItems,
+      })
+    }
   }
   const jsonOutput: JsonOutput = {
     usedMethods: [],
@@ -105,18 +128,13 @@ export function generateFileData({cases}: {cases: Array<() => void>}) {
         fileLines.push('}')
       }
     }
-    const fullFileName = resolve(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      '__tests__',
-      'effector',
-      ...`${file}.test.ts`.split('/'),
+    const fullFileName = resolveFullPathFromTestsRoot(
+      `${file}.test.ts`.split('/'),
     )
+    const relativeDirPath = file.split('/').slice(0, -1)
     const readableFileName = `__tests__/effector/${file}.test.ts`
     const content = fileLines.join(`\n`)
-    return {fullFileName, content, readableFileName}
+    return {fullFileName, content, readableFileName, relativeDirPath}
   })
   jsonOutput.header = [
     '/* eslint-disable no-unused-vars */',
@@ -141,6 +159,20 @@ export function generateFileData({cases}: {cases: Array<() => void>}) {
 
 export async function generateFile({cases}: {cases: Array<() => void>}) {
   const {jsonResult, fileResults} = generateFileData({cases})
+  const dirPaths = new Set<string>()
+  for (const {relativeDirPath} of fileResults) {
+    const joinedPath = relativeDirPath.join('/')
+    if (dirPaths.has(joinedPath)) continue
+    dirPaths.add(joinedPath)
+    const dirFullPath = resolveFullPathFromTestsRoot(relativeDirPath)
+    const hasAccess = await promises.access(dirFullPath).then(
+      () => true,
+      () => false,
+    )
+    if (!hasAccess) {
+      await promises.mkdir(dirFullPath, {recursive: true}).catch(() => {})
+    }
+  }
   await Promise.all(
     fileResults.map(({fullFileName, content}) =>
       promises.writeFile(fullFileName, content),
@@ -152,4 +184,16 @@ export async function generateFile({cases}: {cases: Array<() => void>}) {
   )
   const filesTotal = fileResults.map(({readableFileName}) => readableFileName)
   console.log(`generated files:\n${filesTotal.join(`\n`)}`)
+}
+
+function resolveFullPathFromTestsRoot(fileParts: string[]) {
+  return resolve(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    '__tests__',
+    'effector',
+    ...fileParts,
+  )
 }

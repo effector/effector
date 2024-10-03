@@ -1,3 +1,4 @@
+import {DataDecl} from 'runner/manifold/types'
 import {
   computeFn,
   union,
@@ -43,11 +44,21 @@ const fnVariants = {
   noFnClock: {typedFn: false, fnClock: false},
 }
 
+type TargetType =
+  | 'l_num'
+  | 'l_str'
+  | 'l_num_str'
+  | 'l_num_num'
+  | 'a_num'
+  | 'a_str'
+  | 'abn'
+  | 'ab'
+
 const failCases = {
-  a: ['a_str', 'abn', 'ab', 'a_str_b_num', 'a_str_b_str'],
-  ab: ['a_str', 'abn'],
-  tuple_a: ['l_str', 'l_num_num', 'l_num_str'],
-  tuple_aa: ['l_str', 'l_num_num'],
+  a: ['a_str', 'abn', 'ab', 'a_str_b_num', 'a_str_b_str'] as const,
+  ab: ['a_str', 'abn'] as const,
+  tuple_a: ['l_str', 'l_num_num', 'l_num_str'] as const,
+  tuple_aa: ['l_str', 'l_num_num'] as const,
 }
 
 export default () => {
@@ -256,12 +267,12 @@ export default () => {
       },
     } as const,
     cases: {
-      tuple: permute({
+      tuple: permute<TargetType>({
         items: ['l_num', 'l_str', 'l_num_str', 'l_num_num'],
         amount: {min: 1, max: 2},
         noReorder: true,
       }),
-      object: permute({
+      object: permute<TargetType>({
         items: ['a_num', 'a_str', 'abn', 'ab'],
         amount: {min: 1, max: 2},
         noReorder: true,
@@ -274,14 +285,14 @@ export default () => {
     fn({target}) {
       return target.map(
         //@ts-expect-error
-        (item: keyof typeof variables) => variables[item] || item,
+        item => variables[item] || item,
       )
     },
   })
   sortOrder([hasClock, source, sourceDescription, fnDescription, fnText, fn])
   config({
     header,
-    file: 'generated/sampleArrayTarget',
+    file: 'generated/sampleArrayTargetCombinable',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     grouping: {
       pass: computeFn({
@@ -295,8 +306,8 @@ export default () => {
           if (noFalsePositive) return false
           if (fn)
             return failCases.ab.every(failCase => !target.includes(failCase))
-          return failCases[source as keyof typeof failCases].every(
-            failCase => !target.includes(failCase),
+          return failCases[source].every(
+            failCase => !target.includes(failCase as TargetType),
           )
         },
       }),
@@ -308,7 +319,38 @@ export default () => {
             field: value('num'),
             when: hasClock,
           },
-          target: targetText,
+          target: {
+            field: targetText,
+            markError: separate({
+              source: {source, fn},
+              variant: {
+                fnType: {
+                  hasFn: {fn: true},
+                  noFn: {fn: false},
+                },
+                sourceType: {
+                  objectBig: {source: 'ab'},
+                  objectSmall: {source: 'a'},
+                  tupleBig: {source: 'tuple_aa'},
+                  tupleSmall: {source: 'tuple_a'},
+                },
+              } as const,
+              cases: {
+                //@ts-expect-error
+                hasFn: value<TargetType[]>(['a_str', 'abn']),
+                noFn: {
+                  objectBig: value<TargetType[]>(['a_str', 'abn']),
+                  objectSmall: value<TargetType[]>(['a_str', 'abn', 'ab']),
+                  tupleBig: value<TargetType[]>(['l_num_num', 'l_str']),
+                  tupleSmall: value<TargetType[]>([
+                    'l_num_num',
+                    'l_num_str',
+                    'l_str',
+                  ]),
+                },
+              },
+            }) as DataDecl<TargetType[]>,
+          },
           fn: {
             field: fnText,
             when: fn,

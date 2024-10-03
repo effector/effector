@@ -1,14 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  sample,
-  Store,
-  Event,
-  guard,
-} from 'effector'
+import {createStore, createEvent, sample} from 'effector'
 
 const typecheck = '{global}'
 
@@ -123,7 +115,7 @@ describe('basic cases', () => {
     sample({source: num, clock: anyt, target: [num, str]})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 5 'sample({source: num, clock: anyt, target: [num, str]})'
       "
     `)
   })
@@ -137,7 +129,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 5 'sample({source: num, clock: anyt, target: [str, num]})'
       "
     `)
   })
@@ -152,7 +144,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 6 'sample({source: num, clock: anyt, target: [numberString, str]})'
       "
     `)
   })
@@ -167,7 +159,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 6 'sample({source: num, clock: anyt, target: [str, numberString]})'
       "
     `)
   })
@@ -181,7 +173,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 5 'sample({source: num, clock: anyt, target: [num, stringBoolean]})'
       "
     `)
   })
@@ -195,7 +187,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 5 'sample({source: num, clock: anyt, target: [stringBoolean, num]})'
       "
     `)
   })
@@ -239,7 +231,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 5 'sample({source: num, clock: anyt, target: [anyt, str]})'
       "
     `)
   })
@@ -253,7 +245,7 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 5 'sample({source: num, clock: anyt, target: [str, anyt]})'
       "
     `)
   })
@@ -369,7 +361,7 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 6 'sample({source: {a: $num}, clock: anyt, target: [a_num, a_str]})'
       "
     `)
   })
@@ -399,7 +391,7 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 7 'sample({source: {a: $num}, clock: anyt, target: [a_num_b_num, a_num]})'
       "
     `)
   })
@@ -454,6 +446,7 @@ describe('combinable source list (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 5 'sample({source: [$num], clock: anyt, target: [l_num]})'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }[]; }'.
       "
     `)
@@ -472,6 +465,7 @@ describe('combinable source list (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 6 'source: [$num, $num],'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
       "
     `)

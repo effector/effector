@@ -2120,6 +2120,7 @@ test('split + attach', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 1 'source: $number,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"config should be object with fields \\\\\\"source\\\\\\", \\\\\\"match\\\\\\" and \\\\\\"cases\\\\\\"\\"; got: { source: StoreWritable<number>; match: {}; cases: unknown; clock: unknown; }; }'.
     "
   `)

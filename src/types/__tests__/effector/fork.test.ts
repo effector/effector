@@ -146,7 +146,7 @@ describe('fork values', () => {
           Overload 1 of 4, '(iterable?: Iterable<readonly [StoreWritable<number>, number]> | null | undefined): Map<StoreWritable<number>, number>', gave the following error.
             Argument of type '([StoreWritable<number>, number] | [StoreWritable<string>, string])[]' is not assignable to parameter of type 'Iterable<readonly [StoreWritable<number>, number]>'.
               The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-                Type 'IteratorResult<[StoreWritable<number>, number] | [StoreWritable<string>, string], any>' is not assignable to type 'IteratorResult<readonly [StoreWritable<number>, number], any>'.
+                Type 'IteratorResult<[StoreWritable<number>, number] | [StoreWritable<string>, string], undefined>' is not assignable to type 'IteratorResult<readonly [StoreWritable<number>, number], any>'.
                   Type 'IteratorYieldResult<[StoreWritable<number>, number] | [StoreWritable<string>, string]>' is not assignable to type 'IteratorResult<readonly [StoreWritable<number>, number], any>'.
                     Type 'IteratorYieldResult<[StoreWritable<number>, number] | [StoreWritable<string>, string]>' is not assignable to type 'IteratorYieldResult<readonly [StoreWritable<number>, number]>'.
                       Type '[StoreWritable<number>, number] | [StoreWritable<string>, string]' is not assignable to type 'readonly [StoreWritable<number>, number]'.

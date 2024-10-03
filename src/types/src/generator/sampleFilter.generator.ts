@@ -11,6 +11,10 @@ import {
   config,
   sortOrder,
   fmt,
+  every,
+  not,
+  matchUnion,
+  some,
 } from '../runner/manifold/operators'
 import {Separate} from 'runner/manifold/types'
 
@@ -42,7 +46,8 @@ export default () => {
       'bad return',
     ],
   })
-  const sourceType = separate({
+  //@ts-expect-error
+  const sourceType: Separate<'no' | 'unit' | 'object' | 'tuple'> = separate({
     source: {clockType, filterType},
     variant: {
       clock: {
@@ -55,6 +60,7 @@ export default () => {
       },
     } as const,
     cases: {
+      //@ts-expect-error
       noClock: {
         boolFilter: union(['unit']),
         nonBool: union(['unit', 'object', 'tuple']),
@@ -80,7 +86,6 @@ export default () => {
       },
     } as const,
     cases: {
-      //@ts-ignore
       object: {
         targetUnit: union(['fullObject', 'nullableField', 'smallObject']),
       },
@@ -163,7 +168,6 @@ export default () => {
   })
   const wrongTarget = flag({
     needs: targetIsTyped,
-    avoid: noSource,
   })
   const targetSubtype = separate({
     source: {sourceSubtype, wrongTarget},
@@ -181,7 +185,7 @@ export default () => {
     cases: {
       smallObject: {
         correct: value('smallObject' as const),
-        wrong: union(['tooWideObject', 'wrongFieldSmall']),
+        wrong: union(['tooWideObject', 'wrongFieldSmall'] as const),
       },
       nullableField: {
         correct: value('smallObject' as const),
@@ -263,6 +267,49 @@ export default () => {
     }),
     sort: [false, true],
   })
+
+  const badFilter = bool({
+    source: {
+      targetAny,
+      targetVoid,
+      clockIsArray: bool({source: {clockType}, true: {clockType: 'array'}}),
+      fnType,
+      wrongTarget,
+    },
+    true: [
+      {
+        targetAny: false,
+        targetVoid: false,
+        clockIsArray: false,
+        wrongTarget: false,
+        fnType: 'good untyped',
+      },
+      {
+        targetAny: false,
+        targetVoid: false,
+        clockIsArray: false,
+        wrongTarget: false,
+        fnType: 'no',
+      },
+    ],
+  })
+
+  const badFilterType = separate({
+    source: {
+      isFn: flag({needs: badFilter}),
+    },
+    variant: {
+      byFlag: {
+        isFn: {isFn: true},
+        isNull: {},
+      },
+    },
+    cases: {
+      isFn: value('isFn' as const),
+      isNull: value('isNull' as const),
+    },
+  })
+
   //@ts-expect-error
   const filterFnType: Separate<
     | 'no'
@@ -271,9 +318,15 @@ export default () => {
     | 'good typed'
     | 'bad untyped'
     | 'bad typed'
-    | 'bad return'
+    | 'bad filter'
   > = separate({
-    source: {sourceType, clockType, filterType, inferByFilter},
+    source: {
+      sourceType,
+      clockType,
+      filterType,
+      inferByFilter,
+      badFilter,
+    },
     variant: {
       src: {
         noSource: {sourceType: 'no'},
@@ -285,6 +338,7 @@ export default () => {
       } as const,
       infer: {
         infer: {inferByFilter: true},
+        noInferNoLooseTypes: {badFilter: true},
         noInfer: {},
       } as const,
     } as const,
@@ -293,12 +347,18 @@ export default () => {
       noSource: {
         fn: {
           infer: union(['infer']),
+          noInferNoLooseTypes: union([
+            'good untyped',
+            'good typed',
+            'bad untyped',
+            'bad typed',
+            'bad filter',
+          ]),
           noInfer: union([
             'good untyped',
             'good typed',
             'bad untyped',
             'bad typed',
-            'bad return',
           ]),
         },
         rest: union(['no']),
@@ -325,6 +385,20 @@ export default () => {
     ],
     sort: [false, true],
   })
+  type TargetType =
+    | 'aNum'
+    | 'lNum'
+    | 'ab'
+    | 'aNum'
+    | 'aStr'
+    | 'voidt'
+    | 'anyt'
+    | '$ab'
+    | 'strt'
+    | 'abn'
+    | 'lNumStr'
+    | 'lNumNum'
+    | 'lStr'
   function permuteTargets({
     correctObject,
     correctObjectWide,
@@ -335,14 +409,14 @@ export default () => {
     wrongTuple,
     wrongTupleWide,
   }: {
-    correctObject: string[]
-    correctObjectWide: string[]
-    wrongObject: string[]
-    wrongObjectWide: string[]
-    correctTuple: string[]
-    correctTupleWide: string[]
-    wrongTuple: string[]
-    wrongTupleWide: string[]
+    correctObject: TargetType[]
+    correctObjectWide: TargetType[]
+    wrongObject: TargetType[]
+    wrongObjectWide: TargetType[]
+    correctTuple: TargetType[]
+    correctTupleWide: TargetType[]
+    wrongTuple: TargetType[]
+    wrongTupleWide: TargetType[]
   }) {
     return {
       nonTuple: {
@@ -368,7 +442,7 @@ export default () => {
     }
   }
   //@ts-expect-error
-  const targetValue: Separate<string | string[]> = separate({
+  const targetValue: Separate<TargetType | TargetType[]> = separate({
     source: {
       targetType,
       targetSubtype,
@@ -412,7 +486,7 @@ export default () => {
       },
     } as const,
     cases: {
-      //@ts-ignore
+      //@ts-expect-error
       smallObject: value('aNum'),
       smallTuple: value('lNum'),
       tooWideObject: value('ab'),
@@ -571,12 +645,6 @@ export default () => {
       __: value(null),
     },
   })
-  const targetCode = computeFn({
-    source: {targetValue},
-    fn({targetValue}) {
-      return Array.isArray(targetValue) ? printArray(targetValue) : targetValue
-    },
-  })
   const clockCode = separate({
     source: {clockType, sourceType, fnSecondArg},
     variant: {
@@ -669,6 +737,7 @@ export default () => {
       sourceSubtype,
       inferByFilter,
       filterFnType,
+      badFilterType,
     },
     variant: {
       Afilter: {
@@ -700,7 +769,8 @@ export default () => {
         goodTyped: {filterFnType: 'good typed'},
         badUntyped: {filterFnType: 'bad untyped'},
         badTyped: {filterFnType: 'bad typed'},
-        badReturn: {filterFnType: 'bad return'},
+        badReturn: {filterFnType: 'bad filter', badFilterType: 'isFn'},
+        badFilter: {filterFnType: 'bad filter', badFilterType: 'isNull'},
       },
     },
     cases: {
@@ -742,6 +812,7 @@ export default () => {
               badUntyped: value('(clk) => clk.a > 0'),
               badTyped: value('(clk: AB) => clk.a > 0'),
               badReturn: value('() => 1'),
+              badFilter: value('null'),
             },
           },
           unit: {
@@ -782,28 +853,86 @@ export default () => {
       sourceType,
       clockType,
       targetType,
-      targetCode,
+      targetValue,
       fnType,
+      filterFnType,
+      badFilterType,
     },
     fn({
       sourceIsWiderThatTarget,
       sourceType,
       clockType,
       targetType,
-      targetCode,
+      targetValue,
       fnType,
+      filterFnType,
+      badFilterType,
     }) {
-      return `${
-        sourceType === 'no'
-          ? ''
-          : `${sourceType}${clockType === 'no' ? '' : ' + '}`
-      }${clockType === 'no' ? '' : clockType === 'unit' ? 'clock' : '[clock]'}${
-        fnType === 'no' ? '' : ', fn'
-      } -> ${targetCode ? targetType : 'new unit'} ${
-        sourceIsWiderThatTarget ? 'wide' : 'same'
-      }`
+      if (filterFnType === 'bad filter') {
+        if (badFilterType === 'isFn') return 'bad return'
+        if (badFilterType === 'isNull') return 'not a function'
+      }
+      const src = sourceType === 'no' ? '' : sourceType
+      const srcClkSep = sourceType === 'no' || clockType === 'no' ? '' : ' + '
+      const clk =
+        clockType === 'no' ? '' : clockType === 'unit' ? 'clock' : '[clock]'
+      const fn = fnType === 'no' ? '' : ', fn'
+      const trg = targetValue ? targetType : 'new unit'
+      const isWider = sourceIsWiderThatTarget ? 'wide' : 'same'
+      return `${src}${srcClkSep}${clk}${fn} -> ${trg} ${isWider}`
     },
   })
+
+  const pass = bool({
+    source: {
+      wrongTarget,
+      sourceType,
+      targetType,
+      sourceSubtype,
+      filterType,
+      inferByFilter,
+      fnType,
+      filterFnType,
+    },
+    //prettier-ignore
+    false: [
+      {wrongTarget: true},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad typed'},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad untyped'},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad return'},
+      {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'no'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad typed'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad untyped'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad return'},
+      {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'no'},
+      {sourceSubtype: 'nullableField', fnType: 'bad typed'},
+      {sourceSubtype: 'nullableField', fnType: 'bad untyped'},
+      {sourceSubtype: 'nullableField', fnType: 'bad return'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad typed'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad untyped'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad return'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'no'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad typed'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad untyped'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad return'},
+      {sourceType: 'no', targetType: 'unit', filterType: 'fn', inferByFilter: false, fnType: 'no'},
+      {sourceType: 'no', fnType: 'bad typed'},
+      {sourceType: 'no', fnType: 'bad untyped'},
+      {sourceType: 'no', targetType: 'unit', fnType: 'bad return'},
+      {sourceType: 'no', filterFnType: 'bad typed'},
+      {sourceType: 'no', filterFnType: 'bad untyped'},
+      {sourceType: 'no', filterFnType: 'bad filter'},
+    ],
+  })
+
+  const isTypedArgs = every([
+    some([
+      matchUnion(filterFnType, ['good typed', 'bad typed']),
+      matchUnion(fnType, ['good typed', 'bad typed']),
+    ]),
+    not(fnSecondArg),
+    matchUnion(sourceType, 'no'),
+  ])
 
   sortOrder([
     inferByFilter,
@@ -821,48 +950,17 @@ export default () => {
     file: 'generated/sampleFilter',
     usedMethods: ['createStore', 'createEvent', 'sample'],
     header,
+    childFile: computeFn({
+      source: {filterFnType, isTypedArgs},
+      fn: ({filterFnType, isTypedArgs}) =>
+        filterFnType === 'bad filter'
+          ? 'badFilter'
+          : isTypedArgs
+          ? 'typedArgs'
+          : null,
+    }),
     grouping: {
-      pass: bool({
-        source: {
-          wrongTarget,
-          sourceType,
-          targetType,
-          sourceSubtype,
-          filterType,
-          inferByFilter,
-          fnType,
-          filterFnType,
-        },
-        //prettier-ignore
-        false: [
-          {wrongTarget: true},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad typed'},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad untyped'},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'bad return'},
-          {sourceSubtype: 'nullableField', filterType: 'store', fnType: 'no'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad typed'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad untyped'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'bad return'},
-          {sourceSubtype: 'nullableField', filterType: 'fn', inferByFilter: false, fnType: 'no'},
-          {sourceSubtype: 'nullableField', fnType: 'bad typed'},
-          {sourceSubtype: 'nullableField', fnType: 'bad untyped'},
-          {sourceSubtype: 'nullableField', fnType: 'bad return'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad typed'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad untyped'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'bad return'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'store', fnType: 'no'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad typed'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad untyped'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', fnType: 'bad return'},
-          {sourceType: 'no', targetType: 'unit', filterType: 'fn', inferByFilter: false, fnType: 'no'},
-          {sourceType: 'no', fnType: 'bad typed'},
-          {sourceType: 'no', fnType: 'bad untyped'},
-          {sourceType: 'no', targetType: 'unit', fnType: 'bad return'},
-          {sourceType: 'no', filterFnType: 'bad typed'},
-          {sourceType: 'no', filterFnType: 'bad untyped'},
-          {sourceType: 'no', filterFnType: 'bad return'},
-        ],
-      }),
+      pass,
       getHash: [
         inferByFilter,
         sourceIsWiderThatTarget,
@@ -872,6 +970,8 @@ export default () => {
         fnType,
         targetType,
         clockType,
+        filterFnType,
+        badFilterType,
       ],
       tags: {
         inferByFilter,
@@ -885,7 +985,10 @@ export default () => {
         filterFn: filterFnType,
       },
       describeGroup: computeFn({
-        source: {groupTokens, sourceType},
+        source: {
+          groupTokens,
+          sourceType,
+        },
         fn: ({groupTokens, sourceType}) => ({
           largeGroup: `${sourceType} source`,
           description: groupTokens,
@@ -897,9 +1000,52 @@ export default () => {
         shape: {
           source: sourceCode,
           clock: clockCode,
-          target: targetCode,
-          filter: filterCode,
-          fn: fnCode,
+          target: {
+            field: targetValue,
+            markError: separate({
+              source: {pass},
+              variant: {
+                _: {
+                  pass: {pass: true},
+                },
+              },
+              cases: {
+                pass: value(false),
+                __: value<TargetType[]>([
+                  'abn',
+                  'voidt',
+                  'strt',
+                  'aStr',
+                  'lNumNum',
+                ]),
+              },
+            }),
+          },
+          filter: {
+            field: filterCode,
+            markError: matchUnion(filterFnType, [
+              'bad filter',
+              'bad typed',
+              'bad untyped',
+            ]),
+          },
+          fn: {
+            field: fnCode,
+            markError: some([
+              bool({
+                source: {targetType, sourceType, wrongTarget},
+                true: {
+                  targetType: 'unit',
+                  sourceType: 'no',
+                  wrongTarget: true,
+                },
+              }),
+              every([
+                matchUnion(sourceType, 'no'),
+                matchUnion(fnType, ['bad typed', 'bad untyped']),
+              ]),
+            ]),
+          },
         },
       },
     },

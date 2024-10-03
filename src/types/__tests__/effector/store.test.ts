@@ -91,6 +91,7 @@ test('#map', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Store<string>' is not assignable to type 'Store<number>'.
+      Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -297,7 +298,7 @@ test('unsafe widening (should fail)', () => {
       Types of property '____' are incompatible.
         Type 'StoreValueType<{ page: number; limit: number; id: number; }>' is not assignable to type 'StoreValueType<{ [key: string]: any; page: number; limit: number; }>'.
           Types of parameters 'type' and 'type' are incompatible.
-            Type '{ [key: string]: any; page: number; limit: number; }' is not assignable to type '{ page: number; limit: number; id: number; }'.
+            Property 'id' is missing in type '{ [key: string]: any; page: number; limit: number; }' but required in type '{ page: number; limit: number; id: number; }'.
     "
   `)
 })

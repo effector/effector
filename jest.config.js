@@ -1,4 +1,4 @@
-const { resolve: resolvePath } = require('path')
+const {resolve: resolvePath} = require('path')
 
 const watchPathIgnorePatterns = [
   '<rootDir>/.effector/',
@@ -24,9 +24,14 @@ const transform = {
   '^.+\\.tsx?$': 'babel-jest',
 }
 
+const typeTestsTransform = {
+  '^.+\\.jsx?$': ['babel-jest', {sourceMaps: true}],
+  '^.+\\.tsx?$': ['babel-jest', {sourceMaps: true}],
+}
+
 const solidTransform = {
-  '^.+\\.jsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
-  '^.+\\.tsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
+  '^.+\\.jsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
+  '^.+\\.tsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
 }
 
 const createDefaultConfig = () => ({
@@ -195,7 +200,9 @@ module.exports = {
               testMatch: [`<rootDir>/src/solid/**/*.test.tsx`],
               resolver: resolvePath(__dirname, 'src/solid/resolver.js'),
               transform: solidTransform,
-              setupFilesAfterEnv: ['<rootDir>/src/solid/__tests__/setupTests.ts']
+              setupFilesAfterEnv: [
+                '<rootDir>/src/solid/__tests__/setupTests.ts',
+              ],
             },
             vue: {
               testEnvironment: 'jsdom',
@@ -220,7 +227,7 @@ module.exports = {
               globalSetup: './src/types/src/globalSetup.ts',
               globalTeardown: './src/types/src/globalTeardown.ts',
               maxConcurrency: 25,
-              transform,
+              transform: typeTestsTransform,
             },
           },
         ],

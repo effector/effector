@@ -15,27 +15,33 @@ test('clock param name in the function', () => {
   const allow: StoreWritable<string> = createStore('no')
 
   const result1 = sample({
-    //@ts-expect-error
     source: trigger,
+    //@ts-expect-error
     filter: allow,
   })
   const result2 = sample({
-    //@ts-expect-error
     source: trigger,
     clock: trigger,
+    //@ts-expect-error
     filter: allow,
   })
   const result3 = sample({
-    //@ts-expect-error
     clock: trigger,
+    //@ts-expect-error
     filter: allow,
   })
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 5 'source: trigger,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Unmarked error at test line 10 'source: trigger,'
+    lack of expected error at test line 7 'filter: allow,'
     Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Unmarked error at test line 16 'clock: trigger,'
+    lack of expected error at test line 13 'filter: allow,'
     Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    lack of expected error at test line 18 'filter: allow,'
     "
   `)
 })
@@ -46,7 +52,7 @@ test('custom typeguards: target array support (1)', () => {
   }
   const $store = createStore<string | number>(0)
   const $flag = createStore(false)
-  const trigger = createEvent<{a: number}>()
+  const trigger = createEvent<number>()
 
   const targetA = createEffect<{field: number | string; data: number}, void>()
   const targetB = createEvent<{field: number | string; data: string}>()
@@ -77,10 +83,7 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
-        Types of property 'data' are incompatible.
-          Type 'number' is not assignable to type '{ a: number; }'.
+    no errors
     "
   `)
 })
@@ -91,7 +94,7 @@ test('custom typeguards: target array support (2)', () => {
   }
   const $store = createStore<string | number>(0)
   const $flag = createStore(false)
-  const trigger = createEvent<{a: number}>()
+  const trigger = createEvent<number>()
 
   const targetA = createEffect<{field: number | string; data: number}, void>()
   const targetB = createEvent<{field: number | string; data: string}>()
@@ -123,10 +126,7 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
-        Types of property 'data' are incompatible.
-          Type 'number' is not assignable to type '{ a: number; }'.
+    no errors
     "
   `)
 })
@@ -355,6 +355,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 5 'fn: ({a}) => a,'
         Property 'a' does not exist on type 'AN | null'.
         "
       `)
@@ -410,6 +411,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 5 'fn: ({a}) => a,'
         Property 'a' does not exist on type 'AN | null'.
         "
       `)
