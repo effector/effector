@@ -53,8 +53,7 @@ test('factories with generics support', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 15 'sample({clock: loadFx.doneData, target: $data})'
-    Type 'StoreWritable<T | null>' is not assignable to type 'RebuildTargetClockLoop<[Event<Awaited<T>>], StoreWritable<T | null>, T | null, \\"noFilter\\">'.
+    no errors
     "
   `)
 })

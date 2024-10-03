@@ -316,8 +316,7 @@ describe('generic type match', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 6 'target: $target,'
-      Type 'StoreWritable<T>' is not assignable to type 'RebuildTargetClockLoop<[EventCallable<T>], StoreWritable<T>, T, \\"noFilter\\">'.
+      no errors
       "
     `)
   })
@@ -332,8 +331,7 @@ describe('generic type match', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 6 'target: $target,'
-      Type 'StoreWritable<T>' is not assignable to type 'RebuildTargetClockLoop<[EventCallable<T>], StoreWritable<T>, T, \\"noFilter\\">'.
+      no errors
       "
     `)
   })
