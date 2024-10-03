@@ -95,7 +95,9 @@ test('when a target receives a more loose value type from a source [with clock] 
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Type 'StoreWritable<{ a: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -108,7 +110,9 @@ test('when a target receives a more loose value type from a source [without cloc
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Type 'StoreWritable<{ a: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+      Types of property '__' are incompatible.
+        Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -123,7 +127,8 @@ test('when a target receives a more loose value type from a mapping fn [with clo
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Type '() => { a: string; }' is not assignable to type '() => { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -137,7 +142,8 @@ test('when a target receives a more loose value type from a mapping fn [without 
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: string; }; targetType: { a: string; b: string; }; }; }'.
+    Type '() => { a: string; }' is not assignable to type '() => { a: string; b: string; }'.
+      Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
     "
   `)
 })
@@ -154,7 +160,10 @@ test('when nullable field passed to strict target [with clock] (should fail)', (
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }'.
+    Type 'StoreWritable<{ foo: string; bar: string | null; }>' is not assignable to type 'Unit<{ foo: string; bar: string; }>'.
+      The types of '__.bar' are incompatible between these types.
+        Type 'string | null' is not assignable to type 'string'.
+          Type 'null' is not assignable to type 'string'.
     "
   `)
 })
@@ -170,7 +179,10 @@ test('when nullable field passed to strict target [without clock] (should fail)'
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; bar: string | null; }; targetType: { foo: string; bar: string; }; }; }'.
+    Type 'StoreWritable<{ foo: string; bar: string | null; }>' is not assignable to type 'Unit<{ foo: string; bar: string; }>'.
+      The types of '__.bar' are incompatible between these types.
+        Type 'string | null' is not assignable to type 'string'.
+          Type 'null' is not assignable to type 'string'.
     "
   `)
 })
@@ -186,7 +198,9 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }'.
+      Type 'StoreWritable<{}>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+        Types of property '__' are incompatible.
+          Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       "
     `)
   })
@@ -198,7 +212,9 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: {}; targetType: { a: string; b: string; }; }; }'.
+      Type 'StoreWritable<{}>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
+        Types of property '__' are incompatible.
+          Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       "
     `)
   })
@@ -215,8 +231,9 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
+      Type '() => {}' is not assignable to type '() => { a: string; b: string; }'.
+        Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
+      Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       "
     `)
   })
@@ -230,7 +247,8 @@ describe('edge case for {} type', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
+      Type '() => {}' is not assignable to type '() => { a: string; b: string; }'.
+        Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
       "
     `)
   })
