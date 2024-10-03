@@ -174,7 +174,7 @@ export interface EventCallable<Payload> extends Event<Payload>, UnitTargetable<P
   (payload: Payload): Payload
    (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
 
-  prepend<Before = void>(fn: (_: Before) => Payload): EventCallable<Before>
+  prepend<Before = void>(fn: (_: Before) => Payload): EventCallableAsReturnType<Before>
 }
 
 /**
@@ -1979,6 +1979,17 @@ type RebuildClockSingle<
     >
     : never
 
+type RebuildTargetClockLoopBranch<
+  FilterMode extends ('noFilter' | 'Boolean'),
+  ClockTypeRaw,
+  TargetType,
+  ClockRest extends readonly unknown[],
+  TargetUnit,
+  ClockType = FilterMode extends 'Boolean' ? NonNullable<ClockTypeRaw> : ClockTypeRaw
+> = [ClockType] extends [TargetType]
+  ? RebuildTargetClockLoop<ClockRest, TargetUnit, TargetType, FilterMode>
+  : UnitTargetable<ClockTypeRaw>
+
 type RebuildTargetClockLoop<
   Clock extends readonly unknown[],
   TargetUnit,
@@ -1987,11 +1998,13 @@ type RebuildTargetClockLoop<
 > = WhichType<TargetType> extends 'void'
   ? TargetUnit
   : Clock extends readonly [Unit<infer ClockTypeRaw>, ...infer ClockRest]
-    ? (FilterMode extends 'Boolean' ? NonNullable<ClockTypeRaw> : ClockTypeRaw) extends infer ClockType
-      ? [ClockType] extends [TargetType]
-        ? RebuildTargetClockLoop<ClockRest, TargetUnit, TargetType, FilterMode>
-        : UnitTargetable<ClockTypeRaw>
-      : never
+    ? RebuildTargetClockLoopBranch<
+      FilterMode,
+      ClockTypeRaw,
+      TargetType,
+      ClockRest,
+      TargetUnit
+    >
     : TargetUnit
 
 type RebuildTargetLoop<
