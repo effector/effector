@@ -1,36 +1,23 @@
 /* eslint-disable no-unused-vars */
 import {
   createDomain,
-  Store,
   fork,
   serialize,
   allSettled,
   Json,
   StoreWritable,
   createStore,
+  createEvent,
+  createEffect,
 } from 'effector'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('fork(domain)')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 const typecheck = '{global}'
 
 describe('serialize cases (should pass)', () => {
   test('serialize(Scope): {[sid: string]: any}', () => {
-    const app = createDomain()
-    const $a = app.createStore('demo')
+    const $a = createStore('demo')
 
-    const scope = fork(app)
+    const scope = fork()
     const values: {[sid: string]: string} = serialize(scope)
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -41,11 +28,10 @@ describe('serialize cases (should pass)', () => {
   })
 
   test('serialize(Scope, {ignore:[Store<any>]}): {[sid: string]: any}', () => {
-    const app = createDomain()
-    const $a = app.createStore('demo')
-    const $b = app.createStore(5)
+    const $a = createStore('demo')
+    const $b = createStore(5)
 
-    const scope = fork(app)
+    const scope = fork()
     const values: {[sid: string]: number} = serialize(scope, {ignore: [$b]})
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -58,10 +44,9 @@ describe('serialize cases (should pass)', () => {
 
 describe('serialize cases (should fail)', () => {
   test('serialize(Scope, {ignore:[Event<any>]}): {[sid: string]: any}', () => {
-    const app = createDomain()
-    const event = app.createEvent()
+    const event = createEvent()
 
-    const scope = fork(app)
+    const scope = fork()
     //@ts-expect-error
     const values: {[sid: string]: any} = serialize(scope, {ignore: [event]})
 
@@ -143,11 +128,10 @@ describe('custom serialize for stores', () => {
 describe('fork values', () => {
   describe('without type annotations (should pass)', () => {
     test('fork values as js Map', () => {
-      const app = createDomain()
-      const foo = app.createStore<number>(0)
-      const bar = app.createStore<string>('a')
+      const foo = createStore<number>(0)
+      const bar = createStore<string>('a')
 
-      const scope = fork(app, {
+      const scope = fork({
         // TS expects homogenous Map by default :shrug:
         // @ts-expect-error
         values: new Map([
@@ -174,11 +158,10 @@ describe('fork values', () => {
       `)
     })
     test('fork values as sid map', () => {
-      const app = createDomain()
-      const foo = app.createStore<number>(0)
-      const bar = app.createStore<string>('a')
+      const foo = createStore<number>(0)
+      const bar = createStore<string>('a')
 
-      const scope = fork(app, {
+      const scope = fork({
         values: {
           [foo.sid!]: 1,
           [bar.sid!]: 'b',
@@ -254,27 +237,22 @@ describe('fork values', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        No overload matches this call.
-          Overload 1 of 2, '(config?: { values?: SerializedState | LegacyMap | StorePair<any>[] | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
-            Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'SerializedState | LegacyMap | StorePair<any>[] | undefined'.
-              Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'StorePair<any>[]'.
-                Type '[StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }]' is not assignable to type 'StorePair<any>'.
-                  Type '[Store<number>, number]' is not assignable to type '[StoreWritable<any>, any]'.
-                    Type at position 0 in source is not compatible with type at position 0 in target.
-                      Type 'Store<number>' is missing the following properties from type 'StoreWritable<any>': ____, on, off, reset, and 2 more.
-          Overload 2 of 2, '(domain: Domain, config?: { values?: [StoreWritable<any>, any][] | SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
-            Object literal may only specify known properties, and 'values' does not exist in type 'Domain'.
+        Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'SerializedState | LegacyMap | StorePair<any>[] | undefined'.
+          Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'StorePair<any>[]'.
+            Type '[StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }]' is not assignable to type 'StorePair<any>'.
+              Type '[Store<number>, number]' is not assignable to type '[StoreWritable<any>, any]'.
+                Type at position 0 in source is not compatible with type at position 0 in target.
+                  Type 'Store<number>' is missing the following properties from type 'StoreWritable<any>': ____, on, off, reset, and 2 more.
         "
       `)
     })
   })
   describe('with type annotations', () => {
     test('fork values as js Map', () => {
-      const app = createDomain()
-      const foo = app.createStore<number>(0)
-      const bar = app.createStore<string>('a')
+      const foo = createStore<number>(0)
+      const bar = createStore<string>('a')
 
-      const scope = fork(app, {
+      const scope = fork({
         values: new Map<StoreWritable<any>, any>([
           [foo, 1],
           [bar, 'b'],
@@ -288,11 +266,10 @@ describe('fork values', () => {
       `)
     })
     test('fork values as sid map', () => {
-      const app = createDomain()
-      const foo = app.createStore<number>(0)
-      const bar = app.createStore<string>('a')
+      const foo = createStore<number>(0)
+      const bar = createStore<string>('a')
 
-      const scope = fork(app, {
+      const scope = fork({
         values: {
           [foo.sid!]: 1,
           [bar.sid!]: 'b',
@@ -310,10 +287,9 @@ describe('fork values', () => {
 
 describe('fork handlers', () => {
   test('effect with custom error', () => {
-    const app = createDomain()
-    const fooFx = app.createEffect<void, void, {message: string}>(() => {})
+    const fooFx = createEffect<void, void, {message: string}>(() => {})
 
-    const scope = fork(app, {
+    const scope = fork({
       handlers: [[fooFx, () => {}]],
     })
 
@@ -327,10 +303,9 @@ describe('fork handlers', () => {
 
 describe('allSettled', () => {
   test('event', () => {
-    const app = createDomain()
-    const event = app.createEvent<number>()
+    const event = createEvent<number>()
     const req: Promise<void> = allSettled(event, {
-      scope: fork(app),
+      scope: fork(),
       params: 0,
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -340,10 +315,9 @@ describe('allSettled', () => {
     `)
   })
   test('void event', () => {
-    const app = createDomain()
-    const event = app.createEvent()
+    const event = createEvent()
     const req: Promise<void> = allSettled(event, {
-      scope: fork(app),
+      scope: fork(),
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -352,12 +326,11 @@ describe('allSettled', () => {
     `)
   })
   test('effect', () => {
-    const app = createDomain()
-    const fx = app.createEffect((x: number) => x.toString())
+    const fx = createEffect((x: number) => x.toString())
     const req: Promise<
       {status: 'done'; value: string} | {status: 'fail'; value: Error}
     > = allSettled(fx, {
-      scope: fork(app),
+      scope: fork(),
       params: 0,
     })
     expect(typecheck).toMatchInlineSnapshot(`
@@ -367,12 +340,11 @@ describe('allSettled', () => {
     `)
   })
   test('void effect', () => {
-    const app = createDomain()
-    const fx = app.createEffect(() => 'ok')
+    const fx = createEffect(() => 'ok')
     const req: Promise<
       {status: 'done'; value: string} | {status: 'fail'; value: Error}
     > = allSettled(fx, {
-      scope: fork(app),
+      scope: fork(),
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "

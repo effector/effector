@@ -3,6 +3,7 @@ import {
   createStore,
   createEffect,
   scopeBind,
+  combine,
   fork,
   allSettled,
 } from 'effector'
@@ -283,4 +284,84 @@ test('scopeBind allows $store.getState as a callback', () => {
   const getCount = scopeBind($count.getState, {scope})
 
   expect(getCount()).toBe(42)
+})
+
+describe('scopeBind should not throw in safe context', () => {
+  test('in map without scope', () => {
+    const event = createEvent()
+
+    expect(() =>
+      createStore(0).map(() => {
+        scopeBind(event)
+
+        return 0
+      }),
+    ).not.toThrow()
+  })
+
+  test('in effect without scope', async () => {
+    const event = createEvent()
+
+    const fx = createEffect(() => {
+      scopeBind(event)
+    })
+
+    expect(fx()).resolves.not.toThrow()
+  })
+
+  test('in effect "map" or "watch" without scope', async () => {
+    const event = createEvent()
+    const fx3 = createEffect(async () => {})
+
+    expect(() => fx3.watch(() => scopeBind(event))).not.toThrow()
+    expect(() => fx3.map(() => scopeBind(event))).not.toThrow()
+  })
+
+  test('after nested event call without scope', async () => {
+    const evt = createEvent()
+    const trigger = evt.prepend(() => {})
+
+    const fx = createEffect(() => {
+      trigger()
+      scopeBind(trigger)
+    })
+
+    expect(fx()).resolves.not.toThrow()
+  })
+
+  test('in combine', async () => {
+    const event = createEvent()
+    const $store = createStore(0)
+
+    const $combinedStore = combine($store, () => scopeBind(event))
+
+    expect(() => $combinedStore.getState()).not.toThrow()
+  })
+
+  test('in combine with scope', async () => {
+    const event = createEvent()
+    const scope = fork()
+
+    const $store = createStore(0)
+    const $combinedStore = combine($store, () => {
+      return scopeBind(event)
+    })
+
+    expect(() => scope.getState($combinedStore)).not.toThrow()
+  })
+
+  test('scopebind throw after call effect in effeoct', async () => {
+    const event = createEvent()
+
+    const fx1 = createEffect(
+      async () => new Promise(resolve => setTimeout(resolve, 50)),
+    )
+
+    const fx2 = createEffect(async () => {
+      await fx1()
+      scopeBind(event)
+    })
+
+    expect(fx2).rejects.toThrow()
+  })
 })

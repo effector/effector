@@ -1,8 +1,6 @@
 import type {Scope, Store} from '../unit.h'
 import {forIn, includes} from '../collection'
-import {assert, deprecate} from '../throw'
-import {traverseStores} from './util'
-import {getGraph, getMeta} from '../getter'
+import {assert} from '../validate'
 
 const noopSerializer = (x: any) => x
 /**
@@ -10,7 +8,7 @@ const noopSerializer = (x: any) => x
  */
 export function serialize(
   scope: Scope,
-  config: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
+  config: {ignore?: Array<Store<any>>} = {},
 ) {
   if (scope.warnSerialize) {
     console.error(
@@ -36,20 +34,5 @@ export function serialize(
       result[sid] = serializer(value)
     }
   })
-  if ('onlyChanges' in config) {
-    deprecate(false, 'onlyChanges')
-    if (!config.onlyChanges) {
-      assert(scope.cloneOf, 'scope should be created from domain')
-      traverseStores(getGraph(scope.cloneOf), (node, sid) => {
-        if (
-          !(sid in result) &&
-          !includes(ignoredStores, sid) &&
-          !getMeta(node, 'isCombine') &&
-          getMeta(node, 'serialize') !== 'ignore'
-        )
-          result[sid] = scope.getState(node as any)
-      })
-    }
-  }
   return result
 }

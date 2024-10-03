@@ -41,7 +41,7 @@ scopeBind<T>(event: EventCallable<T>, options?: {scope?: Scope, safe?: boolean})
 We are going to call `changeLocation` inside `history.listen` callback so there is no way for effector to associate event with corresponding scope, and we should explicitly bind event to scope using `scopeBind`.
 
 ```ts
-import {createStore, createEvent, attach, scopeBind} from 'effector';
+import { createStore, createEvent, attach, scopeBind } from "effector";
 
 const $history = createStore(history);
 const initHistory = createEvent();
@@ -70,17 +70,24 @@ sample({
 
 Binds arbitrary callback to a scope to be called later. The bound version of the function retains all properties of the original, e.g., if the original function would throw when called with a certain argument, the bound version will also throw under the same circumstances.
 
-:::info{title="since"}
-Feature is available since `effector 23.1.0` release.
+:::info
+Since `effector 24` release scopeBind can be called in callbacks without `scope` and `safe` options in: `map`, `watch`, `combine`
+
+```ts
+const event = createEvent();
+
+const $store = createStore(0);
+const $combined = combine($store, () => scopeBind(event));
+```
+
 :::
 
 :::warning
-To be compatible with the Fork API, callbacks **must** adhere to the same rules as `Effect` handlers:
+Since `effector 23.1.0` release you don't need to personally pass the scope, but callbacks **must** adhere to the same rules as `Effect` handlers:
 
 - Synchronous functions can be used as they are.
 - Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/scope/).
-
-:::
+  :::
 
 ### Formulae (#scopeBind-methods-scopeBind-callback-formulae)
 
@@ -102,7 +109,7 @@ scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T
 ### Examples (#scopeBind-methods-scopeBind-callback-examples)
 
 ```ts
-import {createEvent, createStore, attach, scopeBind} from 'effector'
+import { createEvent, createStore, attach, scopeBind } from "effector";
 
 const $history = createStore(history);
 const locationChanged = createEvent();

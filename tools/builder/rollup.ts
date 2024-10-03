@@ -37,16 +37,12 @@ const externals = [
   'effector/compat',
   'effector-react',
   'effector-react/effector-react.mjs',
-  'effector-react/scope',
-  'effector-react/scope.mjs',
   'effector-react/compat',
   'effector-vue',
   'effector-vue/effector-vue.mjs',
   'effector-vue/compat',
   'effector-solid',
   'effector-solid/effector-solid.mjs',
-  'effector-solid/scope',
-  'effector-solid/scope.mjs',
   'forest',
   'forest/forest.mjs',
   'forest/server',
@@ -120,7 +116,6 @@ const getPlugins = (
   terser: terser(
     minifyConfig({
       beautify: !!process.env.PRETTIFY,
-      inline: !name.endsWith('.umd'),
     }) as any,
   ),
   json: json({
@@ -152,13 +147,6 @@ export async function rollupEffector() {
       input: 'inspect',
       inputExtension: 'ts',
     }),
-    createUmd(name, {
-      external: externals,
-      file: dir(`npm/${name}/${name}.umd.js`),
-      umdName: name,
-      globals: {},
-      extension: 'ts',
-    }),
     createCompat(name),
   ])
 }
@@ -179,16 +167,6 @@ export async function rollupEffectorDom({name}: {name: string}) {
       input: 'server',
       inputExtension: 'ts',
     }),
-    createUmd(name, {
-      external: externals,
-      file: dir(`npm/${name}/${name}.umd.js`),
-      umdName: name,
-      globals: {
-        effector: 'effector',
-      },
-      extension: 'ts',
-      bundleEffector: false,
-    }),
   ])
 }
 
@@ -204,65 +182,8 @@ export async function rollupEffectorReact() {
       inputExtension: 'ts',
       replaceReactShim: true,
     }),
-    createSSR({
-      file: {
-        cjs: dir(`npm/${name}/scope.js`),
-        es: dir(`npm/${name}/scope.mjs`),
-      },
-    }),
-    createUmd(name, {
-      external: externals,
-      file: dir(`npm/${name}/${name}.umd.js`),
-      umdName: 'effectorReact',
-      globals: {
-        effector: 'effector',
-        react: 'React',
-        'use-sync-external-store/shim/index.js': 'useSyncExternalStoreShim',
-        'use-sync-external-store/shim/with-selector.js':
-          'useSyncExternalStoreWithSelectorShim',
-      },
-      extension: 'ts',
-    }),
     createCompat(name),
   ])
-
-  async function createSSR({
-    file: {cjs, es},
-  }: {
-    file: {cjs: string; es: string}
-  }) {
-    await Promise.all([runBuild(cjs, 'cjs'), runBuild(es, 'es')])
-    async function runBuild(file: string, format: 'cjs' | 'es') {
-      const isEsm = format === 'es'
-      const plugins = getPlugins(name, {
-        isEsm,
-        replaceReactShim: isEsm,
-      })
-      const pluginList = [
-        plugins.resolve,
-        plugins.json,
-        plugins.babel,
-        plugins.terser,
-        plugins.analyzer,
-        plugins.analyzerJSON,
-      ]
-      const build = await rollup({
-        onwarn,
-        input: dir(`packages/${name}/scope.ts`),
-        external: externals,
-        plugins: pluginList,
-      })
-      await build.write({
-        file,
-        format,
-        freeze: false,
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-        externalLiveBindings: isEsm,
-      })
-    }
-  }
 }
 
 export async function rollupEffectorSolid() {
@@ -276,57 +197,7 @@ export async function rollupEffectorSolid() {
       },
       inputExtension: 'ts',
     }),
-    createSSR({
-      file: {
-        cjs: dir(`npm/${name}/scope.js`),
-        es: dir(`npm/${name}/scope.mjs`),
-      },
-    }),
-    createUmd(name, {
-      external: externals,
-      file: dir(`npm/${name}/${name}.umd.js`),
-      umdName: 'effectorSolid',
-      globals: {
-        effector: 'effector',
-        'solid-js': 'SolidJS',
-      },
-      extension: 'ts',
-    }),
   ])
-
-  async function createSSR({
-    file: {cjs, es},
-  }: {
-    file: {cjs: string; es: string}
-  }) {
-    await Promise.all([runBuild(cjs, 'cjs'), runBuild(es, 'es')])
-    async function runBuild(file: string, format: 'cjs' | 'es') {
-      const plugins = getPlugins(name, {isEsm: format === 'es'})
-      const pluginList = [
-        plugins.resolve,
-        plugins.json,
-        plugins.babel,
-        plugins.terser,
-        plugins.analyzer,
-        plugins.analyzerJSON,
-      ]
-      const build = await rollup({
-        onwarn,
-        input: dir(`packages/${name}/scope.ts`),
-        external: externals,
-        plugins: pluginList,
-      })
-      await build.write({
-        file,
-        format,
-        freeze: false,
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-        externalLiveBindings: format === 'es',
-      })
-    }
-  }
 }
 
 export async function rollupEffectorVue() {
@@ -348,58 +219,10 @@ export async function rollupEffectorVue() {
       inputExtension: 'ts',
       replaceVueReactivity: true,
     }),
-    createEsCjs(name, {
-      file: {
-        cjs: dir(`npm/${name}/ssr.cjs.js`),
-        es: dir(`npm/${name}/ssr.mjs`),
-      },
-      input: 'ssr',
-      inputExtension: 'ts',
-      replaceVueReactivity: true,
-    }),
-    createUmd(name, {
-      external: externals,
-      file: dir(`npm/${name}/${name}.umd.js`),
-      umdName: 'effectorVue',
-      globals: {
-        effector: 'effector',
-        vue: 'Vue',
-      },
-      extension: 'ts',
-    }),
     createCompat(name),
   ])
 }
 
-async function createUmd(
-  name: string,
-  {external, file, umdName, globals, extension = 'js', bundleEffector = false},
-) {
-  const plugins = getPlugins(`${name}.umd`)
-  const build = await rollup({
-    onwarn,
-    input: dir(`packages/${name}/index.${extension}`),
-    plugins: [
-      plugins.resolve,
-      plugins.json,
-      plugins.babel,
-      (bundleEffector && plugins.alias) as typeof plugins.alias,
-      plugins.commonjs,
-      plugins.terser,
-      plugins.analyzer,
-      plugins.analyzerJSON,
-    ].filter(Boolean),
-    external,
-  })
-  await build.write({
-    file,
-    format: 'umd',
-    freeze: false,
-    name: umdName,
-    sourcemap: true,
-    globals,
-  })
-}
 async function createCompat(name: string) {
   const plugins = getPlugins(`${name}.compat`)
 
