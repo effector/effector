@@ -348,17 +348,17 @@ Your support allows us to improve the developer experience 🧡.
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/binjospookie>
-            <img src=https://avatars.githubusercontent.com/u/8722478?v=4 width="100;"  alt=Viktor Pasynok/>
-            <br />
-            <sub style="font-size:14px"><b>Viktor Pasynok</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/kireevmp>
             <img src=https://avatars.githubusercontent.com/u/29187880?v=4 width="100;"  alt=Mikhail Kireev/>
             <br />
             <sub style="font-size:14px"><b>Mikhail Kireev</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/binjospookie>
+            <img src=https://avatars.githubusercontent.com/u/8722478?v=4 width="100;"  alt=Viktor Pasynok/>
+            <br />
+            <sub style="font-size:14px"><b>Viktor Pasynok</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
