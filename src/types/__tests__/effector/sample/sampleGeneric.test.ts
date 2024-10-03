@@ -303,3 +303,36 @@ describe('generic union', () => {
     `)
   })
 })
+
+describe('generic type match', () => {
+  test('with extends (should pass)', () => {
+    function foo<T extends Record<string, any>>() {
+      const trigger = createEvent<T>()
+      const $target = createStore<T>(null as any)
+      sample({
+        clock: trigger,
+        target: $target,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('baisc generic (should pass)', () => {
+    function foo<T>() {
+      const trigger = createEvent<T>()
+      const $target = createStore<T>(null as any)
+      sample({
+        clock: trigger,
+        target: $target,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
