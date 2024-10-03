@@ -1215,3 +1215,33 @@ describe('partial edge case', () => {
     })
   })
 })
+
+test('sample should accept arrays from argument (should pass)', () => {
+  const clock = [createEvent()]
+  const target = createEvent()
+  sample({
+    clock,
+    target,
+  })
+  sample({
+    clock,
+    fn: () => undefined,
+    target,
+  })
+  sample({
+    clock,
+    filter: () => true,
+    fn: () => undefined,
+    target,
+  })
+  sample({
+    clock,
+    filter: () => true,
+    target,
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
