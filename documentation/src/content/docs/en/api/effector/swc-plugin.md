@@ -38,7 +38,7 @@ Use the `--exact`/`--save-exact` option in your package manager to install speci
 | ------------------- | ---------------------------------------- | ---------------------- |
 | `>=1.3.63 <1.3.106` | `>=13.4.8 <=14.1.4`                      | `@swc1.3.63`           |
 | `>=1.3.106 <1.4.0`  |                                          | `@swc1.3.106`          |
-| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.6`                      | `@swc1.4.0`            |
+| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.14`                     | `@swc1.4.0`            |
 | `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`            |
 | `>=1.7.0`           | `>=15.0.0-canary.122`                    | `@swc1.7.0`            |
 
@@ -61,8 +61,10 @@ const nextConfig = {
 };
 ```
 
-:::note
 You'll also need to install the official [`@effector/next`](https://github.com/effector/next) bindings to enable SSR/SSG.
+
+:::warning{title="Turbopack"}
+Note that some functionality may be broken when using Turbopack with NextJS, especially with [relative `factories`](#configuration-factories). Use at your own risk.
 :::
 
 ## .swcrc (#usage-swcrc)
