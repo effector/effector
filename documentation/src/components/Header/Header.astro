@@ -8,13 +8,7 @@ import {
   translations,
 } from "../../languages";
 import { SITE } from "../../consts";
-import {
-  DESKTOP_NAVIGATION,
-  SOCIAL_LINKS,
-  DOCS_VERSIONS,
-  isSidebarGroup,
-  isNavLink,
-} from "../../navigation";
+import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS, isSidebarGroup } from "../../navigation";
 
 import MobileNavigation from "../MobileNavigation.astro";
 import DropDownMenu from "../DropDownMenu.astro";
@@ -23,7 +17,7 @@ import EffectorLogo from "./EffectorLogo.astro";
 import MobileMenuButton from "./MobileMenuButton.astro";
 import Search from "./Search.astro";
 import SkipToContent from "./SkipToContent.astro";
-import ThemeToggle from "./ThemeToggleButton";
+import ThemeSwitch from "./ThemeSwitch.astro";
 
 import IconExternal from "@icons/External.astro";
 import IconLanguage from "@icons/Language.astro";
@@ -95,7 +89,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         <IconLanguage />
       </DropDownMenu>
     </div>
-    <ThemeToggle client:idle />
+    <ThemeSwitch />
     {
       SOCIAL_LINKS.map((link) => {
         const Icon = link.icon;
@@ -169,7 +163,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     color: var(--theme-text);
   }
 
-  @media (max-width: 512px) {
+  @media (max-width: 432px) {
     .logo span {
       display: none;
     }

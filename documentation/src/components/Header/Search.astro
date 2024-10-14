@@ -20,11 +20,9 @@ const pagefindTranslations = Object.fromEntries(
     aria-label={t(translations.Search.label, lang)}
     aria-keyshortcuts="Control+K"
   >
-    <IconSearch size={16} />
-    <span class="sl-hidden md:sl-block" aria-hidden="true"
-      >{t(translations.Search.label, lang)}</span
-    >
-    <kbd class="sl-hidden md:sl-flex" style="display: none;">
+    <IconSearch class="leading-normal sm:leading-tight size-6" strokeWidth={1.5} size="auto" />
+    <span class="hidden sm:block" aria-hidden="true">{t(translations.Search.label, lang)}</span>
+    <kbd class="hidden sm:flex" style="display: none;">
       <kbd>Meta</kbd><kbd>K</kbd>
     </kbd>
   </button>

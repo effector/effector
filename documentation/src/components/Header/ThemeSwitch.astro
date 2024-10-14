@@ -1,0 +1,155 @@
+---
+import ThemeAuto from "@icons/ThemeAuto.astro";
+import ThemeDark from "@icons/ThemeDark.astro";
+import ThemeLight from "@icons/ThemeLight.astro";
+
+const themes = [
+  { id: "light", Icon: ThemeLight },
+  { id: "auto", Icon: ThemeAuto },
+  { id: "dark", Icon: ThemeDark },
+];
+---
+
+<theme-switch class="theme-switch">
+  {
+    themes.map((theme) => (
+      <label>
+        <input type="radio" name="theme-switch" value={theme.id} />
+        <theme.Icon class="icon" />
+      </label>
+    ))
+  }
+</theme-switch>
+
+<script>
+  class ThemeSwitch extends HTMLElement {
+    #theme = readTheme();
+    #systemThemeDark = window.matchMedia("(prefers-color-scheme: dark)");
+    #buttons: Array<HTMLInputElement> = [];
+
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      this.setActiveStatus();
+      this.listenButtonClicks();
+
+      // Do not need to unsubscribe, because always visible on screen.
+      this.#systemThemeDark.addEventListener("change", () => this.onSystemThemeChanged());
+    }
+
+    getButtons() {
+      if (this.#buttons.length === 0) {
+        this.#buttons = Array.from(this.querySelectorAll("input"));
+      }
+      return this.#buttons;
+    }
+
+    listenButtonClicks() {
+      this.getButtons().forEach((radioButton) => {
+        radioButton.addEventListener("change", (event) => {
+          const target = event.currentTarget as HTMLInputElement;
+          if (target.checked) {
+            this.#theme = normalizeTheme(target.value);
+            this.updateTheme();
+            this.saveTheme();
+          }
+        });
+      });
+    }
+
+    onSystemThemeChanged() {
+      if (this.#theme === "auto") {
+        this.updateTheme();
+      }
+    }
+
+    updateTheme() {
+      const systemTheme = this.#systemThemeDark.matches ? "dark" : "light";
+      const finalTheme = this.#theme === "auto" ? systemTheme : this.#theme;
+
+      if (finalTheme === "light") {
+        document.documentElement.classList.remove("theme-dark");
+      } else {
+        document.documentElement.classList.add("theme-dark");
+      }
+
+      this.setActiveStatus();
+    }
+
+    setActiveStatus() {
+      this.getButtons().forEach((radioButton) => {
+        radioButton.checked = this.#theme === radioButton.value;
+      });
+    }
+
+    saveTheme() {
+      saveTheme(this.#theme);
+    }
+  }
+
+  type Theme = "dark" | "light" | "auto";
+
+  function normalizeTheme(input: string | null, defaultValue: Theme = "auto"): Theme {
+    const allowedValues: string[] = ["dark", "light", "auto"] satisfies Theme[];
+    if (input && allowedValues.includes(input)) {
+      return input as Theme;
+    }
+    return defaultValue;
+  }
+
+  function readTheme(defaultValue: Theme = "auto"): Theme {
+    if (typeof localStorage !== undefined) {
+      const storedValue = localStorage.getItem("theme");
+      return normalizeTheme(storedValue, defaultValue);
+    }
+    return defaultValue;
+  }
+
+  function saveTheme(theme: Theme) {
+    if (typeof localStorage !== undefined) {
+      localStorage.setItem("theme", theme);
+    }
+  }
+
+  customElements.define("theme-switch", ThemeSwitch);
+</script>
+
+<style>
+  .theme-switch {
+    @apply flex items-center gap-1 rounded-full px-2 py-1;
+    background-color: var(--theme-bg);
+  }
+
+  .theme-switch > label:focus-within {
+    outline: none;
+    color: var(--theme-accent);
+    @apply ring-1 ring-current ring-offset-2;
+  }
+
+  .theme-switch > label {
+    @apply relative flex cursor-pointer items-center justify-center rounded-full opacity-50;
+    color: var(--theme-code-inline-text);
+  }
+
+  .theme-switch .checked {
+    opacity: 1;
+    color: var(--theme-accent);
+  }
+
+  input[name="theme-switch"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  input[type="radio"]:checked ~ .icon {
+    opacity: 1;
+    color: var(--theme-accent);
+  }
+</style>
