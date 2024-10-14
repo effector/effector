@@ -13,8 +13,14 @@ const themes = [
 <theme-switch class="theme-switch">
   {
     themes.map((theme) => (
-      <label>
-        <input type="radio" name="theme-switch" value={theme.id} />
+      <label for={`theme-switch-${theme.id}`}>
+        <input
+          id={`theme-switch-${theme.id}`}
+          type="radio"
+          name="theme-switch"
+          disabled
+          value={theme.id}
+        />
         <theme.Icon class="icon" />
       </label>
     ))
@@ -22,78 +28,69 @@ const themes = [
 </theme-switch>
 
 <script>
-  class ThemeSwitch extends HTMLElement {
-    #theme = readTheme();
-    #systemThemeDark = window.matchMedia("(prefers-color-scheme: dark)");
-    #buttons: Array<HTMLInputElement> = [];
+  import { createStore, createEvent, combine } from "effector";
 
-    constructor() {
-      super();
-    }
+  function watchMedia(media: string) {
+    const matcher = window.matchMedia(media);
+    const $matches = createStore(matcher.matches);
+    const changed = createEvent<MediaQueryListEvent>();
+
+    matcher.addEventListener("change", changed);
+
+    return { $matches, changed };
+  }
+
+  class ThemeSwitch extends HTMLElement {
+    changeThemeClicked = createEvent<Theme>();
+    toggleThemePressed = createEvent();
+
+    systemDarkTheme = watchMedia("(prefers-color-scheme: dark)");
+    $theme = createStore(readTheme());
+    $isDark = combine(this.$theme, this.systemDarkTheme.$matches, (theme, systemDark) => {
+      if (theme === "auto") return systemDark;
+      return theme === "dark";
+    });
 
     connectedCallback() {
-      this.setActiveStatus();
-      this.listenButtonClicks();
+      this.setupButtons();
 
-      // Do not need to unsubscribe, because always visible on screen.
-      this.#systemThemeDark.addEventListener("change", () => this.onSystemThemeChanged());
+      this.$theme.on(this.changeThemeClicked, (_, theme) => theme);
+
+      this.$theme.watch((theme) => saveTheme(theme));
+
+      this.$isDark.watch((dark) => {
+        if (dark) document.documentElement.classList.add("theme-dark");
+        else document.documentElement.classList.remove("theme-dark");
+      });
     }
 
-    getButtons() {
-      if (this.#buttons.length === 0) {
-        this.#buttons = Array.from(this.querySelectorAll("input"));
-      }
-      return this.#buttons;
-    }
+    setupButtons() {
+      const radioButtons = Array.from(this.querySelectorAll("input"));
 
-    listenButtonClicks() {
-      this.getButtons().forEach((radioButton) => {
+      radioButtons.forEach((radioButton) => {
+        this.$theme.watch((theme) => {
+          radioButton.checked = theme === radioButton.value;
+        });
+
+        // Handle clicks
         radioButton.addEventListener("change", (event) => {
           const target = event.currentTarget as HTMLInputElement;
-          if (target.checked) {
-            this.#theme = normalizeTheme(target.value);
-            this.updateTheme();
-            this.saveTheme();
+          console.log("clicked", target.id);
+          if (allowedThemeValues.includes(target.value)) {
+            this.changeThemeClicked(target.value as Theme);
           }
         });
+
+        radioButton.disabled = false;
       });
-    }
-
-    onSystemThemeChanged() {
-      if (this.#theme === "auto") {
-        this.updateTheme();
-      }
-    }
-
-    updateTheme() {
-      const systemTheme = this.#systemThemeDark.matches ? "dark" : "light";
-      const finalTheme = this.#theme === "auto" ? systemTheme : this.#theme;
-
-      if (finalTheme === "light") {
-        document.documentElement.classList.remove("theme-dark");
-      } else {
-        document.documentElement.classList.add("theme-dark");
-      }
-
-      this.setActiveStatus();
-    }
-
-    setActiveStatus() {
-      this.getButtons().forEach((radioButton) => {
-        radioButton.checked = this.#theme === radioButton.value;
-      });
-    }
-
-    saveTheme() {
-      saveTheme(this.#theme);
     }
   }
 
   type Theme = "dark" | "light" | "auto";
+  const allowedThemeValues: string[] = ["dark", "light", "auto"] satisfies Theme[];
 
   function normalizeTheme(input: string | null, defaultValue: Theme = "auto"): Theme {
-    const allowedValues: string[] = ["dark", "light", "auto"] satisfies Theme[];
-    if (input && allowedValues.includes(input)) {
+    if (input && allowedThemeValues.includes(input)) {
       return input as Theme;
     }
     return defaultValue;
