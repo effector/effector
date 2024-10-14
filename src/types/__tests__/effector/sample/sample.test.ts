@@ -457,69 +457,6 @@ describe('sample(Store<T>):Store<T>', () => {
     })
   })
 })
-describe('sample + guard (should pass)', () => {
-  test("directly assign `guard` invocation to `sample`'s `clock` argument without losing inference in `sample`'s `fn` (should pass)", () => {
-    const source = createStore(0)
-    const clock = createEvent<number>()
-
-    sample({
-      source,
-      clock: guard(clock, {
-        filter: clock => clock > 0,
-      }),
-      fn: (source, clock) => source + clock,
-    })
-
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test("directly assign `sample` invocation to `guard`'s `source` argument without losing inference in `guard`'s `filter` (should pass)", () => {
-    const source = createStore(0)
-    const clock = createEvent<number>()
-
-    guard({
-      source: sample({
-        source,
-        clock,
-        fn: (source, clock) => source + clock,
-      }),
-      filter: n => n > 0,
-    })
-
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('edge case (should pass)', () => {
-    function debounce<T>(event: Event<T>): Event<T> {
-      return event
-    }
-    const $store = createStore(0)
-    const $flag = createStore(false)
-    const trigger = createEvent<number>()
-    const target = createEffect<{field: number; data: number}, void>()
-
-    guard({
-      source: sample({
-        clock: debounce(trigger),
-        source: [$flag, $store],
-        fn: ([isAble, field], data) => (isAble ? {field, data} : null),
-      }),
-      filter: (e): e is {field: number; data: number} => !!e,
-      target,
-    })
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-})
 describe('without clock', () => {
   test('with fn (should pass)', () => {
     const source = createStore([{foo: 'ok', bar: 0}])

@@ -22,19 +22,13 @@
       "import": "./server.mjs",
       "require": "./server.js",
       "default": "./server.mjs"
-    },
-    "./forest.umd": {
-      "types": "./forest.umd.d.ts",
-      "require": "./forest.umd.js",
-      "default": "./forest.umd.js"
     }
   },
-  "umd:main": "forest.umd.js",
   "jsnext:main": "forest.mjs",
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^23.1.0"
+    "effector": "^23.2.2"
   },
   "keywords": [
     "business",

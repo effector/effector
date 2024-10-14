@@ -4,7 +4,6 @@
   "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
-  "umd:main": "effector.umd.js",
   "jsnext:main": "effector.mjs",
   "typings": "index.d.ts",
   "dependencies": {},
@@ -31,13 +30,7 @@
       "require": "./inspect.js",
       "default": "./inspect.mjs"
     },
-    "./effector.umd": {
-      "types": "./effector.umd.d.ts",
-      "require": "./effector.umd.js",
-      "default": "./effector.umd.js"
-    },
     "./babel-plugin": "./babel-plugin.js",
-    "./babel-plugin-react": "./babel-plugin-react.js",
     "./package.json": "./package.json"
   },
   "files": [
@@ -48,21 +41,17 @@
     "effector.mjs.map",
     "effector.cjs.js",
     "effector.cjs.js.map",
-    "effector.umd.js",
-    "effector.umd.js.map",
     "compat.js",
     "compat.js.map",
     "effector.cjs.d.ts",
     "effector.mjs.d.ts",
-    "effector.umd.d.ts",
     "compat.d.ts",
     "inspect.js",
     "inspect.js.map",
     "inspect.mjs",
     "inspect.mjs.map",
     "inspect.d.ts",
-    "babel-plugin.js",
-    "babel-plugin-react.js"
+    "babel-plugin.js"
   ],
   "keywords": [
     "business",
