@@ -10,7 +10,7 @@ const themes = [
 ];
 ---
 
-<theme-switch class="theme-switch">
+<theme-switch class="theme-switch relative">
   {
     themes.map((theme) => (
       <label for={`theme-switch-${theme.id}`}>
@@ -25,6 +25,7 @@ const themes = [
       </label>
     ))
   }
+  <button class="mobile-toggle md:hidden"></button>
 </theme-switch>
 
 <script>
@@ -53,8 +54,14 @@ const themes = [
 
     connectedCallback() {
       this.setupButtons();
+      this.setupToggle();
 
       this.$theme.on(this.changeThemeClicked, (_, theme) => theme);
+      this.$theme.on(this.toggleThemePressed, (theme) => {
+        const themeIndex = allowedThemeValues.indexOf(theme);
+        const nextTheme = allowedThemeValues[(themeIndex + 1) % allowedThemeValues.length];
+        return nextTheme as Theme;
+      });
 
       this.$theme.watch((theme) => saveTheme(theme));
 
@@ -83,6 +90,11 @@ const themes = [
 
         radioButton.disabled = false;
       });
+    }
+
+    setupToggle() {
+      const toggle = this.querySelector(".mobile-toggle") as HTMLButtonElement;
+      toggle.addEventListener("click", () => this.toggleThemePressed());
     }
   }
 
@@ -115,7 +127,7 @@ const themes = [
 
 <style>
   .theme-switch {
-    @apply flex items-center gap-1 rounded-full px-2 py-1;
+    @apply flex min-h-6 min-w-6 items-center rounded-full px-2 py-1 md:gap-1;
     background-color: var(--theme-bg);
   }
 
@@ -145,8 +157,21 @@ const themes = [
     z-index: -1;
   }
 
+  input[type="radio"]:not(:checked) ~ .icon {
+    @apply hidden md:block;
+  }
+
   input[type="radio"]:checked ~ .icon {
     opacity: 1;
     color: var(--theme-accent);
+  }
+
+  .mobile-toggle {
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
   }
 </style>
