@@ -241,10 +241,6 @@ export interface Store<State> extends Unit<State> {
     trigger: Unit<E>,
     watcher: (state: State, payload: E) => any,
   ): Subscription
-  /**
-   * @deprecated use js pipe instead
-   */
-  thru<U>(fn: (store: Store<State>) => U): U
 
   defaultState: State
   compositeName: CompositeName
@@ -2136,7 +2132,7 @@ type TargetOrError<
               'Boolean'
             >
         }]
-        : [{error: 'not implemented'}]
+        : never
       : [Omit<ResultConfig & SourceConfig, 'clock' | 'target'> & {
           clock: Clock extends readonly unknown[]
             ? RebuildClockLoop<

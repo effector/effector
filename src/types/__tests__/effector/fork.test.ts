@@ -52,7 +52,7 @@ describe('serialize cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'EventCallable<void>' is missing the following properties from type 'Store<any>': updates, getState, thru, defaultState
+      Type 'EventCallable<void>' is missing the following properties from type 'Store<any>': updates, getState, defaultState
       "
     `)
   })
