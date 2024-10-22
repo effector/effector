@@ -1275,3 +1275,58 @@ test('sample should accept non-inline arrays in target (should pass)', () => {
     "
   `)
 })
+
+describe('fn return cases', () => {
+  const $name = createStore<string>('')
+  const trigger = createEvent()
+  const targetFull = createEvent<{name: string; age: number}>()
+  const targetSmall = createEvent<{name: string}>()
+  test('both units (should fail)', () => {
+    sample({
+      clock: trigger,
+      source: {name: $name},
+      fn: ({name}) => {
+        return {name}
+      },
+      target: [targetFull, targetSmall],
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('only full unit (should fail)', () => {
+    sample({
+      clock: trigger,
+      source: {name: $name},
+      // @ts-expect-error
+      fn: ({name}) => {
+        return {name}
+      },
+      target: [targetFull],
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Unmarked error at test line 2 'clock: trigger,'
+      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { name: string; }; targetType: { name: string; age: number; }; }[]; }'.
+      lack of expected error at test line 5 'fn: ({name}) => {'
+      "
+    `)
+  })
+  test('only small unit (should pass)', () => {
+    sample({
+      clock: trigger,
+      source: {name: $name},
+      fn: ({name}) => {
+        return {name}
+      },
+      target: [targetSmall],
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+})
