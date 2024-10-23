@@ -383,11 +383,6 @@ const effectorVue: LSidebarGroup[] = [
     text: { en: "Common methods" },
     items: [
       {
-        text: { en: "VueEffector" },
-        link: "/api/effector-vue/VueEffector",
-        tags: ["useful"],
-      },
-      {
         text: { en: "EffectorScopePlugin" },
         link: "/api/effector-vue/EffectorScopePlugin",
         tags: ["useful"],
@@ -395,16 +390,6 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "createComponent" },
         link: "/api/effector-vue/createComponent",
-        tags: ["useful"],
-      },
-    ],
-  },
-  {
-    text: { en: "Options and properties", uz: "Variantlar va xususiyatlar" },
-    items: [
-      {
-        text: { en: "ComponentOptions" },
-        link: "/api/effector-vue/ComponentOptions",
         tags: ["useful"],
       },
     ],
@@ -430,7 +415,7 @@ const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Hooks" },
+    text: { en: "Composition API" },
     items: [
       {
         text: { en: "useUnit" },
@@ -449,6 +434,31 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "useVModel" },
         link: "/api/effector-vue/useVModel",
+        tags: ["useful"],
+      },
+    ],
+  },
+  {
+    text: { en: "Options API" },
+    items: [
+      {
+        text: { en: "VueEffector" },
+        link: "/api/effector-vue/VueEffector",
+        tags: ["useful"],
+      },
+      {
+        text: { en: "VueEffector (Vue2)" },
+        link: "/api/effector-vue/VueEffectorVue2",
+        tags: ["useful"],
+      },
+    ],
+  },
+  {
+    text: { en: "Options and properties", uz: "Variantlar va xususiyatlar" },
+    items: [
+      {
+        text: { en: "ComponentOptions (Vue2)" },
+        link: "/api/effector-vue/ComponentOptions",
         tags: ["useful"],
       },
     ],

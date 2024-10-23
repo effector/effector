@@ -209,6 +209,12 @@ export default {
         require: './composition.cjs.js',
         default: './composition.mjs',
       },
+      './options-vue3': {
+        types: './options-vue3.d.ts',
+        import: './options-vue3.mjs',
+        require: './options-vue3.cjs.js',
+        default: './options-vue3.mjs',
+      },
       './ssr': {
         types: './ssr.d.ts',
         import: './ssr.mjs',
@@ -224,6 +230,11 @@ export default {
         types: './composition.mjs.d.ts',
         import: './composition.mjs',
         default: './composition.mjs',
+      },
+      './options-vue3.mjs': {
+        types: './options-vue3.mjs.d.ts',
+        import: './options-vue3.mjs',
+        default: './options-vue3.mjs',
       },
       './ssr.mjs': {
         types: './ssr.mjs.d.ts',
