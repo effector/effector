@@ -99,6 +99,14 @@ export default {
           ['composition.d.ts', 'composition.cjs.d.ts', 'composition.mjs.d.ts'],
         ],
         ['ssr.d.ts', ['ssr.d.ts', 'ssr.cjs.d.ts', 'ssr.mjs.d.ts']],
+        [
+          'options-vue3.d.ts',
+          [
+            'options-vue3.d.ts',
+            'options-vue3.mjs.d.ts',
+            'options-vue3.cjs.d.ts',
+          ],
+        ],
         'README.md',
         'package.json',
       ]),

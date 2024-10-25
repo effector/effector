@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "23.0.0",
+  "version": "23.1.0",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.mjs",
@@ -89,16 +89,23 @@
     "composition.cjs.js.map",
     "ssr.cjs.js",
     "ssr.cjs.js.map",
+    "options-vue3.cjs.js",
+    "options-vue3.cjs.js.map",
     "composition.mjs",
     "composition.mjs.map",
     "ssr.mjs",
     "ssr.mjs.map",
+    "options-vue3.mjs",
+    "options-vue3.mjs.map",
     "composition.d.ts",
     "composition.mjs.d.ts",
     "composition.cjs.d.ts",
     "ssr.d.ts",
     "ssr.mjs.d.ts",
-    "ssr.cjs.d.ts"
+    "ssr.cjs.d.ts",
+    "options-vue3.d.ts",
+    "options-vue3.mjs.d.ts",
+    "options-vue3.cjs.d.ts"
   ],
   "keywords": [
     "vue",

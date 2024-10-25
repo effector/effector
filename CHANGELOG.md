@@ -2,6 +2,13 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 23.1.0
+
+- Update useVModel bindings ([issue #1150](https://github.com/effector/effector/issues/1150))
+- Add support for options api for vue 3 (useful for large codebase migration from vue 2) ([issue #1178](https://github.com/effector/effector/issues/1178))
+
+Big thanks to [egoson](https://github.com/egoson) for making this release possible
+
 ## effector 23.2.3
 
 - Fix types for `attach({ effect })`, allowing to pass explicit `name` in this overload ([issue #1000](https://github.com/effector/effector/issues/1000))
