@@ -2360,24 +2360,35 @@ type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTar
 
 type RebuildFnReturnByTarget<FnReturn, TargetType, TargetTypeSubset = GetUnionLast<TargetType>> =
   [TargetType] extends [never]
-  ? FnReturn
+  ? ['same', null]
   : [TargetTypeSubset] extends [never]
     ? [FnReturn] extends [TargetType]
-      ? FnReturn
-      : TargetType
+      ? ['same', null]
+      : ['change', TargetType]
     : [FnReturn] extends [TargetTypeSubset]
       ? RebuildFnReturnByTarget<FnReturn, Exclude<TargetType, TargetTypeSubset>>
-      : TargetTypeSubset
+      : ['change', TargetTypeSubset]
+
+type TypeOfTargetValLoop<SourceType, Target extends readonly unknown[]> =
+  Target extends readonly [infer TargetUnit, ...infer TargetRest]
+  ? TargetUnit extends Unit<infer TargetType>
+    ? RebuildFnReturnByTarget<SourceType, TargetType> extends ['change', infer ReturnType]
+      ? ReturnType
+      : TypeOfTargetValLoop<SourceType, TargetRest>
+    : never
+  : SourceType
+  
 
 type TypeOfTargetVal<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
   Target extends UnitTargetable<any>
     ? Target extends UnitTargetable<infer TargetType>
-      ? RebuildFnReturnByTarget<SourceType, TargetType>
+      ? RebuildFnReturnByTarget<SourceType, TargetType> extends ['change', infer ReturnType]
+        ? ReturnType
+        : SourceType
       : never
-    : Target extends RoTuple<infer TU>
-      ? TU extends UnitTargetable<infer TargetType>
-        ? RebuildFnReturnByTarget<SourceType, TargetType>
-        : never
+    : Target extends readonly [infer ForceFirst, ...infer ForceRest]
+      ? TypeOfTargetValLoop<SourceType, Target>
+      // branch for non inline arrays
       : never
 
 type IsTargetWiderThanSource<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =

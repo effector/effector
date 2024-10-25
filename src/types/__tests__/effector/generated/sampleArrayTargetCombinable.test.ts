@@ -1176,12 +1176,18 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 26 'fn: ({a,b}) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 35 'fn: ({a,b}) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 44 'fn: ({a,b}) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -1193,6 +1199,8 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 63 'fn: ({a,b}) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -1206,12 +1214,18 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 88 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 97 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 106 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -1223,6 +1237,8 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 125 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -1236,12 +1252,18 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 150 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 159 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 168 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -1253,6 +1275,8 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 187 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -1266,12 +1290,18 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 215 'fn: ({a,b}) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 225 'fn: ({a,b}) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 235 'fn: ({a,b}) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -1283,6 +1313,8 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 256 'fn: ({a,b}) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -1296,12 +1328,18 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 284 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 294 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 304 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -1313,6 +1351,8 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 325 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -1326,12 +1366,18 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 353 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 363 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 373 'fn: ([a,b]) => ({a,b}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -1343,6 +1389,8 @@ describe('source:wide, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 394 'fn: ([a,b]) => ({a,b}),'
+      Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -2528,12 +2576,18 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 26 'fn: ({a}) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 35 'fn: ({a}) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 44 'fn: ({a}) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -2545,6 +2599,8 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 63 'fn: ({a}) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -2558,12 +2614,18 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 88 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 97 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 106 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -2575,6 +2637,8 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 125 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -2588,12 +2652,18 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 150 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 159 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 168 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -2605,6 +2675,8 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 187 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -2618,12 +2690,18 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 215 'fn: ({a}) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 225 'fn: ({a}) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 235 'fn: ({a}) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -2635,6 +2713,8 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 256 'fn: ({a}) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -2648,12 +2728,18 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 284 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 294 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 304 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -2665,6 +2751,8 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 325 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
@@ -2678,12 +2766,18 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 353 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 363 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ a: number; b: string; }'.
+      Unmarked error at test line 373 'fn: ([a]) => ({a,b:''}),'
+      Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -2695,6 +2789,8 @@ describe('source:same, fn:untyped', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 394 'fn: ([a]) => ({a,b:''}),'
+      Type 'string' is not assignable to type 'number'.
       "
     `)
   })

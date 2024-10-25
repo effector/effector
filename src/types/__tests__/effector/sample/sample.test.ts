@@ -1374,9 +1374,8 @@ describe('fn return cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 2 'clock: trigger,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (args_0: { readonly name: string; }) => { name: string; age: number; } | { name: string; }; target: readonly [Unit<{ name: string; }>, Unit<{ name: string; }>]; error: \\"fn result should extend target type\\"; }'.
-      lack of expected error at test line 5 'fn: ({name}) => {'
+      Type '({ name }: { readonly name: string; }) => { name: string; }' is not assignable to type '(args_0: { readonly name: string; }) => { name: string; age: number; }'.
+        Property 'age' is missing in type '{ name: string; }' but required in type '{ name: string; age: number; }'.
       "
     `)
   })
