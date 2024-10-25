@@ -6,6 +6,12 @@ redirectFrom:
   - /docs/api/effector-vue/useStore
 ---
 
+:::warning{title="Deprecated"}
+since [effector-vue 24.0.0](https://changelog.effector.dev/#effector-vue-24-0-0).
+
+Consider using [`useUnit`](/en/api/effector-vue/useUnit) instead.
+:::
+
 ```ts
 import { useStore } from "effector-vue/composition";
 ```

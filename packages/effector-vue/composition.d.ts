@@ -40,6 +40,9 @@ export function useVModel<T extends Record<string, Store<any>>>(
   vm: T,
   scope?: EffectScope
 ): ExtractStore<T>
+/**
+ * @deprecated since v24.0.0, use useUnit instead
+ */
 export function useStore<T>(store: Store<T>): DeepReadonly<Ref<T>>
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(

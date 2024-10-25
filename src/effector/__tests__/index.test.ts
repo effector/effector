@@ -6,12 +6,7 @@ import {
   combine,
   createEvent,
   createEffect,
-  Event,
   EventCallable,
-  forward,
-  split,
-  guard,
-  sample,
 } from 'effector'
 //@ts-expect-error
 import {show} from 'effector/fixtures/showstep'

@@ -20,12 +20,8 @@ import {
   useUnit as useUnitScope,
   createGate,
   useGate,
-  useEvent,
-  useStore,
   Provider,
-} from 'effector-react/scope'
-
-muteErrors(['useEvent', 'useStore'])
+} from 'effector-react'
 
 describe('useUnit', () => {
   it('should bind single store', async () => {
@@ -969,7 +965,7 @@ describe('useUnit', () => {
         </div>
       `)
     })
-    test('useStore + useGate', async () => {
+    test('useUnit + useGate', async () => {
       const event = createEvent()
       const getDataFx = attach({effect: getDataRawFx})
       const $data = createStore<{id: number}[]>([])
@@ -982,8 +978,8 @@ describe('useUnit', () => {
 
       const Component = () => {
         useGate(Gate, 0)
-        const data = useStore($data)
-        const pending = useStore(getDataFx.pending)
+        const data = useUnit($data)
+        const pending = useUnit(getDataFx.pending)
         if (pending) return <div>Loading....</div>
         return <div>{JSON.stringify(data)}</div>
       }
@@ -1022,7 +1018,7 @@ describe('useUnit', () => {
       $data.on(getDataFx.doneData, (_, upd) => upd)
 
       const Component = () => {
-        const run = useEvent(getData)
+        const run = useUnit(getData)
         const [data, pending] = useUnitScope([$data, getDataFx.pending])
         React.useEffect(() => {
           run()

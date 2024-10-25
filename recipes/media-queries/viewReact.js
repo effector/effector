@@ -1,11 +1,11 @@
 //@flow
 
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 import {screenQueries} from './screenQueries'
 import {orientationCheck, screenSizeCheck} from './queryCheck'
 
 export const Screen = props => {
-  const queries = useStore(screenQueries)
+  const queries = useUnit(screenQueries)
   const orientationAllowed = orientationCheck(props, queries)
   const screenSizeAllowed = screenSizeCheck(props, queries)
 

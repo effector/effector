@@ -1,15 +1,13 @@
 import type {DataCarrier} from './unit.h'
 import type {Cmd, Stack} from './index.h'
-import {is, isFunction, isObject, assertTarget} from './is'
+import {is, isFunction, isObject, assertTarget, assert} from './validate'
 import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
-import {createLinkNode} from './forward'
 import {processArgsToConfig} from './config'
 import {compute, userFnCall, calc, read} from './step'
-import {createNode} from './createNode'
-import {launch} from './kernel'
+import {createNode, createLinkNode} from './createNode'
+import {launch, type QueueInstance} from './kernel'
 import {getStoreState} from './getter'
-import {assert} from './throw'
 import {createEvent} from './createUnit'
 import {applyTemplate} from './template'
 import {createSampling} from './sample'
@@ -20,6 +18,7 @@ const launchCase = (
   field: string,
   data: any,
   stack: Stack,
+  q: QueueInstance,
 ) => {
   const target = scopeTargets[field]
   if (target) {
@@ -28,6 +27,7 @@ const launchCase = (
       params: Array.isArray(target) ? target.map(() => data) : data,
       defer: true,
       stack,
+      queue: q,
     })
   }
 }
@@ -90,13 +90,14 @@ export function split(...args: any[]) {
         safe: matchIsUnit,
         filter: true,
         pure: !matchIsUnit,
-        fn(data, scopeTargets, stack) {
+        fn(data, scopeTargets, stack, q) {
           const value = String(matchIsUnit ? stack.a : match(data))
           launchCase(
             scopeTargets,
             includes(caseNames, value) ? value : '__',
             data,
             stack,
+            q,
           )
         },
       }),
@@ -130,18 +131,18 @@ export function split(...args: any[]) {
     }
     splitterSeq = [
       needBarrier! && read(lastValues, false, true),
-      userFnCall((data, scopeTargets, stack) => {
+      userFnCall((data, scopeTargets, stack, q) => {
         for (let i = 0; i < caseNames.length; i++) {
           const caseName = caseNames[i]
           const caseValue = includes(units, caseName)
             ? stack.a[caseName]
             : match[caseName](data)
           if (caseValue) {
-            launchCase(scopeTargets, caseName, data, stack)
+            launchCase(scopeTargets, caseName, data, stack, q)
             return
           }
         }
-        launchCase(scopeTargets, '__', data, stack)
+        launchCase(scopeTargets, '__', data, stack, q)
       }, true),
     ]
   } else {

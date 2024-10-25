@@ -13,16 +13,6 @@ Bind [_Stores_](../effector/Store) to Vue reactivity system or, in the case of [
 
 **Designed for Vue 3 and Composition API exclusively.**
 
-:::info{title="Future"}
-This API can completely replace the following APIs:
-
-- [useStore($store)](./useStore)
-- [useEvent(event)](./useEvent)
-
-In the future, these APIs can be deprecated and removed.
-
-:::
-
 # Methods (#methods)
 
 ## `useUnit(unit)` (#methods-useUnit-unit)

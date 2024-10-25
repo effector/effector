@@ -1,7 +1,7 @@
 import {add} from '../collection'
 import {createDefer} from '../defer'
 import {getGraph} from '../getter'
-import {is} from '../is'
+import {is} from '../validate'
 import {launch, forkPage} from '../kernel'
 import {generateErrorTitle} from '../naming'
 import type {Scope, Event, Effect, DataCarrier, SettledDefer} from '../unit.h'
