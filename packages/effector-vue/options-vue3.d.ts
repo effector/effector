@@ -1,3 +1,3 @@
-import { Plugin } from 'vue-next'
+import { Plugin } from 'vue'
 
 declare function VueEffector(plugin: Plugin): void
