@@ -26,7 +26,8 @@
       "effector-vue/ssr": ["packages/effector-vue/ssr.d.ts"],
       "effector-vue/composition": ["packages/effector-vue/composition.d.ts"],
       "effector-vue/options-vue3": ["packages/effector-vue/options-vue3.d.ts"],
-      "effector-vue": ["packages/effector-vue/index.d.ts"]
+      "effector-vue": ["packages/effector-vue/index.d.ts"],
+      "Builder/*": ["tools/builder/*"]
     }
   },
   "exclude": [
