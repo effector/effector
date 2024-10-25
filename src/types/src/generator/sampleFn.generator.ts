@@ -543,22 +543,23 @@ export default () => {
               every([
                 goodFn,
                 not(pass),
-                not(
-                  whenFnResultExistInTargetType({
-                    exact: [
-                      'exact',
-                      'exactExactBad',
-                      'exactNarrow',
-                      'exactNullable',
-                    ],
-                    exactBad: ['exactBad'],
-                    exactNullable: [],
-                    narrow: ['narrow', 'exactNarrow'],
-                    exactNarrow: ['exactNarrow', 'narrow'],
-                    exactBadNarrow: ['exactBadNarrow'],
-                    exactExactBad: ['exactBad', 'exactExactBad'],
-                  }),
-                ),
+                /** used for skipping cases with lack of fn return typecheck */
+                // not(
+                //   whenFnResultExistInTargetType({
+                //     exact: [
+                //       'exact',
+                //       'exactExactBad',
+                //       'exactNarrow',
+                //       'exactNullable',
+                //     ],
+                //     exactBad: ['exactBad'],
+                //     exactNullable: [],
+                //     narrow: ['narrow', 'exactNarrow'],
+                //     exactNarrow: ['exactNarrow', 'narrow'],
+                //     exactBadNarrow: ['exactBadNarrow'],
+                //     exactExactBad: ['exactBad', 'exactExactBad'],
+                //   }),
+                // ),
               ]),
             ]),
           },
