@@ -48,6 +48,8 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [filledout](https://filledout.github.io) ☢️ — Form manager with easy-to-use yup validation
 - [effector-forms](https://github.com/aanation/effector-forms) ☢️ — Form manager for effector.
 - [effector-react-form](https://github.com/GTOsss/effector-react-form) ☢️ — Connect your forms with state manager.
+- [efform](https://github.com/tehSLy/efform) ⛔ — Form manager based on a state manager, designed for high-quality DX.
+- [effector-reform](https://github.com/movpushmov/effector-reform) ☢️ — Form manager implementing the concept of composite forms.
 
 ## Templates
 

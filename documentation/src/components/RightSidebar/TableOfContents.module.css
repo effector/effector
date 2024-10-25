@@ -17,7 +17,7 @@
 }
 
 .link a {
-  @apply scroll-py-6 py-1;
+  @apply scroll-py-6 pt-1;
 }
 
 :global(.content) ul.contents {
@@ -45,7 +45,7 @@
 }
 
 .level1:not(:first-child) a {
-  @apply pt-6;
+  @apply pt-3;
 }
 
 .level1 a {
@@ -58,7 +58,7 @@
 }
 
 .level2:not(:first-of-type) a {
-  @apply pt-3;
+  @apply pt-1;
 }
 
 .level2 a {

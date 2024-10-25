@@ -145,9 +145,9 @@ await fx(10);
 
 ## `.prepend(fn)` (#methods-prepend-fn)
 
-Creates an event, upon trigger it sends transformed data into the source event.
+Creates an event, upon trigger it sends transformed data into the source effect.
 Works kind of like reverse `.map`.
-In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+In case of `.prepend` data transforms **before the original effect occurs** and in the case of `.map`, data transforms **after original effect occurred**.
 
 ### Formulae (#methods-prepend-fn-formulae)
 
@@ -164,7 +164,7 @@ const event = effect.prepend(fn);
 
 ### Returns (#methods-prepend-fn-returns)
 
-[_Event_](/en/api/effector/Event): New event.
+[_EventCallable_](/en/api/effector/Event#eventCallable): New event
 
 ## `.map(fn)` (#methods-map-fn)
 
@@ -231,7 +231,7 @@ Do not manually call this event. It is an event that depends on effect.
 ### Formulae (#properties-done-formulae)
 
 ```ts
-effect.done: Event<{ params: Params; done: Done }>;
+effect.done: Event<{ params: Params; result: Done }>;
 ```
 
 ### Properties (#properties-done-properties)
@@ -510,7 +510,7 @@ const $isLoading = createStore(false)
 Shows how many effect calls aren't settled yet. Useful for rate limiting.
 
 :::warning{title="Important"}
-Do not modify `$count` value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
+Do not modify store value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
 :::
 
 ### Formulae (#properties-inFlight-formulae)

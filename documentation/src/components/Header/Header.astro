@@ -4,10 +4,11 @@ import {
   createLink,
   getPathParamsFromId,
   getTextLocalized,
+  isExternal,
   translations,
 } from "../../languages";
 import { SITE } from "../../consts";
-import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS, QUICK_MENU } from "../../navigation";
+import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS, isSidebarGroup } from "../../navigation";
 
 import MobileNavigation from "../MobileNavigation.astro";
 import DropDownMenu from "../DropDownMenu.astro";
@@ -16,23 +17,11 @@ import EffectorLogo from "./EffectorLogo.astro";
 import MobileMenuButton from "./MobileMenuButton.astro";
 import Search from "./Search.astro";
 import SkipToContent from "./SkipToContent.astro";
-import ThemeToggle from "./ThemeToggleButton";
+import ThemeSwitch from "./ThemeSwitch.astro";
 
-import IconExternal from "../../icons/External.astro";
-import IconLanguage from "../../icons/Language.astro";
-import IconDots from "../../icons/Dots.astro";
-
-import IconGithub from "../../icons/Github.astro";
-import IconTwitter from "../../icons/Twitter.astro";
-import IconDiscord from "../../icons/Discord.astro";
-import IconYoutube from "../../icons/Youtube.astro";
-
-const socialIcons = {
-  github: IconGithub,
-  twitter: IconTwitter,
-  discord: IconDiscord,
-  youtube: IconYoutube,
-};
+import IconExternal from "@icons/External.astro";
+import IconLanguage from "@icons/Language.astro";
+import IconDots from "@icons/Dots.astro";
 
 type Props = {
   currentPage: string;
@@ -43,7 +32,7 @@ const languageLinks = createChangeLangLinks({ slug });
 const homeLink = lang === "en" ? "/" : `/${lang}`;
 ---
 
-<header data-pagefind-ignore>
+<header data-pagefind-ignore="all">
   <SkipToContent />
 
   <nav>
@@ -51,72 +40,19 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
       <EffectorLogo size={40} />
       <span>{SITE.title ?? getTextLocalized(translations.Documentation, lang)}</span>
     </a>
-    <div class="mr-auto">
-      <Search />
-    </div>
     {
-      DESKTOP_NAVIGATION.map((navLink) => {
-        const external = navLink.link.startsWith("https://") || navLink.link.startsWith("http://");
-        const href = external ? navLink.link : createLink(navLink, lang);
+      DESKTOP_NAVIGATION.filter((item) => !isExternal(item)).map((navLink) => {
+        const href = createLink(navLink, lang);
         const text = getTextLocalized(navLink, lang);
-        const quickMenu = Boolean(navLink.features?.includes("API"));
 
-        if (external) {
+        if (isSidebarGroup(navLink)) {
           return (
-            <a href={href} target="_blank" class="link only-medium">
-              <span>{text}</span>
-              <IconExternal />
-            </a>
-          );
-        }
-
-        if (quickMenu) {
-          return (
-            <div class="group relative hidden md:flex">
-              <a href={href} class="link">
-                {text}
-              </a>
-
-              <div class="absolute left-1/2 z-10 mt-6 hidden w-screen max-w-max -translate-x-1/2 -translate-y-2 group-hover:flex">
-                <div class="quick-menu mt-4">
-                  {Object.entries(QUICK_MENU).map(([name, { link, groups }]) => {
-                    const external = link.startsWith("https://") || link.startsWith("http://");
-                    const href = external ? link : createLink({ link, text: { en: name } }, lang);
-
-                    return (
-                      <div class="quick-group">
-                        <h6 class="quick-group-header">
-                          <span>{name}</span>
-                          <a href={href} class="quick-link">
-                            {getTextLocalized(translations.More, lang)}
-                          </a>
-                        </h6>
-                        {groups.map((elements) => (
-                          <div class="flex flex-wrap gap-x-1">
-                            {elements.map((element) => {
-                              const external =
-                                element.link.startsWith("https://") ||
-                                element.link.startsWith("http://");
-                              const href = external ? element.link : createLink(element, lang);
-                              const text = getTextLocalized(element, lang);
-                              return (
-                                <a
-                                  href={href}
-                                  target={external ? "_blank" : undefined}
-                                  class="quick-link"
-                                >
-                                  <span>{text}</span>
-                                  {external ? <IconExternal /> : null}
-                                </a>
-                              );
-                            })}
-                          </div>
-                        ))}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+            <div class="hidden md:flex">
+              <DropDownMenu links={navLink.items}>
+                <a href={`/${lang}/api`} class="link">
+                  API
+                </a>
+              </DropDownMenu>
             </div>
           );
         }
@@ -130,6 +66,21 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         );
       })
     }
+    <div class="ml-auto"></div>
+    {
+      DESKTOP_NAVIGATION.filter((item) => isExternal(item)).map((navLink) => {
+        const href = createLink(navLink, lang);
+        const text = getTextLocalized(navLink, lang);
+
+        return (
+          <a href={href} target="_blank" class="link only-medium">
+            <span>{text}</span>
+            <IconExternal />
+          </a>
+        );
+      })
+    }
+    <Search />
     <div class="only-medium">
       <DropDownMenu links={DOCS_VERSIONS}>v23.x</DropDownMenu>
     </div>
@@ -138,13 +89,13 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         <IconLanguage />
       </DropDownMenu>
     </div>
-    <ThemeToggle client:idle />
+    <ThemeSwitch />
     {
       SOCIAL_LINKS.map((link) => {
-        const Icon = socialIcons[link.icon];
+        const Icon = link.icon;
         return (
           <a href={link.link} class="link only-medium" target="_blank">
-            <Icon />
+            <Icon size={24} />
           </a>
         );
       })
@@ -152,9 +103,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     <div class="hidden md:inline-block xl:hidden">
       <DropDownMenu
         links={[
-          ...DESKTOP_NAVIGATION.filter(
-            (navLink) => navLink.link.startsWith("https://") || navLink.link.startsWith("http://"),
-          ),
+          ...DESKTOP_NAVIGATION.filter(isExternal),
           {
             text: { en: "Language", ru: "Язык документации" },
             links: languageLinks,
@@ -169,7 +118,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
           },
         ]}
       >
-        <IconDots />
+        <IconDots size={24} />
       </DropDownMenu>
     </div>
     <div class="md:hidden">
@@ -177,11 +126,12 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     </div>
   </nav>
 </header>
+
 <MobileNavigation />
 
 <style>
   header {
-    @apply fixed left-0 right-0 top-0 flex w-full items-center justify-center overflow-visible shadow;
+    @apply fixed left-0 right-0 top-0 flex items-center justify-center overflow-visible shadow;
 
     z-index: 110;
     height: var(--theme-navbar-height);
@@ -193,7 +143,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
   }
 
   nav {
-    @apply mx-auto flex items-center justify-end gap-2;
+    @apply mx-auto flex items-center justify-end gap-0 md:gap-2;
 
     padding-left: max(env(safe-area-inset-left), 1.5rem);
     padding-right: max(env(safe-area-inset-right), 1.5rem);
@@ -213,43 +163,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     color: var(--theme-text);
   }
 
-  .quick-menu {
-    @apply overflow-hidden rounded-lg border border-gray-50/10 text-sm leading-6 shadow-lg;
-    @apply w-screen max-w-md gap-4 px-4 py-3;
-    @apply flex flex-col items-stretch;
-    /* @apply grid grid-cols-2 grid-rows-2; */
-    background-color: var(--theme-card);
-  }
-
-  .quick-menu .quick-group {
-    @apply flex flex-col items-stretch gap-0;
-  }
-
-  .quick-menu .quick-group .quick-group-header {
-    @apply flex justify-between pb-1;
-  }
-
-  .quick-menu .quick-group:not(:first-child) .quick-group-header {
-    @apply border-t pt-4;
-    border-color: var(--theme-card-divider);
-  }
-
-  .quick-menu .quick-link {
-    display: flex;
-    padding-block: 0;
-    gap: 0;
-  }
-
-  .quick-menu .quick-link:hover {
-    text-decoration: underline;
-  }
-
-  .quick-menu .quick-link:not(:last-child)::after {
-    content: ",";
-    color: var(--theme-text-light);
-  }
-
-  @media (max-width: 512px) {
+  @media (max-width: 432px) {
     .logo span {
       display: none;
     }

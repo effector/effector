@@ -4,17 +4,7 @@ import { createChangeLangLinks, getPathParamsFromId, getTextLocalized } from "..
 
 import NestedLinks from "./NestedLinks.astro";
 
-import IconGithub from "../icons/Github.astro";
-import IconTwitter from "../icons/Twitter.astro";
-import IconDiscord from "../icons/Discord.astro";
-import IconYoutube from "../icons/Youtube.astro";
-
-const socialIcons = {
-  github: IconGithub,
-  twitter: IconTwitter,
-  discord: IconDiscord,
-  youtube: IconYoutube,
-};
+import IconExternal from "@icons/External.astro";
 
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 const languageLinks = createChangeLangLinks({ slug });
@@ -29,10 +19,10 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
     <div class="socials">
       {
         SOCIAL_LINKS.map((link) => {
-          const Icon = socialIcons[link.icon];
+          const Icon = link.icon ?? IconExternal;
           return (
             <a class="social" href={link.link} class="link only-medium" target="_blank">
-              <Icon />
+              <Icon size={24} />
             </a>
           );
         })
@@ -58,10 +48,11 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
   }
 
   .navigation {
-    @apply fixed z-50 hidden w-screen flex-col overflow-hidden overflow-y-auto;
+    @apply fixed hidden w-screen flex-col overflow-hidden overflow-y-auto;
 
     top: var(--theme-navbar-height);
     bottom: 0;
+    z-index: 1000;
 
     will-change: transform, opacity;
     contain: layout style;

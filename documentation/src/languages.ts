@@ -31,10 +31,32 @@ export function getTextLocalized(item: { text: LText }, lang: string): string {
   return item.text.en;
 }
 
+export function isExternal(link: { link?: string }) {
+  return (link.link?.startsWith("https://") || link.link?.startsWith("http://")) ?? false;
+}
+
+export function isLocalizedLink(link: { link?: string }) {
+  for (const code of KNOWN_LANGUAGE_CODES) {
+    if (link.link?.startsWith(`/${code}`)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function createLink(item: { text: LText; link: string }, lang: string): string {
+  if (isExternal(item)) {
+    return item.link;
+  }
+
   if (item.link.startsWith("/")) {
+    if (isLocalizedLink(item)) {
+      return item.link;
+    }
+
     return `/${lang}${item.link}`;
   }
+
   return item.link;
 }
 
