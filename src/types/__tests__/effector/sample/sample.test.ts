@@ -1285,6 +1285,7 @@ describe('fn return cases', () => {
     sample({
       clock: trigger,
       source: {name: $name},
+      // @ts-expect-error
       fn: ({name}) => {
         return {name}
       },
@@ -1292,7 +1293,7 @@ describe('fn return cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 5 'fn: ({name}) => {'
       "
     `)
   })
