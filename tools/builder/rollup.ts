@@ -350,6 +350,15 @@ export async function rollupEffectorVue() {
     }),
     createEsCjs(name, {
       file: {
+        cjs: dir(`npm/${name}/options-vue3.cjs.js`),
+        es: dir(`npm/${name}/options-vue3.mjs`),
+      },
+      input: 'options-vue3',
+      inputExtension: 'ts',
+      replaceVueReactivity: true,
+    }),
+    createEsCjs(name, {
+      file: {
         cjs: dir(`npm/${name}/ssr.cjs.js`),
         es: dir(`npm/${name}/ssr.mjs`),
       },

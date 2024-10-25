@@ -1,26 +1,24 @@
 ---
 title: VueEffector
-description: effector-vue plugin for vue 2
+description: effector-vue plugin for vue 3
 redirectFrom:
   - /api/effector-vue/VueEffector
   - /docs/api/effector-vue/vue-effector
 ---
 
 ```ts
-import { VueEffector } from "effector-vue";
+import { VueEffector } from "effector-vue/options-vue3";
 ```
 
-`effector-vue` plugin for vue 2
+`effector-vue` plugin for vue 3 creates a mixin that takes a binding function from the effector option.
 
 # Methods (#methods)
 
-## `VueEffector(Vue, options?)` (#methods-VueEffector-Vue-options)
+## `VueEffector(app)` (#methods-VueEffector-Vue-options)
 
 ### Arguments (#methods-VueEffector-Vue-options-arguments)
 
-1. `Vue` (_class Vue_): Vue class
-2. `options` (_Object_): Plugin options
-   - TBD
+1. `app` (_instance Vue_): Vue instance
 
 ### Returns (#methods-VueEffector-Vue-options-returns)
 
@@ -28,9 +26,49 @@ import { VueEffector } from "effector-vue";
 
 ### Examples (#methods-VueEffector-Vue-options-examples)
 
+#### Installation plugin
 ```js
-import Vue from "vue";
-import { VueEffector } from "effector-vue";
+import { createApp } from "vue";
+import { VueEffector } from "effector-vue/options-vue3";
 
-Vue.use(VueEffector);
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.use(VueEffector);
+```
+
+#### Effector options
+```html
+<template>
+  <div>
+    <span v-if="createPending">loading...</span>
+    <p>{{ user.name }}</p>
+    ...
+    <button @click="create">Create<button>
+  </div>
+</template>
+```
+
+```js
+import { $user, create, createFx } from 'model'
+
+export default {
+  name: 'VueComponent',
+  effector: () => ({
+    user: $user,
+    createDone: createFx.done,
+    createPending: createFx.pending,
+  }),
+  watch: {
+    createDone() {
+      // do something after the effect is done
+    }
+  },
+  methods: {
+    create, // template binding
+    createFx,
+  },
+  ...
+}
 ```
