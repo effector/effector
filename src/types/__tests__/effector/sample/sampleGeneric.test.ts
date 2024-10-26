@@ -152,12 +152,12 @@ test('generic edge cases (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; target: EventCallable<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? EventCallable<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? EventCallable<B> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...] : [error: ...]'.
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => A; target: EventCallable<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? EventCallable<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? EventCallable<B> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
-    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => B; target: StoreWritable<A>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? StoreWritable<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? StoreWritable<A> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
-    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<B>; }]' is not assignable to parameter of type '[[NonFalsy<A>] extends [Readonly<B>] ? EventCallable<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? EventCallable<B> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...] : [error: ...]'.
-    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? StoreWritable<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? StoreWritable<A> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
-    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? StoreWritable<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? StoreWritable<A> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; target: EventCallable<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? EventCallable<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? EventCallable<B> : A] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...] : [error: ...]'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => A; target: EventCallable<B>; }]' is not assignable to parameter of type '[[A] extends [Readonly<B>] ? EventCallable<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? EventCallable<B> : A] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
+    Argument of type '[{ source: StoreWritable<A>; clock: EventCallable<B>; fn: (source: A, clock: B) => B; target: StoreWritable<A>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? StoreWritable<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? StoreWritable<A> : B] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; target: EventCallable<B>; }]' is not assignable to parameter of type '[[NonFalsy<A>] extends [Readonly<B>] ? EventCallable<B> : WhichType<B> extends \\"any\\" | \\"void\\" ? EventCallable<B> : NonFalsy<...>] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...] : [error: ...]'.
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? StoreWritable<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? StoreWritable<A> : B] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: (source: A, clock: B) => true; fn: (source: A, clock: B) => B; target: StoreWritable<...>; }]' is not assignable to parameter of type '[[B] extends [Readonly<A>] ? StoreWritable<A> : WhichType<A> extends \\"any\\" | \\"void\\" ? StoreWritable<A> : B] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
     "
   `)
 })
@@ -216,7 +216,7 @@ describe('generic with either type', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 3 'sample({'
-      Argument of type '[{ clock: Event<Either<L, R>>; fn: (data: Either<L, R>) => R | null; target: EventCallable<L | null>; }]' is not assignable to parameter of type '[[R | null] extends [Readonly<L | null>] ? EventCallable<L | null> : WhichType<L | null> extends \\"any\\" | \\"void\\" ? EventCallable<...> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
+      Argument of type '[{ clock: Event<Either<L, R>>; fn: (data: Either<L, R>) => R | null; target: EventCallable<L | null>; }]' is not assignable to parameter of type '[[R | null] extends [Readonly<L | null>] ? EventCallable<L | null> : WhichType<L | null> extends \\"any\\" | \\"void\\" ? EventCallable<...> : R | null] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [error: ...]'.
       lack of expected error at test line 7 'target: onFail,'
       "
     `)
@@ -272,7 +272,7 @@ describe('generic union', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 3 'sample({'
-      Argument of type '[{ clock: Event<L | R>; filter: (data: L | R) => data is R; target: EventCallable<L>; }]' is not assignable to parameter of type '[[R extends L | R ? R : never] extends [Readonly<L>] ? EventCallable<L> : WhichType<L> extends \\"any\\" | \\"void\\" ? EventCallable<...> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...] : [error: ...]'.
+      Argument of type '[{ clock: Event<L | R>; filter: (data: L | R) => data is R; target: EventCallable<L>; }]' is not assignable to parameter of type '[[R extends L | R ? R : never] extends [Readonly<L>] ? EventCallable<L> : WhichType<L> extends \\"any\\" | \\"void\\" ? EventCallable<...> : R extends L | R ? R : never] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...] : [error: ...]'.
       lack of expected error at test line 7 'target: onFail,'
       "
     `)
@@ -298,7 +298,7 @@ describe('generic union', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Unmarked error at test line 6 'sample({'
-      Argument of type '[{ clock: Event<L | R>; filter: <L, R>(item: L | R) => item is R; target: EventCallable<R>; }]' is not assignable to parameter of type '[[unknown extends L | R ? L | R : never] extends [Readonly<R>] ? EventCallable<R> : WhichType<R> extends \\"any\\" | \\"void\\" ? EventCallable<...> : { ...; }] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...] : [error: ...]'.
+      Argument of type '[{ clock: Event<L | R>; filter: <L, R>(item: L | R) => item is R; target: EventCallable<R>; }]' is not assignable to parameter of type '[[unknown extends L | R ? L | R : never] extends [Readonly<R>] ? EventCallable<R> : WhichType<R> extends \\"any\\" | \\"void\\" ? EventCallable<...> : unknown extends L | R ? L | R : never] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : ([...] extends [...] ? \\"yes\\" : \\"no\\") extends \\"yes\\" ? [error: ...]...'.
       lack of expected error at test line 9 'filter: isRight,'
       "
     `)
