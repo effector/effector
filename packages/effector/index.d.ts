@@ -2174,45 +2174,30 @@ type TargetOrError<
               'noFilter'
             >
         }]
-    : [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
+    : [TypeOfTarget<MatchingValue, Target>] extends [Target]
       ? [config: ResultConfig & SourceConfig]
       : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
         ? [config: ResultConfig & SourceConfig]
         : Mode extends 'fnRet'
-          ? FN extends 'noFn'
-            ? never
-            : [error: {
-                fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
-                target: Target extends readonly any[]
-                  ? {
-                    [K in keyof Target]: Unit<
-                      RebuildTargetValueByFnReturn<UnitValue<Target[K]>, MatchingValue>
-                    >
-                  }
-                  : Unit<RebuildTargetValueByFnReturn<UnitValue<Target>, MatchingValue>>
-                error: 'fn result should extend target type'
-              }]
+          ? [error: {
+              fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
+              target: Target extends readonly any[]
+                ? {
+                  [K in keyof Target]: Unit<
+                    RebuildTargetValueByFnReturn<UnitValue<Target[K]>, MatchingValue>
+                  >
+                }
+                : Unit<RebuildTargetValueByFnReturn<UnitValue<Target>, MatchingValue>>
+              error: 'fn result should extend target type'
+            }]
           : Mode extends 'src'
             ? IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
-              ? Source extends 'noSrc'
-                // fallback for unhandled cases with filterFn
-                ? [error: {
-                  target: Target extends readonly any[]
-                    ? {
-                      [K in keyof Target]: Unit<MatchingValue>
-                    }
-                    : Unit<MatchingValue>
-                  error: 'fallback: source should extend target type'
+              ? [error: {
+                  source: IsUnion<GetSourceExtendedByTarget<Source, Target>> extends true
+                    ? GetSourceExtendedByTargetOnlyIncorrect<Source, Target>
+                    : GetSourceExtendedByTarget<Source, Target>
+                  error: 'source should extend target type'
                 }]
-                : IsUnion<GetSourceExtendedByTarget<Source, Target>> extends true
-                  ? [error: {
-                    source: GetSourceExtendedByTargetOnlyIncorrect<Source, Target>
-                    error: 'union: source should extend target type'
-                  }]
-                  : [error: {
-                    source: GetSourceExtendedByTarget<Source, Target>
-                    error: 'noUnion: source should extend target type'
-                  }]
               : [error: {
                 target: Target extends readonly any[]
                   ? {
@@ -2336,18 +2321,14 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
         : never
     }
 
-type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
+type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
   Target extends UnitTargetable<any>
     ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
           ? Target
-          : Mode extends 'fnRet'
-            ? {fnResult: SourceType; targetType: TargetType}
-            : Mode extends 'src'
-              ? {sourceType: SourceType; targetType: TargetType}
-              : {clockType: SourceType; targetType: TargetType}
+          : SourceType
       : never
     : {
       [
@@ -2357,11 +2338,7 @@ type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTar
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
             ? Target[K]
-            : Mode extends 'fnRet'
-              ? {fnResult: SourceType; targetType: TargetType}
-              : Mode extends 'src'
-                ? {sourceType: SourceType; targetType: TargetType}
-                : {clockType: SourceType; targetType: TargetType}
+            : SourceType
         : never
     }
 
