@@ -87,7 +87,8 @@ test('generic edge cases (should pass)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    no errors
+    Unmarked error at test line 50 'const result = sample({'
+    Argument of type '[{ clock: EventCallable<B>; source: StoreWritable<A>; filter: BooleanConstructor; fn: (source: NonFalsy<A>, clock: B) => NonFalsy<...>; }]' is not assignable to parameter of type 'unknown extends A ? [config: { clock: EventCallable<B>; source: StoreWritable<A>; filter?: BooleanConstructor | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] : A extends UnitsTarget | readonly UnitTargetable<...>[] ? [...] extends [...] ? [config: ...] : [...] extends [...] ? [config: ...] : [e...'.
     "
   `)
 })

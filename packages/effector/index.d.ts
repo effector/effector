@@ -1636,6 +1636,12 @@ type InferredType<Source, Clock, FilterFN> =
       : never
     : never
 
+type TargetTypeSimple<Target> = Target extends Unit<infer TargetType>
+  ? TargetType
+  : Target extends RoTuple<Unit<infer TargetType>>
+    ? TargetType
+    : never
+
 type SampleFilterTargetDef<
   Mode extends Mode_Trg,
   Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
@@ -1734,7 +1740,7 @@ type SampleFilterTargetDef<
               Mode,
               Clock,
               Source,
-              FilterFun & (
+              (
                 Source extends Unit<any> | SourceRecord
                 ? Clock extends Units
                   ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1743,19 +1749,20 @@ type SampleFilterTargetDef<
                   ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
                   : never
               ),
-              FNInf & (
+              (
                 Source extends Unit<any> | SourceRecord
                 ? Clock extends Units
-                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-                  : (src: FNInfSource) => any
+                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => TargetTypeSimple<Target>
+                  : (src: FNInfSource) => TargetTypeSimple<Target>
                 : Clock extends Units
-                  ? (clk: FNInfClock) => any
-                  : any
+                  ? (clk: FNInfClock) => TargetTypeSimple<Target>
+                  : never
               ),
               Target
             >,
             RawConfig,
             FNInf,
+            // dont need source and clock types for case with filter infer
             'noSrc',
             'noClk'
           >
