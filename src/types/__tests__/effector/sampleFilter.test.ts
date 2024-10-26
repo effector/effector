@@ -800,7 +800,9 @@ test('type inference issue', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    lack of expected error at test line 9 'fn: val => ({a: 1, b: val ? val.b : ''}),'
+    Type '(val: { a: string; b: number; } | null) => { a: number; b: string | number; }' is not assignable to type '((clk: { a: string; b: number; }) => number) & ((val: { a: string; b: number; } | null) => { a: number; b: string | number; })'.
+      Type '(val: { a: string; b: number; } | null) => { a: number; b: string | number; }' is not assignable to type '(clk: { a: string; b: number; }) => number'.
+        Type '{ a: number; b: string | number; }' is not assignable to type 'number'.
     "
   `)
 })
