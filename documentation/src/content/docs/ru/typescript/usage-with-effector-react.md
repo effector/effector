@@ -6,10 +6,10 @@ redirectFrom:
   - /ru/typescript/usage-with-effector-react
 ---
 
-**TypeScript** - это типизированное расширение JavaScript. Он стал популярным 
-в последнее время благодаря преимуществам, которые он может принести. Если вы новичок в TypeScript, 
-рекомендуется сначала ознакомиться с ним, прежде чем продолжить. 
-Вы можете ознакомиться с документацей 
+**TypeScript** - это типизированное расширение JavaScript. Он стал популярным
+в последнее время благодаря преимуществам, которые он может принести. Если вы новичок в TypeScript,
+рекомендуется сначала ознакомиться с ним, прежде чем продолжить.
+Вы можете ознакомиться с документацей
 [здесь](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
 Какие преимущества Typescript может принести вашему приложению:
@@ -23,7 +23,7 @@ redirectFrom:
 We will be going through a simplistic chat application to demonstrate a
 possible approach to include static typing. This chat application will have API mock that load and saves data from localStorage.
 
-Мы пройдемся по упрощенному приложению чата, 
+Мы пройдемся по упрощенному приложению чата,
 чтобы продемонстрировать возможный подход к включению статической типизации. Это приложение для чата будет иметь API-модель, которая загружает и сохраняет данные из локального хранилища localStorage.
 
 Полный исходный код можно посмотреть на
@@ -135,7 +135,7 @@ export const messageDeleteFx = createEffect(async (message: Message) => {
 
 ```ts
 // Файл: /src/shared/api/session.ts
-// Это называется сессией, потому что описывает текущую сессию пользователя, а не Пользователя в целом. 
+// Это называется сессией, потому что описывает текущую сессию пользователя, а не Пользователя в целом.
 export interface Session {
   id: string;
   name: string;
@@ -290,7 +290,10 @@ import * as model from "./model";
 // export function ChatPage { ... }
 
 function ChatHistory() {
-  const [messageDeleting, onMessageDelete] = useUnit([model.$messageDeleting, model.messageDeleteClicked]);
+  const [messageDeleting, onMessageDelete] = useUnit([
+    model.$messageDeleting,
+    model.messageDeleteClicked,
+  ]);
 
   // Хук `useList` позволяет React не перерендерить сообщения, которые действительно не изменились.
   const messages = useList(model.$messages, (message) => (
@@ -318,7 +321,11 @@ function MessageForm() {
 }
 
 function SendMessage() {
-  const [userName, messageText, messageSending] = useUnit([model.$userName, model.$messageText, model.$messageSending]);
+  const [userName, messageText, messageSending] = useUnit([
+    model.$userName,
+    model.$messageText,
+    model.$messageSending,
+  ]);
 
   const [handleLogout, handleTextChange, handleEnterPress, handleSendClick] = useUnit([
     model.logoutClicked,

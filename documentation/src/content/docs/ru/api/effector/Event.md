@@ -12,6 +12,7 @@ keywords:
 description: Event, его методы и свойства
 lang: ru
 ---
+
 ```ts
 import { type Event, type EventCallable } from "effector";
 ```

@@ -49,10 +49,10 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
       </span>
       <span> © 2018-{new Date().getFullYear()}</span>
       <picture class="log-image">
-        <source srcset="/log-desktop.jpg" media="(min-width: 1024px)">
-        <source srcset="/log-tablet.jpg" media="(min-width: 768px) and (max-width: 1023px)">
-        <source srcset="/log-mobile.jpg" media="(max-width: 767px)">
-        <img src="/log-other.jpg">
+        <source srcset="/log-desktop.jpg" media="(min-width: 1024px)" />
+        <source srcset="/log-tablet.jpg" media="(min-width: 768px) and (max-width: 1023px)" />
+        <source srcset="/log-mobile.jpg" media="(max-width: 767px)" />
+        <img src="/log-other.jpg" />
       </picture>
     </div>
   </div>

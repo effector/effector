@@ -177,7 +177,7 @@ Types of the `source` object must be the same as `originalFx` params. But the `a
 ### Examples (#methods-attach-source-effect-examples)
 
 ```ts
-import {createEffect, createStore, attach} from 'effector'
+import { createEffect, createStore, attach } from "effector";
 
 const requestPageFx = createEffect<{ page: number; size: number }, string[]>(
   async ({ page, size }) => {
@@ -401,7 +401,7 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 #### Map arguments (#methods-attach-effect-mapParams-examples-map-arguments)
 
 ```ts
-import {createEffect, attach} from 'effector'
+import { createEffect, attach } from "effector";
 
 const originalFx = createEffect((a: { input: number }) => a);
 
@@ -423,7 +423,7 @@ attachedFx(1);
 #### Handle exceptions (#methods-attach-effect-mapParams-examples-handle-exceptions)
 
 ```ts
-import {createEffect, attach} from 'effector'
+import { createEffect, attach } from "effector";
 
 const originalFx = createEffect((a: { a: number }) => a);
 

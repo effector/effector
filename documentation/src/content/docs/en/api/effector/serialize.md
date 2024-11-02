@@ -53,13 +53,13 @@ If a store [does not have a sid](/en/api/effector/babel-plugin#sid), its value w
 ```js
 import { createStore, createEvent, allSettled, fork, serialize } from "effector";
 
-const inc = createEvent()
+const inc = createEvent();
 const $store = createStore(42);
 $store.on(inc, (x) => x + 1);
 
 const scope = fork();
 
-await allSettled(inc, {scope});
+await allSettled(inc, { scope });
 
 console.log(serialize(scope)); // => {[sid]: 43}
 ```

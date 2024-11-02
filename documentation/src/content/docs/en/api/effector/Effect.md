@@ -48,7 +48,7 @@ You must provide a handler either through [.use](#methods-use-handler) method or
 ### Examples (#methods-use-handler-examples)
 
 ```js
-import {createEffect} from 'effector';
+import { createEffect } from "effector";
 
 const fetchUserReposFx = createEffect();
 
@@ -88,7 +88,7 @@ fn = effect.use.getCurrent();
 ### Examples (#methods-use-getCurrent-examples)
 
 ```js
-import {createEffect} from 'effector';
+import { createEffect } from "effector";
 
 const handlerA = () => "A";
 const handlerB = () => "B";

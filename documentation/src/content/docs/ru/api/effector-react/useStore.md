@@ -3,6 +3,7 @@ title: useStore
 description: Реакт-хук для подписки компонента на стор
 lang: ru
 ---
+
 :::warning{title="Устаревшее API "}
 
 Рекомендуется использовать хук [`useUnit`](/ru/api/effector-react/useUnit).

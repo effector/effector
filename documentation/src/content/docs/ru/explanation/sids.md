@@ -26,7 +26,7 @@ Effector основан на идее атомарного store. Это озн�
 
 ```ts
 // server.ts
-import { createStore } from 'single-store-state-manager';
+import { createStore } from "single-store-state-manager";
 
 function handlerRequest() {
   const store = createStore({ initialValue: null });
@@ -38,7 +38,7 @@ function handlerRequest() {
 }
 
 // client.ts
-import { createStore } from 'single-store-state-manager';
+import { createStore } from "single-store-state-manager";
 
 // Предположим, что сервер поместил состояние в HTML
 const serverState = readServerStateFromWindow();
@@ -78,8 +78,8 @@ const store = createStore({
 Давайте добавим его в некоторые stores:
 
 ```ts
-const $name = createStore(null, { sid: 'name' });
-const $age = createStore(null, { sid: 'age' });
+const $name = createStore(null, { sid: "name" });
+const $age = createStore(null, { sid: "age" });
 ```
 
 Теперь мы можем сериализовать и десериализовать stores:
@@ -91,7 +91,7 @@ async function handlerRequest() {
   const scope = fork();
 
   // заполняем stores данными
-  await allSettled($name, { scope, params: 'Igor' });
+  await allSettled($name, { scope, params: "Igor" });
   await allSettled($age, { scope, params: 25 });
 
   const state = JSON.serialize(serialize(scope));
@@ -225,8 +225,6 @@ async function handleServerRequest(req) {
             self._SERVER_STATE_ = ${serializedState}
         </script>
       `,
-
-
     ],
   });
 }
@@ -406,6 +404,7 @@ const personTwo = withFactory({
 personOne.$name.sid; // gre24f|ffds2
 personTwo.$name.sid; // lpefgd|ffds2
 ```
+
 ### Как работает `withFactory`
 
 `withFactory` — это вспомогательная функция, которая позволяет создавать уникальные `sid` для внутренних юнитов. Это функция, которая принимает объект с `sid` и `fn` свойствами. `sid` — это уникальный идентификатор фабрики, а `fn` — функция, которая создает юниты.

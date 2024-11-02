@@ -27,18 +27,20 @@ import { VueEffector } from "effector-vue/options-vue3";
 ### Examples (#methods-VueEffector-Vue-options-examples)
 
 #### Installation plugin
+
 ```js
 import { createApp } from "vue";
 import { VueEffector } from "effector-vue/options-vue3";
 
-import App from './App.vue'
+import App from "./App.vue";
 
-const app = createApp(App)
+const app = createApp(App);
 
 app.use(VueEffector);
 ```
 
 #### Effector options
+
 ```html
 <template>
   <div>

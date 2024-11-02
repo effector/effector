@@ -8,7 +8,6 @@ redirectFrom:
 There is the official Next.js bindings package - [`@effector/next`](https://github.com/effector/next). Follow its documentation to find out, how to integrate Next.js with effector.
 :::
 
-
 This is a simplified example of integration with the Next.js router.
 We create a similar model for storing the router instance:
 

@@ -132,4 +132,7 @@ console.log(scopeB.getState($counter)); // => -1
 ```
 
 [Попробовать](https://share.effector.dev/0grlV3bA)
+
+```
+
 ```

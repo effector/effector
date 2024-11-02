@@ -41,21 +41,21 @@ To connect a custom range input component with state
 - [Client-server interaction with effects](https://github.com/effector/effector/tree/master/examples/worker-rpc) GitHub
 - [Tree folder structure](https://share.effector.dev/v4dfRBNb)
 - [Reddit reader](https://share.effector.dev/aW7ESkZ0) With effects for data fetching and effector-react hooks <!-- Reddit api is disabled, example not working! -->
-<!-- - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook Example with forbidden event calls in pure functions -->
-<!-- - [Dynamic typing status](https://share.effector.dev/tAnzG5oJ) example with watch calls in effect for aborting -->
+  <!-- - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook Example with forbidden event calls in pure functions -->
+  <!-- - [Dynamic typing status](https://share.effector.dev/tAnzG5oJ) example with watch calls in effect for aborting -->
 - [Conditional filtering](https://share.effector.dev/g7N1K6Bc)
-<!-- - [Request cancellation](https://share.effector.dev/W4I0ghLt) just rewrite it in farfetched -->
-<!-- - [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd) rewrite it with models -->
-<!-- - [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD) rewrite it with effector-storage -->
+  <!-- - [Request cancellation](https://share.effector.dev/W4I0ghLt) just rewrite it in farfetched -->
+  <!-- - [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd) rewrite it with models -->
+  <!-- - [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD) rewrite it with effector-storage -->
 - [Dynamic page selection with useStoreMap](https://share.effector.dev/HT7iwbbT)
 - [Update on scroll](https://share.effector.dev/9gLRkfiy)
 - [Night theme switcher component](https://share.effector.dev/307fvPmV)
 <!-- - [Computed bounce menu animation](https://share.effector.dev/ZXEtGBBq) on with derived store -->
 - [Values history](https://share.effector.dev/Tgmw90Ln)
 - [Read default state from backend](https://share.effector.dev/h5dE3SmJ)
-<!-- - [Requests cache](https://share.effector.dev/jvE7r0By) rewrite with farfetched -->
-<!-- - [Watch last two store state values](https://share.effector.dev/LRVsYhIc) -->
-<!-- - [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox update example -->
+  <!-- - [Requests cache](https://share.effector.dev/jvE7r0By) rewrite with farfetched -->
+  <!-- - [Watch last two store state values](https://share.effector.dev/LRVsYhIc) -->
+  <!-- - [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox update example -->
 - [Recent users projects](https://github.com/effector/effector/network/dependents)
 - [BallSort game](https://ballsort.sova.dev/) with [source code](https://github.com/sergeysova/ballsort)
 - [Sudoku game](https://sudoku-effector.pages.dev/) with [source code](https://github.com/Shiyan7/sudoku-effector)
