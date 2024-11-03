@@ -63,7 +63,7 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/typescript/typing-effector",
       },
       {
-        text: { en: "Usage with `effector-react`", uz: "`effector-react` dan foydalaning" },
+        text: { en: "Usage with `effector-react`", ru: "Использование с `effector-react`", uz: "`effector-react` dan foydalaning" },
         link: "/typescript/usage-with-effector-react",
       },
       {
@@ -76,7 +76,7 @@ const defaultSidebar: LSidebarGroup[] = [
     text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
       {
-        text: { en: "Writing tests", uz: "Testlar yozish" },
+        text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
         link: "/guides/testing",
       },
       {
