@@ -17,11 +17,11 @@ import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
 // https://astro.build/config
 export default defineConfig({
   site: process.env.NODE_ENV === "development" ? "http://localhost:4321" : `https://effector.dev`,
+  compressHTML: true,
   integrations: [
     tailwind({ applyBaseStyles: false }),
     preact({ compat: true }),
     mdx({ extendMarkdownConfig: true }),
-    process.env.COMPRESS !== "false" && compress(),
   ],
   prefetch: true,
   base: "/",
