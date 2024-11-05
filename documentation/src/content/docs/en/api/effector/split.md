@@ -42,9 +42,9 @@ split({
   // case store
   match: Store<'first' | 'second'>,
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -59,9 +59,9 @@ split({
   // case function
   match: (value: T) => 'first' | 'second',
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -79,9 +79,9 @@ split({
     second: Store<boolean>
   },
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -103,9 +103,9 @@ split({
     second: (value: T) => boolean
   },
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -130,9 +130,9 @@ split({
   // case function
   match: (data: T) => 'a' | 'b',
   cases: {
-    a: Unit<T>,
-    b: Unit<T>,
-    __?: Unit<T>
+    a: Unit<T> | Unit<T>[],
+    b: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 split({
@@ -140,9 +140,9 @@ split({
   // case store
   match: Store<'a' | 'b'>,
   cases: {
-    a: Unit<T>,
-    b: Unit<T>,
-    __?: Unit<T>
+    a: Unit<T> | Unit<T>[],
+    b: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 split({
@@ -154,9 +154,9 @@ split({
     b: Store<boolean>
   },
   cases: {
-    a: Unit<T>,
-    b: Unit<T>,
-    __?: Unit<T>
+    a: Unit<T> | Unit<T>[],
+    b: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -165,7 +165,7 @@ split({
 
 - `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
 - `match`: Single [store with string](/en/api/effector/split#case-store), single [function which returns string](/en/api/effector/split#case-function) or object with [boolean stores](/en/api/effector/split#matching-store) and [functions which returns boolean](/en/api/effector/split#matching-function)
-- `cases`: Object with [units](/en/explanation/glossary#common-unit) to which data will be passed from `source` after case selection
+- `cases`: Object with [units](/en/explanation/glossary#common-unit)  or arrays of units to which data will be passed from `source` after case selection
 
 ### Returns (#methods-split-source-match-cases-returns)
 
@@ -261,6 +261,42 @@ messageReceived({
 ```
 
 [Try it](https://share.effector.dev/32FNNk8H)
+
+#### Cases with arrays of units (#methods-split-source-match-cases-examples-cases-with-arrays-of-units)
+
+```js
+import { createEffect, createEvent, createStore, sample, split } from "effector";
+
+const $verificationCode = createStore("12345")
+const $error = createStore("");
+
+const modalToInputUsername = createEvent();
+const modalToAuthorizationMethod = createEvent();
+
+const checkVerificationCodeFx = createEffect((code) => {
+  throw "500"
+});
+
+sample({
+  clock: verificationCodeSubmitted,
+  source: $verificationCode,
+  target: checkVerificationCodeFx
+});
+
+split({
+  source: checkVerificationCodeFx.failData,
+  match: (value) => (["400", "410"].includes(value) ? "verificationCodeError" : "serverError"),
+  cases: {
+    verificationCodeError: $verificationCodeError,
+    serverError: [$error, modalToAuthorizationMethod]
+  }
+});
+
+$error.updates.watch((value) => console.log("ERROR: " + value));
+modalToAuthorizationMethod.watch(() => console.log("Modal window to the authorization method content."))
+// => ERROR: 500
+// => Modal window to the authorization method content.
+```
 
 ## `split(source, match)` (#methods-split-source-match)
 
