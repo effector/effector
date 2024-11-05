@@ -290,17 +290,17 @@ Your support allows us to improve the developer experience 🧡.
 </tr>
 <tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/zarabotaet>
-            <img src=https://avatars.githubusercontent.com/u/15930980?v=4 width="100;"  alt=Dmitrij Shuleshov/>
-            <br />
-            <sub style="font-size:14px"><b>Dmitrij Shuleshov</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/Olovyannikov>
             <img src=https://avatars.githubusercontent.com/u/54705024?v=4 width="100;"  alt=Ilya Olovyannikov/>
             <br />
             <sub style="font-size:14px"><b>Ilya Olovyannikov</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/zarabotaet>
+            <img src=https://avatars.githubusercontent.com/u/15930980?v=4 width="100;"  alt=Dmitrij Shuleshov/>
+            <br />
+            <sub style="font-size:14px"><b>Dmitrij Shuleshov</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
