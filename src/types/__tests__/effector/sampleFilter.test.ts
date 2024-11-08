@@ -54,7 +54,15 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+        Unmarked error at test line 7 'filter: allow,'
+        lack of expected error at test line 6 'source: trigger,'
+        Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+          Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+            Types of property 'map' are incompatible.
+              Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+                Types of parameters 'fn' and 'fn' are incompatible.
+                  Types of parameters 'state' and 'state' are incompatible.
+                    Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -70,7 +78,15 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+        Unmarked error at test line 7 'filter: allow,'
+        lack of expected error at test line 6 'source: trigger,'
+        Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+          Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+            Types of property 'map' are incompatible.
+              Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+                Types of parameters 'fn' and 'fn' are incompatible.
+                  Types of parameters 'state' and 'state' are incompatible.
+                    Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -104,7 +120,11 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
+          Unmarked error at test line 9 'target,'
+          lack of expected error at test line 7 'source: trigger,'
+          Type 'StoreWritable<string>' is not assignable to type 'Unit<number>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'number'.
           "
         `)
       })
@@ -168,7 +188,11 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
+          Unmarked error at test line 8 'target,'
+          lack of expected error at test line 6 'source: trigger,'
+          Type 'StoreWritable<string>' is not assignable to type 'Unit<number>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'number'.
           "
         `)
       })
@@ -310,7 +334,11 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }; }'.
+          Unmarked error at test line 10 'target,'
+          lack of expected error at test line 7 'clock,'
+          Type 'StoreWritable<string>' is not assignable to type 'Unit<number>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'number'.
           "
         `)
       })
@@ -400,7 +428,10 @@ describe('sample(config)', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        no errors
+        Unmarked error at test line 4 'const result: Event<User> = sample({'
+        Type 'Event<NonNullable<User | FalsyValues>>' is not assignable to type 'Event<User>'.
+          Type 'NonNullable<User | FalsyValues>' is not assignable to type 'User'.
+            Type 'boolean' is not assignable to type 'User'.
         "
       `)
     })
@@ -434,7 +465,11 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: User; targetType: string; }; }'.
+          Unmarked error at test line 9 'target,'
+          lack of expected error at test line 7 'source: trigger,'
+          Type 'StoreWritable<string>' is not assignable to type 'Unit<User>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'User'.
           "
         `)
       })
@@ -517,7 +552,13 @@ describe('sample(config)', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: User; targetType: string; }; }'.
+          Type 'EventCallable<User>' is not assignable to type 'Unit<string>'.
+            Types of property '__' are incompatible.
+              Type 'User' is not assignable to type 'string'.
+          Unmarked error at test line 9 'target,'
+          Type 'StoreWritable<string>' is not assignable to type 'UnitTargetable<User>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'User'.
           "
         `)
       })
@@ -548,12 +589,9 @@ describe('filter return validation', () => {
       sample({source: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ source: EventCallable<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { source: EventCallable<any>; clock?: undefined; filter: (src: any) => src is any; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ source: EventCallable<any>; filter: () => number; }]' is not assignable to type '[config: { source: EventCallable<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ source: EventCallable<any>; filter: () => number; }' is not assignable to type '{ source: EventCallable<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ source: EventCallable<any>; filter: () => number; }' is not assignable to type '{ source: EventCallable<any>; clock?: undefined; filter: (src: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
+        Type '() => number' is not assignable to type 'Store<boolean> | (() => boolean)'.
+          Type '() => number' is not assignable to type '() => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -562,12 +600,9 @@ describe('filter return validation', () => {
       sample({clock: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ clock: EventCallable<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: EventCallable<any>; source?: undefined; filter: (clk: any) => clk is any; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<any>; filter: () => number; }]' is not assignable to type '[config: { clock: EventCallable<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source?: undefined; filter: (clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
+        Type '() => number' is not assignable to type 'Store<boolean> | (() => boolean)'.
+          Type '() => number' is not assignable to type '() => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -576,12 +611,9 @@ describe('filter return validation', () => {
       sample({source: anyt, clock: anyt, filter: () => 0})
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Argument of type '[{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => src is any; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }]' is not assignable to type '[config: { clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ source: EventCallable<any>; clock: EventCallable<any>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<any>; source: EventCallable<any>; filter: (src: any, clk: any) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
+        Type '() => number' is not assignable to type 'Store<boolean> | (() => boolean)'.
+          Type '() => number' is not assignable to type '() => boolean'.
+            Type 'number' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -750,10 +782,9 @@ test('incorrect filter (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Argument of type '[{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
-      Type '[{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }]' is not assignable to type '[config: never]'.
-        Type '{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }' is not assignable to type 'never'.
-          The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+    Unmarked error at test line 7 'filter: null,'
+    lack of expected error at test line 5 'sample({'
+    Type 'null' is not assignable to type 'Store<boolean> | (() => boolean)'.
     "
   `)
 })
@@ -772,9 +803,9 @@ test('type inference issue', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 5 'clock: nullableAB,'
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string | number; }; targetType: number; }; }'.
-    lack of expected error at test line 9 'fn: val => ({a: 1, b: val ? val.b : ''}),'
+    Type '(val: { a: string; b: number; } | null) => { a: number; b: string | number; }' is not assignable to type '((clk: { a: string; b: number; }) => number) & ((val: { a: string; b: number; } | null) => { a: number; b: string | number; })'.
+      Type '(val: { a: string; b: number; } | null) => { a: number; b: string | number; }' is not assignable to type '(clk: { a: string; b: number; }) => number'.
+        Type '{ a: number; b: string | number; }' is not assignable to type 'number'.
     "
   `)
 })

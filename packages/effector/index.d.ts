@@ -174,7 +174,7 @@ export interface EventCallable<Payload> extends Event<Payload>, UnitTargetable<P
   (payload: Payload): Payload
    (this: IfUnknown<Payload, void, Payload extends void ? void : `Error: Expected 1 argument, but got 0`>, payload?: Payload): void
 
-  prepend<Before = void>(fn: (_: Before) => Payload): EventCallable<Before>
+  prepend<Before = void>(fn: (_: Before) => Payload): EventCallableAsReturnType<Before>
 }
 
 /**
@@ -241,10 +241,6 @@ export interface Store<State> extends Unit<State> {
     trigger: Unit<E>,
     watcher: (state: State, payload: E) => any,
   ): Subscription
-  /**
-   * @deprecated use js pipe instead
-   */
-  thru<U>(fn: (store: Store<State>) => U): U
 
   defaultState: State
   compositeName: CompositeName
@@ -1007,171 +1003,184 @@ type Source<A> = Unit<A> | Combinable
 type Clock<B> = Unit<B> | Tuple<Unit<any>>
 type Target = UnitTargetable<any> | Tuple<any>
 
-type GetTupleWithoutAny<T> = T extends Array<infer U>
-  ? U extends Unit<infer Value>
-    ? IfAny<Value, never, Value>
-    : never
-  : never
-
-type GetMergedValue<T> = GetTupleWithoutAny<T> extends never ? any : GetTupleWithoutAny<T>
-
-type GetSource<S> = S extends Unit<infer Value> ? Value : GetCombinedValue<S>
-type GetClock<C> = C extends Unit<infer Value> ? Value : GetMergedValue<C>
-
-/** Replaces incompatible unit type with string error message.
- *  There is no error message if target type is void.
- */
-type ReplaceUnit<Target, Result, Value> = IfAssignable<Result, Value,
-  Target,
-  Value extends void
-    ? Target
-    : 'incompatible unit in target'
->
-
-// [...T] is used to show sample result as a tuple (not array)
-type TargetTuple<Target extends Array<unknown>, Result> = [...{
-  [Index in keyof Target]: Target[Index] extends UnitTargetable<infer Value>
-    ? ReplaceUnit<Target[Index], Result, Value>
-    : 'non-unit item in target'
-}]
-
-type MultiTarget<Target, Result> = Target extends UnitTargetable<infer Value>
-  ? ReplaceUnit<Target, Result, Value>
-  : Target extends Tuple<unknown>
-    ? TargetTuple<Target, Result>
-    : 'non-unit item in target'
+type ValidateSampleConfig<
+  RawConfig,
+  FnValid extends ('yes' | 'no') = RawConfig extends {fn: infer CheckFN}
+  ? CheckFN extends ((...args: any[]) => void)
+    ? 'yes'
+    : 'no'
+  : 'yes',
+  ClockValid extends ('yes' | 'no') = RawConfig extends {clock: infer CheckClock}
+  ? CheckClock extends (Unit<any> | RoTuple<Unit<any>>)
+    ? 'yes'
+    : 'no'
+  : 'yes',
+  TargetValid extends ('yes' | 'no') = RawConfig extends {target: infer CheckTarget}
+  ? CheckTarget extends (Unit<any> | RoTuple<Unit<any>>)
+    ? 'yes'
+    : 'no'
+  : 'yes',
+  SourceValid extends ('yes' | 'no') = RawConfig extends {source: infer CheckSource}
+  ? CheckSource extends (Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>)
+    ? 'yes'
+    : 'no'
+  : 'yes',
+  FilterValid extends ('yes' | 'no') = RawConfig extends {filter: infer CheckFilter}
+  ? CheckFilter extends (Store<boolean> | ((...args: any[]) => boolean))
+    ? 'yes'
+    : 'no'
+  : 'yes'
+> = [FnValid, ClockValid, TargetValid, SourceValid, FilterValid] extends Tuple<'yes'>
+  ? ['good', unknown]
+  : [
+      'bad',
+      (
+        FnValid extends 'no'
+        ? {fn: () => any}
+        : {}
+      ) & (
+        ClockValid extends 'no'
+        ? {clock: Unit<any> | Array<Unit<any>>}
+        : {}
+      ) & (
+        TargetValid extends 'no'
+        ? {target: Unit<any> | Array<Unit<any>>}
+        : {}
+      ) & (
+        SourceValid extends 'no'
+        ? {source: Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>}
+        : {}
+      ) & (
+        FilterValid extends 'no'
+        ? {filter: Store<boolean> | (() => boolean)}
+        : {}
+      )
+    ]
 
 type SampleImpl<
   Target,
   Source,
   Clock,
-  FLBool,
   FilterFun,
   FN,
   FNInf,
   FNInfSource extends (
     Source extends Unit<any> | SourceRecord
-      ? TypeOfSource<Source>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfSource<Source>>
+        : TypeOfSource<Source>
       : never
     ),
   FNInfClock extends (
     Clock extends Units
-      ? TypeOfClock<Clock>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfClock<Clock>>
+        : TypeOfClock<Clock>
       : never
-    ),
+  ),
   FNAltArg,
-  FLUnit,
-  SomeFN,
-> =
+  FLUnitOrBool,
+  RawConfig
+> = ValidateSampleConfig<RawConfig> extends ['bad', infer ConfigWithError]
+  ? [error: ConfigWithError]
   // no target
-  unknown extends Target
+  : unknown extends Target
     // no target, no source
-  ? unknown extends Source
-    ? unknown extends Clock
-      ? [message: {error: 'either target, clock or source should exists'}]
-        // no target, no source, has clock
-      : Clock extends Units
-        ? SampleFilterDef<
-            ModeSelector<
-              'clock |        | filter | fn |       ',
-              'clock |        | filter |    |       ',
-              'clock |        |        | fn |       ',
-              'clock |        |        |    |       ',
-              SomeFN
-            >,
-            Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, SomeFN
-          >
-        : [message: {error: 'clock should be unit or array of units'; got: Clock}]
-      // no target, has source
-    : Source extends Unit<any> | SourceRecord
+    ? unknown extends Source
+      // no target, no source, has clock
+      ? SampleFilterDef<
+          ModeSelector<
+            'clock |        | filter | fn |       ',
+            'clock |        | filter |    |       ',
+            'clock |        |        | fn |       ',
+            'clock |        |        |    |       ',
+            RawConfig
+          >,
+          Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig
+        >
+        // no target, has source
+      : unknown extends Clock
         // no target, has source, no clock
-      ? unknown extends Clock
         ? SampleFilterDef<
             ModeSelector<
               '      | source | filter | fn |       ',
               '      | source | filter |    |       ',
               '      | source |        | fn |       ',
               '      | source |        |    |       ',
-              SomeFN
+              RawConfig
             >,
-            Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, SomeFN
+            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig
           >
-          // no target, has source, has clock
-        : Clock extends Units
-          ? SampleFilterDef<
-              ModeSelector<
-                'clock | source | filter | fn |       ',
-                'clock | source | filter |    |       ',
-                'clock | source |        | fn |       ',
-                'clock | source |        |    |       ',
-                SomeFN
-              >,
-              Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, SomeFN
-            >
-          : [message: {error: 'clock should be unit or array of units'; got: Clock}]
-      : [message: {error: 'source should be unit or object with stores'; got: Source}]
-  // has target
-  : Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>
-      // has target, no source
-    ? unknown extends Source
-      ? unknown extends Clock
-        ? [message: {error: 'either target, clock or source should exists'}]
-          // has target, no source, has clock
-        : Clock extends Units
-          ? SampleFilterTargetDef<
-              ModeSelector<
-                'clock |        | filter | fn | target',
-                'clock |        | filter |    | target',
-                'clock |        |        | fn | target',
-                'clock |        |        |    | target',
-                SomeFN
-              >,
-              Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, SomeFN
-            >
-          : [message: {error: 'clock should be unit or array of units'; got: Clock}]
-        // has target, has source
-      : Source extends Unit<any> | SourceRecord
-        // has target, has source, no clock
-        ? unknown extends Clock
+        // no target, has source, has clock
+        : SampleFilterDef<
+            ModeSelector<
+              'clock | source | filter | fn |       ',
+              'clock | source | filter |    |       ',
+              'clock | source |        | fn |       ',
+              'clock | source |        |    |       ',
+              RawConfig
+            >,
+            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig
+          >
+    // has target
+    : Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>
+        // has target, no source
+      ? unknown extends Source
+        // has target, no source, has clock
+        ? SampleFilterTargetDef<
+            ModeSelector<
+              'clock |        | filter | fn | target',
+              'clock |        | filter |    | target',
+              'clock |        |        | fn | target',
+              'clock |        |        |    | target',
+              RawConfig
+            >,
+            Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
+          >
+          // has target, has source
+        : unknown extends Clock
+          // has target, has source, no clock
           ? SampleFilterTargetDef<
               ModeSelector<
                 '      | source | filter | fn | target',
                 '      | source | filter |    | target',
                 '      | source |        | fn | target',
                 '      | source |        |    | target',
-                SomeFN
+                RawConfig
               >,
-              Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, SomeFN
+              Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
             >
-            // has target, has source, has clock
-          : Clock extends Units
-            ? SampleFilterTargetDef<
-                ModeSelector<
-                  'clock | source | filter | fn | target',
-                  'clock | source | filter |    | target',
-                  'clock | source |        | fn | target',
-                  'clock | source |        |    | target',
-                  SomeFN
-                >,
-                Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, SomeFN
-              >
-            : [message: {error: 'clock should be unit or array of units'; got: Clock}]
-        : [message: {error: 'source should be unit or object with stores'; got: Source}]
-    : Target extends InvalidUnitsTarget ? [message: {error: 'derived units are not allowed in target'; got: Target}] : [message: {error: 'target should be unit or array of units'; got: Target}]
+          // has target, has source, has clock
+          : SampleFilterTargetDef<
+              ModeSelector<
+                'clock | source | filter | fn | target',
+                'clock | source | filter |    | target',
+                'clock | source |        | fn | target',
+                'clock | source |        |    | target',
+                RawConfig
+              >,
+              Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
+            >
+      : [error: {
+          target: Target extends RoTuple<Unit<any>>
+            ? {[K in keyof Target]: ReplaceDerivedUnitWithWritable<Target[K]>}
+            : ReplaceDerivedUnitWithWritable<Target>
+          error: 'derived units are not allowed in target'
+        }]
 
 type ModeSelector<
   FilterAndFN,
   FilterOnly,
   FNOnly,
   None,
-  SomeFN,
-> = unknown extends SomeFN
+  RawConfig,
+> = unknown extends RawConfig
   ? FilterAndFN
-  : SomeFN extends {fn: any; filter: any}
+  : RawConfig extends {fn: any; filter: any}
     ? FilterAndFN
-    : SomeFN extends {filter: any}
+    : RawConfig extends {filter: any}
       ? FilterOnly
-      : SomeFN extends {fn: any}
+      : RawConfig extends {fn: any}
         ? FNOnly
         : None
 
@@ -1179,8 +1188,7 @@ type SampleRet<
   Target,
   Source,
   Clock,
-  FLUnit,
-  FLBool,
+  FLUnitOrBool,
   FilterFun,
   FN,
   FNAltArg,
@@ -1195,21 +1203,20 @@ type SampleRet<
       ? TypeOfClock<Clock>
       : never
   ),
-  SomeFN,
-  ForceTargetInference
+  RawConfig
 > = unknown extends Target
     ? unknown extends Clock
       ? unknown extends Source
         ? never
         : Source extends Unit<any> | SourceRecord
           // has filter, has fn
-          ? unknown extends SomeFN
-            ? FLUnit extends Unit<any>
+          ? unknown extends RawConfig
+            ? FLUnitOrBool extends Unit<any>
               ? FN extends (src: TypeOfSource<Source>) => any
                 ? EventAsReturnType<ReturnType<FN>>
                 : never
-              : FLBool extends BooleanConstructor
-                ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
+              : FLUnitOrBool extends BooleanConstructor
+                ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
                   ? EventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
@@ -1220,13 +1227,13 @@ type SampleRet<
                     ? EventAsReturnType<ReturnType<FN>>
                     : never
             // has filter, has fn
-            : SomeFN extends {filter: any; fn: any}
-              ? FLUnit extends Unit<any>
+            : RawConfig extends {filter: any; fn: any}
+              ? FLUnitOrBool extends Unit<any>
                 ? FN extends (src: TypeOfSource<Source>) => any
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
-                : FLBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
+                : FLUnitOrBool extends BooleanConstructor
+                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
@@ -1237,18 +1244,18 @@ type SampleRet<
                       ? EventAsReturnType<ReturnType<FN>>
                       : never
               // no filter, has fn
-              : SomeFN extends {fn: any}
+              : RawConfig extends {fn: any}
                 ? FN extends (src: TypeOfSource<Source>) => any
                   ? Source extends Store<any> | SourceRecord
                     ? Store<ReturnType<FN>>
                     : EventAsReturnType<ReturnType<FN>>
                   : never
                 // has filter, no fn
-                : SomeFN extends {filter: any}
-                  ? FLUnit extends Unit<any>
+                : RawConfig extends {filter: any}
+                  ? FLUnitOrBool extends Unit<any>
                     ? EventAsReturnType<TypeOfSource<Source>>
-                    : FLBool extends BooleanConstructor
-                      ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
+                    : FLUnitOrBool extends BooleanConstructor
+                      ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
                       : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
                         ? EventAsReturnType<FNInfSource>
                         : EventAsReturnType<TypeOfSource<Source>>
@@ -1260,13 +1267,13 @@ type SampleRet<
       : unknown extends Source
         ? Clock extends Units
           // has filter, has fn
-          ? unknown extends SomeFN
-            ? FLUnit extends Unit<any>
+          ? unknown extends RawConfig
+            ? FLUnitOrBool extends Unit<any>
               ? FN extends (clk: TypeOfClock<Clock>) => any
                 ? EventAsReturnType<ReturnType<FN>>
                 : never
-              : FLBool extends BooleanConstructor
-                ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
+              : FLUnitOrBool extends BooleanConstructor
+                ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
                   ? EventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
@@ -1277,13 +1284,13 @@ type SampleRet<
                     ? EventAsReturnType<ReturnType<FN>>
                     : never
             // has filter, has fn
-            : SomeFN extends {filter: any; fn: any}
-              ? FLUnit extends Unit<any>
+            : RawConfig extends {filter: any; fn: any}
+              ? FLUnitOrBool extends Unit<any>
                 ? FN extends (clk: TypeOfClock<Clock>) => any
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
-                : FLBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
+                : FLUnitOrBool extends BooleanConstructor
+                  ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
@@ -1294,18 +1301,18 @@ type SampleRet<
                       ? EventAsReturnType<ReturnType<FN>>
                       : never
               // no filter, has fn
-              : SomeFN extends {fn: any}
+              : RawConfig extends {fn: any}
                 ? FN extends (clk: TypeOfClock<Clock>) => any
                   ? Clock extends Store<any>
                     ? Store<ReturnType<FN>>
                     : EventAsReturnType<ReturnType<FN>>
                   : never
                 // has filter, no fn
-                : SomeFN extends {filter: any}
-                  ? FLUnit extends Unit<any>
+                : RawConfig extends {filter: any}
+                  ? FLUnitOrBool extends Unit<any>
                     ? EventAsReturnType<TypeOfClock<Clock>>
-                    : FLBool extends BooleanConstructor
-                      ? EventAsReturnType<NonFalsy<TypeOfClock<Clock>>>
+                    : FLUnitOrBool extends BooleanConstructor
+                      ? EventAsReturnType<NonNullable<TypeOfClock<Clock>>>
                       : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
                         ? EventAsReturnType<FNInfClock>
                         : EventAsReturnType<TypeOfClock<Clock>>
@@ -1317,13 +1324,13 @@ type SampleRet<
         : Clock extends Units
           ? Source extends Unit<any> | SourceRecord
             // has filter, has fn
-            ? unknown extends SomeFN
-              ? FLUnit extends Unit<any>
+            ? unknown extends RawConfig
+              ? FLUnitOrBool extends Unit<any>
                 ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
-                : FLBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                : FLUnitOrBool extends BooleanConstructor
+                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1334,13 +1341,13 @@ type SampleRet<
                       ? EventAsReturnType<ReturnType<FN>>
                       : never
               // has filter, has fn
-              : SomeFN extends {filter: any; fn: any}
-                ? FLUnit extends Unit<any>
+              : RawConfig extends {filter: any; fn: any}
+                ? FLUnitOrBool extends Unit<any>
                   ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
                     ? EventAsReturnType<ReturnType<FN>>
                     : never
-                  : FLBool extends BooleanConstructor
-                    ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                  : FLUnitOrBool extends BooleanConstructor
+                    ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
                       ? EventAsReturnType<ReturnType<FNAltArg>>
                       : never
                     : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1351,18 +1358,18 @@ type SampleRet<
                         ? EventAsReturnType<ReturnType<FN>>
                         : never
                 // no filter, has fn
-                : SomeFN extends {fn: any}
+                : RawConfig extends {fn: any}
                   ? FN extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
                     ? [Clock, Source] extends [Store<any>, Store<any> | SourceRecord]
                       ? Store<ReturnType<FN>>
                       : EventAsReturnType<ReturnType<FN>>
                     : never
                   // has filter, no fn
-                  : SomeFN extends {filter: any}
-                    ? FLUnit extends Unit<any>
+                  : RawConfig extends {filter: any}
+                    ? FLUnitOrBool extends Unit<any>
                       ? EventAsReturnType<TypeOfSource<Source>>
-                      : FLBool extends BooleanConstructor
-                        ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
+                      : FLUnitOrBool extends BooleanConstructor
+                        ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
                         : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
                           ? EventAsReturnType<FNInfSource>
                           : EventAsReturnType<TypeOfSource<Source>>
@@ -1372,7 +1379,7 @@ type SampleRet<
                       : EventAsReturnType<TypeOfSource<Source>>
             : never
           : never
-    : Target & ForceTargetInference
+    : Target
 
 /**
  * Represents a step in a business logic workflow. It tells an application when it should act, which data it needs,
@@ -1394,21 +1401,48 @@ type SampleRet<
  * ```
  */
 export function sample<
-  Target,
-  Source,
-  Clock,
-  FLBool,
-  FNInfSource extends (
+  const Target,
+  const Source,
+  const Clock,
+  const FNNonFalsy extends (
     Source extends Unit<any> | SourceRecord
-      ? TypeOfSource<Source>
-      : never
-    ),
-  FNInfClock extends (
-    Clock extends Units
-      ? TypeOfClock<Clock>
+    ? NonNullable<TypeOfSource<Source>>
+    : Clock extends Units
+      ? NonNullable<TypeOfClock<Clock>>
       : never
   ),
-  FilterFun extends (
+  const RawConfig,
+  const SourceNoConf,
+  const ClockNoConf,
+  const FNSrcNoConf extends (
+    SourceNoConf extends Unit<any> | SourceRecord
+      ? (src: TypeOfSource<SourceNoConf>) => any
+      : never
+  ),
+  const FNBothNoConf extends (
+    SourceNoConf extends Unit<any> | SourceRecord
+      ? ClockNoConf extends Units
+        ? ((src: TypeOfSource<SourceNoConf>, clk: TypeOfClock<ClockNoConf>) => any)
+        : never
+      : never
+  ),
+  const FLUnitOrBool,
+  const FNInfSource extends (
+    Source extends Unit<any> | SourceRecord
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfSource<Source>>
+        : TypeOfSource<Source>
+      : never
+    ),
+  const FNInfClock extends (
+    Clock extends Units
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfClock<Clock>>
+        : TypeOfClock<Clock>
+      : never
+  ),
+  const Args extends any[],
+  const FilterFun = (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (
@@ -1429,7 +1463,7 @@ export function sample<
       )
       : never
   ),
-  FN extends (
+  const FN = (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
@@ -1438,7 +1472,7 @@ export function sample<
       ? (clk: TypeOfClock<Clock>) => any
       : never
   ),
-  FNInf extends (
+  const FNInf = (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
@@ -1447,14 +1481,7 @@ export function sample<
       ? (clk: FNInfClock) => any
       : never
   ),
-  FNNonFalsy extends (
-    Source extends Unit<any> | SourceRecord
-    ? NonFalsy<TypeOfSource<Source>>
-    : Clock extends Units
-      ? NonFalsy<TypeOfClock<Clock>>
-      : never
-  ),
-  FNAltArg extends (
+  const FNAltArg = (
     Source extends Unit<any> | SourceRecord
     ? Clock extends Units
       ? (src: FNNonFalsy, clk: TypeOfClock<Clock>) => any
@@ -1463,24 +1490,6 @@ export function sample<
       ? (clk: FNNonFalsy) => any
       : never
   ),
-  SomeFN,
-  SourceNoConf,
-  ClockNoConf,
-  FNSrcNoConf extends (
-    SourceNoConf extends Unit<any> | SourceRecord
-      ? (src: TypeOfSource<SourceNoConf>) => any
-      : never
-  ),
-  FNBothNoConf extends (
-    SourceNoConf extends Unit<any> | SourceRecord
-      ? ClockNoConf extends Units
-        ? ((src: TypeOfSource<SourceNoConf>, clk: TypeOfClock<ClockNoConf>) => any)
-        : never
-      : never
-  ),
-  FLUnit,
-  Args extends any[],
-  InferTarget,
 >(...args:
   SourceNoConf extends Unit<any> | SourceRecord
     ? ClockNoConf extends Units
@@ -1493,8 +1502,8 @@ export function sample<
         ? [source: SourceNoConf, fn: FNSrcNoConf] & Args
         : Args extends [Unit<any>]
           ? [source: SourceNoConf] & Args
-          : SampleImpl<Target, Source, Clock, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, FLUnit, SomeFN>
-    : SampleImpl<Target, Source, Clock, FLBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, FLUnit, SomeFN>
+          : SampleImpl<Target, Source, Clock, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, FLUnitOrBool, RawConfig>
+    : SampleImpl<Target, Source, Clock, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, FLUnitOrBool, RawConfig>
 ): SourceNoConf extends Unit<any> | SourceRecord
   ? ClockNoConf extends Units
     ? [any, any, any] extends Args
@@ -1518,8 +1527,8 @@ export function sample<
         ? SourceNoConf extends Store<any>
           ? Store<TypeOfSource<SourceNoConf>>
           : EventAsReturnType<TypeOfSource<SourceNoConf>>
-        : NoInfer<SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>>
-  : NoInfer<SampleRet<Target, Source, Clock, FLUnit, FLBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, SomeFN, InferTarget>>
+        : NoInfer<SampleRet<Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, RawConfig>>
+  : NoInfer<SampleRet<Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNAltArg, FNInf, FNInfSource, FNInfClock, RawConfig>>
 
 /*
   | 'clock | source | filter | fn | target'
@@ -1563,27 +1572,6 @@ type Mode_NoTrg = `${string} |       `;
 type Mode_Flt = `${string} | filter | ${string}`;
 type Mode_Flt_Fn = `${string} | filter | fn | ${string}`;
 
-type TargetFilterFnConfig<
-  Mode extends Mode_Flt_Trg,
-  Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
-  Source,
-  Clock,
-  FilterFun,
-  FN,
-> = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
-  : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
-  : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
-  : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
-  : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
-  : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
-  : never
-
 type TargetConfigCheck<
   Mode extends Mode_Trg,
   Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
@@ -1591,7 +1579,7 @@ type TargetConfigCheck<
   Clock,
   FN,
   Config,
-  SomeFN
+  RawConfig
 > = // mode with fn
     Mode extends Mode_Fn_Trg
     // there should be an explicit conditional selection
@@ -1602,29 +1590,37 @@ type TargetConfigCheck<
         ReturnType<FN>,
         'fnRet',
         Target,
-        Config & SomeFN
+        Config, RawConfig,
+        FN,
+        'noSrc',
+        'noClk'
       >
-    : [message: {error: 'function should accept data source types'; got: FN}]
+    : [error: {
+        fn: DataSourceFunction<Source, Clock>
+        error: 'fn parameters should match clock/source types'
+      }]
     // mode with source only or with both clock and source
   : Mode extends Mode_Src
-  ? Source extends Unit<any> | SourceRecord
-    ? TargetOrError<
-        TypeOfSource<Source>,
-        'src',
-        Target,
-        Config & SomeFN
-      >
-    : [message: {error: 'source should be unit or object with stores'; got: Source}]
+  ? TargetOrError<
+      TypeOfSource<Source>,
+      'src',
+      Target,
+      Config, RawConfig,
+      'noFn',
+      Source,
+      Clock
+    >
     // mode with clock only
   : Mode extends Mode_Clk_NoSrc
-  ? Clock extends Units
-    ? TargetOrError<
-        TypeOfClock<Clock>,
-        'clk',
-        Target,
-        Config & SomeFN
-      >
-    : [message: {error: 'clock should be unit or array of units'; got: Clock}]
+  ? TargetOrError<
+      TypeOfClock<Clock>,
+      'clk',
+      Target,
+      Config, RawConfig,
+      'noFn',
+      'noSrc',
+      Clock
+    >
   : never
 
 type InferredType<Source, Clock, FilterFN> =
@@ -1648,13 +1644,18 @@ type InferredType<Source, Clock, FilterFN> =
       : never
     : never
 
+type TargetTypeSimple<Target> = Target extends Unit<infer TargetType>
+  ? TargetType
+  : Target extends RoTuple<Unit<infer TargetType>>
+    ? TargetType
+    : never
+
 type SampleFilterTargetDef<
   Mode extends Mode_Trg,
   Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
   Source,
   Clock,
-  FLUnit,
-  FLBool,
+  FLUnitOrBool,
   FilterFun,
   FN,
   FNInf,
@@ -1669,60 +1670,64 @@ type SampleFilterTargetDef<
       : never
     ),
   FNAltArg,
-  SomeFN
+  RawConfig
 > = Mode extends Mode_Flt_Trg
-  ? FLUnit extends Unit<any>
-    ? boolean extends UnitValue<FLUnit>
-      ? FN extends DataSourceFunction<Source, Clock>
-        ? TargetConfigCheck<
-            Mode, Target, Source, Clock, FN,
-            Mode extends 'clock | source | filter | fn | target'
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
-            : Mode extends 'clock | source | filter |    | target'
-            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
-            : Mode extends '      | source | filter | fn | target'
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
-            : Mode extends '      | source | filter |    | target'
-            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
-            : Mode extends 'clock |        | filter | fn | target'
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
-            : Mode extends 'clock |        | filter |    | target'
-            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
-            : never,
-            SomeFN
-          >
-          : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
-        : [message: {error: 'function should accept data source types'; got: FN}]
-    : FLBool extends BooleanConstructor
+  ? FLUnitOrBool extends Unit<any>
+    ? boolean extends UnitValue<FLUnitOrBool>
+      ? TargetConfigCheck<
+          Mode, Target, Source, Clock, FN,
+          ToResultConfig<
+            Mode,
+            Clock,
+            Source,
+            FLUnitOrBool,
+            FN,
+            Target
+          >,
+          RawConfig
+        >
+      : [error: {
+        fn: DataSourceFunction<Source, Clock>
+        error: 'fn parameters should match clock/source types'
+      }]
+    : FLUnitOrBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn_Trg
         ? FNAltArg extends (arg?: any, clk?: any) => any
           ? TargetOrError<
               ReturnType<FNAltArg>,
               'fnRet',
               Target,
-              TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, FNAltArg> & SomeFN
+              ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FNAltArg, Target>,
+              RawConfig,
+              FNAltArg,
+              'noSrc',
+              'noClk'
             >
           : never
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
-        ? Source extends Unit<any> | SourceRecord
-          ? TargetOrError<
-              NonFalsy<TypeOfSource<Source>>,
-              'src',
-              Target,
-              TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN
-            >
-          : [message: {error: 'source should be unit or object with stores'; got: Source}]
+        ? TargetOrError<
+            NonNullable<TypeOfSource<Source>>,
+            'src',
+            Target,
+            ToResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
+            RawConfig,
+            'noFn',
+            Source,
+            Clock
+          >
           // mode with clock only
         : Mode extends Mode_Clk_NoSrc
-        ? Clock extends Units
-          ? TargetOrError<
-              NonFalsy<TypeOfClock<Clock>>,
-              'clk',
-              Target,
-              TargetFilterFnConfig<Mode, Target, Source, Clock, FLBool, never> & SomeFN
-            >
-          : [message: {error: 'clock should be unit or array of units'; got: Clock}]
+        ? TargetOrError<
+            NonNullable<TypeOfClock<Clock>>,
+            'clk',
+            Target,
+            ToResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
+            RawConfig,
+            'noFn',
+            'noSrc',
+            Clock
+          >
         : never
     : FilterFun extends (
         Source extends Unit<any> | SourceRecord
@@ -1735,20 +1740,15 @@ type SampleFilterTargetDef<
       )
         // mode with fn
       ? Mode extends Mode_Flt_Fn_Trg
-        ? FNInf extends (
-            Source extends Unit<any> | SourceRecord
-            ? Clock extends Units
-              ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-              : (src: FNInfSource) => any
-            : Clock extends Units
-              ? (clk: FNInfClock) => any
-              : any
-          )
-          ? TargetOrError<
-              ReturnType<FNInf>,
-              'fnRet',
-              Target,
-              TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun & (
+        ? TargetOrError<
+            SafeReturn<FNInf>,
+            'fnRet',
+            Target,
+            ToResultConfig<
+              Mode,
+              Clock,
+              Source,
+              (
                 Source extends Unit<any> | SourceRecord
                 ? Clock extends Units
                   ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1756,274 +1756,538 @@ type SampleFilterTargetDef<
                 : Clock extends Units
                   ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
                   : never
-              ), FNInf & (
+              ),
+              (
                 Source extends Unit<any> | SourceRecord
                 ? Clock extends Units
-                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
-                  : (src: FNInfSource) => any
+                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => TargetTypeSimple<Target>
+                  : (src: FNInfSource) => TargetTypeSimple<Target>
                 : Clock extends Units
-                  ? (clk: FNInfClock) => any
-                  : any
-              )> & SomeFN
-            >
-          : [message: {error: 'function should accept data source types'; got: FNInf}]
+                  ? (clk: FNInfClock) => TargetTypeSimple<Target>
+                  : never
+              ),
+              Target
+            >,
+            RawConfig,
+            FNInf,
+            // dont need source and clock types for case with filter infer
+            'noSrc',
+            'noClk'
+          >
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
-        ? Source extends Unit<any> | SourceRecord
-          ? TargetOrError<
-              InferredType<Source, Clock, FilterFun>,
-              'src',
-              Target,
-              TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
-            >
-          : [message: {error: 'source should be unit or object with stores'; got: Source}]
+        ? TargetOrError<
+            InferredType<Source, Clock, FilterFun>,
+            'src',
+            Target,
+            ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+            RawConfig,
+            'noFn',
+            'noSrc',
+            'noClk'
+          >
           // mode with clock only
         : Mode extends Mode_Clk_NoSrc
-        ? Clock extends Units
-          ? TargetOrError<
-              InferredType<Source, Clock, FilterFun>,
-              'clk',
-              Target,
-              TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
-            >
-          : [message: {error: 'clock should be unit or array of units'; got: Clock}]
+        ? TargetOrError<
+            InferredType<Source, Clock, FilterFun>,
+            'clk',
+            Target,
+            ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+            RawConfig,
+            'noFn',
+            'noSrc',
+            Clock
+          >
         : never
-    : FilterFun extends (
-          Mode extends Mode_Clk_Src
-        ? Source extends Unit<any> | SourceRecord
-          ? Clock extends Units
-            ? ((src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any)
-            : never
-          : never
-        : Mode extends Mode_NoClk_Src
-        ? Source extends Unit<any> | SourceRecord
-          ? (src: TypeOfSource<Source>) => any
-          : never
-        : Clock extends Units
-          ? (clk: TypeOfClock<Clock>) => any
-          : never
-      )
-      ? ReturnType<FilterFun> extends boolean
-        // mode with fn
-        ? Mode extends Mode_Flt_Fn_Trg
-          ? FN extends DataSourceFunction<Source, Clock>
-            ? TargetOrError<
-                ReturnType<FN>,
-                'fnRet',
-                Target,
-                TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, FN> & SomeFN
-              >
-            : [message: {error: 'function should accept data source types'; got: FN}]
-            // mode with source only or with both clock and source
-          : Mode extends Mode_Src_Flt_NoFn_Trg
-          ? Source extends Unit<any> | SourceRecord
-            ? TargetOrError<
-                TypeOfSource<Source>,
-                'src',
-                Target,
-                TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
-              >
-            : [message: {error: 'source should be unit or object with stores'; got: Source}]
-            // mode with clock only
-          : Mode extends Mode_Clk_NoSrc
-          ? Clock extends Units
-            ? TargetOrError<
-                TypeOfClock<Clock>,
-                'clk',
-                Target,
-                TargetFilterFnConfig<Mode, Target, Source, Clock, FilterFun, never> & SomeFN
-              >
-            : [message: {error: 'clock should be unit or array of units'; got: Clock}]
-          : never
-        : [message: {error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
-      : [message: {error: 'filter should be function or unit'; got: FilterFun}]
+    // mode with fn
+    : Mode extends Mode_Flt_Fn_Trg
+      ? FN extends DataSourceFunction<Source, Clock>
+        ? TargetOrError<
+            ReturnType<FN>,
+            'fnRet',
+            Target,
+            ToResultConfig<Mode, Clock, Source, FilterFun, FN, Target>,
+            RawConfig,
+            FN,
+            'noSrc',
+            'noClk'
+          >
+        : [error: {
+            fn: DataSourceFunction<Source, Clock>
+            error: 'fn parameters should match clock/source types'
+          }]
+        // mode with source only or with both clock and source
+      : Mode extends Mode_Src_Flt_NoFn_Trg
+      ? TargetOrError<
+          TypeOfSource<Source>,
+          'src',
+          Target,
+          ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+          RawConfig,
+          'noFn',
+          Source,
+          Clock
+        >
+        // mode with clock only
+      : Mode extends Mode_Clk_NoSrc
+      ? TargetOrError<
+          TypeOfClock<Clock>,
+          'clk',
+          Target,
+          ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+          RawConfig,
+          'noFn',
+          'noSrc',
+          Clock
+        >
+      : never
 
   : Mode extends Mode_NoFlt
     ? FN extends DataSourceFunction<Source, Clock>
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
-          Mode extends 'clock | source |        | fn | target'
-          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
-          : Mode extends 'clock | source |        |    | target'
-          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
-          : Mode extends '      | source |        | fn | target'
-          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
-          : Mode extends '      | source |        |    | target'
-          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
-          : Mode extends 'clock |        |        | fn | target'
-          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
-          : Mode extends 'clock |        |        |    | target'
-          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
-          : never,
-          SomeFN
+          ToResultConfig<Mode, Clock, Source, never, FN, Target>,
+          RawConfig
         >
-      : [message: {error: 'function should accept data source types'; got: FN}]
+      : [error: {
+        fn: DataSourceFunction<Source, Clock>
+        error: 'fn parameters should match clock/source types'
+      }]
     : never
+
+type RebuildClockTargetLoop<
+  ClockUnit,
+  ClockType,
+  Target extends readonly unknown[]
+> = Target extends readonly [Unit<infer TargetType>, ...infer TargetRest]
+  ? [ClockType] extends [TargetType]
+    ? RebuildClockTargetLoop<ClockUnit, ClockType, TargetRest>
+    : WhichType<TargetType> extends 'void'
+      ? ClockUnit
+      : Unit<TargetType>
+  : ClockUnit
+
+type RebuildClockLoopBranch<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<Unit<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Clock extends readonly [infer ClockUnit, ...infer ClockRest]
+  ? ClockUnit extends Unit<infer ClockType>
+    ? RebuildClockLoopBranch<
+      ClockRest,
+      Target,
+      [
+        ...Result,
+        RebuildClockTargetLoop<
+          ClockUnit,
+          FilterMode extends 'noFilter' ? ClockType : NonNullable<ClockType>,
+          Target
+        >
+      ],
+      FilterMode
+    >
+    : never
+  : Result
+
+type RebuildClockLoop<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<Unit<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Clock extends readonly [infer ForceFirst, ...infer ForceRest]
+  ? RebuildClockLoopBranch<
+    Clock,
+    Target,
+    Result,
+    FilterMode
+  >
+  // non-inline array unable to match condition above
+  // so we handle it in separate branch
+  : Clock extends Array<UnitTargetable<infer ClockType>>
+    ? Array<RebuildClockTargetLoop<
+      UnitTargetable<ClockType>,
+      ClockType,
+      Target
+    >>
+    : never
+
+type RebuildClockSingle<
+  Clock,
+  Target extends readonly unknown[],
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Clock extends Unit<infer ClockType>
+    ? RebuildClockTargetLoop<
+      Clock,
+      FilterMode extends 'noFilter' ? ClockType : NonNullable<ClockType>,
+      Target
+    >
+    : never
+
+type ToResultConfig<
+  Mode,
+  Clock,
+  Source,
+  Filter,
+  FN,
+  Target,
+> = Mode extends 'clock | source | filter | fn | target'
+  ? {clock: Clock; source: Source; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock | source | filter |    | target'
+  ? {clock: Clock; source: Source; filter: Filter; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends '      | source | filter | fn | target'
+  ? {source: Source; clock?: never; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends '      | source | filter |    | target'
+  ? {source: Source; clock?: never; filter: Filter; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock |        | filter | fn | target'
+  ? {clock: Clock; source?: never; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock |        | filter |    | target'
+  ? {clock: Clock; source?: never; filter: Filter; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock | source |        | fn | target'
+  ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock | source |        |    | target'
+  ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends '      | source |        | fn | target'
+  ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends '      | source |        |    | target'
+  ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock |        |        | fn | target'
+  ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock |        |        |    | target'
+  ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+  : Mode extends 'clock | source | filter | fn |       '
+  ? {clock: Clock; source: Source; filter?: Filter; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends 'clock | source | filter |    |       '
+  ? {clock: Clock; source: Source; filter: Filter; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends '      | source | filter | fn |       '
+  ? {source: Source; clock?: never; filter?: Filter; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends '      | source | filter |    |       '
+  ? {source: Source; clock?: never; filter: Filter; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends 'clock |        | filter | fn |       '
+  ? {clock: Clock; source?: never; filter?: Filter; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends 'clock |        | filter |    |       '
+  ? {clock: Clock; source?: never; filter: Filter; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends 'clock | source |        | fn |       '
+  ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends 'clock | source |        |    |       '
+  ? {clock: Clock; source: Source; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends '      | source |        | fn |       '
+  ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends '      | source |        |    |       '
+  ? {source: Source; clock?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends 'clock |        |        | fn |       '
+  ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : Mode extends 'clock |        |        |    |       '
+  ? {clock: Clock; source?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
+  : never
+
+type IsFnRetSubtypeExtendsTarget<
+  FnRetSubtype,
+  TargetType,
+  TargetSubtype = GetUnionLast<TargetType>
+> =
+  [FnRetSubtype] extends [TargetType]
+  ? [TargetSubtype] extends [never]
+    ? [TargetType] extends [never]
+      ? 'no'
+      : [FnRetSubtype] extends [TargetType]
+        ? 'yes'
+        : 'no'
+    : [FnRetSubtype] extends [TargetSubtype]
+      ? 'yes'
+      : IsFnRetSubtypeExtendsTarget<FnRetSubtype, Exclude<TargetType, TargetSubtype>>
+  : 'no'
+
+type RebuildTargetValueByFnReturn<
+  TargetType,
+  FnRetType,
+  FnRetSubtype = GetUnionLast<FnRetType>
+> = [FnRetSubtype] extends [never]
+  ? [FnRetType] extends [never]
+    ? TargetType
+    : IsFnRetSubtypeExtendsTarget<FnRetType, TargetType> extends 'no'
+      ? FnRetType
+      : TargetType
+  : IsFnRetSubtypeExtendsTarget<FnRetSubtype, TargetType> extends 'no'
+    ? FnRetSubtype
+    : RebuildTargetValueByFnReturn<TargetType, Exclude<FnRetType, FnRetSubtype>>
+
+type RebuildTargetClockLoopBranch<
+  FilterMode extends ('noFilter' | 'Boolean'),
+  ClockTypeRaw,
+  TargetType,
+  ClockRest extends readonly unknown[],
+  TargetUnit,
+  ClockType = FilterMode extends 'Boolean' ? NonNullable<ClockTypeRaw> : ClockTypeRaw
+> = [ClockType] extends [TargetType]
+  ? RebuildTargetClockLoop<ClockRest, TargetUnit, TargetType, FilterMode>
+  : UnitTargetable<ClockTypeRaw>
+
+type RebuildTargetClockLoop<
+  Clock extends readonly unknown[],
+  TargetUnit,
+  TargetType,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = WhichType<TargetType> extends 'void'
+  ? TargetUnit
+  : Clock extends readonly [Unit<infer ClockTypeRaw>, ...infer ClockRest]
+    ? RebuildTargetClockLoopBranch<
+      FilterMode,
+      ClockTypeRaw,
+      TargetType,
+      ClockRest,
+      TargetUnit
+    >
+    : TargetUnit
+
+type RebuildTargetLoopBranch<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<UnitTargetable<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Target extends readonly [infer TargetUnit, ...infer TargetRest]
+  ? TargetUnit extends UnitTargetable<infer TargetType>
+    ? RebuildTargetLoopBranch<
+      Clock,
+      TargetRest,
+      [
+        ...Result,
+        RebuildTargetClockLoop<Clock, TargetUnit, TargetType, FilterMode>
+      ],
+      FilterMode
+    >
+    : never
+  : Result
+
+type RebuildTargetLoop<
+  Clock extends readonly unknown[],
+  Target extends readonly unknown[],
+  Result extends RoTuple<UnitTargetable<any>>,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Target extends readonly [infer TargetUnit, ...infer TargetRest]
+  ? RebuildTargetLoopBranch<
+    Clock,
+    Target,
+    Result,
+    FilterMode
+  >
+  // non-inline array unable to match condition above
+  // so we handle it in separate branch
+  : Target extends Array<UnitTargetable<infer TargetType>>
+    ? Array<RebuildTargetClockLoop<
+      Clock,
+      UnitTargetable<TargetType>,
+      TargetType,
+      FilterMode
+    >>
+    : never
+
+type RebuildTargetSingle<
+  Clock extends readonly unknown[],
+  Target,
+  FilterMode extends ('noFilter' | 'Boolean')
+> = Target extends Unit<infer TargetType>
+    ? RebuildTargetClockLoop<Clock, Target, TargetType, FilterMode>
+    : never
+
+type SafeReturn<F> = F extends () => void ? ReturnType<F> : never
 
 type TargetOrError<
   MatchingValue,
   Mode extends 'fnRet' | 'src' | 'clk',
   Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>,
-  ResultConfig
-> = [TypeOfTarget<MatchingValue, Target, Mode>] extends [Target]
-    ? [config: ResultConfig]
-    : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
-      ? [config: ResultConfig]
-      : [message: {
-          error: Mode extends 'fnRet'
-            ? 'fn result should extend target type'
-            : Mode extends 'src'
-              ? 'source should extend target type'
-              : 'clock should extend target type'
-          targets: Show<TypeOfTarget<MatchingValue, Target, Mode>>
+  ResultConfig,
+  SourceConfig,
+  FN,
+  Source,
+  Clock
+> = [
+    Mode,
+    Source,
+    SourceConfig extends {fn: any} ? 'fn' : 'noFn',
+    SourceConfig extends {filter: any}
+      ? SourceConfig extends {filter: BooleanConstructor}
+        ? 'boolOrNoFilter'
+        : 'hasFilter'
+      : 'boolOrNoFilter'
+  ] extends ['clk', 'noSrc', 'noFn', 'boolOrNoFilter']
+    ? SourceConfig extends {filter: any}
+      ? SourceConfig extends {filter: BooleanConstructor}
+        ? [Omit<ResultConfig & SourceConfig, 'clock' | 'target'> & {
+          clock: Clock extends readonly unknown[]
+            ? RebuildClockLoop<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              [],
+              'Boolean'
+            >
+            : RebuildClockSingle<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              'Boolean'
+            >
+          target: Target extends readonly unknown[]
+            ? RebuildTargetLoop<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              [],
+              'Boolean'
+            >
+            : RebuildTargetSingle<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              'Boolean'
+            >
         }]
+        : never
+      : [Omit<ResultConfig & SourceConfig, 'clock' | 'target'> & {
+          clock: Clock extends readonly unknown[]
+            ? RebuildClockLoop<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              [],
+              'noFilter'
+            >
+            : RebuildClockSingle<
+              Clock,
+              Target extends ReadonlyArray<UnitTargetable<any>>
+                ? Target
+                : [Target],
+              'noFilter'
+            >
+          target: Target extends readonly unknown[]
+            ? RebuildTargetLoop<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              [],
+              'noFilter'
+            >
+            : RebuildTargetSingle<
+              Clock extends ReadonlyArray<Unit<any>>
+                ? Clock
+                : [Clock],
+              Target,
+              'noFilter'
+            >
+        }]
+    : [TypeOfTarget<MatchingValue, Target>] extends [Target]
+      ? [config: ResultConfig & SourceConfig]
+      : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
+        ? [config: ResultConfig & SourceConfig]
+        : Mode extends 'fnRet'
+          ? [error: {
+              fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
+              target: Target extends readonly any[]
+                ? {
+                  [K in keyof Target]: Unit<
+                    RebuildTargetValueByFnReturn<UnitValue<Target[K]>, MatchingValue>
+                  >
+                }
+                : Unit<RebuildTargetValueByFnReturn<UnitValue<Target>, MatchingValue>>
+              error: 'fn result should extend target type'
+            }]
+          : Mode extends 'src'
+            ? IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
+              ? [error: {
+                  source: IsUnion<GetSourceExtendedByTarget<Source, Target>> extends true
+                    ? GetSourceExtendedByTargetOnlyIncorrect<Source, Target>
+                    : GetSourceExtendedByTarget<Source, Target>
+                  error: 'source should extend target type'
+                }]
+              : [error: {
+                target: Target extends readonly any[]
+                  ? {
+                    [K in keyof Target]: Unit<MatchingValue>
+                  }
+                  : Unit<MatchingValue>
+                error: 'source should extend target type'
+              }]
+            : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
+              ? [error: {
+                  clock: GetClockExtendedByTarget<Clock, Target>
+                  error: 'clock should extend target type'
+                }]
+              : [error: {
+                target: Target extends readonly any[]
+                  ? {
+                    [K in keyof Target]: Unit<MatchingValue>
+                  }
+                  : Unit<MatchingValue>
+                error: 'clock should extend target type'
+              }]
 
 type SampleFilterDef<
   Mode extends Mode_NoTrg,
   Source,
   Clock,
-  FLUnit,
-  FLBool,
+  FLUnitOrBool,
   FilterFun,
   FN,
   FNInf,
   FNInfSource extends (
     Source extends Unit<any> | SourceRecord
-      ? TypeOfSource<Source>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfSource<Source>>
+        : TypeOfSource<Source>
       : never
     ),
   FNInfClock extends (
     Clock extends Units
-      ? TypeOfClock<Clock>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfClock<Clock>>
+        : TypeOfClock<Clock>
       : never
-    ),
-  FNAltArg,
-  SomeFN
+  ),
+  RawConfig,
+  SourceType = TypeOfSource<Source>,
+  ClockType = TypeOfClock<Clock>,
 > =
   Mode extends Mode_Flt
-  ? FLUnit extends Unit<any>
-    ? boolean extends UnitValue<FLUnit>
-      ? [config: (
-            Mode extends 'clock | source | filter | fn |       '
-          ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-          : Mode extends 'clock | source | filter |    |       '
-          ? {clock: Clock; source: Source; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-          : Mode extends '      | source | filter | fn |       '
-          ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-          : Mode extends '      | source | filter |    |       '
-          ? {source: Source; clock?: never; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-          : Mode extends 'clock |        | filter | fn |       '
-          ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-          : Mode extends 'clock |        | filter |    |       '
-          ? {clock: Clock; source?: never; filter: FLUnit; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-          : never
-        ) & SomeFN]
-      : [message: {error: 'filter unit should has boolean type'; got: UnitValue<FLUnit>}]
-    : FLBool extends BooleanConstructor
-      ? Mode extends Mode_Flt_Fn
-        ? [config: (
-              Mode extends 'clock | source | filter | fn |       '
-            ? {clock: Clock; source: Source; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : Mode extends '      | source | filter | fn |       '
-            ? {source: Source; clock?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : Mode extends 'clock |        | filter | fn |       '
-            ? {clock: Clock; source?: never; filter?: FLBool; fn?: FNAltArg; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : never
-          ) & SomeFN]
-        : [config: (
-              Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FLBool; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : never
-          ) & SomeFN]
+  ? FLUnitOrBool extends Unit<any>
+    ? [config: ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FN, never> & RawConfig]
+    : FLUnitOrBool extends BooleanConstructor
+      ? [config: ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FNInf, never> & RawConfig]
       : FilterFun extends (
           Source extends Unit<any> | SourceRecord
           ? Clock extends Units
-            ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
-            : (src: TypeOfSource<Source>) => src is FNInfSource
+            ? (src: SourceType, clk: ClockType) => src is FNInfSource
+            : (src: SourceType) => src is FNInfSource
           : Clock extends Units
-            ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
+            ? (clk: ClockType) => clk is FNInfClock
             : never
         )
         ? Mode extends Mode_Flt_Fn
           ? FNInf extends (
               Source extends Unit<any> | SourceRecord
               ? Clock extends Units
-                ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+                ? (src: FNInfSource, clk: ClockType) => any
                 : (src: FNInfSource) => any
               : Clock extends Units
                 ? (clk: FNInfClock) => any
                 : any
             )
-            ? [config: (
-                  Mode extends 'clock | source | filter | fn |       '
-                ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-                : Mode extends '      | source | filter | fn |       '
-                ? {source: Source; clock?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-                : Mode extends 'clock |        | filter | fn |       '
-                ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FNInf; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-                : never
-              ) & SomeFN]
+            ? [config: ToResultConfig<Mode, Clock, Source, FilterFun, FNInf, never> & RawConfig]
             : [message: {
                 error: 'fn should match inferred type'
                 inferred: (Source extends Unit<any> | SourceRecord ? FNInfSource : FNInfClock)
                 fnArg: FNInf extends (arg: infer Arg) => any ? Arg : never
               }]
-          : [config: (
-              Mode extends 'clock | source | filter |    |       '
-            ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : Mode extends '      | source | filter |    |       '
-            ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : Mode extends 'clock |        | filter |    |       '
-            ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-            : never
-          ) & SomeFN]
-      : FilterFun extends (
-          Source extends Unit<any> | SourceRecord
-          ? Clock extends Units
-            ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => any
-            : (src: TypeOfSource<Source>) => any
-          : Clock extends Units
-            ? (clk: TypeOfClock<Clock>) => any
-            : never
-        )
-        ? ReturnType<FilterFun> extends boolean
-          ? [config: (
-                Mode extends 'clock | source | filter | fn |       '
-              ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-              : Mode extends 'clock | source | filter |    |       '
-              ? {clock: Clock; source: Source; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-              : Mode extends '      | source | filter | fn |       '
-              ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-              : Mode extends '      | source | filter |    |       '
-              ? {source: Source; clock?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-              : Mode extends 'clock |        | filter | fn |       '
-              ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-              : Mode extends 'clock |        | filter |    |       '
-              ? {clock: Clock; source?: never; filter: FilterFun; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-              : never
-            ) & SomeFN]
-          : [message: {error: 'filter function should return boolean'; got: ReturnType<FilterFun>}]
-        : [message: {error: 'filter should be function or unit'; got: FilterFun}]
+          : [config: ToResultConfig<Mode, Clock, Source, FilterFun, never, never> & RawConfig]
+      : [config: ToResultConfig<Mode, Clock, Source, FilterFun, FN, never> & RawConfig]
   : Mode extends Mode_NoFlt
-  ? [config: (
-        Mode extends 'clock | source |        | fn |       '
-      ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-      : Mode extends 'clock | source |        |    |       '
-      ? {clock: Clock; source: Source; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-      : Mode extends '      | source |        | fn |       '
-      ? {source: Source; clock?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-      : Mode extends '      | source |        |    |       '
-      ? {source: Source; clock?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-      : Mode extends 'clock |        |        | fn |       '
-      ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-      : Mode extends 'clock |        |        |    |       '
-      ? {clock: Clock; source?: never; filter?: never; target?: never; greedy?: boolean; batch?: boolean; name?: string}
-      : never
-    ) & SomeFN]
+  ? [config: ToResultConfig<Mode, Clock, Source, never, FN, never> & RawConfig]
   : never
 
 type DataSourceFunction<Source, Clock> =
@@ -2070,18 +2334,14 @@ type TypeOfTargetSoft<SourceType, Target extends Units | ReadonlyArray<Unit<any>
         : never
     }
 
-type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>, Mode extends 'fnRet' | 'src' | 'clk'> =
+type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
   Target extends UnitTargetable<any>
     ? Target extends UnitTargetable<infer TargetType>
       ? [SourceType] extends [Readonly<TargetType>]
         ? Target
         : WhichType<TargetType> extends ('void' | 'any')
           ? Target
-          : Mode extends 'fnRet'
-            ? {fnResult: SourceType; targetType: TargetType}
-            : Mode extends 'src'
-              ? {sourceType: SourceType; targetType: TargetType}
-              : {clockType: SourceType; targetType: TargetType}
+          : SourceType
       : never
     : {
       [
@@ -2091,24 +2351,174 @@ type TypeOfTarget<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTar
           ? Target[K]
           : WhichType<TargetType> extends ('void' | 'any')
             ? Target[K]
-            : Mode extends 'fnRet'
-              ? {fnResult: SourceType; targetType: TargetType}
-              : Mode extends 'src'
-                ? {sourceType: SourceType; targetType: TargetType}
-                : {clockType: SourceType; targetType: TargetType}
+            : SourceType
         : never
     }
 
+type RebuildFnReturnByTarget<FnReturn, TargetType, TargetTypeSubset = GetUnionLast<TargetType>> =
+  [TargetType] extends [never]
+  ? ['same', null]
+  : [TargetTypeSubset] extends [never]
+    ? [FnReturn] extends [TargetType]
+      ? ['same', null]
+      : ['change', TargetType]
+    : [FnReturn] extends [TargetTypeSubset]
+      ? RebuildFnReturnByTarget<FnReturn, Exclude<TargetType, TargetTypeSubset>>
+      : ['change', TargetTypeSubset]
+
+type TypeOfTargetValLoop<SourceType, Target extends readonly unknown[]> =
+  Target extends readonly [infer TargetUnit, ...infer TargetRest]
+  ? TargetUnit extends Unit<infer TargetType>
+    ? RebuildFnReturnByTarget<SourceType, TargetType> extends ['change', infer ReturnType]
+      ? ReturnType
+      : TypeOfTargetValLoop<SourceType, TargetRest>
+    : never
+  : SourceType
+  
+
+type TypeOfTargetVal<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
+      ? RebuildFnReturnByTarget<SourceType, TargetType> extends ['change', infer ReturnType]
+        ? ReturnType
+        : SourceType
+      : never
+    : Target extends readonly [infer ForceFirst, ...infer ForceRest]
+      ? TypeOfTargetValLoop<SourceType, Target>
+      // branch for non inline arrays
+      : never
+
+type IsTargetWiderThanSource<SourceType, Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>> =
+  Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
+      ? [TargetType] extends [SourceType]
+        ? 'yes'
+        : 'no'
+      : never
+    : Target extends RoTuple<infer TU>
+      ? TU extends UnitTargetable<infer TargetType>
+        ? [TargetType] extends [SourceType]
+          ? 'yes'
+          : 'no'
+        : never
+      : never
+
+// @link https://ghaiklor.github.io/type-challenges-solutions/en/medium-isunion.html
+type IsUnion<T, U = T> =
+(
+	WhichType<T> extends 'never'
+		? false
+		: T extends any
+			? [U] extends [T]
+				? false
+				: true
+			: never
+) extends infer Result
+	// In some cases `Result` will return `false | true` which is `boolean`,
+	// that means `T` has at least two types and it's a union type,
+	// so we will return `true` instead of `boolean`.
+	? boolean extends Result
+    ? true
+		: Result
+  // Should never happen
+	: never;
+
+type UnionToIntersection<union> = (
+  union extends any ? (k: union) => void : never
+) extends (k: infer intersection) => void
+  ? intersection
+  : never;
+
+type GetUnionLast<Union> = UnionToIntersection<
+  Union extends any ? () => Union : never
+> extends () => infer Last
+  ? Last
+  : never;
+
+type UnionToTuple<Union, Tuple extends unknown[] = []> = [
+  Union
+] extends [never]
+  ? Tuple
+  : UnionToTuple<
+      Exclude<Union, GetUnionLast<Union>>,
+      [GetUnionLast<Union>, ...Tuple]
+    >;
+
+type GetSourceExtendedByTargetOnlyIncorrect<
+  Source,
+  Target
+> = Target extends RoTuple<Unit<any>>
+  ? GetSourceExtendedByTarget<Source, {
+    [K in keyof Target]: UnitValue<Target[K]> extends GetShapeValue<Source>
+      ? GetShapeValue<Source> extends UnitValue<Target[K]>
+        ? never
+        : Target[K]
+      : Target[K]
+  }>
+  : GetSourceExtendedByTarget<Source, Target>
+
+type GetSourceExtendedByTarget<
+  Source,
+  Target,
+  TargetType = Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
+      ? TargetType
+      : never
+    : Target extends RoTuple<infer TU>
+      ? TU extends UnitTargetable<infer TargetType>
+        ? TargetType
+        : never
+      : never
+> =
+  Source extends (Record<string, Store<any>> | RoTuple<Store<any>>)
+  ? {
+    [K in keyof TargetType]: K extends keyof Source
+      ? Source[K] extends StoreWritable<any>
+        ? StoreWritable<TargetType[K]>
+        : Store<TargetType[K]>
+      : Store<TargetType[K]>
+  }
+  : Unit<TargetType>
+
+type GetClockExtendedByTarget<
+  Clock,
+  Target,
+  TargetType = Target extends UnitTargetable<any>
+    ? Target extends UnitTargetable<infer TargetType>
+      ? TargetType
+      : never
+    : Target extends RoTuple<infer TU>
+      ? TU extends UnitTargetable<infer TargetType>
+        ? TargetType
+        : never
+      : never
+> =
+  Clock extends RoTuple<Unit<any>>
+  ? {
+    [K in keyof Clock]: Unit<TargetType>
+  }
+  : Unit<TargetType>
+
+type ReplaceDerivedUnitWithWritable<Target> =
+  Target extends Unit<any>
+  ? Target extends Store<infer T>
+    ? StoreWritable<T>
+    : Target extends Event<infer T>
+      ? EventCallable<T>
+      // case for effects
+      : Target
+  : never
+
 type ClockValueOf<T> = T[keyof T]
 
-type TypeOfSource<Source extends Unit<any> | SourceRecord> =
+type TypeOfSource<Source> =
   Source extends Unit<any>
   ? UnitValue<Source>
   : Source extends SourceRecord
     ? {[K in keyof Source]: UnitValue<Source[K]>}
     : never
 
-type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
+type TypeOfClock<Clock> =
   Clock extends never[]
   ? unknown
   : Clock extends Unit<any>
@@ -2137,11 +2547,8 @@ type TypeOfClock<Clock extends Units | ReadonlyArray<Unit<any>> | never[]> =
 
 type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
-type Units = Unit<any> | Tuple<Unit<any>>
+type Units = Unit<any> | RoTuple<Unit<any>>
 type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
-type InvalidUnitsTarget = Unit<any> | Tuple<Unit<any>> | ReadonlyArray<Unit<any>>
-
-type NonFalsy<T> = T extends null | undefined | false | 0 | 0n | "" ? never : T;
 
 /* attach types */
 
