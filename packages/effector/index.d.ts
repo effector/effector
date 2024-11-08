@@ -1066,14 +1066,18 @@ type SampleImpl<
   FNInf,
   FNInfSource extends (
     Source extends Unit<any> | SourceRecord
-      ? TypeOfSource<Source>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfSource<Source>>
+        : TypeOfSource<Source>
       : never
     ),
   FNInfClock extends (
     Clock extends Units
-      ? TypeOfClock<Clock>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfClock<Clock>>
+        : TypeOfClock<Clock>
       : never
-    ),
+  ),
   FNAltArg,
   FLUnitOrBool,
   RawConfig
@@ -1092,7 +1096,7 @@ type SampleImpl<
             'clock |        |        |    |       ',
             RawConfig
           >,
-          Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
+          Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig
         >
         // no target, has source
       : unknown extends Clock
@@ -1105,7 +1109,7 @@ type SampleImpl<
               '      | source |        |    |       ',
               RawConfig
             >,
-            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
+            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig
           >
         // no target, has source, has clock
         : SampleFilterDef<
@@ -1116,7 +1120,7 @@ type SampleImpl<
               'clock | source |        |    |       ',
               RawConfig
             >,
-            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
+            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig
           >
     // has target
     : Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>
@@ -1212,7 +1216,7 @@ type SampleRet<
                 ? EventAsReturnType<ReturnType<FN>>
                 : never
               : FLUnitOrBool extends BooleanConstructor
-                ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
+                ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
                   ? EventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
@@ -1229,7 +1233,7 @@ type SampleRet<
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
                 : FLUnitOrBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>) => any
+                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
@@ -1251,7 +1255,7 @@ type SampleRet<
                   ? FLUnitOrBool extends Unit<any>
                     ? EventAsReturnType<TypeOfSource<Source>>
                     : FLUnitOrBool extends BooleanConstructor
-                      ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
+                      ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
                       : FilterFun extends (src: TypeOfSource<Source>) => src is FNInfSource
                         ? EventAsReturnType<FNInfSource>
                         : EventAsReturnType<TypeOfSource<Source>>
@@ -1269,7 +1273,7 @@ type SampleRet<
                 ? EventAsReturnType<ReturnType<FN>>
                 : never
               : FLUnitOrBool extends BooleanConstructor
-                ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
+                ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
                   ? EventAsReturnType<ReturnType<FNAltArg>>
                   : never
                 : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
@@ -1286,7 +1290,7 @@ type SampleRet<
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
                 : FLUnitOrBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonFalsy<TypeOfClock<Clock>>) => any
+                  ? FNAltArg extends (arg: NonNullable<TypeOfClock<Clock>>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
@@ -1308,7 +1312,7 @@ type SampleRet<
                   ? FLUnitOrBool extends Unit<any>
                     ? EventAsReturnType<TypeOfClock<Clock>>
                     : FLUnitOrBool extends BooleanConstructor
-                      ? EventAsReturnType<NonFalsy<TypeOfClock<Clock>>>
+                      ? EventAsReturnType<NonNullable<TypeOfClock<Clock>>>
                       : FilterFun extends (clk: TypeOfClock<Clock>) => clk is FNInfClock
                         ? EventAsReturnType<FNInfClock>
                         : EventAsReturnType<TypeOfClock<Clock>>
@@ -1326,7 +1330,7 @@ type SampleRet<
                   ? EventAsReturnType<ReturnType<FN>>
                   : never
                 : FLUnitOrBool extends BooleanConstructor
-                  ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                  ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
                     ? EventAsReturnType<ReturnType<FNAltArg>>
                     : never
                   : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1343,7 +1347,7 @@ type SampleRet<
                     ? EventAsReturnType<ReturnType<FN>>
                     : never
                   : FLUnitOrBool extends BooleanConstructor
-                    ? FNAltArg extends (arg: NonFalsy<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
+                    ? FNAltArg extends (arg: NonNullable<TypeOfSource<Source>>, clk: TypeOfClock<Clock>) => any
                       ? EventAsReturnType<ReturnType<FNAltArg>>
                       : never
                     : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
@@ -1365,7 +1369,7 @@ type SampleRet<
                     ? FLUnitOrBool extends Unit<any>
                       ? EventAsReturnType<TypeOfSource<Source>>
                       : FLUnitOrBool extends BooleanConstructor
-                        ? EventAsReturnType<NonFalsy<TypeOfSource<Source>>>
+                        ? EventAsReturnType<NonNullable<TypeOfSource<Source>>>
                         : FilterFun extends (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
                           ? EventAsReturnType<FNInfSource>
                           : EventAsReturnType<TypeOfSource<Source>>
@@ -1400,21 +1404,11 @@ export function sample<
   const Target,
   const Source,
   const Clock,
-  const FNInfSource extends (
-    Source extends Unit<any> | SourceRecord
-      ? TypeOfSource<Source>
-      : never
-    ),
-  const FNInfClock extends (
-    Clock extends Units
-      ? TypeOfClock<Clock>
-      : never
-  ),
   const FNNonFalsy extends (
     Source extends Unit<any> | SourceRecord
-    ? NonFalsy<TypeOfSource<Source>>
+    ? NonNullable<TypeOfSource<Source>>
     : Clock extends Units
-      ? NonFalsy<TypeOfClock<Clock>>
+      ? NonNullable<TypeOfClock<Clock>>
       : never
   ),
   const RawConfig,
@@ -1433,6 +1427,20 @@ export function sample<
       : never
   ),
   const FLUnitOrBool,
+  const FNInfSource extends (
+    Source extends Unit<any> | SourceRecord
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfSource<Source>>
+        : TypeOfSource<Source>
+      : never
+    ),
+  const FNInfClock extends (
+    Clock extends Units
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfClock<Clock>>
+        : TypeOfClock<Clock>
+      : never
+  ),
   const Args extends any[],
   const FilterFun = (
     Source extends Unit<any> | SourceRecord
@@ -1699,7 +1707,7 @@ type SampleFilterTargetDef<
           // mode with source only or with both clock and source
         : Mode extends Mode_Src_Flt_NoFn_Trg
         ? TargetOrError<
-            NonFalsy<TypeOfSource<Source>>,
+            NonNullable<TypeOfSource<Source>>,
             'src',
             Target,
             ToResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
@@ -1711,7 +1719,7 @@ type SampleFilterTargetDef<
           // mode with clock only
         : Mode extends Mode_Clk_NoSrc
         ? TargetOrError<
-            NonFalsy<TypeOfClock<Clock>>,
+            NonNullable<TypeOfClock<Clock>>,
             'clk',
             Target,
             ToResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
@@ -2230,36 +2238,41 @@ type SampleFilterDef<
   FNInf,
   FNInfSource extends (
     Source extends Unit<any> | SourceRecord
-      ? TypeOfSource<Source>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfSource<Source>>
+        : TypeOfSource<Source>
       : never
     ),
   FNInfClock extends (
     Clock extends Units
-      ? TypeOfClock<Clock>
+      ? FLUnitOrBool extends BooleanConstructor
+        ? NonNullable<TypeOfClock<Clock>>
+        : TypeOfClock<Clock>
       : never
-    ),
-  FNAltArg,
-  RawConfig
+  ),
+  RawConfig,
+  SourceType = TypeOfSource<Source>,
+  ClockType = TypeOfClock<Clock>,
 > =
   Mode extends Mode_Flt
   ? FLUnitOrBool extends Unit<any>
     ? [config: ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FN, never> & RawConfig]
     : FLUnitOrBool extends BooleanConstructor
-      ? [config: ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FNAltArg, never> & RawConfig]
+      ? [config: ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FNInf, never> & RawConfig]
       : FilterFun extends (
           Source extends Unit<any> | SourceRecord
           ? Clock extends Units
-            ? (src: TypeOfSource<Source>, clk: TypeOfClock<Clock>) => src is FNInfSource
-            : (src: TypeOfSource<Source>) => src is FNInfSource
+            ? (src: SourceType, clk: ClockType) => src is FNInfSource
+            : (src: SourceType) => src is FNInfSource
           : Clock extends Units
-            ? (clk: TypeOfClock<Clock>) => clk is FNInfClock
+            ? (clk: ClockType) => clk is FNInfClock
             : never
         )
         ? Mode extends Mode_Flt_Fn
           ? FNInf extends (
               Source extends Unit<any> | SourceRecord
               ? Clock extends Units
-                ? (src: FNInfSource, clk: TypeOfClock<Clock>) => any
+                ? (src: FNInfSource, clk: ClockType) => any
                 : (src: FNInfSource) => any
               : Clock extends Units
                 ? (clk: FNInfClock) => any
@@ -2536,8 +2549,6 @@ type SourceRecord = Record<string, Store<any>> | RoTuple<Store<any>>
 
 type Units = Unit<any> | RoTuple<Unit<any>>
 type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
-
-type NonFalsy<T> = T extends null | undefined | false | 0 | 0n | "" ? never : T;
 
 /* attach types */
 
