@@ -8,6 +8,7 @@ import {
   Event,
   StoreWritable,
   EventCallable,
+  EventAsReturnType,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -167,22 +168,74 @@ describe('generic with either type', () => {
   ): item is {type: 'right'; right: R} {
     return item.type === 'right'
   }
-  test('return type (should pass)', () => {
+  test('return type with clock (should pass)', () => {
     function whenSuccess<L, R>(trigger: Event<Either<L, R>>) {
-      const result = sample({
+      const resultRaw = sample({
         clock: trigger,
         fn: data => (isRight(data) ? data.right : null),
+      })
+      const result = resultRaw as EventAsReturnType<R | null>
+      const result2 = resultRaw as Event<R | null>
+      sample({
+        clock: resultRaw,
+        fn: data => ({data}),
       })
       sample({
         clock: result,
         fn: data => ({data}),
       })
+      sample({
+        clock: result2,
+        fn: data => ({data}),
+      })
+      sample({
+        clock: [result],
+        fn: data => ({data}),
+      })
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 6 'sample({'
+      Unmarked error at test line 8 'sample({'
       Argument of type '[{ clock: NoInfer<EventAsReturnType<R | null>>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends NoInfer<EventAsReturnType<R | null>> ? [message: { error: \\"either target, clock or source should exists\\"; }] : NoInfer<EventAsReturnType<R | null>> extends Units ? (NoInfer<...> extends Units ? ((clk: TypeOfClock<...>) => clk is NoInfer<...> extends Units ? TypeOfClock<...> : never) | ((clk: TypeOfCl...'.
-      Unmarked error at test line 8 'fn: data => ({data}),'
+      Unmarked error at test line 10 'fn: data => ({data}),'
+      Parameter 'data' implicitly has an 'any' type.
+      Unmarked error at test line 12 'sample({'
+      Argument of type '[{ clock: EventAsReturnType<R | null>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends EventAsReturnType<R | null> ? [message: { error: \\"either target, clock or source should exists\\"; }] : EventAsReturnType<R | null> extends Units ? (EventAsReturnType<...> extends Units ? ((clk: TypeOfClock<...>) => boolean) | ((clk: TypeOfClock<...>) => clk is EventAsReturnType<...> extends Units ? Ty...'.
+      Unmarked error at test line 14 'fn: data => ({data}),'
+      Parameter 'data' implicitly has an 'any' type.
+      "
+    `)
+  })
+  test('return type with source (should pass)', () => {
+    function whenSuccess<L, R>(trigger: Event<Either<L, R>>) {
+      const resultRaw = sample({
+        source: trigger,
+        fn: data => (isRight(data) ? data.right : null),
+      })
+      const result = resultRaw as EventAsReturnType<R | null>
+      const result2 = resultRaw as Event<R | null>
+      sample({
+        source: resultRaw,
+        fn: data => ({data}),
+      })
+      sample({
+        source: result,
+        fn: data => ({data}),
+      })
+      sample({
+        source: result2,
+        fn: data => ({data}),
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Unmarked error at test line 8 'sample({'
+      Argument of type '[{ source: NoInfer<EventAsReturnType<R | null>>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends NoInfer<EventAsReturnType<R | null>> ? [message: { error: \\"either target, clock or source should exists\\"; }] : NoInfer<EventAsReturnType<R | null>> extends Unit<...> | SourceRecord ? (NoInfer<...> extends Unit<...> | SourceRecord ? ((src: TypeOfSource<...>) => src is NoInfer<...> extends Unit<...> | ...'.
+      Unmarked error at test line 10 'fn: data => ({data}),'
+      Parameter 'data' implicitly has an 'any' type.
+      Unmarked error at test line 12 'sample({'
+      Argument of type '[{ source: EventAsReturnType<R | null>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type 'unknown extends EventAsReturnType<R | null> ? [message: { error: \\"either target, clock or source should exists\\"; }] : EventAsReturnType<R | null> extends Unit<...> | SourceRecord ? (EventAsReturnType<...> extends Unit<...> | SourceRecord ? ((src: TypeOfSource<...>) => boolean) | ((src: TypeOfSource<...>) => src is E...'.
+      Unmarked error at test line 14 'fn: data => ({data}),'
       Parameter 'data' implicitly has an 'any' type.
       "
     `)
