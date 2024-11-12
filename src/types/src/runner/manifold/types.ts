@@ -91,8 +91,8 @@ export type ComputeVariant<T> = Ref<T, 'computeVariant'> & {
 
 export type Bool = Ref<boolean, 'bool'> & {
   bool: {
-    true: Record<string, any> | void
-    false: Record<string, any> | void
+    true: Record<string, any> | Record<string, any>[] | void
+    false: Record<string, any> | Record<string, any>[] | void
   }
   decls: {
     true: Value<boolean>
@@ -456,6 +456,14 @@ export type Grouping<T extends Record<string, any>> = {
         noGroup?: boolean
         largeGroup?: string | null
       }>
+    | DataDecl<
+        | string
+        | {
+            description: string
+            noGroup?: boolean
+            largeGroup?: string | null
+          }
+      >
   createTestLines:
     | ((obj: T) => any[])
     | {
@@ -470,7 +478,12 @@ export type Grouping<T extends Record<string, any>> = {
         method: string
         shape: Record<
           string,
-          Declarator | {field: Declarator; when: Declarator}
+          | Declarator
+          | {
+              field: Declarator
+              when?: Declarator
+              markError?: DataDecl<string | string[] | boolean> | BoolDecl
+            }
         >
         addExpectError?: boolean | BoolDecl
       }
@@ -478,6 +491,7 @@ export type Grouping<T extends Record<string, any>> = {
   sortByFields?: {[K in keyof T]: Array<T[K]> | 'string'}
   pass?: boolean | BoolDecl | ((obj: T) => boolean)
   tags?: Record<string, Declarator>
+  childFile?: DataDecl<string | null | void>
 }
 
 export type ExecutionPlan = {
@@ -510,13 +524,17 @@ export type CtxConfig = {
   header?: string
   grouping: Grouping<any>
   file?: string
+  childFile?: DataDecl<string | null | void>
   usedMethods?: string[]
+  skipCases?: BoolDecl[]
 }
 export type PartialCtxConfig = {
   header?: string
   grouping?: Partial<Grouping<any>>
   file?: string
+  childFile?: DataDecl<string | null | void>
   usedMethods?: string[]
+  skipCases?: BoolDecl[]
 }
 
 export type ConfigStructShape = {

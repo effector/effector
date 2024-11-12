@@ -1,13 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  sample,
-  Store,
-  Event,
-  guard,
-} from 'effector'
+import {createStore, createEvent, createEffect, sample} from 'effector'
 
 const typecheck = '{global}'
 
@@ -218,9 +210,12 @@ describe('edge case for {} type', () => {
     const target = createEvent<{a: string; b: string}>()
     //@ts-expect-error
     sample({source, clock, fn, target})
+    //@ts-expect-error
+    sample({source, clock, fn: () => ({}), target})
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: {}; targetType: { a: string; b: string; }; }; }'.
       "
     `)

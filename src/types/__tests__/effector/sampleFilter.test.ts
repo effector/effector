@@ -136,6 +136,7 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -236,6 +237,7 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -752,6 +754,27 @@ test('incorrect filter (should fail)', () => {
       Type '[{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }]' is not assignable to type '[config: never]'.
         Type '{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }' is not assignable to type 'never'.
           The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+    "
+  `)
+})
+
+test('type inference issue', () => {
+  const nullableAB = createEvent<{a: string; b: number} | null>()
+  const strt = createEvent<number>()
+
+  sample({
+    clock: nullableAB,
+    target: strt,
+    filter: clk => clk !== null,
+    //@ts-expect-error
+    fn: val => ({a: 1, b: val ? val.b : ''}),
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Unmarked error at test line 5 'clock: nullableAB,'
+    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: string | number; }; targetType: number; }; }'.
+    lack of expected error at test line 9 'fn: val => ({a: 1, b: val ? val.b : ''}),'
     "
   `)
 })
