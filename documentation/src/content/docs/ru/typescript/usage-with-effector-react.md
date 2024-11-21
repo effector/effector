@@ -20,9 +20,6 @@ redirectFrom:
 
 **Практический пример**
 
-We will be going through a simplistic chat application to demonstrate a
-possible approach to include static typing. This chat application will have API mock that load and saves data from localStorage.
-
 Мы пройдемся по упрощенному приложению чата,
 чтобы продемонстрировать возможный подход к включению статической типизации. Это приложение для чата будет иметь API-модель, которая загружает и сохраняет данные из локального хранилища localStorage.
 
