@@ -40,9 +40,10 @@ Use the `--exact`/`--save-exact` option in your package manager to install speci
 | `>=1.3.106 <1.4.0`  |                                          | `@swc1.3.106`          |
 | `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.14`                     | `@swc1.4.0`            |
 | `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`            |
-| `>=1.7.0`           | `>=15.0.0-canary.122`                    | `@swc1.7.0`            |
+| `>=1.7.0 <1.8.0`    | `>=15.0.0-canary.122 <=15.0.2`           | `@swc1.7.0`            |
+| `>=1.8.0`           | `>=15.0.3`                               | `@swc1.8.0`            |
 
-For more information on compatibility, refer to the SWC documentation on [Selecting the SWC Version](https://swc.rs/docs/plugin/selecting-swc-core).
+For more information on compatibility, refer to the SWC documentation on [Selecting the SWC Version](https://swc.rs/docs/plugin/selecting-swc-core) and interactive [compatibility table](https://plugins.swc.rs) on SWC website.
 
 # Usage (#usage)
 
