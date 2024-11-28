@@ -8,7 +8,7 @@ redirectFrom:
 ```js
 import React from "react";
 import ReactDOM from "react-dom";
-import { createEffect, createStore } from "effector";
+import { createEffect, createStore, sample } from "effector";
 import { useUnit } from "effector-react";
 
 const url =
