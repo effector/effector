@@ -10,6 +10,7 @@
   <a href="https://github.com/effector/effector/actions/workflows/tests.yml"><img src="https://github.com/effector/effector/actions/workflows/tests.yml/badge.svg?branch=master" alt="build status" /></a>
   <a href="https://discord.gg/t3KkcQdt"><img src="https://img.shields.io/badge/chat-discord-blue?style=flat&logo=discord" alt="discord chat"></a>
   <a href="https://www.patreon.com/zero_bias/overview"><img src="https://img.shields.io/badge/become-a%20patron-%23f96854" alt="become a patron" /></a>
+  <a href="https://gurubase.io/g/effector"><img src="https://img.shields.io/badge/Gurubase-Ask%20Effector%20Guru-006BFF" alt="Gurubase"></a>
 </p>
 
 
