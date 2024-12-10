@@ -48,7 +48,8 @@ async function getNpmStats() {
 }
 
 async function getRepoStats() {
-  const { data: repo } = await octokit.repos.get(repoInfo);
+  try {
+    const { data: repo } = await octokit.repos.get(repoInfo);
 
   let contributorsCount = 0;
   let page = 1;
@@ -71,6 +72,15 @@ async function getRepoStats() {
     contributors: contributorsCount,
     license: repo.license?.spdx_id,
   };
+  } catch (error) {
+    console.error("Failed to get GitHub repo stats", error);
+
+    return {
+      stars: 4620,
+      contributors: 129,
+      license: 'MIT'
+    }
+  }
 }
 
 async function getGzipSize() {
