@@ -1,4 +1,4 @@
-const { resolve: resolvePath } = require('path')
+const {resolve: resolvePath} = require('path')
 
 const watchPathIgnorePatterns = [
   '<rootDir>/.effector/',
@@ -25,8 +25,8 @@ const transform = {
 }
 
 const solidTransform = {
-  '^.+\\.jsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
-  '^.+\\.tsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
+  '^.+\\.jsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
+  '^.+\\.tsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
 }
 
 const createDefaultConfig = () => ({
@@ -119,7 +119,7 @@ const compatBrowsers = [
 ]
 
 module.exports = {
-  collectCoverage: boolean(process.env.COVERAGE, false),
+  collectCoverage: boolean(process.env.COVERAGE),
   collectCoverageFrom: [
     '<rootDir>/src/effector/**/*.ts',
     '<rootDir>/src/react/**/*.ts',
@@ -131,100 +131,131 @@ module.exports = {
     '!**/*.test.ts',
   ],
   watchPathIgnorePatterns,
-  projects: createProjectList(
-    boolean(process.env.DOM, false)
-      ? [
-          {
-            forestBrowser: {
-              automock: false,
-              testEnvironment: 'node',
-              testMatch: ['<rootDir>/src/forest/__tests__/**/*.test.ts'],
-              testPathIgnorePatterns: ['<rootDir>/src/forest/__tests__/ssr/'],
-              transform,
-              testTimeout: 120e3,
-              runner:
-                './tools/remoteDeviceTestRunner/browserstackTestRunner.js',
-              globals: {
-                needForest: true,
-                effectorBuild: 'cjs',
-                needPolyfill: false,
-                capabilitiesTag: 'forest',
-                noAsyncAwait: false,
-                capabilities: {
-                  'bstack:options': {
-                    os: 'OS X',
-                    osVersion: 'Mojave',
-                    projectName: 'forest',
-                    buildName: 'macos Safari',
-                    seleniumVersion: '3.141.59',
-                  },
-                  browserName: 'Safari',
-                  browserVersion: '12.1',
-                },
+  projects: createProjectListByEnv({
+    DOM: [
+      {
+        forestBrowser: {
+          automock: false,
+          testEnvironment: 'node',
+          testMatch: ['<rootDir>/src/forest/__tests__/**/*.test.ts'],
+          testPathIgnorePatterns: ['<rootDir>/src/forest/__tests__/ssr/'],
+          transform,
+          testTimeout: 120e3,
+          runner: './tools/remoteDeviceTestRunner/browserstackTestRunner.js',
+          globals: {
+            needForest: true,
+            effectorBuild: 'cjs',
+            needPolyfill: false,
+            capabilitiesTag: 'forest',
+            noAsyncAwait: false,
+            capabilities: {
+              'bstack:options': {
+                os: 'OS X',
+                osVersion: 'Mojave',
+                projectName: 'forest',
+                buildName: 'macos Safari',
+                seleniumVersion: '3.141.59',
               },
+              browserName: 'Safari',
+              browserVersion: '12.1',
             },
           },
-        ]
-      : boolean(process.env.COMPAT, false)
-      ? [createCompatProjects(compatBrowsers)]
-      : [
-          {
-            effector: {
-              testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
-              transform,
-            },
+        },
+      },
+    ],
+    COMPAT: [createCompatProjects(compatBrowsers)],
+    OLD_REACT: [
+      {
+        react17: {
+          testEnvironment: 'jsdom',
+          testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
+          transform,
+          moduleNameMapper: {
+            '(.*)/fixtures/react$': '$1/fixtures/react-17',
+            '^react-dom((\\/.*)?)$': 'react-dom-17$1',
+            '^react((\\/.*)?)$': 'react-17$1',
           },
-          'babel',
-          {
-            react: {
-              testEnvironment: 'jsdom',
-              testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
-              transform,
-              moduleNameMapper: boolean(process.env.REACT_17) && {
-                '(.*)/fixtures/react$': '$1/fixtures/react-17',
-                '^react-dom((\\/.*)?)$': 'react-dom-17$1',
-                '^react((\\/.*)?)$': 'react-17$1',
-              },
-              globals: {
-                IS_REACT_ACT_ENVIRONMENT: true,
-                REACT_17: boolean(process.env.REACT_17),
-              },
-            },
-            solid: {
-              testEnvironment: 'jsdom',
-              testMatch: [`<rootDir>/src/solid/**/*.test.tsx`],
-              resolver: resolvePath(__dirname, 'src/solid/resolver.js'),
-              transform: solidTransform,
-              setupFilesAfterEnv: ['<rootDir>/src/solid/__tests__/setupTests.ts']
-            },
-            vue: {
-              testEnvironment: 'jsdom',
-              testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
-              transform,
-            },
-            forest: {
-              automock: false,
-              testEnvironment: 'node',
-              testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
-              transform,
-              testTimeout: 60e3,
-            },
+          globals: {
+            IS_REACT_ACT_ENVIRONMENT: true,
           },
-          !boolean(process.env.NO_TYPE_TESTS, false) && {
-            types: {
-              testMatch: [
-                `<rootDir>/src/types/__tests__/**/*.test.js`,
-                `<rootDir>/src/types/__tests__/**/*.test.ts`,
-                `<rootDir>/src/types/__tests__/**/*.test.tsx`,
-              ],
-              globalSetup: './src/types/src/globalSetup.ts',
-              globalTeardown: './src/types/src/globalTeardown.ts',
-              maxConcurrency: 25,
-              transform,
-            },
+        },
+        react18: {
+          testEnvironment: 'jsdom',
+          testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
+          transform,
+          moduleNameMapper: {
+            '(.*)/fixtures/react$': '$1/fixtures/react-18',
+            '^react-dom((\\/.*)?)$': 'react-dom-18$1',
+            '^react((\\/.*)?)$': 'react-18$1',
           },
-        ],
-  ),
+          globals: {
+            IS_REACT_ACT_ENVIRONMENT: true,
+          },
+        },
+      },
+    ],
+    default: [
+      {
+        effector: {
+          testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
+          transform,
+        },
+      },
+      'babel',
+      {
+        react: {
+          testEnvironment: 'jsdom',
+          testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
+          transform,
+          globals: {
+            IS_REACT_ACT_ENVIRONMENT: true,
+          },
+        },
+        solid: {
+          testEnvironment: 'jsdom',
+          testMatch: [`<rootDir>/src/solid/**/*.test.tsx`],
+          resolver: resolvePath(__dirname, 'src/solid/resolver.js'),
+          transform: solidTransform,
+          setupFilesAfterEnv: ['<rootDir>/src/solid/__tests__/setupTests.ts'],
+        },
+        vue: {
+          testEnvironment: 'jsdom',
+          testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
+          transform,
+        },
+        forest: {
+          automock: false,
+          testEnvironment: 'node',
+          testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
+          transform,
+          testTimeout: 60e3,
+        },
+      },
+      !boolean(process.env.NO_TYPE_TESTS) && {
+        types: {
+          testMatch: [
+            `<rootDir>/src/types/__tests__/**/*.test.js`,
+            `<rootDir>/src/types/__tests__/**/*.test.ts`,
+            `<rootDir>/src/types/__tests__/**/*.test.tsx`,
+          ],
+          globalSetup: './src/types/src/globalSetup.ts',
+          globalTeardown: './src/types/src/globalTeardown.ts',
+          maxConcurrency: 25,
+          transform,
+        },
+      },
+    ],
+  }),
+}
+
+function createProjectListByEnv(itemsMapRaw) {
+  const {default: defaultProjects, ...itemsMap} = itemsMapRaw
+  for (const envKey in itemsMap) {
+    if (boolean(process.env[envKey])) {
+      return createProjectList(itemsMap[envKey])
+    }
+  }
+  return createProjectList(defaultProjects)
 }
 
 function createProjectList(items) {
@@ -292,10 +323,7 @@ function createCompatProjects(browsers) {
   return projects
 }
 
-function boolean(
-  value /*: string | boolean | null | void*/,
-  defaults /*: boolean*/,
-) /*: boolean*/ {
+function boolean(value) {
   switch (value) {
     case 'no':
     case 'false':
@@ -308,6 +336,6 @@ function boolean(
     case null:
     case undefined:
     default:
-      return defaults
+      return false
   }
 }

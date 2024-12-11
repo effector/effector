@@ -21,4 +21,4 @@ jobs:
           node-version: 20
       - run: yarn install --frozen-lockfile
       - run: yarn test
-      - run: yarn test:react-17
+      - run: yarn test:old-react
