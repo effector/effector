@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 23.3.0
+
+- Add react 19 support
+
 ## effector-vue 23.1.0
 
 - Update useVModel bindings ([issue #1150](https://github.com/effector/effector/issues/1150))
