@@ -45,6 +45,7 @@
     "effector": "^23.2.2",
     "html-escaper": "^3.0.3",
     "nanoid": "^5.0.7",
+    "node-html-parser": "^6.1.13",
     "npm-stats-api": "^2.1.2",
     "pagefind": "^1.1.0",
     "preact": "^10.23.2",

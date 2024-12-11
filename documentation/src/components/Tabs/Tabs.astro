@@ -1,0 +1,129 @@
+---
+import { initTabs } from "./init-tabs";
+
+const html = await Astro.slots.render("default");
+const { content, tabs } = initTabs(html);
+---
+
+<tabs-container>
+  {
+    tabs && (
+      <ul role="tablist">
+        {tabs.map(({ id, label }, i) => (
+          <li role="presentation" class="tab">
+            <button
+              role="tab"
+              aria-selected={i === 0 ? "true" : "false"}
+              id={`tab-${id}`}
+              tabindex={i === 0 ? 0 : -1}
+            >
+              {label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  <Fragment set:html={content} />
+</tabs-container>
+
+<script>
+  class Tabs extends HTMLElement {
+    tabs: Array<HTMLButtonElement> = [];
+    tabContents: Array<HTMLDivElement> = [];
+
+    constructor() {
+      super();
+      this.init();
+    }
+
+    init = () => {
+      this.tabs = [...this.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+      this.tabContents = [...this.querySelectorAll<HTMLDivElement>('[role="tabpanel"]')];
+
+      this.tabs.forEach((tab, i) => {
+        tab.addEventListener("click", this.handleClick(i));
+        tab.addEventListener("keydown", this.handleKeyDown);
+      });
+    };
+
+    handleKeyDown = (e: KeyboardEvent) => {
+      const pressedButton = e.key;
+      const currentActiveTab = e.currentTarget;
+
+      const keyboardDirections = {
+        ArrowLeft: -1,
+        ArrowRight: 1,
+      };
+
+      if (pressedButton in keyboardDirections) {
+        const direction = keyboardDirections[pressedButton as keyof typeof keyboardDirections];
+
+        const index = this.tabs.indexOf(currentActiveTab as HTMLButtonElement);
+        let newActiveTabIndex = index + direction;
+
+        if (newActiveTabIndex < 0) {
+          newActiveTabIndex = this.tabs.length - 1;
+        } else if (newActiveTabIndex > this.tabs.length - 1) {
+          newActiveTabIndex = 0;
+        }
+
+        this.switchTab(newActiveTabIndex);
+      }
+    };
+
+    handleClick = (i: number) => (e: MouseEvent) => {
+      const currentElement = e.currentTarget!;
+      const currentActiveTab = this.querySelector('[aria-selected="true"]');
+
+      if (currentElement !== currentActiveTab) {
+        this.switchTab(i);
+      }
+    };
+
+    switchTab = (index: number) => {
+      this.tabs.forEach((tab, i) => {
+        tab.setAttribute("aria-selected", "false");
+        tab.tabIndex = -1;
+      });
+
+      this.tabContents.forEach((content) => {
+        content.setAttribute("hidden", "true");
+      });
+
+      const newActiveTab = this.tabs[index];
+      newActiveTab.setAttribute("aria-selected", "true");
+      newActiveTab.tabIndex = 0;
+      newActiveTab.focus();
+
+      const newTabContent = this.tabContents[index];
+      newTabContent.hidden = false;
+    };
+  }
+
+  customElements.define("tabs-container", Tabs);
+</script>
+
+<style>
+  ul[role="tablist"] {
+    display: flex;
+    gap: 20px;
+    border-bottom: 2px solid var(--theme-divider);
+    padding: 0px;
+    margin-bottom: 10px;
+  }
+
+  li {
+    cursor: pointer;
+    list-style: none;
+    margin: -2px;
+  }
+
+  .tab > button[role="tab"] {
+    border-radius: 2px;
+  }
+
+  .tab:has(> [aria-selected="true"]) {
+    border-bottom: 2px solid var(--theme-accent);
+  }
+</style>

@@ -6,38 +6,73 @@ redirectFrom:
   - /introduction/installation
 ---
 
+import Tabs from "../../../../components/Tabs/Tabs.astro";
+import TabItem from "../../../../components/Tabs/TabItem.astro";
+
+# Installation 
+
 ## Via package manager
 
 Effector doesn't depend on NPM, you can use any package manager you want.<br/>
-For example: [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/).
+
+
+<Tabs>
+  <TabItem label="npm">
 
 ```bash
 npm install effector
 ```
 
-### React
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector
+```
+
+  </TabItem>
+</Tabs>
+
+## Supported Frameworks
+Additionally, to ensure proper integration with popular frameworks, you can also install an additional package.
+
+<Tabs>
+  <TabItem label="React">
 
 ```bash
 npm install effector effector-react
 ```
 
-Also, you can start from [Stackblitz template](https://stackblitz.com/fork/github/effector/vite-react-template) with [TypeScript](https://typescriptlang.org/), [ViteJS](https://vitejs.dev/), and [React](https://reactjs.org/) already set up.
-
-### Vue
+  </TabItem>
+  <TabItem label="Vue">
 
 ```bash
 npm install effector effector-vue
 ```
 
-### Solid
+  </TabItem>
+  <TabItem label="Solid">
 
 ```bash
 npm install effector effector-solid
 ```
 
-### Svelte
+  </TabItem>
+</Tabs>
 
+:::info{title="About Svelte"}
 Svelte works with effector out of the box, no additional packages needed.
+:::
+
+Also, you can start from [Stackblitz template](https://stackblitz.com/fork/github/effector/vite-react-template) with [TypeScript](https://typescriptlang.org/), [ViteJS](https://vitejs.dev/), and [React](https://reactjs.org/) already set up.
+
 
 ## Online playground
 
@@ -45,7 +80,7 @@ Examples in this documentation are running in [our online playground](https://sh
 
 ## Deno
 
-:::info{title="since"}
+:::info{frontmatter.title="since"}
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 :::
 
