@@ -195,6 +195,12 @@ export const translations = {
           uz: "Bizga habar bering",
         },
       },
+      seeAll: {
+        text: {
+          en: "Sell full companies list",
+          ru: 'Посмотреть полный список компаний'
+        }
+      }
     },
   },
   Pagefind: {
