@@ -79,11 +79,11 @@ h6 {
 }
 
 .content section h1 {
-  border-top: 1px solid var(--theme-divider);
-  padding-top: 3rem;
+  border-bottom: 1px solid var(--theme-divider);
   font-size: 2.5rem;
   line-height: 1;
-  margin: 3rem 0 2rem;
+  margin: 3rem 0 0;
+  padding-bottom: 3rem;
 }
 
 .content section h2 {
