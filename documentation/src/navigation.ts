@@ -9,8 +9,7 @@ import IconVue from "@icons/Vue.astro";
 import IconSolid from "@icons/Solid.astro";
 import IconNextJs from "@icons/NextJs.astro";
 import IconGithub from "@icons/Github.astro";
-import IconTwitter from "@icons/Twitter.astro";
-import IconDiscord from "@icons/Discord.astro";
+import IconTelegram from "@icons/Telegram.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
@@ -63,7 +62,11 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/typescript/typing-effector",
       },
       {
-        text: { en: "Usage with `effector-react`", ru: "Использование с `effector-react`", uz: "`effector-react` dan foydalaning" },
+        text: {
+          en: "Usage with `effector-react`",
+          ru: "Использование с `effector-react`",
+          uz: "`effector-react` dan foydalaning",
+        },
         link: "/typescript/usage-with-effector-react",
       },
       {
@@ -825,8 +828,7 @@ export const SOCIAL_LINKS: {
   link: string;
 }[] = [
   { text: { en: "GitHub" }, icon: IconGithub, link: LINKS.github },
-  { text: { en: "Twitter" }, icon: IconTwitter, link: LINKS.twitter },
-  { text: { en: "Discord" }, icon: IconDiscord, link: LINKS.discord },
+  { text: { en: "Telegram" }, icon: IconTelegram, link: LINKS.telegramRU },
 ];
 
 export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
@@ -838,8 +840,6 @@ export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
   },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
-  { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
-  { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
 ];
 
 export const MOBILE_NAVIGATION = createMobileNavigation([
@@ -885,7 +885,6 @@ export const FOOTER_LINKS = [
         link: "/core-principles/releases",
       },
       { text: { en: "What's new", ru: "Что нового", uz: "Yangiliklar" }, link: LINKS.changelog },
-      { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
     ],
   },
   {
@@ -907,6 +906,9 @@ export const FOOTER_LINKS = [
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
       { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
+      { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
+      { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
+      { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
       { text: { en: "Docs powered by Astro" }, link: "https://astro.build" },
     ],
   },
