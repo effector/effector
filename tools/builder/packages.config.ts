@@ -143,7 +143,7 @@ export default {
       'use-sync-external-store': '^1.0.0',
     },
     peerDependencies: {
-      react: '>=16.8.0 <19.0.0',
+      react: '>=16.8.0 <20.0.0',
       effector: '^23.0.0',
     },
     files: [
