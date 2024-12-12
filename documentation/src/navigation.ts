@@ -13,41 +13,32 @@ import IconTelegram from "@icons/Telegram.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
-    text: { en: "Introduction", ru: "Начало работы", uz: "Kirish" },
+    text: { en: "Introduction", ru: "Введение", uz: "Kirish" },
     items: [
+      {
+        text: { en: "Get started", ru: "Начало работы", uz: "Boshlash" },
+        link: "/introduction/get-started",
+      },
       {
         text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
         link: "/introduction/motivation",
-      },
-      {
-        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
-        link: "/introduction/community",
       },
       {
         text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
         link: "/introduction/installation",
       },
       {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
-        link: "/introduction/ecosystem",
+        text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
+        link: "/introduction/core-concepts",
       },
       {
-        text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
-        link: "/introduction/examples",
+        text: { en: "Comparison", ru: "Сравнение с другими", uz: "O'zgarmasligi" },
+        link: "/introduction/comparison",
       },
-      {
-        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
-        link: "/FAQ",
-      },
-    ],
-  },
-  {
-    text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
-    items: [
-      {
-        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
-        link: "/conventions/naming",
-      },
+      // {
+      //   text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
+      //   link: "/introduction/examples",
+      // },
     ],
   },
   {
@@ -116,12 +107,30 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: {
       en: "For library developers",
+      ru: "Для разработчиков",
       uz: "Biblioteka dasturchilari uchun",
     },
     items: [
       {
         text: { en: "Universal @@unitShape protocol" },
         link: "/ecosystem-development/unit-shape-protocol",
+      },
+    ],
+  },
+  {
+    text: { en: "Extra", ru: "Дополнительно", uz: "Qo'shimcha" },
+    items: [
+      {
+        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
+        link: "/extra/naming-conventions",
+      },
+      {
+        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
+        link: "/extra/community",
+      },
+      {
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        link: "/extra/ecosystem",
       },
     ],
   },
@@ -147,6 +156,15 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "SIDs" },
         link: "/explanation/sids",
+      },
+    ],
+  },
+  {
+    text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
+    items: [
+      {
+        link: "/FAQ",
+        text: { en: "FAQ" },
       },
     ],
   },

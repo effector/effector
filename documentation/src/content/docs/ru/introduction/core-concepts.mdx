@@ -1,0 +1,156 @@
+---
+---
+
+# Основные концепции
+
+Effector включает три ключевых элемента, которые позволяют эффективно управлять состоянием и реагировать на изменения в приложении:
+
+## Событие (#event)
+
+Событие ([Event](/ru/api/effector/Event)) — для описания событий, как правило это взаимодейтсвие пользователя с вашей логикой:
+
+- Клик на кнопку
+- Отправка формы и др.
+
+Использование событий:
+
+- Они служат для уведомления других частей системы о произошедших изменениях.
+- Можно создавать события, подписываться на их изменения и трансформировать их данные.
+
+```js
+import { createEvent } from "effector";
+
+// Создаем событие
+const formSubmitted = createEvent();
+
+// Подписываемся на событие
+formSubmitted.watch(() => console.log("Форма отправлена!"));
+
+formSubmitted();
+
+// "Форма отправлена!"
+```
+
+## Хранилище (#store)
+
+Хранилище ([Store](/ru/api/effector/Store)) — для управления состоянием вашего приложения
+Особенности:
+
+- Состояние хранилища можно изменять только через события ([Event](/ru/api/effector/Event)).
+- Хранилище поддерживает реактивность — изменения автоматически распространяются на все подписанные компоненты.
+
+  ```js
+  import { createStore, createEvent } from "effector";
+
+  const increment = createEvent();
+  const $counter = createStore(0);
+
+  $counter.on(increment, (state) => state + 1);
+
+  $counter.watch((state) => console.log(`Текущее значение: ${state}`));
+  // Текущее значение: 0
+
+  // Вызов события изменяет состояние
+  increment(); // Текущее значение: 1
+  ```
+
+## Эффект (#effect)
+
+Эффект ([Effect](/ru/api/effector/Effect)) — Эффект предназначен для обработки побочных действий в приложении. Это могут быть:
+
+- Отправка HTTP-запросов.
+- Чтение и запись данных в localStorage или indexDB.
+- Взаимодействие с другими API или библиотеками.
+
+Эффекты помогают изолировать логику взаимодействия с внешними системами от остального кода, что делает приложение более предсказуемым и удобным для тестирования.
+
+```js
+import { createEffect } from "effector";
+
+const fetchUserFx = createEffect(async (userId) => {
+  const response = await fetch(`/api/user/${userId}`);
+  return response.json();
+});
+
+// Подписываемся на результат эффекта
+fetchUserFx.done.watch(({ result }) => console.log("Данные пользователя:", result));
+fetchUserFx.fail.watch(() => console.log("Произошла ошибка!"));
+
+// Запускаем эффект
+fetchUserFx(1);
+```
+
+## Как это работает вместе?
+
+Эти концепции объединяются в мощный, реактивный поток данных:
+
+1. Событие инициирует изменения (например, нажатие кнопки).
+2. Эти изменения влияют на Хранилище, обновляя состояние приложения.
+3. При необходимости, Эффекты выполняют побочные действия, такие как взаимодействие с сервером.
+
+```ts
+import { createEvent, createStore, createEffect } from "effector";
+
+// Создание события
+const buttonClicked = createEvent();
+
+// Создание хранилища
+const $clickCount = createStore(0);
+
+// Подписываемся на изменения стора при вызове buttonClicked
+$clickCount.on(buttonClicked, (state) => state + 1);
+
+// watch - следит за изменением стора и вызывает колбэк
+// при изменениях И при инициализации
+
+// выведет 0
+// выведет 1
+$counter.watch((state) => console.log(state));
+
+// Создание эффекта
+const fetchUserData = createEffect(async (userId) => {
+  const response = await fetch(`/api/user/${userId}`);
+  return response.json();
+});
+
+// Использование
+buttonClicked(); // Увеличит clickCount на 1
+fetchUserData(1);
+```
+
+:::info{title="Почему $ и Fx?"}
+Более подробно о согласовании команды эффектор об именовании можно почитать [здесь](/ru/conventions/naming).
+:::
+
+Осталось связать изменение стора и вызов эффекта, и здесь в игру вступает прекрасный метод `sample`.
+Более подробно о `sample` можно почитать [тут](/ru/api/effector/sample).
+
+```ts
+import { createEvent, createStore, createEffect, sample } from "effector";
+
+const buttonClicked = createEvent();
+
+const $clickCount = createStore(0);
+
+$clickCount.on(buttonClicked, (state) => state + 1);
+
+$clickCount.watch((state) => console.log(state));
+
+const fetchUserDataFx = createEffect(async (userId) => {
+  const response = await fetch(`/api/user/${userId}`);
+  return response.json();
+});
+
+// при изменении стора $clickCount передай данные в fetchUserDataFx
+// и запусти его
+sample({
+  clock: $clickCount,
+  target: fetchUserDataFx,
+});
+
+buttonClicked();
+```
+
+В итоге всего за несколько строк кода мы создали рабочий, реактивный и предсказуемый поток данных, без капли бойлерплейта.
+
+Effector позволяет сосредоточиться на логике приложения, а не на обработке состояния. Попробуйте, и вы оцените его мощь!

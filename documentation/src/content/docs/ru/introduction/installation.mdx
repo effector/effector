@@ -1,45 +1,77 @@
 ---
-title: Установка
+title: Установка effector
 description: Установка эффектора и сопутствующих пакетов
+keywords: effector, установка, эффектор
+tags: ["effector", "установка", "эффектор"]
 lang: ru
 ---
 
-## С помощью пакетного менеджера
+import Tabs from "../../../../components/Tabs/Tabs.astro";
+import TabItem from "../../../../components/Tabs/TabItem.astro";
+
+# Установка 
 
 Effector не требует использования какого-то одного пакетного менеджера, можете использовать любой на свой выбор.<br/>
-Например: [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/).
+
+<Tabs>
+  <TabItem label="npm">
 
 ```bash
 npm install effector
 ```
 
-### React
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector
+```
+
+  </TabItem>
+</Tabs>
+
+
+## Поддерживаемые фреймворки
+
+Для обеспечения бесшовной интеграции с популярными фреймворками вам нужно установить дополнительный пакет.
+
+
+<Tabs>
+  <TabItem label="React">
 
 ```bash
 npm install effector effector-react
 ```
 
-Вы можете начать использовать effector онлайн с помощью [шаблона Stackblitz](https://stackblitz.com/fork/github/effector/vite-react-template) внутри которого уже настроен [TypeScript](https://typescriptlang.org/), [ViteJS](https://vitejs.dev/) и [React](https://reactjs.org/).
-
-### Vue
+  </TabItem>
+  <TabItem label="Vue">
 
 ```bash
 npm install effector effector-vue
 ```
 
-### Solid
+  </TabItem>
+  <TabItem label="Solid">
 
 ```bash
 npm install effector effector-solid
 ```
 
-### Svelte
+  </TabItem>
+</Tabs>
 
-Svelte работает с effector без установки дополнительных пакетов.
+:::info{title="О Svelte"}
+Svelte работает с эффектором без дополнительных пакетов.
+:::
 
-## Online playground
-
-Все примеры в этой документации запускаются в [нашей онлайн песочнице](https://share.effector.dev). Она позволяет запускать, тестировать и распространять свои идеи бесплатно и без установки. React и синтаксис TypeScript поддерживаются без дополнительной настройки. [Репозиторий проекта](https://github.com/effector/repl).
+Вы можете начать использовать effector онлайн с помощью [шаблона Stackblitz](https://stackblitz.com/fork/github/effector/vite-react-template) внутри которого уже настроен [TypeScript](https://typescriptlang.org/), [ViteJS](https://vitejs.dev/) и [React](https://reactjs.org/).
 
 ## Deno
 

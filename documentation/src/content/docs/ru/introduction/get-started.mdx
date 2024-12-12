@@ -1,0 +1,188 @@
+---
+---
+
+import Tabs from "../../../../components/Tabs/Tabs.astro";
+import TabItem from "../../../../components/Tabs/TabItem.astro";
+
+# Быстрый старт
+
+Effector это реактивный менеджер управления состоянием, который независит от фреймворка.
+
+Для начала устаноим effector при помощи вашего любимого пакетного менеджера
+
+
+<Tabs>
+  <TabItem label="npm">
+
+```bash
+npm install effector
+```
+
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector
+```
+
+  </TabItem>
+</Tabs>
+
+Теперь давайте создадим стор, который является состоянием.
+```ts
+import { createStore } from "effector"
+
+const $counter = createStore(0)
+```
+
+Дальше давайте создадим событие.
+
+```ts
+import { createEvent } from "effector"
+
+const incremented = createEvent()
+const decremented = createEvent()
+```
+
+И свяжем событие вместе со стором.
+
+```ts
+// counter.js
+import { createEvent, createStore } from "effector"
+
+const $counter = createStore(0)
+
+const incremented = createEvent()
+const decremented = createEvent()
+
+$counter.on(incremented, (state) => state + 1);
+$counter.on(decremented, (state) => state - 1);
+```
+
+Если вы хотите использовать **effector** вместе с фреймворком, то для этого вам потребуется установить дополнительный пакет:
+
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```bash
+npm install effector effector-react
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```bash
+npm install effector effector-vue
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```bash
+npm install effector effector-solid
+```
+
+  </TabItem>
+</Tabs>
+
+И использовать 
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```jsx
+
+import { useUnit } from "effector-react";
+import { createEvent, createStore } from "effector";
+import { $counter, incremented, decremented} from './counter.js'
+
+export const Counter = () => {
+	const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+	// или
+	const {counter, onIncremented, onDecremented} = useUnit({$counter, incremented, decremented});
+	// или
+	const counter = useUnit($counter);
+	const onIncremented = useUnit(incremented);
+	const onDecremented = useUnit(decremented);
+
+	return (
+    	<div>
+      		<h1>Count: {counter}</h1>
+      		<button onClick={onIncremented}>Increment</button>
+      		<button onClick={onDecremented}>Decrement</button>
+    	</div>
+	);
+};
+
+
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```html
+<script setup>
+import { useStore } from "@effector-vue/composition";
+import { $counter, incremented, decremented} from './counter.js'
+
+const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+// или
+const {counter, onIncremented, onDecremented} = useUnit({$counter, incremented, decremented});
+// или
+const counter = useUnit($counter);
+const onIncremented = useUnit(incremented);
+const onDecremented = useUnit(decremented);
+</script>
+
+<template>
+  <div>
+    <h1>Count: {{ counter }}</h1>
+    <button @click="onIncremented">Increment</button>
+    <button @click="onDecremented">Decrement</button>
+  </div>
+</template>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```jsx
+import { createEvent, createStore } from "effector";
+import { useUnit } from "effector-solid";
+import { $counter, incremented, decremented} from './counter.js'
+
+const Counter = () => {
+	const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+	// или
+	const {counter, onIncremented, onDecremented} = useUnit({$counter, incremented, decremented});
+	// или
+	const counter = useUnit($counter);
+	const onIncremented = useUnit(incremented);
+	const onDecremented = useUnit(decremented);
+
+	return (
+		<div>
+			<h1>Count: {counter()}</h1>
+			<button onClick={onIncremented}>Increment</button>
+			<button onClick={onDecremented}>Decrement</button>
+    	</div>
+	);
+};
+
+export default Counter;
+```
+
+  </TabItem>
+</Tabs>
+
+:::info{title="А где Svelte ?"}
+Для работы со Svelte не требуется дополнительные пакеты, он прекрасно работает с базовым пакетом effector.
+:::

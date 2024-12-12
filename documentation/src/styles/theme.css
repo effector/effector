@@ -134,6 +134,8 @@
   --theme-admonition-warning-border: hsla(38deg, 92%, 50%, 1);
   --theme-admonition-warning-text: hsla(23deg, 83%, 18%, 1);
 
+  --theme-left-sidebar-item-text: hsla(var(--color-gray-40), 1);
+
   color-scheme: light;
 }
 
@@ -143,7 +145,7 @@ body {
 }
 
 :root.theme-dark {
-  --theme-accent-opacity: 0.15;
+  --theme-accent-opacity: 0.95;
   --theme-accent-color: var(--color-primary-50);
   --theme-accent: hsla(var(--theme-accent-color), 1);
   --theme-text-accent: hsla(var(--color-primary-40), 1);
@@ -190,6 +192,8 @@ body {
   --theme-admonition-warning-bg: hsl(38deg, 45%, 24%);
   --theme-admonition-warning-border: hsla(38deg, 92%, 28%, 1);
   --theme-admonition-warning-text: hsl(38deg, 10%, 95%);
+
+  --theme-left-sidebar-item-text: hsla(var(--color-base-white), 75%, 1);
 
   color-scheme: dark;
 }
