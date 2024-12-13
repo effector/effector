@@ -1,0 +1,183 @@
+---
+---
+
+# Core concepts
+
+Effector includes three core elements that enable efficient state management and reactivity within applications:
+
+## Event (##event)
+
+[Event](/en/api/effector/Event) — serves as the entry point to the reactive data flow. It represents changes or actions that initiate processes and connect various system components, such as stores and effects, enabling flexible and controlled data handling.
+
+#### Event features
+
+- Simplicity: Events are minimalistic and can be easily created using createEvent.
+- Reactivity: Events instantly notify all subscribers upon triggering.
+- Composition: Events can be combined, filtered, transformed, and forwarded to other handlers or stores.
+
+```js
+import { createEvent } from "effector";
+
+// create event
+const formSubmitted = createEvent();
+
+// subscribe to the event
+formSubmitted.watch(() => console.log("Form submitted!"));
+
+// Trigger the event
+formSubmitted();
+
+// Output:
+// "Form submitted!"
+```
+
+## Store (#store)
+
+[Store](/en/api/effector/Store) — is the central state management element in Effector. It represents a reactive value that can only be changed via events, ensuring strict control over mutations and data flow.
+
+#### Store features
+
+- Store state can only be updated through Events.
+- It supports reactivity — changes propagate automatically to all subscribed components.
+- Effector optimizes component re-renders by minimizing unnecessary updates.
+- Store data is immutable by default.
+
+  ```js
+  import { createStore, createEvent } from "effector";
+
+  // Create an event
+  const increment = createEvent();
+
+  // Create a store and derive a reactive value
+  const $counter = createStore(0);
+  const $isEven = $counter.map((counter) => counter % 2 === 0);
+
+  // Update the store on event trigger
+  $counter.on(increment, (state) => state + 1);
+
+  // Subscribe to store changes
+  $counter.watch((state) => console.log(`Current value: ${state}`));
+  $isEven.watch((isEven) => console.log(`Counter value ${isEven ? "even" : "odd"}`));
+
+  // Console output:
+  // Current value: 0
+  // Counter value even
+
+  // Trigger the event
+  increment();
+
+  // Console output:
+  // Current value: 1
+  // Counter value odd
+  ```
+
+## Effect (#effect)
+
+[Effect](/en/api/effector/Effect) — is designed to handle side effects — operations that interact with external systems such as servers, APIs, or browser environments.
+
+#### Effect features:
+
+- Effects have built-in states like pending and emit events such as done and fail, making it easier to track operation statuses.
+- Logic related to external interactions is isolated, improving testability and making the code more predictable.
+
+Effects help isolate the logic of interacting with external systems from the rest of the code, making the application more predictable and easier to test.
+
+```js
+import { createEffect } from "effector";
+
+// Create an effect
+const fetchUserFx = createEffect(async (userId) => {
+  const response = await fetch(`/api/user/${userId}`);
+  return response.json();
+});
+
+// Subscribe to effect results
+fetchUserFx.done.watch(({ result }) => console.log("Данные пользователя:", result));
+fetchUserFx.fail.watch(({ error }) => console.log("Произошла ошибка! ", error));
+
+// Trigger effect
+fetchUserFx(1);
+```
+
+## How it all works together? (## How it all works together?)
+
+These concepts combine to create a powerful, reactive data flow:
+
+1. **Events** initiate changes (e.g., button clicks).
+2. These changes update **Stores**, which manage application state.
+3. **Effects** handle side effects like interacting with external APIs.
+
+```ts
+import { createEvent, createStore, createEffect } from "effector";
+
+// Create event
+const buttonClicked = createEvent();
+
+// Create store
+const $clickCount = createStore(0);
+
+// Update the store when the event is triggered
+$clickCount.on(buttonClicked, (state) => state + 1);
+
+// Watch the store for changes
+$clickCount.watch((state) => console.log(state));
+// Outputs 0 initially
+
+// Create an effect
+const fetchUserDataFx = createEffect(async (userId) => {
+  const response = await fetch(`/api/user/${userId}`);
+  return response.json();
+});
+
+// Trigger event
+buttonClicked(); // Increments clickCount to 1
+fetchUserDataFx(1);
+```
+
+:::info{title="Why use $ and Fx?"}
+Effector naming conventions use $ for stores (e.g., $counter) and Fx for effects (e.g., fetchUserDataFx). Learn more about naming conventions [here](/en/conventions/naming).
+:::
+
+### Adding sample for orchestration (### Adding sample for orchestration)
+
+What's left to do is to connect the store change and the effect call, and this is where the beautiful `sample` method begins.
+
+The `sample` function is a powerful tool for orchestrating reactive dependencies. It connects stores, events, and effects seamlessly.
+
+More about `sample` you can find [here](/en/api/effector/sample).
+
+```ts
+import { createEvent, createStore, createEffect, sample } from "effector";
+
+const buttonClicked = createEvent();
+
+const $clickCount = createStore(0);
+
+$clickCount.on(buttonClicked, (state) => state + 1);
+
+$clickCount.watch((state) => console.log("Counter changed: ", state));
+
+const fetchUserDataFx = createEffect(async (userId) => {
+  const response = await fetch(`/api/user/${userId}`);
+
+  return response.json();
+});
+
+fetchUserDataFx.watch((params) => console.log("effect called with", params));
+
+// Automatically pass store data to the effect when the store changes and call it
+sample({
+  clock: $clickCount,
+  target: fetchUserDataFx,
+});
+
+buttonClicked();
+
+// Counter changed: 0
+// Counter changed: 1
+// effect called with 1
+```
+
+In just a few lines of code, we’ve created a fully functional, reactive, and predictable data flow — with no boilerplate code.
+
+Effector focuses on application logic, allowing you to build scalable systems with ease. Try it out and experience its power!
