@@ -35,10 +35,6 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Comparison", ru: "Сравнение с другими", uz: "O'zgarmasligi" },
         link: "/introduction/comparison",
       },
-      // {
-      //   text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
-      //   link: "/introduction/examples",
-      // },
     ],
   },
   {
@@ -121,8 +117,8 @@ const defaultSidebar: LSidebarGroup[] = [
     text: { en: "Extra", ru: "Дополнительно", uz: "Qo'shimcha" },
     items: [
       {
-        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
-        link: "/extra/naming-conventions",
+        text: { en: "Conventions", ru: "Согласования", uz: "Sog'liqlar" },
+        link: "/extra/conventions",
       },
       {
         text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
@@ -131,6 +127,10 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
         link: "/extra/ecosystem",
+      },
+      {
+        text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
+        link: "/extra/examples",
       },
     ],
   },
