@@ -1,17 +1,17 @@
 ---
-title: Начало работы с effector
-description: Как установить effector и начать с ним работу
+title: Getting Started with Effector
+description: Learn how to install and start using Effector
 ---
 
 import Tabs from "../../../../components/Tabs/Tabs.astro";
 import TabItem from "../../../../components/Tabs/TabItem.astro";
 
-# Быстрый старт
+# Quick start
 
-Effector это реактивный менеджер управления состоянием, который независит от фреймворка.
-Больше о ключевых особенностях эффектора вы можете прочитать [здесь](/ru/introduction/core-concepts)
+Effector is a reactive state manager that is framework-agnostic.
+More about effector core concepts you can read [here](/en/introduction/core-concepts)
 
-Для начала устаноим effector при помощи вашего любимого пакетного менеджера
+To get started, install Effector using your favorite package manager:
 
 <Tabs>
   <TabItem label="npm">
@@ -37,7 +37,7 @@ pnpm install effector
   </TabItem>
 </Tabs>
 
-Теперь давайте создадим стор, который является состоянием.
+Now, let’s create a store, which represents a state of your application:
 
 ```ts
 import { createStore } from "effector";
@@ -45,7 +45,7 @@ import { createStore } from "effector";
 const $counter = createStore(0);
 ```
 
-Дальше давайте создадим событие.
+Next, let’s define some events:
 
 ```ts
 import { createEvent } from "effector";
@@ -54,7 +54,7 @@ const incremented = createEvent();
 const decremented = createEvent();
 ```
 
-И свяжем событие вместе со стором.
+And link the events to the store:
 
 ```ts
 // counter.js
@@ -69,7 +69,7 @@ $counter.on(incremented, (state) => state + 1);
 $counter.on(decremented, (state) => state - 1);
 ```
 
-Если вы хотите использовать **effector** вместе с фреймворком, то для этого вам потребуется установить дополнительный пакет:
+If you want to use Effector with a specific framework, you’ll need to install an additional package:
 
 <Tabs syncId="framework-choice">
   <TabItem label="React">
@@ -95,7 +95,7 @@ npm install effector effector-solid
   </TabItem>
 </Tabs>
 
-И использовать
+And use it like this:
 
 <Tabs syncId="framework-choice">
   <TabItem label="React">
@@ -107,9 +107,9 @@ import { $counter, incremented, decremented } from "./counter.js";
 
 export const Counter = () => {
   const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
-  // или
+  // or
   const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
-  // или
+  // or
   const counter = useUnit($counter);
   const onIncremented = useUnit(incremented);
   const onDecremented = useUnit(decremented);
@@ -133,9 +133,9 @@ export const Counter = () => {
   import { $counter, incremented, decremented } from "./counter.js";
 
   const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
-  // или
+  // or
   const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
-  // или
+  // or
   const counter = useUnit($counter);
   const onIncremented = useUnit(incremented);
   const onDecremented = useUnit(decremented);
@@ -160,9 +160,9 @@ import { $counter, incremented, decremented } from "./counter.js";
 
 const Counter = () => {
   const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
-  // или
+  // or
   const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
-  // или
+  // or
   const counter = useUnit($counter);
   const onIncremented = useUnit(incremented);
   const onDecremented = useUnit(decremented);
@@ -182,6 +182,6 @@ export default Counter;
   </TabItem>
 </Tabs>
 
-:::info{title="А где Svelte ?"}
-Для работы со Svelte не требуется дополнительные пакеты, он прекрасно работает с базовым пакетом effector.
+:::info{title="What about Svelte ?"}
+No additional packages are required to use Effector with Svelte. It works seamlessly with the base Effector package.
 :::

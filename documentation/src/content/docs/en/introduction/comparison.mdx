@@ -1,0 +1,167 @@
+---
+title: Comparison of Effector and Other State Managers
+description: Let’s compare Effector and other popular state managers.
+---
+
+import Tabs from "../../../../components/Tabs/Tabs.astro";
+import TabItem from "../../../../components/Tabs/TabItem.astro";
+
+# Comparison of Effector with Other State Managers
+
+In this example, we will consider a simple implementation of a Counter.
+We will use React as the UI framework.
+
+:::info{title="Effector is framework-agnostic!"}
+It is important to mention that Effector is not tied to React; you can use it with any framework of your choice, such as [React](https://react.dev/), [Vue](https://vuejs.org/), [Solid](https://www.solidjs.com/) and others.
+:::
+
+<Tabs>
+  <TabItem label="effector">
+
+```jsx
+import { useUnit } from "effector-react";
+import { createEvent, createStore } from "effector";
+
+const $counter = createStore(0);
+const $derivedCount = $counter.map((countValue) => countValue * 2);
+
+const incremented = createEvent();
+const decremented = createEvent();
+
+$counter.on(incremented, (state) => state + 1);
+$counter.on(decremented, (state) => state - 1);
+
+export const Counter = () => {
+  const [counter, derivedCount, onIncremented, onDecremented] = useUnit([
+    $counter,
+    $derivedCount,
+    incremented,
+    decremented,
+  ]);
+
+  return (
+    <div>
+      <h1>Count: {counter}</h1>
+      <h1>Derived count: (x2) {derivedCount}</h1>
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
+```
+
+  </TabItem>
+
+  <TabItem label="zustand">
+
+```jsx
+import create from "zustand";
+
+const useCounterStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+  derivedCount: (get) => get().count * 2,
+}));
+
+function Counter() {
+  const { count, increment, decrement, derivedCount } = useCounterStore((state) => ({
+    count: state.count,
+    increment: state.increment,
+    decrement: state.decrement,
+    derivedCount: state.derivedCount(state),
+  }));
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <h2>Derived Count (x2): {derivedCount}</h2>
+      <button onClick={decrement}>-</button>
+      <button onClick={increment}>+</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+  </TabItem>
+
+  <TabItem label="redux">
+
+```jsx
+// store.js
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { count: 0 },
+  reducers: {
+    increment: (state) => { state.count += 1; },
+    decrement: (state) => { state.count -= 1; },
+  },
+});
+
+const store = configureStore({
+  reducer: {
+    counter: counterSlice.reducer,
+  },
+});
+
+export const { increment, decrement } = counterSlice.actions;
+export default store;
+
+
+
+// CounterComponent.js
+import { increment, decrement } from './store';
+import { useDispatch, useSelector } from 'react-redux';
+
+function Counter() {
+  const count = useSelector((state) => state.counter.count);
+  const derivedCount = count * 2;
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+	  <h2>Derived Count (x2): {derivedCount}</h2>
+      <button onClick={() => dispatch(decrement())}>-</button>
+      <button onClick={() => dispatch(increment())}>+</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+  </TabItem>
+
+  <TabItem label="jotai">
+
+```jsx
+import { atom, useAtom } from "jotai";
+
+const countAtom = atom(0);
+const derivedCountAtom = atom((get) => get(countAtom) * 2);
+
+function Counter() {
+  const [count, setCount] = useAtom(countAtom);
+  const [derivedCount] = useAtom(derivedCountAtom);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <h2>Derived Count (x2): {derivedCount}</h2>
+      <button onClick={() => setCount((prev) => prev - 1)}>-</button>
+      <button onClick={() => setCount((prev) => prev + 1)}>+</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+  </TabItem>
+</Tabs>

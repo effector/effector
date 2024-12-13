@@ -1,4 +1,6 @@
 ---
+title: Сравнение effector и других стейт менеджеров
+description: Сравним effector и другие популярные стейт менеджеры
 ---
 
 import Tabs from "../../../../components/Tabs/Tabs.astro";
@@ -6,11 +8,11 @@ import TabItem from "../../../../components/Tabs/TabItem.astro";
 
 # Сравнение effector с другими стейт менеджерами
 
-В этом примере мы возьмем в пример простой пример Counter, а чуть дальше приведем пример посложнее.
-Для примера UI фреймворка мы возьмем React.
+В этом примере мы возьмем в пример простую реализацию Counter.<br/>
+В качестве UI фреймворка мы возьмем React.
 
-:::info{title="Effector не зависит от фреймкорка !"} 
-При этом стоит сказать, что effector не связан с React, вы моежте использовать его с любым удобным для вас фреймворком, будь то [React](https://react.dev/), [Vue](https://vuejs.org/), [Solid](https://www.solidjs.com/) и др.
+:::info{title="Effector не зависит от фреймкорка !"}
+При этом стоит сказать, что effector не связан с React, вы можете использовать его с любым удобным для вас фреймворком, будь то [React](https://react.dev/), [Vue](https://vuejs.org/), [Solid](https://www.solidjs.com/) и др.
 :::
 
 <Tabs>
@@ -20,27 +22,45 @@ import TabItem from "../../../../components/Tabs/TabItem.astro";
 import { useUnit } from "effector-react";
 import { createEvent, createStore } from "effector";
 
-const $counter = createStore(0)
+const $counter = createStore(0);
 const $derivedCount = $counter.map((countValue) => countValue * 2);
 
-const incremented = createEvent()
-const decremented = createEvent()
+const incremented = createEvent();
+const decremented = createEvent();
 
 $counter.on(incremented, (state) => state + 1);
 $counter.on(decremented, (state) => state - 1);
 
 export const Counter = () => {
-	const [counter, derivedCount, onIncremented, onDecremented] = useUnit([$counter, $derivedCount, incremented, decremented]);
+  const [counter, derivedCount, onIncremented, onDecremented] = useUnit([
+    $counter,
+    $derivedCount,
+    incremented,
+    decremented,
+  ]);
 
-	return (
-    	<div>
-      		<h1>Count: {counter}</h1>
-      		<h1>Derived count: (x2) {derivedCount}</h1>
-      		<button onClick={onIncremented}>Increment</button>
-      		<button onClick={onDecremented}>Decrement</button>
-    	</div>
-	);
+  return (
+    <div>
+      <h1>Count: {counter}</h1>
+      <h1>Derived count: (x2) {derivedCount}</h1>
+    </div>
+  );
 };
+
+function CounterWrapper(){
+  const [onIncremented, onDecremented] = useUnit([
+    incremented,
+    decremented,
+  ]);
+
+  return (
+    <div>
+      <Counter>
+      <button onClick={onIncremented}>Increment</button>;
+      <button onClick={onDecremented}>Decrement</button>;
+    </div>
+  )
+}
 ```
 
   </TabItem>
@@ -48,34 +68,51 @@ export const Counter = () => {
   <TabItem label="zustand">
 
 ```jsx
-import create from 'zustand';
+import create from "zustand";
 
-const useCounterStore = create((set) => ({
-  count: 0,
-  increment: () => set((state) => ({ count: state.count + 1 })),
-  decrement: () => set((state) => ({ count: state.count - 1 })),
-  derivedCount: (get) => get().count * 2
+const useStore = create((set) => ({
+  counter: 0,
+  derivedCount: 0,
+  incremented: () =>
+    set((state) => {
+      const newCount = state.counter + 1;
+      return { counter: newCount, derivedCount: newCount * 2 };
+    }),
+  decremented: () =>
+    set((state) => {
+      const newCount = state.counter - 1;
+      return { counter: newCount, derivedCount: newCount * 2 };
+    }),
 }));
 
-function Counter() {
-  const { count, increment, decrement, derivedCount } = useCounterStore((state) => ({
-    count: state.count,
-    increment: state.increment,
-    decrement: state.decrement,
-    derivedCount: state.derivedCount(state),
+export const Counter = () => {
+  const { counter, derivedCount } = useStore((state) => ({
+    counter: state.counter,
+    derivedCount: state.derivedCount,
   }));
-  
+
   return (
     <div>
-      <h1>Count: {count}</h1>
-	  <h2>Derived Count (x2): {derivedCount}</h2>
-      <button onClick={decrement}>-</button>
-      <button onClick={increment}>+</button>
+      <h1>Count: {counter}</h1>
+      <h1>Derived count: (x2) {derivedCount}</h1>
     </div>
   );
-}
+};
 
-export default Counter;
+export const CounterWrapper = () => {
+  const { incremented, decremented } = useStore((state) => ({
+    incremented: state.incremented,
+    decremented: state.decremented,
+  }));
+
+  return (
+    <div>
+      <Counter />
+      <button onClick={incremented}>Increment</button>
+      <button onClick={decremented}>Decrement</button>
+    </div>
+  );
+};
 ```
 
   </TabItem>
@@ -83,16 +120,21 @@ export default Counter;
   <TabItem label="redux">
 
 ```jsx
-// store.js
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
 
 const counterSlice = createSlice({
-  name: 'counter',
-  initialState: { count: 0 },
+  name: "counter",
+  initialState: { counter: 0, derivedCount: 0 },
   reducers: {
-    increment: (state) => { state.count += 1; },
-    decrement: (state) => { state.count -= 1; },
+    incremented: (state) => {
+      state.counter += 1;
+      state.derivedCount = state.counter * 2;
+    },
+    decremented: (state) => {
+      state.counter -= 1;
+      state.derivedCount = state.counter * 2;
+    },
   },
 });
 
@@ -102,31 +144,26 @@ const store = configureStore({
   },
 });
 
-export const { increment, decrement } = counterSlice.actions;
-export default store;
-
-
-
-// CounterComponent.js
-import { increment, decrement } from './store';
-import { useDispatch, useSelector } from 'react-redux';
-
-function Counter() {
-  const count = useSelector((state) => state.counter.count);
-  const derivedCount = count * 2;
-  const dispatch = useDispatch();
-
+export const Counter = () => {
+  const { counter, derivedCount } = useSelector((state) => state.counter);
   return (
     <div>
-      <h1>Count: {count}</h1>
-	  <h2>Derived Count (x2): {derivedCount}</h2>
-      <button onClick={() => dispatch(decrement())}>-</button>
-      <button onClick={() => dispatch(increment())}>+</button>
+      <h1>Count: {counter}</h1>
+      <h1>Derived count: (x2) {derivedCount}</h1>
     </div>
   );
-}
+};
 
-export default Counter;
+export const CounterWrapper = () => {
+  const dispatch = useDispatch();
+  return (
+    <div>
+      <Counter />
+      <button onClick={() => dispatch(counterSlice.actions.incremented())}>Increment</button>
+      <button onClick={() => dispatch(counterSlice.actions.decremented())}>Decrement</button>
+    </div>
+  );
+};
 ```
 
   </TabItem>
@@ -134,26 +171,42 @@ export default Counter;
   <TabItem label="jotai">
 
 ```jsx
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom } from "jotai";
 
-const countAtom = atom(0);
-const derivedCountAtom = atom((get) => get(countAtom) * 2);
+const counterAtom = atom(0);
+const derivedCountAtom = atom((get) => get(counterAtom) * 2);
 
-function Counter() {
-  const [count, setCount] = useAtom(countAtom);
+export const Counter = () => {
+  const [counter] = useAtom(counterAtom);
   const [derivedCount] = useAtom(derivedCountAtom);
 
   return (
     <div>
-      <h1>Count: {count}</h1>
-      <h2>Derived Count (x2): {derivedCount}</h2>
-      <button onClick={() => setCount((prev) => prev - 1)}>-</button>
-      <button onClick={() => setCount((prev) => prev + 1)}>+</button>
+      <h1>Count: {counter}</h1>
+      <h1>Derived count: (x2) {derivedCount}</h1>
     </div>
   );
-}
+};
 
-export default Counter;
+export const CounterWrapper = () => {
+  const [, setCounter] = useAtom(counterAtom);
+
+  const onIncremented = () => {
+    setCounter((count) => count + 1);
+  };
+
+  const onDecremented = () => {
+    setCounter((count) => count - 1);
+  };
+
+  return (
+    <div>
+      <Counter />
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
 ```
 
   </TabItem>
