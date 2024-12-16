@@ -1,5 +1,6 @@
 ---
 title: Motivation
+description: Why should you choose and use effector in your project
 redirectFrom:
   - /en/docs/introduction/motivation
   - /en/introduction/motivation
@@ -20,7 +21,7 @@ Effector was designed to describe application business logic in a simple and cle
 At the same time, user interface logic is handled by the framework.
 Let each framework efficiently address its specific task.
 
-## Separation of Concerns
+### Separation of Concerns
 
 In modern development, business logic and user interface are clearly separated:
 
