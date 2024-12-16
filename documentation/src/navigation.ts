@@ -31,9 +31,62 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
         link: "/introduction/core-concepts",
       },
+    ],
+  },
+  {
+    text: {
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
+    },
+    items: [
       {
-        text: { en: "Comparison", ru: "Сравнение с другими", uz: "O'zgarmasligi" },
-        link: "/introduction/comparison",
+        link: "/essentials/reactivity",
+        text: {
+          en: "Reactivity",
+          ru: "Реактивность",
+          uz: "Reaktivlik",
+        },
+      },
+      {
+        link: "/essentials/manage-states",
+        text: {
+          en: "Manage states",
+          ru: "Управление состоянием",
+          uz: "Holatni o'zgartirish",
+        },
+      },
+      {
+        link: "/essentials/work-with-async",
+        text: {
+          en: "Work with async",
+          ru: "Работа с асинхронностью",
+          uz: "Asinkronlik bilan ishlash",
+        },
+      },
+      {
+        link: "/essentials/unit-composition",
+        text: {
+          en: "Unit composition",
+          ru: "Композиция юнитов",
+          uz: "Unitlarni o'zgartirish",
+        },
+      },
+      {
+        link: "/essentials/testing",
+        text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
+        },
+      },
+      {
+        link: "/essentials/typescript",
+        text: {
+          en: "TypeScript",
+          ru: "Типизация в effector",
+          uz: "Typescript bilan ishlash",
+        },
       },
     ],
   },
@@ -735,7 +788,7 @@ const api: LSidebarGroup[] = [
     items: apiPackages,
   },
   {
-    text: { en: "Official Ecosystem", ru: "Экосистема" },
+    text: { en: "Official Ecosystem", ru: "Официальная экосистема" },
     items: externalPackages,
   },
 ];
