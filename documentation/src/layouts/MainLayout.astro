@@ -9,6 +9,7 @@ import Contributors from "@components/PageContent/Contributors.astro";
 import LeftSidebar from "@components/LeftSidebar/LeftSidebar.astro";
 import RightSidebar from "@components/RightSidebar/RightSidebar.astro";
 import Announcement from "@components/PageContent/Announcement.astro";
+import PageNavigation from "@components/PageNavigation.astro";
 
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];
@@ -158,6 +159,7 @@ const currentPage = Astro.url.pathname;
       >
         <slot />
       </PageContent>
+      <PageNavigation />
       <Contributors documentId={documentId} />
     </div>
     <aside id="grid-right" title="Table of Contents" data-pagefind-ignore="all">
