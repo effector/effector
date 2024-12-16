@@ -1,0 +1,244 @@
+---
+title: Управление состоянием в effector
+description: Как работает состояние в effector и как им управлять
+---
+
+import Tabs from "../../../../components/Tabs/Tabs.astro";
+import TabItem from "../../../../components/Tabs/TabItem.astro";
+
+# Управление состоянием
+
+Состояние в effector управляется через сторы (stores) - специальные объекты, которые хранят значения и обновляют их при получении событий. Сторы создаются с помощью функции [createStore](/ru/api/effector/createStore).
+
+## Создание стора (#store-creation)
+
+```ts
+import { createStore } from "effector";
+
+// Создание стора с начальным значением
+const $counter = createStore(0);
+// с явной типизацией
+const $user = createStore<{ name: "Bob"; age: 25 } | null>(null);
+const $posts = createStore<Post[]>([]);
+```
+
+:::tip{title="Наименование сторов"}
+В effector принято использовать префикс $ для сторов. Это помогает отличать их от других сущностей и улучшает читаемость кода.
+:::
+
+## Чтение значений (#read-store-value)
+
+Получить текущее значение стора можно несколькими способами:
+
+Получить текущее значение стора можно несколькими способами:
+
+1. Метод getState()
+
+```ts
+console.log($counter.getState()); // 0
+```
+
+2. Подписка на изменения через watch
+
+```ts
+$counter.watch((value) => {
+  console.log("Counter changed:", value);
+});
+```
+
+3. При помощи интеграцией фреймворков хуков в React
+
+<Tabs>
+  <TabItem label="React">
+
+```ts
+import { useStore } from 'effector-react'
+import { $counter } from './model.js'
+
+const Counter = () => {
+  const counter = useUnit($counter)
+
+  return <div>{counter}</div>
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```html
+<script setup>
+  import { useUnit } from "effector-vue/composition";
+  import { $counter } from "./model.js";
+
+  const counter = useUnit($counter);
+</script>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```ts
+import { useStore } from 'effector-solid'
+import { $counter } from './model.js'
+
+const Counter = () => {
+  const counter = useUnit($counter)
+
+  return <div>{counter()}</div>
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Обновление состояния (#store-updates)
+
+### Обновление через события (#update-store-via-events)
+
+Самый простой способ обновить стор - это привязать его к событию:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const incremented = createEvent();
+const resetCounter = createEvent();
+
+const $counter = createStore(0)
+  // Увеличиваем значение на 1 при каждом вызове события
+  .on(incremented, (state) => state + 1)
+  // Сбрасываем значение в 0
+  .reset(resetCounter);
+
+$counter.watch((state) => console.log(state));
+
+// Использование
+incremented();
+incremented();
+
+resetCounter();
+
+// Вывод в консоль
+// 0 - вывод при инициализации
+// 1
+// 2
+// 0
+```
+
+### Обновление с параметрами (#update-stores-with-params)
+
+Обновить стор можно и с помощью параметров события, достаточно лишь передать данные в событие, как обычной функции и использовать в обработчике.
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const userUpdated = createEvent<{ name: string }>();
+
+const $user = createStore({ name: "Bob" });
+
+$user.on(userUpdated, (state, update) => ({
+  ...state,
+  ...update,
+}));
+
+userUpdated({ name: "Alice" });
+```
+
+### Множественные обновления
+
+Стор не ограничен одной подпиской на событие, вы можете подписаться на столько событий, сколько вам нужно, а также подписываться на одно и то же событие разными сторами.
+
+```ts
+const categoryChanged = createEvent<string>();
+const searchQueryChanged = createEvent<string>();
+const filtersReset = createEvent();
+
+const $lastUsedFilter = createStore<string | null>(null);
+const $filters = createStore({
+  category: "all",
+  searchQuery: "",
+});
+
+// подписываемся двумя разными сторами на одно и то же событие
+$lastUsedFilter.on(categoryChanged, (_, categoty) => category);
+$filters.on(categoryChanged, (state, category) => ({
+  ...state,
+  category,
+}));
+
+$filters.on(searchQueryChanged, (state, searchQuery) => ({
+  ...state,
+  searchQuery,
+}));
+
+$filters.reset(filtersReset);
+```
+
+В этом примере мы подписываемся стором `$filters` на несколько событий, а также двумя сторами `$filters` и `$lastUsedFilter` на одно и то же событие.
+
+## Производные сторы
+
+Часто нужно создать стор, значение которого зависит от других сторов. Для этого используется метод `map`:
+
+```ts
+const $users = createStore<User[]>([]);
+
+// Отфильтрованный список
+const $activeUsers = $users.map((users) => users.filter((user) => user.active));
+
+// Вычисляемое значение
+const $usersCount = $users.map((users) => users.length);
+
+// Комбинация нескольких сторов
+const $friendsList = combine(
+  {
+    users: $users,
+    currentUser: $currentUser,
+  },
+  ({ users, currentUser }) => users.filter((user) => user.friendIds.includes(currentUser.id)),
+);
+```
+
+Мы также использовали здесь функцию `combine`, которая позволяет нам объединить значение нескольких сторов в одно.<br/>
+Также можно комбинировать сторы в объект
+
+```ts
+const $form = combine({
+  name: $name,
+  age: $age,
+  city: $city,
+});
+
+// или с дополнительной трансформацией
+const $formValidation = combine(
+  {
+    name: $name,
+    age: $age,
+  },
+  ({ name, age }) => ({
+    isValid: name.length > 0 && age >= 18,
+    errors: {
+      name: name.length === 0 ? "Required" : null,
+      age: age < 18 ? "Must be 18+" : null,
+    },
+  }),
+);
+```
+
+:::info{title="Важно про производные состояния"}
+Производные сторы обновляются автоматически при изменении исходных сторов. Не нужно вручную синхронизировать их значения.
+:::
+
+## Сброс состояния
+
+Вы можете сбросить состояние стора до исходного при помощи метода reset
+
+```ts
+const formSubmitted = createEvent();
+const formReset = createEvent();
+
+const $form = createStore({ email: "", password: "" })
+  // При сабмите очищаем форму
+  .reset(formSubmitted)
+  // И при явном сбросе тоже
+  .reset(formReset);
+```

@@ -1,0 +1,240 @@
+---
+title: State Management in effector
+description: How state works in effector and how to manage it
+---
+
+import Tabs from "../../../../components/Tabs/Tabs.astro";
+import TabItem from "../../../../components/Tabs/TabItem.astro";
+
+# State Management
+
+State in effector is managed through stores - special objects that hold values and update them when receiving events. Stores are created using the [createStore](/api/effector/createStore) function.
+
+## Store Creation (#store-creation)
+
+```ts
+import { createStore } from "effector";
+
+// Create store with initial value
+const $counter = createStore(0);
+// with explicit typing
+const $user = createStore<{ name: "Bob"; age: 25 } | null>(null);
+const $posts = createStore<Post[]>([]);
+```
+
+:::tip{title="Store naming"}
+In effector it's conventional to use the `$` prefix for stores. This helps distinguish them from other entities and improves code readability.
+:::
+
+## Reading Values (#read-store-value)
+
+There are several ways to get the current value of a store:
+
+1. getState() method
+
+```ts
+console.log($counter.getState()); // 0
+```
+
+2. Subscribe to changes via watch
+
+```ts
+$counter.watch((value) => {
+  console.log("Counter changed:", value);
+});
+```
+
+3. Using framework integration hooks
+
+<Tabs>
+  <TabItem label="React">
+
+```ts
+import { useStore } from 'effector-react'
+import { $counter } from './model.js'
+
+const Counter = () => {
+  const counter = useUnit($counter)
+
+  return <div>{counter}</div>
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```html
+<script setup>
+  import { useUnit } from "effector-vue/composition";
+  import { $counter } from "./model.js";
+
+  const counter = useUnit($counter);
+</script>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```ts
+import { useStore } from 'effector-solid'
+import { $counter } from './model.js'
+
+const Counter = () => {
+  const counter = useUnit($counter)
+
+  return <div>{counter()}</div>
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## Store Updates (#store-updates)
+
+### Updating via Events (#update-store-via-events)
+
+The simplest way to update a store is to bind it to an event:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const incremented = createEvent();
+const resetCounter = createEvent();
+
+const $counter = createStore(0)
+  // Increase value by 1 each time the event is called
+  .on(incremented, (state) => state + 1)
+  // Reset value to 0
+  .reset(resetCounter);
+
+$counter.watch((state) => console.log(state));
+
+// Usage
+incremented();
+incremented();
+
+resetCounter();
+
+// Console output
+// 0 - output on initialization
+// 1
+// 2
+// 0
+```
+
+### Updating with Event parameters (#update-stores-with-event-params)
+
+You can update a store using event parameters by passing data to the event like a regular function and using it in the handler.
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const userUpdated = createEvent<{ name: string }>();
+
+const $user = createStore({ name: "Bob" });
+
+$user.on(userUpdated, (state, update) => ({
+  ...state,
+  ...update,
+}));
+
+userUpdated({ name: "Alice" });
+```
+
+### Multiple Updates
+
+A store isn't limited to a single event subscription - you can subscribe to as many events as you need, and different stores can subscribe to the same event.
+
+```ts
+const categoryChanged = createEvent<string>();
+const searchQueryChanged = createEvent<string>();
+const filtersReset = createEvent();
+
+const $lastUsedFilter = createStore<string | null>(null);
+const $filters = createStore({
+  category: "all",
+  searchQuery: "",
+});
+
+// subscribe two different stores to the same event
+$lastUsedFilter.on(categoryChanged, (_, category) => category);
+$filters.on(categoryChanged, (state, category) => ({
+  ...state,
+  category,
+}));
+
+$filters.on(searchQueryChanged, (state, searchQuery) => ({
+  ...state,
+  searchQuery,
+}));
+
+$filters.reset(filtersReset);
+```
+
+In this example, we subscribe the $filters store to multiple events, and both $filters and $lastUsedFilter stores to the same event.
+
+## Derived Stores
+
+Often you need to create a store whose value depends on other stores. For this, the `map` method is used:
+
+```ts
+const $users = createStore<User[]>([]);
+
+// Filtered list
+const $activeUsers = $users.map((users) => users.filter((user) => user.active));
+
+// Computed value
+const $usersCount = $users.map((users) => users.length);
+
+// Combining multiple stores
+const $friendsList = combine(
+  {
+    users: $users,
+    currentUser: $currentUser,
+  },
+  ({ users, currentUser }) => users.filter((user) => user.friendIds.includes(currentUser.id)),
+);
+```
+
+We also used the `combine` function here, which allows us to combine values from multiple stores into one.<br/>
+You can also `combine` stores into an object:
+
+```ts
+const $form = combine({
+  name: $name,
+  age: $age,
+  city: $city,
+});
+
+// or with additional transformation
+const $formValidation = combine(
+  {
+    name: $name,
+    age: $age,
+  },
+  ({ name, age }) => ({
+    isValid: name.length > 0 && age >= 18,
+    errors: {
+      name: name.length === 0 ? "Required" : null,
+      age: age < 18 ? "Must be 18+" : null,
+    },
+  }),
+);
+```
+
+:::info{title="Important about derived states"}
+Derived stores update automatically when source stores change. You don't need to manually synchronize their values.
+:::
+
+## Resetting State
+
+```ts
+const formSubmitted = createEvent();
+const formReset = createEvent();
+
+const $form = createStore({ email: "", password: "" })
+  // Clear form on submit
+  .reset(formSubmitted)
+  // And on explicit reset too
+  .reset(formReset);
+```
