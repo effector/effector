@@ -1,6 +1,6 @@
 ---
 title: Effector Core concepts
-description: Core concepets of effector - store, effect, event and how it works together
+description: Core concepts of effector - store, effect, event and how it works together
 ---
 
 # Core concepts
@@ -123,8 +123,8 @@ const fetchUserFx = createEffect(async (userId) => {
 });
 
 // Subscribe to effect results
-fetchUserFx.done.watch(({ result }) => console.log("Данные пользователя:", result));
-fetchUserFx.fail.watch(({ error }) => console.log("Произошла ошибка! ", error));
+fetchUserFx.done.watch(({ result }) => console.log("User data:", result));
+fetchUserFx.fail.watch(({ error }) => console.log("Error occurred! ", error));
 
 // Trigger effect
 fetchUserFx(1);
