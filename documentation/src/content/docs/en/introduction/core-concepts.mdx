@@ -5,9 +5,38 @@ description: Core concepets of effector - store, effect, event and how it works 
 
 # Core concepts
 
-Effector includes three core elements that enable efficient state management and reactivity within applications:
+Effector includes three core elements that enable efficient state management and reactivity within applications.
 
-## Event (##event)
+## Units
+
+A unit is a fundamental concept in Effector. Store, Event, and Effect are all units, which are basic building blocks for creating application business logic. Each unit represents an independent entity that can be:
+
+- Connected with other units
+- Subscribed to changes of other units
+- Used to create new units
+
+```ts
+import { createStore, createEvent, createEffect, is } from "effector";
+
+const $store = createStore(0);
+const event = createEvent();
+const fx = createEffect(() => {});
+
+// Check if value is a unit
+is.unit($store); // true
+is.unit(event); // true
+is.unit(fx); // true
+is.unit({}); // false
+
+// All units can be connected with each other
+$store.on(event, (state) => state + 1);
+sample({
+  clock: event,
+  target: fx,
+});
+```
+
+### Event (#event)
 
 [Event](/en/api/effector/Event) — serves as the entry point to the reactive data flow. It represents changes or actions that initiate processes and connect various system components, such as stores and effects, enabling flexible and controlled data handling.
 
@@ -33,7 +62,7 @@ formSubmitted();
 // "Form submitted!"
 ```
 
-## Store (#store)
+### Store (#store)
 
 [Store](/en/api/effector/Store) — is the central state management element in Effector. It represents a reactive value that can only be changed via events, ensuring strict control over mutations and data flow.
 
@@ -73,7 +102,7 @@ formSubmitted();
   // Counter value odd
   ```
 
-## Effect (#effect)
+### Effect (#effect)
 
 [Effect](/en/api/effector/Effect) — is designed to handle side effects — operations that interact with external systems such as servers, APIs, or browser environments.
 
@@ -101,7 +130,7 @@ fetchUserFx.fail.watch(({ error }) => console.log("Произошла ошибк
 fetchUserFx(1);
 ```
 
-## How it all works together? (## How it all works together?)
+## How it all works together? (#how-it-all-works-together)
 
 These concepts combine to create a powerful, reactive data flow:
 
