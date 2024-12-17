@@ -138,7 +138,7 @@ export const Counter = () => {
 
 ```html
 <script setup>
-  import { useStore } from "@effector-vue/composition";
+  import { useUnit } from "@effector-vue/composition";
   import { $counter, incremented, decremented } from "./counter.js";
 
   const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
