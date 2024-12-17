@@ -3,8 +3,8 @@ title: Управление состоянием в effector
 description: Как работает состояние в effector и как им управлять
 ---
 
-import Tabs from "../../../../components/Tabs/Tabs.astro";
-import TabItem from "../../../../components/Tabs/TabItem.astro";
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
 
 # Управление состоянием
 
@@ -23,12 +23,10 @@ const $posts = createStore<Post[]>([]);
 ```
 
 :::tip{title="Наименование сторов"}
-В effector принято использовать префикс $ для сторов. Это помогает отличать их от других сущностей и улучшает читаемость кода.
+В effector принято использовать префикс $ для сторов. Это улучшает ориентацию в коде и опыт поиска в вашей IDE.
 :::
 
 ## Чтение значений (#read-store-value)
-
-Получить текущее значение стора можно несколькими способами:
 
 Получить текущее значение стора можно несколькими способами:
 
