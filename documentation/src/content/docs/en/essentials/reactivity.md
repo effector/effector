@@ -3,11 +3,11 @@ title: Reactivity in effector
 description: Let's explore how reactivity works in effector
 ---
 
-# Reactivity in effector
+# Reactivity in Effector
 
 Reactivity is a fundamental concept in Effector that enables automatic data updates when dependencies change. Instead of manually managing updates, you describe connections between different parts of your application, and Effector handles their synchronization.
 
-## What is reactivity?
+## What is Reactivity? (#what-is-reactivity)
 
 At the core of reactivity lies the principle of automatic change propagation. When the value of one store changes, all parts of the application that depend on it update automatically.
 
@@ -93,7 +93,7 @@ sample({
 });
 ```
 
-## How unit communicate
+## How units communicate (#how-units-communicate)
 
 Effector manages dependencies between units (stores, events, and effects), ensuring the correct order of updates. When some units depend on others, Effector guarantees that changes propagate predictably:
 
@@ -122,7 +122,7 @@ sample({
 buttonClicked();
 ```
 
-## Real-life example (#example)
+## Real-life example (#effector-reactivity-example-1)
 
 Let's look at an example of a search input with automatic results updates:
 

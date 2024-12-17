@@ -7,9 +7,9 @@ description: Using TypeScript with effector and typing examples
 
 Effector provides first-class TypeScript support out of the box, giving you reliable typing and excellent developer experience when working with the library. In this section, we'll look at both basic typing concepts and advanced techniques for working with types in effector.<br/>
 
-## Basic Typing
+## Basic Typing (#basic-typing)
 
-### Events (#events)
+### Events (#typing-events)
 
 Events in effector can be typed by passing a type to the function's generic:
 
@@ -35,7 +35,7 @@ const formSubmitted = createEvent<{
 If you don't explicitly specify a type, TypeScript will automatically infer the type Event<void> for events without parameters.
 :::
 
-### Stores (#stores)
+### Stores (#typing-stores)
 
 Stores can also be typed by passing a type to the function's generic:
 
@@ -73,7 +73,7 @@ const $users = createStore<PaginatedResponse<User>>({
 });
 ```
 
-### Effects (#effects)
+### Effects (#typing-effects)
 
 Effects support typing of input parameters, return values, and errors:
 
@@ -104,7 +104,7 @@ const fetchUserFx = createEffect<string, User, ApiError>(async (userId) => {
 });
 ```
 
-#### Error Typing with `createEffect`
+#### Error Typing with `createEffect` (#typing-errors-in-createEffect)
 
 Some code may throw exceptions of only certain types, for example, the axios library uses only `AxiosError` for errors. In effects, the Fail generic is used to describe error types.<br/>
 
@@ -134,11 +134,11 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 `Fail` as a second generic was added in effector 21.6.0
 :::
 
-## Advanced Typing Techniques
+## Advanced Typing Techniques (#advanced-typing)
 
-### Combines and Derived Units
+### Combined and Derived Units (#typing-derived-units)
 
-#### event.prepend
+#### Typing `event.prepend` (#typing-event-prepend)
 
 To add types to events created using `event.prepend`, you need to add the type either to the prepend function argument or as a generic
 
@@ -152,7 +152,7 @@ const warningMessage = message.prepend<{ warn: string }>(({ warn }) => warn);
 // warningMessage has type Event<{warn: string}>
 ```
 
-#### Typing attach
+#### Typing `attach` (#typing-attach)
 
 To allow TypeScript to infer the types of the created effect, you can add a type to the first argument of `mapParams`, which will become the Params generic in the result
 
@@ -166,7 +166,7 @@ const sendWarningFx = attach({
 // sendWarningFx has type Effect<{warn: string}, 'ok'>
 ```
 
-#### Typing split
+#### Typing `split` (#typing-split)
 
 TypeScript type predicates can be used to split the original event type into several variants (hence the name)
 
@@ -184,11 +184,11 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage has type Event<WarnMessage>
 ```
 
-### Type Utilities
+### Type Utilities (#type-utilities)
 
 Effector provides a set of utility types for working with unit types:
 
-#### UnitValue
+#### UnitValue (#type-utilities-unit-values)
 
 The `UnitValue` type is used to extract the data type from units:
 
@@ -212,7 +212,7 @@ type UnitScopeType = UnitValue<typeof scope>;
 // any
 ```
 
-#### StoreValue
+#### StoreValue (#type-utilities-store-value)
 
 `StoreValue` is essentially similar to `UnitValue`, but works only with stores:
 
@@ -225,7 +225,7 @@ type StoreValueType = StoreValue<typeof $store>;
 // boolean
 ```
 
-#### EventPayload
+#### EventPayload (#type-utilities-event-payload)
 
 Extracts the data type from events.
 Similar to `UnitValue`, but only for events:
@@ -239,7 +239,7 @@ type EventPayloadType = EventPayload<typeof event>;
 // {id: string}
 ```
 
-#### EffectParams
+#### EffectParams (#type-utilities-effect-params)
 
 Takes an effect type as a generic parameter, allows getting the parameter type of an effect.
 
@@ -259,7 +259,7 @@ type EffectParamsType = EffectParams<typeof fx>;
 // {id: string}
 ```
 
-#### EffectResult
+#### EffectResult (#type-utilities-effect-results)
 
 Takes an effect type as a generic parameter, allows getting the return value type of an effect.
 
@@ -276,7 +276,7 @@ type EffectResultType = EffectResult<typeof fx>;
 // {name: string; isAdmin: boolean}
 ```
 
-#### EffectError
+#### EffectError (#type-utilities-effect-error)
 
 Takes an effect type as a generic parameter, allows getting the error type of an effect.
 

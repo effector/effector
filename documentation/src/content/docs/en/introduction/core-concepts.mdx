@@ -7,7 +7,7 @@ description: Core concepts of effector - store, effect, event and how it works t
 
 Effector includes three core elements that enable efficient state management and reactivity within applications.
 
-## Units
+## Units (#units)
 
 A unit is a fundamental concept in Effector. Store, Event, and Effect are all units, which are basic building blocks for creating application business logic. Each unit represents an independent entity that can be:
 
@@ -40,7 +40,7 @@ sample({
 
 [Event](/en/api/effector/Event) — serves as the entry point to the reactive data flow. It represents changes or actions that initiate processes and connect various system components, such as stores and effects, enabling flexible and controlled data handling.
 
-#### Event features
+#### Event features (#event-features)
 
 - Simplicity: Events are minimalistic and can be easily created using createEvent.
 - Reactivity: Events instantly notify all subscribers upon triggering.
@@ -66,7 +66,7 @@ formSubmitted();
 
 [Store](/en/api/effector/Store) — is the central state management element in Effector. It represents a reactive value that can only be changed via events, ensuring strict control over mutations and data flow.
 
-#### Store features
+#### Store features (#store-features)
 
 - Store state can only be updated through Events.
 - It supports reactivity — changes propagate automatically to all subscribed components.
@@ -106,7 +106,7 @@ formSubmitted();
 
 [Effect](/en/api/effector/Effect) — is designed to handle side effects — operations that interact with external systems such as servers, APIs, or browser environments.
 
-#### Effect features:
+#### Effect features (#effect-features)
 
 - Effects have built-in states like pending and emit events such as done and fail, making it easier to track operation statuses.
 - Logic related to external interactions is isolated, improving testability and making the code more predictable.
@@ -130,7 +130,7 @@ fetchUserFx.fail.watch(({ error }) => console.log("Error occurred! ", error));
 fetchUserFx(1);
 ```
 
-## How it all works together? (#how-it-all-works-together)
+## How it all works together? (#how-units-work-together)
 
 These concepts combine to create a powerful, reactive data flow:
 

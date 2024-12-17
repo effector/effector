@@ -30,21 +30,7 @@ const $posts = createStore<Post[]>([]);
 
 Получить текущее значение стора можно несколькими способами:
 
-1. Метод getState()
-
-```ts
-console.log($counter.getState()); // 0
-```
-
-2. Подписка на изменения через watch
-
-```ts
-$counter.watch((counter) => {
-  console.log("Counter changed:", counter);
-});
-```
-
-3. При помощи интеграцией фреймворков хуков в React
+1. При помощи интеграцией фреймворков хуков в React
 
 <Tabs>
   <TabItem label="React">
@@ -88,6 +74,20 @@ const Counter = () => {
 
   </TabItem>
 </Tabs>
+
+```ts
+console.log($counter.getState()); // 0
+```
+
+2. Подписка на изменения через watch - только для дебага или интеграций
+
+```ts
+$counter.watch((counter) => {
+  console.log("Counter changed:", counter);
+});
+```
+
+3. Метод getState() - только для интеграций
 
 ## Обновление состояния (#store-updates)
 
@@ -133,15 +133,15 @@ const userUpdated = createEvent<{ name: string }>();
 
 const $user = createStore({ name: "Bob" });
 
-$user.on(userUpdated, (user, updateValues) => ({
+$user.on(userUpdated, (user, changedUser) => ({
   ...user,
-  ...updateValues,
+  ...changedUser,
 }));
 
 userUpdated({ name: "Alice" });
 ```
 
-### Множественные обновления
+### Множественные обновления (#multiple-store-updates)
 
 Стор не ограничен одной подпиской на событие, вы можете подписаться на столько событий, сколько вам нужно, а также подписываться на одно и то же событие разными сторами.
 
@@ -173,7 +173,7 @@ $filters.reset(filtersReset);
 
 В этом примере мы подписываемся стором `$filters` на несколько событий, а также двумя сторами `$filters` и `$lastUsedFilter` на одно и то же событие.
 
-## Производные сторы
+## Производные сторы (#derived-stores)
 
 Часто нужно создать стор, значение которого зависит от других сторов. Для этого используется метод `map`:
 
@@ -187,12 +187,8 @@ const $activeUsers = $users.map((users) => users.filter((user) => user.active));
 const $usersCount = $users.map((users) => users.length);
 
 // Комбинация нескольких сторов
-const $friendsList = combine(
-  {
-    users: $users,
-    currentUser: $currentUser,
-  },
-  ({ users, currentUser }) => users.filter((user) => user.friendIds.includes(currentUser.id)),
+const $friendsList = combine($users, $currentUser, (users, currentUser) =>
+  users.filter((user) => user.friendIds.includes(currentUser.id)),
 );
 ```
 
@@ -226,7 +222,7 @@ const $formValidation = combine(
 Производные сторы обновляются автоматически при изменении исходных сторов. Не нужно вручную синхронизировать их значения.
 :::
 
-## Сброс состояния
+## Сброс состояния (#resetting-store-state)
 
 Вы можете сбросить состояние стора до исходного при помощи метода reset
 

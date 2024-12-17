@@ -11,7 +11,7 @@ Asynchronous operations are a fundamental part of any modern application, and Ef
 The Effector team recommends using the `Fx` postfix for naming effects. This is not a mandatory requirement but a usage recommendation, [read more](/en/extra/conventions).
 :::
 
-## What are Effects?
+## What are Effects? (#what-are-effects)
 
 Effects ([createEffect](/en/api/effector.createEffect)) are Effector's tool for working with external APIs or side effects in your application, for example:
 
@@ -19,7 +19,7 @@ Effects ([createEffect](/en/api/effector.createEffect)) are Effector's tool for 
 - Working with `localStorage`/`indexedDB`
 - Any operations that might fail or take time to complete
 
-## Main Effect States
+## Main Effect States (#main-effect-states)
 
 Effector automatically tracks the state of effect execution:
 
@@ -58,9 +58,9 @@ fetchUserFx.fail.watch(({ params, error }) =>
 fetchUserFx();
 ```
 
-## Binding Effects to Events and Stores
+## Binding Effects to Events and Stores (#binding-effects-to-events-and-stores)
 
-### Updating Store Data When Effect Completes
+### Updating Store Data When Effect Completes (#update-store-when-effect-completes)
 
 Let's say we want effector to take the data returned by the effect when it completes and update the store with new data. This can be done quite easily using effect states.
 
@@ -89,13 +89,13 @@ $isLoading.watch((isLoading) => console.log("Is loading:", isLoading));
 
 `doneData` and `failData` are events that are identical to `done` and `fail` respectively, except that they only receive result and error in their parameters.
 
-### Triggering Effects on Event
+### Triggering Effects on Event (#triggering-effect-on-events)
 
 In most cases, you'll want to trigger an effect when some event occurs, like form submission or button click. In such cases, the sample function will help you, which will call target when clock triggers.
 
 :::info{title="`sample` function"}
 The sample function is a key function for connecting stores, effects, and events. It allows you to flexibly and easily configure the reactive logic of your application.
-You can read more about sample [here](/en/essentials/unit-composition)
+You can read more about `sample` [here](/en/essentials/unit-composition)
 :::
 
 ```ts
@@ -118,7 +118,7 @@ sample({
 formSubmitted();
 ```
 
-## Error handling in Effects
+## Error handling in Effects (#error-handing-in-effects)
 
 Effects in Effector provide robust error handling capabilities. When an error occurs during effect execution, it's automatically caught and processed through the `fail` event.
 
@@ -145,7 +145,7 @@ const effect = createEffect<Params, ReturnValue, CustomError>(() => {
 
 If you throw an error of a different type, the typescript will show the error to you.
 
-## Real-life Example
+## Practical Example (#effects-practical-example)
 
 ```ts
 import { createStore, createEvent, createEffect, sample } from "effector";

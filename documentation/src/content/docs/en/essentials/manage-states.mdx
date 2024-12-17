@@ -30,21 +30,7 @@ In effector it's conventional to use the `$` prefix for stores. This helps disti
 
 There are several ways to get the current value of a store:
 
-1. getState() method
-
-```ts
-console.log($counter.getState()); // 0
-```
-
-2. Subscribe to changes via watch
-
-```ts
-$counter.watch((counter) => {
-  console.log("Counter changed:", counter);
-});
-```
-
-3. Using framework integration hooks
+1. Using framework integration hooks
 
 <Tabs>
   <TabItem label="React">
@@ -88,6 +74,20 @@ const Counter = () => {
 
   </TabItem>
 </Tabs>
+
+```ts
+console.log($counter.getState()); // 0
+```
+
+2. Subscribe to changes via watch - only for debug or integration needs
+
+```ts
+$counter.watch((counter) => {
+  console.log("Counter changed:", counter);
+});
+```
+
+3. getState() method - only for integration needs
 
 ## Store Updates (#store-updates)
 
@@ -133,15 +133,15 @@ const userUpdated = createEvent<{ name: string }>();
 
 const $user = createStore({ name: "Bob" });
 
-$user.on(userUpdated, (user, updateValues) => ({
+$user.on(userUpdated, (user, changedUser) => ({
   ...user,
-  ...updateValues,
+  ...changedUser,
 }));
 
 userUpdated({ name: "Alice" });
 ```
 
-### Multiple Updates
+### Multiple Store Updates (#multiple-store-updates)
 
 A store isn't limited to a single event subscription - you can subscribe to as many events as you need, and different stores can subscribe to the same event.
 
@@ -173,7 +173,7 @@ $filters.reset(filtersReset);
 
 In this example, we subscribe the $filters store to multiple events, and both $filters and $lastUsedFilter stores to the same event.
 
-## Derived Stores
+## Derived Stores (#derived-stores)
 
 Often you need to create a store whose value depends on other stores. For this, the `map` method is used:
 
@@ -226,7 +226,7 @@ const $formValidation = combine(
 Derived stores update automatically when source stores change. You don't need to manually synchronize their values.
 :::
 
-## Resetting State
+## Resetting State (#resetting-store-state)
 
 ```ts
 const formSubmitted = createEvent();

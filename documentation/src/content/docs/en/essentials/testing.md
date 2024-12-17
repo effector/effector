@@ -37,7 +37,7 @@ $counter.on(counterIncremented, (counter) => counter + 1);
 // counter.test.js
 import { counterIncremented, $counter } from "./counter.js";
 
-test("счетчик должен увеличиться на 1", async () => {
+test("counter should increase by 1", async () => {
   const scope = fork();
 
   expect(scope.getState($counter)).toEqual(0);
@@ -50,7 +50,7 @@ test("счетчик должен увеличиться на 1", async () => {
 
 For isolated state logic testing, fork is used. This allows testing stores and events without affecting global state.
 
-### Effect Testing (#effect-testing)
+### Effect Testing (#effects-testing)
 
 Effects can be tested by verifying their successful execution or error handling. In unit testing, we often want to prevent effects from making real API calls. This can be achieved by passing a configuration object with a handlers property to fork, where you define mock handlers for specific effects.
 
@@ -83,7 +83,7 @@ test("effect executes correctly", async () => {
 });
 ```
 
-## Full Example of Testing
+## A Complete Example of Testing (#complete-test-example)
 
 Let’s consider a typical counter with asynchronous validation via our backend. Suppose we have the following requirements:
 
@@ -123,7 +123,7 @@ sample({
 });
 ```
 
-### Test Setup
+### Test Setup (#complete-test-example-setup)
 
 Here’s our main scenario:
 
@@ -156,7 +156,7 @@ test("main case", async () => {
 
 However, this test has an issue—it uses a real backend API. Since this is a unit test, we should mock the backend call.
 
-### Custom Effect Handlers
+### Custom Effect Handlers (#complete-test-example-effect-handlers)
 
 To avoid real server requests, we can mock the server response by providing a custom handler via the fork configuration.
 
@@ -177,7 +177,7 @@ test("main case", async () => {
 });
 ```
 
-### Custom Store Values
+### Custom Store Values (#complete-test-example-custom-store-values)
 
 Another scenario:
 

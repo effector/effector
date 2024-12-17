@@ -7,9 +7,9 @@ description: Использование TypeScript с effector и примеры
 
 Effector предоставляет первоклассную поддержку TypeScript из коробки, что дает вам надежную типизацию и отличный developer experience при работе с библиотекой. В этом разделе мы рассмотрим как базовые концепции типизации, так и продвинутые техники работы с типами в effector.
 
-## Базовая типизация
+## Базовая типизация (#basic-typing)
 
-### События (#events)
+### События (#typing-events)
 
 События в effector могут быть типизированы при помощи передачи типа в дженерик функции:
 
@@ -35,7 +35,7 @@ const formSubmitted = createEvent<{
 Если вы не указываете тип явно, TypeScript автоматически выведет тип Event<void> для события без параметров.
 :::
 
-### Сторы (#stores)
+### Сторы (#typing-stores)
 
 Сторы также можно типизировать при помощи передачи типа в дженерик функции:
 
@@ -73,7 +73,7 @@ const $users = createStore<PaginatedResponse<User>>({
 });
 ```
 
-### Эффекты (#effects)
+### Эффекты (#typing-effects)
 
 Эффекты поддерживают типизацию входных параметров, возвращаемого результата и ошибок:
 
@@ -104,7 +104,7 @@ const fetchUserFx = createEffect<string, User, ApiError>(async (userId) => {
 });
 ```
 
-#### Типизация ошибок с `createEffect`
+#### Типизация ошибок с `createEffect` (#typing-errors-in-createEffect)
 
 Некоторый код может выдать исключения только некоторых типов, например библиотека axios в качестве ошибок использует только `AxiosError`. В эффектах для описания типов ошибок используется дженерик `Fail`.
 
@@ -134,11 +134,11 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 `Fail` в качестве второго дженерика добавлен в effector 21.6.0
 :::
 
-## Продвинутые техники типизации
+## Продвинутые техники типизации (#advanced-typing)
 
-### Комбинаторы и производные юниты
+### Комбинированные и производные юниты (#typing-derived-units)
 
-#### `event.prepend`
+#### Типизация `event.prepend` (#typing-event-prepend)
 
 Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event#prepend-fn), необходимо добавить тип либо в аргумент функции prepend, либо как дженерик
 
@@ -152,7 +152,7 @@ const warningMessage = message.prepend<{ warn: string }>(({ warn }) => warn);
 // warningMessage имеет тип Event<{warn: string}>
 ```
 
-#### Типизация `attach`
+#### Типизация `attach` (#typing-attach)
 
 Чтобы позволить TypeScript выводить типы создаваемого эффекта, можно добавить тип к первому аргументу `mapParams`, который станет дженериком `Params` у результата
 
@@ -166,7 +166,7 @@ const sendWarningFx = attach({
 // sendWarningFx имеет тип Effect<{warn: string}, 'ok'>
 ```
 
-#### Типизация `split`
+#### Типизация `split` (#typing-split)
 
 [TypeScript type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) можно использовать для разделения исходного типа события на несколько вариантов (отсюда и название)
 
@@ -184,11 +184,11 @@ const { userMessage, warnMessage } = split(message, {
 // warnMessage имеет тип Event<WarnMessage>
 ```
 
-### Утилиты для типов
+### Утилиты для типов (#type-utilities)
 
 Effector предоставляет набор утилитных типов для работы с типами юнитов:
 
-#### UnitValue
+#### UnitValue (#type-utilities-unit-values)
 
 Тип `UnitValue` служит для извлечение типа данных из юнитов:
 
@@ -212,7 +212,7 @@ type UnitScopeType = UnitValue<typeof scope>;
 // any
 ```
 
-#### StoreValue
+#### StoreValue (#type-utilities-store-value)
 
 `StoreValue` по своей сути похож на `UnitValue`, но работает только со стором:
 
@@ -225,7 +225,7 @@ type StoreValueType = StoreValue<typeof $store>;
 // boolean
 ```
 
-#### EventPayload
+#### EventPayload (#type-utilities-event-payload)
 
 Извлекает тип данных из событий.
 Похож на `UnitValue`, но только для [событий](/ru/api/effector/Event)
@@ -239,7 +239,7 @@ type EventPayloadType = EventPayload<typeof event>;
 // {id: string}
 ```
 
-#### EffectParams
+#### EffectParams (#type-utilities-effect-params)
 
 Принимает тип эффекта в параметры дженерика, позволяет получить тип параметров [эффекта](/ru/api/effector/Effect).
 
@@ -259,7 +259,7 @@ type EffectParamsType = EffectParams<typeof fx>;
 // {id: string}
 ```
 
-#### EffectResult
+#### EffectResult (#type-utilities-effect-results)
 
 Принимает тип эффекта в параметры дженерика, позволяет получить тип возвращаемого значения [эффекта](/ru/api/effector/Effect).
 
@@ -276,7 +276,7 @@ type EffectResultType = EffectResult<typeof fx>;
 // {name: string; isAdmin: boolean}
 ```
 
-#### EffectError
+#### EffectError (#type-utilities-effect-error)
 
 Принимает тип эффекта в параметры дженерика, позволяет получить тип ошибки [эффекта](/ru/api/effector/Effect).
 

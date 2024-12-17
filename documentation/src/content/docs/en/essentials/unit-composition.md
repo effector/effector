@@ -7,11 +7,11 @@ description: How to connect units using sample and attach
 
 Effector has two powerful tools for connecting units together: `sample` and `attach`. While they might seem similar, each has its own features and use cases.
 
-## Sample: connecting data and events
+## Sample: connecting data and events (#sample)
 
 `sample` is a universal tool for connecting units. Its main purpose is to take data from one place `source` and pass it to another place `target` when a specific trigger `clock` fires.
 
-### Basic sample usage
+### Basic `sample` usage (#sample-basic-example)
 
 ```typescript
 import { createStore, createEvent, sample, createEffect } from "effector";
@@ -51,9 +51,9 @@ When to use `sample`:
 3. For conditional processing using filter
 4. For synchronizing multiple data sources
 
-### Advanced sample features
+### Advanced sample features (#advanced-sample-features)
 
-#### Data transformation
+#### Data transformation (#sample-data-transformation)
 
 Often you need not just to pass data, but transform it. For this, the `fn` parameter is used:
 
@@ -74,9 +74,9 @@ sample({
 });
 ```
 
-#### Event Filtering
+#### Data Filtering (#sample-data-filtering)
 
-`sample` allows filtering events using the `filter` parameter:
+`sample` allows filtering data using the `filter` parameter:
 
 ```ts
 import { createEvent, createStore, sample, createEffect } from "effector";
@@ -102,13 +102,13 @@ sample({
 submitForm();
 ```
 
-When `submitForm` is called, we take data from `source`, check conditions in `filter`, if check passes successfully, we return true, otherwise false. If check passes successfully, the `target` is called.
+When `submitForm` is called, we take data from `source`, check conditions in `filter`, if check passes successfully, we return true and the `target` is called, otherwise false and do nothing.
 
 :::warning{title="Important information"}
-The fn and filter functions must be pure functions!
+The fn and filter functions **must be pure functions**! A pure function is one that always returns the same output for the same input and produces no side effects (doesn't modify any data outside its scope)
 :::
 
-#### Combining Multiple Sources
+#### Multiple Data Sources (#sample-multiple-sources)
 
 You can use multiple stores as a data source:
 
@@ -138,11 +138,11 @@ sample({
 });
 ```
 
-### Sample Return Value
+### Sample Return Value (#sample-return-value)
 
 `sample` returns a unit whose type depends on the configuration:
 
-#### With target
+#### With `target` (#sample-return-value-with-target)
 
 If `target` is specified, `sample` will return new unit, but same as same target:
 
@@ -161,7 +161,7 @@ const result = sample({
 });
 ```
 
-#### Without target
+#### Without `target` (#sample-return-value-without-target)
 
 When `target` is not specified, the return type depends on the provided parameters.<br/>
 If `filter` is **NOT** specified, and both `clock` and `source` are **stores**, then the result will also be a [store](/api/effector/Store) with the data type from `source`.<br/>
@@ -210,7 +210,7 @@ const secondSampleEvent = sample({
 // Event<true>
 ```
 
-### Practical Example
+### Practical Example (#sample-example)
 
 ```ts
 import { createStore, createEvent, sample } from "effector";
@@ -239,7 +239,7 @@ const adminSelected = sample({
 // adminSelected has type Event<User>
 ```
 
-## Attach: Effects Specialization
+## Attach: Effects Specialization (#attach)
 
 `attach` is a tool for creating new effects based on existing ones, with access to data from stores. This is especially useful when you need to:
 
