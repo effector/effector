@@ -141,6 +141,56 @@ $user.on(userUpdated, (user, changedUser) => ({
 userUpdated({ name: "Alice" });
 ```
 
+### Store Creating via Other Units (#create-store-via-other-units)
+
+If your store work involves replacing the old state with a new one when an event is called, you can use the `restore` method:
+
+```ts
+import { restore, createEvent } from "effector";
+
+const nameChanged = createEvent<string>();
+
+const $counter = restore(nameChanged, "");
+```
+
+The code above is equivalent to the code below:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const nameChanged = createEvent<string>();
+
+const $counter = createStore("").on(nameChanged, (_, newName) => newName);
+```
+
+You can also use `restore` method with an effect. In this case, the store will receive data from the effect's `doneData` event, and the default store value should match the return value type:
+
+```ts
+import { restore, createEffect } from "effector";
+
+type User = {
+  id: number;
+  name: string;
+  age: number;
+};
+
+const createUserFx = createEffect<string, User>((id) => {
+  // effect logic
+
+  return {
+    id: 4,
+    name: "Bob",
+    age: 18,
+  };
+});
+
+const $newUser = restore(userCreatedFx, {
+  id: 0,
+  name: "",
+  age: -1,
+});
+```
+
 ### Multiple Store Updates (#multiple-store-updates)
 
 A store isn't limited to a single event subscription - you can subscribe to as many events as you need, and different stores can subscribe to the same event.

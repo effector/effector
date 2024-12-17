@@ -141,6 +141,55 @@ $user.on(userUpdated, (user, changedUser) => ({
 userUpdated({ name: "Alice" });
 ```
 
+### Создание стора при помощи других юнитов (#create-store-via-other-units)
+
+Если у вас работа со стором подразумевает замену старого состояние на новое при вызове события, то вы можете использовать метод `restore`:
+
+```ts
+import { restore, createEvent } from "effector";
+
+const nameChanged = createEvent<string>();
+
+const $counter = restore(nameChanged, "");
+```
+
+Код выше эквивалентен коду ниже:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const nameChanged = createEvent<string>();
+
+const $counter = createStore("").on(nameChanged, (_, newName) => newName);
+```
+
+Также метод `restore` можно использовать и с эффектом, в таком случае в стор попадут данные из события эффекта `doneData`, а дефолтное значение стора должно соответствовать возвращаемому значению:
+
+```ts
+import { restore, createEffect } from "effector";
+
+type User = {
+  id: number;
+  name: string;
+  age: number;
+};
+
+const createUserFx = createEffect<string, User>((id) => {
+  // тело эффекта
+  return {
+    id: 4,
+    name: "Bob",
+    age: 18,
+  };
+});
+
+const $newUser = restore(userCreatedFx, {
+  id: 0,
+  name: "",
+  age: -1,
+});
+```
+
 ### Множественные обновления (#multiple-store-updates)
 
 Стор не ограничен одной подпиской на событие, вы можете подписаться на столько событий, сколько вам нужно, а также подписываться на одно и то же событие разными сторами.
