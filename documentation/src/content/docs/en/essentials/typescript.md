@@ -136,7 +136,7 @@ const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
 
 ## Advanced Typing Techniques
 
-### Combinators and Derived Units
+### Combines and Derived Units
 
 #### event.prepend
 

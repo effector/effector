@@ -18,18 +18,18 @@ A unit is a fundamental concept in Effector. Store, Event, and Effect are all un
 ```ts
 import { createStore, createEvent, createEffect, is } from "effector";
 
-const $store = createStore(0);
+const $counter = createStore(0);
 const event = createEvent();
 const fx = createEffect(() => {});
 
 // Check if value is a unit
-is.unit($store); // true
+is.unit($counter); // true
 is.unit(event); // true
 is.unit(fx); // true
 is.unit({}); // false
 
 // All units can be connected with each other
-$store.on(event, (state) => state + 1);
+$counter.on(event, (counter) => counter + 1);
 sample({
   clock: event,
   target: fx,
@@ -84,10 +84,10 @@ formSubmitted();
   const $isEven = $counter.map((counter) => counter % 2 === 0);
 
   // Update the store on event trigger
-  $counter.on(increment, (state) => state + 1);
+  $counter.on(increment, (counter) => counter + 1);
 
   // Subscribe to store changes
-  $counter.watch((state) => console.log(`Current value: ${state}`));
+  $counter.watch((counter) => console.log(`Current value: ${counter}`));
   $isEven.watch((isEven) => console.log(`Counter value ${isEven ? "even" : "odd"}`));
 
   // Console output:
@@ -148,10 +148,10 @@ const buttonClicked = createEvent();
 const $clickCount = createStore(0);
 
 // Update the store when the event is triggered
-$clickCount.on(buttonClicked, (state) => state + 1);
+$clickCount.on(buttonClicked, (clickCount) => clickCount + 1);
 
 // Watch the store for changes
-$clickCount.watch((state) => console.log(state));
+$clickCount.watch((clickCount) => console.log(clickCount));
 // Outputs 0 initially
 
 // Create an effect
@@ -184,9 +184,9 @@ const buttonClicked = createEvent();
 
 const $clickCount = createStore(0);
 
-$clickCount.on(buttonClicked, (state) => state + 1);
+$clickCount.on(buttonClicked, (clickCount) => clickCount + 1);
 
-$clickCount.watch((state) => console.log("Counter changed: ", state));
+$clickCount.watch((clickCount) => console.log("Counter changed: ", clickCount));
 
 const fetchUserDataFx = createEffect(async (userId) => {
   const response = await fetch(`/api/user/${userId}`);

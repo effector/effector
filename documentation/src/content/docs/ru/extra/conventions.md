@@ -38,8 +38,8 @@ const fetchUserFx = createEffect(async () => {
 ```js
 const emailChanged = createEvent();
 
-$user.on(emailChanged, (state, email) => ({
-  ...state,
+$user.on(emailChanged, (user, email) => ({
+  ...user,
   email,
 }));
 ```

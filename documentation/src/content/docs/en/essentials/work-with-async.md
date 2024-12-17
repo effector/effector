@@ -84,7 +84,7 @@ $error.on(fetchUserNameFx.fail, (_, { params, error }) => error.message);
 $userName.on(fetchUserNameFx.doneData, (_, result) => result);
 $error.on(fetchUserNameFx.failData, (_, error) => error.message);
 
-$isLoading.watch((loading) => console.log("Is loading:", loading));
+$isLoading.watch((isLoading) => console.log("Is loading:", isLoading));
 ```
 
 `doneData` and `failData` are events that are identical to `done` and `fail` respectively, except that they only receive result and error in their parameters.
@@ -93,7 +93,7 @@ $isLoading.watch((loading) => console.log("Is loading:", loading));
 
 In most cases, you'll want to trigger an effect when some event occurs, like form submission or button click. In such cases, the sample function will help you, which will call target when clock triggers.
 
-:::info{title="sample function"}
+:::info{title="`sample` function"}
 The sample function is a key function for connecting stores, effects, and events. It allows you to flexibly and easily configure the reactive logic of your application.
 You can read more about sample [here](/en/essentials/unit-composition)
 :::

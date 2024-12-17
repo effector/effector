@@ -74,8 +74,8 @@ const $counter = createStore(0);
 const incremented = createEvent();
 const decremented = createEvent();
 
-$counter.on(incremented, (state) => state + 1);
-$counter.on(decremented, (state) => state - 1);
+$counter.on(incremented, (counter) => counter + 1);
+$counter.on(decremented, (counter) => counter - 1);
 ```
 
 If you want to use Effector with a specific framework, you’ll need to install an additional package:

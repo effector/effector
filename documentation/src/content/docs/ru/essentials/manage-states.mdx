@@ -39,8 +39,8 @@ console.log($counter.getState()); // 0
 2. Подписка на изменения через watch
 
 ```ts
-$counter.watch((value) => {
-  console.log("Counter changed:", value);
+$counter.watch((counter) => {
+  console.log("Counter changed:", counter);
 });
 ```
 
@@ -103,11 +103,11 @@ const resetCounter = createEvent();
 
 const $counter = createStore(0)
   // Увеличиваем значение на 1 при каждом вызове события
-  .on(incremented, (state) => state + 1)
+  .on(incremented, (counterValue) => counterValue + 1)
   // Сбрасываем значение в 0
   .reset(resetCounter);
 
-$counter.watch((state) => console.log(state));
+$counter.watch((counterValue) => console.log(counterValue));
 
 // Использование
 incremented();
@@ -133,9 +133,9 @@ const userUpdated = createEvent<{ name: string }>();
 
 const $user = createStore({ name: "Bob" });
 
-$user.on(userUpdated, (state, update) => ({
-  ...state,
-  ...update,
+$user.on(userUpdated, (user, updateValues) => ({
+  ...user,
+  ...updateValues,
 }));
 
 userUpdated({ name: "Alice" });
@@ -158,13 +158,13 @@ const $filters = createStore({
 
 // подписываемся двумя разными сторами на одно и то же событие
 $lastUsedFilter.on(categoryChanged, (_, categoty) => category);
-$filters.on(categoryChanged, (state, category) => ({
-  ...state,
+$filters.on(categoryChanged, (filters, category) => ({
+  ...filters,
   category,
 }));
 
-$filters.on(searchQueryChanged, (state, searchQuery) => ({
-  ...state,
+$filters.on(searchQueryChanged, (filters, searchQuery) => ({
+  ...filters,
   searchQuery,
 }));
 

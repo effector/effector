@@ -38,8 +38,8 @@ There are no any specific rules for this. However, the proposal is to name event
 ```js
 const emailChanged = createEvent();
 
-$user.on(emailChanged, (state, email) => ({
-  ...state,
+$user.on(emailChanged, (user, email) => ({
+  ...user,
   email,
 }));
 ```

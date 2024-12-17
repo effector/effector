@@ -30,7 +30,7 @@ const counterIncremented = createEvent();
 
 const $counter = createStore(0);
 
-$counter.on(counterIncremented, (state) => state + 1);
+$counter.on(counterIncremented, (counter) => counter + 1);
 ```
 
 ```ts

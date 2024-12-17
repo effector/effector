@@ -18,18 +18,19 @@ Effector включает три ключевых элемента, которы
 ```ts
 import { createStore, createEvent, createEffect, is } from "effector";
 
-const $store = createStore(0);
+const $counter = createStore(0);
 const event = createEvent();
 const fx = createEffect(() => {});
 
 // Проверка, является ли значение юнитом
-is.unit($store); // true
+is.unit($counter); // true
 is.unit(event); // true
 is.unit(fx); // true
 is.unit({}); // false
 
 // Все юниты можно связывать между собой
-$store.on(event, (state) => state + 1);
+$counter.on(event, (counter) => counter + 1);
+
 sample({
   clock: event,
   target: fx,
@@ -80,9 +81,9 @@ formSubmitted();
   const $counter = createStore(0);
   const $isEven = $counter.map((counter) => counter % 2 === 0);
 
-  $counter.on(increment, (state) => state + 1);
+  $counter.on(increment, (counter) => counter + 1);
 
-  $counter.watch((state) => console.log(`Текущее значение: ${state}`));
+  $counter.watch((counter) => console.log(`Текущее значение: ${counter}`));
   $isEven.watch((isEven) => console.log(`Значение счетчика ${isEven ? "четное" : "нечетное"}`));
 
   // Вывод в консоль:
@@ -142,12 +143,12 @@ const buttonClicked = createEvent();
 const $clickCount = createStore(0);
 
 // Подписываемся на изменения стора при вызове buttonClicked
-$clickCount.on(buttonClicked, (state) => state + 1);
+$clickCount.on(buttonClicked, (clickCount) => clickCount + 1);
 
 // watch - следит за изменением стора и вызывает колбэк
 // при изменениях И при инициализации!
 
-$clickCount.watch((state) => console.log(state));
+$clickCount.watch((clickCount) => console.log(clickCount));
 // выведет 0
 
 // Создание эффекта
@@ -179,9 +180,9 @@ const buttonClicked = createEvent();
 
 const $clickCount = createStore(0);
 
-$clickCount.on(buttonClicked, (state) => state + 1);
+$clickCount.on(buttonClicked, (clickCount) => clickCount + 1);
 
-$clickCount.watch((state) => console.log("Counter changed: ", state));
+$clickCount.watch((clickCount) => console.log("Counter changed: ", clickCount));
 
 const fetchUserDataFx = createEffect(async (userId) => {
   const response = await fetch(`/api/user/${userId}`);
