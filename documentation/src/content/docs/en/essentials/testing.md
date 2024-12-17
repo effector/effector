@@ -7,7 +7,7 @@ description: How to write tests for validating logic in Effector
 
 Testing state management logic is one of Effector’s strengths. Thanks to isolated contexts (fork) and controlled asynchronous processes `allSettled`, you can test application behavior without having to emulate the entire lifecycle.
 
-:::info{title=“What does fork do?”}
+:::info{title="What does fork do?"}
 By calling the fork function, we create a scope, which can be considered an independent instance of our Effector application.
 :::
 
