@@ -3,7 +3,7 @@ title: Unit Composition
 description: How to connect units using sample and attach
 ---
 
-# Unit Composition in effector
+# Unit Composition in effector (#unit-composition)
 
 Effector has two powerful tools for connecting units together: `sample` and `attach`. While they might seem similar, each has its own features and use cases.
 

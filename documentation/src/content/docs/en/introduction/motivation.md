@@ -6,7 +6,7 @@ redirectFrom:
   - /en/introduction/motivation
 ---
 
-# Motivation
+# Motivation (#motivation)
 
 Modern web application development is becoming more complex every day. Multiple frameworks, complex business logic, different approaches to state management — all of this creates additional challenges for developers. Effector offers an elegant solution to these problems.
 

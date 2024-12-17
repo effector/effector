@@ -3,7 +3,7 @@ title: TypeScript в effector
 description: Использование TypeScript с effector и примеры типизации
 ---
 
-# TypeScript в effector
+# TypeScript в effector (#typescript-in-effector)
 
 Effector предоставляет первоклассную поддержку TypeScript из коробки, что дает вам надежную типизацию и отличный developer experience при работе с библиотекой. В этом разделе мы рассмотрим как базовые концепции типизации, так и продвинутые техники работы с типами в effector.
 

@@ -3,7 +3,7 @@ title: TypeScript in effector
 description: Using TypeScript with effector and typing examples
 ---
 
-# TypeScript in effector
+# TypeScript in effector (#typescript-in-effector)
 
 Effector provides first-class TypeScript support out of the box, giving you reliable typing and excellent developer experience when working with the library. In this section, we'll look at both basic typing concepts and advanced techniques for working with types in effector.<br/>
 

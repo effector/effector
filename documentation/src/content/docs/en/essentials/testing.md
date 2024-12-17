@@ -3,7 +3,7 @@ title: Testing in Effector
 description: How to write tests for validating logic in Effector
 ---
 
-# Writing Tests
+# Writing Tests (#writing-test-in-effector)
 
 Testing state management logic is one of Effector’s strengths. Thanks to isolated contexts (fork) and controlled asynchronous processes `allSettled`, you can test application behavior without having to emulate the entire lifecycle.
 

@@ -3,7 +3,7 @@ title: Reactivity in effector
 description: Let's explore how reactivity works in effector
 ---
 
-# Reactivity in Effector
+# Reactivity in Effector (#reactivity-in-effector)
 
 Reactivity is a fundamental concept in Effector that enables automatic data updates when dependencies change. Instead of manually managing updates, you describe connections between different parts of your application, and Effector handles their synchronization.
 
