@@ -57,6 +57,14 @@ const defaultSidebar: LSidebarGroup[] = [
         },
       },
       {
+        link: "/essentials/events",
+        text: {
+          en: "Events",
+          ru: "События",
+          uz: "Events",
+        },
+      },
+      {
         link: "/essentials/work-with-async",
         text: {
           en: "Work with async",

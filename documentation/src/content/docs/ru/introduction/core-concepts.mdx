@@ -43,7 +43,7 @@ sample({
 
 #### Особенности события (#event-features)
 
-- Простота: События в Effector являются минималистичными и легко создаются с помощью createEvent.
+- Простота: События в Effector являются минималистичными и легко создаются с помощью [createEvent](/ru/api/effector/createEffect).
 - Реактивность: Они обеспечивают мгновенное уведомление всех подписчиков при срабатывании.
 - Композиция: Вы можете комбинировать события, фильтровать их, изменять данные и передавать их в другие обработчики или сторы.
 
@@ -64,7 +64,7 @@ formSubmitted();
 
 ### Хранилище (#store)
 
-Хранилище ([Store](/ru/api/effector/Store)) — это **центральный элемент управления состоянием** в Effector. Он представляет собой реактивное значение, которое может изменяться только через события, обеспечивая строгий контроль над мутациями и потоком данных.
+Хранилище ([Store](/ru/api/effector/Store)) — это **ключевой элемент управления состоянием** в Effector. Он представляет собой реактивное значение, которое может изменяться только через события, обеспечивая строгий контроль над мутациями и потоком данных.
 
 #### Особенности хранилища (#store-features)
 
@@ -125,6 +125,61 @@ fetchUserFx.fail.watch(({ error }) => console.log("Произошла ошибк
 fetchUserFx(1);
 ```
 
+## Чистота функций (#purity)
+
+Большинство функций в API effector не должны вызывать другие события или эффекты напрямую. Это делает поток данных в приложении более понятным, когда императивные триггеры сгруппированы внутри обработчиков watch и effect, а не разбросаны по всей бизнес-логике.
+
+Правильно, императивный подход:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const submitLoginSize = createEvent();
+
+const $login = createStore("guest");
+const $loginSize = $login.map((login) => login.length);
+
+$loginSize.watch((size) => {
+  submitLoginSize(size);
+});
+```
+
+✅ **Лучше**, декларативный подход:
+
+```ts
+import { createStore, createEvent, sample } from "effector";
+
+const submitLoginSize = createEvent();
+
+const $login = createStore("guest");
+const $loginSize = $login.map((login) => login.length);
+
+sample({
+  clock: $loginSize,
+  target: submitLoginSize,
+});
+```
+
+❌ А вот так делать **НЕ** стоит:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const submitLoginSize = createEvent();
+
+const $login = createStore("guest");
+// Так делать не надо!
+const $loginSize = $login.map((login) => {
+  // Не вызывайте события внутри map! Используйте sample вместо этого
+  submitLoginSize(login.length);
+  return login.length;
+});
+```
+
+:::info{title="Важное замечание"}
+Вызов событий или эффектов внутри функций преобразования (например, в `map`, `sample.filter` или обработчиках `on`) может привести к непредсказуемому поведению и усложняет отладку. Всегда используйте декларативный подход с помощью `sample` для таких случаев.
+:::
+
 ## Как это все работает вместе? (#how-units-work-together)
 
 Эти концепции объединяются в мощный, реактивный поток данных:
@@ -168,10 +223,12 @@ fetchUserDataFx(1);
 Более подробно об этом можно почитать [здесь](/ru/extra/conventions).
 :::
 
-Осталось связать изменение стора и вызов эффекта, и здесь в игру вступает прекрасный метод `sample`.
+### Добавляем `sample` для композиции (#adding-sample)
+
+Осталось связать изменение стора и вызов эффекта, и здесь в игру вступает прекрасный метод [`sample`](/ru/api/effector/sample).
 Функция `sample` — это инструмент для оркестрации реактивных зависимостей. Это основной способ связывать сторы, события и эффекты в Effector.
 
-Более подробно о `sample` можно почитать [тут](/ru/api/effector/sample).
+[Как работать с `sample`](/ru/essentials/unit-composition).
 
 ```ts
 import { createEvent, createStore, createEffect, sample } from "effector";

@@ -42,7 +42,7 @@ sample({
 
 #### Event features (#event-features)
 
-- Simplicity: Events are minimalistic and can be easily created using createEvent.
+- Simplicity: Events are minimalistic and can be easily created using [`createEvent`](/en/api/effector/createEvent).
 - Reactivity: Events instantly notify all subscribers upon triggering.
 - Composition: Events can be combined, filtered, transformed, and forwarded to other handlers or stores.
 
@@ -64,7 +64,7 @@ formSubmitted();
 
 ### Store (#store)
 
-[Store](/en/api/effector/Store) — is the central state management element in Effector. It represents a reactive value that can only be changed via events, ensuring strict control over mutations and data flow.
+[Store](/en/api/effector/Store) — is the key unit for state management element in Effector. It represents a reactive value that can only be changed via events, ensuring strict control over mutations and data flow.
 
 #### Store features (#store-features)
 
@@ -104,11 +104,11 @@ formSubmitted();
 
 ### Effect (#effect)
 
-[Effect](/en/api/effector/Effect) — is designed to handle side effects — operations that interact with external systems such as servers, APIs, or browser environments.
+[Effect](/en/api/effector/Effect) — is designed to handle side effects (async or not) — operations that interact with external systems such as servers, APIs, or browser environments.
 
 #### Effect features (#effect-features)
 
-- Effects have built-in states like pending and emit events such as done and fail, making it easier to track operation statuses.
+- Effects have built-in states like `pending` and emit events such as `done` and `fail`, making it easier to track operation statuses.
 - Logic related to external interactions is isolated, improving testability and making the code more predictable.
 
 Effects help isolate the logic of interacting with external systems from the rest of the code, making the application more predictable and easier to test.
@@ -129,6 +129,60 @@ fetchUserFx.fail.watch(({ error }) => console.log("Error occurred! ", error));
 // Trigger effect
 fetchUserFx(1);
 ```
+
+## Function purity (#purity)
+
+Most functions in the effector API should not call other events or effects directly. This makes the application's data flow more understandable when imperative triggers are grouped inside watch and effect handlers rather than scattered throughout the business logic.
+Correct, imperative approach:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const submitLoginSize = createEvent();
+
+const $login = createStore("guest");
+const $loginSize = $login.map((login) => login.length);
+
+$loginSize.watch((size) => {
+  submitLoginSize(size);
+});
+```
+
+✅ **Better**, declarative approach:
+
+```ts
+import { createStore, createEvent, sample } from "effector";
+
+const submitLoginSize = createEvent();
+
+const $login = createStore("guest");
+const $loginSize = $login.map((login) => login.length);
+
+sample({
+  clock: $loginSize,
+  target: submitLoginSize,
+});
+```
+
+❌ This should NOT be done:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const submitLoginSize = createEvent();
+
+const $login = createStore("guest");
+// Don't do this!
+const $loginSize = $login.map((login) => {
+  // Don't call events inside map! Use sample instead
+  submitLoginSize(login.length);
+  return login.length;
+});
+```
+
+:::info{title="Important note"}
+Calling events or effects inside transformation functions (e.g., in map, sample.filter, or on handlers) can lead to unpredictable behavior and complicates debugging. Always use the declarative approach with sample for such cases.
+:::
 
 ## How it all works together? (#how-units-work-together)
 
@@ -169,11 +223,11 @@ fetchUserDataFx(1);
 Effector naming conventions use $ for stores (e.g., $counter) and Fx for effects (e.g., fetchUserDataFx). Learn more about naming conventions [here](/en/conventions/naming).
 :::
 
-### Adding sample for orchestration (### Adding sample for orchestration)
+### Adding sample for orchestration (#adding-sample)
 
-What's left to do is to connect the store change and the effect call, and this is where the beautiful `sample` method begins.
+What's left to do is to connect the store change and the effect call, and this is where the beautiful [`sample`](/en/api/effector/sample) method begins.
 
-The `sample` function is a powerful tool for orchestrating reactive dependencies. It connects stores, events, and effects seamlessly.
+[How to work with `sample`](/en/essentials/unit-composition)
 
 More about `sample` you can find [here](/en/api/effector/sample).
 
