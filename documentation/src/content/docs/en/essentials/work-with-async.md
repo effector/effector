@@ -19,6 +19,10 @@ Effects ([createEffect](/en/api/effector.createEffect)) are Effector's tool for 
 - Working with `localStorage`/`indexedDB`
 - Any operations that might fail or take time to complete
 
+:::tip{title="good to know"}
+The effect can be either async or sync.
+:::
+
 ## Main Effect States (#main-effect-states)
 
 Effector automatically tracks the state of effect execution:
