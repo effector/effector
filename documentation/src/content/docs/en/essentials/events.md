@@ -1,16 +1,18 @@
 ---
-title: Events
+title: Events in effector
 keywords:
   - event
   - unit
-description: How events works, where to use
+description: How events works and how to use it
 ---
+
+# Events (#events)
 
 The **Event** in effector represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things. This unit is designed to be a carrier of information/intention/state within the application, not the holder of a state.
 
 In most situations, it is recommended to create events directly within the module, rather than placing them within conditional statements or classes, in order to maintain simplicity and readability. An exception to this recommendation is the use of factory functions; however, these should also be invoked at the root level of the module.
 
-:::info
+:::info{title="important information!"}
 Event instances persist throughout the entire runtime of the application and inherently represent a portion of the business logic.
 
 Attempting to delete instances and clear memory for the purpose of saving resources is not advised, as it may adversely impact the functionality and performance of the application.
@@ -30,7 +32,7 @@ const callHappened = createEvent<void>();
 callHappened(); // event triggered
 ```
 
-The **declarative** approach utilizes the event as a target for operators, such as sample, or as an argument when passed into factory functions:
+The **declarative** approach utilizes the event as a target for operators, such as `sample`, or as an argument when passed into factory functions:
 
 ```ts
 import { createEvent, sample } from "effector";
@@ -44,12 +46,14 @@ sample({
 });
 ```
 
-> When the `firstTriggered` event is invoked, the `secondTriggered` event will be subsequently called, creating a sequence of events.
+When the `firstTriggered` event is invoked, the `secondTriggered` event will be subsequently called, creating a sequence of events.
 
 This method is employed to link various units within a single event chain. In most cases, the chain will have multiple branches, allowing for diverse interactions and processes within the application logic.
 
-**You need to know:** In Effector, any event supports only **a single argument**.
+:::tip{title="Good to know"}
+In Effector, any event supports only **a single argument**.
 It is not possible to call an event with two or more arguments, as in `someEvent(first, second)`.
+:::
 
 All arguments beyond the first will be ignored.
 The core team has implemented this rule for specific reasons related to the design and functionality.
@@ -59,7 +63,9 @@ If multiple arguments need to be passed, encapsulate them within an object:
 
 ```ts
 import { createEvent } from "effector";
+
 const requestReceived = createEvent<{ id: number; title: string }>();
+
 requestReceived({ id: 1, title: "example" });
 ```
 
@@ -119,7 +125,7 @@ Its primary intended use is for short-term debugging and logging purposes.
 
 When an event is invoked, TypeScript will verify that the type of the argument passed matches the type defined in the event, ensuring consistency and type safety within the code.
 
-This is also works for operators like `sample` or `split`:
+This is also works for operators like [`sample`](/en/essentials/unit-composition) or `split`:
 
 ```ts
 import { sample, createEvent } from "effector";
@@ -128,56 +134,82 @@ const someHappened = createEvent<number>();
 const anotherHappened = createEvent<string>();
 
 sample({
-  // @ts-expect-error error: "clock should extend target type"; targets: { clockType: number; targetType: string; }
+  // @ts-expect-error error:
+  // "clock should extend target type";
+  // targets: { clockType: number; targetType: string; }
   clock: someHappened,
   target: anotherHappened,
 });
 ```
 
-[Try it in ts playground](https://tsplay.dev/WyoPKN)
+## Working with multiple events (#working-with-events)
 
-To specify the argument type for an event, it is essential to first determine the intended purpose, what do you want to do with this event:
+Events in effector can be combined in various ways to create more complex logic. Let's look at the main approaches:
 
-- If you intend to **invoke** an event or use it as a target, you should utilize the `EventCallable<T>` type.
-- If your goal is to **subscribe** to updates, or use the event as a `clock` or `source`, you should employ the `Event<T>` type.
+### Creating derivative events (#derived-events)
 
-_Where `T` represents the type of the event's argument._
-
-```ts
-import { type Event, createStore, createEvent } from "effector";
-
-function createCounter(counterChanged: Event<number>) {
-  const $counter = createStore(0);
-  sample({
-    clock: $counter,
-    target: counterChanged,
-  });
-}
-
-const whenCounterChanged = createEvent<number>();
-createCounter(whenCounterChanged);
-```
-
-## Using `Event` (#event-using)
-
-A `Event` is a super type of `EventCallable` with different approach. Firstly, invoking a `Event` is not allowed, and it cannot be used as a target in the sample operator, and so on.
-
-The primary purpose of a `Event` is to be triggered by internal code withing the effector library or ecosystem. For instance, the `.map()` method returns a `Event`, which is subsequently called by the `.map()` method itself.
-
-To utilize the `Event` type, simply import it from the `"effector"` package and integrate it into your code as needed:
+You can create a new event based on an existing one using the map method:
 
 ```ts
-import { type Event, createStore, createEvent } from "effector";
-
-function createCounter(increment: Event<void>) {
-  const $counter = createStore(0);
-
-  $counter.on(increment, (count) => count + 1);
-}
-
-const incrementCounter = createEvent<number>();
-createCounter(incrementCounter);
-incrementCounter();
+const userClicked = createEvent<{ id: number; name: string }>();
+// Creating an event that will trigger only with the user's name
+const userNameSelected = userClicked.map(({ name }) => name);
 ```
 
-It is allowed to pass `EventCallable<T>` into argument with type `Event<T>`. The primary purpose of Event is to accept any event type while explicitly signaling the code's intention to listen to the event, rather than invoking it.
+### Filtering events (#filtering-events)
+
+The `filter` method allows creating a new event that triggers only when a certain condition is met:
+
+```ts
+const userClicked = createEvent<{ id: number; role: "admin" | "user" }>();
+
+// Event will trigger only for admins
+const adminClicked = userClicked.filter({
+  fn: ({ role }) => role === "admin",
+});
+
+// Creating a type-safe filter
+const adminClicked = userClicked.filter({
+  fn: (user): user is { id: number; role: "admin" } => user.role === "admin",
+});
+```
+
+:::tip{sample is better!}
+Using the sample method and filter property is preferred over this method!
+:::
+
+### Merging multiple events (#merging-events)
+
+To merge multiple events into one, you can use sample with an array in clock:
+
+```ts
+const buttonClicked = createEvent();
+const linkClicked = createEvent();
+const iconClicked = createEvent();
+
+// Any of these events will trigger someActionHappened
+sample({
+  clock: [buttonClicked, linkClicked, iconClicked],
+  target: someActionHappened,
+});
+```
+
+### Conditional event triggering (#conditional-event-triggering)
+
+The action chain when calling an event can trigger based on store states:
+
+```ts
+const buttonClicked = createEvent<void>();
+const $isEnabled = createStore(true);
+
+// Event will trigger only if $isEnabled is true
+sample({
+  clock: buttonClicked,
+  filter: $isEnabled,
+  target: actionExecuted,
+});
+```
+
+:::tip{title="Tip"}
+Combining events through `sample` is preferred over directly calling events inside `watch` or other handlers, as it makes the data flow more explicit and predictable.
+:::
