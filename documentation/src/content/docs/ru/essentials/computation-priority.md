@@ -1,11 +1,6 @@
 ---
 title: Чистые функции и порядок вычислений
 description: Что такое чистые функции, где они используются в effector и как работает порядок вычислений
-redirectFrom:
-  - /en/advanced-guide/computation-priority
-  - /explanation/computation-priority
-  - /docs/advanced-guide/computation-priority
-  - /docs/explanation/computation-priority
 ---
 
 # Чистые функции и порядок вычислений (#pure-functions-and-computation)
