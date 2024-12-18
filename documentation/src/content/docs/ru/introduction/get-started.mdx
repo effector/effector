@@ -1,0 +1,214 @@
+---
+title: Начало работы с effector
+description: Как установить effector и начать с ним работу
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Быстрый старт (#quick-start-with-effector)
+
+Effector - это мощный менеджер состояния, который предлагает принципиально новый подход к управлению данными в приложениях, который также. В отличие от традиционных решений, где состояние изменяется напрямую через действия, Effector использует реактивный и декларативный подход.
+
+## Особенности Effector (#effector-features)
+
+- **Effector реактивный 🚀**: Effector автоматически отслеживает зависимости и обновляет все связанные части приложения, избавляя вас от необходимости вручную управлять обновлениями.
+- **Декларативный код 📝**: Вы описываете связи между данными и их трансформации, а Effector сам заботится о том, как и когда выполнять эти преобразования.
+- **Предсказуемое тестирование** ✅: Изолированные контексты делают тестирование бизнес-логики простым и надёжным.
+- **Гибкая архитектура** 🏗️: Effector одинаково хорошо подходит как для небольших приложений, так и для крупных корпоративных систем.
+- **Универсальность** 🔄: Хотя Effector прекрасно интегрируется с популярными фреймворками, он может использоваться в любой JavaScript-среде.
+
+Больше о ключевых особенностях эффектора вы можете прочитать [здесь](/ru/introduction/core-concepts)
+
+## Установка effector (#install-effector)
+
+Для начала установим effector при помощи вашего любимого пакетного менеджера
+
+<Tabs>
+  <TabItem label="npm">
+
+```bash
+npm install effector
+```
+
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector
+```
+
+  </TabItem>
+</Tabs>
+
+### Создаем ваш первый стор (#first-store)
+
+Теперь давайте создадим стор, который является состоянием.
+
+```ts
+import { createStore } from "effector";
+
+const $counter = createStore(0);
+```
+
+### Добавление событий (#adding-events)
+
+Дальше давайте создадим событие.
+
+```ts
+import { createEvent } from "effector";
+
+const incremented = createEvent();
+const decremented = createEvent();
+```
+
+### Подписываем стор на событие (#connection-event-to-store)
+
+И свяжем событие вместе со стором.
+
+```ts
+// counter.js
+import { createEvent, createStore } from "effector";
+
+const $counter = createStore(0);
+
+const incremented = createEvent();
+const decremented = createEvent();
+
+$counter.on(incremented, (counter) => counter + 1);
+$counter.on(decremented, (counter) => counter - 1);
+
+// и вызовите событие в вашем приложении
+incremented();
+// counter увеличиться на 1
+```
+
+## Интеграция с фреймворками (#effector-framework-integration)
+
+### Установка (#effector-framework-installation)
+
+Если вы хотите использовать **effector** вместе с фреймворком, то для этого вам потребуется установить дополнительный пакет:
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```bash
+npm install effector effector-react
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```bash
+npm install effector effector-vue
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```bash
+npm install effector effector-solid
+```
+
+  </TabItem>
+</Tabs>
+
+### Примеры использования (#effector-framework-usage-examples)
+
+И использовать
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```jsx
+import { useUnit } from "effector-react";
+import { createEvent, createStore } from "effector";
+import { $counter, incremented, decremented } from "./counter.js";
+
+export const Counter = () => {
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // или
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // или
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+
+  return (
+    <div>
+      <h1>Count: {counter}</h1>
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```html
+<script setup>
+  import { useUnit } from "@effector-vue/composition";
+  import { $counter, incremented, decremented } from "./counter.js";
+
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // или
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // или
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+</script>
+
+<template>
+  <div>
+    <h1>Count: {{ counter }}</h1>
+    <button @click="onIncremented">Increment</button>
+    <button @click="onDecremented">Decrement</button>
+  </div>
+</template>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```jsx
+import { createEvent, createStore } from "effector";
+import { useUnit } from "effector-solid";
+import { $counter, incremented, decremented } from "./counter.js";
+
+const Counter = () => {
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // или
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // или
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+
+  return (
+    <div>
+      <h1>Count: {counter()}</h1>
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+  </TabItem>
+</Tabs>
+
+:::info{title="А где Svelte ?"}
+Для работы со Svelte не требуется дополнительные пакеты, он прекрасно работает с базовым пакетом effector.
+:::

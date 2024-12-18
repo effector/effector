@@ -13,40 +13,96 @@ import IconTelegram from "@icons/Telegram.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
-    text: { en: "Introduction", ru: "Начало работы", uz: "Kirish" },
+    text: { en: "Introduction", ru: "Введение", uz: "Kirish" },
     items: [
+      {
+        text: { en: "Get started", ru: "Начало работы", uz: "Boshlash" },
+        link: "/introduction/get-started",
+      },
       {
         text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
         link: "/introduction/motivation",
-      },
-      {
-        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
-        link: "/introduction/community",
       },
       {
         text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
         link: "/introduction/installation",
       },
       {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
-        link: "/introduction/ecosystem",
-      },
-      {
-        text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
-        link: "/introduction/examples",
-      },
-      {
-        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
-        link: "/FAQ",
+        text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
+        link: "/introduction/core-concepts",
       },
     ],
   },
   {
-    text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
+    text: {
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
+    },
     items: [
       {
-        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
-        link: "/conventions/naming",
+        link: "/essentials/reactivity",
+        text: {
+          en: "Reactivity",
+          ru: "Реактивность",
+          uz: "Reaktivlik",
+        },
+      },
+      {
+        link: "/essentials/manage-states",
+        text: {
+          en: "Manage states",
+          ru: "Управление состоянием",
+          uz: "Holatni o'zgartirish",
+        },
+      },
+      {
+        link: "/essentials/events",
+        text: {
+          en: "Events",
+          ru: "События",
+          uz: "Events",
+        },
+      },
+      {
+        link: "/essentials/work-with-async",
+        text: {
+          en: "Work with async",
+          ru: "Работа с асинхронностью",
+          uz: "Asinkronlik bilan ishlash",
+        },
+      },
+      {
+        link: "/essentials/unit-composition",
+        text: {
+          en: "Unit composition",
+          ru: "Композиция юнитов",
+          uz: "Unitlarni o'zgartirish",
+        },
+      },
+      {
+        link: "/essentials/testing",
+        text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
+        },
+      },
+      {
+        link: "/essentials/typescript",
+        text: {
+          en: "TypeScript",
+          ru: "Типизация в effector",
+          uz: "Typescript bilan ishlash",
+        },
+      },
+      {
+        link: "/essentials/computation-priority",
+        text: {
+          en: "Computation priority",
+          ru: "Приоритет вычисления",
+          uz: "Bajarish darajasi",
+        },
       },
     ],
   },
@@ -116,6 +172,7 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: {
       en: "For library developers",
+      ru: "Для разработчиков",
       uz: "Biblioteka dasturchilari uchun",
     },
     items: [
@@ -126,20 +183,41 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: { en: "Extra", ru: "Дополнительно", uz: "Qo'shimcha" },
+    items: [
+      {
+        text: { en: "Conventions", ru: "Согласования", uz: "Sog'liqlar" },
+        link: "/extra/conventions",
+      },
+      {
+        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
+        link: "/extra/community",
+      },
+      {
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        link: "/extra/ecosystem",
+      },
+      {
+        text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
+        link: "/extra/examples",
+      },
+    ],
+  },
+  {
     text: { en: "Explanation", ru: "Погружение", uz: "Tushuntirish" },
     items: [
       {
         text: { en: "Glossary", ru: "Глоссарий", uz: "Lug'at" },
         link: "/explanation/glossary",
       },
-      {
-        text: { en: "Events", ru: "События", uz: "Events" },
-        link: "/explanation/events",
-      },
-      {
-        text: { en: "Computation Priority", uz: "Hisoblash ustuvorligi" },
-        link: "/explanation/computation-priority",
-      },
+      // {
+      //   text: { en: "Events", ru: "События", uz: "Events" },
+      //   link: "/explanation/events",
+      // },
+      // {
+      //   text: { en: "Computation Priority", uz: "Hisoblash ustuvorligi" },
+      //   link: "/explanation/computation-priority",
+      // },
       {
         text: { en: "Prior Art", ru: "Prior Art", uz: "Prior Art" },
         link: "/explanation/prior-art",
@@ -147,6 +225,15 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "SIDs" },
         link: "/explanation/sids",
+      },
+    ],
+  },
+  {
+    text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
+    items: [
+      {
+        link: "/FAQ",
+        text: { en: "FAQ" },
       },
     ],
   },
@@ -717,7 +804,7 @@ const api: LSidebarGroup[] = [
     items: apiPackages,
   },
   {
-    text: { en: "Official Ecosystem", ru: "Экосистема" },
+    text: { en: "Official Ecosystem", ru: "Официальная экосистема" },
     items: externalPackages,
   },
 ];
