@@ -10,6 +10,45 @@ import TabItem from "@components/Tabs/TabItem.astro";
 
 State in effector is managed through stores - special objects that hold values and update them when receiving events. Stores are created using the [createStore](/en/api/effector/createStore) function.
 
+:::info{title="Data immutability"}
+Store data in effector is immutable, which means you should not mutate arrays or objects directly, but create new instances when updating them.
+:::
+
+<Tabs>
+  <TabItem label="✅ Correct">
+
+```ts
+// update array
+$users.on(userAdded, (users, newUser) => [...users, newUser]);
+
+//update object
+$user.on(nameChanged, (user, newName) => ({
+  ...user,
+  name: newName,
+}));
+```
+
+  </TabItem>
+
+  <TabItem label="❌ Incorrect">
+
+```ts
+// update array
+$users.on(userAdded, (users, newUser) => {
+  users.push(newUser); // mutation!
+  return users;
+});
+
+// update object
+$user.on(nameChanged, (user, newName) => {
+  user.name = newName; // mutation!
+  return user;
+});
+```
+
+  </TabItem>
+</Tabs>
+
 ## Store Creation (#store-creation)
 
 ```ts
@@ -75,10 +114,6 @@ const Counter = () => {
   </TabItem>
 </Tabs>
 
-```ts
-console.log($counter.getState()); // 0
-```
-
 2. Subscribe to changes via watch - only for debug or integration needs
 
 ```ts
@@ -89,11 +124,15 @@ $counter.watch((counter) => {
 
 3. getState() method - only for integration needs
 
+```ts
+console.log($counter.getState()); // 0
+```
+
 ## Store Updates (#store-updates)
 
 ### Updating via Events (#update-store-via-events)
 
-The simplest way to update a store is to bind it to an event:
+The simplest and correct way to update a store is to bind it to an event:
 
 ```ts
 import { createStore, createEvent } from "effector";
@@ -143,7 +182,7 @@ userUpdated({ name: "Alice" });
 
 ### Store Creation via Other Units (#create-store-via-other-units)
 
-If your store work involves replacing the old state with a new one when an event is called, you can use the `restore` method:
+If your store work involves replacing the old state with a new one when an event is called, you can use the [`restore`](/en/api/effector/restore) method:
 
 ```ts
 import { restore, createEvent } from "effector";
@@ -163,7 +202,7 @@ const nameChanged = createEvent<string>();
 const $counter = createStore("").on(nameChanged, (_, newName) => newName);
 ```
 
-You can also use `restore` method with an effect. In this case, the store will receive data from the effect's `doneData` event, and the default store value should match the return value type:
+You can also use `restore` method with an effect. In this case, the store will receive data from the effect's [`doneData`](/en/api/effector/Effect#doneData) event, and the default store value should match the return value type:
 
 ```ts
 import { restore, createEffect } from "effector";
@@ -225,7 +264,7 @@ In this example, we subscribe the $filters store to multiple events, and both $f
 
 ## Derived Stores (#derived-stores)
 
-Often you need to create a store whose value depends on other stores. For this, the `map` method is used:
+Often you need to create a store whose value depends on other stores. For this, the [`map`](/en/api/effector/Store#map) method is used:
 
 ```ts
 const $users = createStore<User[]>([]);
@@ -246,7 +285,7 @@ const $friendsList = combine(
 );
 ```
 
-We also used the `combine` function here, which allows us to combine values from multiple stores into one.<br/>
+We also used the [`combine`](/en/api/effector/combine) function here, which allows us to combine values from multiple stores into one.<br/>
 You can also `combine` stores into an object:
 
 ```ts

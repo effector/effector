@@ -10,6 +10,45 @@ import TabItem from "@components/Tabs/TabItem.astro";
 
 Состояние в effector управляется через сторы (stores) - специальные объекты, которые хранят значения и обновляют их при получении событий. Сторы создаются с помощью функции [createStore](/ru/api/effector/createStore).
 
+:::info{title="Иммутабельность данных"}
+Данные сторов в effector иммутабельные, это знчит, что вы должны не мутировать массивы или объекты напрямую, а создавать новые инстансы при обновлениях.
+:::
+
+<Tabs>
+  <TabItem label="✅ Правильно">
+
+```ts
+// обновление массива данных
+$users.on(userAdded, (users, newUser) => [...users, newUser]);
+
+//обновление объекта
+$user.on(nameChanged, (user, newName) => ({
+  ...user,
+  name: newName,
+}));
+```
+
+  </TabItem>
+
+  <TabItem label="❌ Неправильно">
+
+```ts
+// обновление массива данных
+$users.on(userAdded, (users, newUser) => {
+  users.push(newUser); // Мутация!
+  return users;
+});
+
+//обновление объекта
+$user.on(nameChanged, (user, newName) => {
+  user.name = newName; // Мутация!
+  return user;
+});
+```
+
+  </TabItem>
+</Tabs>
+
 ## Создание стора (#store-creation)
 
 ```ts
@@ -75,10 +114,6 @@ const Counter = () => {
   </TabItem>
 </Tabs>
 
-```ts
-console.log($counter.getState()); // 0
-```
-
 2. Подписка на изменения через watch - только для дебага или интеграций
 
 ```ts
@@ -89,11 +124,15 @@ $counter.watch((counter) => {
 
 3. Метод getState() - только для интеграций
 
+```ts
+console.log($counter.getState()); // 0
+```
+
 ## Обновление состояния (#store-updates)
 
 ### Обновление через события (#update-store-via-events)
 
-Самый простой способ обновить стор - это привязать его к событию:
+Самый простой и верный способ обновить стор - это привязать его к событию:
 
 ```ts
 import { createStore, createEvent } from "effector";
@@ -143,7 +182,7 @@ userUpdated({ name: "Alice" });
 
 ### Создание стора при помощи других юнитов (#create-store-via-other-units)
 
-Если у вас работа со стором подразумевает замену старого состояние на новое при вызове события, то вы можете использовать метод `restore`:
+Если у вас работа со стором подразумевает замену старого состояние на новое при вызове события, то вы можете использовать метод [`restore`](/ru/api/effector/restore):
 
 ```ts
 import { restore, createEvent } from "effector";
@@ -163,7 +202,7 @@ const nameChanged = createEvent<string>();
 const $counter = createStore("").on(nameChanged, (_, newName) => newName);
 ```
 
-Также метод `restore` можно использовать и с эффектом, в таком случае в стор попадут данные из события эффекта `doneData`, а дефолтное значение стора должно соответствовать возвращаемому значению:
+Также метод `restore` можно использовать и с эффектом, в таком случае в стор попадут данные из события эффекта [`doneData`](/ru/api/effector/Effect#doneData), а дефолтное значение стора должно соответствовать возвращаемому значению:
 
 ```ts
 import { restore, createEffect } from "effector";
@@ -224,7 +263,7 @@ $filters.reset(filtersReset);
 
 ## Производные сторы (#derived-stores)
 
-Часто нужно создать стор, значение которого зависит от других сторов. Для этого используется метод `map`:
+Часто нужно создать стор, значение которого зависит от других сторов. Для этого используется метод [`map`](/ru/api/effector/Store#map):
 
 ```ts
 const $users = createStore<User[]>([]);
@@ -241,7 +280,7 @@ const $friendsList = combine($users, $currentUser, (users, currentUser) =>
 );
 ```
 
-Мы также использовали здесь функцию `combine`, которая позволяет нам объединить значение нескольких сторов в одно.<br/>
+Мы также использовали здесь функцию [`combine`](/ru/api/effector/combine), которая позволяет нам объединить значение нескольких сторов в одно.<br/>
 Также можно комбинировать сторы в объект
 
 ```ts
