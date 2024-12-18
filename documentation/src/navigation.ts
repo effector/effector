@@ -96,6 +96,14 @@ const defaultSidebar: LSidebarGroup[] = [
           uz: "Typescript bilan ishlash",
         },
       },
+      {
+        link: "/essentials/computation-priority",
+        text: {
+          en: "Computation priority",
+          ru: "Приоритет вычисления",
+          uz: "Bajarish darajasi",
+        },
+      },
     ],
   },
   {
@@ -202,14 +210,14 @@ const defaultSidebar: LSidebarGroup[] = [
         text: { en: "Glossary", ru: "Глоссарий", uz: "Lug'at" },
         link: "/explanation/glossary",
       },
-      {
-        text: { en: "Events", ru: "События", uz: "Events" },
-        link: "/explanation/events",
-      },
-      {
-        text: { en: "Computation Priority", uz: "Hisoblash ustuvorligi" },
-        link: "/explanation/computation-priority",
-      },
+      // {
+      //   text: { en: "Events", ru: "События", uz: "Events" },
+      //   link: "/explanation/events",
+      // },
+      // {
+      //   text: { en: "Computation Priority", uz: "Hisoblash ustuvorligi" },
+      //   link: "/explanation/computation-priority",
+      // },
       {
         text: { en: "Prior Art", ru: "Prior Art", uz: "Prior Art" },
         link: "/explanation/prior-art",
