@@ -13,11 +13,15 @@ import IconTelegram from "@icons/Telegram.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
-    text: { en: "Introduction", ru: "Начало работы", uz: "Kirish" },
+    text: { en: "Introduction", ru: "Введение", uz: "Kirish" },
     items: [
       {
         text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
         link: "/introduction/motivation",
+      },
+      {
+        text: { en: "Get started", ru: "Начало работы", uz: "Motivatsiya" },
+        link: "/introduction/get-started",
       },
       {
         text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
