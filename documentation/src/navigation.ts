@@ -42,6 +42,23 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: {
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
+    },
+    items: [
+      {
+        text: {
+          en: "Events",
+          ru: "События",
+          uz: "O'zgaruvchilar",
+        },
+        link: "/essentials/events",
+      },
+    ],
+  },
+  {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
