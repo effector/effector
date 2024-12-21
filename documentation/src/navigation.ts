@@ -42,6 +42,23 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: {
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
+    },
+    items: [
+      {
+        text: {
+          en: "Work with async",
+          ru: "Работа с асинхронностью",
+          uz: "Asinkronlik bilan ishlash",
+        },
+        link: "/essentials/work-with-async",
+      },
+    ],
+  },
+  {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
