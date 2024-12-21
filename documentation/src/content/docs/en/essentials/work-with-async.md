@@ -197,3 +197,5 @@ submit(); // Load data
 ```
 
 <!-- todo You can read about how to test effects on the [Testing page](/en/essentials/testing). -->
+
+[Full API reference for effects](/en/api/effector/Effect)
