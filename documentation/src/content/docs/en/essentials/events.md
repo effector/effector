@@ -1,9 +1,9 @@
 ---
 title: Events in effector
 description: How events works and how to use it
-redirectFrom: 
-	- /docs/essentials/events
-	- /essentials/events
+redirectFrom:
+  - /docs/essentials/events
+  - /essentials/events
 ---
 
 # Events (#events)
