@@ -56,6 +56,14 @@ const defaultSidebar: LSidebarGroup[] = [
         },
         link: "/essentials/reactivity",
       },
+      {
+        text: {
+          en: "Work with async",
+          ru: "Работа с асинхронностью",
+          uz: "Asinkronlik bilan ishlash",
+        },
+        link: "/essentials/work-with-async",
+      },
     ],
   },
   {
