@@ -50,11 +50,27 @@ const defaultSidebar: LSidebarGroup[] = [
     items: [
       {
         text: {
+          en: "Reactivity",
+          ru: "Реактивность",
+          uz: "Reaktivlik",
+        },
+        link: "/essentials/reactivity",
+      },
+      {
+        text: {
           en: "Manage states",
           ru: "Управление состоянием",
           uz: "Holatni o'zgartirish",
         },
         link: "/essentials/manage-states",
+      },
+      {
+        text: {
+          en: "Work with async",
+          ru: "Работа с асинхронностью",
+          uz: "Asinkronlik bilan ishlash",
+        },
+        link: "/essentials/work-with-async",
       },
     ],
   },
