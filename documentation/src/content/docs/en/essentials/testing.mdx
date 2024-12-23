@@ -4,7 +4,6 @@ description: How to write tests for validating logic in Effector
 redirectFrom:
   - /essentials/testing
   - /guides/testing
-  - /en/guides/testing
 ---
 
 import Tabs from "@components/Tabs/Tabs.astro";
@@ -12,7 +11,7 @@ import TabItem from "@components/Tabs/TabItem.astro";
 
 # Writing Tests (#writing-test-in-effector)
 
-Testing state management logic is one of Effector’s strengths. Thanks to isolated contexts (fork) and controlled asynchronous processes `allSettled`, you can test application behavior without having to emulate the entire lifecycle.
+Testing state management logic is one of Effector’s strengths. Thanks to isolated contexts [(fork api)](/en/api/effector/fork) and controlled asynchronous processes [`allSettled`](/en/api/effector/allSettled), you can test application behavior without having to emulate the entire lifecycle.
 
 :::info{title="What does fork do?"}
 By calling the fork function, we create a scope, which can be considered an independent instance of our Effector application.
