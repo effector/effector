@@ -64,6 +64,14 @@ const defaultSidebar: LSidebarGroup[] = [
         },
         link: "/essentials/work-with-async",
       },
+      {
+        text: {
+          en: "Computation priority",
+          ru: "Приоритет вычислений",
+          uz: "Hisoblashning prioriteti",
+        },
+        link: "/essentials/computation-priority",
+      },
     ],
   },
   {
