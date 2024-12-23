@@ -134,7 +134,7 @@ buttonClicked();
 
 ## Real-life Example (#effector-reactivity-example-1)
 
-Рассмотрим пример поисковой строки с автоматическим обновлением результатов:
+Let's take a look at an example of a search bar with automatic result updates:
 
 ```ts
 import { createStore, createEvent, createEffect, sample } from "effector";
