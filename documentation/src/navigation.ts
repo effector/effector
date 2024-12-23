@@ -36,6 +36,10 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/introduction/examples",
       },
       {
+        text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
+        link: "/introduction/core-concepts",
+      },
+      {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
       },
