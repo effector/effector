@@ -90,10 +90,10 @@ const defaultSidebar: LSidebarGroup[] = [
       uz: "Typescript bilan ishlash",
     },
     items: [
-      {
-        text: { en: "Typing effector", ru: "Типизация effector", uz: "Effector tipizatsiyasi" },
-        link: "/typescript/typing-effector",
-      },
+      // {
+      //   text: { en: "Typing effector", ru: "Типизация effector", uz: "Effector tipizatsiyasi" },
+      //   link: "/typescript/typing-effector",
+      // },
       {
         text: {
           en: "Usage with `effector-react`",
@@ -102,10 +102,10 @@ const defaultSidebar: LSidebarGroup[] = [
         },
         link: "/typescript/usage-with-effector-react",
       },
-      {
-        text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
-        link: "/typescript/utility-types",
-      },
+      // {
+      //   text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
+      //   link: "/typescript/utility-types",
+      // },
     ],
   },
   {
