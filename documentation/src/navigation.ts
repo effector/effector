@@ -64,6 +64,15 @@ const defaultSidebar: LSidebarGroup[] = [
         },
         link: "/essentials/work-with-async",
       },
+
+      {
+        text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
+        },
+        link: "/essentials/testing",
+      },
     ],
   },
   {
@@ -103,10 +112,10 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
-      {
-        text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
-        link: "/guides/testing",
-      },
+      // {
+      //   text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
+      //   link: "/guides/testing",
+      // },
       {
         text: { en: "Server Side Rendering" },
         link: "/guides/server-side-rendering",
