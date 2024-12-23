@@ -42,6 +42,24 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: {
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
+    },
+    items: [
+      {
+        text: {
+          en: "Computation priority",
+          ru: "Приоритет вычислений",
+          uz: "Hisoblashning prioriteti",
+        },
+        link: "/essentials/computation-priority",
+      },
+    ],
+  },
+
+  {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
