@@ -42,6 +42,24 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: {
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
+    },
+    items: [
+      {
+        text: {
+          en: "Typescript",
+          ru: "Типизация",
+          uz: "Typescript",
+        },
+        link: "/essentials/typescript",
+      },
+    ],
+  },
+
+  {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
