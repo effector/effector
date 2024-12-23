@@ -42,6 +42,23 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: {
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
+    },
+    items: [
+      {
+        text: {
+          en: "Reactivity",
+          ru: "Реактивность",
+          uz: "Reaktivlik",
+        },
+        link: "/essentials/reactivity",
+      },
+    ],
+  },
+  {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
