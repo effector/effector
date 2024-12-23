@@ -93,10 +93,14 @@ firstTriggered();
 // => [event] secondTriggered undefined
 ```
 
-However, if your environment does not permit the addition of further dependencies, you may use the `watch` method with caution.
+However, if your environment does not permit the addition of further dependencies, you may use the `createWatch` method, which accepts object in params with properties:
+
+- `unit` — unit or array of units, that you want to start watch
+- `fn` — function, that will be called when the unit is triggered. Accepts the unit’s payload as the first argument.
+- `scope` — [scope](/en/api/effector/Scope), instance of [fork](/en/api/effector/fork) to restrict watcher calls on particular scope
 
 ```ts
-import { createEvent, sample } from "effector";
+import { createEvent, sample, createWatch } from "effector";
 
 const firstTriggered = createEvent<void>();
 const secondTriggered = createEvent<void>();
@@ -106,18 +110,22 @@ sample({
   target: secondTriggered,
 });
 
-firstTriggered.watch(() => console.info("[event] firstTriggered"));
-secondTriggered.watch(() => console.info("[event] secondTriggered"));
+const unwatch = createWatch({
+  unit: [firstTriggered, secondTriggered],
+  fn: (payload) => {
+    console.log("[event] triggered");
+  },
+});
 
 firstTriggered();
-// => [event] firstTriggered
-// => [event] secondTriggered
+// => [event] triggered
+// => [event] triggered
 ```
 
 :::tip{title="Keep in mind"}
-The `watch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
+The `createWatch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
 
-Its primary intended use is for short-term debugging and logging purposes.
+Its primary intended use is for short-term debugging and logging purposes, or for tests to ensure that some unit was triggered.
 :::
 
 ## Working with TypeScript (#typescript)
@@ -145,7 +153,7 @@ sample({
 
 Events in effector can be combined in various ways to create more complex logic. Let's look at the main approaches:
 
-### Creating derivative events (#derived-events)
+### Creating derived events (#derived-events)
 
 You can create a new event based on an existing one using the `map` method, which will be fired after original event:
 
@@ -168,25 +176,28 @@ You cannot call derived events directly, but you can still subscribe to them for
 
 ### Filtering events (#filtering-events)
 
-The `filter` method allows creating a new event that triggers only when a certain condition is met:
+If you wanna create a new event that triggers only when a certain condition is met, you can use `sample` method and `filter` param:
 
 ```ts
-const userClicked = createEvent<{ id: number; role: "admin" | "user" }>();
+import { sample, createEvent } from "effector";
+
+type User = { id: number; role: "admin" | "user" };
+type Admin = { id: number; role: "admin" };
+
+const userClicked = createEvent<User>();
 
 // Event will trigger only for admins
-const adminClicked = userClicked.filter({
-  fn: ({ role }) => role === "admin",
+const adminClicked = sample({
+  clock: userClicked,
+  filter: ({ role }) => role === "admin",
 });
 
-// Creating a type-safe filter
-const adminClicked = userClicked.filter({
-  fn: (user): user is { id: number; role: "admin" } => user.role === "admin",
+// Creating type-safe event
+const typeSafeAdminClicked = sample({
+  clock: userClicked,
+  filter: (user): user is Admin => user.role === "admin",
 });
 ```
-
-:::tip{sample is better!}
-Using the sample method and filter property is preferred over this method!
-:::
 
 ### Merging multiple events (#merging-events)
 

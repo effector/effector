@@ -55,8 +55,6 @@ sample({
 
 Если необходимо передать несколько аргументов, объедините их в объект:
 
-If multiple arguments need to be passed, encapsulate them within an object:
-
 ```ts
 import { createEvent } from "effector";
 
@@ -65,7 +63,7 @@ const requestReceived = createEvent<{ id: number; title: string }>();
 requestReceived({ id: 1, title: "example" });
 ```
 
-This rule also contributes to the clarity of each argument's meaning, both at the call side and subscription side. It promotes clean and organized code, making it easier to understand and maintain.
+Это правило также способствует ясности значения каждого аргумента как на стороне вызова, так и на стороне подписки. Оно способствует чистоте и организованности кода, облегчая его понимание и сопровождение.
 
 :::tip{title="Наименование событий"}
 Мы предлагаем вам называть события, которые напрямую запускают обновления сторов, как будто они уже произошли, например userChang**ed**.
@@ -95,10 +93,14 @@ firstTriggered();
 // => [event] secondTriggered undefined
 ```
 
-Однако, если ваша среда не позволяет добавлять дополнительные зависимости, вы можете с осторожностью использовать метод `watch`:
+Однако, если ваша среда не позволяет добавлять дополнительные зависимости, вы можете использовать метод `createWatch`, который в аргумент принимает объект со значениями
+
+- `unit` — юнит или массив юнитов, за которым вы хотите начать следить
+- `fn` — функция, которая вызывается при изменениях юнита, принимает обновленное значение в аргументе
+- `scope` — [изолированный контекст](/ru/api/effector/Scope), инстанс [fork](/ru/api/effector/fork)'а, для изолированного выполнения
 
 ```ts
-import { createEvent, sample } from "effector";
+import { createEvent, sample, createWatch } from "effector";
 
 const firstTriggered = createEvent<void>();
 const secondTriggered = createEvent<void>();
@@ -108,17 +110,24 @@ sample({
   target: secondTriggered,
 });
 
-firstTriggered.watch(() => console.info("[event] firstTriggered"));
-secondTriggered.watch(() => console.info("[event] secondTriggered"));
+userClicked("value");
+
+const unwatch = createWatch({
+  unit: [firstTriggered, secondTriggered],
+  fn: (payload) => {
+    console.log("[event] triggered");
+  },
+});
 
 firstTriggered();
-// => [event] firstTriggered
-// => [event] secondTriggered
+
+// => [event] triggered
+// => [event] triggered
 ```
 
 :::info{title="Имейте в виду"}
-Метод `watch` не обрабатывает и не сообщает об исключениях, не управляет завершением асинхронных операций и не решает проблемы гонки данных.
-Его основное предназначение - краткосрочная отладка и логирование.
+Метод `createWatch` не обрабатывает и не сообщает об исключениях, не управляет завершением асинхронных операций и не решает проблемы гонки данных.
+Его основное предназначение - краткосрочная отладка и логирование, или для тестирования, чтобы убедиться, что какой-нибудь юнит был задействован.
 :::
 
 ## Работа с TypeScript (#typescript)
@@ -170,22 +179,25 @@ userClicked({ id: 1, name: "John" });
 Метод `filter` позволяет создать новое событие, которое срабатывает только при выполнении определенного условия:
 
 ```ts
-const userClicked = createEvent<{ id: number; role: "admin" | "user" }>();
+import { sample, createEvent } from "effector";
 
-// Событие сработает только для админов
-const adminClicked = userClicked.filter({
-  fn: ({ role }) => role === "admin",
+type User = { id: number; role: "admin" | "user" };
+type Admin = { id: number; role: "admin" };
+
+const userClicked = createEvent<User>();
+
+// Событие вызовется только для admin
+const adminClicked = sample({
+  clock: userClicked,
+  filter: ({ role }) => role === "admin",
 });
 
-// Создаем типобезопасный фильтр
-const adminClicked = userClicked.filter({
-  fn: (user): user is { id: number; role: "admin" } => user.role === "admin",
+// Создаем типизированное событие
+const typeSafeAdminClicked = sample({
+  clock: userClicked,
+  filter: (user): user is Admin => user.role === "admin",
 });
 ```
-
-:::tip{sample лучше!}
-Использование метода `sample` и свойства `filter` в аргументе предпочительнее этого метода!
-:::
 
 ### Объединение нескольких событий (#merging-events)
 
