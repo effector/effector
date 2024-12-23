@@ -50,6 +50,22 @@ const defaultSidebar: LSidebarGroup[] = [
     items: [
       {
         text: {
+          en: "Reactivity",
+          ru: "Реактивность",
+          uz: "Reaktivlik",
+        },
+        link: "/essentials/reactivity",
+      },
+      {
+        text: {
+          en: "Work with async",
+          ru: "Работа с асинхронностью",
+          uz: "Asinkronlik bilan ishlash",
+        },
+        link: "/essentials/work-with-async",
+      },
+      {
+        text: {
           en: "Computation priority",
           ru: "Приоритет вычислений",
           uz: "Hisoblashning prioriteti",
@@ -58,7 +74,6 @@ const defaultSidebar: LSidebarGroup[] = [
       },
     ],
   },
-
   {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
