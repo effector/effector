@@ -310,6 +310,43 @@ const { userMessage, warnMessage } = split(message, {
   </TabItem>
 </Tabs>
 
+### `createApi` (#typing-createApi)
+
+To allow TypeScript to infer types of created events, adding a type to second argument of given reducers
+
+```typescript
+const $count = createStore(0);
+
+const { add, sub } = createApi($count, {
+  add: (x, add: number) => x + add,
+  sub: (x, sub: number) => x - sub,
+});
+
+// add has type Event<number>
+// sub has type Event<number>
+```
+
+### `is` (#typing-is)
+
+`is` methods can help to infer a unit type (thereby `is` methods acts as [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)) which can help to write strongly-typed helper functions
+
+```typescript
+export function getUnitType(unit: unknown) {
+  if (is.event(unit)) {
+    // here unit has Event<any> type
+    return "event";
+  }
+  if (is.effect(unit)) {
+    // here unit has Effect<any, any> type
+    return "effect";
+  }
+  if (is.store(unit)) {
+    // here unit has Store<any> type
+    return "store";
+  }
+}
+```
+
 ### Type Utilities (#type-utilities)
 
 Effector provides a set of utility types for working with unit types:

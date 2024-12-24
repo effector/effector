@@ -312,6 +312,42 @@ const { userMessage, warnMessage } = split(message, {
   </TabItem>
 </Tabs>
 
+### `createApi`
+
+Чтобы позволить TypeScript выводить типы создаваемых событий, можно добавить тип ко второму аргументу обработчиков
+
+```typescript
+const $count = createStore(0);
+
+const { add, sub } = createApi($count, {
+  add: (x, add: number) => x + add,
+  sub: (x, sub: number) => x - sub,
+});
+
+// add имеет тип Event<number>
+// sub имеет тип Event<number>
+```
+
+### `is`
+
+Методы группы [is](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит:
+
+````typescript
+export function getUnitType(unit: unknown) {
+  if (is.event(unit)) {
+    // здесь юнит имеет тип Event<any>
+    return "event";
+  }
+  if (is.effect(unit)) {
+    // здесь юнит имеет тип Effect<any, any>
+    return "effect";
+  }
+  if (is.store(unit)) {
+    // здесь юнит имеет тип Store<any>
+    return "store";
+  }
+}
+
 ## Утилиты для типов (#type-utilities)
 
 Effector предоставляет набор утилитных типов для работы с типами юнитов:
@@ -338,7 +374,7 @@ type UnitEffectType = UnitValue<typeof effect>;
 const scope = fork();
 type UnitScopeType = UnitValue<typeof scope>;
 // any
-```
+````
 
 ### StoreValue (#type-utilities-store-value)
 
