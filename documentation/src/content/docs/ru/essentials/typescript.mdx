@@ -312,7 +312,7 @@ const { userMessage, warnMessage } = split(message, {
   </TabItem>
 </Tabs>
 
-### `createApi`
+### `createApi` (#typing-create-api)
 
 Чтобы позволить TypeScript выводить типы создаваемых событий, можно добавить тип ко второму аргументу обработчиков
 
@@ -328,11 +328,11 @@ const { add, sub } = createApi($count, {
 // sub имеет тип Event<number>
 ```
 
-### `is`
+### `is` (#typing-is)
 
 Методы группы [is](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит:
 
-````typescript
+```ts
 export function getUnitType(unit: unknown) {
   if (is.event(unit)) {
     // здесь юнит имеет тип Event<any>
@@ -347,6 +347,41 @@ export function getUnitType(unit: unknown) {
     return "store";
   }
 }
+```
+
+### `merge` (#typing-merge)
+
+При объединении событий можно получить союз их типов:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge([firstEvent, secondEvent]);
+// Event<string | number>
+
+// Можно также объединять события с одинаковыми типами
+const buttonClicked = createEvent<MouseEvent>();
+const linkClicked = createEvent<MouseEvent>();
+
+const anyClick = merge([buttonClicked, linkClicked]);
+// Event<MouseEvent>
+```
+
+`merge` принимает дженерик параметр, где можно указать какого типа событий он ожидает:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge<number>([firstEvent, secondEvent]);
+//                                ^
+// Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+```
 
 ## Утилиты для типов (#type-utilities)
 
@@ -374,7 +409,7 @@ type UnitEffectType = UnitValue<typeof effect>;
 const scope = fork();
 type UnitScopeType = UnitValue<typeof scope>;
 // any
-````
+```
 
 ### StoreValue (#type-utilities-store-value)
 

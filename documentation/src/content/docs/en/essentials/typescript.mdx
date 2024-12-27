@@ -347,6 +347,40 @@ export function getUnitType(unit: unknown) {
 }
 ```
 
+### `merge` (#typing-merge)
+
+When we wanna merge events we can get their union types:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge([firstEvent, secondEvent]);
+// Event<string | number>
+
+// You can also combine events with the same types
+const buttonClicked = createEvent<MouseEvent>();
+const linkClicked = createEvent<MouseEvent>();
+
+const anyClick = merge([buttonClicked, linkClicked]);
+// Event<MouseEvent>
+```
+
+`merge` accepts generic, where you can use what type do you expect from events:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge<number>([firstEvent, secondEvent]);
+//                                ^
+// Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+```
+
 ### Type Utilities (#type-utilities)
 
 Effector provides a set of utility types for working with unit types:
