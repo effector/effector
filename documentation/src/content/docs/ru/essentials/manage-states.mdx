@@ -226,7 +226,7 @@ const createUserFx = createEffect<string, User>((id) => {
   };
 });
 
-const $newUser = restore(userCreatedFx, {
+const $newUser = restore(createUserFx, {
   id: 0,
   name: "",
   age: -1,
@@ -275,12 +275,61 @@ $filters.reset(filtersReset);
 
 В этом примере мы подписываемся стором `$filters` на несколько событий, а также двумя сторами `$filters` и `$lastUsedFilter` на одно и то же событие `categoryChanged`.
 
+### Упрощение обновлений с `createApi` (#simplified-updates-with-createapi)
+
+Когда вам нужно создать множество обработчиков для одного стора, вместо создания отдельных событий и подписки на них, вы можете использовать [`createApi`](/ru/api/effector/createApi). Эта функция создает набор событий для обновления стора в одном месте.<br/>
+Следующие примеры кода эквиваленты:
+
+<Tabs>
+  <TabItem label="С createApi">
+
+```ts
+import { createStore, createApi } from "effector";
+
+const $counter = createStore(0);
+
+const { increment, decrement, reset } = createApi($counter, {
+  increment: (state) => state + 1,
+  decrement: (state) => state - 1,
+  reset: () => 0,
+});
+
+// Использование
+increment(); // 1
+reset(); // 0
+```
+
+  </TabItem>
+  <TabItem label="Обычное использование">
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const $counter = createStore(0);
+
+const incrementClicked = createEvent();
+const decrementClicked = createEvent();
+const resetClicked = createEvent();
+
+$counter
+  .on(incrementClicked, (state) => state + 1)
+  .on(decrementClicked, (state) => state - 1)
+  .reset(resetClicked);
+
+// Использование
+increment(); // 1
+reset(); // 0
+```
+
+  </TabItem>
+</Tabs>
+
 ## Производные сторы (#derived-stores)
 
 Часто нужно создать стор, значение которого зависит от других состояний. Для этого используется метод [`map`](/ru/api/effector/Store#map):
 
 ```ts
-import { createStore } from "effector";
+import { createStore, combine } from "effector";
 
 const $currentUser = createStore({
   id: 1,
@@ -302,9 +351,11 @@ const $friendsList = combine($users, $currentUser, (users, currentUser) =>
 ```
 
 Мы также использовали здесь метод [`combine`](/ru/api/effector/combine), который позволяет нам объединить значение нескольких сторов в одно.<br/>
-Также можно комбинировать сторы в объект
+Также можно комбинировать сторы в объект:
 
 ```ts
+import { combine } from "effector";
+
 const $form = combine({
   name: $name,
   age: $age,
@@ -312,23 +363,17 @@ const $form = combine({
 });
 
 // или с дополнительной трансформацией
-const $formValidation = combine(
-  {
-    name: $name,
-    age: $age,
+const $formValidation = combine($name, $age, (name, age) => ({
+  isValid: name.length > 0 && age >= 18,
+  errors: {
+    name: name.length === 0 ? "Required" : null,
+    age: age < 18 ? "Must be 18+" : null,
   },
-  ({ name, age }) => ({
-    isValid: name.length > 0 && age >= 18,
-    errors: {
-      name: name.length === 0 ? "Required" : null,
-      age: age < 18 ? "Must be 18+" : null,
-    },
-  }),
-);
+}));
 ```
 
-:::info{title="Важно про производные состояния"}
-Производные сторы обновляются автоматически при изменении исходных сторов. Не нужно вручную синхронизировать их значения.
+:::warning{title="Важно про производные состояния"}
+Производные сторы обновляются автоматически при изменении исходных сторов. **Не нужно** вручную синхронизировать их значения.
 :::
 
 ## Сброс состояния (#resetting-store-state)
