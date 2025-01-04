@@ -67,6 +67,23 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
+    text: {
+      en: "Advanced",
+      ru: "Продвинутый уровень",
+      uz: "O'zgargan",
+    },
+    items: [
+      {
+        text: {
+          en: "Scope: Working with Isolated Contexts",
+          ru: "Scope: Работа с изолированными контекстами",
+          uz: "Scope: Isolatli kontekstlar bilan ishlash",
+        },
+        link: "/advanced/work-with-scope",
+      },
+    ],
+  },
+  {
     text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
     items: [
       {
