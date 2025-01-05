@@ -43,6 +43,8 @@
     "cssnano": "^7.0.5",
     "dotenv": "^16.4.5",
     "effector": "^23.2.2",
+    "embla-carousel": "^8.5.1",
+    "embla-carousel-autoplay": "^8.5.1",
     "html-escaper": "^3.0.3",
     "nanoid": "^5.0.7",
     "node-html-parser": "^6.1.13",
