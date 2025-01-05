@@ -36,6 +36,10 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/introduction/examples",
       },
       {
+        text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
+        link: "/introduction/core-concepts",
+      },
+      {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
       },
@@ -58,13 +62,28 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Events",
+          ru: "События",
+          uz: "O'zgaruvchilar",
+        },
+        link: "/essentials/events",
+      },
+      {
+        text: {
           en: "Work with async",
           ru: "Работа с асинхронностью",
           uz: "Asinkronlik bilan ishlash",
         },
         link: "/essentials/work-with-async",
       },
-
+      {
+        text: {
+          en: "Unit composition",
+          ru: "Композиция юнитов",
+          uz: "Unit kompozitsiyasi",
+        },
+        link: "/essentials/unit-composition",
+      },
       {
         text: {
           en: "Testing",
@@ -72,7 +91,7 @@ const defaultSidebar: LSidebarGroup[] = [
           uz: "Testlash",
         },
         link: "/essentials/testing",
-      },
+      }
     ],
   },
   {
