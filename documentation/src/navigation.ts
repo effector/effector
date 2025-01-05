@@ -36,6 +36,10 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/introduction/examples",
       },
       {
+        text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
+        link: "/introduction/core-concepts",
+      },
+      {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
       },
@@ -66,11 +70,35 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Events",
+          ru: "События",
+          uz: "O'zgaruvchilar",
+        },
+        link: "/essentials/events",
+      },
+      {
+        text: {
           en: "Work with async",
           ru: "Работа с асинхронностью",
           uz: "Asinkronlik bilan ishlash",
         },
         link: "/essentials/work-with-async",
+      },
+      {
+        text: {
+          en: "Unit composition",
+          ru: "Композиция юнитов",
+          uz: "Unit kompozitsiyasi",
+        },
+        link: "/essentials/unit-composition",
+      },
+      {
+        text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
+        },
+        link: "/essentials/testing",
       },
     ],
   },
@@ -111,10 +139,10 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
-      {
-        text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
-        link: "/guides/testing",
-      },
+      // {
+      //   text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
+      //   link: "/guides/testing",
+      // },
       {
         text: { en: "Server Side Rendering" },
         link: "/guides/server-side-rendering",
