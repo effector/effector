@@ -184,6 +184,55 @@ $user.on(userUpdated, (user, changedUser) => ({
 userUpdated({ name: "Alice" });
 ```
 
+### Complex Update Logic (#update-stores-with-sample)
+
+Using the `on` method, we can update store state for simple cases when an event occurs, either by passing data from the event or updating based on the previous value.
+
+However, this doesn't always cover all needs. For more complex state update logic, we can use the [`sample`](/en/api/effector/sample) method, which helps us when:
+
+- We need to control store updates using an event
+- We need to update a store based on values from other stores
+- We need data transformation before updating the store with access to current values of other stores
+
+For example:
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+const updateItems = createEvent();
+
+const $items = createStore([1, 2, 3]);
+const $filteredItems = createStore([]);
+const $filter = createStore("even");
+
+// sample automatically provides access to current values
+// of all connected stores at the moment the event triggers
+sample({
+  clock: updateItems,
+  source: { items: $items, filter: $filter },
+  fn: ({ items, filter }) => {
+    if (filter === "even") {
+      return items.filter((n) => n % 2 === 0);
+    }
+
+    return items.filter((n) => n % 2 === 1);
+  },
+  target: $filteredItems,
+});
+```
+
+:::info{title="What is sample?"}
+To learn more about what `sample` is, how to use this method, and its detailed description, you can read about it [here](/en/essentials/unit-composition#sample).
+:::
+
+Advantages of using `sample` for state updates:
+
+1. Access to current values of all stores
+2. Atomic updates of multiple stores
+3. Convenient data transformation through the `fn` function
+4. Ability to filter updates using `filter`
+5. Control over update timing through `clock`
+
 ### Store Creation via `restore` method (#create-store-via-restore)
 
 If your store work involves replacing the old state with a new one when an event is called, you can use the [`restore`](/en/api/effector/restore) method:
