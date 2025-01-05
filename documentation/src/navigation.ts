@@ -76,6 +76,14 @@ const defaultSidebar: LSidebarGroup[] = [
         },
         link: "/essentials/work-with-async",
       },
+      {
+        text: {
+          en: "Unit composition",
+          ru: "Композиция юнитов",
+          uz: "Unit kompozitsiyasi",
+        },
+        link: "/essentials/unit-composition",
+      },
     ],
   },
   {
