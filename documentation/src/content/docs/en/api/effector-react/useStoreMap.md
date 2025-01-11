@@ -17,9 +17,9 @@ React hook, which subscribes to a [store](/en/api/effector/Store) and transforms
 
 You can read the motivation in the [issue](https://github.com/effector/effector/issues/118).
 
-:::warning{title="Important behavior with `undefined` values"}
+:::warning{title="Important behavior with undefined values"}
 When the selector function returns `undefined`, the hook will skip the state update.
-This can be problematic for example when working with optional properties. To handle such cases, use defaultValue option or transform `undefined` values in selector.
+This can be problematic for example when working with optional properties. To handle such cases, use `defaultValue` option or transform `undefined` values in selector.
 :::
 
 # Methods (#methods)
