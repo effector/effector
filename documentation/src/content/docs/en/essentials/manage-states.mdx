@@ -439,4 +439,46 @@ const $form = createStore({ email: "", password: "" })
   .reset([formSubmitted, formReset]);
 ```
 
+## `undefined` and `null` values (#void-values)
+
+By default, effector skips updates with `undefined` or `null` values. This is done to prevent accidental errors. If you need to use `undefined` as a valid value, you need to explicitly specify `skipVoid: false` when creating a store :
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const setVoidValue = createEvent<number>();
+
+// ❌ undefined and null will be skipped
+const $store = createStore(13).on(setVoidValue, (_, voidValue) => voidValue);
+
+// ✅ undefined and null are allowed as values
+const $store = createStore(13, {
+  skipVoid: false,
+}).on(setVoidValue, (_, voidValue) => voidValue);
+
+setVoidValue(null);
+```
+
+However, if your store's initial value is `null` or `undefined`, you can use the `reset` property of [stores](/en/api/effector/Store#methods-reset-triggers) to return to default value.
+
+```ts
+import { createStore, createEvent, createEffect } from "effector";
+
+const resetCurrentUser = createEvent();
+
+const getCurrentUserFx = createEffect(() => {
+  // ...
+});
+
+const $currentUser = createStore(null)
+  .on(getCurrentUserFx.doneData, (_, newUser) => newUser)
+  .reset(resetCurrentUser);
+
+resetCurrentUser();
+```
+
+:::warning{title="Don't use undefined as default value"}
+Using `undefined` as a value is not recommended and can lead to hard-to-detect bugs. It's better to use `null` for missing values.
+:::
+
 [Full API reference for store](/en/api/effector/Store)
