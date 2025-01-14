@@ -6,6 +6,7 @@ description: How to split data streams into multiple directions using split.
 import { Image } from "astro:assets";
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import ThemeImage from "@components/ThemeImage.astro";
 
 # Splitting Data Streams with `split` (#data-flow-splitting)
 
@@ -87,9 +88,10 @@ The shortest usage involves passing a [unit](/en/introduction/core-concepts#unit
 
 Let's look at an example with GitHub's "Star" and "Watch" buttons:
 
-<Image
-  alt="Starred button for repository"
-  src="/images/split/github-repo-buttons.png"
+<ThemeImage
+  alt='Button "Star" for repo i github'
+  lightImage="/images/split/github-repo-buttons.png"
+  darkImage="/images/split/github-repo-buttons-dark.png"
   height={20}
   width={650}
 />

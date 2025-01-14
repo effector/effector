@@ -1,0 +1,52 @@
+---
+import { Image } from "astro:assets";
+
+export interface Props {
+  lightImage: string;
+  darkImage: string;
+  width: number;
+  height: number;
+  alt?: string;
+}
+
+const { darkImage, lightImage, height, width, alt = null } = Astro.props;
+
+if (!darkImage || !lightImage) {
+  throw new Error("at least one of lightImage or darkImage are required");
+}
+---
+
+<theme-image>
+  <Image
+    src={lightImage}
+    alt={alt || "light image"}
+    width={width}
+    height={height}
+    class="light-image"
+  />
+  <Image
+    src={darkImage}
+    alt={alt || "dark image"}
+    width={width}
+    height={height}
+    class="dark-image"
+  />
+</theme-image>
+
+<style>
+  :global(.theme-dark) .light-image {
+    display: none;
+  }
+
+  :global(.theme-dark) .dark-image {
+    display: block;
+  }
+
+  .dark-image {
+    display: none;
+  }
+
+  .light-image {
+    display: block;
+  }
+</style>

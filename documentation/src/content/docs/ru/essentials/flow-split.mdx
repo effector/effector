@@ -6,6 +6,7 @@ description: Как разделять потоки данных на неско
 import { Image } from "astro:assets";
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import ThemeImage from "@components/ThemeImage.astro";
 
 # Разделение потоков данных с помощью split (#data-flow-splitting)
 
@@ -87,9 +88,10 @@ updateUserStatus("default case");
 
 Рассмотрим пример с кнопкой Star и Watch как у гитхаба, :
 
-<Image
+<ThemeImage
   alt='Кнопка "Добавить звезду" для репозитория на гитхабе'
-  src="/images/split/github-repo-buttons.png"
+  lightImage="/images/split/github-repo-buttons.png"
+  darkImage="/images/split/github-repo-buttons-dark.png"
   height={20}
   width={650}
 />
