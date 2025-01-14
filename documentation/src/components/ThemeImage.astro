@@ -12,7 +12,7 @@ export interface Props {
 const { darkImage, lightImage, height, width, alt = null } = Astro.props;
 
 if (!darkImage || !lightImage) {
-  throw new Error("at least one of lightImage or darkImage are required");
+  throw new Error("darkImage and lightImage are required");
 }
 ---
 
