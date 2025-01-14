@@ -86,12 +86,20 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Flow splitting",
+          ru: "Разделение потока данных",
+          uz: "Flow to'plamasi",
+        },
+        link: "/essentials/flow-split",
+      },
+      {
+        text: {
           en: "Testing",
           ru: "Тестирование",
           uz: "Testlash",
         },
         link: "/essentials/testing",
-      }
+      },
     ],
   },
   {
