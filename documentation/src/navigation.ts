@@ -62,6 +62,14 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Manage states",
+          ru: "Управление состоянием",
+          uz: "Holatni o'zgartirish",
+        },
+        link: "/essentials/manage-states",
+      },
+      {
+        text: {
           en: "Events",
           ru: "События",
           uz: "O'zgaruvchilar",
