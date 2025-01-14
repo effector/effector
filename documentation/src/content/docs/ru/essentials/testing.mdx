@@ -62,6 +62,38 @@ $counter.on(counterIncremented, (counter) => counter + 1);
 
 Для изолированного тестирования логики состояния используется fork. Это позволяет тестировать хранилища и события **без влияния** на глобальное состояние.
 
+### Тестирование событий (#events-testing)
+
+Для того, чтобы протестировать было ли вызвано событие и сколько раз, можно воспользоваться методом `createWatch`, который создаст подписку на переданный юнит:
+
+```ts
+import { createEvent, createWatch, fork } from "effector";
+import { userUpdated } from "../";
+
+test("should handle user update with scope", async () => {
+  const scope = fork();
+  const fn = jest.fn();
+
+  // Создаем watcher в конкретном scope
+  const unwatch = createWatch({
+    unit: userUpdated,
+    fn,
+    scope,
+  });
+
+  // Запускаем событие в scope
+  await allSettled(userUpdated, {
+    scope,
+  });
+
+  expect(fn).toHaveBeenCalledTimes(1);
+});
+```
+
+:::info{title="Почему не watch?"}
+Мы не использовали `watch` свойство событий, потому что при параллельных тестах мы можем вызывать одно и то же событие, что может вызвать конфликты.
+:::
+
 ### Тестирование эффектов (#effects-testing)
 
 Эффекты можно тестировать, проверяя их успешное выполнение или обработку ошибок.
