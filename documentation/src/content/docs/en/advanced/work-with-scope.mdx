@@ -22,131 +22,6 @@ You can create an application scope using the [fork](/en/api/effector/fork) meth
 Fork API is one of the most powerful features of Effector.
 :::
 
-## What is Scope and why do we need it (#about-scope)
-
-By default, all stores and events in Effector are static and global - they create one shared state for the entire application. But sometimes we need to isolate state.
-Let's say we have a component that we want to display multiple times on a page, in our case it will be a basic counter:
-
-```ts
-// counter-store.js
-import { createStore, createApi } from "effector";
-
-const $counter = createStore(0);
-
-// equivalent to creating an event using createEvent
-// and subscribe the store to event via the on property
-const { increment } = createApi($counter, {
-  increment: (count) => count + 1,
-});
-```
-
-Let's create a `Counter` component for demonstration:
-
-```tsx
-// Counter.js
-import { useUnit } from "effector-react";
-import { $counter, increment } from "./counter-store";
-
-const Counter = () => {
-  const count = useUnit($counter);
-  const handleIncrement = useUnit(increment);
-
-  return (
-    <div>
-      <p>Count: {count}</p>
-      <button onClick={handleIncrement}>+1</button>
-    </div>
-  );
-};
-```
-
-Currently, when we use `$counter` directly without `Scope`, if we click the button and increase the value, the state will change for both components because all components work with the same global state directly:
-
-```tsx
-// App.tsx
-import { Provider, useUnit } from "effector-react";
-import { $counter, increment } from "./counter-store";
-import { Counter } from "./Counter";
-
-const App = () => {
-  return (
-    <div>
-      <div>
-        <h3>First Counter</h3>
-        <Counter />
-      </div>
-      <div>
-        <h3>Second Counter</h3>
-        <Counter />
-      </div>
-    </div>
-  );
-};
-```
-
-However, this is not the behavior we expect.<br/>
-We want to get isolated state, as in the case with `useState`, where each component has its own data, not shared. This is where the isolated context `scope` will help us:
-
-<Tabs>
-  <TabItem label="✅ With Scope">
-
-```tsx
-import { useUnit, Provider } from "effector-react";
-import { $counter, increment } from "./counter-store";
-import { Counter } from "./Counter";
-
-const App = () => {
-  // Create two independent scopes
-  const scope1 = fork();
-  const scope2 = fork();
-
-  return (
-    <div>
-      <Provider value={scope1}>
-        <h3>First Counter</h3>
-        <Counter />
-      </Provider>
-
-      <Provider value={scope2}>
-        <h3>Second Counter</h3>
-        <Counter />
-      </Provider>
-    </div>
-  );
-};
-```
-
-  </TabItem>
-  <TabItem label="❌ Without Scope">
-
-```tsx
-import { useUnit } from "effector-react";
-import { $counter, increment } from "./counter";
-import { Counter } from "./Counter";
-
-const App = () => {
-  return (
-    <div>
-      <div>
-        <h3>First Counter</h3>
-        <Counter />
-      </div>
-      <div>
-        <h3>Second Counter</h3>
-        <Counter />
-      </div>
-    </div>
-  );
-};
-```
-
-  </TabItem>
-</Tabs>
-
-:::info{title="State Isolation"}
-`Scope` creates a separate copy of the state for each component instance. The original store remains unchanged!
-:::
-
 And voila, now the `Counter` component works with its isolated state - this is exactly what we wanted. Let's look at other important applications of `Scope`.
 
 :::tip{title="Automatic Scope Propagation"}
@@ -240,6 +115,10 @@ This is especially useful in cases of:
 - Server Side Rendering (SSR) - to hydrate the client with necessary data from the server
 - Testing components with different initial data
 - Saving and restoring application state
+
+:::info{title="State Isolation"}
+`Scope` creates a separate copy of the state. The original store remains unchanged!
+:::
 
 ## SSR Usage (#ssr-usage)
 
@@ -560,63 +439,8 @@ sample({
 });
 ```
 
-Meanwhile, our components look like this:
-
-<Tabs>
-<TabItem label="app.tsx">
-
-```tsx
-export function App() {
-  return (
-    <div className="App">
-      <Provider value={fork()}>
-        Timer A
-        <Timer />
-      </Provider>
-      <Provider value={fork()}>
-        Timer B
-        <Timer />
-      </Provider>
-    </div>
-  );
-}
-```
-
-</TabItem>
-<TabItem label="timer.tsx">
-
-```tsx
-export function Timer() {
-  const timerCount = useUnit($timerCount);
-  const isRunning = useUnit($timerId);
-
-  const onTimerReset = useUnit(timerReset);
-  const onTimerStart = useUnit(timerStarted);
-  const onTimerStop = useUnit(timerStopped);
-
-  return (
-    <div>
-      {isRunning ? (
-        <button onClick={() => onTimerStop()}>Stop</button>
-      ) : (
-        <button onClick={() => onTimerStart()}>Start</button>
-      )}
-      <button onClick={onTimerReset}>Reset</button>
-      timer: {timerCount}
-    </div>
-  );
-}
-```
-
-</TabItem>
-</Tabs>
-
-For other frameworks with integrations, it works identically.
-
-Вы можете поиграть с этим примером [здесь](https://stackblitz.com/edit/effector-vite-react-template-ugavudbj?file=src%2Ftimer.tsx)
-
-:::tip{title="Scope и фреймворки"}
-Если вы используете effector в связке с фреймворками (React, Vue и тд.), то вы можете просто использовать хук `useUnit` для юнитов (store, event и effect), он сам свяжет их с текущим скоупом.
+:::tip{title="Scope and frameworks"}
+If you are using effector with integrations like 📘 React, 📗 Vue etc. you can use hook `useUnit` for units (store, event and effect). This hook automatically binds the unit to the current scope.
 :::
 
 ### Why Does Scope Loss Occur? (#why-scope-loss)

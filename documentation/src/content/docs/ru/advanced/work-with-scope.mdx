@@ -22,137 +22,6 @@ Scope создает отдельную "вселенную" для юнитов
 Fork API - это одна из самых мощных особенностей effector.
 :::
 
-## Что такое скоуп и зачем он нужен (#about-scope)
-
-По умолчанию все сторы и события в effector статичные и глобальные - они создают одно общее состояние для всего приложения. Но иногда нам нужно изолировать состояние.
-Допустим, что у нас есть какой-то компонент, который мы хотим отобразить несколько раз на странице, в нашем случае это будет базовый счетчик:
-
-```ts
-// counter-store.js
-import { createStore, createApi } from "effector";
-
-const $counter = createStore(0);
-
-// эквивалентно созданию события через createEvent
-// и связи со стором через свойство on
-const { increment } = createApi($counter, {
-  increment: (count) => count + 1,
-});
-```
-
-Создадим компонент `Counter` для демонстрации:
-
-```tsx
-// Counter.js
-import { useUnit } from "effector-react";
-import { $counter, increment } from "./counter-store";
-
-const Counter = () => {
-  const count = useUnit($counter);
-  const handleIncrement = useUnit(increment);
-
-  return (
-    <div>
-      <p>Count: {count}</p>
-      <button onClick={handleIncrement}>+1</button>
-    </div>
-  );
-};
-```
-
-Сейчас, когда мы используем `$counter` напрямую без `Scope`, мы нажмем на кнопку и увеличим значение, то состояние изменится для обоих компонентов, это связано с тем, что все компоненты работают с одним и тем же глобальным состоянием напрямую:
-
-```tsx
-// App.tsx
-import { Provider, useUnit } from "effector-react";
-import { $counter, increment } from "./counter-store";
-import { Counter } from "./Counter";
-
-const App = () => {
-  return (
-    <div>
-      <div>
-        <h3>First Counter</h3>
-        <Counter />
-      </div>
-      <div>
-        <h3>Second Counter</h3>
-        <Counter />
-      </div>
-    </div>
-  );
-};
-```
-
-Однако это не то поведение, которое мы ожидаем.<br/>
-Мы хотим получить изолированное состояние, как в случае с `useState`, когда у каждого компонента свои данные, а не общие. Вот здесь нам и поможет изолированный контекст `scope`:
-
-<Tabs>
-  <TabItem label="✅ Через Scope">
-
-```tsx
-import { useUnit, Provider } from "effector-react";
-import { $counter, increment } from "./counter-store";
-import { Counter } from "./Counter";
-
-const App = () => {
-  // Создаем два независимых scope
-  const scope1 = fork();
-  const scope2 = fork();
-
-  return (
-    <div>
-      <Provider value={scope1}>
-        <h3>First Counter</h3>
-        <Counter />
-      </Provider>
-
-      <Provider value={scope2}>
-        <h3>Second Counter</h3>
-        <Counter />
-      </Provider>
-    </div>
-  );
-};
-```
-
-  </TabItem>
-  <TabItem label="❌ Без Scope">
-
-```tsx
-import { useUnit } from "effector-react";
-import { $counter, increment } from "./counter";
-import { Counter } from "./Counter";
-
-const App = () => {
-  return (
-    <div>
-      <div>
-        <h3>First Counter</h3>
-        <Counter />
-      </div>
-      <div>
-        <h3>Second Counter</h3>
-        <Counter />
-      </div>
-    </div>
-  );
-};
-```
-
-  </TabItem>
-</Tabs>
-
-:::info{title="Изоляция состояния"}
-`Scope` создает отдельную копию состояния для каждого экземпляра компонента. При этом исходный стор остается неизменным!
-:::
-
-И вуаля, теперь компонент `Counter` работает со своим изолированным состоянием - это как раз то, чего мы и хотели. Давайте рассмотрим другие важные применения `Scope`.
-
-:::tip{title="Автоматическое распространение Scope"}
-Вам не нужно вручную следить за тем, чтобы каждая операция выполнялась в правильном `scope`. Effector делает это автоматически, достаточно вызвать цепочку событие с определенным скопом, при помощи возвращаемого значения `useUnit` в компоненте или `allSettled`.
-:::
-
 ## Правила работы со скоупом (#scope-rules)
 
 При работе со Scope важно понимать правила вызова эффектов и событий, чтобы избежать потери контекста. Рассмотрим основные паттерны использования:
@@ -343,6 +212,10 @@ Scope является мощным инструментом для тестир
 - Устанавливать начальное состояние для каждого теста
 - Проверять изменения состояния после действий
 - Имитировать разные сценарии пользователя
+
+:::info{title="Изоляция состояния"}
+`Scope` создает отдельную копию состояния. При этом исходный стор остается неизменным!
+:::
 
 Пример тестирования процесса авторизации:
 
@@ -560,61 +433,6 @@ sample({
 });
 ```
 
-При этом наши компоненты выглядит следующим образом:
-
-<Tabs>
-<TabItem label="app.tsx">
-
-```tsx
-export function App() {
-  return (
-    <div className="App">
-      <Provider value={fork()}>
-        Timer A
-        <Timer />
-      </Provider>
-      <Provider value={fork()}>
-        Timer B
-        <Timer />
-      </Provider>
-    </div>
-  );
-}
-```
-
-</TabItem>
-<TabItem label="timer.tsx">
-
-```tsx
-export function Timer() {
-  const timerCount = useUnit($timerCount);
-  const isRunning = useUnit($timerId);
-
-  const onTimerReset = useUnit(timerReset);
-  const onTimerStart = useUnit(timerStarted);
-  const onTimerStop = useUnit(timerStopped);
-
-  return (
-    <div>
-      {isRunning ? (
-        <button onClick={() => onTimerStop()}>Stop</button>
-      ) : (
-        <button onClick={() => onTimerStart()}>Start</button>
-      )}
-      <button onClick={onTimerReset}>Reset</button>
-      timer: {timerCount}
-    </div>
-  );
-}
-```
-
-</TabItem>
-</Tabs>
-
-Для других фреймворков с интеграциями работает идентично.
-
-Вы можете поиграть с этим примером [здесь](https://stackblitz.com/edit/effector-vite-react-template-ugavudbj?file=src%2Ftimer.tsx)
-
 :::tip{title="Scope и фреймворки"}
 Если вы используете effector в связке с фреймворками (React, Vue и тд.), то вы можете просто использовать хук `useUnit` для юнитов (store, event и effect), он сам свяжет их с текущим скоупом.
 :::
@@ -624,24 +442,33 @@ export function Timer() {
 Потеря scope - это не уникальная проблема effector, а фундаментальное ограничение работы с асинхронностью в JavaScript. При синхронном выполнении кода все значения стабильно доступны на протяжении всего времени исполнения. Однако при асинхронном выполнении, когда код проходит через event loop, происходит потеря неявной информации из места вызова из-за замены call stack.
 
 ```ts
-const scope = fork();
+let value;
 
-const nameChanged = createEvent();
+function process() {
+  try {
+    value = "effector";
+    asyncProcess();
+  } finally {
+    value = undefined;
+    console.log("value is undefined");
+  }
+}
 
-const $name = createStore("old name").on(nameChanged, (_, newName) => newName);
+async function asyncProcess() {
+  console.log("here is ok", value); // effector
 
-const someFx = createEffect(async () => {
-  nameChanged("new name");
-  // В момент вызова scope существует
-  console.log($store.getState()); // new name значение из scope
+  await 1;
 
-  await somePromise;
+  // here we already lost context
+  console.log("but here is not ok ", value); // undefined
+}
 
-  // После await scope потерян
-  console.log($store.getState()); // odl name значение из глобального состояния!
-});
+process();
 
-await allSettled(someFx, { scope });
+// Output:
+// here is ok effector
+// value is undefined
+// but here is not ok undefined
 ```
 
 :::warning{title="Последствия потери scope"}
