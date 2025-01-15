@@ -65,6 +65,38 @@ $counter.on(counterIncremented, (counter) => counter + 1);
 
 For isolated state logic testing, fork is used. This allows testing stores and events without affecting global state.
 
+### Events Testing (#events-testing)
+
+To test whether an event was triggered and how many times, you can use the `createWatch` method, which will create a subscription to the passed unit:
+
+```ts
+import { createEvent, createWatch, fork } from "effector";
+import { userUpdated } from "../";
+
+test("should handle user update with scope", async () => {
+  const scope = fork();
+  const fn = jest.fn();
+
+  // Create a watcher in the specific scope
+  const unwatch = createWatch({
+    unit: userUpdated,
+    fn,
+    scope,
+  });
+
+  // Trigger the event in scope
+  await allSettled(userUpdated, {
+    scope,
+  });
+
+  expect(fn).toHaveBeenCalledTimes(1);
+});
+```
+
+:::info{title="Why not watch?"}
+We didn't use the `watch` property of events because during parallel tests we might trigger the same event, which could cause conflicts.
+:::
+
 ### Effect Testing (#effects-testing)
 
 Effects can be tested by verifying their successful execution or error handling. In unit testing, we often want to prevent effects from making real API calls. This can be achieved by passing a configuration object with a handlers property to fork, where you define mock handlers for specific effects.
