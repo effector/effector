@@ -439,19 +439,36 @@ const $form = createStore({ email: "", password: "" })
   .reset([formSubmitted, formReset]);
 ```
 
-## `undefined` and `null` values (#void-values)
+## `undefined` Values (#void-values)
 
-By default, effector skips updates with `undefined` or `null` values. This is done to prevent accidental errors. If you need to use `undefined` as a valid value, you need to explicitly specify `skipVoid: false` when creating a store :
+By default, effector skips updates with undefined value. This is done so that you don't have to return anything from reducers if store update is not required:
+
+```ts
+const $store = createStore(0).on(event, (_, newValue) => {
+  if (newValue % 2 === 0) {
+    return;
+  }
+
+  return newValue;
+});
+```
+
+:::warning{title="Attention!"}
+This behavior will be disabled in the future!
+Practice has shown that it would be better to simply return the previous store value.
+:::
+
+If you need to use `undefined` as a valid value, you need to explicitly specify it using `skipVoid: false` when creating the store:
 
 ```ts
 import { createStore, createEvent } from "effector";
 
 const setVoidValue = createEvent<number>();
 
-// ❌ undefined and null will be skipped
+// ❌ undefined will be skipped
 const $store = createStore(13).on(setVoidValue, (_, voidValue) => voidValue);
 
-// ✅ undefined and null are allowed as values
+// ✅ undefined allowed as values
 const $store = createStore(13, {
   skipVoid: false,
 }).on(setVoidValue, (_, voidValue) => voidValue);
@@ -459,26 +476,8 @@ const $store = createStore(13, {
 setVoidValue(null);
 ```
 
-However, if your store's initial value is `null` or `undefined`, you can use the `reset` property of [stores](/en/api/effector/Store#methods-reset-triggers) to return to default value.
-
-```ts
-import { createStore, createEvent, createEffect } from "effector";
-
-const resetCurrentUser = createEvent();
-
-const getCurrentUserFx = createEffect(() => {
-  // ...
-});
-
-const $currentUser = createStore(null)
-  .on(getCurrentUserFx.doneData, (_, newUser) => newUser)
-  .reset(resetCurrentUser);
-
-resetCurrentUser();
-```
-
-:::warning{title="Don't use undefined as default value"}
-Using `undefined` as a value is not recommended and can lead to hard-to-detect bugs. It's better to use `null` for missing values.
+:::tip{title="null instead of undefined"}
+You can use `null` instead of `undefined` for missing values.
 :::
 
 [Full API reference for store](/en/api/effector/Store)

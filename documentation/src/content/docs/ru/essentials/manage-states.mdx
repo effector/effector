@@ -440,19 +440,36 @@ const $form = createStore({ email: "", password: "" })
   .reset([formReset, formSubmitted]);
 ```
 
-## Значения `undefined` и `null` (#void-values)
+## Значения `undefined` (#void-values)
 
-По умолчанию effector пропускает обновления со значением `undefined` или `null`. Это сделано для предотвращения случайных ошибок. Если вам нужно использовать `undefined` как валидное значение, необходимо явно указать с помощью `skipVoid: false` при создании стора:
+По умолчанию effector пропускает обновления со значением `undefined`. Это сделано для того, чтобы можно было ничего не возвращать из редьюсеров, если обновление стора не требуется:
+
+```ts
+const $store = createStore(0).on(event, (_, newValue) => {
+  if (newValue % 2 === 0) {
+    return;
+  }
+
+  return newValue;
+});
+```
+
+:::warning{title="Внимание!"}
+Это поведение будет отключено в будущем!
+Как показала практика, будет лучше просто возвращать предыдущее значение стора.
+:::
+
+Если вам нужно использовать `undefined` как валидное значение, необходимо явно указать с помощью `skipVoid: false` при создании стора:
 
 ```ts
 import { createStore, createEvent } from "effector";
 
 const setVoidValue = createEvent<number>();
 
-// ❌ undefined и null будут пропущены
+// ❌ undefined будут пропущены
 const $store = createStore(13).on(setVoidValue, (_, voidValue) => voidValue);
 
-// ✅ undefined и null разрешены как значения
+// ✅ undefined разрешены как значения
 const $store = createStore(13, {
   skipVoid: false,
 }).on(setVoidValue, (_, voidValue) => voidValue);
@@ -460,26 +477,8 @@ const $store = createStore(13, {
 setVoidValue(null);
 ```
 
-Однако, если у вас начальное значение стора `null` или `undefined`, то вы можете использовать свойство `reset` у [сторов](/ru/api/effector/Store#methods-reset-triggers), чтобы сбросить состояние до начального.
-
-```ts
-import { createStore, createEvent, createEffect } from "effector";
-
-const resetCurrentUser = createEvent();
-
-const getCurrentUserFx = createEffect(() => {
-  // ...
-});
-
-const $currentUser = createStore(null)
-  .on(getCurrentUserFx.doneData, (_, newUser) => newUser)
-  .reset(resetCurrentUser);
-
-resetCurrentUser();
-```
-
-:::warning{title="null вместо undefined"}
-Использование `undefined` как значения не рекомендуется и может привести к трудноотлавливаемым ошибкам. Лучше использовать `null` для отсутствующих значений.
+:::tip{title="null вместо undefined"}
+Вы можете использовать `null` вместо `undefined` для отсутствующих значений.
 :::
 
 [Познакомиться с полным API для сторов тут](/ru/api/effector/Store)
