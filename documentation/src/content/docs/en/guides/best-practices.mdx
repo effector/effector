@@ -1,0 +1,459 @@
+---
+title: Best Practices and Recommendations in Effector
+description: Best practices and recommendations for effective work with Effector, including common patterns, typing, optimization, and popular ecosystem libraries
+redirectFrom:
+  - /en/conventions/naming
+---
+
+# Best Practices in Effector (#best-practices)
+
+This section contains recommendations for effective work with Effector, based on community experience and the development team.
+
+## Keep Stores Small (#keep-stores-small)
+
+title: Best Practices and Recommendations in Effector
+description: Best practices and recommendations for effective work with Effector, including common patterns, typing, optimization, and popular ecosystem libraries
+redirectFrom:
+
+/en/conventions/naming
+
+Unlike Redux, in Effector it's recommended to make stores as atomic as possible. Let's explore why this is important and what advantages it provides.
+
+Large stores with multiple fields create several problems:
+
+- Unnecessary re-renders: When any field changes, all components subscribed to the store update
+- Heavy computations: Each update requires copying the entire object
+- Unnecessary calculations: if you have derived stores depending on a large store, they will be recalculated
+
+Atomic stores allow:
+
+- Updating only what actually changed
+- Subscribing only to needed data
+- More efficient work with reactive dependencies
+
+```ts
+// ❌ Big store - any change triggers update of everything
+const $bigStore = createStore({
+profile: {/* many fields */},
+settings: {/* many fields */},
+posts: [ /* many posts */ ]
+})
+
+// ✅ Atomic stores - precise updates
+const $userName = createStore('')
+const $userEmail = createStore('')
+const $posts = createStore<Post[]>([])
+const $settings = createStore<Settings>({})
+
+// Component subscribes only to needed data
+const UserName = () => {
+const name = useUnit($userName) // Updates only when name changes
+return <h1>{name}</h1>
+}
+```
+
+Rules for atomic stores:
+
+- One store = one responsibility
+- Store should be indivisible
+- Stores can be combined using combine
+- Store update should not affect other data
+
+## Immer for Complex Objects (#immer)
+
+If your store contains nested structures, you can use the beloved Immer for simplified updates:
+
+```ts
+import { createStore } from "effector";
+import { produce } from "immer";
+
+const $users = createStore<User[]>([]);
+
+$users.on(userUpdated, (users, updatedUser) =>
+  produce(users, (draft) => {
+    const user = draft.find((u) => u.id === updatedUser.id);
+    if (user) {
+      user.profile.settings.theme = updatedUser.profile.settings.theme;
+    }
+  }),
+);
+```
+
+## Use `scope` (#use-scope)
+
+The effector team recommends always using [`Scope`](/en/advanced/work-with-scope), even if your application doesn't use SSR.
+This is necessary so that in the future you can easily migrate to working with `Scope`.
+
+## `useUnit` Hook (#use-unit)
+
+Using the useUnit hook is the recommended way to work with units when using frameworks (📘React, 📗Vue, and 📘Solid).
+Why you should use `useUnit`:
+
+- Correct work with stores
+- Optimized updates
+- Automatic work with `Scope` – units know which scope they were called in
+
+## Pure Functions (#pure-functions)
+
+Use pure functions everywhere except effects for data processing, this ensures:
+
+- Deterministic result
+- No side effects
+- Easier to test
+- Easier to maintain
+
+:::tip{title="This is work for effects"}
+If your code can throw an error or can end in success/failure - that's an excellent place for effects.
+:::
+
+## Debugging (#debug)
+
+We strongly recommend using the patronum library and the debug method.
+
+```ts
+import { createStore, createEvent, createEffect } from "effector";
+import { debug } from "patronum/debug";
+
+const event = createEvent();
+const effect = createEffect().use((payload) => Promise.resolve("result" + payload));
+const $store = createStore(0)
+  .on(event, (state, value) => state + value)
+  .on(effect.done, (state) => state * 10);
+
+debug($store, event, effect);
+
+event(5);
+effect("demo");
+
+// => [store] $store 1
+// => [event] event 5
+// => [store] $store 6
+// => [effect] effect demo
+// => [effect] effect.done {"params":"demo", "result": "resultdemo"}
+// => [store] $store 60
+```
+
+However, nothing prevents you from using `.watch` or [`createWatch`](/en/api/effector/createWatch) for debugging.
+
+## Factories (#factories)
+
+We recommend using the [@withease/factories](https://withease.effector.dev/factories/) library for factories.
+This is necessary for proper effector work with SSR because your stores need to have a unique sid.
+You can read more about it [here](/en/explanation/sids/#unique-sids).
+
+## Working with Network (#work-with-network)
+
+For convenient effector work with network requests, you can use farfetched.
+Farfetched provides:
+
+- Mutations and queries
+- Ready API for caching and more
+- Framework independence
+
+## Effector Utils (#effector-utils)
+
+The Effector ecosystem includes the [patronum](https://patronum.effector.dev/operators/) library, which provides ready solutions for working with units:
+
+- State management (`condition`, `status`, etc.)
+- Working with time (`debounce`, `interval`, etc.)
+- Predicate functions (`not`, `or`, `once`, etc.)
+
+## Simplifying Complex Logic with `createAction` (#create-action)
+
+[`effector-action`](https://github.com/AlexeyDuybo/effector-action) is a library that allows you to write imperative code for complex conditional logic while maintaining effector's declarative nature.
+
+Moreover, `effector-action` helps make your code more readable:
+
+<Tabs>
+  <TabItem label="❌ Complex sample">
+
+```ts
+import { sample } from "effector";
+
+sample({
+  clock: formSubmitted,
+  source: {
+    form: $form,
+    settings: $settings,
+    user: $user,
+  },
+  filter: ({ form }) => form.isValid,
+  fn: ({ form, settings, user }) => ({
+    data: form,
+    theme: settings.theme,
+  }),
+  target: submitFormFx,
+});
+
+sample({
+  clock: formSubmitted,
+  source: $form,
+  filter: (form) => !form.isValid,
+  target: showErrorMessageFx,
+});
+
+sample({
+  clock: submitFormFx.done,
+  source: $settings,
+  filter: (settings) => settings.sendNotifications,
+  target: sendNotificationFx,
+});
+```
+
+  </TabItem>
+
+<TabItem label="✅ With createAction">
+
+```ts
+import { createAction } from "effector-action";
+
+const submitForm = createAction({
+  source: {
+    form: $form,
+    settings: $settings,
+    user: $user,
+  },
+  target: {
+    submitFormFx,
+    showErrorMessageFx,
+    sendNotificationFx,
+  },
+  fn: (target, { form, settings, user }) => {
+    if (!form.isValid) {
+      target.showErrorMessageFx(form.errors);
+      return;
+    }
+
+    target.submitFormFx({
+      data: form,
+      theme: settings.theme,
+    });
+  },
+});
+
+createAction(submitFormFx.done, {
+  source: $settings,
+  target: sendNotificationFx,
+  fn: (sendNotification, settings) => {
+    if (settings.sendNotifications) {
+      sendNotification();
+    }
+  },
+});
+
+submitForm();
+```
+
+  </TabItem>
+</Tabs>
+
+## Naming (#naming)
+
+Use accepted naming conventions:
+
+- For [stores](/en/api/effector/Store) – prefix `$`
+- For [effects](/en/api/effector/Effect) – postfix `fx`, this will help you distinguish your effects from events
+- For [events](/en/api/effector/Event) – no rules, however, we suggest naming events that directly trigger store updates as if they've already happened.
+
+```ts
+const updateUserNameFx = createEffect(() => {});
+
+const userNameUpdated = createEvent();
+
+const $userName = createStore("JS");
+
+$userName.on(userNameUpdated, (_, newName) => newName);
+
+userNameUpdated("TS");
+```
+
+:::info{title="Naming Convention"}
+The choice between prefix or postfix is mainly a matter of personal preference. This is necessary to improve the search experience in your IDE.
+:::
+
+## Anti-patterns (#anti-patterns)
+
+### Using watch for Logic (#watch-for-logic)
+
+watch should only be used for debugging. For logic, use sample, guard, or effects.
+
+<Tabs>
+  <TabItem label="❌ Incorrect">
+
+```ts
+// logic in watch
+$user.watch((user) => {
+  localStorage.setItem("user", JSON.stringify(user));
+  api.trackUserUpdate(user);
+  someEvent(user.id);
+});
+```
+
+  </TabItem>
+  <TabItem label="✅ Correct">
+
+```ts
+// separate effects for side effects
+const saveToStorageFx = createEffect((user: User) =>
+  localStorage.setItem("user", JSON.stringify(user)),
+);
+
+const trackUpdateFx = createEffect((user: User) => api.trackUserUpdate(user));
+
+// connect through sample
+sample({
+  clock: $user,
+  target: [saveToStorageFx, trackUpdateFx],
+});
+
+// for events also use sample
+sample({
+  clock: $user,
+  fn: (user) => user.id,
+  target: someEvent,
+});
+```
+
+</TabItem>
+</Tabs>
+
+### Complex Nested samples (#complex-samples)
+
+Avoid complex and nested chains of sample.
+
+### Abstract Names in Callbacks (#naming-in-callbacks)
+
+Use meaningful names instead of abstract `value`, `data`, `item`.
+
+<Tabs>
+  <TabItem label="❌ Incorrect">
+
+```ts
+$users.on(userAdded, (state, payload) => [...state, payload]);
+
+sample({
+  clock: buttonClicked,
+  source: $data,
+  fn: (data) => data,
+  target: someFx,
+});
+```
+
+  </TabItem>
+  <TabItem label="✅ Correct">
+
+```ts
+$users.on(userAdded, (users, newUser) => [...users, newUser]);
+
+sample({
+  clock: buttonClicked,
+  source: $userData,
+  fn: (userData) => userData,
+  target: updateUserFx,
+});
+```
+
+  </TabItem>
+</Tabs>
+
+### Imperative Calls in Effects (#imperative-calls)
+
+Don't call events or effects imperatively inside other effects, instead use declarative style.
+
+<Tabs>
+  <TabItem label="❌ Incorrect">
+
+```ts
+const loginFx = createEffect(async (params) => {
+  const user = await api.login(params);
+
+  // imperative calls
+  setUser(user);
+  redirectFx("/dashboard");
+  showNotification("Welcome!");
+
+  return user;
+});
+```
+
+  </TabItem>
+  <TabItem label="✅ Correct">
+
+```ts
+const loginFx = createEffect((params) => api.login(params));
+// Connect through sample
+sample({
+  clock: loginFx.doneData,
+  target: [
+    $user, // update store
+    redirectToDashboardFx,
+    showWelcomeNotificationFx,
+  ],
+});
+```
+
+ </TabItem>
+</Tabs>
+
+### Using getState (#get-state)
+
+Don't use `$store.getState` to get values. If you need to get data from some store, pass it there, for example in `source` in `sample`:
+
+<Tabs>
+  <TabItem label="❌ Incorrect">
+
+```ts
+const submitFormFx = createEffect((formData) => {
+  // get values through getState
+  const user = $user.getState();
+  const settings = $settings.getState();
+
+  return api.submit({
+    ...formData,
+    userId: user.id,
+    theme: settings.theme,
+  });
+});
+```
+
+</TabItem>
+  <TabItem label="✅ Correct">
+
+```ts
+// get values through parameters
+const submitFormFx = createEffect(({ form, userId, theme }) => {});
+
+// get all necessary data through sample
+sample({
+  clock: formSubmitted,
+  source: {
+    form: $form,
+    user: $user,
+    settings: $settings,
+  },
+  fn: ({ form, user, settings }) => ({
+    form,
+    userId: user.id,
+    theme: settings.theme,
+  }),
+  target: submitFormFx,
+});
+```
+
+  </TabItem>
+</Tabs>
+
+### Business Logic in UI (#business-logic-in-ui)
+
+Don't put your logic in UI elements, this is the [main philosophy](/en/introduction/motivation) of effector and what effector tries to free you from, namely the dependency of logic on UI.
+
+Brief summary of anti-patterns:
+
+1. Don't use `watch` for logic, only for debugging
+2. Avoid direct mutations in stores
+3. Don't create complex nested `sample`, they're hard to read
+4. Don't use large stores, use an atomic approach
+5. Use meaningful parameter names, not abstract ones
+6. Don't call events inside effects imperatively
+7. Don't use `$store.getState` for work
+8. Don't put logic in UI
