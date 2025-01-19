@@ -186,9 +186,11 @@ However, nothing prevents you from using `.watch` or [`createWatch`](/en/api/eff
 
 ## Factories (#factories)
 
-We recommend using the [@withease/factories](https://withease.effector.dev/factories/) library for factories.
-This is necessary for proper effector work with SSR because your stores need to have a unique sid.
-You can read more about it [here](/en/explanation/sids/#unique-sids).
+Factory creation is a common pattern when working with effector, it makes it easier to use similar code. However, you may encounter a problem with [identical sids](/en/explanation/sids/#unique-sids) that can interfere with SSR.
+
+To avoid this problem, we recommend using the [@withease/factories](https://withease.effector.dev/factories/) library.
+
+If your environment does not allow adding additional dependencies, you can create your own factory following [these guidelines](/en/explanation/sids/#custom-factories).
 
 ## Working with Network (#work-with-network)
 
