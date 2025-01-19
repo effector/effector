@@ -77,6 +77,57 @@ $users.on(userUpdated, (users, updatedUser) =>
 );
 ```
 
+## Явный старт приложения (#explicit-app-start)
+
+Мы рекомендуем использовать явный старт приложения через специальные события, чтобы запустить инициализацию.
+
+Почему это важно:
+
+1. Контроль жизненного цикла приложения
+2. Возможность корректного тестирования
+3. Предсказуемое поведение приложения
+4. Возможность явного запуска инициализации
+
+```ts
+export const appStarted = createEvent();
+```
+
+а также подписаться и запустить событие:
+
+<Tabs>
+  <TabItem label="Без скоупов">
+
+```ts
+import { sample } from "effector";
+import { scope } from "./app.js";
+
+sample({
+  clock: appStarted,
+  target: initFx,
+});
+
+appStarted();
+```
+
+  </TabItem>
+  <TabItem label="Со скоупами">
+
+```ts
+import { sample, allSettled } from "effector";
+import { scope } from "./app.js";
+
+sample({
+  clock: appStarted,
+  target: initFx,
+});
+
+allSettled(appStarted, { scope });
+```
+
+  </TabItem>
+
+</Tabs>
+
 ## Используйте `scope` (#use-scope)
 
 Команда effector рекомендует всегда использовать `Scope`, даже если ваше приложение не использует SSR.

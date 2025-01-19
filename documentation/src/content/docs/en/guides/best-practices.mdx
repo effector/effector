@@ -77,6 +77,57 @@ $users.on(userUpdated, (users, updatedUser) =>
 );
 ```
 
+## Explicit Application Start (#explicit-app-start)
+
+We recommend using explicit application start through special events to initialize your application.
+
+Why it matters:
+
+1. Full control over application lifecycle
+2. Simplified testing
+3. Predictable application behavior
+4. Ability to control initialization order
+
+```ts
+export const appStarted = createEvent();
+```
+
+call event and subscribe on it:
+
+<Tabs>
+  <TabItem label="Without Scopes">
+
+```ts
+import { sample } from "effector";
+import { scope } from "./app.js";
+
+sample({
+  clock: appStarted,
+  target: initFx,
+});
+
+appStarted();
+```
+
+  </TabItem>
+  <TabItem label="With Scopes">
+
+```ts
+import { sample, allSettled } from "effector";
+import { scope } from "./app.js";
+
+sample({
+  clock: appStarted,
+  target: initFx,
+});
+
+allSettled(appStarted, { scope });
+```
+
+  </TabItem>
+
+</Tabs>
+
 ## Use `scope` (#use-scope)
 
 The effector team recommends always using [`Scope`](/en/advanced/work-with-scope), even if your application doesn't use SSR.
