@@ -421,9 +421,9 @@ export const $timerCount = createStore(0)
   .on(tick, (seconds) => seconds + 1)
   .reset(timerReset);
 
-export const $timerId = createStore<null | number>(null, { skipVoid: false })
+export const $timerId = createStore<null | number>(null)
   .on(startFx.doneData, (_, timerId) => timerId)
-  .on(stopFx.finally, () => null);
+  .reset(stopFx.finally);
 
 sample({
   clock: timerStarted,
@@ -445,35 +445,35 @@ If you are using effector with integrations like 📘 React, 📗 Vue etc. you c
 
 ### Why Does Scope Loss Occur? (#why-scope-loss)
 
-Scope loss is not a unique problem to Effector, but a fundamental limitation of working with asynchronicity in JavaScript. During synchronous code execution, all values are stably accessible throughout the entire execution time. However, during asynchronous execution, when code passes through the event loop, implicit information from the call site is lost due to call stack replacement.
+Let's imagine how scope work under the hood:
 
 ```ts
-let value;
+let scope;
 
 function process() {
   try {
-    value = "effector";
+    scope = "effector";
     asyncProcess();
   } finally {
-    value = undefined;
-    console.log("value is undefined");
+    scope = undefined;
+    console.log("scope is undefined");
   }
 }
 
 async function asyncProcess() {
-  console.log("here is ok", value); // effector
+  console.log("here is ok", scope); // effector
 
   await 1;
 
   // here we already lost context
-  console.log("but here is not ok ", value); // undefined
+  console.log("but here is not ok ", scope); // undefined
 }
 
 process();
 
 // Output:
 // here is ok effector
-// value is undefined
+// scope is undefined
 // but here is not ok undefined
 ```
 

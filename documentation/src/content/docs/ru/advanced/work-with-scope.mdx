@@ -415,9 +415,9 @@ export const $timerCount = createStore(0)
   .on(tick, (seconds) => seconds + 1)
   .reset(timerReset);
 
-export const $timerId = createStore<null | number>(null, { skipVoid: false })
+export const $timerId = createStore<null | number>(null)
   .on(startFx.doneData, (_, timerId) => timerId)
-  .on(stopFx.finally, () => null);
+  .reset(stopFx.finally);
 
 sample({
   clock: timerStarted,
@@ -439,36 +439,36 @@ sample({
 
 ### Почему происходит потеря scope? (#why-scope-loss)
 
-Потеря scope - это не уникальная проблема effector, а фундаментальное ограничение работы с асинхронностью в JavaScript. При синхронном выполнении кода все значения стабильно доступны на протяжении всего времени исполнения. Однако при асинхронном выполнении, когда код проходит через event loop, происходит потеря неявной информации из места вызова из-за замены call stack.
+Давайте представим, то как работает скоуп в effector:
 
 ```ts
-let value;
+let scope;
 
 function process() {
   try {
-    value = "effector";
+    scope = "effector";
     asyncProcess();
   } finally {
-    value = undefined;
-    console.log("value is undefined");
+    scope = undefined;
+    console.log("наш скоуп undefined");
   }
 }
 
 async function asyncProcess() {
-  console.log("here is ok", value); // effector
+  console.log("у нас есть скоуп", scope); // effector
 
   await 1;
 
-  // here we already lost context
-  console.log("but here is not ok ", value); // undefined
+  // тут мы уже потеряли контекст
+  console.log("а здесь скоупа уже нет ", scope); // undefined
 }
 
 process();
 
-// Output:
-// here is ok effector
-// value is undefined
-// but here is not ok undefined
+// Вывод:
+// у нас есть скоуп effector
+// наш скоуп undefined
+// а здесь скоупа уже нет undefined
 ```
 
 :::warning{title="Последствия потери scope"}
