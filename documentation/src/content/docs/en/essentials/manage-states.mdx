@@ -129,6 +129,12 @@ console.log($counter.getState()); // 0
 
 ## Store Updates (#store-updates)
 
+In effector, state updates are done via events. You can change the state by subscribing to an event via `.on` or by using the `sample` method.
+
+:::info{title="Optimizing updates"}
+Store state is updated when it receives a value that is not equal (!==) to the current value, and also not equal to `undefined`.
+:::
+
 ### Updating via Events (#update-store-via-events)
 
 The simplest and correct way to update a store is to bind it to an event:
