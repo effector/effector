@@ -105,10 +105,6 @@ const defaultSidebar: LSidebarGroup[] = [
   {
     text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
-      // {
-      //   text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
-      //   link: "/guides/testing",
-      // },
       {
         text: {
           en: "Best practices",
@@ -140,15 +136,6 @@ const defaultSidebar: LSidebarGroup[] = [
       },
     ],
   },
-  // {
-  //   text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
-  //   items: [
-  //     {
-  //       text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
-  //       link: "/conventions/naming",
-  //     },
-  //   ],
-  // },
   {
     text: {
       en: "TypeScript Guide",
