@@ -115,11 +115,36 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
+    text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
       {
-        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
-        link: "/conventions/naming",
+        text: {
+          en: "Best practices",
+          ru: "Лучшие практики",
+          uz: "To'g'ri usullar",
+        },
+        link: "/guides/best-practices",
+      },
+      {
+        text: {
+          en: "Server Side Rendering",
+          ru: "Работа с SSR",
+        },
+        link: "/guides/server-side-rendering",
+      },
+      {
+        text: {
+          en: "Migration guide",
+          ru: "Миграция с v23",
+        },
+        link: "/guides/migration-guide-v23",
+      },
+      {
+        text: {
+          en: "Migrating from Redux",
+          ru: "Миграция с Redux",
+        },
+        link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
     ],
   },
@@ -131,7 +156,11 @@ const defaultSidebar: LSidebarGroup[] = [
     },
     items: [
       {
-        text: { en: "Typing effector", ru: "Типизация effector", uz: "Effector tipizatsiyasi" },
+        text: {
+          en: "Typing effector",
+          ru: "Типизация effector",
+          uz: "Effector tipizatsiyasi",
+        },
         link: "/typescript/typing-effector",
       },
       {
@@ -145,27 +174,6 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
         link: "/typescript/utility-types",
-      },
-    ],
-  },
-  {
-    text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
-    items: [
-      // {
-      //   text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
-      //   link: "/guides/testing",
-      // },
-      {
-        text: { en: "Server Side Rendering" },
-        link: "/guides/server-side-rendering",
-      },
-      {
-        text: { en: "Migration guide" },
-        link: "/guides/migration-guide-v23",
-      },
-      {
-        text: { en: "Migrating from Redux" },
-        link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
     ],
   },
