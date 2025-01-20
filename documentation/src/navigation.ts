@@ -20,7 +20,7 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/introduction/motivation",
       },
       {
-        text: { en: "Get started", ru: "Начало работы", uz: "Motivatsiya" },
+        text: { en: "Get started", ru: "Начало работы", uz: "Ishni boshlash" },
         link: "/introduction/get-started",
       },
       {
