@@ -446,4 +446,45 @@ const $form = createStore({ email: "", password: "" })
   .reset([formReset, formSubmitted]);
 ```
 
+## Значения `undefined` (#void-values)
+
+По умолчанию effector пропускает обновления со значением `undefined`. Это сделано для того, чтобы можно было ничего не возвращать из редьюсеров, если обновление стора не требуется:
+
+```ts
+const $store = createStore(0).on(event, (_, newValue) => {
+  if (newValue % 2 === 0) {
+    return;
+  }
+
+  return newValue;
+});
+```
+
+:::warning{title="Внимание!"}
+Это поведение будет отключено в будущем!
+Как показала практика, будет лучше просто возвращать предыдущее значение стора.
+:::
+
+Если вам нужно использовать `undefined` как валидное значение, необходимо явно указать с помощью `skipVoid: false` при создании стора:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const setVoidValue = createEvent<number>();
+
+// ❌ undefined будут пропущены
+const $store = createStore(13).on(setVoidValue, (_, voidValue) => voidValue);
+
+// ✅ undefined разрешены как значения
+const $store = createStore(13, {
+  skipVoid: false,
+}).on(setVoidValue, (_, voidValue) => voidValue);
+
+setVoidValue(null);
+```
+
+:::tip{title="null вместо undefined"}
+Вы можете использовать `null` вместо `undefined` для отсутствующих значений.
+:::
+
 [Познакомиться с полным API для сторов тут](/ru/api/effector/Store)
