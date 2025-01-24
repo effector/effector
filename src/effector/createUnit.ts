@@ -40,7 +40,7 @@ import {
   setMeta,
   getMeta,
 } from './getter'
-import {assert, deprecate} from './throw'
+import {assert, deprecate, printErrorWithStack} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
@@ -241,6 +241,7 @@ export function createStore<State>(
   const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
   const errorTitle = generateErrorTitle('store', config)
+  const storeTrace = Error().stack
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
@@ -373,7 +374,10 @@ export function createStore<State>(
         const isVoidUpdate = isVoid(upd)
 
         if (isVoidUpdate && !explicitSkipVoid) {
-          console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
+          printErrorWithStack(
+            `${errorTitle}: ${requireExplicitSkipVoidMessage}`,
+            storeTrace,
+          )
         }
 
         return (
