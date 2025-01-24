@@ -241,7 +241,11 @@ export function createStore<State>(
   const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
   const errorTitle = generateErrorTitle('store', config)
-  const storeTrace = Error().stack
+  const traceError = Error()
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(traceError, createStore)
+  }
+  const storeTrace = traceError.stack
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
@@ -392,6 +396,7 @@ export function createStore<State>(
     meta: {
       ...meta,
       defaultState,
+      storeTrace,
     },
     regional: true,
   })
