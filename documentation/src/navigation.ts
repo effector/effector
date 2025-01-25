@@ -127,6 +127,14 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Troubleshooting",
+          ru: "Исправление ошибок",
+          uz: "Xatolarni o'zgartirish",
+        },
+        link: "/guides/troubleshooting",
+      },
+      {
+        text: {
           en: "Server Side Rendering",
           ru: "Работа с SSR",
         },
