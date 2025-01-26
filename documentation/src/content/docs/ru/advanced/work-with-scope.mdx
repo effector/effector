@@ -71,22 +71,6 @@ const authFx = createEffect(async () => {
 ## Работа с начальным состоянием (#initial-state)
 
 При создании scope часто требуется задать начальные значения для сторов. Это особенно важно при SSR или тестировании, когда нужно подготовить определенное состояние приложения, сделать это можно при помощи передачи свойства `values` в первые аргумент метода `fork`.
-Effector предоставляет несколько способов инициализации состояния в scope:
-
-<Tabs>
-  <TabItem label="При помощи Map">
-
-```ts
-const scope = fork({
-  values: new Map([
-    [$store, "value"],
-    [$user, { id: 1, name: "Alice" }],
-  ]),
-});
-```
-
-  </TabItem>
-  <TabItem label="Массив пар">
 
 ```ts
 const scope = fork({
@@ -96,9 +80,6 @@ const scope = fork({
   ],
 });
 ```
-
-  </TabItem>
-</Tabs>
 
 :::info{title="Что принимает values"}
 Свойство `values` принимает в себя массив пар со значением `[$store, value]`.
@@ -265,10 +246,10 @@ describe("auth flow", () => {
 ```ts
 // Можно также передавать моки для эффектов:
 const scope = fork({
-  handlers: new Map([
+  handlers: [
     [effectA, async () => "true"],
     [effectB, async () => ({ id: 1, data: "mock" })],
-  ]),
+  ],
 });
 ```
 

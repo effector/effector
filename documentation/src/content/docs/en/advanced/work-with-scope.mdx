@@ -77,22 +77,6 @@ It's better to call effects declaratively using the `sample` method!
 ## Working with Initial State (#initial-state)
 
 When creating a scope, it's often necessary to set initial values for stores. This is especially important for SSR or testing, when you need to prepare a specific application state. You can do this by passing the `values` property in the first argument of the `fork` method.
-Effector provides several ways to initialize state in scope:
-
-<Tabs>
-  <TabItem label="Using Map">
-
-```ts
-const scope = fork({
-  values: new Map([
-    [$store, "value"],
-    [$user, { id: 1, name: "Alice" }],
-  ]),
-});
-```
-
-  </TabItem>
-  <TabItem label="Array of tuples">
 
 ```ts
 const scope = fork({
@@ -102,9 +86,6 @@ const scope = fork({
   ],
 });
 ```
-
-  </TabItem>
-</Tabs>
 
 :::info{title="What values accepts"}
 The `values` property accepts an array of pairs with the value `[$store, value]`.
@@ -271,10 +252,10 @@ A similar pattern for initial values can be used for effects to implement mock d
 ```ts
 // You can also pass mocks for effects:
 const scope = fork({
-  handlers: new Map([
+  handlers: [
     [effectA, async () => "true"],
     [effectB, async () => ({ id: 1, data: "mock" })],
-  ]),
+  ],
 });
 ```
 
