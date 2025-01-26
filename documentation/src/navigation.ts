@@ -13,11 +13,15 @@ import IconTelegram from "@icons/Telegram.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
-    text: { en: "Introduction", ru: "Начало работы", uz: "Kirish" },
+    text: { en: "Introduction", ru: "Введение", uz: "Kirish" },
     items: [
       {
         text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
         link: "/introduction/motivation",
+      },
+      {
+        text: { en: "Get started", ru: "Начало работы", uz: "Ishni boshlash" },
+        link: "/introduction/get-started",
       },
       {
         text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
@@ -34,6 +38,10 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
         link: "/introduction/examples",
+      },
+      {
+        text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
+        link: "/introduction/core-concepts",
       },
       {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
@@ -58,6 +66,22 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Manage states",
+          ru: "Управление состоянием",
+          uz: "Holatni o'zgartirish",
+        },
+        link: "/essentials/manage-states",
+      },
+      {
+        text: {
+          en: "Events",
+          ru: "События",
+          uz: "O'zgaruvchilar",
+        },
+        link: "/essentials/events",
+      },
+      {
+        text: {
           en: "Work with async",
           ru: "Работа с асинхронностью",
           uz: "Asinkronlik bilan ishlash",
@@ -66,20 +90,61 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Computation priority",
-          ru: "Приоритет вычислений",
-          uz: "Hisoblashning prioriteti",
+          en: "Unit composition",
+          ru: "Композиция юнитов",
+          uz: "Unit kompozitsiyasi",
         },
-        link: "/essentials/computation-priority",
+        link: "/essentials/unit-composition",
+      },
+      {
+        text: {
+          en: "Flow splitting",
+          ru: "Разделение потока данных",
+          uz: "Flow to'plamasi",
+        },
+        link: "/essentials/flow-split",
+      },
+      {
+        text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
+        },
+        link: "/essentials/testing",
       },
     ],
   },
   {
-    text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
+    text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
       {
-        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
-        link: "/conventions/naming",
+        text: {
+          en: "Best practices",
+          ru: "Лучшие практики",
+          uz: "To'g'ri usullar",
+        },
+        link: "/guides/best-practices",
+      },
+      {
+        text: {
+          en: "Server Side Rendering",
+          ru: "Работа с SSR",
+        },
+        link: "/guides/server-side-rendering",
+      },
+      {
+        text: {
+          en: "Migration guide",
+          ru: "Миграция с v23",
+        },
+        link: "/guides/migration-guide-v23",
+      },
+      {
+        text: {
+          en: "Migrating from Redux",
+          ru: "Миграция с Redux",
+        },
+        link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
     ],
   },
@@ -91,7 +156,11 @@ const defaultSidebar: LSidebarGroup[] = [
     },
     items: [
       {
-        text: { en: "Typing effector", ru: "Типизация effector", uz: "Effector tipizatsiyasi" },
+        text: {
+          en: "Typing effector",
+          ru: "Типизация effector",
+          uz: "Effector tipizatsiyasi",
+        },
         link: "/typescript/typing-effector",
       },
       {
@@ -105,27 +174,6 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
         link: "/typescript/utility-types",
-      },
-    ],
-  },
-  {
-    text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
-    items: [
-      {
-        text: { en: "Writing tests", ru: "Написание тестов", uz: "Testlar yozish" },
-        link: "/guides/testing",
-      },
-      {
-        text: { en: "Server Side Rendering" },
-        link: "/guides/server-side-rendering",
-      },
-      {
-        text: { en: "Migration guide" },
-        link: "/guides/migration-guide-v23",
-      },
-      {
-        text: { en: "Migrating from Redux" },
-        link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
     ],
   },

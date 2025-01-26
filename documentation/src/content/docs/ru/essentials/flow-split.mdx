@@ -1,0 +1,378 @@
+---
+title: Разделение потоков данных с помощью split
+description: Как разделять потоки данных на несколько направлений с помощью split
+---
+
+import { Image } from "astro:assets";
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+import ThemeImage from "@components/ThemeImage.astro";
+
+# Разделение потоков данных с помощью split (#data-flow-splitting)
+
+Метод `split` был создан с целью разделения логики на несколько потоков данных.
+Например, вам может потребоваться направить данные по разным путям в зависимости от их содержимого. Это похоже на железнодорожную стрелку, которая направляет поезда по разным путям:
+
+- если форма заполнена неправильно – показать ошибку
+- если все корректно – отправить запрос
+
+:::info{title="Порядок проверки условий"}
+Условия в `split` проверяются последовательно сверху вниз. Когда находится первое подходящее условие, остальные не проверяются. Учитывайте это при составлении условий.
+:::
+
+## Базовое использование `split` (#basic-usage)
+
+Давайте посмотрим на простой пример – разбор сообщений разных типов:
+
+```ts
+import { createEvent, split } from "effector";
+
+const updateUserStatus = createEvent();
+
+const { activeUserUpdated, idleUserUpdated, inactiveUserUpdated } = split(updateUserStatus, {
+  activeUserUpdated: (userStatus) => userStatus === "active",
+  idleUserUpdated: (userStatus) => userStatus === "idle",
+  inactiveUserUpdated: (userStatus) => userStatus === "inactive",
+});
+```
+
+Логика этого кусочка кода максимально простая. При вызове события `updateUserStatus` мы попадаем в `split`, где проходимся по каждому условию сверху вниз до первого совпадения, а затем `effector` вызывает нужное нам событие.
+
+Учтите, что каждое условие описывается предикатом – функцией, которая возвращает `true` или `false`.
+
+Возможно вы подумали, зачем мне это, если я могу вызывать нужное событие при определенном условии в UI интерфейсе с использованием `if/else`. Однако это то, от чего effector старается избавить вашу UI часть, а именно **бизнес-логика**.
+
+:::tip{title="Совет"}
+Вы можете относится к `split` как к реактивному `switch` для юнитов.
+:::
+
+## Случай по умолчанию (#default-case)
+
+При использовании метода `split` может произойти ситуация, когда ни один случай не подошел, для того, чтобы обработать такую ситуацию существует специальный случай по умолчанию `__`.
+
+Рассмотрим тот же пример, что и выше, но с использованием случая по умолчанию:
+
+```ts
+import { createEvent, split } from "effector";
+
+const updateUserStatus = createEvent();
+
+const { activeUserUpdated, idleUserUpdated, inactiveUserUpdated, __ } = split(updateUserStatus, {
+  activeUserUpdated: (userStatus) => userStatus === "active",
+  idleUserUpdated: (userStatus) => userStatus === "idle",
+  inactiveUserUpdated: (userStatus) => userStatus === "inactive",
+});
+
+__.watch((defaultStatus) => console.log("default case with status:", defaultStatus));
+activeUserUpdated.watch(() => console.log("active user"));
+
+updateUserStatus("whatever");
+updateUserStatus("active");
+updateUserStatus("default case");
+
+// Вывод в консоль:
+// default case with status: whatever
+// active user
+// default case with status: default case
+```
+
+:::info{title="По умолчанию отработает 'по умолчанию'"}
+Если ни одно условие не сработает, то в таком случае отработает случай по умолчанию `__`.
+:::
+
+## Короткая запись (#short-form)
+
+Метод `split` поддерживает разные методы использование, в зависимости от того, что вам нужно.
+
+Самый короткий способ использования метода `split` – это передать первым аргументом [юнит](/ru/introduction/core-concepts#units), который служит триггером, а вторым аргументом объект со случаями.
+
+Рассмотрим пример с кнопкой Star и Watch как у гитхаба, :
+
+<ThemeImage
+  alt='Кнопка "Добавить звезду" для репозитория на гитхабе'
+  lightImage="/images/split/github-repo-buttons.png"
+  darkImage="/images/split/github-repo-buttons-dark.png"
+  height={20}
+  width={650}
+/>
+
+```ts
+import { createStore, createEvent, split } from "effector";
+
+type Repo = {
+  // ... другие свойства
+  isStarred: boolean;
+  isWatched: boolean;
+};
+
+const toggleStar = createEvent<string>();
+const toggleWatch = createEvent<string>();
+
+const $repo = createStore<null | Repo>(null)
+  .on(toggleStar, (repo) => ({
+    ...repo,
+    isStarred: !repo.isStarred,
+  }))
+  .on(toggleWatch, (repo) => ({ ...repo, isWatched: !repo.isWatched }));
+
+const { starredRepo, unstarredRepo, __ } = split($repo, {
+  starredRepo: (repo) => repo.isStarred,
+  unstarredRepo: (repo) => !repo.isStarred,
+});
+
+// следим за случаем по умолчанию для дебага
+__.watch((repo) =>
+  console.log("[split toggleStar] Случай по умолчанию отработал со значением ", repo),
+);
+
+// где-то в приложении
+toggleStar();
+```
+
+В этом случае `split` вернет нам объект с **производными событиями**, на которые мы можем подписаться для запуска реактивной цепочки действий.
+
+:::tip{title="Совет"}
+Используйте этот вариант, когда у ваc:
+
+- нету зависимости от внешних данных, например от сторов
+- нужен простой и понятный код
+  :::
+
+## Расширенная запись (#expanded-form)
+
+Использовании метода `split` в этом варианте нам ничего не возвращает, однако у нас появляется несколько новых возможностей:
+
+1. Мы можем зависить от внешних данных, например от сторов, при помощи параметра `match`
+2. Вызов нескольких юнитов при срабатывании кейса передав массив
+3. Добавление источника данных через `source` и триггера срабатывания через `clock`
+
+Возьмем в пример случай, когда у нас имеется два режима приложения `user` и `admin`. При срабатывании события в режиме `user` и `admin` у нас происходят разные действия:
+
+```ts
+import { createStore, createEvent, split } from "effector";
+
+const adminActionFx = createEffect();
+const secondAdminActionFx = createEffect();
+const userActionFx = createEffect();
+const defaultActionFx = createEffect();
+// События для UI
+const buttonClicked = createEvent();
+
+// Текущий режим приложения
+const $appMode = createStore<"admin" | "user">("user");
+
+// Разные события для разных режимов
+split({
+  source: buttonClicked,
+  match: $appMode, // Логика зависит от текущего режима
+  cases: {
+    admin: [adminActionFx, secondAdminActionFx],
+    user: userActionFx,
+    __: defaultActionFx,
+  },
+});
+
+// При клике одна и та же кнопка делает разные вещи
+// в зависимости от режима приложения
+buttonClicked();
+// -> "Выполняем пользовательское действие" (когда $appMode = 'user')
+// -> "Выполняем админское действие" (когда $appMode = 'admin')
+```
+
+Более того, вы можете также добавить свойство `clock`, которое работает также как у [`sample`](/ru/essentials/unit-composition#sample), и будет триггером для срабатывания, а в `source` передать данные хранилища, которые передадутся в нужный case.
+Дополним предыдущий пример следующим кодом:
+
+```ts
+// дополним предыдущий код
+
+const adminActionFx = createEffect((currentUser) => {
+  // ...
+});
+const secondAdminActionFx = createEffect((currentUser) => {
+  // ...
+});
+
+// добавим новый стор
+const $currentUser = createStore({
+  id: 1,
+  name: "Donald",
+});
+
+const $appMode = createStore<"admin" | "user">("user");
+
+split({
+  clock: buttonClicked,
+  // и передадим его как источник данных
+  source: $currentUser,
+  match: $appMode,
+  cases: {
+    admin: [adminActionFx, secondAdminActionFx],
+    user: userActionFx,
+    __: defaultActionFx,
+  },
+});
+```
+
+:::warning{title="Случай по умолчанию"}
+Обратите внимание, если вам нужен случай по умолчанию, то вам нужно описать его в объекте `cases`, иначе он не обработается!
+:::
+
+В этом случае у нас не получится определить логику работы в момент создания `split`, как в предыдущем примере, он определяется в runtime в зависимости от `$appMode`.
+
+:::info{title="Особенности использования"}
+В этом варианте использование `match` принимает в себя юниты, функции и объект, но с определенными условиями:
+
+- **Хранилище**: если вы используете [хранилище](/ru/api/effector/Store), тогда этот **стор должен хранить в себе строковое значение**
+- **Функция:** если вы передаете функцию, то эта **фунция должна вернуть строковое значение, а также быть чистой**!
+- **Объект с хранилищами**: если вы передаете объект с хранилищами, тогда вам нужно, чтобы **каждое хранилище было с булевым значением**
+- **Объект с функциями**: если вы передаете объект с функциями, то **каждая функция должна возвращать булевое значение, и быть чистой**!
+  :::
+
+### `match` как хранилище (#match-as-store)
+
+Когда `match` принимает хранилище, значение из этого хранилища используется как ключ для выбора нужного case:
+
+```ts
+const $currentTab = createStore("home");
+
+split({
+  source: pageNavigated,
+  match: $currentTab,
+  cases: {
+    home: loadHomeDataFx,
+    profile: loadProfileDataFx,
+    settings: loadSettingsDataFx,
+  },
+});
+```
+
+### `match` как функция (#match-as-fn)
+
+При использовании функции в `match`, она должна возвращать строку, которая будет использоваться как ключ case:
+
+```ts
+const userActionRequested = createEvent<{ type: string; payload: any }>();
+
+split({
+  source: userActionRequested,
+  match: (action) => action.type, // Функция возвращает строку
+  cases: {
+    update: updateUserDataFx,
+    delete: deleteUserDataFx,
+    create: createUserDataFx,
+  },
+});
+```
+
+### `match` как объект с хранилищами (#match-as-object-with-stores)
+
+Когда `match` - это объект с хранилищами, каждое хранилище должно содержать булево значение. Сработает тот case, чье хранилище содержит `true`:
+
+```ts
+const $isAdmin = createStore(false);
+const $isModerator = createStore(false);
+
+split({
+  source: postCreated,
+  match: {
+    admin: $isAdmin,
+    moderator: $isModerator,
+  },
+  cases: {
+    admin: createAdminPostFx,
+    moderator: createModeratorPostFx,
+    __: createUserPostFx,
+  },
+});
+```
+
+### `match` как объект с функциями (#match-as-object-with-stores)
+
+При использовании объекта с функциями, каждая функция должна возвращать булево значение. Сработает первый case, чья функция вернула `true`:
+
+```ts
+split({
+  source: paymentReceived,
+  match: {
+    lowAmount: ({ amount }) => amount < 100,
+    mediumAmount: ({ amount }) => amount >= 100 && amount < 1000,
+    highAmount: ({ amount }) => amount >= 1000,
+  },
+  cases: {
+    lowAmount: processLowPaymentFx,
+    mediumAmount: processMediumPaymentFx,
+    highAmount: processHighPaymentFx,
+  },
+});
+```
+
+:::warning{title="Внимание"}
+Ваши условия в `match` должны быть взаимоисключающие, иначе данные могут пойти не по тому пути, который вы ожидаете. Всегда проверяйте, что условия не пересекаются.
+:::
+
+## Практические примеры (#practical-examples)
+
+### Работа с формами (#handling-forms-with-split)
+
+```ts
+const showFormErrorsFx = createEffect(() => {
+  // логика отображение ошибки
+});
+const submitFormFx = createEffect(() => {
+  // логика отображение ошибки
+});
+
+const submitForm = createEvent();
+
+const $form = createStore({
+  name: "",
+  email: "",
+  age: 0,
+}).on(submitForm, (_, submittedForm) => ({ ...submittedForm }));
+// Отдельный стор для ошибок
+const $formErrors = createStore({
+  name: "",
+  email: "",
+  age: "",
+}).reset(submitForm);
+
+// Проверяем все поля и собираем все ошибки
+sample({
+  clock: submitForm,
+  source: $form,
+  fn: (form) => ({
+    name: !form.name.trim() ? "Имя обязательно" : "",
+    email: !isValidEmail(form.email) ? "Неверный email" : "",
+    age: form.age < 18 ? "Возраст должен быть 18+" : "",
+  }),
+  target: $formErrors,
+});
+
+// И только после этого используем split для маршрутизации
+split({
+  source: $formErrors,
+  match: {
+    hasErrors: (errors) => Object.values(errors).some((error) => error !== ""),
+  },
+  cases: {
+    hasErrors: showFormErrorsFx,
+    __: submitFormFx,
+  },
+});
+```
+
+Давайте разберем этот пример:
+
+Для начала создаём два эффекта: один для показа ошибок, другой для отправки формы. Потом нам нужно где-то хранить данные формы и отдельно ошибки - для этого создаем два стора `$form` и `$formErrors`.
+Когда пользователь нажимает "Отправить", срабатывает событие `submitForm`. В этот момент происходят две вещи:
+
+1. Обновляются данные в сторе формы
+2. Запускается проверка всех полей на ошибки через sample
+
+В процессе проверки мы смотрим каждое поле и валидируем его.
+
+Все найденные ошибки сохраняются в сторе `$formErrors`.
+И вот тут в игру вступает `split`. Он смотрит на все ошибки и решает:
+
+- Если хотя бы в одном поле есть ошибка - ❌ показываем все ошибки пользователю
+- Если все поля заполнены правильно - ✅ отправляем форму
