@@ -1,27 +1,20 @@
 ---
 import Show from "src/components/Show.astro";
 import { getPathParamsFromId, getTextLocalized } from "src/languages";
-import { getLocalizedSidebar } from "src/navigation";
+import { getLocalizedSidebar, trimTrailingSlash } from "src/navigation";
 import { getPrevNext } from "src/navigation";
 import { PAGE_NAVIGATION } from "src/consts";
 import ArrowLeft from "src/icons/ArrowLeft.astro";
 import ArrowRight from "src/icons/ArrowRight.astro";
 
-type Props = {
-  currentPage: string;
-};
-
-const { currentPage } = Astro.props;
-
-const { slug, lang } = getPathParamsFromId(currentPage);
+const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 const baseSidebar = await getLocalizedSidebar(slug, lang);
-console.log(baseSidebar[0].items);
-console.log(currentPage);
 
-const { prevPage, nextPage } = getPrevNext(baseSidebar, currentPage);
+const pagePath = trimTrailingSlash(Astro.url.pathname);
+const { prevPage, nextPage } = getPrevNext(baseSidebar, pagePath);
 ---
 
-<nav class="pagination-links" data-pagefind-ignore="all" aria-label={currentPage}>
+<nav class="pagination-links" data-pagefind-ignore="all">
   <Show when={prevPage}>
     <a href={prevPage?.link} rel="prev" class="pagination-link pagination-link-prev">
       <ArrowLeft class="pagination-link-icon" />

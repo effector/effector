@@ -1174,3 +1174,7 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
 
   return nav;
 }
+
+export function trimTrailingSlash(link: string) {
+  return link.endsWith("/") ? link.slice(0, -1) : link;
+}
