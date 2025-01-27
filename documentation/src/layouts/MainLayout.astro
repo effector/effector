@@ -51,7 +51,7 @@ const currentPage = Astro.url.pathname;
         indexing={indexing}
       >
         <slot />
-        <PageNavigation />
+        <PageNavigation currentPage={currentPage} />
       </PageContent>
       <Contributors documentId={documentId} />
     </div>
