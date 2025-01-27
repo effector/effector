@@ -15,11 +15,13 @@ const { currentPage } = Astro.props;
 
 const { slug, lang } = getPathParamsFromId(currentPage);
 const baseSidebar = await getLocalizedSidebar(slug, lang);
+console.log(baseSidebar[0].items);
+console.log(currentPage);
 
 const { prevPage, nextPage } = getPrevNext(baseSidebar, currentPage);
 ---
 
-<nav class="pagination-links" data-pagefind-ignore="all">
+<nav class="pagination-links" data-pagefind-ignore="all" aria-label={currentPage}>
   <Show when={prevPage}>
     <a href={prevPage?.link} rel="prev" class="pagination-link pagination-link-prev">
       <ArrowLeft class="pagination-link-icon" />
