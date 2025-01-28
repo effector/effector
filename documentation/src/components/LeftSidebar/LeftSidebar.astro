@@ -33,8 +33,9 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
                     href={item.link}
                     aria-current={currentPageMatch === item.link ? "page" : false}
                     target={item.link.startsWith("/") ? undefined : "_blank"}
+                    data-fallback={item.isFallback}
                   >
-                    {item.title}
+                    <span> {item.title}</span>
                   </a>
                 </li>
               ))}
@@ -158,6 +159,14 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     color: var(--theme-left-sidebar-item-text);
     font: inherit;
     text-decoration: none;
+  }
+
+  .nav-link a[data-fallback] span:after {
+    content: "EN";
+    font-weight: bold;
+    font-size: 0.75rem;
+    vertical-align: super;
+    margin-left: 5px;
   }
 
   .nav-link a:hover,
