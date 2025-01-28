@@ -107,7 +107,7 @@ const defaultSidebar: LSidebarGroup[] = [
           ru: "Приоритет вычислений",
           uz: "Hisoblash ustuvorligi",
         },
-        link: "/ru/explanation/computation-priority/",
+        link: "/explanation/computation-priority",
       },
     ],
   },
