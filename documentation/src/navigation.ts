@@ -98,6 +98,14 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/essentials/flow-split",
       },
       {
+        text: {
+          en: "Scope: Working with Isolated Contexts",
+          ru: "Scope: Работа с изолированными контекстами",
+          uz: "Scope: Isolatli kontekstlar bilan ishlash",
+        },
+        link: "/advanced/work-with-scope",
+      },
+      {
         text: { en: "Store SID", ru: "Хранилища и их SID", uz: "Store SID" },
         link: "/explanation/sids",
       },
