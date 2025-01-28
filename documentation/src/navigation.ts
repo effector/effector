@@ -78,14 +78,6 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Typescript",
-          ru: "Типизация",
-          uz: "Typescript",
-        },
-        link: "/essentials/typescript",
-      },
-      {
-        text: {
           en: "Reactivity",
           ru: "Реактивность",
           uz: "Reaktivlik",
@@ -129,6 +121,14 @@ const defaultSidebar: LSidebarGroup[] = [
           uz: "To'g'ri usullar",
         },
         link: "/guides/best-practices",
+      },
+      {
+        text: {
+          en: "Typescript",
+          ru: "Типизация",
+          uz: "Typescript",
+        },
+        link: "/essentials/typescript",
       },
       {
         text: {
