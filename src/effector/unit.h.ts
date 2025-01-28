@@ -188,7 +188,7 @@ export interface Scope extends Unit {
   fxCount: Node
   storeChange: Node
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
-  warnSerialize?: boolean
+  warnSerializeTraces: Set<string>
   warnSerializeNode: Node
 }
 

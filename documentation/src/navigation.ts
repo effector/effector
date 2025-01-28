@@ -13,39 +13,27 @@ import IconTelegram from "@icons/Telegram.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
-    text: { en: "Introduction", ru: "Введение", uz: "Kirish" },
+    text: { en: "Quick start", ru: "Быстрый старт", uz: "Qayta boshlash" },
     items: [
-      {
-        text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
-        link: "/introduction/motivation",
-      },
       {
         text: { en: "Get started", ru: "Начало работы", uz: "Ishni boshlash" },
         link: "/introduction/get-started",
-      },
-      {
-        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
-        link: "/introduction/community",
-      },
-      {
-        text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
-        link: "/introduction/installation",
-      },
-      {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
-        link: "/introduction/ecosystem",
-      },
-      {
-        text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
-        link: "/introduction/examples",
       },
       {
         text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
         link: "/introduction/core-concepts",
       },
       {
-        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
-        link: "/FAQ",
+        text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
+        link: "/introduction/installation",
+      },
+      {
+        text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
+        link: "/introduction/motivation",
+      },
+      {
+        text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
+        link: "/introduction/examples",
       },
     ],
   },
@@ -56,14 +44,6 @@ const defaultSidebar: LSidebarGroup[] = [
       uz: "Asosiy",
     },
     items: [
-      {
-        text: {
-          en: "Reactivity",
-          ru: "Реактивность",
-          uz: "Reaktivlik",
-        },
-        link: "/essentials/reactivity",
-      },
       {
         text: {
           en: "Manage states",
@@ -98,6 +78,19 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Reactivity",
+          ru: "Реактивность",
+          uz: "Reaktivlik",
+        },
+        link: "/essentials/reactivity",
+      },
+    ],
+  },
+  {
+    text: { en: "Advanced", ru: "Продвинутые темы", uz: "O'zgaruvchilar" },
+    items: [
+      {
+        text: {
           en: "Flow splitting",
           ru: "Разделение потока данных",
           uz: "Flow to'plamasi",
@@ -105,12 +98,16 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/essentials/flow-split",
       },
       {
+        text: { en: "Store SID", ru: "Хранилища и их SID", uz: "Store SID" },
+        link: "/explanation/sids",
+      },
+      {
         text: {
-          en: "Testing",
-          ru: "Тестирование",
-          uz: "Testlash",
+          en: "Computation Priority",
+          ru: "Приоритет вычислений",
+          uz: "Hisoblash ustuvorligi",
         },
-        link: "/essentials/testing",
+        link: "/explanation/computation-priority",
       },
     ],
   },
@@ -127,10 +124,26 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
+        },
+        link: "/guides/testing",
+      },
+      {
+        text: {
           en: "Server Side Rendering",
           ru: "Работа с SSR",
         },
         link: "/guides/server-side-rendering",
+      },
+      {
+        text: {
+          ru: "Использование с Websocket",
+          en: "Websockets",
+          uz: "Websocket bilan bog'lanish",
+        },
+        link: "/guides/websocket-integration",
       },
       {
         text: {
@@ -178,56 +191,31 @@ const defaultSidebar: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Core principles", ru: "Основные принципы", uz: "Asosiy tamoyillar" },
+    text: { en: "Resources", ru: "Ресурсы", uz: "Resurslar" },
     items: [
       {
-        text: { en: "Releases policy" },
-        link: "/core-principles/releases",
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        link: "/introduction/ecosystem",
       },
       {
-        text: { en: "Testing" },
-        link: "/core-principles/testing",
+        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
+        link: "/introduction/community",
       },
-      {
-        text: { en: "Typings" },
-        link: "/core-principles/typings",
-      },
-    ],
-  },
-  {
-    text: {
-      en: "For library developers",
-      uz: "Biblioteka dasturchilari uchun",
-    },
-    items: [
-      {
-        text: { en: "Universal @@unitShape protocol" },
-        link: "/ecosystem-development/unit-shape-protocol",
-      },
-    ],
-  },
-  {
-    text: { en: "Explanation", ru: "Погружение", uz: "Tushuntirish" },
-    items: [
       {
         text: { en: "Glossary", ru: "Глоссарий", uz: "Lug'at" },
         link: "/explanation/glossary",
       },
       {
-        text: { en: "Events", ru: "События", uz: "Events" },
-        link: "/explanation/events",
-      },
-      {
-        text: { en: "Computation Priority", uz: "Hisoblash ustuvorligi" },
-        link: "/explanation/computation-priority",
-      },
-      {
-        text: { en: "Prior Art", ru: "Prior Art", uz: "Prior Art" },
+        text: { en: "Prior Art", ru: "Вдохновение", uz: "Taqdim etilganlar" },
         link: "/explanation/prior-art",
       },
       {
-        text: { en: "SIDs" },
-        link: "/explanation/sids",
+        text: { en: "For developers", ru: "Для разработчиков" },
+        link: "/ecosystem-development/unit-shape-protocol",
+      },
+      {
+        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
+        link: "/FAQ",
       },
     ],
   },
@@ -1193,4 +1181,8 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
   }
 
   return nav;
+}
+
+export function trimTrailingSlash(link: string) {
+  return link.endsWith("/") ? link.slice(0, -1) : link;
 }
