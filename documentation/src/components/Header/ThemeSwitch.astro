@@ -33,8 +33,10 @@ const themes = [
 
   function watchMedia(media: string) {
     const matcher = window.matchMedia(media);
-    const $matches = createStore(matcher.matches);
     const changed = createEvent<MediaQueryListEvent>();
+
+    const $matches = createStore(matcher.matches);
+    $matches.on(changed, (_, event) => event.matches);
 
     matcher.addEventListener("change", changed);
 

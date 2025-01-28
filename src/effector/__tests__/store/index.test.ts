@@ -374,7 +374,7 @@ describe('void skip pattern deprecation', () => {
         const store = createStore(0).on(inc, () => {})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"[store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+          `"Error: [store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
         )
       })
       test('store.on reducer skips updates with undefined and does not warn, if store has {skipVoid: true} (only warning of the store itself is shown)', () => {
@@ -404,7 +404,7 @@ describe('void skip pattern deprecation', () => {
         sample({clock: inc, fn: () => {}, target: store})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"[store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+          `"Error: [store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
         )
       })
       test('sample target skips updates with undefined, but shows warning, if store has {skipVoid: true}', () => {
@@ -465,7 +465,7 @@ describe('void skip pattern deprecation', () => {
         .map(x => (x > 3 ? undefined : x))
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"[store] unit 'store → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"Error: [store] unit 'store → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('store.map skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
@@ -518,7 +518,7 @@ describe('void skip pattern deprecation', () => {
       )
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"[store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"Error: [store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('combine skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
