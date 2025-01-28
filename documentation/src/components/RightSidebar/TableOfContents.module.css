@@ -103,6 +103,6 @@
 .expandContent {
   background-color: var(--theme-code-inline-bg);
   --theme-bg: var(--theme-code-inline-bg);
-  max-width: 52ch;
+  max-width: min(52ch, calc(100vw - 1.5rem));
   @apply rounded-2xl rounded-tl-none px-1 py-3;
 }

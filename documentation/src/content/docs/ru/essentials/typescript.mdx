@@ -1,0 +1,496 @@
+---
+title: TypeScript в effector
+description: Использование TypeScript с effector и примеры типизации
+redirectFrom:
+  - /ru/typescript/utility-types/
+  - /ru/typescript/typing-effector/
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# TypeScript в effector (#typescript-in-effector)
+
+Effector предоставляет первоклассную поддержку TypeScript из коробки, что дает вам надежную типизацию и отличный опыт разработки при работе с библиотекой. В этом разделе мы рассмотрим как базовые концепции типизации, так и продвинутые техники работы с типами в effector.
+
+## Типизация событий (#typing-events)
+
+События в effector могут быть типизированы при помощи передачи типа в дженерик функции, однако если не передавать ничего, то в таком случае событие будет с типом `EventCallable<void>`:
+
+```ts
+import { createEvent } from "effector";
+
+// Событие без параметров
+const clicked = createEvent();
+// EventCallable<void>
+
+// Событие с параметром
+const userNameChanged = createEvent<string>();
+// EventCallable<string>
+
+// Событие со сложным параметром
+const formSubmitted = createEvent<{
+  username: string;
+  password: string;
+}>();
+// EventCallable<{ username: string;password: string; }>
+```
+
+### Типы событий (#event-types)
+
+В effector для событий может быть несколько типов, где `T` - тип хранимого значения:
+
+1. `EventCallable<T>` - событие, которое может вызвать.
+2. `Event<T>` - производное событие, которое нельзя вызвать в ручную.
+
+### Типизация методов событий (#typing-event-methods)
+
+#### `event.prepend` (#typing-event-prepend)
+
+Чтобы добавить типы к событиям, созданным с помощью [event.prepend](/ru/api/effector/Event#eventCallable-methods-prepend-fn), необходимо добавить тип либо в аргумент функции `prepend`, либо как дженерик
+
+```typescript
+const message = createEvent<string>();
+
+const userMessage = message.prepend((text: string) => text);
+// userMessage имеет тип EventCallable<string>
+
+const warningMessage = message.prepend<string>((warnMessage) => warnMessage);
+// warningMessage имеет тип EventCallable<string>
+```
+
+## Типизация сторов (#typing-stores)
+
+Сторы также можно типизировать при помощи передачи типа в дженерик функции, либо указав дефолтное значение при инициализации, тогда ts будет выводить тип из этого значения:
+
+```ts
+import { createStore } from "effector";
+
+// Базовый стор с примитивным значением
+// StoreWritable<number>
+const $counter = createStore(0);
+
+// Стор со сложным объектным типом
+interface User {
+  id: number;
+  name: string;
+  role: "admin" | "user";
+}
+
+// StoreWritable<User>
+const $user = createStore<User>({
+  id: 1,
+  name: "Bob",
+  role: "user",
+});
+
+// Store<string>
+const $userNameAndRole = $user.map((user) => `User name and role: ${user.name} and ${user.role}`);
+```
+
+### Типы сторов (#store-types)
+
+В эффектор существуют два типа сторов, где `T` - тип хранимого значения:
+
+1. `Store<T>` - тип производного стора, в который нельзя записать новые данные.
+2. `StoreWritable<T>` - тип стора, в который можно записывать новые данные при помощи `on` или `sample`.
+
+## Типизация эффектов (#typing-effects)
+
+При обычном использовании TypeScript будет выводить типы в зависимости от возвращаемого результата функции, а также ее аргументов.<br/>
+Однако, `createEffect` поддерживает типизацию входных параметров, возвращаемого результата и ошибок через дженерик:
+
+<Tabs>
+  <TabItem label="Обычное использование">
+
+```ts
+import { createEffect } from "effector";
+
+// Базовый эффект
+// Effect<string, User, Error>
+const fetchUserFx = createEffect(async (userId: string) => {
+  const response = await fetch(`/api/users/${userId}`);
+  const result = await response.json();
+
+  return result as User;
+});
+```
+
+  </TabItem>
+
+  <TabItem label="Типизация через дженерик">
+
+```ts
+import { createEffect } from "effector";
+
+// Базовый эффект
+// Effect<string, User, Error>
+const fetchUserFx = createEffect<string, User>(async (userId) => {
+  const response = await fetch(`/api/users/${userId}`);
+  const result = await response.json();
+
+  return result;
+});
+```
+
+  </TabItem>
+</Tabs>
+
+### Типизация функции обработчика вне эффекта (#typing-effect-handler)
+
+В случае, если функция обработчик определен вне эффекта, то для типизации вам нужно будет передать тип этой функции:
+
+```ts
+const sendMessage = async (params: { text: string }) => {
+  // ...
+  return "ok";
+};
+
+const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
+// => Effect<{text: string}, string, AxiosError>
+```
+
+### Кастомные ошибки эффекта (#typing-effect-errors)
+
+Некоторый код может выдать исключения только некоторых типов. В эффектах для описания типов ошибок используется третий дженерик `Fail`.
+
+```ts
+// Определяем типы ошибок API
+interface ApiError {
+  code: number;
+  message: string;
+}
+
+// Создаём типизированный эффект
+const fetchUserFx = createEffect<string, User, ApiError>(async (userId) => {
+  const response = await fetch(`/api/users/${userId}`);
+
+  if (!response.ok) {
+    throw {
+      code: response.status,
+      message: "Failed to fetch user",
+    } as ApiError;
+  }
+
+  return response.json();
+});
+```
+
+## Типизация методов (#typing-effector-methods)
+
+### `sample` (#typing-sample)
+
+#### Типизация `filter` (#typing-sample-filter)
+
+Если вам необходимо получить конкретный тип, то для этого вам нужно в ручную указать ожидаемый тип, сделать это можно при помощи [типов придикатов](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates):
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+
+const message = createEvent<UserMessage | WarnMessage>();
+const userMessage = createEvent<UserMessage>();
+
+sample({
+  clock: message,
+  filter: (msg): msg is UserMessage => msg.kind === "user",
+  target: userMessage,
+});
+```
+
+Если вам нужно произвести проверку в `filter` на существование данных, то вы можете просто передать `Boolean`:
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+// События
+const formSubmitted = createEvent();
+const userDataSaved = createEvent<User>();
+
+// Состояния
+const $currentUser = createStore<User | null>(null);
+
+// При сабмите формы отправляем данные только если юзер существует
+sample({
+  clock: formSubmitted,
+  source: $currentUser,
+  filter: Boolean, // отфильтровываем null
+  target: userDataSaved,
+});
+
+// Теперь userDataSaved получит только существующие данные пользователя
+```
+
+#### Типизация `filter` и `fn` (#typing-sample-filter-and-fn)
+
+Как упоминалось выше, если использовать предикаты типов в `filter`, то все отработает корректно и в `target` попадет нужный тип.<br/>
+Однако, такая механика не отработает как нужно при использовании `filter` и `fn` вместе. В таком случае вам потребуется в ручную указать тип данных параметров `filter`, а также добавить [предикаты типов](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates). Это происходит из-за того, что TypeScript не может корректно вывести тип в `fn` после `filter`, если тип не указан явно. Это ограничение системы типов TypeScript.
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+type Message = UserMessage | WarnMessage;
+
+const message = createEvent<Message>();
+const userText = createEvent<string>();
+
+sample({
+  clock: message,
+  filter: (msg: Message): msg is UserMessage => msg.kind === "user",
+  fn: (msg) => msg.text,
+  target: userText,
+});
+
+// userMessage has type Event<string>
+```
+
+:::tip{title="Оно стало умнее!"}
+Начиная с TypeScript версии >= 5.5 вы можете не писать предикаты типов, а просто указать тип аргумента, а TypeScript сам поймет, что нужно вывести:
+`filter: (msg: Message) => msg.kind === "user"`,
+:::
+
+### `attach` (#typing-attach)
+
+Чтобы позволить TypeScript выводить типы создаваемого эффекта, можно добавить тип к первому аргументу `mapParams`, который станет дженериком `Params` у результата:
+
+```ts
+const sendTextFx = createEffect<{ message: string }, "ok">(() => {
+  // ...
+
+  return "ok";
+});
+
+const sendWarningFx = attach({
+  effect: sendTextFx,
+  mapParams: (warningMessage: string) => ({ message: warningMessage }),
+});
+// sendWarningFx имеет тип Effect<{message: string}, 'ok'>
+```
+
+### `split` (#typing-split)
+
+Вы можете использовать [предикаты типов](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates) для разделения исходного типа события на несколько вариантов:
+
+<Tabs>
+  <TabItem label="до 5.5 версии TS">
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+
+const message = createEvent<UserMessage | WarnMessage>();
+
+const { userMessage, warnMessage } = split(message, {
+  userMessage: (msg): msg is UserMessage => msg.kind === "user",
+  warnMessage: (msg): msg is WarnMessage => msg.kind === "warn",
+});
+// userMessage имеет тип Event<UserMessage>
+// warnMessage имеет тип Event<WarnMessage>
+```
+
+  </TabItem>
+
+  <TabItem label="после 5.5 версии TS">
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+
+const message = createEvent<UserMessage | WarnMessage>();
+
+const { userMessage, warnMessage } = split(message, {
+  userMessage: (msg) => msg.kind === "user",
+  warnMessage: (msg) => msg.kind === "warn",
+});
+// userMessage имеет тип Event<UserMessage>
+// warnMessage имеет тип Event<WarnMessage>
+```
+
+  </TabItem>
+</Tabs>
+
+### `createApi` (#typing-create-api)
+
+Чтобы позволить TypeScript выводить типы создаваемых событий, можно добавить тип ко второму аргументу обработчиков
+
+```typescript
+const $count = createStore(0);
+
+const { add, sub } = createApi($count, {
+  add: (x, add: number) => x + add,
+  sub: (x, sub: number) => x - sub,
+});
+
+// add имеет тип Event<number>
+// sub имеет тип Event<number>
+```
+
+### `is` (#typing-is)
+
+Методы группы [is](/ru/api/effector/is) могут помочь вывести тип юнита, то есть они действуют как [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Это применяется в написании типизированных утилит:
+
+```ts
+export function getUnitType(unit: unknown) {
+  if (is.event(unit)) {
+    // здесь юнит имеет тип Event<any>
+    return "event";
+  }
+  if (is.effect(unit)) {
+    // здесь юнит имеет тип Effect<any, any>
+    return "effect";
+  }
+  if (is.store(unit)) {
+    // здесь юнит имеет тип Store<any>
+    return "store";
+  }
+}
+```
+
+### `merge` (#typing-merge)
+
+При объединении событий можно получить союз их типов:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge([firstEvent, secondEvent]);
+// Event<string | number>
+
+// Можно также объединять события с одинаковыми типами
+const buttonClicked = createEvent<MouseEvent>();
+const linkClicked = createEvent<MouseEvent>();
+
+const anyClick = merge([buttonClicked, linkClicked]);
+// Event<MouseEvent>
+```
+
+`merge` принимает дженерик параметр, где можно указать какого типа событий он ожидает:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge<number>([firstEvent, secondEvent]);
+//                                ^
+// Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+```
+
+## Утилиты для типов (#type-utilities)
+
+Effector предоставляет набор утилитных типов для работы с типами юнитов:
+
+### UnitValue (#type-utilities-unit-values)
+
+Тип `UnitValue` служит для извлечение типа данных из юнитов:
+
+```ts
+import { UnitValue, createEffect, createStore, createEvent } from "effector";
+
+const event = createEvent<{ id: string; name?: string } | { id: string }>();
+type UnitEventType = UnitValue<typeof event>;
+// {id: string; name?: string | undefined} | {id: string}
+
+const $store = createStore([false, true]);
+type UnitStoreType = UnitValue<typeof $store>;
+// boolean[]
+
+const effect = createEffect<{ token: string }, any, string>(() => {});
+type UnitEffectType = UnitValue<typeof effect>;
+// {token: string}
+
+const scope = fork();
+type UnitScopeType = UnitValue<typeof scope>;
+// any
+```
+
+### StoreValue (#type-utilities-store-value)
+
+`StoreValue` по своей сути похож на `UnitValue`, но работает только со стором:
+
+```ts
+import { createStore, StoreValue } from "effector";
+
+const $store = createStore(true);
+
+type StoreValueType = StoreValue<typeof $store>;
+// boolean
+```
+
+### EventPayload (#type-utilities-event-payload)
+
+Извлекает тип данных из событий.
+Похож на `UnitValue`, но только для [событий](/ru/api/effector/Event)
+
+```ts
+import { createEvent, EventPayload } from "effector";
+
+const event = createEvent<{ id: string }>();
+
+type EventPayloadType = EventPayload<typeof event>;
+// {id: string}
+```
+
+### EffectParams (#type-utilities-effect-params)
+
+Принимает тип эффекта в параметры дженерика, позволяет получить тип параметров [эффекта](/ru/api/effector/Effect).
+
+```ts
+import { createEffect, EffectParams } from "effector";
+
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => {
+  // ...
+  return { name: "Alice", isAdmin: false };
+});
+
+type EffectParamsType = EffectParams<typeof fx>;
+// {id: string}
+```
+
+### EffectResult (#type-utilities-effect-results)
+
+Принимает тип эффекта в параметры дженерика, позволяет получить тип возвращаемого значения [эффекта](/ru/api/effector/Effect#doneData).
+
+```ts
+import { createEffect, EffectResult } from "effector";
+
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => ({ name: "Alice", isAdmin: false }));
+
+type EffectResultType = EffectResult<typeof fx>;
+// {name: string; isAdmin: boolean}
+```
+
+### EffectError (#type-utilities-effect-error)
+
+Принимает тип эффекта в параметры дженерика, позволяет получить тип ошибки [эффекта](/ru/api/effector/Effect#failData).
+
+```ts
+import { createEffect, EffectError } from "effector";
+
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => ({ name: "Alice", isAdmin: false }));
+
+type EffectErrorType = EffectError<typeof fx>;
+// {statusText: string; status: number}
+```

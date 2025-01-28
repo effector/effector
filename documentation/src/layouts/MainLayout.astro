@@ -9,6 +9,7 @@ import Contributors from "@components/PageContent/Contributors.astro";
 import LeftSidebar from "@components/LeftSidebar/LeftSidebar.astro";
 import RightSidebar from "@components/RightSidebar/RightSidebar.astro";
 import Announcement from "@components/PageContent/Announcement.astro";
+import PageNavigation from "@components/PageNavigation.astro";
 
 export type Props = CollectionEntry<"docs">["data"] & {
   headings: MarkdownHeading[];
@@ -35,113 +36,6 @@ const currentPage = Astro.url.pathname;
 ---
 
 <CommonLayout lang={lang} {...data}>
-  <style>
-    :root {
-      --gutter: 0.5rem;
-      --content-max-width: 56rem;
-    }
-
-    main {
-      margin-top: var(--theme-navbar-height);
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--content-max-width)) minmax(
-          var(--gutter),
-          1fr
-        );
-      grid-auto-flow: column;
-      overflow-x: hidden;
-    }
-
-    #grid-left {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      background-color: var(--theme-bg);
-      height: 100%;
-
-      position: sticky;
-      top: var(--theme-navbar-height, 0);
-      padding: 0;
-      height: calc(100vh - var(--theme-navbar-height, 0));
-    }
-
-    #grid-main {
-      display: flex;
-      grid-column: 2;
-      flex-direction: column;
-      padding-block: var(--doc-padding);
-      padding-inline: 1rem;
-      height: 100%;
-    }
-
-    #grid-right {
-      display: none;
-    }
-
-    @media (min-width: 768px) {
-      :root {
-        --sidebar-left-width: 20rem;
-      }
-
-      .layout {
-        grid-template-columns: var(--sidebar-left-width) minmax(0, var(--content-max-width));
-        gap: 1em;
-        overflow: initial;
-      }
-
-      #grid-left {
-        display: flex;
-        position: sticky;
-        grid-column: 1;
-        padding-left: 2rem;
-      }
-
-      #grid-main {
-        padding-right: 2rem;
-      }
-    }
-
-    @media (min-width: 1280px) {
-      :root {
-        --sidebar-right-width: 18rem;
-        --header-max-width: calc(
-          var(--sidebar-left-width) + var(--content-max-width) + var(--sidebar-right-width)
-        );
-      }
-
-      .layout {
-        grid-template-columns: var(--sidebar-left-width) minmax(0, var(--content-max-width)) var(
-            --sidebar-right-width
-          );
-        margin-right: auto;
-        margin-left: auto;
-        padding-right: 0;
-        padding-left: 0;
-      }
-
-      #grid-right {
-        display: flex;
-        grid-column: 3;
-      }
-    }
-
-    @media (min-width: 1536px) {
-      :root {
-        --sidebar-left-width: 22rem;
-        --sidebar-right-width: 20rem;
-      }
-    }
-  </style>
-  <style is:global>
-    .layout > * {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-
   <main class="layout">
     <aside id="grid-left" title="Site Navigation" data-pagefind-ignore="all">
       <LeftSidebar currentPage={currentPage} headings={headings} />
@@ -157,6 +51,7 @@ const currentPage = Astro.url.pathname;
         indexing={indexing}
       >
         <slot />
+        <PageNavigation />
       </PageContent>
       <Contributors documentId={documentId} />
     </div>
@@ -165,3 +60,110 @@ const currentPage = Astro.url.pathname;
     </aside>
   </main>
 </CommonLayout>
+
+<style>
+  :root {
+    --gutter: 0.5rem;
+    --content-max-width: 56rem;
+  }
+
+  main {
+    margin-top: var(--theme-navbar-height);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(var(--gutter), 1fr) minmax(0, var(--content-max-width)) minmax(
+        var(--gutter),
+        1fr
+      );
+    grid-auto-flow: column;
+    overflow-x: hidden;
+  }
+
+  #grid-left {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    background-color: var(--theme-bg);
+    height: 100%;
+
+    position: sticky;
+    top: var(--theme-navbar-height, 0);
+    padding: 0;
+    height: calc(100vh - var(--theme-navbar-height, 0));
+  }
+
+  #grid-main {
+    display: flex;
+    grid-column: 2;
+    flex-direction: column;
+    padding-block: var(--doc-padding);
+    padding-inline: 0.2rem;
+    height: 100%;
+  }
+
+  #grid-right {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --sidebar-left-width: 20rem;
+    }
+
+    .layout {
+      grid-template-columns: var(--sidebar-left-width) minmax(0, var(--content-max-width));
+      gap: 1em;
+      overflow: initial;
+    }
+
+    #grid-left {
+      display: flex;
+      position: sticky;
+      grid-column: 1;
+      padding-left: 2rem;
+    }
+
+    #grid-main {
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      --sidebar-right-width: 18rem;
+      --header-max-width: calc(
+        var(--sidebar-left-width) + var(--content-max-width) + var(--sidebar-right-width)
+      );
+    }
+
+    .layout {
+      grid-template-columns: var(--sidebar-left-width) minmax(0, var(--content-max-width)) var(
+          --sidebar-right-width
+        );
+      margin-right: auto;
+      margin-left: auto;
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    #grid-right {
+      display: flex;
+      grid-column: 3;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    :root {
+      --sidebar-left-width: 22rem;
+      --sidebar-right-width: 20rem;
+    }
+  }
+</style>
+<style is:global>
+  .layout > * {
+    width: 100%;
+    height: 100%;
+  }
+</style>

@@ -1,0 +1,374 @@
+---
+title: Splitting Data Streams with split
+description: How to split data streams into multiple directions using split.
+---
+
+import { Image } from "astro:assets";
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+import ThemeImage from "@components/ThemeImage.astro";
+
+# Splitting Data Streams with `split` (#data-flow-splitting)
+
+The `split` method is designed to divide logic into multiple data streams.
+For example, you might need to route data differently depending on its content, much like a railway switch that directs trains to different tracks:
+
+- If a form is filled incorrectly — display an error.
+- If everything is correct — send a request.
+
+:::info{title="Condition Checking Order"}
+Conditions in `split` are checked sequentially from top to bottom. Once a condition matches, subsequent ones are not evaluated. Keep this in mind when crafting your conditions.
+:::
+
+## Basic Usage of `split` (#basic-usage)
+
+Let's look at a simple example — processing messages of different types:
+
+```ts
+import { createEvent, split } from "effector";
+
+const updateUserStatus = createEvent();
+
+const { activeUserUpdated, idleUserUpdated, inactiveUserUpdated } = split(updateUserStatus, {
+  activeUserUpdated: (userStatus) => userStatus === "active",
+  idleUserUpdated: (userStatus) => userStatus === "idle",
+  inactiveUserUpdated: (userStatus) => userStatus === "inactive",
+});
+```
+
+The logic here is straightforward. When the `updateUserStatus` event is triggered, it enters `split`, which evaluates each condition from top to bottom until a match is found, then triggers the corresponding event in `effector`.
+
+Each condition is defined by a predicate — a function returning `true` or `false`.
+
+You might wonder, "Why use this when I could handle conditions with `if/else` in the UI?" The answer lies in Effector's philosophy of **separating business logic** from the UI.
+
+:::tip
+Think of `split` as a reactive `switch` for units.
+:::
+
+## Default Case (#default-case)
+
+When using `split`, there might be situations where no conditions match. For such cases, there's a special default case: `__`.
+
+Here's the same example as before, now including a default case:
+
+```ts
+import { createEvent, split } from "effector";
+
+const updateUserStatus = createEvent();
+
+const { activeUserUpdated, idleUserUpdated, inactiveUserUpdated, __ } = split(updateUserStatus, {
+  activeUserUpdated: (userStatus) => userStatus === "active",
+  idleUserUpdated: (userStatus) => userStatus === "idle",
+  inactiveUserUpdated: (userStatus) => userStatus === "inactive",
+});
+
+__.watch((defaultStatus) => console.log("default case with status:", defaultStatus));
+activeUserUpdated.watch(() => console.log("active user"));
+
+updateUserStatus("whatever");
+updateUserStatus("active");
+updateUserStatus("default case");
+
+// Console output:
+// default case with status: whatever
+// active user
+// default case with status: default case
+```
+
+:::info{title="Default Handling"}
+If no conditions match, the default case `__` will be triggered.
+:::
+
+## Short Form (#short-form)
+
+The `split` method supports multiple usage patterns based on your needs.
+
+The shortest usage involves passing a [unit](/en/introduction/core-concepts#units) as the first argument serving as a trigger and an object with cases as the second argument.
+
+Let's look at an example with GitHub's "Star" and "Watch" buttons:
+
+<ThemeImage
+  alt='Button "Star" for repo i github'
+  lightImage="/images/split/github-repo-buttons.png"
+  darkImage="/images/split/github-repo-buttons-dark.png"
+  height={20}
+  width={650}
+/>
+
+```ts
+import { createStore, createEvent, split } from "effector";
+
+type Repo = {
+  // ... other properties
+  isStarred: boolean;
+  isWatched: boolean;
+};
+
+const toggleStar = createEvent<string>();
+const toggleWatch = createEvent<string>();
+
+const $repo = createStore<null | Repo>(null)
+  .on(toggleStar, (repo) => ({
+    ...repo,
+    isStarred: !repo.isStarred,
+  }))
+  .on(toggleWatch, (repo) => ({ ...repo, isWatched: !repo.isWatched }));
+
+const { starredRepo, unstarredRepo, __ } = split($repo, {
+  starredRepo: (repo) => repo.isStarred,
+  unstarredRepo: (repo) => !repo.isStarred,
+});
+
+// Debug default case
+__.watch((repo) => console.log("[split toggleStar] Default case triggered with value ", repo));
+
+// Somewhere in the app
+toggleStar();
+```
+
+This usage returns an object with derived events, which can trigger reactive chains of actions.
+
+:::tip
+Use this pattern when:
+
+- There are no dependencies on external data (e.g., stores).
+- You need simple, readable code.
+  :::
+
+## Expanded Form (#expanded-form)
+
+Using the `split` method in this variation doesn't return any value but provides several new capabilities:
+
+1. You can depend on external data, such as stores, using the `match` parameter.
+2. Trigger multiple units when a case matches by passing an array.
+3. Add a data source using `source` and a trigger using `clock`.
+
+For example, imagine a scenario where your application has two modes: `user` and `admin`. When an event is triggered, different actions occur depending on whether the mode is `user` or `admin`:
+
+```ts
+import { createStore, createEvent, createEffect, split } from "effector";
+
+const adminActionFx = createEffect();
+const secondAdminActionFx = createEffect();
+const userActionFx = createEffect();
+const defaultActionFx = createEffect();
+// UI event
+const buttonClicked = createEvent();
+
+// Current application mode
+const $appMode = createStore<"admin" | "user">("user");
+
+// Different actions for different modes
+split({
+  source: buttonClicked,
+  match: $appMode, // Logic depends on the current mode
+  cases: {
+    admin: [adminActionFx, secondAdminActionFx],
+    user: userActionFx,
+    __: defaultActionFx,
+  },
+});
+
+// Clicking the same button performs different actions
+// depending on the application mode
+buttonClicked();
+// -> "Performing user action" (when $appMode = 'user')
+// -> "Performing admin action" (when $appMode = 'admin')
+```
+
+Additionally, you can include a `clock` property that works like in [`sample`](/en/essentials/unit-composition), acting as a trigger, while `source` provides the data to be passed into the respective case. Here's an extended example:
+
+```ts
+// Extending the previous code
+
+const adminActionFx = createEffect((currentUser) => {
+  // ...
+});
+const secondAdminActionFx = createEffect((currentUser) => {
+  // ...
+});
+
+// Adding a new store
+const $currentUser = createStore({
+  id: 1,
+  name: "Donald",
+});
+
+const $appMode = createStore<"admin" | "user">("user");
+
+split({
+  clock: buttonClicked,
+  // Passing the new store as a data source
+  source: $currentUser,
+  match: $appMode,
+  cases: {
+    admin: [adminActionFx, secondAdminActionFx],
+    user: userActionFx,
+    __: defaultActionFx,
+  },
+});
+```
+
+:::warning{title="Default Case"}
+If you need a default case, you must explicitly define it in the `cases` object, otherwise, it won' t be processed!
+:::
+
+In this scenario, the logic for handling cases is determined at runtime based on `$appMode`, unlike the earlier example where it was defined during `split` creation.
+
+:::info{title="Usage Notes"}
+When using `match`, it can accept units, functions, or objects with specific constraints:
+
+- **Store**: If using a [store](/en/api/effector/Store), **it must store a string value**.
+- **Function**: If passing a function, **it must return a string value and be pure**.
+- **Object with stores**: If passing an object of stores, **each store must hold a boolean value**.
+- **Object with functions**: If passing an object of functions, **each function must return a boolean value and be pure**.
+  :::
+
+### `match` as a Store (#match-as-store)
+
+When `match` is a store, the value in the store is used as a key to select the corresponding case:
+
+```ts
+const $currentTab = createStore("home");
+
+split({
+  source: pageNavigated,
+  match: $currentTab,
+  cases: {
+    home: loadHomeDataFx,
+    profile: loadProfileDataFx,
+    settings: loadSettingsDataFx,
+  },
+});
+```
+
+### `match` as a Function (#match-as-fn)
+
+When using a function for `match`, it must return a string to be used as the case key:
+
+```ts
+const userActionRequested = createEvent<{ type: string; payload: any }>();
+
+split({
+  source: userActionRequested,
+  match: (action) => action.type, // The function returns a string
+  cases: {
+    update: updateUserDataFx,
+    delete: deleteUserDataFx,
+    create: createUserDataFx,
+  },
+});
+```
+
+### `match` as an Object with Stores (#match-as-object-with-stores)
+
+When `match` is an object of stores, each store must hold a boolean value. The case whose store contains true will execute:
+
+```ts
+const $isAdmin = createStore(false);
+const $isModerator = createStore(false);
+
+split({
+  source: postCreated,
+  match: {
+    admin: $isAdmin,
+    moderator: $isModerator,
+  },
+  cases: {
+    admin: createAdminPostFx,
+    moderator: createModeratorPostFx,
+    __: createUserPostFx,
+  },
+});
+```
+
+### `match` as an Object with Functions (#match-as-object-with-functions)
+
+If using an object of functions, each function must return a boolean. The first case with a `true` function will execute:
+
+```ts
+split({
+  source: paymentReceived,
+  match: {
+    lowAmount: ({ amount }) => amount < 100,
+    mediumAmount: ({ amount }) => amount >= 100 && amount < 1000,
+    highAmount: ({ amount }) => amount >= 1000,
+  },
+  cases: {
+    lowAmount: processLowPaymentFx,
+    mediumAmount: processMediumPaymentFx,
+    highAmount: processHighPaymentFx,
+  },
+});
+```
+
+:::warning{title="Attention"}
+Ensure your conditions in `match` are mutually exclusive. Overlapping conditions may cause unexpected behavior. Always verify the logic to avoid conflicts.
+:::
+
+## Practical Examples (#practical-examples)
+
+### Handling forms with split (#handling-forms-with-split)
+
+```ts
+const showFormErrorsFx = createEffect(() => {
+  // Logic to display errors
+});
+const submitFormFx = createEffect(() => {
+  // Logic to submit the form
+});
+
+const submitForm = createEvent();
+
+const $form = createStore({
+  name: "",
+  email: "",
+  age: 0,
+}).on(submitForm, (_, submittedForm) => ({ ...submittedForm }));
+// Separate store for errors
+const $formErrors = createStore({
+  name: "",
+  email: "",
+  age: "",
+}).reset(submitForm);
+
+// Validate fields and collect errors
+sample({
+  clock: submitForm,
+  source: $form,
+  fn: (form) => ({
+    name: !form.name.trim() ? "Name is required" : "",
+    email: !isValidEmail(form.email) ? "Invalid email" : "",
+    age: form.age < 18 ? "Age must be 18+" : "",
+  }),
+  target: $formErrors,
+});
+
+// Use split for routing based on validation results
+split({
+  source: $formErrors,
+  match: {
+    hasErrors: (errors) => Object.values(errors).some((error) => error !== ""),
+  },
+  cases: {
+    hasErrors: showFormErrorsFx,
+    __: submitFormFx,
+  },
+});
+```
+
+Explanation:
+
+Two effects are created: one to display errors and one to submit the form.
+
+Two stores are defined: `$form` for form data and `$formErrors` for errors.
+On form submission `submitForm`, two things happen:
+
+1. Form data is updated in the `$form` store.
+2. All fields are validated using `sample`, and errors are stored in `$formErrors`.
+
+The `split` method determines the next step:
+
+- If any field has an error – ❌ display the errors.
+- If all fields are valid – ✅ submit the form.
