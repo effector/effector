@@ -1090,8 +1090,9 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
         const originalLink = createLink(item, SITE.defaultLanguage);
         if (slugs.has(originalLink.toLowerCase())) {
           return {
-            title: `${itemTitle} (${SITE.defaultLanguage.toUpperCase()})`,
+            title: `${itemTitle}`,
             link,
+            isFallback: true,
           };
         }
 
