@@ -53,7 +53,7 @@ export function withRegion<T = void>(unit: NodeUnit, cb: () => T): T {
   const meta = node.meta || {}
 
   if (!is.domain(unit)) {
-    meta.regionStack = regionStack
+    meta.isRegion = true
   }
 
   regionStack = {

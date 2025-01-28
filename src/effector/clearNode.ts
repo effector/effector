@@ -22,7 +22,7 @@ const clearNodeNormalized = (
   targetNode.scope = null
   let currentNode
   let list = getLinks(targetNode)
-  const isRegionNode = 'regionStack' in targetNode.meta
+  const isRegionNode = targetNode.meta.isRegion
   const nextRegionNode = isRegionNode ? targetNode : regionNode
   if (list.length > 0) {
     const canGoDeep = !isRegionNode && !extractOnly

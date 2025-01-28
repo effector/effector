@@ -450,6 +450,7 @@ describe('inspectGraph API', () => {
           source: $source,
           target: targetEvent,
         },
+        isRegion: true,
       })
       expect(argumentHistory(declared)).toMatchInlineSnapshot(`
         Array [
@@ -557,11 +558,12 @@ describe('inspectGraph API', () => {
         id: expect.any(String),
         meta: {
           region: 'inner',
+          isRegion: true,
         },
         region: {
           type: 'region',
           id: expect.any(String),
-          meta: {region: 'outer'},
+          meta: {region: 'outer', isRegion: true},
           region: {
             type: 'factory',
             id: expect.any(String),
