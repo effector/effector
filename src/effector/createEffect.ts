@@ -145,6 +145,7 @@ export function createEffect<Params, Done, Fail = Error>(
       ),
     ],
     meta: {op: 'fx', fx: 'runner'},
+    regional: true,
   })
   node.scope.runner = runner
   add(

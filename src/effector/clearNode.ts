@@ -13,6 +13,8 @@ const clearNodeNormalized = (
   targetNode: Node,
   deep: boolean,
   isDomainUnit: boolean,
+  regionNode: Node | null,
+  extractOnly: boolean,
 ) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
@@ -20,18 +22,30 @@ const clearNodeNormalized = (
   targetNode.scope = null
   let currentNode
   let list = getLinks(targetNode)
-  while ((currentNode = list.pop())) {
-    removeFromNode(currentNode, targetNode)
-    if (
-      deep ||
-      (isDomainUnit && targetNode.meta.op !== 'sample') ||
-      currentNode.family.type === CROSSLINK
-    ) {
-      clearNodeNormalized(
-        currentNode,
-        deep,
-        currentNode.meta.op !== 'on' && isDomainUnit,
-      )
+  const isRegionNode = 'regionStack' in targetNode.meta
+  const nextRegionNode = isRegionNode ? targetNode : regionNode
+  if (list.length > 0) {
+    const canGoDeep = !isRegionNode && !extractOnly
+    const domainSampleEdgeCase =
+      canGoDeep && isDomainUnit && targetNode.meta.op !== 'sample'
+    while ((currentNode = list.pop())) {
+      removeFromNode(currentNode, targetNode)
+      if (isRegionNode) {
+        clearNodeNormalized(currentNode, false, false, targetNode, true)
+      }
+      if (
+        deep ||
+        domainSampleEdgeCase ||
+        (canGoDeep && currentNode.family.type === CROSSLINK)
+      ) {
+        clearNodeNormalized(
+          currentNode,
+          deep,
+          isDomainUnit && currentNode.meta.op !== 'on',
+          nextRegionNode,
+          extractOnly,
+        )
+      }
     }
   }
   list = getOwners(targetNode)
@@ -41,7 +55,9 @@ const clearNodeNormalized = (
       clearNodeNormalized(
         currentNode,
         deep,
-        currentNode.meta.op !== 'on' && isDomainUnit,
+        currentNode.meta.op !== 'on',
+        nextRegionNode,
+        extractOnly,
       )
     }
   }
@@ -68,5 +84,5 @@ export const clearNode = (
     clearMap(history.stores)
     clearMap(history.domains)
   }
-  clearNodeNormalized(getGraph(graphite), !!deep, isDomainUnit)
+  clearNodeNormalized(getGraph(graphite), !!deep, isDomainUnit, null, false)
 }
