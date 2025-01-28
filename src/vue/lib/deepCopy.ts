@@ -3,6 +3,11 @@ export function deepCopy<T>(obj, cache = new Map()): T {
   if (obj === null || typeof obj !== 'object') {
     return obj
   }
+
+  if (obj instanceof Date) {
+    return obj
+  }
+
   const hit = cache.get(obj)
 
   if (hit) {
