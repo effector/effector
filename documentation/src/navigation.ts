@@ -139,6 +139,14 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          ru: "Использование с Websocket",
+          en: "Websockets",
+          uz: "Websocket bilan bog'lanish",
+        },
+        link: "/guides/websocket-integration",
+      },
+      {
+        text: {
           en: "Migration guide",
           ru: "Миграция с v23",
         },
