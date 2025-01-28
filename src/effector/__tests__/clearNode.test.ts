@@ -12,6 +12,8 @@ import {
   createNode,
   Node,
   step,
+  EventCallable,
+  merge,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 
@@ -967,5 +969,388 @@ describe('supports sample in withRegion', () => {
     expect(argumentHistory(fnTrigger)).toEqual(['a', 'b'])
     expect(argumentHistory(fnSource)).toEqual([10])
     expect(argumentHistory(fnTarget)).toEqual([0, 10])
+  })
+})
+
+describe('external connections survival', () => {
+  const KILL_EXTERNAL = false
+  const EXTERNAL_UNIT_CAN_KILL = true
+
+  let sampleFn: jest.Mock<number, [number]>
+  let externalTriggerFn: jest.Mock<any, any>
+  let externalTargetFn: jest.Mock<any, any>
+  let regionalUnitFn: jest.Mock<any, any>
+  let region: Node
+  let externalTrigger: EventCallable<number>
+  let externalTarget: EventCallable<number>
+  beforeEach(() => {
+    sampleFn = jest.fn(x => x)
+    externalTriggerFn = jest.fn()
+    externalTargetFn = jest.fn()
+    regionalUnitFn = jest.fn()
+    region = createNode()
+    externalTrigger = createEvent<number>()
+    externalTarget = createEvent<number>()
+  })
+  describe('regional unit in external sample target', () => {
+    test('single unit in target (should destroy the link)', () => {
+      const regionalTarget = withRegion(region, () => createEvent<number>())
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      sample({
+        clock: externalTrigger,
+        fn: upd => sampleFn(upd),
+        target: regionalTarget,
+      })
+      externalTrigger(0)
+      clearNode(region)
+      externalTrigger(1)
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        sampleFn: argumentHistory(sampleFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1],
+        sampleFn: KILL_EXTERNAL ? [0] : [0, 1],
+      })
+    })
+    test('single unit in target array (should destroy the link)', () => {
+      const regionalTarget = withRegion(region, () => createEvent<number>())
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      sample({
+        clock: externalTrigger,
+        fn: upd => sampleFn(upd),
+        target: [regionalTarget],
+      })
+      externalTrigger(0)
+      clearNode(region)
+      externalTrigger(1)
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        sampleFn: argumentHistory(sampleFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1],
+        sampleFn: KILL_EXTERNAL ? [0] : [0, 1],
+      })
+    })
+    test('not a single unit in target array (should keep the link)', () => {
+      const regionalTarget = withRegion(region, () => createEvent<number>())
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      regionalTarget.watch(upd => regionalUnitFn(upd))
+      sample({
+        clock: externalTrigger,
+        fn: upd => sampleFn(upd),
+        target: [externalTarget, regionalTarget],
+      })
+      externalTrigger(0)
+      clearNode(region)
+      externalTrigger(1)
+      externalTarget(2)
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+        sampleFn: argumentHistory(sampleFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1],
+        externalTargetFn: [0, 1, 2],
+        sampleFn: [0, 1],
+        regionalUnitFn: [0],
+      })
+    })
+    test('last unit in target array is regional (should destroy the link)', () => {
+      const regionalTarget = withRegion(region, () => createEvent<number>())
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      regionalTarget.watch(upd => regionalUnitFn(upd))
+      sample({
+        clock: externalTrigger,
+        fn: upd => sampleFn(upd),
+        target: [externalTarget, regionalTarget],
+      })
+      externalTrigger(0)
+      clearNode(externalTarget)
+      externalTrigger(1)
+      clearNode(region)
+      externalTrigger(2)
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+        sampleFn: argumentHistory(sampleFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1, 2],
+        externalTargetFn: [0],
+        sampleFn: EXTERNAL_UNIT_CAN_KILL ? [0] : [0, 1],
+        regionalUnitFn: EXTERNAL_UNIT_CAN_KILL ? [0] : [0, 1],
+      })
+    })
+    test('last two units in target array are regional (should keep the link)', () => {
+      const regionalTarget = withRegion(region, () => createEvent<number>())
+      const regionB = createNode()
+      const regionalTargetB = withRegion(regionB, () => createEvent<number>())
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      regionalTarget.watch(upd => regionalUnitFn(upd))
+      sample({
+        clock: externalTrigger,
+        fn: upd => sampleFn(upd),
+        target: [externalTarget, regionalTargetB, regionalTarget],
+      })
+      externalTrigger(0)
+      // clearNode(regionalTargetB)
+      clearNode(regionB)
+      externalTrigger(1)
+      clearNode(region)
+      externalTrigger(2)
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+        sampleFn: argumentHistory(sampleFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1, 2],
+        externalTargetFn: [0, 1, 2],
+        sampleFn: [0, 1, 2],
+        regionalUnitFn: [0, 1],
+      })
+    })
+    test('last unit in target array is not regional (should destroy the link)', () => {
+      // This test may not work because of history of default behavior of clearNode
+      const regionalTarget = withRegion(region, () => createEvent<number>())
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      regionalTarget.watch(upd => regionalUnitFn(upd))
+      sample({
+        clock: externalTrigger,
+        fn: upd => sampleFn(upd),
+        target: [externalTarget, regionalTarget],
+      })
+      externalTrigger(0)
+      clearNode(region)
+      externalTrigger(1)
+      clearNode(externalTarget)
+      externalTrigger(2)
+      regionalTarget(3)
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+        sampleFn: argumentHistory(sampleFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1, 2],
+        externalTargetFn: [0, 1],
+        sampleFn: [0, 1],
+        regionalUnitFn: EXTERNAL_UNIT_CAN_KILL ? [0] : [0, 3],
+      })
+    })
+  })
+  describe('regional unit in external sample clock', () => {
+    test('single unit in clock (should destroy the link)', () => {
+      const regionalTrigger = withRegion(region, () => createEvent<number>())
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      sample({
+        clock: regionalTrigger,
+        fn: upd => sampleFn(upd),
+        target: externalTarget,
+      })
+      regionalTrigger(0)
+      clearNode(region)
+      regionalTrigger(1)
+      externalTarget(2)
+      expect({
+        regionalTriggerFn: argumentHistory(regionalUnitFn),
+        sampleFn: argumentHistory(sampleFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+      }).toEqual({
+        regionalTriggerFn: [0],
+        sampleFn: [0],
+        externalTargetFn: [0, 2],
+      })
+    })
+    test('single unit in clock array (should destroy the link)', () => {
+      const regionalTrigger = withRegion(region, () => createEvent<number>())
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      sample({
+        clock: [regionalTrigger],
+        fn: upd => sampleFn(upd),
+        target: externalTarget,
+      })
+      regionalTrigger(0)
+      clearNode(region)
+      regionalTrigger(1)
+      externalTarget(2)
+      expect({
+        regionalTriggerFn: argumentHistory(regionalUnitFn),
+        sampleFn: argumentHistory(sampleFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+      }).toEqual({
+        regionalTriggerFn: [0],
+        sampleFn: [0],
+        externalTargetFn: [0, 2],
+      })
+    })
+    test('not a single unit in clock array (should keep the link)', () => {
+      const regionalTrigger = withRegion(region, () => createEvent<number>())
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      sample({
+        clock: [externalTrigger, regionalTrigger],
+        fn: upd => sampleFn(upd),
+        target: externalTarget,
+      })
+      regionalTrigger(0)
+      externalTrigger(1)
+      clearNode(region)
+      regionalTrigger(2)
+      externalTrigger(3)
+      externalTarget(4)
+      expect({
+        regionalTriggerFn: argumentHistory(regionalUnitFn),
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        sampleFn: argumentHistory(sampleFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+      }).toEqual({
+        regionalTriggerFn: [0],
+        externalTriggerFn: [1, 3],
+        sampleFn: [0, 1, 3],
+        externalTargetFn: [0, 1, 3, 4],
+      })
+    })
+    test('last unit in clock array is regional (should destroy the link)', () => {
+      const regionalTrigger = withRegion(region, () => createEvent<number>())
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      sample({
+        clock: [externalTrigger, regionalTrigger],
+        fn: upd => sampleFn(upd),
+        target: externalTarget,
+      })
+      regionalTrigger(0)
+      externalTrigger(1)
+      clearNode(externalTrigger)
+      regionalTrigger(2)
+      externalTrigger(3)
+      clearNode(region)
+      regionalTrigger(4)
+      externalTrigger(5)
+      externalTarget(6)
+      expect({
+        regionalTriggerFn: argumentHistory(regionalUnitFn),
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        sampleFn: argumentHistory(sampleFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+      }).toEqual({
+        regionalTriggerFn: [0, 2],
+        externalTriggerFn: [1],
+        sampleFn: EXTERNAL_UNIT_CAN_KILL ? [0, 1] : [0, 1, 2],
+        externalTargetFn: EXTERNAL_UNIT_CAN_KILL ? [0, 1, 6] : [0, 1, 2, 6],
+      })
+    })
+    test('last unit in clock array is not regional (should destroy the link)', () => {
+      // This test may not work because of history of default behavior of clearNode
+      const regionalTrigger = withRegion(region, () => createEvent<number>())
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      externalTarget.watch(upd => externalTargetFn(upd))
+      sample({
+        clock: [externalTrigger, regionalTrigger],
+        fn: upd => sampleFn(upd),
+        target: externalTarget,
+      })
+      regionalTrigger(0)
+      externalTrigger(1)
+      clearNode(region)
+      regionalTrigger(2)
+      externalTrigger(3)
+      clearNode(externalTrigger)
+      regionalTrigger(4)
+      externalTrigger(5)
+      externalTarget(6)
+      expect({
+        regionalTriggerFn: argumentHistory(regionalUnitFn),
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        sampleFn: argumentHistory(sampleFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+      }).toEqual({
+        regionalTriggerFn: [0],
+        externalTriggerFn: [1, 3],
+        sampleFn: [0, 1, 3],
+        externalTargetFn: [0, 1, 3, 6],
+      })
+    })
+  })
+  test('regional unit in external sample filter (should destroy the link)', () => {
+    const $filter = withRegion(region, () => createStore(true))
+    externalTrigger.watch(upd => externalTriggerFn(upd))
+    externalTarget.watch(upd => externalTargetFn(upd))
+    sample({
+      clock: externalTrigger,
+      filter: $filter,
+      fn: upd => sampleFn(upd),
+      target: externalTarget,
+    })
+    externalTrigger(0)
+    clearNode(region)
+    externalTrigger(1)
+    externalTarget(2)
+    expect({
+      externalTriggerFn: argumentHistory(externalTriggerFn),
+      sampleFn: argumentHistory(sampleFn),
+      externalTargetFn: argumentHistory(externalTargetFn),
+    }).toEqual({
+      externalTriggerFn: [0, 1],
+      sampleFn: KILL_EXTERNAL ? [0] : [0, 1],
+      externalTargetFn: KILL_EXTERNAL ? [0, 2] : [0, 1, 2],
+    })
+  })
+  describe('regional unit in external merge clock', () => {
+    test('single unit in clock array (should destroy target unit)', () => {
+      const regionalTrigger = withRegion(region, () => createEvent<number>())
+      const mergeTarget = merge([regionalTrigger])
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+      mergeTarget.watch(upd => externalTargetFn(upd))
+      regionalTrigger(0)
+      clearNode(region)
+      regionalTrigger(1)
+      expect({
+        regionalTriggerFn: argumentHistory(regionalUnitFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+      }).toEqual({
+        regionalTriggerFn: [0],
+        externalTargetFn: [0],
+      })
+      if (KILL_EXTERNAL) {
+        // Failing here meaning that merge do not destroy target node
+        expect(
+          ((mergeTarget as any).graphite as Node).family.owners.length,
+        ).toBe(0)
+        expect(((mergeTarget as any).graphite as Node).next.length).toBe(0)
+      }
+    })
+    test('not a single unit in clock array (should keep target unit)', () => {
+      const regionalTrigger = withRegion(region, () => createEvent<number>())
+      const mergeTarget = merge([regionalTrigger, externalTrigger])
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      mergeTarget.watch(upd => externalTargetFn(upd))
+      regionalTrigger(0)
+      externalTrigger(1)
+      clearNode(region)
+      regionalTrigger(2)
+      externalTrigger(3)
+      expect({
+        regionalTriggerFn: argumentHistory(regionalUnitFn),
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        externalTargetFn: argumentHistory(externalTargetFn),
+      }).toEqual({
+        regionalTriggerFn: [0],
+        externalTriggerFn: [1, 3],
+        externalTargetFn: [0, 1, 3],
+      })
+    })
   })
 })
