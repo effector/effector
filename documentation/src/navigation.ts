@@ -107,7 +107,7 @@ const defaultSidebar: LSidebarGroup[] = [
           ru: "Приоритет вычислений",
           uz: "Hisoblash ustuvorligi",
         },
-        link: "/explanation/computation-priority",
+        link: "/ru/explanation/computation-priority/",
       },
     ],
   },
@@ -121,6 +121,14 @@ const defaultSidebar: LSidebarGroup[] = [
           uz: "To'g'ri usullar",
         },
         link: "/guides/best-practices",
+      },
+      {
+        text: {
+          en: "Typescript",
+          ru: "Типизация",
+          uz: "Typescript",
+        },
+        link: "/essentials/typescript",
       },
       {
         text: {
@@ -159,23 +167,6 @@ const defaultSidebar: LSidebarGroup[] = [
         },
         link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
-    ],
-  },
-  {
-    text: {
-      en: "TypeScript Guide",
-      ru: "Использование с TypeScript",
-      uz: "Typescript bilan ishlash",
-    },
-    items: [
-      {
-        text: {
-          en: "Typing effector",
-          ru: "Типизация effector",
-          uz: "Effector tipizatsiyasi",
-        },
-        link: "/typescript/typing-effector",
-      },
       {
         text: {
           en: "Usage with `effector-react`",
@@ -183,10 +174,6 @@ const defaultSidebar: LSidebarGroup[] = [
           uz: "`effector-react` dan foydalaning",
         },
         link: "/typescript/usage-with-effector-react",
-      },
-      {
-        text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
-        link: "/typescript/utility-types",
       },
     ],
   },
