@@ -292,12 +292,18 @@ export const $timerCount = createStore(0)
 Не стоит также и забыть об очистке таймера, для этого нам понадобится также создать хранилище `$timerId`, чтобы сохранять `intervalId`.
 А также нам нужны эффекты:
 
-1. Для запуска таймера
-2. Для очистки таймера
+1. Для запуска таймера – `startFx`
+2. Для очистки таймера – `stopFx`
 
 ```ts
 const TIMEOUT = 1_000;
 
+const timerStopped = createEvent();
+const timerReset = createEvent();
+const timerStarted = createEvent();
+const tick = createEvent();
+
+// запуск таймера
 const startFx = createEffect(() => {
   const intervalId = setInterval(() => {
     // здесь вся проблема
@@ -307,20 +313,28 @@ const startFx = createEffect(() => {
   return intervalId;
 });
 
+// остановка таймера
 const stopFx = createEffect((timerId: number) => {
   clearInterval(timerId);
 });
 
-export const $timerId = createStore<null | number>(null)
+// id таймера для очистки
+const $timerId = createStore<null | number>(null)
   .on(startFx.doneData, (_, timerId) => timerId)
   .on(stopFx.finally, () => null);
 
+const $timerCount = createStore(0)
+  .on(tick, (seconds) => seconds + 1)
+  .reset(timerReset);
+
+// логика запуска таймера
 sample({
   clock: timerStarted,
   filter: $timerId.map((timerId) => !timerId),
   target: startFx,
 });
 
+// логика остановки таймера
 sample({
   clock: timerStopped,
   source: $timerId,
@@ -329,7 +343,7 @@ sample({
 });
 ```
 
-Обратите внимание на вызов `tick` в `setInterval`, мы вызываем его напрямую. Здесь и кроется вся проблема, как мы писали выше, к моменту вызова tick scope уже мог измениться, либо удалиться - проще говоря "потеряться". Однако благодаря `scopeBind` мы связываем событие `tick` c нужным нам скоупом.
+Обратите внимание на вызов `tick` в `setInterval`, мы вызываем его напрямую. Здесь и кроется вся проблема, как мы писали выше, к моменту вызова `tick` скоуп уже мог измениться, либо удалиться - проще говоря "потеряться". Однако благодаря `scopeBind` мы связываем событие `tick` c нужным нам скоупом.
 
 <Tabs>
 <TabItem label="❌ До">
@@ -363,7 +377,7 @@ const startFx = createEffect(() => {
 </Tabs>
 
 :::info{title="scopeBind без scope?"}
-Возможно вы уже заметили, что мы не передаем в `scopeBind` сам `scope`, это связано с тем, что текущий `scope` находится в глобальной переменной, и функция `scopeBind` замыкает нужный scope в себе в момент вызова. Однако, если вам нужно, то вы можете передать нужный `scope` в объекта второго аргумента.
+Возможно вы уже заметили, что мы не передаем в `scopeBind` сам `scope`, это связано с тем, что текущий скоуп находится в глобальной переменной, и функция `scopeBind` замыкает нужный скоуп в себе в момент вызова. Однако, если вам нужно, то вы можете передать нужный `scope` в объекта второго аргумента.
 :::
 
 И того мы имеем:
@@ -373,12 +387,14 @@ import { createEffect, createEvent, createStore, sample, scopeBind } from "effec
 
 const TIMEOUT = 1_000;
 
-export const timerStopped = createEvent();
-export const timerReset = createEvent();
-export const timerStarted = createEvent();
+const timerStopped = createEvent();
+const timerReset = createEvent();
+const timerStarted = createEvent();
 const tick = createEvent();
 
+// запуск таймера
 const startFx = createEffect(() => {
+  // привязываем событие к текущему активному скоупу
   const bindedTick = scopeBind(tick);
 
   const intervalId = setInterval(() => {
@@ -388,24 +404,29 @@ const startFx = createEffect(() => {
   return intervalId;
 });
 
+// остановка и очистка таймера
 const stopFx = createEffect((timerId: number) => {
   clearInterval(timerId);
 });
 
-export const $timerCount = createStore(0)
+// счетчик времени в секундах
+const $timerCount = createStore(0)
   .on(tick, (seconds) => seconds + 1)
   .reset(timerReset);
 
-export const $timerId = createStore<null | number>(null)
+// id таймера
+const $timerId = createStore<null | number>(null)
   .on(startFx.doneData, (_, timerId) => timerId)
   .reset(stopFx.finally);
 
+// логика запуска таймера
 sample({
   clock: timerStarted,
   filter: $timerId.map((timerId) => !timerId),
   target: startFx,
 });
 
+// логика остановки таймера
 sample({
   clock: timerStopped,
   source: $timerId,
@@ -415,7 +436,7 @@ sample({
 ```
 
 :::tip{title="Scope и фреймворки"}
-Если вы используете effector в связке с фреймворками (React, Vue и тд.), то вы можете просто использовать хук `useUnit` для юнитов (store, event и effect), он сам свяжет их с текущим скоупом.
+Если вы используете effector в связке с фреймворками (React, Vue и др.), то вы можете просто использовать хук `useUnit` для юнитов (store, event и effect), он сам свяжет их с текущим активным скоупом.
 :::
 
 ### Почему происходит потеря scope? (#why-scope-loss)
@@ -423,6 +444,7 @@ sample({
 Давайте представим, то как работает скоуп в effector:
 
 ```ts
+// наш активный скоуп
 let scope;
 
 function process() {
@@ -455,7 +477,7 @@ process();
 :::warning{title="Последствия потери scope"}
 Потеря scope может привести к тому, что:
 
-- Обновления данных не попадут в нужный scope
+- Обновления данных не попадут в нужный скоуп
 - Клиент получит неконсистентное состояние
 - Изменения не будут отражены в UI
 - Возможны утечки данных между разными пользователями при SSR

@@ -298,12 +298,18 @@ export const $timerCount = createStore(0)
 Don't forget about clearing the timer; for this, we'll also need to create a `$timerId` store to save the `intervalId`.
 We also need effects for:
 
-1. Starting the timer
-2. Clearing the timer
+1. Starting the timer – `startFx`
+2. Clearing the timer – `stopFx`
 
 ```ts
 const TIMEOUT = 1_000;
 
+const timerStopped = createEvent();
+const timerReset = createEvent();
+const timerStarted = createEvent();
+const tick = createEvent();
+
+// start timer
 const startFx = createEffect(() => {
   const intervalId = setInterval(() => {
     // here's the whole problem
@@ -313,20 +319,24 @@ const startFx = createEffect(() => {
   return intervalId;
 });
 
+// stop and clear timer
 const stopFx = createEffect((timerId: number) => {
   clearInterval(timerId);
 });
 
+// timer id
 export const $timerId = createStore<null | number>(null)
   .on(startFx.doneData, (_, timerId) => timerId)
   .on(stopFx.finally, () => null);
 
+// start timer logic
 sample({
   clock: timerStarted,
   filter: $timerId.map((timerId) => !timerId),
   target: startFx,
 });
 
+// stop timer logic
 sample({
   clock: timerStopped,
   source: $timerId,
@@ -379,12 +389,14 @@ import { createEffect, createEvent, createStore, sample, scopeBind } from "effec
 
 const TIMEOUT = 1_000;
 
-export const timerStopped = createEvent();
-export const timerReset = createEvent();
-export const timerStarted = createEvent();
+const timerStopped = createEvent();
+const timerReset = createEvent();
+const timerStarted = createEvent();
 const tick = createEvent();
 
+// start timer
 const startFx = createEffect(() => {
+  // bind event to scope, so our data doesn't get lost
   const bindedTick = scopeBind(tick);
 
   const intervalId = setInterval(() => {
@@ -394,24 +406,29 @@ const startFx = createEffect(() => {
   return intervalId;
 });
 
+// stop and clean timer
 const stopFx = createEffect((timerId: number) => {
   clearInterval(timerId);
 });
 
-export const $timerCount = createStore(0)
+// timer count in seconds
+const $timerCount = createStore(0)
   .on(tick, (seconds) => seconds + 1)
   .reset(timerReset);
 
-export const $timerId = createStore<null | number>(null)
+// timer id
+const $timerId = createStore<null | number>(null)
   .on(startFx.doneData, (_, timerId) => timerId)
   .reset(stopFx.finally);
 
+// start timer logic
 sample({
   clock: timerStarted,
   filter: $timerId.map((timerId) => !timerId),
   target: startFx,
 });
 
+// stop timer logic
 sample({
   clock: timerStopped,
   source: $timerId,
@@ -429,6 +446,7 @@ If you are using effector with integrations like 📘 React, 📗 Vue etc. you c
 Let's imagine how scope work under the hood:
 
 ```ts
+// out current scope
 let scope;
 
 function process() {
