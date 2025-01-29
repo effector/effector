@@ -209,6 +209,10 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/ecosystem-development/unit-shape-protocol",
       },
       {
+        text: { en: "Releases policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
+        link: "/resources/releases",
+      },
+      {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
       },
@@ -1090,8 +1094,9 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
         const originalLink = createLink(item, SITE.defaultLanguage);
         if (slugs.has(originalLink.toLowerCase())) {
           return {
-            title: `${itemTitle} (${SITE.defaultLanguage.toUpperCase()})`,
+            title: `${itemTitle}`,
             link,
+            isFallback: true,
           };
         }
 
