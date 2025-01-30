@@ -1,6 +1,7 @@
 ---
 title: Объединение юнитов
 description: Как связывать юниты с помощью sample и attach
+lang: ru
 ---
 
 # Композиция юнитов в effector (#unit-composition)

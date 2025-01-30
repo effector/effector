@@ -1,5 +1,6 @@
 ---
 title: FAQ
+lang: ru
 description: Часто задаваемые вопросы про Effector
 redirectFrom:
   - /ru/FAQ

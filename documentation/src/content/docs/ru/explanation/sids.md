@@ -1,6 +1,7 @@
 ---
 title: SIDs
 description: Stable IDentifiers
+lang: ru
 redirectFrom:
   - /ru/explanation/sids
   - /ru/docs/explanation/sids

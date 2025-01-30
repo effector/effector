@@ -1,5 +1,6 @@
 ---
 title: Политика релизов
+lang: ru
 description: Обзор политик и принципов релизов effector, направленных на улучшение опыта разработчиков
 redirectFrom:
   - /ru/core-principles/releases

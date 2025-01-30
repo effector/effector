@@ -1,6 +1,7 @@
 ---
 id: createWatch
 title: createWatch
+lang: ru
 ---
 
 Создает подписку на юнит (стор, ивент или эффект).
