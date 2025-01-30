@@ -1353,4 +1353,132 @@ describe('external connections survival', () => {
       })
     })
   })
+
+  test('withRegion + on (unsubscribe edge case)', () => {
+    const {$count, $str} = withRegion(region, () => {
+      const inc = createEvent()
+      const $count = createStore(0)
+      $count.on(inc, n => n + 1)
+      const $str = $count.map(n => String(n))
+
+      inc()
+
+      $count.on(inc, n => n + 1)
+
+      inc()
+
+      return {$count, $str}
+    })
+
+    expect({
+      count: $count.getState(),
+      str: $str.getState(),
+    }).toEqual({count: 2, str: '2'})
+  })
+
+  describe('external unit should survive', () => {
+    let handlerFn: jest.Mock<number, [number]>
+    beforeEach(() => {
+      handlerFn = jest.fn(x => x)
+    })
+    test('store .map', () => {
+      const inc = createEvent()
+      const $external = createStore(0)
+      $external.on(inc, x => x + 1)
+      const $regional = withRegion(region, () => {
+        return $external.map(n => handlerFn(n))
+      })
+      $external.watch(upd => externalTriggerFn(upd))
+      $regional.watch(upd => regionalUnitFn(upd))
+
+      inc()
+
+      clearNode(region)
+
+      inc()
+
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+        handlerFn: argumentHistory(handlerFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1, 2],
+        regionalUnitFn: [0, 1],
+        handlerFn: [0, 1],
+      })
+    })
+    test('combine', () => {
+      const inc = createEvent()
+      const $external = createStore(0)
+      $external.on(inc, x => x + 1)
+      const $regional = withRegion(region, () => {
+        return combine($external, n => handlerFn(n))
+      })
+      $external.watch(upd => externalTriggerFn(upd))
+      $regional.watch(upd => regionalUnitFn(upd))
+
+      inc()
+
+      clearNode(region)
+
+      inc()
+
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+        handlerFn: argumentHistory(handlerFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1, 2],
+        regionalUnitFn: [0, 1],
+        handlerFn: [0, 1],
+      })
+    })
+    test('event .map', () => {
+      const regionalTarget = withRegion(region, () => {
+        return externalTrigger.map(n => handlerFn(n))
+      })
+      externalTrigger.watch(upd => externalTriggerFn(upd))
+      regionalTarget.watch(upd => regionalUnitFn(upd))
+
+      externalTrigger(0)
+
+      clearNode(region)
+
+      externalTrigger(1)
+
+      expect({
+        externalTriggerFn: argumentHistory(externalTriggerFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+        handlerFn: argumentHistory(handlerFn),
+      }).toEqual({
+        externalTriggerFn: [0, 1],
+        regionalUnitFn: [0],
+        handlerFn: [0],
+      })
+    })
+    test('event .prepend', () => {
+      const regionalTrigger = withRegion(region, () => {
+        return externalTarget.prepend((n: number) => handlerFn(n))
+      })
+      externalTarget.watch(upd => externalTargetFn(upd))
+      regionalTrigger.watch(upd => regionalUnitFn(upd))
+
+      regionalTrigger(0)
+
+      clearNode(region)
+
+      regionalTrigger(1)
+      externalTarget(2)
+
+      expect({
+        externalTargetFn: argumentHistory(externalTargetFn),
+        regionalUnitFn: argumentHistory(regionalUnitFn),
+        handlerFn: argumentHistory(handlerFn),
+      }).toEqual({
+        externalTargetFn: [0, 2],
+        regionalUnitFn: [0],
+        handlerFn: [0],
+      })
+    })
+  })
 })

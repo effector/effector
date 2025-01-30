@@ -1,8 +1,8 @@
-import type {Subscription, NodeUnit} from './index.h'
-import {clearNode} from './clearNode'
+import type {Subscription, Node} from './index.h'
+import {clearNodeLight} from './clearNode'
 
-export const createSubscription = (node: NodeUnit): Subscription =>
-  addUnsubscribe(() => clearNode(node))
+export const createSubscription = (node: Node): Subscription =>
+  addUnsubscribe(() => clearNodeLight(node))
 
 export function addUnsubscribe(callback: () => void): Subscription {
   const subscription: Subscription = () => callback()
