@@ -25,7 +25,15 @@ export const clearNodeLight = (targetNode: Node) => {
   }
 }
 /** These nodes should be cleared but dissalow clearing of any links */
-const nonPassableNodes = ['on', 'reset', 'sample', 'split', 'guard', 'forward']
+const nonPassableNodes = [
+  'on',
+  'reset',
+  'sample',
+  'split',
+  'merge',
+  'guard',
+  'forward',
+]
 const clearNodeNormalized = (
   targetNode: Node,
   deep: boolean,
@@ -42,22 +50,26 @@ const clearNodeNormalized = (
   const isRegionNode = targetNode.meta.isRegion
   const nextRegionNode = isRegionNode ? targetNode : regionNode
   if (list.length > 0) {
+    const targetIsOp = includes(nonPassableNodes, targetNode.meta.op)
     const canGoDeep = !isRegionNode && !extractOnly
-    const domainSampleEdgeCase =
-      canGoDeep &&
-      isDomainUnit &&
-      !includes(nonPassableNodes, targetNode.meta.op)
+    const domainSampleEdgeCase = canGoDeep && isDomainUnit && !targetIsOp
     while ((currentNode = list.pop())) {
+      const isTrigger = includes(currentNode.next, targetNode)
       removeFromNode(currentNode, targetNode)
       if (isRegionNode) {
         clearNodeNormalized(currentNode, false, false, targetNode, true)
       }
+      if (!isTrigger) {
+        currentNode.family.triggers -= 1
+      }
       if (
         deep ||
         domainSampleEdgeCase ||
-        (canGoDeep &&
-          currentNode.family.type === CROSSLINK &&
-          !includes(nonPassableNodes, targetNode.meta.op))
+        (canGoDeep && currentNode.family.type === CROSSLINK && !targetIsOp) ||
+        (extractOnly &&
+          includes(nonPassableNodes, currentNode.meta.op) &&
+          ((isTrigger && currentNode.next.length === 0) ||
+            (!isTrigger && currentNode.family.triggers <= 0)))
       ) {
         clearNodeNormalized(
           currentNode,

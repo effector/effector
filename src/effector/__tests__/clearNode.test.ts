@@ -984,8 +984,10 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
      * links with regional units in clock
      * in the region itself
      **/
-    const KILL_EXTERNAL = false
+    const KILL_EXTERNAL = true
     const EXTERNAL_UNIT_CAN_KILL = true
+    /** When sample filter becomes dead it kills a whole sample */
+    const SAMPLE_FILTER_SUPPORTED = false
 
     let sampleFn: jest.Mock<number, [number]>
     let externalTriggerFn: jest.Mock<any, any>
@@ -1369,12 +1371,13 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
         externalTargetFn: argumentHistory(externalTargetFn),
       }).toEqual({
         externalTriggerFn: [0, 1],
-        sampleFn: KILL_EXTERNAL ? [0] : [0, 1],
-        externalTargetFn: KILL_EXTERNAL ? [0, 2] : [0, 1, 2],
+        sampleFn: KILL_EXTERNAL && SAMPLE_FILTER_SUPPORTED ? [0] : [0, 1],
+        externalTargetFn:
+          KILL_EXTERNAL && SAMPLE_FILTER_SUPPORTED ? [0, 2] : [0, 1, 2],
       })
     })
     describe('regional unit in external merge clock', () => {
-      test('single unit in clock array (should destroy target unit)', () => {
+      test('single unit in clock array (should keep target unit)', () => {
         const [regionalTrigger, mergeTarget] = optionalRegionWrap(() => {
           const regionalTrigger = withRegion(region, () =>
             createEvent<number>(),
@@ -1394,13 +1397,16 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
           regionalTriggerFn: [0],
           externalTargetFn: [0],
         })
-        if (KILL_EXTERNAL) {
-          // Failing here meaning that merge do not destroy target node
-          expect(
-            ((mergeTarget as any).graphite as Node).family.owners.length,
-          ).toBe(0)
-          expect(((mergeTarget as any).graphite as Node).next.length).toBe(0)
-        }
+
+        const mergeTargetNode = (mergeTarget as any).graphite as Node
+
+        expect({
+          mergeTargetOwners: mergeTargetNode.family.owners.length,
+          mergeTargetNext: mergeTargetNode.next.length,
+        }).toEqual({
+          mergeTargetOwners: regionWrap ? 1 : 0,
+          mergeTargetNext: 1,
+        })
       })
       test('not a single unit in clock array (should keep target unit)', () => {
         const regionalTrigger = optionalRegionWrap(() => {
@@ -1485,9 +1491,6 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
       replace(2)
 
       const node: Node = ($count as any).graphite
-
-      console.dir(node.family.links, {depth: 4})
-      console.dir(node.family.links[2], {depth: 3})
 
       expect(argumentHistory(handlerFn)).toEqual([1])
       /** .updates and reinit */

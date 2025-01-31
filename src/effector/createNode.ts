@@ -41,7 +41,7 @@ export function createNode({
 } = {}): Node {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
-  const owners = arrifyNodes(familyRaw.owners)
+  const owners = [...new Set(arrifyNodes(familyRaw.owners))]
   const seq: Cmd[] = []
   forEach(node, item => item && add(seq, item))
   const result: Node = {
@@ -51,6 +51,7 @@ export function createNode({
     meta,
     scope,
     family: {
+      triggers: sources.length,
       type: familyRaw.type || CROSSLINK,
       links,
       owners,
