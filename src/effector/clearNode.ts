@@ -1,5 +1,5 @@
 import {Node, NodeUnit} from './index.h'
-import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
+import {getGraph, getOwners, getLinks} from './getter'
 import {is} from './is'
 import {removeItem} from './collection'
 import {CROSSLINK} from './tag'
@@ -89,9 +89,7 @@ export const clearNode = (
   let isDomainUnit = false
   //@ts-expect-error
   if (graphite.ownerSet) graphite.ownerSet.delete(graphite)
-  if (is.store(graphite)) {
-    clearMap(getSubscribers(graphite))
-  } else if (is.domain(graphite)) {
+  if (is.domain(graphite)) {
     isDomainUnit = true
     const history = graphite.history
     clearMap(history.events)

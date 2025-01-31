@@ -973,6 +973,15 @@ describe('supports sample in withRegion', () => {
 })
 
 describe('external connections survival', () => {
+  /**
+   * Ability to remove link from regional unit
+   * to external declared outside of region
+   * (e.g. `$external.on(regional, ...)`)
+   *
+   * When false, it's better to always declare
+   * links with regional units in clock
+   * in the region itself
+   **/
   const KILL_EXTERNAL = false
   const EXTERNAL_UNIT_CAN_KILL = true
 
@@ -1374,6 +1383,71 @@ describe('external connections survival', () => {
       count: $count.getState(),
       str: $str.getState(),
     }).toEqual({count: 2, str: '2'})
+  })
+
+  test('regional .on support', () => {
+    const handlerFn = jest.fn((x: number) => x)
+    const $count = createStore(0)
+    const replace = createEvent<number>()
+    withRegion(region, () => {
+      $count.on(replace, (_, upd) => handlerFn(upd))
+    })
+
+    replace(1)
+    clearNode(region)
+    replace(2)
+
+    expect(argumentHistory(handlerFn)).toEqual([1])
+  })
+
+  test('external .on support', () => {
+    const handlerFn = jest.fn((x: number) => x)
+    const $count = createStore(0)
+    const replace = withRegion(region, () => createEvent<number>())
+    $count.on(replace, (_, upd) => handlerFn(upd))
+
+    replace(1)
+    clearNode(region)
+    replace(2)
+
+    const node: Node = ($count as any).graphite
+
+    console.dir(node.family.links, {depth: 4})
+    console.dir(node.family.links[2], {depth: 3})
+
+    expect(argumentHistory(handlerFn)).toEqual([1])
+    /** .updates and reinit */
+    expect(node.family.links.length).toBe(KILL_EXTERNAL ? 2 : 3)
+  })
+
+  test('.on memory leaks', () => {
+    const $count = createStore(0)
+
+    function factory() {
+      const region = createNode()
+
+      const inc = withRegion(region, () => {
+        const inc = createEvent()
+        $count.on(inc, x => x + 1)
+        return inc
+      })
+
+      inc()
+
+      return {inc, region}
+    }
+
+    for (let i = 0; i < 10; i++) {
+      const {region} = factory()
+      clearNode(region)
+    }
+
+    const node: Node = ($count as any).graphite
+
+    /** only .updates */
+    expect(node.next.length).toBe(1)
+    /** .updates and reinit */
+    expect(node.family.links.length).toBe(2)
   })
 
   describe('external unit should survive', () => {

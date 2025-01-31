@@ -30,21 +30,14 @@ import {
 import {createName, generateErrorTitle} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
-import {createSubscription} from './subscription'
 import {readTemplate, readSidRoot, reportDeclaration} from './region'
-import {
-  getSubscribers,
-  getStoreState,
-  getGraph,
-  getParent,
-  setMeta,
-  getMeta,
-} from './getter'
+import {getStoreState, getGraph, getParent, setMeta, getMeta} from './getter'
 import {assert, deprecate, printErrorWithStack} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
+import {clearNodeLight} from './clearNode'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -223,10 +216,7 @@ function on<State>(
   )
   forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
     store.off(trigger)
-    getSubscribers(store).set(
-      trigger,
-      createSubscription(updateStore(trigger, store, 'on', callARegStack, fn)),
-    )
+    updateStore(trigger, store, 'on', callARegStack, fn)
   })
   return store
 }
@@ -258,7 +248,6 @@ export function createStore<State>(
   deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter', errorTitle)
 
   const store = {
-    subscribers: new Map(),
     updates,
     defaultState,
     stateRef: plainState,
@@ -308,10 +297,12 @@ export function createStore<State>(
       return on(store, '.on', nodeSet, fn, errorTitle)
     },
     off(unit: CommonUnit) {
-      const currentSubscription = getSubscribers(store).get(unit)
-      if (currentSubscription) {
-        currentSubscription()
-        getSubscribers(store).delete(unit)
+      const triggerUnitId = getGraph(unit).id
+      const oldLink = getGraph(store).family.links.find(
+        e => e.meta.onTrigger === triggerUnitId,
+      )
+      if (oldLink) {
+        clearNodeLight(oldLink)
       }
       return store
     },
@@ -468,5 +459,9 @@ const updateStore = (
     node,
     is.store(from) && getStoreState(from),
   )
-  return createLinkNode(from, store, node, op, fn)
+  const result = createLinkNode(from, store, node, op, fn)
+  if (op !== MAP) {
+    setMeta(result, 'onTrigger', getGraph(from).id)
+  }
+  return result
 }
