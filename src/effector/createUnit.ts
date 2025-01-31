@@ -37,7 +37,7 @@ import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
-import {clearNodeLight} from './clearNode'
+import {clearNode} from './clearNode'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -302,7 +302,7 @@ export function createStore<State>(
         e => e.meta.onTrigger === triggerUnitId,
       )
       if (oldLink) {
-        clearNodeLight(oldLink)
+        clearNode(oldLink)
       }
       return store
     },

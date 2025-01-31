@@ -9,21 +9,6 @@ const removeFromNode = (currentNode: Node, targetNode: Node) => {
   removeItem(getOwners(currentNode), targetNode)
   removeItem(getLinks(currentNode), targetNode)
 }
-export const clearNodeLight = (targetNode: Node) => {
-  targetNode.next.length = 0
-  targetNode.seq.length = 0
-  //@ts-expect-error
-  targetNode.scope = null
-  let currentNode: Node | void
-  let list = getLinks(targetNode)
-  while ((currentNode = list.pop())) {
-    removeFromNode(currentNode, targetNode)
-  }
-  list = getOwners(targetNode)
-  while ((currentNode = list.pop())) {
-    removeFromNode(currentNode, targetNode)
-  }
-}
 /** These nodes should be cleared but dissalow clearing of any links */
 const nonPassableNodes = [
   'on',
