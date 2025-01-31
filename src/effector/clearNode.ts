@@ -1,7 +1,7 @@
 import {Node, NodeUnit} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
 import {is} from './is'
-import {removeItem} from './collection'
+import {includes, removeItem} from './collection'
 import {CROSSLINK} from './tag'
 
 const removeFromNode = (currentNode: Node, targetNode: Node) => {
@@ -24,6 +24,8 @@ export const clearNodeLight = (targetNode: Node) => {
     removeFromNode(currentNode, targetNode)
   }
 }
+/** These nodes should be cleared but dissalow clearing of any links */
+const nonPassableNodes = ['on', 'reset', 'sample', 'split', 'guard', 'forward']
 const clearNodeNormalized = (
   targetNode: Node,
   deep: boolean,
@@ -42,7 +44,9 @@ const clearNodeNormalized = (
   if (list.length > 0) {
     const canGoDeep = !isRegionNode && !extractOnly
     const domainSampleEdgeCase =
-      canGoDeep && isDomainUnit && targetNode.meta.op !== 'sample'
+      canGoDeep &&
+      isDomainUnit &&
+      !includes(nonPassableNodes, targetNode.meta.op)
     while ((currentNode = list.pop())) {
       removeFromNode(currentNode, targetNode)
       if (isRegionNode) {
@@ -51,7 +55,9 @@ const clearNodeNormalized = (
       if (
         deep ||
         domainSampleEdgeCase ||
-        (canGoDeep && currentNode.family.type === CROSSLINK)
+        (canGoDeep &&
+          currentNode.family.type === CROSSLINK &&
+          !includes(nonPassableNodes, targetNode.meta.op))
       ) {
         clearNodeNormalized(
           currentNode,
