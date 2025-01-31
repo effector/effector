@@ -237,7 +237,10 @@ const syncSourceState = (
         mov({from: STACK, target: sourceRef}),
         mov({from: VALUE, store: true, target: hasSource}),
       ],
-      family: {owners: [source, target, clock], links: target},
+      family: {
+        owners: [...new Set([source, target, clock].flat())],
+        links: target,
+      },
       meta: {op: method},
       regional: true,
     })
