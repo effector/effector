@@ -72,6 +72,7 @@ Binds arbitrary callback to a scope to be called later. The bound version of the
 
 :::info{title="since"}
 Feature is available since `effector 23.1.0` release.
+Multiple function arguments are supported since `effector 23.3.0`
 :::
 
 :::warning
@@ -85,7 +86,7 @@ To be compatible with the Fork API, callbacks **must** adhere to the same rules 
 ### Formulae (#scopeBind-methods-scopeBind-callback-formulae)
 
 ```ts
-scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T) => void;
+scopeBind(callback: (...args: Args) => T, options?: { scope?: Scope; safe?: boolean }): (...args: Args) => T;
 ```
 
 ### Arguments (#scopeBind-methods-scopeBind-callback-arguments)
@@ -97,7 +98,7 @@ scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T
 
 ### Returns (#scopeBind-methods-scopeBind-callback-returns)
 
-`(payload: T) => void` — A function with the same types as `callback`.
+`(...args: Args) => T` — A function with the same types as `callback`.
 
 ### Examples (#scopeBind-methods-scopeBind-callback-examples)
 
