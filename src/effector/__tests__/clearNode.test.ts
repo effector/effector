@@ -1529,6 +1529,39 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
       expect(node.family.links.length).toBe(2)
     })
 
+    /** So nested models will NOT be cleared correctly without region: true */
+    test('inner regions will survive with regional: false', () => {
+      const innerEvent = optionalRegionWrap(() => {
+        return withRegion(region, () => {
+          const innerRegion = createNode()
+          return withRegion(innerRegion, () => createEvent<number>())
+        })
+      })
+      innerEvent.watch(upd => regionalUnitFn(upd))
+
+      innerEvent(0)
+      clearNode(region)
+      innerEvent(1)
+
+      expect(argumentHistory(regionalUnitFn)).toEqual([0, 1])
+    })
+
+    test('inner regions will not survive with regional: true', () => {
+      const innerEvent = optionalRegionWrap(() => {
+        return withRegion(region, () => {
+          const innerRegion = createNode({regional: true})
+          return withRegion(innerRegion, () => createEvent<number>())
+        })
+      })
+      innerEvent.watch(upd => regionalUnitFn(upd))
+
+      innerEvent(0)
+      clearNode(region)
+      innerEvent(1)
+
+      expect(argumentHistory(regionalUnitFn)).toEqual([0])
+    })
+
     describe('external unit should survive', () => {
       let handlerFn: jest.Mock<number, [number]>
       beforeEach(() => {
