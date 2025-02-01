@@ -13,7 +13,8 @@ import type {UsingBlock} from '../relation.h'
 
 import {createOpGroup, createOpQueue} from '../plan'
 
-import {createTemplate, spawn, currentLeaf} from '../template'
+import {createTemplate} from '../engine/createTemplate'
+import {spawn, currentLeaf} from '../engine/spawn'
 import {assert} from '../assert'
 import {mountFn} from '../mountFn'
 
