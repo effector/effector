@@ -4,6 +4,8 @@ description: How events works and how to use it
 redirectFrom:
   - /docs/essentials/events
   - /essentials/events
+  - /en/explanation/events
+  - /explanation/events
 ---
 
 # Events (#events)

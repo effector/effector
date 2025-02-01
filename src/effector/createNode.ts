@@ -51,6 +51,7 @@ export function createNode({
     meta,
     scope,
     family: {
+      triggers: sources.length,
       type: familyRaw.type || CROSSLINK,
       links,
       owners,

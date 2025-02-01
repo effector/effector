@@ -1,6 +1,7 @@
 ---
 title: Асинхронность в effector
 description: Как эффекты помогают работать с асинхронностью в effector
+lang: ru
 ---
 
 # Асинхронность в effector с помощью эффектов (#async-operation-with-effects)

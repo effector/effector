@@ -98,6 +98,14 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/essentials/flow-split",
       },
       {
+        text: {
+          en: "Scope: Working with Isolated Contexts",
+          ru: "Scope: Работа с изолированными контекстами",
+          uz: "Scope: Isolatli kontekstlar bilan ishlash",
+        },
+        link: "/advanced/work-with-scope",
+      },
+      {
         text: { en: "Store SID", ru: "Хранилища и их SID", uz: "Store SID" },
         link: "/explanation/sids",
       },
@@ -124,6 +132,14 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Typescript",
+          ru: "Типизация",
+          uz: "Typescript",
+        },
+        link: "/essentials/typescript",
+      },
+      {
+        text: {
           en: "Testing",
           ru: "Тестирование",
           uz: "Testlash",
@@ -139,6 +155,14 @@ const defaultSidebar: LSidebarGroup[] = [
       },
       {
         text: {
+          ru: "Использование с Websocket",
+          en: "Websockets",
+          uz: "Websocket bilan bog'lanish",
+        },
+        link: "/guides/websocket-integration",
+      },
+      {
+        text: {
           en: "Migration guide",
           ru: "Миграция с v23",
         },
@@ -151,23 +175,6 @@ const defaultSidebar: LSidebarGroup[] = [
         },
         link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
-    ],
-  },
-  {
-    text: {
-      en: "TypeScript Guide",
-      ru: "Использование с TypeScript",
-      uz: "Typescript bilan ishlash",
-    },
-    items: [
-      {
-        text: {
-          en: "Typing effector",
-          ru: "Типизация effector",
-          uz: "Effector tipizatsiyasi",
-        },
-        link: "/typescript/typing-effector",
-      },
       {
         text: {
           en: "Usage with `effector-react`",
@@ -175,10 +182,6 @@ const defaultSidebar: LSidebarGroup[] = [
           uz: "`effector-react` dan foydalaning",
         },
         link: "/typescript/usage-with-effector-react",
-      },
-      {
-        text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
-        link: "/typescript/utility-types",
       },
     ],
   },
@@ -204,6 +207,10 @@ const defaultSidebar: LSidebarGroup[] = [
       {
         text: { en: "For developers", ru: "Для разработчиков" },
         link: "/ecosystem-development/unit-shape-protocol",
+      },
+      {
+        text: { en: "Releases policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
+        link: "/resources/releases",
       },
       {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
@@ -1087,8 +1094,9 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
         const originalLink = createLink(item, SITE.defaultLanguage);
         if (slugs.has(originalLink.toLowerCase())) {
           return {
-            title: `${itemTitle} (${SITE.defaultLanguage.toUpperCase()})`,
+            title: `${itemTitle}`,
             link,
+            isFallback: true,
           };
         }
 

@@ -38,9 +38,6 @@ importers:
       '@types/html-escaper':
         specifier: ^3.0.2
         version: 3.0.2
-      '@types/mdast':
-        specifier: ^4.0.4
-        version: 4.0.4
       '@types/node':
         specifier: ^20.11.30
         version: 20.11.30
@@ -50,9 +47,6 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.0
-      '@types/unist':
-        specifier: ^3.0.3
-        version: 3.0.3
       astro:
         specifier: ^4.16.8
         version: 4.16.8(@types/node@20.11.30)(lightningcss@1.25.1)(rollup@4.21.2)(terser@5.31.3)(typescript@5.5.4)
@@ -101,12 +95,21 @@ importers:
       remark-github:
         specifier: ^12.0.0
         version: 12.0.0
+      remark-parse:
+        specifier: ^11.0.0
+        version: 11.0.0
+      remark-stringify:
+        specifier: ^11.0.0
+        version: 11.0.0
       rollup:
         specifier: ^4.21.2
         version: 4.21.2
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.10
+      unified:
+        specifier: ^11.0.5
+        version: 11.0.5
       unist-util-map:
         specifier: ^4.0.0
         version: 4.0.0
@@ -117,6 +120,12 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
     devDependencies:
+      '@types/mdast':
+        specifier: ^4.0.4
+        version: 4.0.4
+      '@types/unist':
+        specifier: ^3.0.3
+        version: 3.0.3
       mdast-util-directive:
         specifier: ^3.0.0
         version: 3.0.0
