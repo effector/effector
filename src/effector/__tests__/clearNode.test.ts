@@ -1004,7 +1004,7 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
       regionalUnitFn = jest.fn()
       parentRegion = createNode()
       ;[region, externalTrigger, externalTarget] = optionalRegionWrap(() => [
-        createNode(),
+        createNode({regional: true}),
         createEvent<number>(),
         createEvent<number>(),
       ])
@@ -1116,7 +1116,7 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
       test('last two units in target array are regional (should keep the link)', () => {
         const regionB = optionalRegionWrap(() => {
           const regionalTarget = withRegion(region, () => createEvent<number>())
-          const regionB = createNode()
+          const regionB = createNode({regional: true})
           const regionalTargetB = withRegion(regionB, () =>
             createEvent<number>(),
           )
@@ -1503,7 +1503,7 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
         return $count
       })
       function factory() {
-        const region = createNode()
+        const region = createNode({regional: true})
 
         const inc = withRegion(region, () => {
           const inc = createEvent()
