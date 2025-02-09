@@ -1,5 +1,6 @@
 ---
 id: usage-with-effector-react
+lang: ru
 title: Использование с пакетом effector-react
 redirectFrom:
   - /ru/docs/typescript/usage-with-effector-react

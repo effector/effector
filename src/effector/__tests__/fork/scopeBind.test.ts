@@ -284,3 +284,23 @@ test('scopeBind allows $store.getState as a callback', () => {
 
   expect(getCount()).toBe(42)
 })
+
+test('scopeBind with arbitary sync callback allow multiple arguments', () => {
+  const add = createEvent<number>()
+  const $count = createStore(0).on(add, (x, y) => x + y)
+
+  const scope = fork()
+
+  const scopeInc = scopeBind(
+    (a: number, b: number) => {
+      add(a)
+      add(b)
+    },
+    {scope},
+  )
+
+  scopeInc(10, 100)
+
+  expect(scope.getState($count)).toBe(110)
+  expect($count.getState()).toBe(0)
+})

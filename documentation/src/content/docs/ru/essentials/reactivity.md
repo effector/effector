@@ -1,6 +1,7 @@
 ---
 title: Реактивность в effector
 description: Разберем что такое реактивность и как она работает в эффекторе
+lang: ru
 ---
 
 # Реактивность в effector (#reactivity-in-effector)

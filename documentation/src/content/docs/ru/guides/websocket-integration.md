@@ -1,5 +1,6 @@
 ---
 title: Настройка работы WebSocket с Effector
+lang: ru
 description: Подробное руководство по созданию надёжного и масштабируемого WebSocket-клиента с использованием Effector.
 ---
 

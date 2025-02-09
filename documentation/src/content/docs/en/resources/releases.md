@@ -1,12 +1,16 @@
 ---
 title: Releases policy
+description: Overview of effector's release policies and principles aimed at providing a better developer experience
 redirectFrom:
   - /core-principles/releases
+  - /en/core-principles/releases
 ---
+
+# Releases policy (#releases-policy)
 
 The main goal of effector is to **make developer experience better**, as a part of this strategy we are committing to some rules of effector releases.
 
-## No breaking changes without prior deprecation
+## No breaking changes without prior deprecation (#no-breaking-changes)
 
 Before each breaking change, the effector must provide a deprecation warning for **at least a year before.**
 
@@ -15,7 +19,7 @@ For example:
 - When version 22 was released, feature "A" was marked as deprecated. The library gives a warning to the console when it is used.
 - A year later, in version 23 release, feature "A" is removed.
 
-## Release cycle
+## Release cycle (#release-cycle)
 
 Major updates (i.e. with breaking changes) of the effector are released **no more than once a year.**
 

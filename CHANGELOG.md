@@ -2,6 +2,16 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.3.0
+
+- Improve error messages: now errors for `skipVoid` and `store without sid` will point to the line of store creation. This will help locate troublesome units easily
+- Add support for multiple arguments to `scopeBind`. This feature indirectly allows to use multiple arguments in `reflect` ([issue reflect#91](https://github.com/effector/reflect/issues/91))
+- Fix issues with `clearNode` ([issue #1200](https://github.com/effector/effector/issues/1200))
+
+## effector-vue 23.1.1
+
+- Fix `Date` suppport in `useVModel`, `createGate` and options API ([PR #1228](https://github.com/effector/effector/pull/1228), thanks [egoson](https://github.com/egoson))
+
 ## effector-react 23.3.0
 
 - Add react 19 support

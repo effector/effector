@@ -29,7 +29,6 @@ export interface Event<E> extends Unit {
 }
 
 export interface Store<State> extends Unit {
-  subscribers: Map<CommonUnit, Subscription>
   id: string
   stateRef: StateRef
   reset(...units: CommonUnit[]): Store<State>
