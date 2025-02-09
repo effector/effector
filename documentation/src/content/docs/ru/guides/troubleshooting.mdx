@@ -1,15 +1,19 @@
 ---
 title: Исправление ошибок в Effector
 description: Исправление ошибок
+lang: ru
 ---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
 
 # Исправление ошибок (#troubleshooting)
 
 ## Основные ошибки (#common-errors)
 
-### `store: undefined is used to skip updates` (#store-undefined)
+### `store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option` (#store-undefined)
 
-Ошибка вида: `store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option` сообщает вам о том, что вы пытаетесь передать в ваш стор значение `undefined`, что, возможно, является некорректным поведением.
+Эта ошибка сообщает вам о том, что вы пытаетесь передать в ваш стор значение `undefined`, что, возможно, является некорректным поведением.
 
 Если вам действительно нужно передать ваш стор значение `undefined`, то вам надо вторым аргументом в `createStore` передать объект со свойством `skipVoid: false`.
 
@@ -19,14 +23,19 @@ const $store = createStore(0, {
 });
 ```
 
-### `There is a store without sid in this scope, its value is omitted` (#store-without-sid)
+### `serialize: One or more stores dont have sids, their values are omitted` (#store-without-sid)
+
+:::info{title="До версии 23.3.0"}
+До версии 23.3.0 эта ошибка также известна как: `There is a store without sid in this scope, its value is omitted`.
+:::
 
 Эта ошибка часто встречается при работе с SSR, она связана с тем, что у вашего стора отсутствует `sid` (stable id), который необходим для корректной гидрации данных с сервера на клиент.
 Чтобы исправить эту проблему вам нужно добавить этот `sid`.<br/>
 Сделать это вы можете несколькими способами:
 
-1. Использовать [babel](/ru/api/effector/babel-plugin/) или [SWC](/ru/api/effector/swc-plugin/) плагин
-2. Добавить `sid` в ручную, передав во второй аргумент `createStore` объект со свойством `sid`:
+1. Использовать [babel](/ru/api/effector/babel-plugin/) или [SWC](/ru/api/effector/swc-plugin/) плагин, который сделает все за вас
+2. Или добавить `sid` в ручную, передав во второй аргумент `createStore` объект со свойством `sid`:
+
    ```ts
    const $store = createStore(0, {
      sid: "unique id",
@@ -41,7 +50,7 @@ const $store = createStore(0, {
 Эта ошибка могла быть вызвана:
 
 1. Вы используете режим работы 'без скоупа' и у вас их нет в приложении
-2. Ваши [юниты были вызваны вне скоупа](#using-using-without-use-unit)
+2. Ваши [юниты были вызваны вне скоупа](#using-units-without-use-unit)
 
 Возможные решения:
 
@@ -81,14 +90,21 @@ const scopeEvent = scopeBind(event, {
 
 ## Частые проблемы (#gotchas)
 
+### `sample.fn` не сужает тип, который приходит из `sample.filter` (#sample-types-error)
+
+Частая проблема с типизацией `sample` происходит когда мы делаем проверку в `filter` на что-то, но не получаем необходимый тип в `fn`.
+
+[Исправление этой проблемы](/ru/essentials/typescript#typing-sample-filter-and-fn).
+
 ### Мое состояние не изменилось (#my-state-not-changed)
 
-Скорее всего вы работаете со скоупами и в какой-то момент ваш скоуп для юнита потерялся из-за чего он запустился в глобальной области.<br/>
+Скорее всего вы работаете со скоупами и в какой-то момент активный скоуп потерялся и ваш юнит выполнился в глобальной области.<br/>
+Вы можете найти больше информации об этом [тут](/ru/advanced/work-with-scope).
 Это происходит при передаче юнитов (события или эффекты) в колбэк внешних функций, таких как:
 
 - `setTimeout`/`setInterval`
 - `addEventListener`
-- `webSocket`
+- `webSocket` и др.
 
 Чтобы исправить эту проблему привяжите ваше событие или эффект к текущему скоупу при помощи [`scopeBind`](/ru/api/effector/scopeBind):
 
@@ -96,21 +112,53 @@ const scopeEvent = scopeBind(event, {
 const event = createEvent();
 
 // ❌ - так у вас событие вызовется в глобальной области видимости
-setTimeout(() => {
-  event();
-}, 1000);
+const effectFx = createEffect(() => {
+  setTimeout(() => {
+    event();
+  }, 1000);
+});
 
 // ✅ - так у вас будет работать как ожидаемо
-const scopeEvent = scopeBind(event);
-setTimeout(() => {
-  scopeEvent();
-}, 1000);
+const effectFx = createEffect(() => {
+  const scopeEvent = scopeBind(event);
+  setTimeout(() => {
+    scopeEvent();
+  }, 1000);
+});
 ```
 
 #### Использование юнитов без `useUnit` (#using-units-without-use-unit)
 
 Возможно вы используете события или эффекты во фреймворках без использования хука `useUnit`, что может также повлиять на неправильную работу со скоупами.<br/>
-Чтобы исправить это поведение передайте нужный юнит в `useUnit` хук и используйте возвращаемое значение.
+Чтобы исправить это поведение передайте нужный юнит в `useUnit` хук и используйте возвращаемое значение:
+
+<Tabs>
+<TabItem label="❌ Неверно">
+
+```tsx
+import { event } from "./model.js";
+
+const Component = () => {
+  return <button onClick={() => event}></button>;
+};
+```
+
+</TabItem>
+<TabItem label="✅ Верно">
+
+```tsx
+import { event } from "./model.js";
+import { useUnit } from "effector-react";
+
+const Component = () => {
+  const onEvent = useUnit(event);
+
+  return <button onClick={onEvent}></button>;
+};
+```
+
+</TabItem>
+</Tabs>
 
 :::info{title="Информация"}
 [Использования хука `useUnit` является рекомендованным способом работы](/ru/guides/best-practices#use-unit) с юнитами.
@@ -122,7 +170,7 @@ setTimeout(() => {
 
 Если вы не нашли ответ на свой вопрос, то вы всегда можете задать сообществу:
 
-- RU Telegram - https://t.me/effector_ru
-- EN Telegram - https://t.me/effector_en
-- Discord - https://discord.gg/t3KkcQdt
-- Reddit — [reddit.com/r/effectorjs](https://www.reddit.com/r/effectorjs/)
+- [RU Telegram](https://t.me/effector_ru)
+- [EN Telegram](https://t.me/effector_en)
+- [Discord](https://discord.gg/t3KkcQdt)
+- [Reddit](https://www.reddit.com/r/effectorjs/)

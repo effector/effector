@@ -1,0 +1,179 @@
+---
+title: Troubleshooting in Effector
+description: Error Fixing
+lang: en
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Troubleshooting Effector (#troubleshooting)
+
+## Common Errors (#common-errors)
+
+### `store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option` (#store-undefined)
+
+This error indicates that you are trying to pass `undefined` as a value to your store, which might not be the intended behavior.
+
+If you really need to store `undefined`, pass an object with `{ skipVoid: false }` as the second argument to `createStore`:
+
+```ts
+const $store = createStore(0, {
+  skipVoid: false,
+});
+```
+
+### `serialize: One or more stores dont have sids, their values are omitted` (#store-without-sid)
+
+:::info{title="Before version 23.3.0"}
+Before version 23.3.0, this error was also known as: `There is a store without sid in this scope, its value is omitted`.
+:::
+
+This error commonly occurs in SSR scenarios due to the absence of an `sid` (stable id), which is required for proper hydration of store data from the server to the client.
+
+To fix this, add an `sid` to your store. You can do this in one of the following ways:
+
+1. Use the [Babel](/en/api/effector/babel-plugin/) or [SWC](/en/api/effector/swc-plugin/) plugin to handle it automatically.
+2. Manually specify an `sid` by providing an object with a `sid` property as the second argument to `createStore`:
+
+   ```ts
+   const $store = createStore(0, {
+     sid: "unique id",
+   });
+   ```
+
+For more details, see [Understanding `sid` and its purpose](/en/explanation/sids).
+
+### `scopeBind: scope not found` (#scope-not-found)
+
+This error occurs when a scope is lost at some point in execution, preventing `scopeBind` from associating an event or effect with the correct execution scope.<br/>
+It may be caused by:
+
+1. Using a "scope-free" mode where scopes are not present in your application.
+2. Calling [units outside of a scope](#using-units-without-use-unit).
+
+Possible Solutions:
+
+1. Ensure `scopeBind` is used within effects:
+
+   ```ts
+   const event = createEvent();
+
+   // ❌ - Do not call scopeBind inside callbacks
+   const effectFx = createEffect(() => {
+     setTimeout(() => {
+       scopeBind(event)();
+     }, 1111);
+   });
+
+   // ✅ - Use scopeBind inside the effect
+   const effectFx = createEffect(() => {
+     const scopeEvent = scopeBind(event);
+
+     setTimeout(() => {
+       scopeEvent();
+     }, 1111);
+   });
+   ```
+
+2. Ensure that your units are used inside a scope:
+   - When working with a framework, use `useUnit`.
+   - If calling an event or effect outside a framework, use `allSettled` and provide the appropriate `scope` as an argument.
+
+If necessary, and you want to suppress the error, you can pass `{ safe: true }` as an option:
+
+```ts
+const scopeEvent = scopeBind(event, {
+  safe: true,
+});
+```
+
+## Gotchas (#gotchas)
+
+### `sample.fn` does not narrow the type passed from `sample.filter`
+
+A common type-related issue with `sample` occurs when a check is performed inside `filter`, but `fn` does not receive the expected narrowed type.
+
+[Fixing this issue](/en/essentials/typescript#typing-sample-filter-and-fn).
+
+### My state did not change (#my-state-not-changed)
+
+If your state does not update as expected, you are likely working with scopes and, at some point, the active scope was lost. As a result, your unit executed in the global scope instead.<br/>
+Find more details about this behavior [here](/en/advanced/work-with-scope).
+
+This issue often occurs when passing units (events or effects) into external function callbacks such as:
+
+- `setTimeout` / `setInterval`
+- `addEventListener`
+- `webSocket`, etc.
+
+Solution:
+
+Bind your event or effect to the current scope using [`scopeBind`](/en/api/effector/scopeBind):
+
+```ts
+const event = createEvent();
+
+// ❌ - This will execute the event in the global scope
+const effectFx = createEffect(() => {
+  setTimeout(() => {
+    event();
+  }, 1000);
+});
+
+// ✅ - This ensures the event executes in the correct scope
+const effectFx = createEffect(() => {
+  const scopeEvent = scopeBind(event);
+  setTimeout(() => {
+    scopeEvent();
+  }, 1000);
+});
+```
+
+#### Using units without `useUnit` (#using-units-without-use-unit)
+
+If you're using events or effects in a framework without `useUnit`, this may also lead to incorrect behavior related to scopes.<br/>
+To fix this, pass the unit to the `useUnit` hook and use the returned value:
+
+<Tabs>
+<TabItem label="❌ Incorrect">
+
+```tsx
+import { event } from "./model.js";
+
+const Component = () => {
+  return <button onClick={() => event}></button>;
+};
+```
+
+</TabItem>
+<TabItem label="✅ Correct">
+
+```tsx
+import { event } from "./model.js";
+import { useUnit } from "effector-react";
+
+const Component = () => {
+  const onEvent = useUnit(event);
+
+  return <button onClick={onEvent}></button>;
+};
+```
+
+</TabItem>
+</Tabs>
+
+:::info{title="Best Practice"}
+[Using `useUnit` is the recommended approach](/en/guides/best-practices#use-unit) for working with units.
+:::
+
+[What is scope loss and why does it happen](/en/api/effector/Scope#scope-loss).
+
+## No Answer to Your Question?
+
+If you couldn't find the answer to your question, you can always ask the community:
+
+- [RU Telegram](https://t.me/effector_ru)
+- [EN Telegram](https://t.me/effector_en)
+- [Discord](https://discord.gg/t3KkcQdt)
+- [Reddit](https://www.reddit.com/r/effectorjs/)
