@@ -1,15 +1,15 @@
 import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
-import { SITE, LINKS } from "./consts";
-import { getTextLocalized, createLink, type LText, isExternal } from "./languages";
+import { LINKS, SITE } from "./consts";
+import { type LText, createLink, getTextLocalized, isExternal } from "./languages";
 
 import IconEffector from "@icons/Effector.astro";
-import IconReact from "@icons/React.astro";
-import IconVue from "@icons/Vue.astro";
-import IconSolid from "@icons/Solid.astro";
-import IconNextJs from "@icons/NextJs.astro";
 import IconGithub from "@icons/Github.astro";
+import IconNextJs from "@icons/NextJs.astro";
+import IconReact from "@icons/React.astro";
+import IconSolid from "@icons/Solid.astro";
 import IconTelegram from "@icons/Telegram.astro";
+import IconVue from "@icons/Vue.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
@@ -75,14 +75,6 @@ const defaultSidebar: LSidebarGroup[] = [
           uz: "Unit kompozitsiyasi",
         },
         link: "/essentials/unit-composition",
-      },
-      {
-        text: {
-          en: "Reactivity",
-          ru: "Реактивность",
-          uz: "Reaktivlik",
-        },
-        link: "/essentials/reactivity",
       },
     ],
   },
