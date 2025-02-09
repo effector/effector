@@ -1,4 +1,4 @@
-import {getForkPage, getGraph} from '../getter'
+import {getForkPage, getGraph, getMeta} from '../getter'
 import {setForkPage, getPageRef, currentPage} from '../kernel'
 import {createNode} from '../createNode'
 import {calc, compute} from '../step'
@@ -86,9 +86,10 @@ export function createScope(unit?: Domain): Scope {
     node: [
       calc((_, __, stack) => {
         const forkPage = getForkPage(stack)
-        if (forkPage && stack.parent) {
-          if (isNotCombineNode(stack.parent)) {
-            forkPage.warnSerialize = true
+        const parent = stack.parent
+        if (forkPage && parent) {
+          if (isNotCombineNode(parent)) {
+            forkPage.warnSerializeTraces.add(getMeta(parent.node, 'storeTrace'))
           }
         }
       }),
@@ -121,6 +122,7 @@ export function createScope(unit?: Domain): Scope {
     handlers: {sidMap: {}, unitMap: new Map()},
     fxCount: forkInFlightCounter,
     storeChange,
+    warnSerializeTraces: new Set(),
     warnSerializeNode,
   }
   return resultScope

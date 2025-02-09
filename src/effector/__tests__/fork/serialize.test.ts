@@ -12,7 +12,7 @@ import {
   createEffect,
   attach,
 } from 'effector'
-import {muteErrors} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
 muteErrors(['onlyChanges', 'fork(domain)', 'hydrate(domain'])
 
@@ -597,17 +597,24 @@ describe('serialize: missing sids', () => {
     // equals to situation, if user forgot to configure babel-plugin
     // or did not install the sid manually
     const $store = createStore('value', {sid: ''})
+    const $storeB = createStore('value', {sid: ''})
 
     const scope = fork()
 
     allSettled($store, {scope, params: 'scope value'})
+    allSettled($storeB, {scope, params: 'scope value'})
 
     const result = serialize(scope)
     expect(result).toEqual({})
     expect(scope.getState($store)).toEqual('scope value')
-    expect(console.error).toHaveBeenCalledWith(
-      'There is a store without sid in this scope, its value is omitted',
-    )
+
+    expect(argumentHistory(console.error as any)).toMatchInlineSnapshot(`
+      Array [
+        "serialize: One or more stores dont have sids, their values are omitted",
+        [Error: store should have sid or \`serialize: ignore\`],
+        [Error: store should have sid or \`serialize: ignore\`],
+      ]
+    `)
   })
   test('serialize: throws if duplicated sids', () => {
     const a = createStore(0, {sid: 'sameSid'})

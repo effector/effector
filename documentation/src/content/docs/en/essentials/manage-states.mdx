@@ -51,6 +51,8 @@ $user.on(nameChanged, (user, newName) => {
 
 ## Store Creation (#store-creation)
 
+You can create new store via [`createStore`](/en/api/effector/createStore):
+
 ```ts
 import { createStore } from "effector";
 
@@ -69,7 +71,7 @@ In effector it's conventional to use the `$` prefix for stores. This helps disti
 
 There are several ways to get the current value of a store:
 
-1. Using framework integration hooks `useUnit`
+1. Using framework integration hooks `useUnit` ([📘&nbsp;React](/en/api/effector-react/useUnit), [📗&nbsp;Vue](/en/api/effector-vue/useUnit), [📘&nbsp;Solid](/en/api/effector-solid/useUnit)):
 
 <Tabs>
   <TabItem label="React">
@@ -113,7 +115,7 @@ const Counter = () => {
   </TabItem>
 </Tabs>
 
-2. Subscribe to changes via watch - only for debug or integration needs
+2. Subscribe to changes via `watch` - only for debug or integration needs
 
 ```ts
 $counter.watch((counter) => {
@@ -121,7 +123,7 @@ $counter.watch((counter) => {
 });
 ```
 
-3. getState() method - only for integration needs
+3. `getState()` method - only for integration needs
 
 ```ts
 console.log($counter.getState()); // 0
@@ -129,7 +131,7 @@ console.log($counter.getState()); // 0
 
 ## Store Updates (#store-updates)
 
-In effector, state updates are done via events. You can change the state by subscribing to an event via `.on` or by using the `sample` method.
+In effector, state updates are done via [events](/en/essentials/events). You can change the state by subscribing to an event via `.on` or by using the [`sample`](/en/essentials/unit-composition) method.
 
 :::info{title="Optimizing updates"}
 Store state is updated when it receives a value that is not equal (!==) to the current value, and also not equal to `undefined`.
@@ -171,9 +173,13 @@ resetCounter();
 // 0 - reset
 ```
 
+:::info{title="What are events?"}
+If you are not familiar with `createEvent` and events, you will learn how to work with them on [next page](/en/essentials/events).
+:::
+
 ### Updating with Event parameters (#update-stores-with-event-params)
 
-You can update a store using event parameters by passing data to the event like a regular function and using it in the handler.
+You can update a store using event parameters by passing data to the event like a regular function and using it in the handler:
 
 ```ts
 import { createStore, createEvent } from "effector";
@@ -235,9 +241,9 @@ Advantages of using `sample` for state updates:
 
 1. Access to current values of all stores
 2. Atomic updates of multiple stores
-3. Convenient data transformation through the `fn` function
+3. Control over update timing through `clock`
 4. Ability to filter updates using `filter`
-5. Control over update timing through `clock`
+5. Convenient data transformation through the `fn` function
 
 ### Store Creation via `restore` method (#create-store-via-restore)
 
@@ -263,15 +269,14 @@ const $counter = createStore("").on(nameChanged, (_, newName) => newName);
 
 You can also use `restore` method with an effect. In this case, the store will receive data from the effect's [`doneData`](/en/api/effector/Effect#doneData) event, and the default store value should match the return value type:
 
+:::info{title="What are effects?"}
+If you are not familiar with `createEffect` and effects, you will learn how to work with them on [this page](/en/essentials/work-with-async).
+:::
+
 ```ts
 import { restore, createEffect } from "effector";
 
-type User = {
-  id: number;
-  name: string;
-  age: number;
-};
-
+// omit type realization
 const createUserFx = createEffect<string, User>((id) => {
   // effect logic
 
@@ -290,16 +295,18 @@ const $newUser = restore(createEffect, {
 
 createUserFx();
 
-// $newUser = {
-// 		id: 4,
-// 		name: "Bob",
-// 		age: 18,
-//   }
+// After successful completion of the effect
+// $newUser will be:
+// {
+// 	 id: 4,
+// 	 name: "Bob",
+// 	 age: 18,
+// }
 ```
 
 ### Multiple Store Updates (#multiple-store-updates)
 
-A store isn't limited to a single event subscription - you can subscribe to as many events as you need, and different stores can subscribe to the same event.
+A store isn't limited to a single event subscription - you can subscribe to as many events as you need, and different stores can subscribe to the same event:
 
 ```ts
 const categoryChanged = createEvent<string>();
