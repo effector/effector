@@ -2,6 +2,9 @@
 title: Основные концепции эффектора
 lang: ru
 description: Основные концепции эффектора - хранилище, эффект, событие и как все это работает вместе
+redirectFrom:
+  - /ru/essentials/reactivity
+  - /ru/docs/reactivity
 ---
 
 # Основные концепции (#core-concepts)

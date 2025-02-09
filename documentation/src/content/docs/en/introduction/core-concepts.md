@@ -2,7 +2,11 @@
 title: Effector Core concepts
 description: Core concepts of effector - store, effect, event and how it works together
 redirectFrom:
+  - /essentials/reactivity
   - /docs/introduction/core-concepts
+  - /docs/reactivity
+  - /en/essentials/reactivity
+  - /en/docs/reactivity
 ---
 
 # Core concepts (#core-concepts)
