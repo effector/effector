@@ -1,0 +1,135 @@
+---
+title: Как мыслить в парадигме Effector
+description: Разбираемся, как правильно строить связи между юнитами в Effector, чтобы логика была чистой, состояние предсказуемым, а код легко расширяемым.
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Как мыслить в парадигме Effector (#mindset)
+
+Effector — это не просто «менеджер состояния», а также мощный инструмент для построения логики приложения. Здесь мы рассмотрим рекомендации по написанию кода, а также как стоит мыслить при использовании эффектора.
+
+## Как правильно подходить к разработке с Effector? (#how-to-think)
+
+Чтобы эффективно использовать Effector, важно освоить несколько ключевых принципов.
+
+### События — основа всего (#events-source-of-truth)
+
+Приложение — это поток изменений. Каждое изменение — это событие. Важно понимать, что событие не решает, что делать, оно лишь фиксирует факт произошедшего. Это ключевой момент, который помогает избежать жёстких зависимостей.
+
+- **Событие — это просто факт**: «что-то произошло».
+- **События не содержат логику** — они только объявляют событие, но не решают, как на него реагировать.
+- **Один факт может привести к разным последствиям** — одно событие может запускать несколько независимых процессов.
+
+Пример:
+
+```ts
+// Не думайте о реализации сейчас — только объявите факт
+const searchInputChanged = createEvent();
+const buttonClicked = createEvent();
+```
+
+:::tip{title="Давайте осмысленные названия"}
+Давайте событиям осмысленные название. Например, если вам надо загрузить данные при каком-то действии, то событие связано с действием, а не реализацией:
+
+```ts
+❌ const fetchData=createEvent()
+✅ const appStarted=createEvent()
+```
+
+:::
+
+### Бизнес-логика и UI — это разные вещи (#business-logic-not-ui)
+
+Правильный подход к архитектуре — держать бизнес-логику отдельно от интерфейса. Effector позволяет это сделать, сохраняя UI простым, а логику — чистой и переиспользуемой.
+
+- UI только отображает данные.
+- Effector управляет состоянием и логикой.
+
+## Как это выглядит в реальном приложении? (#real-world-examples)
+
+Возьмём в пример GitHub с кнопками «Watch», «Fork» и «Star». Каждое действие пользователя — это событие:
+
+![кнопки действий для репозитория в гитхаб](/images/github-repo-actions.png)
+
+- Пользователь поставил/убрал звездочку - `repoStarToggled`
+- Строка поиска по репозиторию изменилась - `repoFileSearchChanged`
+- Репозиторий был форкнут - `repoForked`
+
+Логика строится вокруг событий и реакций на них. UI просто сообщает о действии, а их обработка это уже часть бизнес-логики.
+
+Упрощенный пример логики с кнопкой звездочки:
+
+<Tabs>
+<TabItem label="Бизнес-логика">
+
+```ts
+// repo.model.ts
+
+// событие – факт действия
+const repoStarToggled = createEvent();
+
+// эффекты как дополнительная реакция на события
+// (предположим эффекты возвращают обновленное значение)
+const starRepoFx = createEffect(() => {});
+const unstarRepoFx = createEffect(() => {});
+
+// состояние приложения
+const $isRepoStarred = createStore(false);
+const $repoStarsCount = createStore(0);
+
+// логика переключения звездочки
+sample({
+  clock: repoStarToggled,
+  source: $isRepoStarred,
+  fn: (isRepoStarred) => !isRepoStarred,
+  target: $isRepoStarred,
+});
+
+// отправка запроса на сервер при переключении звезды
+sample({
+  clock: $isRepoStarred,
+  filter: (isRepoStarred) => isRepoStarred,
+  target: starRepoFx,
+});
+
+sample({
+  clock: $isRepoStarred,
+  filter: (isRepoStarred) => !isRepoStarred,
+  target: unstarRepoFx,
+});
+
+// обновляем счетчик
+sample({
+  clock: [starRepoFx.doneData, unstarRepoFx.doneData],
+  target: $repoStarsCount,
+});
+```
+
+</TabItem>
+<TabItem label="UI">
+
+```tsx
+import { repoStarToggled, $isRepoStarred, $repoStarsCount } from "./repo.model.ts";
+
+const RepoStarButton = () => {
+  const [onStarToggle, isRepoStarred, repoStarsCount] = useUnit([
+    repoStarToggled,
+    $isRepoStarred,
+    $repoStarsCount,
+  ]);
+
+  return (
+    <div>
+      <button onClick={onStarToggle}>{isRepoStarred ? "unstar" : "star"}</button>
+      <span>{repoStarsCount}</span>
+    </div>
+  );
+};
+```
+
+</TabItem>
+</Tabs>
+
+При этом UI не знает что там будет происходить внутри, все за что он отвечает – это вызов событий и отображение данных.

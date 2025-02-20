@@ -1,0 +1,135 @@
+---
+title: How to Think in the Effector
+description: Understanding how to properly structure connections between units in Effector to keep logic clean, state predictable, and code easily extendable.
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# How to Think in the Effector Paradigm (#mindset)
+
+Effector is not just a state manager — it's also a powerful tool for building application logic. Here, we'll go over best practices for writing code and how to approach thinking when using Effector.
+
+## How to approach development with Effector in the right way (#how-to-think)
+
+To use Effector effectively, it's important to grasp a few key principles.
+
+### Events as the Source of Truth (#events-source-of-truth)
+
+An application is a stream of changes. Every change is an event. It's crucial to understand that an event **does not decide what to do** — it simply records that something happened. This is a key point that helps avoid tight dependencies.
+
+- **An event is just a fact**: "something happened."
+- **Events contain no logic** — they only declare an occurrence but do not decide how to respond.
+- **One fact can lead to multiple consequences** — a single event can trigger several independent processes.
+
+Example:
+
+```ts
+// Don't think about implementation yet — just declare the fact
+const searchInputChanged = createEvent();
+const buttonClicked = createEvent();
+```
+
+:::tip{title="Use Meaningful Names"}
+Give events meaningful names. For example, if you need to load data upon a certain action, the event should be tied to the action, not its implementation:
+
+```ts
+❌ const fetchData = createEvent();
+✅ const appStarted = createEvent();
+```
+
+:::
+
+### Business Logic and UI Are Separate (#business-logic-not-ui)
+
+A good architectural approach is to keep business logic separate from the user interface. Effector makes this easy, keeping the UI simple and the logic clean and reusable.
+
+- The UI only displays data.
+- Effector manages state and logic.
+
+## How Does This Look in a Real Application? (#real-world-examples)
+
+Let's take GitHub as an example, with buttons like "Watch," "Fork," and "Star." Every user action is an event:
+
+![GitHub repository action buttons](/images/github-repo-actions.png)
+
+- The user toggled a star - `repoStarToggled`
+- The search input in the repository changed - `repoFileSearchChanged`
+- The repository was forked - `repoForked`
+
+The logic is built around events and their reactions. The UI simply announces an action, while its handling is part of the business logic.
+
+A simplified example of the logic behind the star button:
+
+<Tabs>  
+<TabItem label="Business Logic">
+
+```ts
+// repo.model.ts
+
+// Event – fact of an action
+const repoStarToggled = createEvent();
+
+// Effects as additional reactions to events
+// (assuming effects return updated values)
+const starRepoFx = createEffect(() => {});
+const unstarRepoFx = createEffect(() => {});
+
+// Application state
+const $isRepoStarred = createStore(false);
+const $repoStarsCount = createStore(0);
+
+// Toggle star logic
+sample({
+  clock: repoStarToggled,
+  source: $isRepoStarred,
+  fn: (isRepoStarred) => !isRepoStarred,
+  target: $isRepoStarred,
+});
+
+// Send request to server when star is toggled
+sample({
+  clock: $isRepoStarred,
+  filter: (isRepoStarred) => isRepoStarred,
+  target: starRepoFx,
+});
+
+sample({
+  clock: $isRepoStarred,
+  filter: (isRepoStarred) => !isRepoStarred,
+  target: unstarRepoFx,
+});
+
+// Update the star count
+sample({
+  clock: [starRepoFx.doneData, unstarRepoFx.doneData],
+  target: $repoStarsCount,
+});
+```
+
+</TabItem>  
+<TabItem label="UI">
+
+```tsx
+import { repoStarToggled, $isRepoStarred, $repoStarsCount } from "./repo.model.ts";
+
+const RepoStarButton = () => {
+  const [onStarToggle, isRepoStarred, repoStarsCount] = useUnit([
+    repoStarToggled,
+    $isRepoStarred,
+    $repoStarsCount,
+  ]);
+
+  return (
+    <div>
+      <button onClick={onStarToggle}>{isRepoStarred ? "unstar" : "star"}</button>
+      <span>{repoStarsCount}</span>
+    </div>
+  );
+};
+```
+
+</TabItem>  
+</Tabs>
+
+At the same time, the UI doesn't need to know what's happening internally — it's only responsible for triggering events and displaying data.

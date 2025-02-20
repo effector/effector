@@ -189,6 +189,14 @@ const defaultSidebar: LSidebarGroup[] = [
     text: { en: "Resources", ru: "Ресурсы", uz: "Resurslar" },
     items: [
       {
+        text: {
+          en: "Mindset in Effector",
+          uz: "Effectordan foydalanish",
+          ru: "Как мыслить в парадигме Effector",
+        },
+        link: "/resources/mindset",
+      },
+      {
         text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
         link: "/introduction/ecosystem",
       },
