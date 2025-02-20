@@ -550,6 +550,11 @@ h2.heading {
 }
 
 .admonition code {
+  background-color: var(--admonition-bg);
+  color: var(--admonition-text);
+}
+.admonition pre > code {
+  background-color: initial;
   color: var(--admonition-text);
 }
 
