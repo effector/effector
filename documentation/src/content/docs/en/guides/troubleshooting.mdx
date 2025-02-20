@@ -142,7 +142,7 @@ To fix this, pass the unit to the `useUnit` hook and use the returned value:
 import { event } from "./model.js";
 
 const Component = () => {
-  return <button onClick={() => event}></button>;
+  return <button onClick={() => event()}></button>;
 };
 ```
 
@@ -156,7 +156,7 @@ import { useUnit } from "effector-react";
 const Component = () => {
   const onEvent = useUnit(event);
 
-  return <button onClick={onEvent}></button>;
+  return <button onClick={() => onEvent()}></button>;
 };
 ```
 
@@ -169,7 +169,7 @@ const Component = () => {
 
 [What is scope loss and why does it happen](/en/api/effector/Scope#scope-loss).
 
-## No Answer to Your Question?
+## No Answer to Your Question? (#community)
 
 If you couldn't find the answer to your question, you can always ask the community:
 

@@ -139,7 +139,7 @@ const effectFx = createEffect(() => {
 import { event } from "./model.js";
 
 const Component = () => {
-  return <button onClick={() => event}></button>;
+  return <button onClick={() => event()}></button>;
 };
 ```
 
@@ -153,7 +153,7 @@ import { useUnit } from "effector-react";
 const Component = () => {
   const onEvent = useUnit(event);
 
-  return <button onClick={onEvent}></button>;
+  return <button onClick={() => onEvent()}></button>;
 };
 ```
 
@@ -166,7 +166,7 @@ const Component = () => {
 
 [Что такое потеря скоупа и почему это происходит](/ru/api/effector/Scope#scope-loss)
 
-## Не нашли ответ на свой вопрос ? (#no-answers)
+## Не нашли ответ на свой вопрос ? (#community)
 
 Если вы не нашли ответ на свой вопрос, то вы всегда можете задать сообществу:
 
