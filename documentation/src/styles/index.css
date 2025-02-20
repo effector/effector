@@ -553,6 +553,10 @@ h2.heading {
   background-color: var(--admonition-bg);
   color: var(--admonition-text);
 }
+.admonition pre > code {
+  background-color: initial;
+  color: var(--admonition-text);
+}
 
 .admonition-content p + p {
   @apply mt-4;
