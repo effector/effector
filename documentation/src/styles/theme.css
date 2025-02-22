@@ -146,7 +146,7 @@ body {
 
 :root.theme-dark {
   --theme-accent-opacity: 0.15;
-  --theme-accent-color: var(--color-primary-70);
+  --theme-accent-color: var(--color-primary-40);
   --theme-accent: hsla(var(--theme-accent-color), 1);
   --theme-text-accent: hsla(var(--color-primary-40), 1);
 
