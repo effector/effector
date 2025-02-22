@@ -1,17 +1,19 @@
 ---
 import Show from "src/components/Show.astro";
 import { getPathParamsFromId, getTextLocalized } from "src/languages";
-import { getLocalizedSidebar, trimTrailingSlash } from "src/navigation";
-import { getPrevNext } from "src/navigation";
+
 import { PAGE_NAVIGATION } from "src/consts";
 import ArrowLeft from "src/icons/ArrowLeft.astro";
 import ArrowRight from "src/icons/ArrowRight.astro";
+import { trimTrailingSlash } from "src/libs/trim-trailing-slash";
+import { getPrevNext } from "@components/Pagination/paganation";
+import { getLocalizedPanelSidebar } from "src/navigation";
 
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
-const baseSidebar = await getLocalizedSidebar(slug, lang);
+const sidebar = await getLocalizedPanelSidebar(slug, lang);
 
 const pagePath = trimTrailingSlash(Astro.url.pathname);
-const { prevPage, nextPage } = getPrevNext(baseSidebar, pagePath);
+const { prevPage, nextPage } = getPrevNext(sidebar, pagePath);
 ---
 
 <nav class="pagination-links" data-pagefind-ignore="all">
