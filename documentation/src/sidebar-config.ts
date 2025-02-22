@@ -114,173 +114,179 @@ export const learning: LSidebarGroup[] = [
 ];
 
 export const guidesAndRecipes: LSidebarGroup[] = [
-  ...[
-    {
-      text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
-      items: [
-        {
-          text: {
-            en: "Best practices",
-            ru: "Лучшие практики",
-            uz: "To'g'ri usullar",
-          },
-          link: "/guides/best-practices",
+  {
+    text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
+    items: [
+      {
+        text: {
+          en: "Best practices",
+          ru: "Лучшие практики",
+          uz: "To'g'ri usullar",
         },
-        {
-          text: {
-            en: "Typescript",
-            ru: "Типизация",
-            uz: "Typescript",
-          },
-          link: "/essentials/typescript",
+        link: "/guides/best-practices",
+      },
+      {
+        text: {
+          en: "Troubleshooting",
+          ru: "Исправление ошибок",
+          uz: "Xatolarni o'zgartirish",
         },
-        {
-          text: {
-            en: "Testing",
-            ru: "Тестирование",
-            uz: "Testlash",
-          },
-          link: "/guides/testing",
+        link: "/guides/troubleshooting",
+      },
+      {
+        text: {
+          en: "Typescript",
+          ru: "Типизация",
+          uz: "Typescript",
         },
-        {
-          text: {
-            en: "Server Side Rendering",
-            ru: "Работа с SSR",
-          },
-          link: "/guides/server-side-rendering",
+        link: "/essentials/typescript",
+      },
+      {
+        text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
         },
-        {
-          text: {
-            ru: "Использование с Websocket",
-            en: "Websockets",
-            uz: "Websocket bilan bog'lanish",
-          },
-          link: "/guides/websocket-integration",
+        link: "/guides/testing",
+      },
+      {
+        text: {
+          en: "Server Side Rendering",
+          ru: "Работа с SSR",
         },
-        {
-          text: {
-            en: "Migration guide",
-            ru: "Миграция с v23",
-          },
-          link: "/guides/migration-guide-v23",
+        link: "/guides/server-side-rendering",
+      },
+      {
+        text: {
+          ru: "Использование с Websocket",
+          en: "Websockets",
+          uz: "Websocket bilan bog'lanish",
         },
-        {
-          text: {
-            en: "Migrating from Redux",
-            ru: "Миграция с Redux",
-          },
-          link: "https://withease.effector.dev/magazine/migration_from_redux.html",
+        link: "/guides/websocket-integration",
+      },
+      {
+        text: {
+          en: "Migration guide",
+          ru: "Миграция с v23",
         },
-        {
-          text: {
-            en: "Usage with `effector-react`",
-            ru: "Использование с `effector-react`",
-            uz: "`effector-react` dan foydalaning",
-          },
-          link: "/typescript/usage-with-effector-react",
+        link: "/guides/migration-guide-v23",
+      },
+      {
+        text: {
+          en: "Migrating from Redux",
+          ru: "Миграция с Redux",
         },
-      ],
-    },
-    {
-      text: { en: "Resources", ru: "Ресурсы", uz: "Resurslar" },
-      items: [
-        {
-          text: {
-            en: "Mindset in Effector",
-            uz: "Effectordan foydalanish",
-            ru: "Как мыслить в парадигме Effector",
-          },
-          link: "/resources/mindset",
+        link: "https://withease.effector.dev/magazine/migration_from_redux.html",
+      },
+      {
+        text: {
+          en: "Usage with `effector-react`",
+          ru: "Использование с `effector-react`",
+          uz: "`effector-react` dan foydalaning",
         },
-        {
-          text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
-          link: "/introduction/ecosystem",
+        link: "/typescript/usage-with-effector-react",
+      },
+    ],
+  },
+  {
+    text: { en: "Resources", ru: "Ресурсы", uz: "Resurslar" },
+    items: [
+      {
+        text: {
+          en: "Mindset in Effector",
+          uz: "Effectordan foydalanish",
+          ru: "Как мыслить в парадигме Effector",
         },
-        {
-          text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
-          link: "/introduction/community",
+        link: "/resources/mindset",
+      },
+      {
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        link: "/introduction/ecosystem",
+      },
+      {
+        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
+        link: "/introduction/community",
+      },
+      {
+        text: { en: "Glossary", ru: "Глоссарий", uz: "Lug'at" },
+        link: "/explanation/glossary",
+      },
+      {
+        text: { en: "Prior Art", ru: "Вдохновение", uz: "Taqdim etilganlar" },
+        link: "/explanation/prior-art",
+      },
+      {
+        text: { en: "For developers", ru: "Для разработчиков" },
+        link: "/ecosystem-development/unit-shape-protocol",
+      },
+      {
+        text: { en: "Releases policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
+        link: "/resources/releases",
+      },
+      {
+        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
+        link: "/FAQ",
+      },
+    ],
+  },
+  {
+    text: { en: "Common", uz: "Umumiy" },
+    items: [
+      {
+        text: { en: "Countdown Timer", uz: "Hisob taymeri" },
+        link: "/recipes/common/countdown",
+      },
+    ],
+  },
+  {
+    text: { en: "React" },
+    items: [
+      {
+        text: { en: "Counter" },
+        link: "/recipes/react/counter",
+      },
+      {
+        text: { en: "Effects" },
+        link: "/recipes/react/effects",
+      },
+      {
+        text: { en: "Forms" },
+        link: "/recipes/react/forms",
+      },
+      {
+        text: { en: "Gate" },
+        link: "/recipes/react/gate",
+      },
+      {
+        text: { en: "ToDo Creator" },
+        link: "/recipes/react/todo-creator",
+      },
+      {
+        text: { en: "Dynamic Form Schema", uz: "Dinamik shakl sxemasi" },
+        link: "/recipes/react/dynamic-form-schema",
+      },
+      {
+        text: {
+          en: "ToDo List with Validation",
+          uz: "Validation bilan tasdiqlangan ishlar ro'yxati",
         },
-        {
-          text: { en: "Glossary", ru: "Глоссарий", uz: "Lug'at" },
-          link: "/explanation/glossary",
-        },
-        {
-          text: { en: "Prior Art", ru: "Вдохновение", uz: "Taqdim etilganlar" },
-          link: "/explanation/prior-art",
-        },
-        {
-          text: { en: "For developers", ru: "Для разработчиков" },
-          link: "/ecosystem-development/unit-shape-protocol",
-        },
-        {
-          text: { en: "Releases policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
-          link: "/resources/releases",
-        },
-        {
-          text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
-          link: "/FAQ",
-        },
-      ],
-    },
-    {
-      text: { en: "Common", uz: "Umumiy" },
-      items: [
-        {
-          text: { en: "Countdown Timer", uz: "Hisob taymeri" },
-          link: "/recipes/common/countdown",
-        },
-      ],
-    },
-    {
-      text: { en: "React" },
-      items: [
-        {
-          text: { en: "Counter" },
-          link: "/recipes/react/counter",
-        },
-        {
-          text: { en: "Effects" },
-          link: "/recipes/react/effects",
-        },
-        {
-          text: { en: "Forms" },
-          link: "/recipes/react/forms",
-        },
-        {
-          text: { en: "Gate" },
-          link: "/recipes/react/gate",
-        },
-        {
-          text: { en: "ToDo Creator" },
-          link: "/recipes/react/todo-creator",
-        },
-        {
-          text: { en: "Dynamic Form Schema", uz: "Dinamik shakl sxemasi" },
-          link: "/recipes/react/dynamic-form-schema",
-        },
-        {
-          text: {
-            en: "ToDo List with Validation",
-            uz: "Validation bilan tasdiqlangan ishlar ro'yxati",
-          },
-          link: "/recipes/react/todo-with-validation",
-        },
-        {
-          text: { en: "Slots", uz: "Slotlar" },
-          link: "/recipes/react/slots",
-        },
-      ],
-    },
-    {
-      text: { en: "React Native" },
-      items: [
-        {
-          text: { en: "AsyncStorage Counter" },
-          link: "/recipes/react-native/asyncstorage-counter",
-        },
-      ],
-    },
-  ],
+        link: "/recipes/react/todo-with-validation",
+      },
+      {
+        text: { en: "Slots", uz: "Slotlar" },
+        link: "/recipes/react/slots",
+      },
+    ],
+  },
+  {
+    text: { en: "React Native" },
+    items: [
+      {
+        text: { en: "AsyncStorage Counter" },
+        link: "/recipes/react-native/asyncstorage-counter",
+      },
+    ],
+  },
 ];
 
 export const effectorReact: LSidebarGroup[] = [

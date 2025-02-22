@@ -388,11 +388,11 @@ const merged = merge<number>([firstEvent, secondEvent]);
 // Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
 ```
 
-### Type Utilities (#type-utilities)
+## Type Utilities (#type-utilities)
 
 Effector provides a set of utility types for working with unit types:
 
-#### UnitValue (#type-utilities-unit-values)
+### UnitValue (#type-utilities-unit-values)
 
 The `UnitValue` type is used to extract the data type from units:
 
@@ -416,7 +416,7 @@ type UnitScopeType = UnitValue<typeof scope>;
 // any
 ```
 
-#### StoreValue (#type-utilities-store-value)
+### StoreValue (#type-utilities-store-value)
 
 `StoreValue` is essentially similar to `UnitValue`, but works only with stores:
 
@@ -429,7 +429,7 @@ type StoreValueType = StoreValue<typeof $store>;
 // boolean
 ```
 
-#### EventPayload (#type-utilities-event-payload)
+### EventPayload (#type-utilities-event-payload)
 
 Extracts the data type from events.
 Similar to `UnitValue`, but only for events:
@@ -443,7 +443,7 @@ type EventPayloadType = EventPayload<typeof event>;
 // {id: string}
 ```
 
-#### EffectParams (#type-utilities-effect-params)
+### EffectParams (#type-utilities-effect-params)
 
 Takes an effect type as a generic parameter, allows getting the parameter type of an effect.
 
@@ -463,7 +463,7 @@ type EffectParamsType = EffectParams<typeof fx>;
 // {id: string}
 ```
 
-#### EffectResult (#type-utilities-effect-results)
+### EffectResult (#type-utilities-effect-results)
 
 Takes an effect type as a generic parameter, allows getting the return value type of an effect.
 
@@ -480,7 +480,7 @@ type EffectResultType = EffectResult<typeof fx>;
 // {name: string; isAdmin: boolean}
 ```
 
-#### EffectError (#type-utilities-effect-error)
+### EffectError (#type-utilities-effect-error)
 
 Takes an effect type as a generic parameter, allows getting the error type of an effect.
 
