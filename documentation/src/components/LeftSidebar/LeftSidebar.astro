@@ -118,6 +118,10 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
           button.setAttribute("aria-expanded", (!expanded).toString());
 
           content.classList.toggle("collapsed", expanded);
+          content.setAttribute("aria-hidden", expanded.toString());
+          content.querySelectorAll("a").forEach((link) => {
+            link.setAttribute("tabindex", expanded ? "-1" : "0");
+          });
           button.classList.toggle("collapsed", expanded);
         });
       }
@@ -161,27 +165,25 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   .navigation-panel li {
-    padding: 0.5rem 1rem;
+    padding: 0;
     border-radius: 12px;
     width: 100%;
   }
 
-  .navigation-panel li:hover {
-    background-color: var(--theme-navbar-bg);
-  }
-
-  .navigation-panel li {
-    padding: 0;
-  }
-
-  li:has(button[aria-selected="true"]) {
-    background-color: var(--theme-bg);
-  }
-
-  li button {
+  .navigation-panel li button {
     width: 100%;
     padding: 0.5rem 1rem;
     background-color: transparent;
+    color: var(--theme-left-sidebar-item-text);
+    border-radius: 12px;
+  }
+  .navigation-panel li button:hover {
+    background-color: var(--theme-navbar-bg);
+  }
+
+  .navigation-panel li button[aria-selected="true"] {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
   }
 
   .tab-panel-item {
@@ -248,7 +250,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   .nav-group-title:hover,
-  .nav-group-title:focus {
+  .nav-group-title:focus-visible {
     background-color: var(--theme-bg-hover);
   }
 
