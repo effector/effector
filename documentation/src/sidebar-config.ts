@@ -178,14 +178,6 @@ export const guidesAndRecipes: LSidebarGroup[] = [
         },
         link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
-      {
-        text: {
-          en: "Usage with `effector-react`",
-          ru: "Использование с `effector-react`",
-          uz: "`effector-react` dan foydalaning",
-        },
-        link: "/typescript/usage-with-effector-react",
-      },
     ],
   },
   {
@@ -300,6 +292,14 @@ export const effectorReact: LSidebarGroup[] = [
           ru: "Справочник API",
           uz: "API taqdimati",
         },
+      },
+      {
+        text: {
+          en: "Usage with effector-react",
+          ru: "Использование с effector-react",
+          uz: "effector-react dan foydalaning",
+        },
+        link: "/typescript/usage-with-effector-react",
       },
     ],
   },
