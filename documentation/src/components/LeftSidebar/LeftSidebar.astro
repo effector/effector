@@ -37,25 +37,27 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
             </li>
           ))
         }
-        <ul class="frameworks-panel">
-          {
-            PANEL_FRAMEWORK_ITEMS.map(({ text, id, Icon }, i) => (
-              <li role="presentation">
-                <button
-                  role="tab"
-                  class="tab-panel-item"
-                  data-icon={id}
-                  data-active={i === 0 ? "true" : "false"}
-                  class="tab-panel-item"
-                  aria-selected={id === activePanelIndex ? "true" : "false"}
-                >
-                  {Icon && <Icon size={18} />}
-                  <span>{text[lang as keyof typeof text] || text.en}</span>
-                </button>
-              </li>
-            ))
-          }
-        </ul>
+        <li role="presentation">
+          <ul class="frameworks-panel">
+            {
+              PANEL_FRAMEWORK_ITEMS.map(({ text, id, Icon }, i) => (
+                <li role="presentation">
+                  <button
+                    role="tab"
+                    class="tab-panel-item"
+                    data-icon={id}
+                    data-active={i === 0 ? "true" : "false"}
+                    class="tab-panel-item"
+                    aria-selected={id === activePanelIndex ? "true" : "false"}
+                  >
+                    {Icon && <Icon size={18} />}
+                    <span>{text[lang as keyof typeof text] || text.en}</span>
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </li>
       </ul>
     </div>
 
