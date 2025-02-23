@@ -3,7 +3,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import type { InferGetStaticPropsType, InferGetStaticParamsType } from "astro";
 import MainLayout from "src/layouts/MainLayout.astro";
 import { getPathParamsFromId } from "src/languages";
-import { trimTrailingSlash } from "src/libs/trim-trailing-slash";
+import { trimTrailingSlash } from "src/libs/path-helpers/trim-trailing-slash";
 
 interface Path {
   params: { slug: string };

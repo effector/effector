@@ -15,6 +15,7 @@ import {
   guidesAndRecipes,
   type LSidebarGroup,
 } from "./sidebar-config";
+import { normalizeUrlPath } from "./libs/path-helpers/normalize-url-path";
 
 export type MostUsefulItem = {
   text: LText;
@@ -198,7 +199,7 @@ const findActiveSidebarBySlug = (sidebar: LSidebarGroup[], slug: string) => {
 };
 
 export function getActiveTabSidebar(slug: string) {
-  const path = slug.startsWith("/") ? slug : `/${slug}`;
+  const path = normalizeUrlPath(slug);
   const activePanel = [...PANEL_ITEMS, ...PANEL_FRAMEWORK_ITEMS].find((panel) =>
     findActiveSidebarBySlug(panel.items, path),
   );
