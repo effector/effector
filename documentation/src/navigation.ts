@@ -22,6 +22,7 @@ import IconVue from "@icons/Vue.astro";
 import IconReact from "@icons/React.astro";
 import IconSolid from "@icons/Solid.astro";
 import IconEffector from "@icons/Effector.astro";
+import IconNextJs from "@icons/NextJs.astro";
 
 export type MostUsefulItem = {
   text: LText;
@@ -56,7 +57,21 @@ export const SOCIAL_LINKS: {
   { text: { en: "Telegram" }, icon: IconTelegram, link: LINKS.telegramRU },
 ];
 
+const apiPackages: LSidebarIconItem[] = [
+  { text: { en: "effector" }, link: "/api/effector", icon: IconEffector },
+  { text: { en: "effector-react" }, link: "/api/effector-react", icon: IconReact },
+  { text: { en: "effector-solid" }, link: "/api/effector-solid", icon: IconSolid },
+  { text: { en: "effector-vue" }, link: "/api/effector-vue", icon: IconVue },
+  { text: { en: "@effector/next" }, link: "https://github.com/effector/next", icon: IconNextJs },
+];
+
 export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/motivation" },
+  {
+    text: { en: "API" },
+    link: "/api",
+    items: [{ text: { en: "Overview", ru: "Обзор" }, link: "/api" }, ...apiPackages],
+  },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
 ];
 

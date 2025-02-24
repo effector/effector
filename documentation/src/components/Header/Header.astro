@@ -40,7 +40,32 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
       <EffectorLogo size={40} />
       <span>{SITE.title ?? getTextLocalized(translations.Documentation, lang)}</span>
     </a>
-    <Search />
+    {
+      DESKTOP_NAVIGATION.filter((item) => !isExternal(item)).map((navLink) => {
+        const href = createLink(navLink, lang);
+        const text = getTextLocalized(navLink, lang);
+
+        if (isSidebarGroup(navLink)) {
+          return (
+            <div class="hidden md:flex">
+              <DropDownMenu links={navLink.items}>
+                <a href={`/${lang}/api`} class="link">
+                  API
+                </a>
+              </DropDownMenu>
+            </div>
+          );
+        }
+
+        return (
+          <div class="relative hidden md:flex">
+            <a href={href} class="link">
+              {text}
+            </a>
+          </div>
+        );
+      })
+    }
     <div class="ml-auto"></div>
     {
       DESKTOP_NAVIGATION.filter((item) => isExternal(item)).map((navLink) => {
@@ -55,6 +80,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
         );
       })
     }
+    <Search />
     <div class="only-medium">
       <DropDownMenu links={DOCS_VERSIONS}>v23.x</DropDownMenu>
     </div>
