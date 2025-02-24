@@ -256,8 +256,8 @@ export const guidesAndRecipes: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Most useful API",
-          ru: "Наиболее полезные API",
+          en: "Most popular API",
+          ru: "Наиболее популярные API",
           uz: "Eng ko'p foydalaniladigan API",
         },
         link: "/api",
