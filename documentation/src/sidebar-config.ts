@@ -113,6 +113,69 @@ export const learning: LSidebarGroup[] = [
   },
 ];
 
+// temp var
+// remove later when mobile navigation will finished
+export const recipeItems: LSidebarGroup[] = [
+  {
+    text: { en: "Common", uz: "Umumiy" },
+    items: [
+      {
+        text: { en: "Countdown Timer", uz: "Hisob taymeri" },
+        link: "/recipes/common/countdown",
+      },
+    ],
+  },
+  {
+    text: { en: "React" },
+    items: [
+      {
+        text: { en: "Counter" },
+        link: "/recipes/react/counter",
+      },
+      {
+        text: { en: "Effects" },
+        link: "/recipes/react/effects",
+      },
+      {
+        text: { en: "Forms" },
+        link: "/recipes/react/forms",
+      },
+      {
+        text: { en: "Gate" },
+        link: "/recipes/react/gate",
+      },
+      {
+        text: { en: "ToDo Creator" },
+        link: "/recipes/react/todo-creator",
+      },
+      {
+        text: { en: "Dynamic Form Schema", uz: "Dinamik shakl sxemasi" },
+        link: "/recipes/react/dynamic-form-schema",
+      },
+      {
+        text: {
+          en: "ToDo List with Validation",
+          uz: "Validation bilan tasdiqlangan ishlar ro'yxati",
+        },
+        link: "/recipes/react/todo-with-validation",
+      },
+      {
+        text: { en: "Slots", uz: "Slotlar" },
+        link: "/recipes/react/slots",
+      },
+    ],
+  },
+  {
+    text: { en: "React Native" },
+    items: [
+      {
+        text: { en: "AsyncStorage Counter" },
+        link: "/recipes/react-native/asyncstorage-counter",
+      },
+    ],
+  },
+];
+
 export const guidesAndRecipes: LSidebarGroup[] = [
   {
     text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
@@ -192,6 +255,14 @@ export const guidesAndRecipes: LSidebarGroup[] = [
         link: "/resources/mindset",
       },
       {
+        text: {
+          en: "Most useful API",
+          ru: "Наиболее полезные API",
+          uz: "Eng ko'p foydalaniladigan API",
+        },
+        link: "/api",
+      },
+      {
         text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
         link: "/introduction/ecosystem",
       },
@@ -218,64 +289,6 @@ export const guidesAndRecipes: LSidebarGroup[] = [
       {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
-      },
-    ],
-  },
-  {
-    text: { en: "Common", uz: "Umumiy" },
-    items: [
-      {
-        text: { en: "Countdown Timer", uz: "Hisob taymeri" },
-        link: "/recipes/common/countdown",
-      },
-    ],
-  },
-  {
-    text: { en: "React" },
-    items: [
-      {
-        text: { en: "Counter" },
-        link: "/recipes/react/counter",
-      },
-      {
-        text: { en: "Effects" },
-        link: "/recipes/react/effects",
-      },
-      {
-        text: { en: "Forms" },
-        link: "/recipes/react/forms",
-      },
-      {
-        text: { en: "Gate" },
-        link: "/recipes/react/gate",
-      },
-      {
-        text: { en: "ToDo Creator" },
-        link: "/recipes/react/todo-creator",
-      },
-      {
-        text: { en: "Dynamic Form Schema", uz: "Dinamik shakl sxemasi" },
-        link: "/recipes/react/dynamic-form-schema",
-      },
-      {
-        text: {
-          en: "ToDo List with Validation",
-          uz: "Validation bilan tasdiqlangan ishlar ro'yxati",
-        },
-        link: "/recipes/react/todo-with-validation",
-      },
-      {
-        text: { en: "Slots", uz: "Slotlar" },
-        link: "/recipes/react/slots",
-      },
-    ],
-  },
-  {
-    text: { en: "React Native" },
-    items: [
-      {
-        text: { en: "AsyncStorage Counter" },
-        link: "/recipes/react-native/asyncstorage-counter",
       },
     ],
   },
@@ -803,6 +816,33 @@ export const effector: LSidebarGroup[] = [
   },
 ];
 
+export const nextJsRecipes: LSidebarItem[] = [
+  {
+    text: {
+      en: "Integrate Next.js with effector",
+      ru: "Интеграция Next.js с effector",
+      uz: "Next.js effector bilan integratsiyasi",
+    },
+    link: "/recipes/nextjs/integrate",
+  },
+  {
+    text: {
+      en: "Integrate with Next.js router",
+      ru: "Использование Next.js router в effector",
+      uz: "Next.js router bilan integratsiyasi",
+    },
+    link: "/recipes/nextjs/router",
+  },
+  {
+    text: {
+      en: "Use scopeBind in Next.js",
+      ru: "scopeBind в Next.js",
+      uz: "Next.js da scopeBind dan foydalaning",
+    },
+    link: "/recipes/nextjs/scope-bind",
+  },
+];
+
 export const effectorNext: LSidebarGroup[] = [
   {
     text: {
@@ -810,32 +850,7 @@ export const effectorNext: LSidebarGroup[] = [
       uz: "Batafsil ma'lumot",
       ru: "Обзор",
     },
-    items: [
-      {
-        text: {
-          en: "Integrate Next.js with effector",
-          ru: "Интеграция Next.js с effector",
-          uz: "Next.js effector bilan integratsiyasi",
-        },
-        link: "/recipes/nextjs/integrate",
-      },
-      {
-        text: {
-          en: "Integrate with Next.js router",
-          ru: "Использование Next.js router в effector",
-          uz: "Next.js router bilan integratsiyasi",
-        },
-        link: "/recipes/nextjs/router",
-      },
-      {
-        text: {
-          en: "Use scopeBind in Next.js",
-          ru: "scopeBind в Next.js",
-          uz: "Next.js da scopeBind dan foydalaning",
-        },
-        link: "/recipes/nextjs/scope-bind",
-      },
-    ],
+    items: nextJsRecipes,
   },
 ];
 
@@ -896,7 +911,7 @@ export const PANEL_ITEMS: TabPanelItems[] = [
       en: "Guides & Resources",
       ru: "Руководства и ресурсы",
     },
-    items: guidesAndRecipes,
+    items: [...guidesAndRecipes, ...recipeItems],
   },
   {
     id: "api",

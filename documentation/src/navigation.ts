@@ -14,8 +14,14 @@ import {
   PANEL_ITEMS,
   guidesAndRecipes,
   type LSidebarGroup,
+  recipeItems,
+  nextJsRecipes,
 } from "./sidebar-config";
 import { normalizeUrlPath } from "./libs/path-helpers/normalize-url-path";
+import IconVue from "@icons/Vue.astro";
+import IconReact from "@icons/React.astro";
+import IconSolid from "@icons/Solid.astro";
+import IconEffector from "@icons/Effector.astro";
 
 export type MostUsefulItem = {
   text: LText;
@@ -57,7 +63,7 @@ export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
 export const MOBILE_NAVIGATION = createMobileNavigation([
   {
     text: { en: "Documentation", ru: "Документация", uz: "Hujjat" },
-    items: learning,
+    items: [...learning, ...guidesAndRecipes],
   },
   {
     text: { en: "API" },
@@ -71,8 +77,15 @@ export const MOBILE_NAVIGATION = createMobileNavigation([
   },
   {
     text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" },
-    link: "/recipes",
-    items: guidesAndRecipes,
+    items: [
+      ...recipeItems,
+      {
+        items: nextJsRecipes,
+        text: {
+          en: "Next.js",
+        },
+      },
+    ],
   },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
   { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
@@ -330,3 +343,47 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
 
   return nav;
 }
+
+export const MOST_USEFUL_EFFECTOR: MostUsefulItem = {
+  text: { en: "effector" },
+  icon: IconEffector,
+  description: {
+    en: "The core library forms the foundation for most written code.",
+    ru: "Фундамент основного кода логики в приложениях.",
+  },
+  items: filterSidebarGroups(["useful"], effector),
+};
+export const MOST_USEFUL_REACT: MostUsefulItem = {
+  text: { en: "effector-react" },
+  icon: IconReact,
+  description: {
+    en: "Specialized hooks and gates, designed to seamlessly integrate with React.",
+    ru: "Хуки для компактной и удобной интеграции с React компонентами.",
+  },
+  items: filterSidebarGroups(["useful"], effectorReact),
+};
+export const MOST_USEFUL_SOLID: MostUsefulItem = {
+  text: { en: "effector-solid" },
+  icon: IconSolid,
+  description: {
+    en: "Bindings for performant reactivity framework",
+    ru: "Интеграция с сигналами фреймворка Solid.",
+  },
+  items: filterSidebarGroups(["useful"], effectorSolid),
+};
+export const MOST_USEFUL_VUE: MostUsefulItem = {
+  text: { en: "effector-vue" },
+  icon: IconVue,
+  description: {
+    en: "Bindings for progressive framework",
+    ru: "Хуки, методы, плагины для работы в рамках Vue.",
+  },
+  items: filterSidebarGroups(["useful"], effectorVue),
+};
+
+export const MOST_USEFUL = [
+  MOST_USEFUL_EFFECTOR,
+  MOST_USEFUL_REACT,
+  MOST_USEFUL_SOLID,
+  MOST_USEFUL_VUE,
+];
