@@ -24,8 +24,6 @@ export async function getStaticPaths() {
         );
       }
 
-      console.log("====PAGE====", page);
-
       paths.push({
         params: { slug: actualPath },
         props: { redirectTo: page },
@@ -45,7 +43,7 @@ const { slug } = Astro.params as Params;
 
 // It is important to use .id instead of .slug, because .slug loses case from url
 // we need /api/effector/Event instead of /api/effector/event
-const pageParams = getPathParamsFromId(redirectTo.id.replace(/(index)\.(md|mdx)$/, ""));
+const pageParams = getPathParamsFromId(redirectTo.id.replace(/\.(md|mdx)$/, ""));
 const url = trimTrailingSlash(`/${pageParams.lang}/${pageParams.slug}`);
 ---
 
