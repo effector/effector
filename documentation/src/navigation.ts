@@ -17,7 +17,7 @@ import {
   recipeItems,
   nextJsRecipes,
 } from "./sidebar-config";
-import { normalizeUrlPath } from "./libs/path-helpers/normalize-url-path";
+import { normalizeUrlPath } from "./libs/path";
 import IconVue from "@icons/Vue.astro";
 import IconReact from "@icons/React.astro";
 import IconSolid from "@icons/Solid.astro";
