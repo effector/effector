@@ -3,6 +3,15 @@
  * @import { ImportDeclaration, Program, Statement, VariableDeclaration, VariableDeclarator, CallExpression } from '@babel/types;
  */
 
+const createUnits = [
+  'createEvent',
+  'createStore',
+  'createEffect',
+  'sample',
+  'merge',
+  'combine',
+]
+
 /**
  * @param {NodePath<any>} path
  * @returns {boolean}
@@ -100,11 +109,9 @@ function getUnitInitStatements(path) {
             return
           }
 
-          const isCreateUnitFunction = [
-            'createEvent',
-            'createStore',
-            'createEffect',
-          ].includes(call.node.callee.name)
+          const isCreateUnitFunction = createUnits.includes(
+            call.node.callee.name,
+          )
 
           if (!isCreateUnitFunction && !isInvoke) {
             return
