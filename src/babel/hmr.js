@@ -1,6 +1,6 @@
 /**
  * @import { NodePath } from '@babel/traverse';
- * @import { ImportDeclaration, Program, Statement, VariableDeclaration, VariableDeclarator } from '@babel/types;
+ * @import { ImportDeclaration, Program, Statement, VariableDeclaration, VariableDeclarator, CallExpression } from '@babel/types;
  */
 
 /**
@@ -38,6 +38,11 @@ function getUnitInitStatements(path) {
   const declarations = []
 
   path.traverse({
+    /**
+     *
+     * @param {NodePath<CallExpression>} call
+     * @returns
+     */
     CallExpression: call => {
       if (
         call.node.callee.type !== 'Identifier' ||
@@ -51,7 +56,7 @@ function getUnitInitStatements(path) {
       }
 
       /**
-       * @type {}
+       * @type {Statement}
        */
       const statement = {
         type: 'ExpressionStatement',
@@ -59,15 +64,31 @@ function getUnitInitStatements(path) {
       }
 
       statements.push(statement)
-      call.parentPath.remove()
+
+      if (
+        call.parentPath.node.type === 'ExpressionStatement' &&
+        call.parentPath.parentPath.node.type === 'Program'
+      ) {
+        call.parentPath.remove()
+      }
     },
 
+    /**
+     *
+     * @param {NodePath<VariableDeclaration>} variable
+     * @returns
+     */
     VariableDeclaration(variable) {
       if (!isSupportHMR(variable)) {
         return
       }
 
       variable.traverse({
+        /**
+         *
+         * @param {NodePath<CallExpression>} call
+         * @returns
+         */
         CallExpression(call) {
           if (call.node.callee.type !== 'Identifier') {
             return
@@ -233,7 +254,7 @@ function modifyFile(path) {
           expression: false,
           body: {
             type: 'BlockStatement',
-            body: declarations,
+            body: statements,
             directives: [],
           },
         },
@@ -263,7 +284,7 @@ function modifyFile(path) {
         },
       ],
     },
-    ...statements,
+    ...declarations,
     initStatement,
   ])
 
@@ -373,43 +394,17 @@ function modifyFile(path) {
                   async: false,
                   expression: false,
                   body: {
-                    type: 'BlockStatement',
-                    directives: [],
-                    body: [
-                      {
-                        type: 'ExpressionStatement',
-                        expression: {
-                          type: 'CallExpression',
-                          callee: {
-                            type: 'Identifier',
-                            name: getNameWithModulePrefix('clearNode'),
-                          },
-                          arguments: [
-                            {type: 'Identifier', name: '_internalHMRRegion'},
-                          ],
-                        },
+                    type: 'ExpressionStatement',
+                    expression: {
+                      type: 'CallExpression',
+                      callee: {
+                        type: 'Identifier',
+                        name: getNameWithModulePrefix('clearNode'),
                       },
-                      {
-                        type: 'ExpressionStatement',
-                        expression: {
-                          type: 'AssignmentExpression',
-                          operator: '=',
-                          left: {
-                            type: 'Identifier',
-                            name: '_internalHMRRegion',
-                          },
-                          right: {
-                            type: 'CallExpression',
-                            callee: {
-                              type: 'Identifier',
-                              name: getNameWithModulePrefix('createNode'),
-                            },
-                            arguments: [],
-                          },
-                        },
-                      },
-                      initStatement,
-                    ],
+                      arguments: [
+                        {type: 'Identifier', name: '_internalHMRRegion'},
+                      ],
+                    },
                   },
                 },
               ],
