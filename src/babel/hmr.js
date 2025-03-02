@@ -1,115 +1,153 @@
-import {NodePath} from '@babel/traverse'
-import {ImportDeclaration, Program, Statement, VariableDeclaration, VariableDeclarator} from '@babel/types'
+/**
+ * @import { NodePath } from '@babel/traverse';
+ * @import { ImportDeclaration, Program, Statement, VariableDeclaration, VariableDeclarator } from '@babel/types;
+ */
 
-export function isSupportHMR(path: NodePath<any>) {
-  const parent = path.findParent((parent) =>
-    !parent ||
-    parent.isExportNamedDeclaration() ||
-    parent.isExportDefaultDeclaration() ||
-    parent.isArrowFunctionExpression() ||
-    parent.isFunctionDeclaration() ||
-    parent.isFunctionExpression() ||
-    parent.isDeclareFunction()
+/**
+ * @param {NodePath<any>} path
+ * @returns {boolean}
+ */
+function isSupportHMR(path) {
+  const parent = path.findParent(
+    parent =>
+      !parent ||
+      parent.isExportNamedDeclaration() ||
+      parent.isExportDefaultDeclaration() ||
+      parent.isArrowFunctionExpression() ||
+      parent.isFunctionDeclaration() ||
+      parent.isFunctionExpression() ||
+      parent.isDeclareFunction(),
   )
 
   return !parent || parent.isExportNamedDeclaration()
 }
 
-export function getUnitInitStatements(path: NodePath<Program>): { statements: Statement[]; declarations: VariableDeclaration[]; } {
-    const statements: Statement[] = []
-    const declarations: VariableDeclaration[] = []
-
-    path.traverse({
-        CallExpression: (call) => {
-            if (
-                call.node.callee.type !== 'Identifier' ||
-                call.node.callee.name !== 'sample'
-            ) {
-                return
-            }
-    
-            if (!isSupportHMR(call)) {
-                return
-            }
-
-            statements.push({
-                type: 'ExpressionStatement',
-                expression: call.node,
-            } as Statement)
-
-            call.parentPath.remove();
-        },
-        
-        VariableDeclaration(variable) {
-            if (!isSupportHMR(variable)) {
-              return
-            }
-    
-            variable.traverse({
-              CallExpression(call) {
-                if (call.node.callee.type !== 'Identifier') {
-                  return
-                }
-    
-                const isInvoke = call.node.callee.name === 'invoke'
-    
-                if (!isSupportHMR(call) && !isInvoke) {
-                  return
-                }
-
-                const isCreateUnitFunction = ['createEvent', 'createStore', 'createEffect'].includes(
-                    call.node.callee.name,
-                )
-    
-                if (!isCreateUnitFunction && !isInvoke) {
-                  return
-                }
-    
-                const declarationPath = call.findParent(parent => parent.isVariableDeclarator()) as NodePath<VariableDeclarator> | null
-
-                if (!declarationPath) {
-                  return
-                }
-
-                const {node: declaration} = declarationPath
-    
-                declarations.push({
-                    type: 'VariableDeclaration',
-                    kind: 'let',
-                    declarations: [
-                      {type: 'VariableDeclarator', id: declaration.id},
-                    ],
-                })
-
-                statements.push({
-                  type: 'ExpressionStatement',
-                  expression: {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: declaration.id,
-                    right: declaration.init!,
-                  },
-                })
-
-                declarationPath.remove()
-    
-                if (variable.node?.declarations.length === 0) {
-                  variable.parentPath.remove()
-                }
-              },
-            })
-        }
-    })
-
-    return {statements, declarations}
-}
-
-function updateEffectorImport(path: NodePath<Program>): { getNameWithModulePrefix: (name: string) => string, lastImport: NodePath<ImportDeclaration> | null } {
-  let modulePrefix: string | null = null
-  let lastImport: NodePath<ImportDeclaration> | null = null
+/**
+ *
+ * @param {NodePath<Program>} path
+ * @returns {{ statements: Statement[]; declarations: VariableDeclaration[]; }}
+ */
+function getUnitInitStatements(path) {
+  /**
+   * @type {Statement[]}
+   */
+  const statements = []
+  /**
+   * @type {VariableDeclaration[]}
+   */
+  const declarations = []
 
   path.traverse({
-    ImportDeclaration: (declaration) => {
+    CallExpression: call => {
+      if (
+        call.node.callee.type !== 'Identifier' ||
+        call.node.callee.name !== 'sample'
+      ) {
+        return
+      }
+
+      if (!isSupportHMR(call)) {
+        return
+      }
+
+      /**
+       * @type {}
+       */
+      const statement = {
+        type: 'ExpressionStatement',
+        expression: call.node,
+      }
+
+      statements.push(statement)
+      call.parentPath.remove()
+    },
+
+    VariableDeclaration(variable) {
+      if (!isSupportHMR(variable)) {
+        return
+      }
+
+      variable.traverse({
+        CallExpression(call) {
+          if (call.node.callee.type !== 'Identifier') {
+            return
+          }
+
+          const isInvoke = call.node.callee.name === 'invoke'
+
+          if (!isSupportHMR(call) && !isInvoke) {
+            return
+          }
+
+          const isCreateUnitFunction = [
+            'createEvent',
+            'createStore',
+            'createEffect',
+          ].includes(call.node.callee.name)
+
+          if (!isCreateUnitFunction && !isInvoke) {
+            return
+          }
+
+          /**
+           * @type {NodePath<VariableDeclarator> | null}
+           */
+          const declarationPath = call.findParent(parent =>
+            parent.isVariableDeclarator(),
+          )
+
+          if (!declarationPath) {
+            return
+          }
+
+          const {node: declaration} = declarationPath
+
+          declarations.push({
+            type: 'VariableDeclaration',
+            kind: 'let',
+            declarations: [{type: 'VariableDeclarator', id: declaration.id}],
+          })
+
+          statements.push({
+            type: 'ExpressionStatement',
+            expression: {
+              type: 'AssignmentExpression',
+              operator: '=',
+              left: declaration.id,
+              right: declaration.init,
+            },
+          })
+
+          declarationPath.remove()
+
+          if (variable.node?.declarations.length === 0) {
+            variable.parentPath.remove()
+          }
+        },
+      })
+    },
+  })
+
+  return {statements, declarations}
+}
+
+/**
+ *
+ * @param {NodePath<Program>} path
+ * @returns {{ getNameWithModulePrefix: (name: string) => string, lastImport: NodePath<ImportDeclaration> | null }}
+ */
+function updateEffectorImport(path) {
+  /**
+   * @type {string | null}
+   */
+  let modulePrefix = null
+  /**
+   * @type {NodePath<ImportDeclaration> | null}
+   */
+  let lastImport = null
+
+  path.traverse({
+    ImportDeclaration: declaration => {
       lastImport = declaration
 
       if (declaration.node.source.value !== 'effector') {
@@ -129,7 +167,7 @@ function updateEffectorImport(path: NodePath<Program>): { getNameWithModulePrefi
 
         for (const specifier of declaration.node.specifiers) {
           needToImported = needToImported.filter(
-            (unit) => unit !== specifier.local.name,
+            unit => unit !== specifier.local.name,
           )
         }
 
@@ -147,16 +185,22 @@ function updateEffectorImport(path: NodePath<Program>): { getNameWithModulePrefi
           })
         }
       }
-    }
+    },
   })
 
   return {
-    getNameWithModulePrefix: (name) => modulePrefix ? `${modulePrefix}.${name}` : name,
+    getNameWithModulePrefix: name =>
+      modulePrefix ? `${modulePrefix}.${name}` : name,
     lastImport,
   }
 }
 
-export function modifyFile(path: NodePath<Program>) {
+/**
+ *
+ * @param {NodePath<Program>} path
+ * @returns {void}
+ */
+function modifyFile(path) {
   const {declarations, statements} = getUnitInitStatements(path)
 
   if (!statements.length) {
@@ -169,7 +213,10 @@ export function modifyFile(path: NodePath<Program>) {
     return
   }
 
-  const initStatement: Statement = {
+  /**
+   * @type {Statement}
+   */
+  const initStatement = {
     type: 'ExpressionStatement',
     expression: {
       type: 'CallExpression',
@@ -207,7 +254,10 @@ export function modifyFile(path: NodePath<Program>) {
           },
           init: {
             type: 'CallExpression',
-            callee: {type: 'Identifier', name: getNameWithModulePrefix('createNode')},
+            callee: {
+              type: 'Identifier',
+              name: getNameWithModulePrefix('createNode'),
+            },
             arguments: [],
           },
         },
@@ -217,8 +267,10 @@ export function modifyFile(path: NodePath<Program>) {
     initStatement,
   ])
 
-
-  path.node.body.push(...[
+  /**
+   * @type {Statement[]}
+   */
+  const disposeStatements = [
     {
       type: 'VariableDeclaration',
       declarations: [
@@ -226,9 +278,9 @@ export function modifyFile(path: NodePath<Program>) {
           type: 'VariableDeclarator',
           id: {
             type: 'Identifier',
-            name: '_internalHmrApi'
+            name: '_internalHmrApi',
           },
-        }
+        },
       ],
       kind: 'let',
     },
@@ -244,25 +296,26 @@ export function modifyFile(path: NodePath<Program>) {
               operator: '=',
               left: {
                 type: 'Identifier',
-                name: '_internalHmrApi'
+                name: '_internalHmrApi',
               },
               right: {
                 type: 'CallExpression',
                 callee: {
                   type: 'Identifier',
-                  name: 'eval'
+                  name: 'eval',
                 },
                 arguments: [
                   {
                     type: 'StringLiteral',
-                    value: 'import.meta.hot ?? import.meta.webpackHot ?? module.hot'
-                  }
-                ]
-              }
-            }
-          }
+                    value:
+                      'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
+                  },
+                ],
+              },
+            },
+          },
         ],
-        directives: []
+        directives: [],
       },
       handler: {
         type: 'CatchClause',
@@ -274,15 +327,17 @@ export function modifyFile(path: NodePath<Program>) {
               argument: {
                 type: 'StringLiteral',
                 extra: {
-                  'rawValue': "[Effector HMR] Fatal error. Current environment doesn't support HMR API",
-                  'raw': "'[Effector HMR] Fatal error. Current environment doesn\\'t support HMR API'"
+                  rawValue:
+                    "[Effector HMR] Fatal error. Current environment doesn't support HMR API",
+                  raw: "'[Effector HMR] Fatal error. Current environment doesn\\'t support HMR API'",
                 },
-                value: "[Effector HMR] Fatal error. Current environment doesn't support HMR API"
-              }
-            }
+                value:
+                  "[Effector HMR] Fatal error. Current environment doesn't support HMR API",
+              },
+            },
           ],
-          directives: []
-        }
+          directives: [],
+        },
       },
     },
     {
@@ -307,7 +362,7 @@ export function modifyFile(path: NodePath<Program>) {
                 },
                 property: {
                   type: 'Identifier',
-                  name: 'accept',
+                  name: 'dispose',
                 },
                 computed: false,
               },
@@ -362,6 +417,10 @@ export function modifyFile(path: NodePath<Program>) {
           },
         ],
       },
-    }
-  ] as Statement[]);
+    },
+  ]
+
+  path.node.body.push(...disposeStatements)
 }
+
+module.exports = {modifyFile}
