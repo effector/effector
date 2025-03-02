@@ -97,17 +97,38 @@ export const learning: LSidebarGroup[] = [
         },
         link: "/advanced/work-with-scope",
       },
+    ],
+  },
+  {
+    text: {
+      en: "Goodies",
+      ru: "Будет полезно!",
+      uz: "Mumkin bo'lgan!",
+    },
+    items: [
       {
-        text: { en: "Store SID", ru: "Хранилища и их SID", uz: "Store SID" },
-        link: "/explanation/sids",
+        text: {
+          en: "Most popular API",
+          ru: "Наиболее популярные API",
+          uz: "Eng ko'p foydalaniladigan API",
+        },
+        link: "/api",
       },
       {
         text: {
-          en: "Computation Priority",
-          ru: "Приоритет вычислений",
-          uz: "Hisoblash ustuvorligi",
+          en: "Best practices",
+          ru: "Лучшие практики",
+          uz: "To'g'ri usullar",
         },
-        link: "/explanation/computation-priority",
+        link: "/guides/best-practices",
+      },
+      {
+        text: {
+          en: "Mindset in Effector",
+          uz: "Effectordan foydalanish",
+          ru: "Как мыслить в парадигме Effector",
+        },
+        link: "/resources/mindset",
       },
     ],
   },
@@ -182,14 +203,6 @@ export const guidesAndRecipes: LSidebarGroup[] = [
     items: [
       {
         text: {
-          en: "Best practices",
-          ru: "Лучшие практики",
-          uz: "To'g'ri usullar",
-        },
-        link: "/guides/best-practices",
-      },
-      {
-        text: {
           en: "Troubleshooting",
           ru: "Исправление ошибок",
           uz: "Xatolarni o'zgartirish",
@@ -247,20 +260,16 @@ export const guidesAndRecipes: LSidebarGroup[] = [
     text: { en: "Resources", ru: "Ресурсы", uz: "Resurslar" },
     items: [
       {
-        text: {
-          en: "Mindset in Effector",
-          uz: "Effectordan foydalanish",
-          ru: "Как мыслить в парадигме Effector",
-        },
-        link: "/resources/mindset",
+        text: { en: "Store SID", ru: "Хранилища и их SID", uz: "Store SID" },
+        link: "/explanation/sids",
       },
       {
         text: {
-          en: "Most popular API",
-          ru: "Наиболее популярные API",
-          uz: "Eng ko'p foydalaniladigan API",
+          en: "Computation Priority",
+          ru: "Приоритет вычислений",
+          uz: "Hisoblash ustuvorligi",
         },
-        link: "/api",
+        link: "/explanation/computation-priority",
       },
       {
         text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
