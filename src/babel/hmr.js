@@ -1,6 +1,8 @@
 /**
  * @import { NodePath } from '@babel/traverse';
  * @import { ImportDeclaration, Program, Statement, VariableDeclaration, VariableDeclarator, CallExpression } from '@babel/types;
+ * 
+ * @import * as Babel from '@babel/core';
  */
 
 const createUnits = [
@@ -17,24 +19,13 @@ const createUnits = [
  * @returns {boolean}
  */
 function isSupportHMR(path) {
-  const parent = path.findParent(
-    parent =>
-      !parent ||
-      parent.isExportNamedDeclaration() ||
-      parent.isExportDefaultDeclaration() ||
-      parent.isArrowFunctionExpression() ||
-      parent.isFunctionDeclaration() ||
-      parent.isFunctionExpression() ||
-      parent.isDeclareFunction(),
-  )
-
-  return !parent || parent.isExportNamedDeclaration()
+  return path.scope.block.type === 'Program';
 }
 
 /**
  *
  * @param {NodePath<Program>} path
- * @returns {{ statements: Statement[]; declarations: VariableDeclaration[]; }}
+ * @returns {{ statements: Statement[]; declarations: VariableDeclaration[]; lastImport: ImportDeclaration; withPrefix: (name: string) => string }}
  */
 function getUnitInitStatements(path) {
   /**
@@ -45,8 +36,61 @@ function getUnitInitStatements(path) {
    * @type {VariableDeclaration[]}
    */
   const declarations = []
+  /**
+   * @type {NodePath<ImportDeclaration>}
+   */
+  let lastImport;
+  /**
+   * @type {string}
+   */
+  let prefix;
+
 
   path.traverse({
+    /**
+     *
+     * @param {NodePath<ImportDeclaration>} call
+     * @returns
+     */
+    ImportDeclaration: declaration => {
+      lastImport = declaration
+
+      if (declaration.node.source.value !== 'effector') {
+        return
+      }
+
+      if (declaration.node.specifiers.length === 1) {
+        const specifier = declaration.node.specifiers[0]
+
+        if (!specifier) {
+          throw new Error()
+        }
+
+        prefix = specifier.local.name
+      } else {
+        let needToImported = ['withRegion', 'createNode', 'clearNode']
+
+        for (const specifier of declaration.node.specifiers) {
+          needToImported = needToImported.filter(
+            unit => unit !== specifier.local.name,
+          )
+        }
+
+        for (const importName of needToImported) {
+          declaration.node.specifiers.push({
+            type: 'ImportSpecifier',
+            local: {
+              type: 'Identifier',
+              name: importName,
+            },
+            imported: {
+              type: 'Identifier',
+              name: importName,
+            },
+          })
+        }
+      }
+    },
     /**
      *
      * @param {NodePath<CallExpression>} call
@@ -156,270 +200,45 @@ function getUnitInitStatements(path) {
     },
   })
 
-  return {statements, declarations}
+  return {statements, declarations, lastImport, withPrefix: (name) => prefix ? `${prefix}.${name}` : name}
 }
 
 /**
  *
- * @param {NodePath<Program>} path
- * @returns {{ getNameWithModulePrefix: (name: string) => string, lastImport: NodePath<ImportDeclaration> | null }}
- */
-function updateEffectorImport(path) {
-  /**
-   * @type {string | null}
-   */
-  let modulePrefix = null
-  /**
-   * @type {NodePath<ImportDeclaration> | null}
-   */
-  let lastImport = null
-
-  path.traverse({
-    ImportDeclaration: declaration => {
-      lastImport = declaration
-
-      if (declaration.node.source.value !== 'effector') {
-        return
-      }
-
-      if (declaration.node.specifiers.length === 1) {
-        const specifier = declaration.node.specifiers[0]
-
-        if (!specifier) {
-          throw new Error()
-        }
-
-        modulePrefix = specifier.local.name
-      } else {
-        let needToImported = ['withRegion', 'createNode', 'clearNode']
-
-        for (const specifier of declaration.node.specifiers) {
-          needToImported = needToImported.filter(
-            unit => unit !== specifier.local.name,
-          )
-        }
-
-        for (const importName of needToImported) {
-          declaration.node.specifiers.push({
-            type: 'ImportSpecifier',
-            local: {
-              type: 'Identifier',
-              name: importName,
-            },
-            imported: {
-              type: 'Identifier',
-              name: importName,
-            },
-          })
-        }
-      }
-    },
-  })
-
-  return {
-    getNameWithModulePrefix: name =>
-      modulePrefix ? `${modulePrefix}.${name}` : name,
-    lastImport,
-  }
-}
-
-/**
- *
+ * @param {Babel} babel
  * @param {NodePath<Program>} path
  * @returns {void}
  */
-function modifyFile(path) {
-  const {declarations, statements} = getUnitInitStatements(path)
+function modifyFile(babel, path) {
+  const {declarations, statements, lastImport, withPrefix} = getUnitInitStatements(path)
 
   if (!statements.length) {
     return
   }
 
-  const {getNameWithModulePrefix, lastImport} = updateEffectorImport(path)
-
-  if (!lastImport) {
-    return
-  }
-
-  /**
-   * @type {Statement}
-   */
-  const initStatement = {
-    type: 'ExpressionStatement',
-    expression: {
-      type: 'CallExpression',
-      callee: {
-        type: 'Identifier',
-        name: getNameWithModulePrefix('withRegion'),
-      },
-      arguments: [
-        {type: 'Identifier', name: '_internalHMRRegion'},
-        {
-          type: 'ArrowFunctionExpression',
-          async: false,
-          params: [],
-          expression: false,
-          body: {
-            type: 'BlockStatement',
-            body: statements,
-            directives: [],
-          },
-        },
-      ],
-    },
-  }
-
   lastImport.insertAfter([
-    {
-      type: 'VariableDeclaration',
-      kind: 'let',
-      declarations: [
-        {
-          type: 'VariableDeclarator',
-          id: {
-            type: 'Identifier',
-            name: '_internalHMRRegion',
-          },
-          init: {
-            type: 'CallExpression',
-            callee: {
-              type: 'Identifier',
-              name: getNameWithModulePrefix('createNode'),
-            },
-            arguments: [],
-          },
-        },
-      ],
-    },
     ...declarations,
-    initStatement,
+    ...babel.template(`
+      const _internalHMRRegion = ${withPrefix('createNode')}();
+      
+      ${withPrefix('withRegion')}(_internalHMRRegion, () => {
+        %%statements%%
+      });
+    `)({ statements }),
   ])
 
-  /**
-   * @type {Statement[]}
-   */
-  const disposeStatements = [
-    {
-      type: 'VariableDeclaration',
-      declarations: [
-        {
-          type: 'VariableDeclarator',
-          id: {
-            type: 'Identifier',
-            name: '_internalHmrApi',
-          },
-        },
-      ],
-      kind: 'let',
-    },
-    {
-      type: 'TryStatement',
-      block: {
-        type: 'BlockStatement',
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'AssignmentExpression',
-              operator: '=',
-              left: {
-                type: 'Identifier',
-                name: '_internalHmrApi',
-              },
-              right: {
-                type: 'CallExpression',
-                callee: {
-                  type: 'Identifier',
-                  name: 'eval',
-                },
-                arguments: [
-                  {
-                    type: 'StringLiteral',
-                    value:
-                      'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-                  },
-                ],
-              },
-            },
-          },
-        ],
-        directives: [],
-      },
-      handler: {
-        type: 'CatchClause',
-        body: {
-          type: 'BlockStatement',
-          body: [
-            {
-              type: 'ThrowStatement',
-              argument: {
-                type: 'StringLiteral',
-                extra: {
-                  rawValue:
-                    "[Effector HMR] Fatal error. Current environment doesn't support HMR API",
-                  raw: "'[Effector HMR] Fatal error. Current environment doesn\\'t support HMR API'",
-                },
-                value:
-                  "[Effector HMR] Fatal error. Current environment doesn't support HMR API",
-              },
-            },
-          ],
-          directives: [],
-        },
-      },
-    },
-    {
-      type: 'IfStatement',
-      test: {
-        type: 'Identifier',
-        name: '_internalHmrApi',
-      },
-      consequent: {
-        type: 'BlockStatement',
-        directives: [],
-        body: [
-          {
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'CallExpression',
-              callee: {
-                type: 'MetaProperty',
-                meta: {
-                  type: 'Identifier',
-                  name: '_internalHmrApi',
-                },
-                property: {
-                  type: 'Identifier',
-                  name: 'dispose',
-                },
-                computed: false,
-              },
-              arguments: [
-                {
-                  type: 'ArrowFunctionExpression',
-                  params: [],
-                  async: false,
-                  expression: false,
-                  body: {
-                    type: 'CallExpression',
-                    callee: {
-                      type: 'Identifier',
-                      name: getNameWithModulePrefix('clearNode'),
-                    },
-                    arguments: [
-                      {type: 'Identifier', name: '_internalHMRRegion'},
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ]
-
-  path.node.body.push(...disposeStatements)
+  path.node.body.push(
+    ...babel.template.ast(`
+      let _internalHmrApi = typeof module !== 'undefined' ?
+        module.hot : eval('import.meta.hot ?? import.meta.webpackHot');
+  
+      if (_internalHmrApi) {
+        _internalHmrApi.dispose(() => ${withPrefix('clearNode')}(_internalHMRRegion))
+      } else {
+        console.warning('[effector hmr] HMR is not available in current environment.');
+      }
+    `)
+  )
 }
 
 module.exports = {modifyFile}

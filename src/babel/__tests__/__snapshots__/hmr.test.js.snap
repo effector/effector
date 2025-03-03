@@ -1,15 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hmr babel babel plugin intergation effector code at corrent called fabric (callback in invoke) 1`] = `
+exports[`hmr babel effector code at corrent called fabric (callback in invoke) 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
 var _factories = require('@withease/factories')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let model
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   model = (0, _effector.withFactory)({
     sid: '-qbyui2',
@@ -58,32 +59,30 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at corrent called fabric 1`] = `
+exports[`hmr babel effector code at corrent called fabric 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
 var _factories = require('@withease/factories')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let model
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   model = (0, _effector.withFactory)({
     sid: '-qbyui2',
@@ -132,35 +131,33 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at root & correct called fabric in same file (callback in invoke) 1`] = `
+exports[`hmr babel effector code at root & correct called fabric in same file (callback in invoke) 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
 var _factories = require('@withease/factories')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let $rcount
 let rincrement
 let rdecrement
 let model
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   $rcount = (0, _effector.createStore)(0, {
     sid: '-4nvlii',
@@ -244,35 +241,33 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at root & correct called fabric in same file 1`] = `
+exports[`hmr babel effector code at root & correct called fabric in same file 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
 var _factories = require('@withease/factories')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let $rcount
 let rincrement
 let rdecrement
 let model
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   $rcount = (0, _effector.createStore)(0, {
     sid: '-4nvlii',
@@ -356,34 +351,32 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at root & correct uncalled fabric in same file 1`] = `
+exports[`hmr babel effector code at root & correct uncalled fabric in same file 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
 var _factories = require('@withease/factories')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let $rcount
 let rincrement
 let rdecrement
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   $rcount = (0, _effector.createStore)(0, {
     sid: '-4nvlii',
@@ -463,32 +456,30 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at root & incorrect called fabric in same file 1`] = `
+exports[`hmr babel effector code at root & incorrect called fabric in same file 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let $rcount
 let rincrement
 let rdecrement
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   $rcount = (0, _effector.createStore)(0, {
     sid: '-54x7wp',
@@ -567,32 +558,30 @@ function incorrect() {
 
 const model = incorrect()
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at root & incorrect uncalled fabric in same file 1`] = `
+exports[`hmr babel effector code at root & incorrect uncalled fabric in same file 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let $rcount
 let rincrement
 let rdecrement
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   $rcount = (0, _effector.createStore)(0, {
     sid: '-54x7wp',
@@ -669,33 +658,31 @@ function incorrect() {
   })
 }
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at root & sample variable 1`] = `
+exports[`hmr babel effector code at root & sample variable 1`] = `
 "'use strict'
 
 var _effector = require('effector')
-
-let _internalHMRRegion = (0, _effector.createNode)()
 
 let $count
 let increment
 let decrement
 let $store
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   $count = (0, _effector.createStore)(0, {
     sid: '-z0wt8e',
@@ -744,32 +731,30 @@ let $store
   })
 })
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code at root 1`] = `
+exports[`hmr babel effector code at root 1`] = `
 "'use strict'
 
 var _effector = require('effector')
 
-let _internalHMRRegion = (0, _effector.createNode)()
-
 let $count
 let increment
 let decrement
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
 ;(0, _effector.withRegion)(_internalHMRRegion, () => {
   $count = (0, _effector.createStore)(0, {
     sid: '-z0wt8e',
@@ -808,23 +793,20 @@ let decrement
   })
 })
 
-let _internalHmrApi
-
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
+let _internalHmrApi =
+  typeof module !== 'undefined'
+    ? module.hot
+    : eval('import.meta.hot ?? import.meta.webpackHot')
 
 if (_internalHmrApi) {
   _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code in correct uncalled fabric 1`] = `
+exports[`hmr babel effector code in correct uncalled fabric 1`] = `
 "'use strict'
 
 var _effector = require('effector')
@@ -875,7 +857,7 @@ const correct = (0, _effector.withFactory)({
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code in incorrect called fabric 1`] = `
+exports[`hmr babel effector code in incorrect called fabric 1`] = `
 "'use strict'
 
 var _effector = require('effector')
@@ -922,7 +904,7 @@ const model = incorrect()
 "
 `;
 
-exports[`hmr babel babel plugin intergation effector code in incorrect uncalled fabric 1`] = `
+exports[`hmr babel effector code in incorrect uncalled fabric 1`] = `
 "'use strict'
 
 var _effector = require('effector')
@@ -962,523 +944,6 @@ function incorrect() {
     or: {
       sid: 'ine1bc',
     },
-  })
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at corrent called fabric (callback in invoke) 1`] = `
-"import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-import {createFactory, invoke} from '@withease/factories'
-let _internalHMRRegion = createNode()
-let model
-withRegion(_internalHMRRegion, () => {
-  model = invoke(() => correct())
-})
-const correct = createFactory(() => {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-})
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at corrent called fabric 1`] = `
-"import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-import {createFactory, invoke} from '@withease/factories'
-let _internalHMRRegion = createNode()
-let model
-withRegion(_internalHMRRegion, () => {
-  model = invoke(correct)
-})
-const correct = createFactory(() => {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-})
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at root & correct called fabric in same file (callback in invoke) 1`] = `
-"import {createFactory, invoke} from '@withease/factories'
-import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-let _internalHMRRegion = createNode()
-let $rcount
-let rincrement
-let rdecrement
-let model
-withRegion(_internalHMRRegion, () => {
-  $rcount = createStore(0)
-  rincrement = createEvent()
-  rdecrement = createEvent()
-  sample({
-    clock: rincrement,
-    source: $rcount,
-    fn: count => count + 1,
-    target: $rcount,
-  })
-  sample({
-    clock: rdecrement,
-    source: $rcount,
-    fn: count => count - 1,
-    target: $rcount,
-  })
-  model = invoke(() => correct())
-})
-const correct = createFactory(() => {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-})
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at root & correct called fabric in same file 1`] = `
-"import {createFactory, invoke} from '@withease/factories'
-import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-let _internalHMRRegion = createNode()
-let $rcount
-let rincrement
-let rdecrement
-let model
-withRegion(_internalHMRRegion, () => {
-  $rcount = createStore(0)
-  rincrement = createEvent()
-  rdecrement = createEvent()
-  sample({
-    clock: rincrement,
-    source: $rcount,
-    fn: count => count + 1,
-    target: $rcount,
-  })
-  sample({
-    clock: rdecrement,
-    source: $rcount,
-    fn: count => count - 1,
-    target: $rcount,
-  })
-  model = invoke(correct)
-})
-const correct = createFactory(() => {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-})
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at root & correct uncalled fabric in same file 1`] = `
-"import {createFactory} from '@withease/factories'
-import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-let _internalHMRRegion = createNode()
-let $rcount
-let rincrement
-let rdecrement
-withRegion(_internalHMRRegion, () => {
-  $rcount = createStore(0)
-  rincrement = createEvent()
-  rdecrement = createEvent()
-  sample({
-    clock: rincrement,
-    source: $rcount,
-    fn: count => count + 1,
-    target: $rcount,
-  })
-  sample({
-    clock: rdecrement,
-    source: $rcount,
-    fn: count => count - 1,
-    target: $rcount,
-  })
-})
-const correct = createFactory(() => {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-})
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at root & incorrect called fabric in same file 1`] = `
-"import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-let _internalHMRRegion = createNode()
-let $rcount
-let rincrement
-let rdecrement
-withRegion(_internalHMRRegion, () => {
-  $rcount = createStore(0)
-  rincrement = createEvent()
-  rdecrement = createEvent()
-  sample({
-    clock: rincrement,
-    source: $rcount,
-    fn: count => count + 1,
-    target: $rcount,
-  })
-  sample({
-    clock: rdecrement,
-    source: $rcount,
-    fn: count => count - 1,
-    target: $rcount,
-  })
-})
-function incorrect() {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-}
-const model = incorrect()
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at root & incorrect uncalled fabric in same file 1`] = `
-"import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-let _internalHMRRegion = createNode()
-let $rcount
-let rincrement
-let rdecrement
-withRegion(_internalHMRRegion, () => {
-  $rcount = createStore(0)
-  rincrement = createEvent()
-  rdecrement = createEvent()
-  sample({
-    clock: rincrement,
-    source: $rcount,
-    fn: count => count + 1,
-    target: $rcount,
-  })
-  sample({
-    clock: rdecrement,
-    source: $rcount,
-    fn: count => count - 1,
-    target: $rcount,
-  })
-})
-function incorrect() {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-}
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code at root 1`] = `
-"import {
-  createEvent,
-  createStore,
-  sample,
-  withRegion,
-  createNode,
-  clearNode,
-} from 'effector'
-let _internalHMRRegion = createNode()
-let $count
-let increment
-let decrement
-withRegion(_internalHMRRegion, () => {
-  $count = createStore(0)
-  increment = createEvent()
-  decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-})
-let _internalHmrApi
-try {
-  _internalHmrApi = eval(
-    'import.meta.hot ?? import.meta.webpackHot ?? module.hot',
-  )
-} catch {
-  throw \\"[Effector HMR] Fatal error. Current environment doesn't support HMR API\\"
-}
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => clearNode(_internalHMRRegion))
-}
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code in correct uncalled fabric 1`] = `
-"import {createEvent, createStore, sample} from 'effector'
-import {createFactory} from '@withease/factories'
-const correct = createFactory(() => {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-})
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code in incorrect called fabric 1`] = `
-"import {createEvent, createStore, sample} from 'effector'
-function incorrect() {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
-  })
-}
-const model = incorrect()
-"
-`;
-
-exports[`hmr babel independent hmr modify effector code in incorrect uncalled fabric 1`] = `
-"import {createEvent, createStore, sample} from 'effector'
-function incorrect() {
-  const $count = createStore(0)
-  const increment = createEvent()
-  const decrement = createEvent()
-  sample({
-    clock: increment,
-    source: $count,
-    fn: count => count + 1,
-    target: $count,
-  })
-  sample({
-    clock: decrement,
-    source: $count,
-    fn: count => count - 1,
-    target: $count,
   })
 }
 "

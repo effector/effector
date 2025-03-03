@@ -389,7 +389,7 @@ module.exports = function (babel, options = {}) {
       Program: {
         enter(path, state) {
           if (hmr) {
-            modifyFile(path)
+            modifyFile(babel, path)
           }
           
           path.traverse(importVisitor, state)

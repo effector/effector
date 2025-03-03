@@ -31,7 +31,6 @@
   "devDependencies": {
     "@babel/core": "^7.13.14",
     "@babel/eslint-parser": "^7.13.14",
-    "@babel/generator": "^7.26.9",
     "@babel/helper-plugin-utils": "^7.13.0",
     "@babel/parser": "^7.13.13",
     "@babel/plugin-transform-class-properties": "^7.13.0",
