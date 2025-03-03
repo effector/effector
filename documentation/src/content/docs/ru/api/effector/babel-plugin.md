@@ -2,10 +2,10 @@
 title: Babel плагин
 lang: ru
 ---
-Встроенный плагин для Babel может использоваться для SSR и отладки. Он добавляет имя [юнита](/en/explanation/glossary#unit),
-выведенное из имени переменной, и `sid` ([Стабильный Идентификатор](/en/explanation/sids)), вычисленный из местоположения в исходном коде.
+Встроенный плагин для Babel может использоваться для SSR и отладки. Он добавляет имя [юнита](/ru/explanation/glossary#unit),
+выведенное из имени переменной, и `sid` ([Стабильный Идентификатор](/ru/explanation/sids)), вычисленный из местоположения в исходном коде.
 
-Например, в случае [эффектов без обработчиков](/en/api/effector/Effect#use-handler), это улучшает сообщения об ошибках,
+Например, в случае [эффектов без обработчиков](/ru/api/effector/Effect#use-handler), это улучшает сообщения об ошибках,
 показывая, в каком именно эффекте произошла ошибка.
 
 ```js
@@ -43,7 +43,7 @@ fetchFx();
 Ключевое значение sid заключается в том, что он может быть автоматически сгенерирован `effector/babel-plugin` с конфигурацией по умолчанию, и он будет стабильным между сборками.
 
 :::tip{title="Подробное объяснение"}
-Если вам нужно подробное объяснение о том, зачем нужны SID и как они используются внутри, вы можете найти его, [перейдя по этой ссылке](/en/explanation/sids)
+Если вам нужно подробное объяснение о том, зачем нужны SID и как они используются внутри, вы можете найти его, [перейдя по этой ссылке](/ru/explanation/sids)
 :::
 
 Смотрите [пример проекта](https://github.com/effector/effector/tree/master/examples/worker-rpc)
@@ -139,8 +139,8 @@ getUsers.use(
 
 ## `factories` (#configuration-factories)
 
-Принимает массив имен модулей, экспорты которых рассматриваются как пользовательские фабрики, поэтому каждый вызов функции предоставляет уникальный префикс для [sids](/en/api/effector/babel-plugin#sid) юнитов внутри них. Используется для
-SSR([Серверный рендеринг](/en/api/effector/Scope)) и не требуется для клиентских приложений.
+Принимает массив имен модулей, экспорты которых рассматриваются как пользовательские фабрики, поэтому каждый вызов функции предоставляет уникальный префикс для [sids](/ru/api/effector/babel-plugin#sid) юнитов внутри них. Используется для
+SSR ([серверный рендеринг](/ru/api/effector/Scope)) и не требуется для клиентских приложений.
 
 :::info{title="с"}
 [effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
@@ -202,7 +202,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 ```
 
 Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривался как фабричная функция, поэтому каждое хранилище, созданное ею,
-имеет свой собственный [sid](/en/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/en/api/effector/serialize)
+имеет свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize)
 независимо, хотя без `factories` они будут использовать один и тот же `sid`.
 
 ## `reactSsr` (#configuration-reactSsr)
@@ -211,7 +211,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 сборок из одной кодовой базы.
 
 :::warning{title="Устарело"}
-С [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) команда разработчиков рекомендует удалить эту опцию из конфигурации `babel-plugin`, потому что [effector-react](/en/api/effector-react) поддерживает SSR по умолчанию.
+С [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) команда разработчиков рекомендует удалить эту опцию из конфигурации `babel-plugin`, потому что [effector-react](/ru/api/effector-react) поддерживает SSR по умолчанию.
 :::
 
 ### Формула (#configuration-reactSsr-formulae)
@@ -232,7 +232,7 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 
 Добавляет имя к вызовам фабрик юнитов. Полезно для минификации и обфускации production сборок.
 
-:::info{title="с"}
+:::info{title="Начиная с"}
 [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
