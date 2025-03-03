@@ -3,6 +3,7 @@ import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
 import { getLocalizedSidebar } from "../../navigation";
 import ChevronRight from "src/icons/ChevronRight.astro";
+import SidebarScrollRestore from "./SidebarScrollRestore.astro";
 
 type Props = {
   currentPage: string;
@@ -17,7 +18,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
 ---
 
 <nav aria-labelledby="grid-left">
-  <ul class="nav-groups">
+  <ul id="sidebar" class="nav-groups">
     {
       baseSidebar.map((group, index) => (
         <li>
@@ -45,6 +46,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
       ))
     }
   </ul>
+  <SidebarScrollRestore />
 </nav>
 
 <script>
@@ -64,6 +66,8 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
       }
     });
   }
+
+  console.log("sidebar");
 
   document.addEventListener("DOMContentLoaded", setupNavigation);
   document.addEventListener("astro:after-swap", setupNavigation);

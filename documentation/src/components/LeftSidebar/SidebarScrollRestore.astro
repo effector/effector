@@ -1,0 +1,24 @@
+---
+
+---
+
+<sidebar-scroll-restore> </sidebar-scroll-restore>
+
+<!-- we need inline derective to avoid quick flick on page load because sidebar scroll is resetting when new page opens -->
+<script is:inline>
+  class SidebarScrollRestore extends HTMLElement {}
+
+  const sidebar = document.querySelector("#sidebar");
+  const scrollState = sessionStorage.getItem("sidebar-scroll") || "0";
+  if (scrollState && sidebar) {
+    sidebar.scrollTop = parseInt(scrollState);
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      sessionStorage.setItem("sidebar-scroll", `${Math.round(sidebar.scrollTop)}`);
+    }
+  });
+
+  customElements.define("sidebar-scroll-restore", SidebarScrollRestore);
+</script>
