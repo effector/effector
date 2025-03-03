@@ -14,11 +14,15 @@
     sidebar.scrollTop = parseInt(scrollState);
   }
 
+  customElements.define("sidebar-scroll-restore", SidebarScrollRestore);
+</script>
+
+<script>
+  const sidebar = document.querySelector("#sidebar");
+
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
-      sessionStorage.setItem("sidebar-scroll", `${Math.round(sidebar.scrollTop)}`);
+      sessionStorage.setItem("sidebar-scroll", `${Math.round(sidebar?.scrollTop || 0)}`);
     }
   });
-
-  customElements.define("sidebar-scroll-restore", SidebarScrollRestore);
 </script>
