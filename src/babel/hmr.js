@@ -230,7 +230,7 @@ function modifyFile(babel, path) {
   path.node.body.push(
     babel.template.ast(`
       try {
-        (typeof module !== 'undefined' ? module.hot : eval('import.meta.hot ?? import.meta.webpackHot'))
+        (typeof module !== 'undefined' ? module.hot : eval('import.meta.hot || import.meta.webpackHot'))
           .dispose(() => ${withPrefix('clearNode')}(_internalHMRRegion))
       } catch {
         console.warning('[effector hmr] HMR is not available in current environment.');
