@@ -35,8 +35,9 @@ const { content, tabs } = initTabs(html);
 
 <script>
   import { Tabs } from "./Tabs";
+  class TabsContainer extends Tabs {}
 
-  customElements.define("tabs-container", Tabs);
+  customElements.define("tabs-container", TabsContainer);
 </script>
 
 <style>

@@ -106,8 +106,9 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
 
 <script>
   import { Tabs } from "@components/Tabs/Tabs";
+  class TabbedSidebar extends Tabs {}
 
-  customElements.define("tabbed-sidebar", Tabs);
+  customElements.define("tabbed-sidebar", TabbedSidebar);
 
   function setupNavigation() {
     const navGroups = document.querySelectorAll(".nav-group");
