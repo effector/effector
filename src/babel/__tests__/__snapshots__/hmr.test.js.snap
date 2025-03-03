@@ -59,14 +59,12 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -131,14 +129,12 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -241,14 +237,12 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -351,14 +345,12 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -456,14 +448,12 @@ const correct = (0, _effector.withFactory)({
     }),
 })
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -558,14 +548,12 @@ function incorrect() {
 
 const model = incorrect()
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -658,14 +646,12 @@ function incorrect() {
   })
 }
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -731,14 +717,12 @@ const _internalHMRRegion = (0, _effector.createNode)()
   })
 })
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
@@ -793,14 +777,12 @@ const _internalHMRRegion = (0, _effector.createNode)()
   })
 })
 
-let _internalHmrApi =
-  typeof module !== 'undefined'
+try {
+  ;(typeof module !== 'undefined'
     ? module.hot
     : eval('import.meta.hot ?? import.meta.webpackHot')
-
-if (_internalHmrApi) {
-  _internalHmrApi.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} else {
+  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} catch {
   console.warning('[effector hmr] HMR is not available in current environment.')
 }
 "
