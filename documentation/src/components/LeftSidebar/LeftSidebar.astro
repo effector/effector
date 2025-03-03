@@ -67,8 +67,6 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     });
   }
 
-  console.log("sidebar");
-
   document.addEventListener("DOMContentLoaded", setupNavigation);
   document.addEventListener("astro:after-swap", setupNavigation);
 </script>
