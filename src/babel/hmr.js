@@ -401,17 +401,14 @@ function modifyFile(path) {
                   async: false,
                   expression: false,
                   body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                      type: 'CallExpression',
-                      callee: {
-                        type: 'Identifier',
-                        name: getNameWithModulePrefix('clearNode'),
-                      },
-                      arguments: [
-                        {type: 'Identifier', name: '_internalHMRRegion'},
-                      ],
+                    type: 'CallExpression',
+                    callee: {
+                      type: 'Identifier',
+                      name: getNameWithModulePrefix('clearNode'),
                     },
+                    arguments: [
+                      {type: 'Identifier', name: '_internalHMRRegion'},
+                    ],
                   },
                 },
               ],

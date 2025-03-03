@@ -57,6 +57,7 @@ const foo2 = attach({
     sid: '-5raqzc',
   },
 })
+
 const f = () =>
   attach({
     and: {
@@ -73,16 +74,20 @@ const f = () =>
       sid: 'he4rvf',
     },
   })
+
 {
   const incorrect = attach(config)
+
   function attach() {}
 }
 {
   const attach = () => {}
+
   const incorrect = attach(config)
 }
 {
   const attach = () => {}
+
   if (true) {
     const incorrect = attach(config)
   }
@@ -208,6 +213,7 @@ combine({
     sid: '6d0wwi',
   },
 })
+
 const f = a =>
   combine({
     and: [
@@ -226,14 +232,17 @@ const f = a =>
       sid: '-l6wxyg',
     },
   })
+
 {
   const incorrect = combine({
     foo,
   })
+
   function combine() {}
 }
 {
   const combine = () => {}
+
   if (true) {
     const incorrect = combine({
       foo,
@@ -311,10 +320,12 @@ createDomain({
 })
 {
   const incorrect = createDomain()
+
   function createDomain() {}
 }
 {
   const createDomain = () => {}
+
   if (true) {
     const incorrect = createDomain()
   }
@@ -439,6 +450,7 @@ const a = domain.effect({
   name: 'a',
   sid: '-yrcjkp',
 })
+
 const f = () =>
   domain.effect({
     loc: {
@@ -449,6 +461,7 @@ const f = () =>
     name: 'f',
     sid: 'jhjhqd',
   })
+
 const b = domain.effect('hello', {
   loc: {
     file: _effectorFileName,
@@ -458,6 +471,7 @@ const b = domain.effect('hello', {
   name: 'b',
   sid: 'xrlmjq',
 })
+
 const g = () =>
   domain.effect('baz', {
     loc: {
@@ -468,6 +482,7 @@ const g = () =>
     name: 'g',
     sid: 'gzdlvo',
   })
+
 const aAlias = domain.createEffect({
   loc: {
     file: _effectorFileName,
@@ -477,6 +492,7 @@ const aAlias = domain.createEffect({
   name: 'aAlias',
   sid: 'lkzafg',
 })
+
 const fAlias = () =>
   domain.createEffect({
     loc: {
@@ -487,6 +503,7 @@ const fAlias = () =>
     name: 'fAlias',
     sid: '-ywgdjk',
   })
+
 const bAlias = domain.createEffect('helloAlias', {
   loc: {
     file: _effectorFileName,
@@ -496,6 +513,7 @@ const bAlias = domain.createEffect('helloAlias', {
   name: 'bAlias',
   sid: '-i4te7u',
 })
+
 const gAlias = () =>
   domain.createEffect('bazAlias', {
     loc: {
@@ -506,6 +524,7 @@ const gAlias = () =>
     name: 'gAlias',
     sid: 'x03ktr',
   })
+
 const {sid} = domain.createEffect({
   loc: {
     file: _effectorFileName,
@@ -575,6 +594,7 @@ const a = domain.event({
   name: 'a',
   sid: '-hh3210',
 })
+
 const f = () =>
   domain.event({
     loc: {
@@ -585,6 +605,7 @@ const f = () =>
     name: 'f',
     sid: '-ofjjww',
   })
+
 const b = domain.event('asm', {
   loc: {
     file: _effectorFileName,
@@ -594,6 +615,7 @@ const b = domain.event('asm', {
   name: 'b',
   sid: 'olrsnt',
 })
+
 const g = () =>
   domain.event('tasm', {
     loc: {
@@ -604,6 +626,7 @@ const g = () =>
     name: 'g',
     sid: 'hnbarx',
   })
+
 const aAlias = domain.createEvent({
   loc: {
     file: _effectorFileName,
@@ -613,6 +636,7 @@ const aAlias = domain.createEvent({
   name: 'aAlias',
   sid: 'p4m37p',
 })
+
 const fAlias = () =>
   domain.createEvent({
     loc: {
@@ -623,6 +647,7 @@ const fAlias = () =>
     name: 'fAlias',
     sid: 's9mo4t',
   })
+
 const bAlias = domain.createEvent('asmAlias', {
   loc: {
     file: _effectorFileName,
@@ -632,6 +657,7 @@ const bAlias = domain.createEvent('asmAlias', {
   name: 'bAlias',
   sid: '-2t87zp',
 })
+
 const gAlias = () =>
   domain.createEvent('tasmAlias', {
     loc: {
@@ -642,6 +668,7 @@ const gAlias = () =>
     name: 'gAlias',
     sid: '1l50ei',
   })
+
 const {sid} = domain.createEvent({
   loc: {
     file: _effectorFileName,
@@ -927,6 +954,7 @@ const quux = createEffect('nice', {
   name: 'quux',
   sid: '-fu1zix',
 })
+
 const f = () =>
   createEffect({
     loc: {
@@ -937,6 +965,7 @@ const f = () =>
     name: 'f',
     sid: 'x9z3su',
   })
+
 const {sid} = createEffect({
   loc: {
     file: _effectorFileName,
@@ -984,10 +1013,12 @@ createEffect({
 })
 {
   const incorrect = createEffect()
+
   function createEffect() {}
 }
 {
   const createEffect = () => {}
+
   if (true) {
     const incorrect = createEffect()
   }
@@ -1030,6 +1061,7 @@ const baz = createEvent(
     sid: 'zb55dr',
   },
 )
+
 const f = () =>
   createEvent({
     loc: {
@@ -1040,6 +1072,7 @@ const f = () =>
     name: 'f',
     sid: 'ujzd7p',
   })
+
 const {sid} = createEvent({
   loc: {
     file: _effectorFileName,
@@ -1087,10 +1120,12 @@ createEvent({
 })
 {
   const incorrect = createEvent()
+
   function createEvent() {}
 }
 {
   const createEvent = () => {}
+
   if (true) {
     const incorrect = createEvent()
   }
@@ -1358,6 +1393,7 @@ const dod = createStore(null, {
   name: 'dod',
   sid: '441vf7',
 })
+
 const f = a =>
   createStore(a, {
     loc: {
@@ -1368,6 +1404,7 @@ const f = a =>
     name: 'f',
     sid: '34ig6u',
   })
+
 const {sid} = createStore(null, {
   loc: {
     file: _effectorFileName,
@@ -1405,10 +1442,12 @@ createStore(null, {
 })
 {
   const incorrect = createStore(null)
+
   function createStore() {}
 }
 {
   const createStore = () => {}
+
   if (true) {
     const incorrect = createStore(null)
   }
@@ -1486,6 +1525,7 @@ const baz4 = createApi({
     sid: '-m0rrok',
   },
 })
+
 const f = () =>
   createApi({
     and: [
@@ -1503,12 +1543,15 @@ const f = () =>
       sid: '-l2oitl',
     },
   })
+
 {
   const incorrect = createApi(foo, {})
+
   function createApi() {}
 }
 {
   const createApi = () => {}
+
   if (true) {
     const incorrect = createApi(foo, {})
   }
@@ -1763,11 +1806,13 @@ exports[`babel-plugin should debug sids with options 1`] = `
     name: 'quux',
     sid: '-o01o3h:/src/babel/__tests__/fixtures/debug-sids.js:quux',
   })
+
   const fa = () =>
     createEffect({
       name: 'fa',
       sid: '-f4wwm2:/src/babel/__tests__/fixtures/debug-sids.js:fa',
     })
+
   const {sid} = createEffect({
     sid: '-18yher:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1816,11 +1861,13 @@ exports[`babel-plugin should debug sids with options 1`] = `
     name: 'dod',
     sid: 'ts6uvl:/src/babel/__tests__/fixtures/debug-sids.js:dod',
   })
+
   const f = a =>
     createStore(a, {
       name: 'f',
       sid: 'h940v3:/src/babel/__tests__/fixtures/debug-sids.js:f',
     })
+
   const {sid} = createStore(null, {
     sid: 's3u31b:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1855,11 +1902,13 @@ exports[`babel-plugin should debug sids with options 1`] = `
       sid: '-g40i96:/src/babel/__tests__/fixtures/debug-sids.js:baz',
     },
   )
+
   const f = () =>
     createEvent({
       name: 'f',
       sid: '-r9h70a:/src/babel/__tests__/fixtures/debug-sids.js:f',
     })
+
   const {sid} = createEvent({
     sid: '-qcp750:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1908,11 +1957,13 @@ exports[`babel-plugin should debug sids with options 1`] = `
     name: 'dod',
     sid: '-vclm8o:/src/babel/__tests__/fixtures/debug-sids.js:dod',
   })
+
   const f = a =>
     restore(foo, null, {
       name: 'f',
       sid: '-m02imo:/src/babel/__tests__/fixtures/debug-sids.js:f',
     })
+
   const {sid} = restore(foo, null, {
     sid: '-m6nww7:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1938,6 +1989,7 @@ import {withFactory as _withFactory} from 'effector'
 import {createQuery} from '@farfetched/core'
 import {debounce} from 'patronum'
 import {delay} from 'patronum/delay'
+
 const q = _withFactory({
   sid: '-8gjzqm',
   fn: () =>
@@ -1952,6 +2004,7 @@ const q = _withFactory({
     column: 10,
   },
 })
+
 _withFactory({
   sid: '-d76u2e',
   fn: () =>
@@ -1968,6 +2021,7 @@ _withFactory({
     column: 0,
   },
 })
+
 _withFactory({
   sid: 'e9kkk1',
   fn: () =>
@@ -2002,6 +2056,7 @@ import {g1} from '../g.ts'
 import {g2} from './g.ts'
 const withFactory = 1
 const _withFactory = 2
+
 const a_val = _withFactory2({
   sid: 'f933k3',
   fn: () => a(0),
@@ -2013,7 +2068,9 @@ const a_val = _withFactory2({
     column: 14,
   },
 })
+
 const a1_val = a1(0)
+
 const b_val = _withFactory2({
   sid: 'qmj9c2',
   fn: () => b(0),
@@ -2025,6 +2082,7 @@ const b_val = _withFactory2({
     column: 14,
   },
 })
+
 const c_val = _withFactory2({
   sid: '-xi699a',
   fn: () => c(0),
@@ -2036,6 +2094,7 @@ const c_val = _withFactory2({
     column: 14,
   },
 })
+
 const e_val = _withFactory2({
   sid: '-c6esvx',
   fn: () => e(0),
@@ -2047,6 +2106,7 @@ const e_val = _withFactory2({
     column: 14,
   },
 })
+
 const f_val = _withFactory2({
   sid: '8nxsry',
   fn: () => f(0),
@@ -2058,6 +2118,7 @@ const f_val = _withFactory2({
     column: 14,
   },
 })
+
 const f1_val = _withFactory2({
   sid: 'zg3bgx',
   fn: () => f1(0),
@@ -2069,6 +2130,7 @@ const f1_val = _withFactory2({
     column: 15,
   },
 })
+
 const g_val = _withFactory2({
   sid: 'k1dyjx',
   fn: () => g(0),
@@ -2080,6 +2142,7 @@ const g_val = _withFactory2({
     column: 14,
   },
 })
+
 const g1_val = _withFactory2({
   sid: '4gqp0u',
   fn: () => g1(0),
@@ -2091,7 +2154,9 @@ const g1_val = _withFactory2({
     column: 15,
   },
 })
+
 const g2_val = g2(0)
+
 const {foo, bar} = _withFactory2({
   sid: '-bpn650',
   fn: () => a(0),
@@ -2111,12 +2176,14 @@ exports[`babel-plugin should factories only with name with options 1`] = `
 import {itIsALongName, Randomizing} from 'c/d'
 import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
+
 const longer = _withFactory({
   sid: 'sxdi9p',
   fn: () => itIsALongName(0),
   name: 'longer',
   method: 'itIsALongName',
 })
+
 const arcade = _withFactory({
   sid: '-rwb2il',
   fn: () =>
@@ -2135,6 +2202,7 @@ const arcade = _withFactory({
   name: 'arcade',
   method: 'default',
 })
+
 _withFactory({
   sid: '-dr78v0',
   fn: () =>
@@ -2144,6 +2212,7 @@ _withFactory({
   name: 'none',
   method: 'Randomizing',
 })
+
 const result = _withFactory({
   sid: '-fbu55p',
   fn: () =>
@@ -2162,10 +2231,12 @@ exports[`babel-plugin should factories without name with options 1`] = `
 import {itIsALongName, Randomizing} from 'c/d'
 import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
+
 const longer = _withFactory({
   sid: 'mn9l4u',
   fn: () => itIsALongName(0),
 })
+
 const arcade = _withFactory({
   sid: 'xpbz5w',
   fn: () =>
@@ -2180,6 +2251,7 @@ const arcade = _withFactory({
       }),
     }),
 })
+
 _withFactory({
   sid: '-yfq3bv',
   fn: () =>
@@ -2187,6 +2259,7 @@ _withFactory({
       arcade,
     }),
 })
+
 const result = _withFactory({
   sid: 'lwwnia',
   fn: () =>
@@ -2293,6 +2366,7 @@ const baz5 = forward({
     sid: '-u8jxfp',
   },
 })
+
 const f = () =>
   forward({
     and: {
@@ -2309,15 +2383,18 @@ const f = () =>
       sid: '798vsy',
     },
   })
+
 {
   const incorrect = forward({
     from: foo,
     to: bar,
   })
+
   function forward() {}
 }
 {
   const forward = () => {}
+
   if (true) {
     const incorrect = forward({
       from: foo,
@@ -2449,6 +2526,7 @@ const baz5 = guard({
     sid: '-b8br2g',
   },
 })
+
 const f = () =>
   guard({
     and: [
@@ -2467,14 +2545,17 @@ const f = () =>
       sid: '-83rmcb',
     },
   })
+
 {
   const incorrect = guard(bar, {
     filter: foo,
   })
+
   function guard() {}
 }
 {
   const guard = () => {}
+
   if (true) {
     const incorrect = guard(bar, {
       filter: foo,
@@ -2701,6 +2782,7 @@ import {createStore} from 'redux'
     scope,
   })
 }
+
 function nameClashCheck() {
   const domain = createDomain()
   const event = createEvent()
@@ -2751,6 +2833,7 @@ function nameClashCheck() {
     scope,
   })
 }
+
 const reduxStore = createStore(() => 0)
 import {
   createStore as attach,
@@ -2964,9 +3047,11 @@ const q = allSettled(domainEvent, {
 exports[`babel-plugin should localVariables 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/localVariables.js'
 import {createEvent} from 'effector'
+
 function A() {
   const createEvent = 123
 }
+
 function B() {
   return createEvent({
     loc: {
@@ -3039,10 +3124,12 @@ const c = merge(...args, {
 })
 {
   const incorrect = merge([foo])
+
   function merge() {}
 }
 {
   const merge = () => {}
+
   if (true) {
     const incorrect = merge([foo])
   }
@@ -3052,6 +3139,7 @@ const c = merge(...args, {
 
 exports[`babel-plugin should references 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/references.js'
+
 function outerScope() {
   const createDomain = bar
   const createEvent = bar
@@ -3075,6 +3163,7 @@ function outerScope() {
   const serialize = foo
   const scopeBind = foo
   const allSettled = foo
+
   function nameClashCheck() {
     const domain = createDomain()
     const event = createEvent()
@@ -3126,7 +3215,9 @@ function outerScope() {
     })
   }
 }
+
 function foo() {}
+
 const bar = () => {}
 "
 `;
@@ -3185,6 +3276,7 @@ const dod = restore(foo, null, {
   name: 'dod',
   sid: '-juogjx',
 })
+
 const f = a =>
   restore(foo, null, {
     loc: {
@@ -3195,6 +3287,7 @@ const f = a =>
     name: 'f',
     sid: 'sesimo',
   })
+
 const {sid} = restore(foo, null, {
   loc: {
     file: _effectorFileName,
@@ -3232,10 +3325,12 @@ restore(foo, null, {
 })
 {
   const incorrect = restore(foo, null)
+
   function restore() {}
 }
 {
   const restore = () => {}
+
   if (true) {
     const incorrect = restore(foo, null)
   }
@@ -3349,6 +3444,7 @@ const baz5 = sample({
     sid: '40inll',
   },
 })
+
 const f = () =>
   sample({
     and: [
@@ -3367,12 +3463,15 @@ const f = () =>
       sid: 'hnsza4',
     },
   })
+
 {
   const incorrect = sample(config)
+
   function sample() {}
 }
 {
   const sample = () => {}
+
   if (true) {
     const incorrect = sample(config)
   }
@@ -3512,6 +3611,7 @@ const baz5 = split({
     sid: '-anhjzk',
   },
 })
+
 const f = () =>
   split({
     and: [
@@ -3529,6 +3629,7 @@ const f = () =>
       sid: '8jr5i',
     },
   })
+
 {
   const incorrect = split({
     source: foo,
@@ -3539,10 +3640,12 @@ const f = () =>
       nonEmpty: bar,
     },
   })
+
   function split() {}
 }
 {
   const split = () => {}
+
   if (true) {
     const incorrect = split({
       source: foo,
@@ -3667,10 +3770,12 @@ exports[`babel-plugin should units without name with options 1`] = `
     },
     sid: '-26njv2',
   })
+
   const fa = () =>
     createEffect({
       sid: 'nsvob9',
     })
+
   const {sid} = createEffect({
     sid: 'ixqzbg',
   })
@@ -3714,10 +3819,12 @@ exports[`babel-plugin should units without name with options 1`] = `
     and: config,
     sid: 'sja6dc',
   })
+
   const f = a =>
     createStore(a, {
       sid: '-sen25u',
     })
+
   const {sid} = createStore(null, {
     sid: '-mqki7m',
   })
@@ -3749,10 +3856,12 @@ exports[`babel-plugin should units without name with options 1`] = `
       sid: 'f82vt1',
     },
   )
+
   const f = () =>
     createEvent({
       sid: '-1w4823',
     })
+
   const {sid} = createEvent({
     sid: '-65zqet',
   })
@@ -3796,10 +3905,12 @@ exports[`babel-plugin should units without name with options 1`] = `
     and: config,
     sid: '10dc0p',
   })
+
   const f = a =>
     restore(foo, null, {
       sid: '-gu50wv',
     })
+
   const {sid} = restore(foo, null, {
     sid: 'zcd1uy',
   })
