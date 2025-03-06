@@ -111,13 +111,14 @@ getUsers.use(
 ```json
 "effector/babel-plugin",
   {
-    "hmr": true
+    "hmr": "es"
   }
 ]
 ```
 
-- Тип: `boolean`
-- По умолчанию: `false`
+- Тип: `es` | `cjs` | `none`
+- По умолчанию: `none`
+
 
 ## `importName` (#configuration-importName)
 

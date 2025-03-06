@@ -113,13 +113,13 @@ Hot module replacement for bundlers which uses `module.hot`, `import.meta.webpac
 ```json
 "effector/babel-plugin",
   {
-    "hmr": true
+    "hmr": "es"
   }
 ]
 ```
 
-- Type: `boolean`
-- Default: `false`
+- Type: `es` | `cjs` | `none`
+- Default: `none`
 
 ## `importName` (#configuration-importName)
 
