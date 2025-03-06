@@ -1,50 +1,63 @@
 /**
  * @import { NodePath } from '@babel/traverse';
- * @import { ImportDeclaration, Program, Statement, VariableDeclaration, VariableDeclarator, CallExpression } from '@babel/types;
- * 
- * @import * as Babel from '@babel/core';
+ * @import { Program, CallExpression } from '@babel/types;
  */
 
-const createUnits = [
-  'createEvent',
-  'createStore',
-  'createEffect',
-  'sample',
-  'merge',
-  'combine',
-]
+const REGION_NAME = '_internalHMRRegion';
+const DEFAULT_WATCHED_CALLS = [
+  'map',
+  'filter',
+  'filterMap',
+  'subscribe',
+  'on',
+  'watch',
+  'reset',
+  'prepend'
+];
 
 /**
  * @param {NodePath<any>} path
  * @returns {boolean}
  */
 function isSupportHMR(path) {
-  return path.scope.block.type === 'Program';
+  return !path.findParent((parent) =>
+    parent &&
+    [
+      'FunctionDeclaration',
+      'ArrowFunctionExpression',
+      'ExportDefaultDeclaration',
+      'ClassDeclaration'
+    ].includes(parent.node.type)
+  );
 }
 
 /**
  *
+ * @param {Babel} babel
  * @param {NodePath<Program>} path
- * @returns {{ statements: Statement[]; declarations: VariableDeclaration[]; lastImport: ImportDeclaration; withPrefix: (name: string) => string }}
+ * @param {'module' | 'commonjs'} env 
+ * @param {string[]} factories 
+ * @returns {void}
  */
-function getUnitInitStatements(path) {
-  /**
-   * @type {Statement[]}
-   */
-  const statements = []
-  /**
-   * @type {VariableDeclaration[]}
-   */
-  const declarations = []
-  /**
-   * @type {NodePath<ImportDeclaration>}
-   */
-  let lastImport;
-  /**
-   * @type {string}
-   */
-  let prefix;
+function transformHmr(babel, path, env, factories) {
+  /** @type {Set<string>} */
+  const watchedFactories = new Set(DEFAULT_WATCHED_CALLS);
 
+  const buildUnitInit = babel.template(`
+    withRegion(${REGION_NAME}, () => %%statement%%)  
+  `);
+  
+  const buildImportSpecifier = (importName) => ({
+    type: 'ImportSpecifier',
+    local: {
+      type: 'Identifier',
+      name: importName,
+    },
+    imported: {
+      type: 'Identifier',
+      name: importName,
+    },
+  });
 
   path.traverse({
     /**
@@ -53,42 +66,26 @@ function getUnitInitStatements(path) {
      * @returns
      */
     ImportDeclaration: declaration => {
-      lastImport = declaration
+      const source = declaration.node.source.value;
+      const specifiers = declaration.node.specifiers.map(specifier => specifier.local.name);
 
-      if (declaration.node.source.value !== 'effector') {
-        return
+      if (!['effector', ...factories].includes(source)) {
+        return;
       }
 
-      if (declaration.node.specifiers.length === 1) {
-        const specifier = declaration.node.specifiers[0]
+      for (const specifier of specifiers) {
+        watchedFactories.add(specifier);
+      }
 
-        if (!specifier) {
-          throw new Error()
-        }
+      if (source !== 'effector') {
+        return;
+      }
 
-        prefix = specifier.local.name
-      } else {
-        let needToImported = ['withRegion', 'createNode', 'clearNode']
+      declaration.insertAfter(babel.template.ast(`const _internalHMRRegion = createNode();`));
 
-        for (const specifier of declaration.node.specifiers) {
-          needToImported = needToImported.filter(
-            unit => unit !== specifier.local.name,
-          )
-        }
-
-        for (const importName of needToImported) {
-          declaration.node.specifiers.push({
-            type: 'ImportSpecifier',
-            local: {
-              type: 'Identifier',
-              name: importName,
-            },
-            imported: {
-              type: 'Identifier',
-              name: importName,
-            },
-          })
-        }
+      for (const specifier of ['withRegion', 'createNode', 'clearNode']) {
+        if (specifiers.includes(specifier)) continue;
+        declaration.node.specifiers.push(buildImportSpecifier(specifier));
       }
     },
     /**
@@ -97,146 +94,46 @@ function getUnitInitStatements(path) {
      * @returns
      */
     CallExpression: call => {
-      if (
-        call.node.callee.type !== 'Identifier' ||
-        call.node.callee.name !== 'sample'
-      ) {
-        return
+      const isWatchedFactoryCall = 
+        watchedFactories.has(call.node.callee.name) ||
+        watchedFactories.has(call.node.callee.property?.name);
+
+      if (!isSupportHMR(call) || !isWatchedFactoryCall) {
+        return;
       }
 
-      if (!isSupportHMR(call)) {
-        return
-      }
-
-      /**
-       * @type {Statement}
-       */
-      const statement = {
-        type: 'ExpressionStatement',
-        expression: call.node,
-      }
-
-      statements.push(statement)
-
-      if (
-        call.parentPath.node.type === 'ExpressionStatement' &&
-        call.parentPath.parentPath.node.type === 'Program'
-      ) {
-        call.parentPath.remove()
-      }
-    },
-
-    /**
-     *
-     * @param {NodePath<VariableDeclaration>} variable
-     * @returns
-     */
-    VariableDeclaration(variable) {
-      if (!isSupportHMR(variable)) {
-        return
-      }
-
-      variable.traverse({
-        /**
-         *
-         * @param {NodePath<CallExpression>} call
-         * @returns
-         */
-        CallExpression(call) {
-          if (call.node.callee.type !== 'Identifier') {
-            return
-          }
-
-          const isInvoke = call.node.callee.name === 'invoke'
-
-          if (!isSupportHMR(call) && !isInvoke) {
-            return
-          }
-
-          const isCreateUnitFunction = createUnits.includes(
-            call.node.callee.name,
-          )
-
-          if (!isCreateUnitFunction && !isInvoke) {
-            return
-          }
-
-          /**
-           * @type {NodePath<VariableDeclarator> | null}
-           */
-          const declarationPath = call.findParent(parent =>
-            parent.isVariableDeclarator(),
-          )
-
-          if (!declarationPath) {
-            return
-          }
-
-          const {node: declaration} = declarationPath
-
-          declarations.push({
-            type: 'VariableDeclaration',
-            kind: 'let',
-            declarations: [{type: 'VariableDeclarator', id: declaration.id}],
-          })
-
-          statements.push({
-            type: 'ExpressionStatement',
-            expression: {
-              type: 'AssignmentExpression',
-              operator: '=',
-              left: declaration.id,
-              right: declaration.init,
-            },
-          })
-
-          declarationPath.remove()
-
-          if (variable.node?.declarations.length === 0) {
-            variable.parentPath.remove()
-          }
-        },
-      })
+      call.replaceWith(buildUnitInit({ statement: call.node }));
     },
   })
 
-  return {statements, declarations, lastImport, withPrefix: (name) => prefix ? `${prefix}.${name}` : name}
-}
+  switch (env) {
+    case 'es': {
+      path.node.body.push(
+        babel.template.ast(`
+          if (import.meta.hot || import.meta.webpackHot) {
+            (import.meta.hot || import.meta.webpackHot).dispose(() => clearNode(_internalHMRRegion));
+          } else {
+            console.warn('[effector hmr] HMR is not available in current environment.');
+          }
+        `)
+      )
 
-/**
- *
- * @param {Babel} babel
- * @param {NodePath<Program>} path
- * @returns {void}
- */
-function modifyFile(babel, path) {
-  const {declarations, statements, lastImport, withPrefix} = getUnitInitStatements(path)
+      break;
+    }
+    case 'cjs': {
+      path.node.body.push(
+        babel.template.ast(`
+          if (module.hot) {
+            module.hot.dispose(() => clearNode(_internalHMRRegion));
+          } else {
+            console.warn('[effector hmr] HMR is not available in current environment.');
+          }
+        `)
+      )
 
-  if (!statements.length) {
-    return
+      break;
+    }
   }
-
-  lastImport.insertAfter([
-    ...declarations,
-    ...babel.template(`
-      const _internalHMRRegion = ${withPrefix('createNode')}();
-      
-      ${withPrefix('withRegion')}(_internalHMRRegion, () => {
-        %%statements%%
-      });
-    `)({ statements }),
-  ])
-
-  path.node.body.push(
-    babel.template.ast(`
-      try {
-        (typeof module !== 'undefined' ? module.hot : eval('import.meta.hot || import.meta.webpackHot'))
-          .dispose(() => ${withPrefix('clearNode')}(_internalHMRRegion))
-      } catch {
-        console.warning('[effector hmr] HMR is not available in current environment.');
-      }
-    `)
-  )
 }
 
-module.exports = {modifyFile}
+module.exports = {transformHmr}
