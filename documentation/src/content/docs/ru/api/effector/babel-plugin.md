@@ -1,11 +1,12 @@
 ---
-title: Babel plugin
+title: Babel плагин
 lang: ru
 ---
+Встроенный плагин для Babel может использоваться для SSR и отладки. Он добавляет имя [юнита](/ru/explanation/glossary#unit),
+выведенное из имени переменной, и `sid` ([Стабильный Идентификатор](/ru/explanation/sids)), вычисленный из местоположения в исходном коде.
 
-Встроенный плагин для babel, который можно использовать для ssr и отладки. Он вставляет имя юнита, выводимое из имени переменной, и `sid` (стабильный идентификатор), вычисляемый по расположению в исходном коде.
-
-К примеру, в случае [эффектов без обработчиков](/ru/api/effector/Effect#use-handler), это улучшит сообщение об ошибке, четко показывая, в каком эффекте произошла ошибка.
+Например, в случае [эффектов без обработчиков](/ru/api/effector/Effect#use-handler), это улучшает сообщения об ошибках,
+показывая, в каком именно эффекте произошла ошибка.
 
 ```js
 import { createEffect } from "effector";
@@ -19,9 +20,9 @@ fetchFx();
 
 [Запустить пример](https://share.effector.dev/Yb8vQ1Ly)
 
-## Использование
+# Использование (#usage)
 
-В простейшем случае его можно использовать без какой-либо настройки:
+В простейшем случае его можно использовать без какой-либо конфигурации:
 
 ```json
 // .babelrc
@@ -30,16 +31,22 @@ fetchFx();
 }
 ```
 
-### sid
+# SID (#sid)
 
-:::info
-Добавлено в effector 20.2.0
+:::info{title="Начиная с"}
+[effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
-Стабильный идентификатор для событий, эффектов, сторов и доменов, сохраняемый между окружениями, для обработки клиент-серверного взаимодействия в рамках одной кодовой базы.
-Ключевым преимуществом является то, что sid может быть автоматически сгенерирован через `effector/babel-plugin` с конфигурацией по умолчанию и будет стабилен между сборками.
+Стабильный хэш-идентификатор для событий, эффектов, хранилищ и доменов, сохраняемый между окружениями, для обработки взаимодействия клиент-сервер
+в рамках одной кодовой базы.
 
-[Пример проекта](https://github.com/effector/effector/tree/master/examples/worker-rpc)
+Ключевое значение sid заключается в том, что он может быть автоматически сгенерирован `effector/babel-plugin` с конфигурацией по умолчанию, и он будет стабильным между сборками.
+
+:::tip{title="Подробное объяснение"}
+Если вам нужно подробное объяснение о том, зачем нужны SID и как они используются внутри, вы можете найти его, [перейдя по этой ссылке](/ru/explanation/sids)
+:::
+
+Смотрите [пример проекта](https://github.com/effector/effector/tree/master/examples/worker-rpc)
 
 ```js
 // common.js
@@ -89,33 +96,76 @@ getUsers.use(
 );
 ```
 
-## Конфигурация
+# Конфигурация (#configuration)
 
-### importName
+## `hmr` (#configuration-hmr)
 
-- Type: `string | string[]`
-- Default: `['effector', 'effector/compat']`
-
-Имя импорта или имена импортов, которые(-й) будут(-ет) обрабатываться плагином.
-
-### factories
-
-:::info
-Добавлено в effector 21.6.0
+:::info{title="Начиная с"}
+[effector 23.4.0](https://changelog.effector.dev/#effector-23.4.0)
 :::
 
-- Type: `string[]`
+Горячая замена модулей для сборщиков, использующих API `module.hot`, `import.meta.webpackHot` или `import.meta.hot`.
 
-Принимает массив имен модулей, экспорты которых будут рассматриваться как пользовательские фабрики, и каждый вызов таких фабрик будет иметь уникальный префикс для [сидов](/ru/api/effector/babel-plugin#sid) юнитов внутри них. Применяется для реализации SSR, для чисто клиентского приложения не требуется.
+### Формула (#configuration-hmr-formulae)
 
-- Фабрики могут иметь любое количество аргументов
-- Фабрики могут создавать любое количество юнитов
-- Фабрики могут вызывать любые эффекторные методы
-- Фабрики могут вызывать другие фабрики из других модулей
-- Модули с фабриками могут экспортировать любое количество функций
-- Фабрики должны быть скомпилированы с `effector/babel-plugin`, как и код, который их использует
+```json
+"effector/babel-plugin",
+  {
+    "hmr": true
+  }
+]
+```
 
-#### Пример
+- Тип: `boolean`
+- По умолчанию: `false`
+
+## `importName` (#configuration-importName)
+
+Указание имени или имен импорта для обработки плагином. Импорт должен использоваться в коде как указано.
+
+### Формула (#configuration-importName-formulae)
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "importName": ["effector"]
+  }
+]
+```
+
+- Тип: `string | string[]`
+- По умолчанию: `['effector', 'effector/compat']`
+
+## `factories` (#configuration-factories)
+
+Принимает массив имен модулей, экспорты которых рассматриваются как пользовательские фабрики, поэтому каждый вызов функции предоставляет уникальный префикс для [sids](/ru/api/effector/babel-plugin#sid) юнитов внутри них. Используется для
+SSR ([серверный рендеринг](/ru/api/effector/Scope)) и не требуется для клиентских приложений.
+
+:::info{title="с"}
+[effector 21.6.0](https://changelog.effector.dev/#effector-21-6-0)
+:::
+
+### Формула (#configuration-factories-formulae)
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "factories": ["path/here"]
+  }
+]
+```
+
+- Тип: `string[]`
+- Фабрики могут иметь любое количество аргументов.
+- Фабрики могут создавать любое количество юнитов.
+- Фабрики могут вызывать любые методы effector.
+- Фабрики могут вызывать другие фабрики из других модулей.
+- Модули с фабриками могут экспортировать любое количество функций.
+- Фабрики должны быть скомпилированы с `effector/babel-plugin`, как и код, который их использует.
+
+### Примеры (#configuration-factories-examples)
 
 ```json
 // .babelrc
@@ -137,6 +187,7 @@ import { rootDomain } from "./rootDomain";
 
 export function createEffectStatus(fx) {
   const $status = rootDomain.createStore("init").on(fx.finally, (_, { status }) => status);
+
   return $status;
 }
 ```
@@ -150,57 +201,114 @@ export const $fetchUserStatus = createEffectStatus(fetchUserFx);
 export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 ```
 
-Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривается как фабричная функция, поэтому каждый созданный ею стор получит свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize) независимо, в то время как без `factories` они все будут иметь один и тот же `sid`.
+Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривался как фабричная функция, поэтому каждое хранилище, созданное ею,
+имеет свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize)
+независимо, хотя без `factories` они будут использовать один и тот же `sid`.
 
-### reactSsr
+## `reactSsr` (#configuration-reactSsr)
 
-:::info
-Добавлено в effector 21.5.0
+Заменяет импорты из `effector-react` на `effector-react/scope`. Полезно для сборки как серверных, так и клиентских
+сборок из одной кодовой базы.
+
+:::warning{title="Устарело"}
+С [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) команда разработчиков рекомендует удалить эту опцию из конфигурации `babel-plugin`, потому что [effector-react](/ru/api/effector-react) поддерживает SSR по умолчанию.
 :::
 
-- Type: `boolean`
-- Default: `false`
+### Формула (#configuration-reactSsr-formulae)
 
-Заменяет импорты из `effector-react` на `effector-react/scope`. Полезно для создания серверных и клиентских сборок из одной и той же кодовой базы.
+```json
+[
+  "effector/babel-plugin",
+  {
+    "reactSsr": false
+  }
+]
+```
 
-### addNames
+- Тип: `boolean`
+- По умолчанию: `false`
 
-:::info
-Добавлено в effector 21.8.0
+## `addNames` (#configuration-addNames)
+
+Добавляет имя к вызовам фабрик юнитов. Полезно для минификации и обфускации production сборок.
+
+:::info{title="Начиная с"}
+[effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-- Type: `boolean`
-- Default: `true`
+### Формула (#configuration-addNames-formulae)
 
-Добавляет имена к вызовам фабрик юнитов. Отключение применяется для минификации и обфускации продакшн сборок.
+```json
+[
+  "effector/babel-plugin",
+  {
+    "addNames": true
+  }
+]
+```
 
-### addLoc
+- Тип: `boolean`
+- По умолчанию: `true`
 
-- Type: `boolean`
-- Default: `false`
+## `addLoc` (#configuration-addLoc)
 
-Добавляет местоположение к вызовам методов. Используется инструментами для разработчиков, например, [effector-logger](https://github.com/effector/logger)
+Добавляет местоположение к вызовам методов. Используется devtools, например [effector-logger](https://github.com/effector/logger).
 
-### debugSids
+### Формула (#configuration-addLoc-formulae)
 
-> `debugSids: boolean`
+```json
+[
+  "effector/babel-plugin",
+  {
+    "addLoc": false
+  }
+]
+```
 
-Добавляет в sid путь к файлу и имя переменной где объявлен unit. Очень полезно при отладке SSR.
+- Тип: `boolean`
+- По умолчанию: `false`
 
-### noDefaults
+## `debugSids` (#configuration-debugSids)
 
-:::info
-Добавлено в effector 20.2.0
+Добавляет путь к файлу и имя переменной определения юнита к sid. Полезно для отладки SSR.
+
+### Формула (#configuration-debugSids-formulae)
+
+```json
+[
+  "effector/babel-plugin",
+  {
+    "debugSids": false
+  }
+]
+```
+
+- Тип: `boolean`
+- По умолчанию: `false`
+
+## `noDefaults` (#configuration-noDefaults)
+
+Опция для `effector/babel-plugin` для создания пользовательских фабрик юнитов с чистой конфигурацией.
+
+:::info{title="с"}
+[effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
-- Type: `boolean`
-- Default: `false`
+### Формула (#configuration-noDefaults-formulae)
 
-Опция для `effector/babel-plugin` для создания пользовательских фабрик юнитов с чистой конфигурацией, изначально не делающей ничего.
+```json
+[
+  "effector/babel-plugin",
+  {
+    "noDefaults": false
+  }
+]
+```
 
-:::info
-Оптимальнее использовать [factories](#factories)
-:::
+- Тип: `boolean`
+- По умолчанию: `false`
+
+### Примеры (#configuration-noDefaults-examples)
 
 ```json
 // .babelrc
@@ -237,7 +345,7 @@ import { createInputField } from "@lib/createInputField";
 const foo = createInputField("-");
 /*
 
-will be treated as store creator and compiled to
+будет обработано как создатель хранилища и скомпилировано в
 
 const foo = createInputField('-', {
   name: 'foo',
@@ -245,4 +353,35 @@ const foo = createInputField('-', {
 })
 
 */
+```
+
+# Использование со сборщиками (#bundlers)
+
+## Vite + React (SSR) (#bundlers-ViteReactSSR)
+
+Для использования с `effector/babel-plugin`, необходимо выполнить следующие шаги:
+
+1. Установите пакет `@vitejs/plugin-react`.
+2. `vite.config.js` должен выглядеть следующим образом:
+
+> Примечание: `effector/babel-plugin` не является отдельным пакетом, он входит в состав `effector`
+
+```js
+// vite.config.js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: ["effector/babel-plugin"],
+        // Использовать .babelrc файлы
+        babelrc: true,
+        // Использовать babel.config.js файлы
+        configFile: true,
+      },
+    }),
+  ],
+});
 ```

@@ -8,11 +8,14 @@ const defaultFactories = [
   'patronum' // there is also custom handling for patronum/{method} imports
 ]
 
+const {modifyFile} = require('./hmr')
+
 module.exports = function (babel, options = {}) {
   const {
     addNames,
     addLoc,
     debugSids,
+    hmr,
     filename: enableFileName,
     stores,
     events,
@@ -385,6 +388,10 @@ module.exports = function (babel, options = {}) {
     visitor: {
       Program: {
         enter(path, state) {
+          if (hmr) {
+            modifyFile(babel, path)
+          }
+          
           path.traverse(importVisitor, state)
         },
       },
@@ -464,6 +471,7 @@ module.exports = function (babel, options = {}) {
   }
   return plugin
 }
+
 function addFileNameIdentifier(addLoc, enableFileName, t, path, state) {
   if (addLoc && !state.fileNameIdentifier) {
     const fileName = enableFileName
@@ -613,6 +621,7 @@ const normalizeOptions = options => {
       ),
       addLoc: Boolean(options.addLoc),
       debugSids: Boolean(options.debugSids),
+      hmr: Boolean(options.hmr),
       addNames:
         typeof options.addNames !== 'undefined'
           ? Boolean(options.addNames)

@@ -4,7 +4,6 @@ redirectFrom:
   - /api/effector/babel-plugin
   - /docs/api/effector/babel-plugin
 ---
-
 Built-in plugin for babel can be used for ssr and debugging. It inserts a name a [Unit](/en/explanation/glossary#unit),
 inferred from variable name and `sid` ([Stable IDentifier](/en/explanation/sids)), computed from the location in the source code.
 
@@ -101,6 +100,27 @@ getUsers.use(
 
 # Configuration (#configuration)
 
+## `hmr` (#configuration-hmr)
+
+:::info{title="since"}
+[effector 23.4.0](https://changelog.effector.dev/#effector-23.4.0)
+:::
+
+Hot module replacement for bundlers which uses `module.hot`, `import.meta.webpackHot` or  `import.meta.hot` API.
+
+### Formulae (#configuration-hmr-formulae)
+
+```json
+"effector/babel-plugin",
+  {
+    "hmr": true
+  }
+]
+```
+
+- Type: `boolean`
+- Default: `false`
+
 ## `importName` (#configuration-importName)
 
 Specifying import name or names to process by plugin. Import should be used in the code as specified.
@@ -140,7 +160,6 @@ SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for c
 ```
 
 - Type: `string[]`
-
 - Factories can have any number of arguments.
 - Factories can create any number of units.
 - Factories can call any effector methods.
