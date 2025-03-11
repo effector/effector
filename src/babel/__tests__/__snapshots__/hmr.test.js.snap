@@ -1,768 +1,150 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hmr babel effector code at corrent called fabric (callback in invoke) 1`] = `
+exports[`hmr module cjs format 1`] = `
 "'use strict'
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+})
+exports.default = exports.exportedLet = exports.exportedConst = void 0
 
 var _effector = require('effector')
 
 var _factories = require('@withease/factories')
 
-let model
-
 const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  model = (0, _effector.withFactory)({
-    sid: '-qbyui2',
-    fn: () => (0, _factories.invoke)(() => correct()),
-  })
-})
-const correct = (0, _effector.withFactory)({
-  sid: '-gflem9',
-  fn: () =>
-    (0, _factories.createFactory)(() => {
-      const $count = (0, _effector.createStore)(0, {
-        sid: '-y2tkea',
-      })
-      const increment = (0, _effector.createEvent)({
-        sid: 'a5bvgp',
-      })
-      const decrement = (0, _effector.createEvent)({
-        sid: '-kqbygk',
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: increment,
-            source: $count,
-            fn: count => count + 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: '-aqjp65',
-        },
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: decrement,
-            source: $count,
-            fn: count => count - 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'inxtwp',
-        },
-      })
-    }),
-})
-
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at corrent called fabric 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-var _factories = require('@withease/factories')
-
-let model
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  model = (0, _effector.withFactory)({
-    sid: '-qbyui2',
-    fn: () => (0, _factories.invoke)(correct),
-  })
-})
-const correct = (0, _effector.withFactory)({
-  sid: '-gflem9',
-  fn: () =>
-    (0, _factories.createFactory)(() => {
-      const $count = (0, _effector.createStore)(0, {
-        sid: '-y2tkea',
-      })
-      const increment = (0, _effector.createEvent)({
-        sid: 'a5bvgp',
-      })
-      const decrement = (0, _effector.createEvent)({
-        sid: '-kqbygk',
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: increment,
-            source: $count,
-            fn: count => count + 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: '-aqjp65',
-        },
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: decrement,
-            source: $count,
-            fn: count => count - 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'inxtwp',
-        },
-      })
-    }),
-})
-
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at root & correct called fabric in same file (callback in invoke) 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-var _factories = require('@withease/factories')
-
-let $rcount
-let rincrement
-let rdecrement
-let model
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  $rcount = (0, _effector.createStore)(0, {
-    sid: '-4nvlii',
-  })
-  rincrement = (0, _effector.createEvent)({
-    sid: '-2vfjaq',
-  })
-  rdecrement = (0, _effector.createEvent)({
-    sid: '-xr3d7z',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rincrement,
-        source: $rcount,
-        fn: count => count + 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: '-ar3ht8',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rdecrement,
-        source: $rcount,
-        fn: count => count - 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: 'ine19m',
-    },
-  })
-  model = (0, _effector.withFactory)({
-    sid: '22qh5m',
-    fn: () => (0, _factories.invoke)(() => correct()),
-  })
-})
-const correct = (0, _effector.withFactory)({
-  sid: 'wh8kc5',
-  fn: () =>
-    (0, _factories.createFactory)(() => {
-      const $count = (0, _effector.createStore)(0, {
-        sid: '-vicpim',
-      })
-      const increment = (0, _effector.createEvent)({
-        sid: '-oa68ff',
-      })
-      const decrement = (0, _effector.createEvent)({
-        sid: '-1bgw8g',
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: increment,
-            source: $count,
-            fn: count => count + 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'j5j8w9',
-        },
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: decrement,
-            source: $count,
-            fn: count => count - 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'jkxhid',
-        },
-      })
-    }),
-})
-
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at root & correct called fabric in same file 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-var _factories = require('@withease/factories')
-
-let $rcount
-let rincrement
-let rdecrement
-let model
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  $rcount = (0, _effector.createStore)(0, {
-    sid: '-4nvlii',
-  })
-  rincrement = (0, _effector.createEvent)({
-    sid: '-2vfjaq',
-  })
-  rdecrement = (0, _effector.createEvent)({
-    sid: '-xr3d7z',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rincrement,
-        source: $rcount,
-        fn: count => count + 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: '-ar3ht8',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rdecrement,
-        source: $rcount,
-        fn: count => count - 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: 'ine19m',
-    },
-  })
-  model = (0, _effector.withFactory)({
-    sid: '22qh5m',
-    fn: () => (0, _factories.invoke)(correct),
-  })
-})
-const correct = (0, _effector.withFactory)({
-  sid: 'wh8kc5',
-  fn: () =>
-    (0, _factories.createFactory)(() => {
-      const $count = (0, _effector.createStore)(0, {
-        sid: '-vicpim',
-      })
-      const increment = (0, _effector.createEvent)({
-        sid: '-oa68ff',
-      })
-      const decrement = (0, _effector.createEvent)({
-        sid: '-1bgw8g',
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: increment,
-            source: $count,
-            fn: count => count + 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'j5j8w9',
-        },
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: decrement,
-            source: $count,
-            fn: count => count - 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'jkxhid',
-        },
-      })
-    }),
-})
-
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at root & correct uncalled fabric in same file 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-var _factories = require('@withease/factories')
-
-let $rcount
-let rincrement
-let rdecrement
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  $rcount = (0, _effector.createStore)(0, {
-    sid: '-4nvlii',
-  })
-  rincrement = (0, _effector.createEvent)({
-    sid: '-2vfjaq',
-  })
-  rdecrement = (0, _effector.createEvent)({
-    sid: '-xr3d7z',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rincrement,
-        source: $rcount,
-        fn: count => count + 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: '-ar3ht8',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rdecrement,
-        source: $rcount,
-        fn: count => count - 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: 'ine19m',
-    },
-  })
-})
-const correct = (0, _effector.withFactory)({
-  sid: 'wh8kc5',
-  fn: () =>
-    (0, _factories.createFactory)(() => {
-      const $count = (0, _effector.createStore)(0, {
-        sid: '-vicpim',
-      })
-      const increment = (0, _effector.createEvent)({
-        sid: '-oa68ff',
-      })
-      const decrement = (0, _effector.createEvent)({
-        sid: '-1bgw8g',
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: increment,
-            source: $count,
-            fn: count => count + 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'j5j8w9',
-        },
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: decrement,
-            source: $count,
-            fn: count => count - 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'jkxhid',
-        },
-      })
-    }),
-})
-
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at root & incorrect called fabric in same file 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-let $rcount
-let rincrement
-let rdecrement
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  $rcount = (0, _effector.createStore)(0, {
-    sid: '-54x7wp',
-  })
-  rincrement = (0, _effector.createEvent)({
-    sid: '-3ch5ox',
-  })
-  rdecrement = (0, _effector.createEvent)({
-    sid: '-y84zm6',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rincrement,
-        source: $rcount,
-        fn: count => count + 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: '-arnael',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rdecrement,
-        source: $rcount,
-        fn: count => count - 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: 'imu8o9',
-    },
-  })
-})
 
 function incorrect() {
-  const $count = (0, _effector.createStore)(0, {
-    sid: '-vzebwt',
+  const $si = (0, _effector.createStore)(0, {
+    sid: '-snxj9s',
   })
-  const increment = (0, _effector.createEvent)({
-    sid: '-or7utm',
+  const ei = (0, _effector.createEvent)({
+    sid: '-4v7pd2',
   })
-  const decrement = (0, _effector.createEvent)({
-    sid: '-1siimn',
+  const iFx = (0, _effector.createEffect)(() => {}, {
+    sid: 'fcqi33',
   })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: increment,
-        source: $count,
-        fn: count => count + 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: 'j4zgaw',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: decrement,
-        source: $count,
-        fn: count => count - 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: 'jkdox0',
-    },
-  })
+  return {
+    $si,
+    ei,
+    iFx,
+  }
 }
 
-const model = incorrect()
-
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at root & incorrect uncalled fabric in same file 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-let $rcount
-let rincrement
-let rdecrement
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  $rcount = (0, _effector.createStore)(0, {
-    sid: '-54x7wp',
+const incorrectArrow = () =>
+  (0, _effector.createStore)(0, {
+    sid: 'tkkil4',
   })
-  rincrement = (0, _effector.createEvent)({
-    sid: '-3ch5ox',
-  })
-  rdecrement = (0, _effector.createEvent)({
-    sid: '-y84zm6',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rincrement,
-        source: $rcount,
-        fn: count => count + 1,
-        target: $rcount,
-      },
-    ],
-    or: {
-      sid: '-arnael',
+
+const correct = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: 'iqxiwi',
+    fn: () =>
+      (0, _factories.createFactory)(() => {
+        const $si = (0, _effector.createStore)(0, {
+          sid: '-jhatvh',
+        })
+        const ei = (0, _effector.createEvent)({
+          sid: '-69j9k7',
+        })
+        const iFx = (0, _effector.createEffect)(() => {}, {
+          sid: '-wwg0zk',
+        })
+        return {
+          $si,
+          ei,
+          iFx,
+        }
+      }),
+  }),
+)
+const fx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEffect)(() => {}, {
+    sid: 'tbvz02',
+  }),
+)
+const attachedFx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.attach)({
+    and: {
+      effect: fx,
     },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: rdecrement,
-        source: $rcount,
-        fn: count => count - 1,
-        target: $rcount,
-      },
-    ],
     or: {
-      sid: 'imu8o9',
+      sid: 'vlalad',
     },
-  })
-})
-
-function incorrect() {
-  const $count = (0, _effector.createStore)(0, {
-    sid: '-vzebwt',
-  })
-  const increment = (0, _effector.createEvent)({
-    sid: '-or7utm',
-  })
-  const decrement = (0, _effector.createEvent)({
-    sid: '-1siimn',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: increment,
-        source: $count,
-        fn: count => count + 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: 'j4zgaw',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: decrement,
-        source: $count,
-        fn: count => count - 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: 'jkdox0',
-    },
-  })
-}
-
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at root & sample variable 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-let $count
-let increment
-let decrement
-let $store
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  $count = (0, _effector.createStore)(0, {
-    sid: '-z0wt8e',
-  })
-  increment = (0, _effector.createEvent)({
-    sid: '978m4i',
-  })
-  decrement = (0, _effector.createEvent)({
-    sid: '-lof7sr',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: increment,
-        source: $count,
-        fn: count => count + 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: '-arnael',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: decrement,
-        source: $count,
-        fn: count => count - 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: 'imu8o9',
-    },
-  })
-  $store = (0, _effector.sample)({
+  }),
+)
+const $count = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)(0, {
+    sid: '-uk9gry',
+  }),
+)
+const increment = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-nc306u',
+  }),
+)
+const decrement = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-ddnzv',
+  }),
+)
+const exportedConst = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: '-2v9kq',
+  }),
+)
+exports.exportedConst = exportedConst
+let exportedLet = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: 'npo5bw',
+  }),
+)
+exports.exportedLet = exportedLet
+const model = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: '-clnt2f',
+    fn: () => (0, _factories.invoke)(correct),
+  }),
+)
+const incorrectModel = incorrect()
+const incorrectArrowModel = incorrectArrow()
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  $count.on(increment, count => count + 1),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () => $count.watch(console.log))
+const $store = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
     and: [
       {
         clock: $count,
       },
     ],
     or: {
-      sid: 'wxkf5w',
+      sid: '-jmsdfn',
     },
-  })
-})
+  }),
+)
 
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
-}
-"
-`;
-
-exports[`hmr babel effector code at root 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-let $count
-let increment
-let decrement
-
-const _internalHMRRegion = (0, _effector.createNode)()
-
-;(0, _effector.withRegion)(_internalHMRRegion, () => {
-  $count = (0, _effector.createStore)(0, {
-    sid: '-z0wt8e',
-  })
-  increment = (0, _effector.createEvent)({
-    sid: '978m4i',
-  })
-  decrement = (0, _effector.createEvent)({
-    sid: '-lof7sr',
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: increment,
-        source: $count,
-        fn: count => count + 1,
-        target: $count,
+if (true) {
+  ;(0, _effector.withRegion)(_internalHMRRegion, () =>
+    (0, _effector.sample)({
+      and: [
+        {
+          clock: increment,
+          source: $count,
+          fn: count => count + 1,
+          target: $count,
+        },
+      ],
+      or: {
+        sid: 'k0vipu',
       },
-    ],
-    or: {
-      sid: '-arnael',
-    },
-  })
-  ;(0, _effector.sample)({
+    }),
+  )
+}
+
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
     and: [
       {
         clock: decrement,
@@ -772,149 +154,199 @@ const _internalHMRRegion = (0, _effector.createNode)()
       },
     ],
     or: {
-      sid: 'imu8o9',
+      sid: 'kgtjvl',
     },
-  })
+  }),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: decrement,
+        target: increment.prepend(() => -1),
+      },
+    ],
+    or: {
+      sid: 'kko414',
+    },
+  }),
+)
+
+class Class {
+  constructor() {
+    this.event = (0, _effector.createEvent)(
+      {
+        sid: '-inls94',
+      },
+      {
+        and: {
+          sid: '-inls94',
+        },
+        sid: '-inls94',
+      },
+    )
+  }
+}
+
+var _default = (0, _effector.createEvent)({
+  sid: 'cq3mv4',
 })
 
-try {
-  ;(typeof module !== 'undefined'
-    ? module.hot
-    : eval('import.meta.hot || import.meta.webpackHot')
-  ).dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
-} catch {
-  console.warning('[effector hmr] HMR is not available in current environment.')
+exports.default = _default
+
+if (module.hot) {
+  module.hot.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warn('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;
 
-exports[`hmr babel effector code in correct uncalled fabric 1`] = `
+exports[`hmr module esm format 1`] = `
 "'use strict'
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+})
+exports.default = exports.exportedLet = exports.exportedConst = void 0
 
 var _effector = require('effector')
 
 var _factories = require('@withease/factories')
 
-const correct = (0, _effector.withFactory)({
-  sid: '-gflem9',
-  fn: () =>
-    (0, _factories.createFactory)(() => {
-      const $count = (0, _effector.createStore)(0, {
-        sid: '-y2tkea',
-      })
-      const increment = (0, _effector.createEvent)({
-        sid: 'a5bvgp',
-      })
-      const decrement = (0, _effector.createEvent)({
-        sid: '-kqbygk',
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: increment,
-            source: $count,
-            fn: count => count + 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: '-aqjp65',
-        },
-      })
-      ;(0, _effector.sample)({
-        and: [
-          {
-            clock: decrement,
-            source: $count,
-            fn: count => count - 1,
-            target: $count,
-          },
-        ],
-        or: {
-          sid: 'inxtwp',
-        },
-      })
-    }),
-})
-"
-`;
-
-exports[`hmr babel effector code in incorrect called fabric 1`] = `
-"'use strict'
-
-var _effector = require('effector')
+const _internalHMRRegion = (0, _effector.createNode)()
 
 function incorrect() {
-  const $count = (0, _effector.createStore)(0, {
-    sid: '-yjv6sh',
+  const $si = (0, _effector.createStore)(0, {
+    sid: '-snxj9s',
   })
-  const increment = (0, _effector.createEvent)({
-    sid: '9oa92i',
+  const ei = (0, _effector.createEvent)({
+    sid: '-4v7pd2',
   })
-  const decrement = (0, _effector.createEvent)({
-    sid: '-l7dkur',
+  const iFx = (0, _effector.createEffect)(() => {}, {
+    sid: 'fcqi33',
   })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: increment,
-        source: $count,
-        fn: count => count + 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: '-ar3hri',
-    },
-  })
-  ;(0, _effector.sample)({
-    and: [
-      {
-        clock: decrement,
-        source: $count,
-        fn: count => count - 1,
-        target: $count,
-      },
-    ],
-    or: {
-      sid: 'ine1bc',
-    },
-  })
+  return {
+    $si,
+    ei,
+    iFx,
+  }
 }
 
-const model = incorrect()
-"
-`;
-
-exports[`hmr babel effector code in incorrect uncalled fabric 1`] = `
-"'use strict'
-
-var _effector = require('effector')
-
-function incorrect() {
-  const $count = (0, _effector.createStore)(0, {
-    sid: '-yjv6sh',
+const incorrectArrow = () =>
+  (0, _effector.createStore)(0, {
+    sid: 'tkkil4',
   })
-  const increment = (0, _effector.createEvent)({
-    sid: '9oa92i',
-  })
-  const decrement = (0, _effector.createEvent)({
-    sid: '-l7dkur',
-  })
-  ;(0, _effector.sample)({
+
+const correct = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: 'iqxiwi',
+    fn: () =>
+      (0, _factories.createFactory)(() => {
+        const $si = (0, _effector.createStore)(0, {
+          sid: '-jhatvh',
+        })
+        const ei = (0, _effector.createEvent)({
+          sid: '-69j9k7',
+        })
+        const iFx = (0, _effector.createEffect)(() => {}, {
+          sid: '-wwg0zk',
+        })
+        return {
+          $si,
+          ei,
+          iFx,
+        }
+      }),
+  }),
+)
+const fx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEffect)(() => {}, {
+    sid: 'tbvz02',
+  }),
+)
+const attachedFx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.attach)({
+    and: {
+      effect: fx,
+    },
+    or: {
+      sid: 'vlalad',
+    },
+  }),
+)
+const $count = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)(0, {
+    sid: '-uk9gry',
+  }),
+)
+const increment = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-nc306u',
+  }),
+)
+const decrement = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-ddnzv',
+  }),
+)
+const exportedConst = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: '-2v9kq',
+  }),
+)
+exports.exportedConst = exportedConst
+let exportedLet = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: 'npo5bw',
+  }),
+)
+exports.exportedLet = exportedLet
+const model = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: '-clnt2f',
+    fn: () => (0, _factories.invoke)(correct),
+  }),
+)
+const incorrectModel = incorrect()
+const incorrectArrowModel = incorrectArrow()
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  $count.on(increment, count => count + 1),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () => $count.watch(console.log))
+const $store = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
     and: [
       {
-        clock: increment,
-        source: $count,
-        fn: count => count + 1,
-        target: $count,
+        clock: $count,
       },
     ],
     or: {
-      sid: '-ar3hri',
+      sid: '-jmsdfn',
     },
-  })
-  ;(0, _effector.sample)({
+  }),
+)
+
+if (true) {
+  ;(0, _effector.withRegion)(_internalHMRRegion, () =>
+    (0, _effector.sample)({
+      and: [
+        {
+          clock: increment,
+          source: $count,
+          fn: count => count + 1,
+          target: $count,
+        },
+      ],
+      or: {
+        sid: 'k0vipu',
+      },
+    }),
+  )
+}
+
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
     and: [
       {
         clock: decrement,
@@ -924,9 +356,52 @@ function incorrect() {
       },
     ],
     or: {
-      sid: 'ine1bc',
+      sid: 'kgtjvl',
     },
-  })
+  }),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: decrement,
+        target: increment.prepend(() => -1),
+      },
+    ],
+    or: {
+      sid: 'kko414',
+    },
+  }),
+)
+
+class Class {
+  constructor() {
+    this.event = (0, _effector.createEvent)(
+      {
+        sid: '-inls94',
+      },
+      {
+        and: {
+          sid: '-inls94',
+        },
+        sid: '-inls94',
+      },
+    )
+  }
+}
+
+var _default = (0, _effector.createEvent)({
+  sid: 'cq3mv4',
+})
+
+exports.default = _default
+
+if (import.meta.hot || import.meta.webpackHot) {
+  ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
+    (0, _effector.clearNode)(_internalHMRRegion),
+  )
+} else {
+  console.warn('[effector hmr] HMR is not available in current environment.')
 }
 "
 `;

@@ -8,7 +8,7 @@ const defaultFactories = [
   'patronum' // there is also custom handling for patronum/{method} imports
 ]
 
-const {modifyFile} = require('./hmr')
+const {transformHmr} = require('./hmr')
 
 module.exports = function (babel, options = {}) {
   const {
@@ -388,8 +388,8 @@ module.exports = function (babel, options = {}) {
     visitor: {
       Program: {
         enter(path, state) {
-          if (hmr) {
-            modifyFile(babel, path)
+          if (hmr !== 'none') {
+            transformHmr(babel, path, hmr, factories)
           }
           
           path.traverse(importVisitor, state)
@@ -621,7 +621,7 @@ const normalizeOptions = options => {
       ),
       addLoc: Boolean(options.addLoc),
       debugSids: Boolean(options.debugSids),
-      hmr: Boolean(options.hmr),
+      hmr: options.hmr || 'none',
       addNames:
         typeof options.addNames !== 'undefined'
           ? Boolean(options.addNames)
