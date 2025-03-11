@@ -3,6 +3,7 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import type { InferGetStaticPropsType, InferGetStaticParamsType } from "astro";
 import MainLayout from "src/layouts/MainLayout.astro";
 import { getPathParamsFromId } from "src/languages";
+import { trimTrailingSlash } from "src/libs/path";
 
 interface Path {
   params: { slug: string };
@@ -43,7 +44,7 @@ const { slug } = Astro.params as Params;
 // It is important to use .id instead of .slug, because .slug loses case from url
 // we need /api/effector/Event instead of /api/effector/event
 const pageParams = getPathParamsFromId(redirectTo.id.replace(/\.(md|mdx)$/, ""));
-const url = `/${pageParams.lang}/${pageParams.slug}`;
+const url = trimTrailingSlash(`/${pageParams.lang}/${pageParams.slug}`);
 ---
 
 <MainLayout
