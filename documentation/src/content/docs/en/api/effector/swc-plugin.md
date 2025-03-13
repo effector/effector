@@ -128,6 +128,47 @@ import { createBooleanStore } from "../factory";
 const $boolean = createBooleanStore(); /* Treated as a factory! */
 ```
 
+## `debugSids` (#configuration-debugSids)
+
+Append the full file path and Unit name to generated `SID`s for easier debugging of SSR issues.
+
+### Formulae (#configuration-debugSids-formulae)
+
+```json
+["@effector/swc-plugin", { "debugSids": false }]
+```
+
+- Type: `boolean`
+- Default: `false`
+
+## `hmr` (#configuration-hmr)
+
+:::info{title="since"}
+`@effector/swc-plugin@0.7.0`
+:::
+
+Enable Hot Module Replacement (HMR) support to clean up links, subscriptions and side effects managed by Effector. This prevents double-firing of Effects and watchers.
+
+:::warning{title="Experimental"}
+Although tested, this option is considered experimental and might have unexpected issues in different bundlers.
+:::
+
+### Formulae (#configuration-hmr-formulae)
+
+```json
+["@effector/swc-plugin", { "hmr": "es" }]
+```
+
+- Type: `"es"` | `"cjs"` | `"none"`
+  - `"es"`: Use `import.meta.hot` HMR API in bundlers that are ESM-compliant, like Vite and Rollup
+  - `"cjs"`: Use `module.hot` HMR API in bundlers that rely on CommonJS modules, like Webpack and Next.js
+  - `"none"`: Disable Hot Module Replacement.
+- Default: `none`
+
+:::info{title="In Production"}
+When bundling for production, make sure to set the `hmr` option to `"none"` to reduce bundle size and improve runtime performance.
+:::
+
 ## `addNames` (#configuration-addNames)
 
 Add names to [Units](/en/explanation/glossary#unit) when calling factories (like `createStore` or `createDomain`). This is helpful for debugging during development and testing, but its recommended to disable it for minification.
@@ -149,19 +190,6 @@ Include location information (file paths and line numbers) for [Units](/en/expla
 
 ```json
 ["@effector/swc-plugin", { "addLoc": false }]
-```
-
-- Type: `boolean`
-- Default: `false`
-
-## `debugSids` (#configuration-debugSids)
-
-Append the full file path and Unit name to generated `SID`s for easier debugging of SSR issues.
-
-### Formulae (#configuration-debugSids-formulae)
-
-```json
-["@effector/swc-plugin", { "debugSids": false }]
 ```
 
 - Type: `boolean`
