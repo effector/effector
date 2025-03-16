@@ -36,12 +36,12 @@ Use the `--exact`/`--save-exact` option in your package manager to install speci
 
 | `@swc/core` version | Next.js version                          | Correct plugin version |
 | ------------------- | ---------------------------------------- | ---------------------- |
-| `>=1.3.63 <1.3.106` | `>=13.4.8 <=14.1.4`                      | `@swc1.3.63`           |
-| `>=1.3.106 <1.4.0`  |                                          | `@swc1.3.106`          |
-| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.14`                     | `@swc1.4.0`            |
+| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.15`                     | `@swc1.4.0`            |
 | `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`            |
 | `>=1.7.0 <1.8.0`    | `>=15.0.0-canary.122 <=15.0.2`           | `@swc1.7.0`            |
-| `>=1.8.0`           | `>=15.0.3`                               | `@swc1.8.0`            |
+| `>=1.9.0 <1.10.0`   | `>=15.0.3 <=15.1.6`                      | `@swc1.9.0`            |
+| `>=1.10.0 <1.11.0`  | `>=15.2.0 <15.2.1`                       | `@swc1.10.0`           |
+| `>=1.11.0`          | `>=15.2.1`                               | `@swc1.11.0`           |
 
 For more information on compatibility, refer to the SWC documentation on [Selecting the SWC Version](https://swc.rs/docs/plugin/selecting-swc-core) and interactive [compatibility table](https://plugins.swc.rs) on SWC website.
 
@@ -128,6 +128,47 @@ import { createBooleanStore } from "../factory";
 const $boolean = createBooleanStore(); /* Treated as a factory! */
 ```
 
+## `debugSids` (#configuration-debugSids)
+
+Append the full file path and Unit name to generated `SID`s for easier debugging of SSR issues.
+
+### Formulae (#configuration-debugSids-formulae)
+
+```json
+["@effector/swc-plugin", { "debugSids": false }]
+```
+
+- Type: `boolean`
+- Default: `false`
+
+## `hmr` (#configuration-hmr)
+
+:::info{title="since"}
+`@effector/swc-plugin@0.7.0`
+:::
+
+Enable Hot Module Replacement (HMR) support to clean up links, subscriptions and side effects managed by Effector. This prevents double-firing of Effects and watchers.
+
+:::warning{title="Experimental"}
+Although tested, this option is considered experimental and might have unexpected issues in different bundlers.
+:::
+
+### Formulae (#configuration-hmr-formulae)
+
+```json
+["@effector/swc-plugin", { "hmr": "es" }]
+```
+
+- Type: `"es"` | `"cjs"` | `"none"`
+  - `"es"`: Use `import.meta.hot` HMR API in bundlers that are ESM-compliant, like Vite and Rollup
+  - `"cjs"`: Use `module.hot` HMR API in bundlers that rely on CommonJS modules, like Webpack and Next.js
+  - `"none"`: Disable Hot Module Replacement.
+- Default: `none`
+
+:::info{title="In Production"}
+When bundling for production, make sure to set the `hmr` option to `"none"` to reduce bundle size and improve runtime performance.
+:::
+
 ## `addNames` (#configuration-addNames)
 
 Add names to [Units](/en/explanation/glossary#unit) when calling factories (like `createStore` or `createDomain`). This is helpful for debugging during development and testing, but its recommended to disable it for minification.
@@ -149,19 +190,6 @@ Include location information (file paths and line numbers) for [Units](/en/expla
 
 ```json
 ["@effector/swc-plugin", { "addLoc": false }]
-```
-
-- Type: `boolean`
-- Default: `false`
-
-## `debugSids` (#configuration-debugSids)
-
-Append the full file path and Unit name to generated `SID`s for easier debugging of SSR issues.
-
-### Formulae (#configuration-debugSids-formulae)
-
-```json
-["@effector/swc-plugin", { "debugSids": false }]
 ```
 
 - Type: `boolean`
