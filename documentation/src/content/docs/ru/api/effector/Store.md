@@ -25,7 +25,7 @@ $items.on(addItem, (items, newItem) => {
 });
 ```
 
-Так делать нельзя, обновления стора **не произойдёт**
+Так делать нельзя, обновления store **не произойдёт**
 
 ```ts
 $items.on(addItem, (items, newItem) => {

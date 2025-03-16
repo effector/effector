@@ -2,6 +2,7 @@
 title: Babel плагин
 lang: ru
 ---
+
 Встроенный плагин для Babel может использоваться для SSR и отладки. Он добавляет имя [юнита](/ru/explanation/glossary#unit),
 выведенное из имени переменной, и `sid` ([Стабильный Идентификатор](/ru/explanation/sids)), вычисленный из местоположения в исходном коде.
 
@@ -37,7 +38,7 @@ fetchFx();
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
-Стабильный хэш-идентификатор для событий, эффектов, хранилищ и доменов, сохраняемый между окружениями, для обработки взаимодействия клиент-сервер
+Стабильный хэш-идентификатор для событий, эффектов, store'ов и доменов, сохраняемый между окружениями, для обработки взаимодействия клиент-сервер
 в рамках одной кодовой базы.
 
 Ключевое значение sid заключается в том, что он может быть автоматически сгенерирован `effector/babel-plugin` с конфигурацией по умолчанию, и он будет стабильным между сборками.
@@ -118,7 +119,6 @@ getUsers.use(
 
 - Тип: `es` | `cjs` | `none`
 - По умолчанию: `none`
-
 
 ## `importName` (#configuration-importName)
 
@@ -202,7 +202,7 @@ export const $fetchUserStatus = createEffectStatus(fetchUserFx);
 export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 ```
 
-Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривался как фабричная функция, поэтому каждое хранилище, созданное ею,
+Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривался как фабричная функция, поэтому каждый store, созданный ею,
 имеет свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize)
 независимо, хотя без `factories` они будут использовать один и тот же `sid`.
 
@@ -346,7 +346,7 @@ import { createInputField } from "@lib/createInputField";
 const foo = createInputField("-");
 /*
 
-будет обработано как создатель хранилища и скомпилировано в
+будет обработано как создатель store и скомпилировано в
 
 const foo = createInputField('-', {
   name: 'foo',

@@ -1,10 +1,10 @@
 ---
 title: createStore
-description: Метод для создания независимого стора
+description: Метод для создания независимого store
 lang: ru
 ---
 
-Метод для создания независимого [стора](/ru/api/effector/Store)
+Метод для создания независимого [store](/ru/api/effector/Store)
 
 ## Формула (#createStore-formulae)
 
@@ -22,15 +22,15 @@ createStore<T>(defaultState: T, config: {
 1. **`defaultState`**: Исходное состояние
 2. **`config`**: Опциональный объект конфигурации
 
-   - **`name`**: Имя стора. Babel-plugin может определить его из имени переменной стора, если имя не передано явно в конфигурации
+   - **`name`**: Имя store. Babel-plugin может определить его из имени переменной store, если имя не передано явно в конфигурации
    - **`updateFilter`**: `(update: T, current: T) => boolean`
 
-     Функция, которая предотвращает обновление стора, если она возвращает `false`. Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в стор, равняется _undefined_ или текущему значению стора) недостаточно.
+     Функция, которая предотвращает обновление store, если она возвращает `false`. Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в store, равняется _undefined_ или текущему значению store) недостаточно.
 
      **Аргументы**
 
      - **`update`**: Значение, которое предлагается записать в стор
-     - **`current`**: Текущее значение стора
+     - **`current`**: Текущее значение store
 
      **Возвращает**: `boolean`
 
@@ -38,9 +38,9 @@ createStore<T>(defaultState: T, config: {
 
    - **`serialize`**: `'ignore'`
 
-     Опция, запрещающая сериализацию стора при вызовах [serialize](/ru/api/effector/serialize)
+     Опция, запрещающая сериализацию store при вызовах [serialize](/ru/api/effector/serialize)
 
-   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стора к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
+   - **`serialize`**: Объект конфигурации кастомной сериализации store. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние store к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
 
 ### Возвращает (#createStore-return)
 
@@ -85,7 +85,7 @@ const saveDate = createEvent();
 const $date = createStore<null | Date>(null, {
   // Объект Date автоматически приводится в строку ISO-даты при вызове JSON.stringify
   // но не приводится обратно к Date при вызове JSON.parse – результатом будет та же строка ISO-даты
-  // Это приведет к расхождению состояния стора при гидрации состояния на клиенте при серверном рендеринге
+  // Это приведет к расхождению состояния store при гидрации состояния на клиенте при серверном рендеринге
   //
   // Кастомная конфигурация `serialize` решает эту проблему
   serialize: {
@@ -99,14 +99,14 @@ const serverScope = fork();
 await allSettled(saveDate, { scope: serverScope, params: new Date() });
 
 const serverValues = serialize(serverScope);
-// `serialize.write` стора `$date` был вызван
+// `serialize.write` store `$date` был вызван
 
 console.log(serverValues);
 // => { nq1e2rb: "2022-11-05T15:38:53.108Z" }
-// Объект Date из стора сохранен как ISO-дата
+// Объект Date из store сохранен как ISO-дата
 
 const clientScope = fork({ values: serverValues });
-// `serialize.read` стора `$date` был вызван
+// `serialize.read` store `$date` был вызван
 
 const currentValue = clientScope.getState($date);
 console.log(currentValue);

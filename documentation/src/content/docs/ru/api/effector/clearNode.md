@@ -28,7 +28,7 @@ _void_
 
 ## Примеры
 
-### Пример удаления стора
+### Пример удаления store
 
 ```js
 import { createStore, createEvent, clearNode } from "effector";

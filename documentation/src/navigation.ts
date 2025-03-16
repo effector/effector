@@ -98,7 +98,7 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/advanced/work-with-scope",
       },
       {
-        text: { en: "Store SID", ru: "Хранилища и их SID", uz: "Store SID" },
+        text: { en: "Store SID", ru: "Сторы и их сиды", uz: "Store SID" },
         link: "/explanation/sids",
       },
       {

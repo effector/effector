@@ -63,11 +63,11 @@ fetchUserFx.fail.watch(({ params, error }) =>
 fetchUserFx();
 ```
 
-## Привязка эффектов к событиям и хранилищам (#binding-effects-to-events-and-stores)
+## Привязка эффектов к событиям и сторам (#binding-effects-to-events-and-stores)
 
-### Заполнить стор данными при завершении эффекта (#update-store-when-effect-completes)
+### Заполнить store данными при завершении эффекта (#update-store-when-effect-completes)
 
-Допустим мы хотим, чтобы при завершении работы эффекта effector взял данные, которые вернул эффект, и обновил стор с новыми данными, сделать это довольно просто при помощи событий эффекта:
+Допустим мы хотим, чтобы при завершении работы эффекта effector взял данные, которые вернул эффект, и обновил store с новыми данными, сделать это довольно просто при помощи событий эффекта:
 
 ```ts
 import { createStore, createEffect } from "effector";

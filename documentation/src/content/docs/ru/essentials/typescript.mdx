@@ -60,14 +60,14 @@ const warningMessage = message.prepend<string>((warnMessage) => warnMessage);
 // warningMessage имеет тип EventCallable<string>
 ```
 
-## Типизация сторов (#typing-stores)
+## Типизация store'ов (#typing-stores)
 
 Сторы также можно типизировать при помощи передачи типа в дженерик функции, либо указав дефолтное значение при инициализации, тогда ts будет выводить тип из этого значения:
 
 ```ts
 import { createStore } from "effector";
 
-// Базовый стор с примитивным значением
+// Базовый store с примитивным значением
 // StoreWritable<number>
 const $counter = createStore(0);
 
@@ -89,12 +89,12 @@ const $user = createStore<User>({
 const $userNameAndRole = $user.map((user) => `User name and role: ${user.name} and ${user.role}`);
 ```
 
-### Типы сторов (#store-types)
+### Типы store'ов (#store-types)
 
-В эффектор существуют два типа сторов, где `T` - тип хранимого значения:
+В эффектор существуют два типа store'ов, где `T` - тип хранимого значения:
 
-1. `Store<T>` - тип производного стора, в который нельзя записать новые данные.
-2. `StoreWritable<T>` - тип стора, в который можно записывать новые данные при помощи `on` или `sample`.
+1. `Store<T>` - тип производного store, в который нельзя записать новые данные.
+2. `StoreWritable<T>` - тип store, в который можно записывать новые данные при помощи `on` или `sample`.
 
 ## Типизация эффектов (#typing-effects)
 

@@ -6,7 +6,7 @@ lang: ru
 
 _Domain (домен)_ - это способ группировки и массовой обработки юнитов.
 
-Домен может подписываться на создание события, эффекта, стора или вложенного домена с помощью методов `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain`.
+Домен может подписываться на создание события, эффекта, store или вложенного домена с помощью методов `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain`.
 
 Может использоваться для логирования или других сайд эффектов.
 
@@ -56,7 +56,7 @@ _Domain (домен)_ - это способ группировки и массо
 
 ### Аргументы
 
-1. `defaultState` (_State_): дефолтное состояние стора
+1. `defaultState` (_State_): дефолтное состояние store
 
 **Возвращает**
 
@@ -207,7 +207,7 @@ const barFx = domain.createEffect();
 domain.onCreateStore(($store) => {});
 ```
 
-- Функция переданная в `onCreateStore` вызывается каждый раз, когда создается новый стор в `domain`
+- Функция переданная в `onCreateStore` вызывается каждый раз, когда создается новый store в `domain`
 - Первый аргумент вызываемой функции `$store`
 - Результат вызова функции игнорируется
 
@@ -227,11 +227,11 @@ import { createDomain } from "effector";
 const domain = createDomain();
 
 domain.onCreateStore((store) => {
-  console.log("новый стор создан");
+  console.log("новый store создан");
 });
 
 const $a = domain.createStore(null);
-// => новый стор создан
+// => новый store создан
 ```
 
 [Запустить пример](https://share.effector.dev/OGlYOtfz)

@@ -69,7 +69,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
 
 ## Обработка сообщений (#message-handling)
 
-Создадим хранилище для последнего полученного сообщения:
+Создадим store для последнего полученного сообщения:
 
 ```ts
 const $lastMessage = createStore("");

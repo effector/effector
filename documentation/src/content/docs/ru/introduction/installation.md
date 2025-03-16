@@ -63,7 +63,7 @@ import { createStore } from "https://cdn.jsdelivr.net/npm/effector/effector.mjs"
 
 ## DevTools
 
-Используйте [effector-logger](https://github.com/effector/logger) для вывода изменений сторов в консоль, вывода их значений в браузерный интерфейс и подключения к Redux Dev Tools.
+Используйте [effector-logger](https://github.com/effector/logger) для вывода изменений store'ов в консоль, вывода их значений в браузерный интерфейс и подключения к Redux Dev Tools.
 
 Для рендеринга на сервере и написания тестов вам понадобятся плагины для компилятора:
 
