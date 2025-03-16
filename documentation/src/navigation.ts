@@ -98,7 +98,7 @@ const defaultSidebar: LSidebarGroup[] = [
         link: "/advanced/work-with-scope",
       },
       {
-        text: { en: "Store SID", ru: "Сторы и их сиды", uz: "Store SID" },
+        text: { en: "Store SID", ru: "Store и их sid", uz: "Store SID" },
         link: "/explanation/sids",
       },
       {
@@ -381,7 +381,7 @@ const effectorReact: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Low-level API" },
+    text: { en: "Low-level API", ru: "Низкоуровневое API" },
     collapsed: true,
     items: [
       {
@@ -714,7 +714,7 @@ const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Low-level API" },
+    text: { en: "Low-level API", ru: "Низкоуровневое API" },
     collapsed: true,
     items: [
       {
@@ -740,7 +740,7 @@ const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Import map" },
+    text: { en: "Import map", ru: "Подпакеты" },
     items: [
       {
         text: { en: "effector/compat" },
@@ -757,7 +757,7 @@ const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Compiler Plugins" },
+    text: { en: "Compiler Plugins", ru: "Плагины для сборки" },
     items: [
       {
         text: { en: "Babel plugin" },

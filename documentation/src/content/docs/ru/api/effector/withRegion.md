@@ -1,38 +1,36 @@
 ---
 title: withRegion
-redirectFrom:
-  - /api/effector/withRegion
-  - /docs/api/effector/withRegion
+lang: ru
 ---
 
 ```ts
 import { withRegion } from "effector";
 ```
 
-The method is based on the idea of region-based memory management (see [Region-based memory management](https://en.wikipedia.org/wiki/Region-based_memory_management) for reference).
+Метод основан на идее управления памятью на основе регионов (см. [Region-based memory management](https://en.wikipedia.org/wiki/Region-based_memory_management) для справки).
 
-# Methods (#methods)
+# Методы (#methods)
 
 ## `withRegion(unit, callback)` (#methods-withRegion)
 
-:::info{title="since"}
+:::info{title="Начиная с"}
 [effector 20.11.0](https://changelog.effector.dev/#effector-20-11-0)
 :::
 
-The method allows to explicitly transfer ownership of all units (including links created with `sample`, `forward`, etc...) defined in the callback to `unit`. As an implication, all the created links will be erased as soon as `clearNode` is called on [_Unit_](/en/explanation/glossary#unit).
+Метод позволяет явно передать владение всеми юнитами (включая связи, созданные с помощью `sample`, `forward` и т.д.), определенными в callback, на `unit`. Как следствие, все созданные связи будут удалены, как только будет вызван `clearNode` на [_Unit_](/ru/explanation/glossary#unit).
 
-### Formulae (#methods-withRegion-unit-callback-formulae)
+### Формула (#methods-withRegion-unit-callback-formulae)
 
 ```ts
 withRegion(unit: Unit<T> | Node, callback: () => void): void
 ```
 
-### Arguments (#methods-withRegion-unit-callback-arguments)
+### Аргументы (#methods-withRegion-unit-callback-arguments)
 
-1. `unit`: _Unit_ | _Node_ — which will serve as "local area" or "region" owning all the units created within the provided callback. Usually a node created by low level `createNode` method is optimal for this case.
-2. `callback`: `() => void` — The callback where all the relevant units should be defined.
+1. `unit`: _Unit_ | _Node_ — который будет служить "локальной областью" или "регионом", владеющим всеми юнитами, созданными внутри предоставленного callback. Обычно узел, созданный методом низкого уровня `createNode`, оптимален для этого случая.
+2. `callback`: `() => void` — Callback, в котором должны быть определены все соответствующие юниты.
 
-### Examples (#methods-withRegion-unit-callback-examples)
+### Примеры (#methods-withRegion-unit-callback-examples)
 
 ```js
 import { createNode, createEvent, restore, withRegion, clearNode } from "effector";
@@ -43,8 +41,8 @@ const $store = restore(first, "");
 const region = createNode();
 
 withRegion(domain, () => {
-  // Following links created with `sample` are owned by the provided unit `domain`
-  // and will be disposed as soon as `clearNode` is called on `domain`.
+  // Следующие связи, созданные с помощью `sample`, принадлежат предоставленному юниту `domain`
+  // и будут удалены, как только будет вызван `clearNode` на `domain`.
   sample({
     clock: second,
     target: first,
@@ -53,10 +51,10 @@ withRegion(domain, () => {
 
 $store.watch(console.log);
 
-first("hello");
-second("world");
+first("привет");
+second("мир");
 
 clearNode(region);
 
-second("will not trigger updates of `$store`");
+second("не вызовет обновлений `$store`");
 ```

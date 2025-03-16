@@ -1,8 +1,6 @@
 ---
 title: withRegion
-redirectFrom:
-  - /api/effector/withRegion
-  - /docs/api/effector/withRegion
+lang: ru
 ---
 
 ```ts

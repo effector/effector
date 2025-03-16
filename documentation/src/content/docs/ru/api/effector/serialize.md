@@ -15,7 +15,7 @@ import { serialize, type Scope } from "effector";
 Сопутствующий метод для [_fork_](/ru/api/effector/fork). Позволяет получить сериализованное значение всех store'ов в пределах [scope](/ru/api/effector/Scope). Основная цель — сериализация состояния приложения на стороне сервера во время SSR.
 
 :::warning{title="Внимание"}
-Для использования этого метода требуется [_Babel plugin_](/ru/api/effector/babel-plugin) или [_SWC plugin_](/ru/api/effector/swc-plugin), так как эти плагины предоставляют сиды для store'ов, которые необходимы для стабильной сериализации состояния.
+Для использования этого метода требуется [_Babel plugin_](/ru/api/effector/babel-plugin) или [_SWC plugin_](/ru/api/effector/swc-plugin), так как эти плагины предоставляют sid для store'ов, которые необходимы для стабильной сериализации состояния.
 
 Подробное объяснение можно найти [здесь](/ru/explanation/sids).
 :::
@@ -38,10 +38,10 @@ serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): 
 
 ### Возвращает (#methods-serialize-returns)
 
-Объект со значениями store'ов, использующий сиды в качестве ключей.
+Объект со значениями store'ов, использующий sid в качестве ключей.
 
 :::warning{title="Внимание"}
-Если у store [нет сида](/ru/api/effector/babel-plugin#sid), его значение будет пропущено при сериализации.
+Если у store [нет sid'а](/ru/api/effector/babel-plugin#sid), его значение будет пропущено при сериализации.
 :::
 
 ### Примеры (#methods-serialize-examples)

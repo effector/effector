@@ -1,45 +1,43 @@
 ---
 title: split
-redirectFrom:
-  - /api/effector/split
-  - /docs/api/effector/split
+lang: ru
 ---
 
 ```ts
 import { split } from "effector";
 ```
 
-Choose one of cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions. Works like pattern matching for payload values and external stores
+Выберите один из случаев по заданным условиям. Эта функция "разделяет" исходный юнит на несколько событий, которые срабатывают, когда полезная нагрузка соответствует их условиям. Работает как сопоставление с образцом для значений полезной нагрузки и внешних store'ов.
 
-# Concepts (#concepts)
+# Концепции (#concepts)
 
-## Case mode (#concepts-case-mode)
+## Режим случая (#concepts-case-mode)
 
-Mode in which target case is selected by the name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which kept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one).
+Режим, в котором целевой случай выбирается по имени его поля. Случай может быть выбран из данных в `source` с помощью [функции случая](/ru/api/effector/split#case-function) или из внешнего [хранилища случая](/ru/api/effector/split#case-store), которое хранит текущее имя случая. После выбора данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
 
-**See also**:
+**Смотрите также**:
 
-- [case store](/en/api/effector/split#case-store)
-- [case function](/en/api/effector/split#case-function)
+- [хранилище случая](/ru/api/effector/split#case-store)
+- [функция случая](/ru/api/effector/split#case-function)
 
-## Matching mode (#concepts-matching-mode)
+## Режим сопоставления (#concepts-matching-mode)
 
-Mode in which each case is sequentially matched by stores and functions in fields of `match` object.
-If one of the fields got `true` from store value or return of function, then the data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one)
+Режим, в котором каждый случай последовательно сопоставляется с хранилищами и функциями в полях объекта `match`.
+Если одно из полей получает `true` из значения хранилища или возврата функции, то данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
 
-**See also**:
+**Смотрите также**:
 
-- [matcher store](/en/api/effector/split#matcher-store)
-- [matcher function](/en/api/effector/split#matcher-function)
+- [хранилище сопоставления](/ru/api/effector/split#matcher-store)
+- [функция сопоставления](/ru/api/effector/split#matcher-function)
 
-## Case store (#concepts-case-store)
+## Хранилище случая (#concepts-case-store)
 
-Store with a string which will be used to choose the case by its name. Placed directly in `match` field.
+Хранилище со строкой, которая будет использоваться для выбора случая по его имени. Размещается непосредственно в поле `match`.
 
 ```ts
 split({
   source: Unit<T>
-  // case store
+  // хранилище случая
   match: Store<'first' | 'second'>,
   cases: {
     first: Unit<T> | Unit<T>[],
@@ -49,14 +47,14 @@ split({
 })
 ```
 
-## Case function (#concepts-case-function)
+## Функция случая (#concepts-case-function)
 
-String-returning function which will be called with value from `source` to choose the case by its name. Placed directly in `match` field, [should be **pure**](/en/explanation/glossary#purity)
+Функция, возвращающая строку, которая будет вызвана со значением из `source` для выбора случая по его имени. Размещается непосредственно в поле `match`, [должна быть **чистой**](/ru/explanation/glossary#purity).
 
 ```ts
 split({
   source: Unit<T>
-  // case function
+  // функция случая
   match: (value: T) => 'first' | 'second',
   cases: {
     first: Unit<T> | Unit<T>[],
@@ -66,15 +64,15 @@ split({
 })
 ```
 
-## Matcher store (#concepts-matcher-store)
+## Хранилище сопоставления (#concepts-matcher-store)
 
-Boolean store which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher functions](/en/api/effector/split#matcher-function)
+Логическое хранилище, которое указывает, следует ли выбрать конкретный случай или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [функциями сопоставления](/ru/api/effector/split#matcher-function).
 
 ```ts
 split({
   source: Unit<T>
   match: {
-    // matcher store
+    // хранилище сопоставления
     first: Store<boolean>,
     second: Store<boolean>
   },
@@ -86,19 +84,19 @@ split({
 })
 ```
 
-## Matcher function (#concepts-matcher-function)
+## Функция сопоставления (#concepts-matcher-function)
 
 :::info
-Case store, case function and matcher store are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
+Хранилище случая, функция случая и хранилище сопоставления поддерживаются с [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-Boolean-returning function which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher stores](/en/api/effector/split#matcher-store), [should be **pure**](/en/explanation/glossary#purity)
+Функция, возвращающая логическое значение, которое указывает, следует ли выбрать конкретный случай или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [хранилищами сопоставления](/ru/api/effector/split#matcher-store), [должна быть **чистой**](/ru/explanation/glossary#purity).
 
 ```ts
 split({
   source: Unit<T>
   match: {
-    // matcher function
+    // функция сопоставления
     first: (value: T) => boolean,
     second: (value: T) => boolean
   },
@@ -110,15 +108,15 @@ split({
 })
 ```
 
-# Methods (#methods)
+# Методы (#methods)
 
 ## `split({ source, match, cases })` (#methods-split-source-match-cases)
 
-:::info{title="since"}
+:::info{title="с"}
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 :::
 
-### Formulae (#methods-split-source-match-cases-formulae)
+### Формула (#methods-split-source-match-cases-formulae)
 
 ```ts
 split({ source, match, cases });
@@ -127,7 +125,7 @@ split({ source, match, cases });
 ```ts
 split({
   source: Unit<T>
-  // case function
+  // функция случая
   match: (data: T) => 'a' | 'b',
   cases: {
     a: Unit<T> | Unit<T>[],
@@ -137,7 +135,7 @@ split({
 })
 split({
   source: Unit<T>
-  // case store
+  // хранилище случая
   match: Store<'a' | 'b'>,
   cases: {
     a: Unit<T> | Unit<T>[],
@@ -148,9 +146,9 @@ split({
 split({
   source: Unit<T>
   match: {
-    // matcher function
+    // функция сопоставления
     a: (data: T) => boolean,
-    // matcher store
+    // хранилище сопоставления
     b: Store<boolean>
   },
   cases: {
@@ -161,19 +159,19 @@ split({
 })
 ```
 
-### Arguments (#methods-split-source-match-cases-arguments)
+### Аргументы (#methods-split-source-match-cases-arguments)
 
-- `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
-- `match`: Single [store with string](/en/api/effector/split#case-store), single [function which returns string](/en/api/effector/split#case-function) or object with [boolean stores](/en/api/effector/split#matching-store) and [functions which returns boolean](/en/api/effector/split#matching-function)
-- `cases`: Object with [units](/en/explanation/glossary#common-unit)  or arrays of units to which data will be passed from `source` after case selection
+- `source`: [Юнит](/ru/explanation/glossary#common-unit), который будет запускать вычисления в `split`
+- `match`: Одиночное [хранилище со строкой](/ru/api/effector/split#case-store), одиночная [функция, возвращающая строку](/ru/api/effector/split#case-function) или объект с [логическими хранилищами](/ru/api/effector/split#matching-store) и [функциями, возвращающими логическое значение](/ru/api/effector/split#matching-function)
+- `cases`: Объект с [юнитами](/ru/explanation/glossary#common-unit) или массивами юнитов, в которые будут переданы данные из `source` после выбора случая
 
-### Returns (#methods-split-source-match-cases-returns)
+### Возвращает (#methods-split-source-match-cases-returns)
 
 `void`
 
-### Examples (#methods-split-source-match-cases-examples)
+### Примеры (#methods-split-source-match-cases-examples)
 
-#### Basic (#methods-split-source-match-cases-examples-basic)
+#### Базовый (#methods-split-source-match-cases-examples-basic)
 
 ```js
 import { split, createEffect, createEvent } from "effector";
@@ -181,7 +179,7 @@ const messageReceived = createEvent();
 const showTextPopup = createEvent();
 const playAudio = createEvent();
 const reportUnknownMessageTypeFx = createEffect(({ type }) => {
-  console.log("unknown message:", type);
+  console.log("неизвестное сообщение:", type);
 });
 
 split({
@@ -198,26 +196,26 @@ split({
 });
 
 showTextPopup.watch(({ value }) => {
-  console.log("new message:", value);
+  console.log("новое сообщение:", value);
 });
 
 messageReceived({
   type: "text",
-  value: "Hello",
+  value: "Привет",
 });
-// => new message: Hello
+// => новое сообщение: Привет
 messageReceived({
   type: "image",
   imageUrl: "...",
 });
-// => unknown message: image
+// => неизвестное сообщение: image
 ```
 
-[Try it](https://share.effector.dev/W6VYZbfH)
+[Попробуйте](https://share.effector.dev/W6VYZbfH)
 
-#### Direct match (#methods-split-source-match-cases-examples-direct-match)
+#### Прямое сопоставление (#methods-split-source-match-cases-examples-direct-match)
 
-You can match directly to store api as well:
+Вы также можете сопоставлять напрямую с API хранилища:
 
 ```js
 import { split, createStore, createEvent, createApi } from "effector";
@@ -234,8 +232,8 @@ split({
   },
   cases: createApi($textContent, {
     text: (list, { value }) => [...list, value],
-    audio: (list, { duration }) => [...list, `audio ${duration} ms`],
-    __: (list) => [...list, "unknown message"],
+    audio: (list, { duration }) => [...list, `аудио ${duration} мс`],
+    __: (list) => [...list, "неизвестное сообщение"],
   }),
 });
 
@@ -245,42 +243,42 @@ $textContent.watch((messages) => {
 
 messageReceived({
   type: "text",
-  value: "Hello",
+  value: "Привет",
 });
-// => ['Hello']
+// => ['Привет']
 messageReceived({
   type: "image",
   imageUrl: "...",
 });
-// => ['Hello', 'unknown message']
+// => ['Привет', 'неизвестное сообщение']
 messageReceived({
   type: "audio",
   duration: 500,
 });
-// => ['Hello', 'unknown message', 'audio 500 ms']
+// => ['Привет', 'неизвестное сообщение', 'аудио 500 мс']
 ```
 
-[Try it](https://share.effector.dev/32FNNk8H)
+[Попробуйте](https://share.effector.dev/32FNNk8H)
 
-#### Cases with arrays of units (#methods-split-source-match-cases-examples-cases-with-arrays-of-units)
+#### Случаи с массивами юнитов (#methods-split-source-match-cases-examples-cases-with-arrays-of-units)
 
 ```js
 import { createEffect, createEvent, createStore, sample, split } from "effector";
 
-const $verificationCode = createStore("12345")
+const $verificationCode = createStore("12345");
 const $error = createStore("");
 
 const modalToInputUsername = createEvent();
 const modalToAuthorizationMethod = createEvent();
 
 const checkVerificationCodeFx = createEffect((code) => {
-  throw "500"
+  throw "500";
 });
 
 sample({
   clock: verificationCodeSubmitted,
   source: $verificationCode,
-  target: checkVerificationCodeFx
+  target: checkVerificationCodeFx,
 });
 
 split({
@@ -288,40 +286,42 @@ split({
   match: (value) => (["400", "410"].includes(value) ? "verificationCodeError" : "serverError"),
   cases: {
     verificationCodeError: $verificationCodeError,
-    serverError: [$error, modalToAuthorizationMethod]
-  }
+    serverError: [$error, modalToAuthorizationMethod],
+  },
 });
 
-$error.updates.watch((value) => console.log("ERROR: " + value));
-modalToAuthorizationMethod.watch(() => console.log("Modal window to the authorization method content."))
-// => ERROR: 500
-// => Modal window to the authorization method content.
+$error.updates.watch((value) => console.log("ОШИБКА: " + value));
+modalToAuthorizationMethod.watch(() =>
+  console.log("Модальное окно с содержимым метода авторизации."),
+);
+// => ОШИБКА: 500
+// => Модальное окно с содержимым метода авторизации.
 ```
 
 ## `split(source, match)` (#methods-split-source-match)
 
-:::info{title="since"}
+:::info{title="с"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
-### Formulae (#methods-split-source-match-formulae)
+### Формула (#methods-split-source-match-formulae)
 
 ```ts
 split(source, match);
 ```
 
-### Arguments (#methods-split-source-match-arguments)
+### Аргументы (#methods-split-source-match-arguments)
 
-1. `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
-2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
+1. `source`: [Юнит](/ru/explanation/glossary#common-unit), который будет запускать вычисления в `split`
+2. `match` (_Объект_): Схема случаев, которая использует имена результирующих событий как ключи и функцию сопоставления*((value) => Boolean)*
 
-### Returns (#methods-split-source-match-returns)
+### Возвращает (#methods-split-source-match-returns)
 
-(Object) – Object, having keys, defined in `match` argument, plus `__`(two underscores) – which stands for `default` (no matches met) case.
+(Объект) – Объект, имеющий ключи, определенные в аргументе `match`, плюс `__`(два подчеркивания) – который обозначает случай по умолчанию (если ни одно из условий не выполнено).
 
-### Examples (#methods-split-source-match-examples)
+### Примеры (#methods-split-source-match-examples)
 
-#### Basic (#methods-split-source-match-examples-basic)
+#### Базовый (#methods-split-source-match-examples-basic)
 
 ```js
 import { createEvent, split } from "effector";
@@ -339,27 +339,27 @@ messageByAuthor.alice.watch(({ text }) => {
   console.log("[alice]: ", text);
 });
 
-message({ user: "bob", text: "Hello" });
-// => [bob]: Hello
-message({ user: "alice", text: "Hi bob" });
-// => [alice]: Hi bob
+message({ user: "bob", text: "Привет" });
+// => [bob]: Привет
+message({ user: "alice", text: "Привет, bob" });
+// => [alice]: Привет, bob
 
-/* default case, triggered if no one condition met */
+/* случай по умолчанию, срабатывает, если ни одно из условий не выполнено */
 const { __: guest } = messageByAuthor;
 guest.watch(({ text }) => {
-  console.log("[guest]: ", text);
+  console.log("[гость]: ", text);
 });
-message({ user: "unregistered", text: "hi" });
-// => [guest]: hi
+message({ user: "незарегистрированный", text: "привет" });
+// => [гость]: привет
 ```
 
-[Try it](https://share.effector.dev/QXZsR5yM)
+[Попробуйте](https://share.effector.dev/QXZsR5yM)
 
 :::info
-Only the first met match will trigger resulting event
+Только первое выполненное сопоставление вызовет результирующее событие
 :::
 
-#### Another (#methods-split-source-match-examples-another)
+#### Другой пример (#methods-split-source-match-examples-another)
 
 ```js
 import { createEvent, split } from "effector";
@@ -372,44 +372,44 @@ const { short, long, medium } = split(message, {
   long: (m) => m.length > 10,
 });
 
-short.watch((m) => console.log(`short message '${m}'`));
-medium.watch((m) => console.log(`medium message '${m}'`));
-long.watch((m) => console.log(`long message '${m}'`));
+short.watch((m) => console.log(`короткое сообщение '${m}'`));
+medium.watch((m) => console.log(`среднее сообщение '${m}'`));
+long.watch((m) => console.log(`длинное сообщение '${m}'`));
 
-message("Hello, Bob!");
-// => long message 'Hello, Bob!'
+message("Привет, Боб!");
+// => длинное сообщение 'Привет, Боб!'
 
-message("Hi!");
-// => short message 'Hi!'
+message("Привет!");
+// => короткое сообщение 'Привет!'
 ```
 
-[Try it](https://share.effector.dev/ke2tM78I)
+[Попробуйте](https://share.effector.dev/ke2tM78I)
 
 ## `split({ source, clock?, match, cases })` (#methods-split-source-clock-match-cases)
 
-:::info{title="since"}
+:::info{title="с"}
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
-It works the same as [split with cases](/en/api/effector/split#methods-split-source-match-cases), however computations in `split` will be started after `clock` is triggered.
+Работает так же, как [split с случаями](/ru/api/effector/split#methods-split-source-match-cases), однако вычисления в `split` будут запущены после срабатывания `clock`.
 
-### Formulae (#methods-split-source-clock-match-cases-formulae)
+### Формула (#methods-split-source-clock-match-cases-formulae)
 
 ```js
 split({source, clock?, match, cases})
 ```
 
-### Arguments (#methods-split-source-clock-match-cases-arguments)
+### Аргументы (#methods-split-source-clock-match-cases-arguments)
 
 TBD
 
-### Examples (#methods-split-source-clock-match-cases-examples)
+### Примеры (#methods-split-source-clock-match-cases-examples)
 
 ```js
 import { createStore, createEvent, createEffect, split } from "effector";
 
 const options = ["save", "delete", "forward"];
-const $message = createStore({ id: 1, text: "Bring me a cup of coffee, please!" });
+const $message = createStore({ id: 1, text: "Принесите мне чашку кофе, пожалуйста!" });
 const $mode = createStore("");
 const selectedMessageOption = createEvent();
 const saveMessageFx = createEffect(() => "save");
@@ -429,8 +429,8 @@ split({
   },
 });
 
-selectedMessageOption("delet"); // nothing happens
+selectedMessageOption("delet"); // ничего не происходит
 selectedMessageOption("delete");
 ```
 
-[Try it](https://share.effector.dev/1fRuqN0o)
+[Попробуйте](https://share.effector.dev/1fRuqN0o)
