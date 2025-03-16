@@ -7,37 +7,37 @@ lang: ru
 import { split } from "effector";
 ```
 
-Выберите один из случаев по заданным условиям. Эта функция "разделяет" исходный юнит на несколько событий, которые срабатывают, когда полезная нагрузка соответствует их условиям. Работает как сопоставление с образцом для значений полезной нагрузки и внешних store'ов.
+Выберите один из кейсов по заданным условиям. Эта функция "разделяет" исходный юнит на несколько событий, которые срабатывают, когда полезная нагрузка соответствует их условиям. Работает как сопоставление с образцом для значений полезной нагрузки и внешних store'ов.
 
-# Концепции (#concepts)
+# Режимы (#concepts)
 
-## Режим случая (#concepts-case-mode)
+## "Case" режим (#concepts-case-mode)
 
-Режим, в котором целевой случай выбирается по имени его поля. Случай может быть выбран из данных в `source` с помощью [функции случая](/ru/api/effector/split#case-function) или из внешнего [хранилища случая](/ru/api/effector/split#case-store), которое хранит текущее имя случая. После выбора данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
+Режим, в котором кейс выбирается его имени. Кейс может быть выбран из данных в `source` с помощью [функции кейса](/ru/api/effector/split#concepts-case-function) или из внешнего [store'а кейса](/ru/api/effector/split#concepts-case-store), которое хранит текущее имя кейса. После выбора данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
 
 **Смотрите также**:
 
-- [хранилище случая](/ru/api/effector/split#case-store)
-- [функция случая](/ru/api/effector/split#case-function)
+- [store кейса](/ru/api/effector/split#concepts-case-store)
+- [функция кейса](/ru/api/effector/split#concepts-case-function)
 
 ## Режим сопоставления (#concepts-matching-mode)
 
-Режим, в котором каждый случай последовательно сопоставляется с хранилищами и функциями в полях объекта `match`.
-Если одно из полей получает `true` из значения хранилища или возврата функции, то данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
+Режим, в котором каждый кейс последовательно сопоставляется с store'ами и функциями в полях объекта `match`.
+Если одно из полей получает `true` из значения store'а или возврата функции, то данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
 
 **Смотрите также**:
 
-- [хранилище сопоставления](/ru/api/effector/split#matcher-store)
-- [функция сопоставления](/ru/api/effector/split#matcher-function)
+- [store сопоставления](/ru/api/effector/split#concepts-matcher-store)
+- [функция сопоставления](/ru/api/effector/split#concepts-matcher-function)
 
-## Хранилище случая (#concepts-case-store)
+## Store кейса (#concepts-case-store)
 
-Хранилище со строкой, которая будет использоваться для выбора случая по его имени. Размещается непосредственно в поле `match`.
+Store со строкой, который будет использоваться для выбора итогового кейса по его имени. Размещается непосредственно в поле `match`.
 
 ```ts
 split({
   source: Unit<T>
-  // хранилище случая
+  // Store кейса
   match: Store<'first' | 'second'>,
   cases: {
     first: Unit<T> | Unit<T>[],
@@ -47,14 +47,14 @@ split({
 })
 ```
 
-## Функция случая (#concepts-case-function)
+## Функция кейса (#concepts-case-function)
 
-Функция, возвращающая строку, которая будет вызвана со значением из `source` для выбора случая по его имени. Размещается непосредственно в поле `match`, [должна быть **чистой**](/ru/explanation/glossary#purity).
+Функция, возвращающая строку, которая будет вызвана со значением из `source` для выбора итогового кейса по его имени. Размещается непосредственно в поле `match`, [должна быть **чистой**](/ru/explanation/glossary#purity).
 
 ```ts
 split({
   source: Unit<T>
-  // функция случая
+  // функция кейса
   match: (value: T) => 'first' | 'second',
   cases: {
     first: Unit<T> | Unit<T>[],
@@ -64,15 +64,15 @@ split({
 })
 ```
 
-## Хранилище сопоставления (#concepts-matcher-store)
+## Store сопоставления (#concepts-matcher-store)
 
-Логическое хранилище, которое указывает, следует ли выбрать конкретный случай или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [функциями сопоставления](/ru/api/effector/split#matcher-function).
+`Boolean` store, который указывает, следует ли выбрать конкретный кейс или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [функциями сопоставления](/ru/api/effector/split#concepts-matcher-function).
 
 ```ts
 split({
   source: Unit<T>
   match: {
-    // хранилище сопоставления
+    // store сопоставления
     first: Store<boolean>,
     second: Store<boolean>
   },
@@ -86,11 +86,11 @@ split({
 
 ## Функция сопоставления (#concepts-matcher-function)
 
-:::info
-Хранилище случая, функция случая и хранилище сопоставления поддерживаются с [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
+:::info{title="Обратите внимание"}
+Store кейса, функция кейса и store сопоставления поддерживаются с [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-Функция, возвращающая логическое значение, которое указывает, следует ли выбрать конкретный случай или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [хранилищами сопоставления](/ru/api/effector/split#matcher-store), [должна быть **чистой**](/ru/explanation/glossary#purity).
+Функция, возвращающая `boolean` значение, которое указывает, следует ли выбрать конкретный кейс или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [store сопоставления](/ru/api/effector/split#concepts-matcher-store), [должна быть **чистой**](/ru/explanation/glossary#purity).
 
 ```ts
 split({
@@ -112,7 +112,7 @@ split({
 
 ## `split({ source, match, cases })` (#methods-split-source-match-cases)
 
-:::info{title="с"}
+:::info{title="Начиная с"}
 [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
 :::
 
@@ -125,7 +125,7 @@ split({ source, match, cases });
 ```ts
 split({
   source: Unit<T>
-  // функция случая
+  // функция кейса
   match: (data: T) => 'a' | 'b',
   cases: {
     a: Unit<T> | Unit<T>[],
@@ -135,7 +135,7 @@ split({
 })
 split({
   source: Unit<T>
-  // хранилище случая
+  // store кейса
   match: Store<'a' | 'b'>,
   cases: {
     a: Unit<T> | Unit<T>[],
@@ -148,7 +148,7 @@ split({
   match: {
     // функция сопоставления
     a: (data: T) => boolean,
-    // хранилище сопоставления
+    // store сопоставления
     b: Store<boolean>
   },
   cases: {
@@ -162,8 +162,8 @@ split({
 ### Аргументы (#methods-split-source-match-cases-arguments)
 
 - `source`: [Юнит](/ru/explanation/glossary#common-unit), который будет запускать вычисления в `split`
-- `match`: Одиночное [хранилище со строкой](/ru/api/effector/split#case-store), одиночная [функция, возвращающая строку](/ru/api/effector/split#case-function) или объект с [логическими хранилищами](/ru/api/effector/split#matching-store) и [функциями, возвращающими логическое значение](/ru/api/effector/split#matching-function)
-- `cases`: Объект с [юнитами](/ru/explanation/glossary#common-unit) или массивами юнитов, в которые будут переданы данные из `source` после выбора случая
+- `match`: Одиночное [store со строкой](/ru/api/effector/split#concepts-case-store), одиночная [функция, возвращающая строку](/ru/api/effector/split#concepts-case-function) или объект с [boolean store'ами](/ru/api/effector/split#concepts-matching-store) и [функциями, возвращающими boolean значение](/ru/api/effector/split#concepts-matching-function)
+- `cases`: Объект с [юнитами](/ru/explanation/glossary#common-unit) или массивами юнитов, в которые будут переданы данные из `source` после выбора кейса
 
 ### Возвращает (#methods-split-source-match-cases-returns)
 
@@ -260,7 +260,7 @@ messageReceived({
 
 [Попробуйте](https://share.effector.dev/32FNNk8H)
 
-#### Случаи с массивами юнитов (#methods-split-source-match-cases-examples-cases-with-arrays-of-units)
+#### Кейс с массивами юнитов (#methods-split-source-match-cases-examples-cases-with-arrays-of-units)
 
 ```js
 import { createEffect, createEvent, createStore, sample, split } from "effector";
@@ -300,7 +300,7 @@ modalToAuthorizationMethod.watch(() =>
 
 ## `split(source, match)` (#methods-split-source-match)
 
-:::info{title="с"}
+:::info{title="Начиная с"}
 [effector 20.0.0](https://changelog.effector.dev/#effector-20-0-0)
 :::
 
@@ -313,11 +313,11 @@ split(source, match);
 ### Аргументы (#methods-split-source-match-arguments)
 
 1. `source`: [Юнит](/ru/explanation/glossary#common-unit), который будет запускать вычисления в `split`
-2. `match` (_Объект_): Схема случаев, которая использует имена результирующих событий как ключи и функцию сопоставления*((value) => Boolean)*
+2. `match` (_Объект_): Схема кейсов, которая использует имена результирующих событий как ключи и функцию сопоставления*((value) => Boolean)*
 
 ### Возвращает (#methods-split-source-match-returns)
 
-(Объект) – Объект, имеющий ключи, определенные в аргументе `match`, плюс `__`(два подчеркивания) – который обозначает случай по умолчанию (если ни одно из условий не выполнено).
+(Объект) – Объект, имеющий ключи, определенные в аргументе `match`, плюс `__`(два подчеркивания) – который обозначает кейс по умолчанию (если ни одно из условий не выполнено).
 
 ### Примеры (#methods-split-source-match-examples)
 
@@ -344,7 +344,7 @@ message({ user: "bob", text: "Привет" });
 message({ user: "alice", text: "Привет, bob" });
 // => [alice]: Привет, bob
 
-/* случай по умолчанию, срабатывает, если ни одно из условий не выполнено */
+/* кейс по умолчанию, срабатывает, если ни одно из условий не выполнено */
 const { __: guest } = messageByAuthor;
 guest.watch(({ text }) => {
   console.log("[гость]: ", text);
@@ -355,7 +355,7 @@ message({ user: "незарегистрированный", text: "привет"
 
 [Попробуйте](https://share.effector.dev/QXZsR5yM)
 
-:::info
+:::info{title="Обратите внимание"}
 Только первое выполненное сопоставление вызовет результирующее событие
 :::
 
@@ -387,11 +387,11 @@ message("Привет!");
 
 ## `split({ source, clock?, match, cases })` (#methods-split-source-clock-match-cases)
 
-:::info{title="с"}
+:::info{title="Начиная с"}
 [effector 22.2.0](https://changelog.effector.dev/#effector-22-2-0)
 :::
 
-Работает так же, как [split с случаями](/ru/api/effector/split#methods-split-source-match-cases), однако вычисления в `split` будут запущены после срабатывания `clock`.
+Работает так же, как [split с кейсами](/ru/api/effector/split#methods-split-source-match-cases), однако вычисления в `split` будут запущены после срабатывания `clock`.
 
 ### Формула (#methods-split-source-clock-match-cases-formulae)
 
