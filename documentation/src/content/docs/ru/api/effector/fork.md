@@ -59,7 +59,7 @@ console.log(scopeB.getState($counter)); // => -1
 
 ## `fork(options)` (#methods-fork-options)
 
-Позволяет задать значения для stores в scope и заменить обработчики для effects.
+Позволяет задать значения для сторов в scope и заменить обработчики для effects.
 
 :::info{title="Время добавления"}
 
@@ -79,11 +79,11 @@ fork(options: { values?, handlers? }): Scope
 
 #### `values` (#methods-fork-options-arguments-values)
 
-Опция для предоставления начальных состояний для stores.
+Опция для предоставления начальных состояний для сторов.
 
 Может использоваться тремя способами:
 
-1.  Массив кортежей со stores и значениями:
+1.  Массив кортежей со сторами и значениями:
 
 ```ts
 fork({
@@ -94,7 +94,7 @@ fork({
 });
 ```
 
-2.  Map со stores и значениями:
+2.  Map со сторами и значениями:
 
 ```ts
 fork({
@@ -169,7 +169,7 @@ fork({
 
 ### Примеры (#methods-fork-options-examples)
 
-#### Задание начального состояния для store и изменение обработчика для effect (#methods-fork-examples-set-initial-state-and-change-handler)
+#### Задание начального состояния для стора и изменение обработчика для effect (#methods-fork-examples-set-initial-state-and-change-handler)
 
 Это пример теста, который проверяет, что после запроса к серверу значение `$friends` заполняется.
 
@@ -196,7 +196,7 @@ await allSettled(fetchFriendsFx, {
   params: { limit: 10 },
 });
 
-/* проверяем значение store в scope */
+/* проверяем значение стора в scope */
 console.log(testScope.getState($friends));
 // => ['bob', 'carol']
 ```

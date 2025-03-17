@@ -1,6 +1,6 @@
 ---
 title: attach
-description: Обертка для эффекта, которая позволяет маппить аргументы эффекта и использовать данные из store'ов.
+description: Обертка для эффекта, которая позволяет маппить аргументы эффекта и использовать данные из сторов.
 lang: ru
 ---
 
@@ -14,9 +14,9 @@ import { attach } from "effector";
 С версии [effector 22.4.0](https://changelog.effector.dev/#effector-encke-22-4-0) можно проверить, создан ли эффект через метод `attach` — [is.attached](/ru/api/effector/is#is-attached).
 :::
 
-Создает новые [эффекты](/ru/api/effector/Effect) на основе других эффектов и [store'ов](/ru/api/effector/Store). Позволяет маппить параметры и обрабатывать ошибки.
+Создает новые [эффекты](/ru/api/effector/Effect) на основе других эффектов и [сторов](/ru/api/effector/Store). Позволяет маппить параметры и обрабатывать ошибки.
 
-Основные случаи использования: декларативный способ передачи значений из store'ов в эффекты и предобработка аргументов. Наиболее полезный случай — `attach({ source, async effect })`.
+Основные случаи использования: декларативный способ передачи значений из сторов в эффекты и предобработка аргументов. Наиболее полезный случай — `attach({ source, async effect })`.
 
 :::tip{title="Примечание"}
 Прикрепленные эффекты являются такими же полноценными объектами, как и обычные эффекты, созданные через [createEffect](/ru/api/effector/createEffect). Вы должны размещать их в тех же файлах, что и обычные эффекты, а также можете использовать ту же стратегию именования.
@@ -97,7 +97,7 @@ attachedFx("второй");
 
 ## `attach({source, effect})` (#methods-attach-source-effect)
 
-Создает эффект, который будет вызывать указанный эффект с данными из `source` store.
+Создает эффект, который будет вызывать указанный эффект с данными из `source` стора.
 
 ### Формула (#methods-attach-source-effect-formulae)
 
@@ -152,10 +152,10 @@ const attachedFx: Effect<void, Done, Fail> = attach({
 
 [Попробуйте в песочнице TypeScript](https://tsplay.dev/NBJDDN)
 
-Типы store в `source` и параметров `effect` должны совпадать.
+Типы стора в `source` и параметров `effect` должны совпадать.
 Но `attachedFx` будет опускать тип параметров, что означает, что прикрепленный эффект не требует никаких параметров.
 
-#### Объект store
+#### Объект стора
 
 ```ts
 const originalFx: Effect<{ a: A; b: B }, Done, Fail>;
@@ -217,7 +217,7 @@ await requestNextPageFx();
 [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
 :::
 
-Создает эффект, который будет вызывать асинхронную функцию с данными из `source` store.
+Создает эффект, который будет вызывать асинхронную функцию с данными из `source` стора.
 
 ### Формула (#methods-attach-source-async-effect-formulae)
 
@@ -281,7 +281,7 @@ const regularFunctionFx = createEffect(regularFunction);
 
 ### Типы (#methods-attach-source-async-effect-types)
 
-#### Один store (#methods-attach-source-async-effect-types-single-store)
+#### Один стор (#methods-attach-source-async-effect-types-single-store)
 
 ```ts
 const $store: Store<T>;
@@ -303,7 +303,7 @@ const attachedFx: Effect<void, void, Fail> = attach({
 });
 ```
 
-#### Несколько store'ов (#methods-attach-source-async-effect-types-multiple-stores)
+#### Несколько сторов (#methods-attach-source-async-effect-types-multiple-stores)
 
 :::tip{title="Примечание"}
 Для подробностей ознакомьтесь с [предыдущим разделом типов](#methods-attach-source-async-effect-types). Здесь та же логика.
@@ -444,7 +444,7 @@ attachedFx(1);
 
 ## `attach({source, mapParams, effect})` (#methods-attach-source-mapParams-effect)
 
-Создает эффект, который будет читать значения из `source` store, передавать их с параметрами в функцию `mapParams`, а затем вызывать `effect` с результатом.
+Создает эффект, который будет читать значения из `source` стора, передавать их с параметрами в функцию `mapParams`, а затем вызывать `effect` с результатом.
 
 ### Формула (#methods-attach-source-mapParams-effect-formulae)
 

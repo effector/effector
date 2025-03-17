@@ -49,9 +49,9 @@ pnpm install effector
   </TabItem>
 </Tabs>
 
-### Создаем ваш первый store (#first-store)
+### Создаем ваш первый стор (#first-store)
 
-Теперь давайте создадим store, который является состоянием вашего приложения.
+Теперь давайте создадим стор, который является состоянием вашего приложения.
 
 ```ts
 import { createStore } from "effector";
@@ -61,7 +61,7 @@ const $counter = createStore(0);
 
 ### Добавление событий (#adding-events)
 
-Дальше давайте добавим события, при вызове которых, мы будем обновлять данные store.
+Дальше давайте добавим события, при вызове которых, мы будем обновлять данные стора.
 
 ```ts
 import { createEvent } from "effector";
@@ -70,7 +70,7 @@ const incremented = createEvent();
 const decremented = createEvent();
 ```
 
-### Подписываем store на событие (#connection-event-to-store)
+### Подписываем стор на событие (#connection-event-to-store)
 
 И свяжем событие вместе с стором.
 

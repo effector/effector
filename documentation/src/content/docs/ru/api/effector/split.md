@@ -7,13 +7,13 @@ lang: ru
 import { split } from "effector";
 ```
 
-Выберите один из кейсов по заданным условиям. Эта функция "разделяет" исходный юнит на несколько событий, которые срабатывают, когда полезная нагрузка соответствует их условиям. Работает как сопоставление с образцом для значений полезной нагрузки и внешних store'ов.
+Выберите один из кейсов по заданным условиям. Эта функция "разделяет" исходный юнит на несколько событий, которые срабатывают, когда полезная нагрузка соответствует их условиям. Работает как сопоставление с образцом для значений полезной нагрузки и внешних сторов.
 
 # Режимы (#concepts)
 
 ## "Case" режим (#concepts-case-mode)
 
-Режим, в котором кейс выбирается его имени. Кейс может быть выбран из данных в `source` с помощью [функции кейса](/ru/api/effector/split#concepts-case-function) или из внешнего [store'а кейса](/ru/api/effector/split#concepts-case-store), которое хранит текущее имя кейса. После выбора данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
+Режим, в котором кейс выбирается его имени. Кейс может быть выбран из данных в `source` с помощью [функции кейса](/ru/api/effector/split#concepts-case-function) или из внешнего [стора кейса](/ru/api/effector/split#concepts-case-store), которое хранит текущее имя кейса. После выбора данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
 
 **Смотрите также**:
 
@@ -22,22 +22,22 @@ import { split } from "effector";
 
 ## Режим сопоставления (#concepts-matching-mode)
 
-Режим, в котором каждый кейс последовательно сопоставляется с store'ами и функциями в полях объекта `match`.
-Если одно из полей получает `true` из значения store'а или возврата функции, то данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
+Режим, в котором каждый кейс последовательно сопоставляется с сторами и функциями в полях объекта `match`.
+Если одно из полей получает `true` из значения стора или возврата функции, то данные из `source` будут отправлены в соответствующий `cases[fieldName]` (если он есть), если ни одно из полей не совпадает, то данные будут отправлены в `cases.__` (если он есть).
 
 **Смотрите также**:
 
 - [store сопоставления](/ru/api/effector/split#concepts-matcher-store)
 - [функция сопоставления](/ru/api/effector/split#concepts-matcher-function)
 
-## Store кейса (#concepts-case-store)
+## Стор кейса (#concepts-case-store)
 
 Store со строкой, который будет использоваться для выбора итогового кейса по его имени. Размещается непосредственно в поле `match`.
 
 ```ts
 split({
   source: Unit<T>
-  // Store кейса
+  // стор кейса
   match: Store<'first' | 'second'>,
   cases: {
     first: Unit<T> | Unit<T>[],
@@ -64,7 +64,7 @@ split({
 })
 ```
 
-## Store сопоставления (#concepts-matcher-store)
+## Стор сопоставления (#concepts-matcher-store)
 
 `Boolean` store, который указывает, следует ли выбрать конкретный кейс или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [функциями сопоставления](/ru/api/effector/split#concepts-matcher-function).
 
@@ -72,7 +72,7 @@ split({
 split({
   source: Unit<T>
   match: {
-    // store сопоставления
+    // стор сопоставления
     first: Store<boolean>,
     second: Store<boolean>
   },
@@ -87,7 +87,7 @@ split({
 ## Функция сопоставления (#concepts-matcher-function)
 
 :::info{title="Обратите внимание"}
-Store кейса, функция кейса и store сопоставления поддерживаются с [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
+Стор кейса, функция кейса и стор сопоставления поддерживаются с [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
 Функция, возвращающая `boolean` значение, которое указывает, следует ли выбрать конкретный кейс или попробовать следующий. Размещается в полях объекта `match`, может быть смешано с [store сопоставления](/ru/api/effector/split#concepts-matcher-store), [должна быть **чистой**](/ru/explanation/glossary#purity).
@@ -135,7 +135,7 @@ split({
 })
 split({
   source: Unit<T>
-  // store кейса
+  // стор кейса
   match: Store<'a' | 'b'>,
   cases: {
     a: Unit<T> | Unit<T>[],
@@ -148,7 +148,7 @@ split({
   match: {
     // функция сопоставления
     a: (data: T) => boolean,
-    // store сопоставления
+    // стор сопоставления
     b: Store<boolean>
   },
   cases: {
@@ -162,7 +162,7 @@ split({
 ### Аргументы (#methods-split-source-match-cases-arguments)
 
 - `source`: [Юнит](/ru/explanation/glossary#common-unit), который будет запускать вычисления в `split`
-- `match`: Одиночное [store со строкой](/ru/api/effector/split#concepts-case-store), одиночная [функция, возвращающая строку](/ru/api/effector/split#concepts-case-function) или объект с [boolean store'ами](/ru/api/effector/split#concepts-matching-store) и [функциями, возвращающими boolean значение](/ru/api/effector/split#concepts-matching-function)
+- `match`: Одиночное [store со строкой](/ru/api/effector/split#concepts-case-store), одиночная [функция, возвращающая строку](/ru/api/effector/split#concepts-case-function) или объект с [boolean сторами](/ru/api/effector/split#concepts-matching-store) и [функциями, возвращающими boolean значение](/ru/api/effector/split#concepts-matching-function)
 - `cases`: Объект с [юнитами](/ru/explanation/glossary#common-unit) или массивами юнитов, в которые будут переданы данные из `source` после выбора кейса
 
 ### Возвращает (#methods-split-source-match-cases-returns)

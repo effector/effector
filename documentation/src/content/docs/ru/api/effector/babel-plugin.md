@@ -38,7 +38,7 @@ fetchFx();
 [effector 20.2.0](https://changelog.effector.dev/#effector-20-2-0)
 :::
 
-Стабильный хэш-идентификатор для событий, эффектов, store'ов и доменов, сохраняемый между окружениями, для обработки взаимодействия клиент-сервер
+Стабильный хэш-идентификатор для событий, эффектов, сторов и доменов, сохраняемый между окружениями, для обработки взаимодействия клиент-сервер
 в рамках одной кодовой базы.
 
 Ключевое значение sid заключается в том, что он может быть автоматически сгенерирован `effector/babel-plugin` с конфигурацией по умолчанию, и он будет стабильным между сборками.
@@ -105,7 +105,11 @@ getUsers.use(
 [effector 23.4.0](https://changelog.effector.dev/#effector-23.4.0)
 :::
 
-Горячая замена модулей для сборщиков, использующих API `module.hot`, `import.meta.webpackHot` или `import.meta.hot`.
+Включите поддержку Hot Module Replacement (HMR) для очистки связей, подписок и побочных эффектов, управляемых Effector. Это предотвращает двойное срабатывание эффектов и наблюдателей.
+
+:::warning{title="Экспериментально"}
+Хотя опция и протестирована, она считается экспериментальной и может иметь неожиданные проблемы в разных сборщиках.
+:::
 
 ### Формула (#configuration-hmr-formulae)
 
@@ -117,8 +121,15 @@ getUsers.use(
 ]
 ```
 
-- Тип: `es` | `cjs` | `none`
+- Тип: `"es"` | `"cjs"` | `"none"`
+  - `"es"`: Использует API HMR `import.meta.hot` в сборщиках, соответствующих ESM, таких как Vite и Rollup
+  - `"cjs"`: Использует API HMR `module.hot` в сборщиках, использующих CommonJS модули, таких как Webpack и Next.js
+  - `"none"`: Отключает Hot Module Replacement.
 - По умолчанию: `none`
+
+:::info{title="Обратите внимание"}
+При сборке для продакшена убедитесь, что задали опции `hmr` значение `"none"`, чтобы уменьшить размер бандла и улучшить производительность в runtime.
+:::
 
 ## `importName` (#configuration-importName)
 
@@ -202,7 +213,7 @@ export const $fetchUserStatus = createEffectStatus(fetchUserFx);
 export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 ```
 
-Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривался как фабричная функция, поэтому каждый store, созданный ею,
+Импорт `createEffectStatus` из `'./createEffectStatus'` рассматривался как фабричная функция, поэтому каждый стор, созданный ею,
 имеет свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize)
 независимо, хотя без `factories` они будут использовать один и тот же `sid`.
 
@@ -346,7 +357,7 @@ import { createInputField } from "@lib/createInputField";
 const foo = createInputField("-");
 /*
 
-будет обработано как создатель store и скомпилировано в
+будет обработано как создатель стор и скомпилировано в
 
 const foo = createInputField('-', {
   name: 'foo',

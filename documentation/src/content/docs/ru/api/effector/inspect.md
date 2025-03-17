@@ -105,7 +105,7 @@ inspect({
     if (m.kind === "store" && m.sid === $count.sid) {
       m.trace.forEach((tracedMessage) => {
         logInspectMessage(tracedMessage);
-        // ☝️ здесь мы логируем трассировку обновления конкретного store
+        // ☝️ здесь мы логируем трассировку обновления конкретного стора
       });
     }
   },

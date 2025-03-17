@@ -13,8 +13,8 @@ import { restore } from "effector";
 
 Создает [_StoreWritable_](/en/api/effector/Store) из [_Event_](/en/api/effector/Event). Работает как сокращение для `createStore(defaultState).on(event, (_, payload) => payload)`.
 
-:::warning{title="Это не производный store"}
-`restore` создает новый store. Это не [derived store](/en/api/effector/Store#readonly). Это означает, что вы можете изменять его состояние через события и использовать его как `target` в [sample](/en/api/effector/sample).
+:::warning{title="Это не производный стор"}
+`restore` создает новый стор. Это не [производный стор](/en/api/effector/Store#readonly). Это означает, что вы можете изменять его состояние через события и использовать его как `target` в [sample](/en/api/effector/sample).
 :::
 
 ### Формула (#methods-restore-event-defaultState-formulae)
@@ -30,7 +30,7 @@ restore(event: Event<T>, defaultState: T): StoreWritable<T>
 
 ### Возвращает (#methods-restore-event-defaultState-returns)
 
-[_StoreWritable_](/en/api/effector/Store): Новый store.
+[_StoreWritable_](/en/api/effector/Store): Новый стор.
 
 ### Примеры (#methods-restore-event-defaultState-examples)
 
@@ -68,7 +68,7 @@ restore(effect: Effect<Params, Done, Fail>, defaultState: Done): StoreWritable<D
 
 ### Возвращает (#methods-restore-effect-defaultState-returns)
 
-[_StoreWritable_](/en/api/effector/Store): Новый store.
+[_StoreWritable_](/en/api/effector/Store): Новый стор.
 
 ### Типы (#methods-restore-effect-defaultState-types)
 
@@ -95,7 +95,7 @@ await fx();
 
 ## `restore(shape)` (#methods-restore-shape)
 
-Создает объект с stores из объекта с значениями.
+Создает объект с сторами из объекта с значениями.
 
 ### Формула (#methods-restore-shape-formulae)
 
@@ -107,7 +107,7 @@ TBD
 
 ### Возвращает (#methods-restore-shape-returns)
 
-[_StoreWritable_](/en/api/effector/Store): Новый store.
+[_StoreWritable_](/en/api/effector/Store): Новый стор.
 
 ### Примеры (#methods-restore-shape-examples)
 
