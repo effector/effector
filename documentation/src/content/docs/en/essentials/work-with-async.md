@@ -8,10 +8,10 @@ redirectFrom:
 
 # Asynchronous Operations in effector using Effects (#async-operation-with-effects)
 
-Asynchronous operations are a fundamental part of any modern application, and Effector provides convenient tools to handle them. Using effects ([createEffect](/en/api/effector.createEffect)), you can build predictable logic for working with asynchronous data.
+Asynchronous operations are a fundamental part of any modern application, and Effector provides convenient tools to handle them. Using effects ([createEffect](/en/api/effector/createEffect)), you can build predictable logic for working with asynchronous data.
 
 :::tip{title="Effect naming"}
-The Effector team recommends using the `Fx` postfix for naming effects. This is not a mandatory requirement but a usage recommendation, [read more](/en/extra/conventions).
+The Effector team recommends using the `Fx` postfix for naming effects. This is not a mandatory requirement but a usage recommendation, [read more](/en/guides/best-practices/#naming).
 :::
 
 ## What are Effects? (#what-are-effects)
