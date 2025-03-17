@@ -23,7 +23,7 @@ _Effect (эффект)_ это контейнер для сайд-эффекто
 
 Если на момент вызова эффект уже имел имплементацию, то она будет заменена на новую
 
-:::tip{title="статья от автора"}
+:::tip{title="Статья от автора"}
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 :::
 

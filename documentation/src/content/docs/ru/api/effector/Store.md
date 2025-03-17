@@ -8,7 +8,7 @@ lang: ru
 import { type Store, type StoreWritable } from "effector";
 ```
 
-_Store_ — это объект, который хранит значение состояния. Store обновляется, когда получает значение, которое не равно (`!==`) текущему и не равно `undefined`. Store является [Unit](/ru/explanation/glossary#common-unit). Некоторые stores могут быть [derived](#store-derived).
+_Store_ — это объект, который хранит значение состояния. Стор обновляется, когда получает значение, которое не равно (`!==`) текущему и не равно `undefined`. Стор является [Unit](/ru/explanation/glossary#common-unit). Некоторые сторы могут быть [производными](#store-derived).
 
 ## Иммутабельность (#immutability)
 
@@ -29,7 +29,7 @@ $items.on(addItem, (items, newItem) => {
 
 ```ts
 $items.on(addItem, (items, newItem) => {
-  // ❌ ошибка! Ссылка на массив осталась та же, обновления store не произойдёт
+  // ❌ ошибка! Ссылка на массив осталась та же, обновления стора не произойдёт
   items.push(newItem);
   return items;
 });
@@ -37,13 +37,13 @@ $items.on(addItem, (items, newItem) => {
 
 Обновление объектов происходит аналогичным образом
 
-Store в effector должен быть размером как можно меньше, чтобы отвечать за конкретную часть в бизнес логике, в отличии от например redux, store которого имеет тенденцию к тому чтобы держать рядом всё и сразу. Когда состояние атомарное, то необходимости в спредах объектов становится меньше. Однако, если возникает потребность часто обновлять сильно вложенные данные, для обновления состояния допустимо применять [immer](https://immerjs.github.io/immer/produce) чтобы упростить повторяющийся код
+Сторы в effector должен быть размером как можно меньше, чтобы отвечать за конкретную часть в бизнес логике, в отличии от например redux стора, который имеет тенденцию к тому чтобы держать рядом всё и сразу. Когда состояние атомарное, то необходимости в спредах объектов становится меньше. Однако, если возникает потребность часто обновлять сильно вложенные данные, для обновления состояния допустимо применять [immer](https://immerjs.github.io/immer/produce) чтобы упростить повторяющийся код
 
-# Методы Store (#methods)
+# Методы стора (#methods)
 
 ## `.map(fn)` (#methods-map-fn)
 
-Создает производный store. Он вызывает переданную функцию с состоянием, когда оригинальный store обновляется, и использует результат для обновления производного store.
+Создает производный стор. Он вызывает переданную функцию с состоянием, когда оригинальный стор обновляется, и использует результат для обновления производного стора.
 
 ### Формула (#methods-map-fn-formulae)
 
@@ -53,12 +53,12 @@ const $second = $first.map(fn);
 
 ### Аргументы (#methods-map-fn-arguments)
 
-1. `fn` (_Function_): Функция, которая принимает `state` и возвращает новое состояние для производного store.
+1. `fn` (_Function_): Функция, которая принимает `state` и возвращает новое состояние для производного стора.
 2. `config` (_Object_): Необязательная конфигурация.
 
 ### Возвращает (#methods-map-fn-returns)
 
-[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный store.
+[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный стор.
 
 ### Примеры (#methods-map-fn-examples)
 
@@ -105,7 +105,7 @@ $store.on(trigger, reducer);
 
 ### Возвращает (#methods-on-trigger-reducer-returns)
 
-[_Store_](/ru/api/effector/Store): Текущий store.
+[_Store_](/ru/api/effector/Store): Текущий стор.
 
 ### Примеры (#methods-on-trigger-reducer-examples)
 
@@ -131,7 +131,7 @@ changed(2);
 
 ## `.watch(watcher)` (#methods-watch-watcher)
 
-Вызывает функцию `watcher` каждый раз, когда store обновляется.
+Вызывает функцию `watcher` каждый раз, когда стор обновляется.
 
 ### Формула (#methods-watch-watcher-formulae)
 
@@ -141,7 +141,7 @@ const unwatch = $store.watch(watcher);
 
 ### Аргументы (#methods-watch-watcher-arguments)
 
-1. `watcher`: [_Watcher_](/ru/explanation/glossary#watcher): Функция-наблюдатель, которая принимает текущее состояние store в качестве первого аргумента.
+1. `watcher`: [_Watcher_](/ru/explanation/glossary#watcher): Функция-наблюдатель, которая принимает текущее состояние стора в качестве первого аргумента.
 
 ### Возвращает (#methods-watch-watcher-returns)
 
@@ -166,7 +166,7 @@ add(3);
 
 ## `.reset(...triggers)` (#methods-reset-triggers)
 
-Сбрасывает состояние store до значения по умолчанию.
+Сбрасывает состояние стора до значения по умолчанию.
 
 ### Формула (#methods-reset-triggers-formulae)
 
@@ -180,7 +180,7 @@ $store.reset(...triggers);
 
 ### Возвращает (#methods-reset-triggers-returns)
 
-[_Store_](/ru/api/effector/Store): Текущий store.
+[_Store_](/ru/api/effector/Store): Текущий стор.
 
 ### Примеры (#methods-reset-triggers-examples)
 
@@ -221,7 +221,7 @@ $store.off(trigger);
 
 ### Возвращает (#methods-off-trigger-returns)
 
-[_Store_](/ru/api/effector/Store): Текущий store.
+[_Store_](/ru/api/effector/Store): Текущий стор.
 
 ### Примеры (#methods-off-trigger-examples)
 
@@ -242,13 +242,13 @@ $store.off(changed);
 
 [Попробовать](https://share.effector.dev/bzdoyLHm)
 
-# Свойства Store (#properties)
+# Свойства стора (#properties)
 
 ## `.updates` (#properties-updates)
 
 ### Возвращает (#properties-updates-returns)
 
-[_Event_](/ru/api/effector/Event): Событие, представляющее обновления данного store.
+[_Event_](/ru/api/effector/Event): Событие, представляющее обновления данного стора.
 
 ### Пример (#properties-updates-example)
 
@@ -269,7 +269,7 @@ $clicksAmount.updates.watch((amount) => {
 
 ### Возвращает (#properties-reinit-returns)
 
-[_EventCallable_](/ru/api/effector/Event#eventCallable): Событие, которое может реинициализировать store до значения по умолчанию.
+[_EventCallable_](/ru/api/effector/Event#eventCallable): Событие, которое может реинициализировать стор до значения по умолчанию.
 
 ### Пример (#properties-reinit-example)
 
@@ -310,11 +310,11 @@ console.log($store.defaultState === "DEFAULT");
 
 ## `.getState()` (#utility-methods-getState)
 
-Возвращает текущее состояние store.
+Возвращает текущее состояние стора.
 
 ### Возвращает (#utility-methods-getState-returns)
 
-(_`State`_): Текущее состояние store.
+(_`State`_): Текущее состояние стора.
 
 ### Пример (#utility-methods-getState-example)
 
@@ -333,7 +333,7 @@ console.log($number.getState());
 
 [Попробовать](https://share.effector.dev/YrnlMuRj)
 
-# Только для чтения store (#readonly)
+# Стор только для чтения (#readonly)
 
 TBD
 

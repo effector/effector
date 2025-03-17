@@ -63,7 +63,7 @@ fetchUserFx.fail.watch(({ params, error }) =>
 fetchUserFx();
 ```
 
-## Привязка эффектов к событиям и хранилищам (#binding-effects-to-events-and-stores)
+## Привязка эффектов к событиям и сторам (#binding-effects-to-events-and-stores)
 
 ### Заполнить стор данными при завершении эффекта (#update-store-when-effect-completes)
 

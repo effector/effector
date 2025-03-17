@@ -4,7 +4,7 @@ description: Метод для создания независимого сто�
 lang: ru
 ---
 
-Метод для создания независимого [стора](/ru/api/effector/Store)
+Метод для создания независимого [store](/ru/api/effector/Store)
 
 ## Формула (#createStore-formulae)
 
@@ -38,9 +38,9 @@ createStore<T>(defaultState: T, config: {
 
    - **`serialize`**: `'ignore'`
 
-     Опция, запрещающая сериализацию стора при вызовах [serialize](/ru/api/effector/serialize)
+     Опция, запрещающая сериализацию стор при вызовах [serialize](/ru/api/effector/serialize)
 
-   - **`serialize`**: Объект конфигурации кастомной сериализации стора. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стора к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
+   - **`serialize`**: Объект конфигурации кастомной сериализации стор. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стор к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
 
 ### Возвращает (#createStore-return)
 
@@ -99,14 +99,14 @@ const serverScope = fork();
 await allSettled(saveDate, { scope: serverScope, params: new Date() });
 
 const serverValues = serialize(serverScope);
-// `serialize.write` стора `$date` был вызван
+// `serialize.write` стор `$date` был вызван
 
 console.log(serverValues);
 // => { nq1e2rb: "2022-11-05T15:38:53.108Z" }
 // Объект Date из стора сохранен как ISO-дата
 
 const clientScope = fork({ values: serverValues });
-// `serialize.read` стора `$date` был вызван
+// `serialize.read` стор `$date` был вызван
 
 const currentValue = clientScope.getState($date);
 console.log(currentValue);
