@@ -13,7 +13,7 @@ import { createComponent } from "effector-react";
 :::warning{title="Deprecated"}
 since [effector-react 23.0.0](https://changelog.effector.dev/#effector-react-23-0-0).
 
-You can use [hooks api](/en/api/effector-react/index#hooks) in `createComponent` since [effector-react@20.3.0](https://changelog.effector.dev/#effector-20-3-0).
+You can use [hooks api](/en/api/effector-react#hooks) in `createComponent` since [effector-react@20.3.0](https://changelog.effector.dev/#effector-20-3-0).
 :::
 
 # Methods (#methods)

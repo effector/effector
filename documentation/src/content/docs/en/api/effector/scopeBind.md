@@ -79,7 +79,7 @@ Multiple function arguments are supported since `effector 23.3.0`
 To be compatible with the Fork API, callbacks **must** adhere to the same rules as `Effect` handlers:
 
 - Synchronous functions can be used as they are.
-- Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/scope/).
+- Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/Scope).
 
 :::
 

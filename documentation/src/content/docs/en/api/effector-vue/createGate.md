@@ -6,7 +6,7 @@ redirectFrom:
   - /docs/api/effector-vue/createGate
 ---
 
-Creates a [_Gate_](/apieffector-vue/Gate) to consume data from view, designed for vue 3. If `defaultState` is defined, [Gate.state](/apieffector-vue/Gate#state) will be created with passed value.
+Creates a [_Gate_](/api/effector-vue/Gate) to consume data from view, designed for vue 3. If `defaultState` is defined, [Gate.state](/api/effector-vue/Gate#state) will be created with passed value.
 
 # Methods (#methods)
 
