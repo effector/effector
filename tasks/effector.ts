@@ -58,11 +58,7 @@ export default {
       massCopy('packages/effector-solid', 'npm/effector-solid', [
         [
           'index.d.ts',
-          [
-            'index.d.ts',
-            'effector-solid.cjs.d.ts',
-            'effector-solid.mjs.d.ts',
-          ],
+          ['index.d.ts', 'effector-solid.cjs.d.ts', 'effector-solid.mjs.d.ts'],
         ],
         'README.md',
         'package.json',
@@ -100,14 +96,7 @@ export default {
     () =>
       Promise.all([
         massCopy('packages/forest', 'npm/forest', [
-          [
-            'index.d.ts',
-            [
-              'index.d.ts',
-              'forest.cjs.d.ts',
-              'forest.mjs.d.ts',
-            ],
-          ],
+          ['index.d.ts', ['index.d.ts', 'forest.cjs.d.ts', 'forest.mjs.d.ts']],
           'server.d.ts',
         ]),
         massCopy('packages/forest', 'npm/forest', [

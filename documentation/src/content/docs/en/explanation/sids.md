@@ -25,7 +25,7 @@ Actually, single store forces you to create unique names of each part of it impl
 
 ```ts
 // server.ts
-import { createStore } from 'single-store-state-manager';
+import { createStore } from "single-store-state-manager";
 
 function handlerRequest() {
   const store = createStore({ initialValue: null });
@@ -37,7 +37,7 @@ function handlerRequest() {
 }
 
 // client.ts
-import { createStore } from 'single-store-state-manager';
+import { createStore } from "single-store-state-manager";
 
 // Let's assume that server put the state into the HTML
 const serverState = readServerStateFromWindow();
@@ -77,8 +77,8 @@ Because of multi-store architecture, Effector requires a unique identifier for e
 Let's add it to some stores:
 
 ```ts
-const $name = createStore(null, { sid: 'name' });
-const $age = createStore(null, { sid: 'age' });
+const $name = createStore(null, { sid: "name" });
+const $age = createStore(null, { sid: "age" });
 ```
 
 Now, we can serialize and deserialize stores:
@@ -90,7 +90,7 @@ async function handlerRequest() {
   const scope = fork();
 
   // fill some data to stores
-  await allSettled($name, { scope, params: 'Igor' });
+  await allSettled($name, { scope, params: "Igor" });
   await allSettled($age, { scope, params: 25 });
 
   const state = JSON.serialize(serialize(scope));
@@ -404,6 +404,7 @@ Thanks to that `sid`-s of inner units of a factory are also unique, and we can s
 personOne.$name.sid; // gre24f|ffds2
 personTwo.$name.sid; // lpefgd|ffds2
 ```
+
 ### How `withFactory` works
 
 `withFactory` is a helper that allows to create unique `sid`-s for inner units. It is a function that accepts an object with `sid` and `fn` properties. `sid` is a unique identifier of the factory, and `fn` is a function that creates units.

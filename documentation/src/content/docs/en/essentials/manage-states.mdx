@@ -1,0 +1,496 @@
+---
+title: State Management in effector
+description: How state works in effector and how to manage it
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# State Management (#state-management)
+
+State in effector is managed through stores - special objects that hold values and update them when receiving events. Stores are created using the [createStore](/en/api/effector/createStore) function.
+
+:::info{title="Data immutability"}
+Store data in effector is immutable, which means you should not mutate arrays or objects directly, but create new instances when updating them.
+:::
+
+<Tabs>
+  <TabItem label="✅ Correct">
+
+```ts
+// update array
+$users.on(userAdded, (users, newUser) => [...users, newUser]);
+
+//update object
+$user.on(nameChanged, (user, newName) => ({
+  ...user,
+  name: newName,
+}));
+```
+
+  </TabItem>
+
+  <TabItem label="❌ Incorrect">
+
+```ts
+// update array
+$users.on(userAdded, (users, newUser) => {
+  users.push(newUser); // mutation!
+  return users;
+});
+
+// update object
+$user.on(nameChanged, (user, newName) => {
+  user.name = newName; // mutation!
+  return user;
+});
+```
+
+  </TabItem>
+</Tabs>
+
+## Store Creation (#store-creation)
+
+You can create new store via [`createStore`](/en/api/effector/createStore):
+
+```ts
+import { createStore } from "effector";
+
+// Create store with initial value
+const $counter = createStore(0);
+// with explicit typing
+const $user = createStore<{ name: "Bob"; age: 25 } | null>(null);
+const $posts = createStore<Post[]>([]);
+```
+
+:::tip{title="Store naming"}
+In effector it's conventional to use the `$` prefix for stores. This helps distinguish them from other entities and improves code readability.
+:::
+
+## Reading Values (#read-store-value)
+
+There are several ways to get the current value of a store:
+
+1. Using framework integration hooks `useUnit` ([📘&nbsp;React](/en/api/effector-react/useUnit), [📗&nbsp;Vue](/en/api/effector-vue/useUnit), [📘&nbsp;Solid](/en/api/effector-solid/useUnit)):
+
+<Tabs>
+  <TabItem label="React">
+
+```ts
+import { useUnit } from 'effector-react'
+import { $counter } from './model.js'
+
+const Counter = () => {
+  const counter = useUnit($counter)
+
+  return <div>{counter}</div>
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```html
+<script setup>
+  import { useUnit } from "effector-vue/composition";
+  import { $counter } from "./model.js";
+  const counter = useUnit($counter);
+</script>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```ts
+import { useUnit } from 'effector-solid'
+import { $counter } from './model.js'
+
+const Counter = () => {
+  const counter = useUnit($counter)
+
+  return <div>{counter()}</div>
+}
+```
+
+  </TabItem>
+</Tabs>
+
+2. Subscribe to changes via `watch` - only for debug or integration needs
+
+```ts
+$counter.watch((counter) => {
+  console.log("Counter changed:", counter);
+});
+```
+
+3. `getState()` method - only for integration needs
+
+```ts
+console.log($counter.getState()); // 0
+```
+
+## Store Updates (#store-updates)
+
+In effector, state updates are done via [events](/en/essentials/events). You can change the state by subscribing to an event via `.on` or by using the [`sample`](/en/essentials/unit-composition) method.
+
+:::info{title="Optimizing updates"}
+Store state is updated when it receives a value that is not equal (!==) to the current value, and also not equal to `undefined`.
+:::
+
+### Updating via Events (#update-store-via-events)
+
+The simplest and correct way to update a store is to bind it to an event:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const incremented = createEvent();
+const decremented = createEvent();
+const resetCounter = createEvent();
+
+const $counter = createStore(0)
+  // Increase value by 1 each time the event is called
+  .on(incremented, (counterValue) => counterValue + 1)
+  // Decrease value by 1 each time the event is called
+  .on(decremented, (counterValue) => counterValue - 1)
+  // Reset value to 0
+  .reset(resetCounter);
+
+$counter.watch((counterValue) => console.log(counterValue));
+
+// Usage
+incremented();
+incremented();
+decremented();
+
+resetCounter();
+
+// Console output
+// 0 - output on initialization
+// 1
+// 2
+// 1
+// 0 - reset
+```
+
+:::info{title="What are events?"}
+If you are not familiar with `createEvent` and events, you will learn how to work with them on [next page](/en/essentials/events).
+:::
+
+### Updating with Event parameters (#update-stores-with-event-params)
+
+You can update a store using event parameters by passing data to the event like a regular function and using it in the handler:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const userUpdated = createEvent<{ name: string }>();
+
+const $user = createStore({ name: "Bob" });
+
+$user.on(userUpdated, (user, changedUser) => ({
+  ...user,
+  ...changedUser,
+}));
+
+userUpdated({ name: "Alice" });
+```
+
+### Complex Update Logic (#update-stores-with-sample)
+
+Using the `on` method, we can update store state for simple cases when an event occurs, either by passing data from the event or updating based on the previous value.
+
+However, this doesn't always cover all needs. For more complex state update logic, we can use the [`sample`](/en/api/effector/sample) method, which helps us when:
+
+- We need to control store updates using an event
+- We need to update a store based on values from other stores
+- We need data transformation before updating the store with access to current values of other stores
+
+For example:
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+const updateItems = createEvent();
+
+const $items = createStore([1, 2, 3]);
+const $filteredItems = createStore([]);
+const $filter = createStore("even");
+
+// sample automatically provides access to current values
+// of all connected stores at the moment the event triggers
+sample({
+  clock: updateItems,
+  source: { items: $items, filter: $filter },
+  fn: ({ items, filter }) => {
+    if (filter === "even") {
+      return items.filter((n) => n % 2 === 0);
+    }
+
+    return items.filter((n) => n % 2 === 1);
+  },
+  target: $filteredItems,
+});
+```
+
+:::info{title="What is sample?"}
+To learn more about what `sample` is, how to use this method, and its detailed description, you can read about it [here](/en/essentials/unit-composition#sample).
+:::
+
+Advantages of using `sample` for state updates:
+
+1. Access to current values of all stores
+2. Atomic updates of multiple stores
+3. Control over update timing through `clock`
+4. Ability to filter updates using `filter`
+5. Convenient data transformation through the `fn` function
+
+### Store Creation via `restore` method (#create-store-via-restore)
+
+If your store work involves replacing the old state with a new one when an event is called, you can use the [`restore`](/en/api/effector/restore) method:
+
+```ts
+import { restore, createEvent } from "effector";
+
+const nameChanged = createEvent<string>();
+
+const $counter = restore(nameChanged, "");
+```
+
+The code above is equivalent to the code below:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const nameChanged = createEvent<string>();
+
+const $counter = createStore("").on(nameChanged, (_, newName) => newName);
+```
+
+You can also use `restore` method with an effect. In this case, the store will receive data from the effect's [`doneData`](/en/api/effector/Effect#doneData) event, and the default store value should match the return value type:
+
+:::info{title="What are effects?"}
+If you are not familiar with `createEffect` and effects, you will learn how to work with them on [this page](/en/essentials/work-with-async).
+:::
+
+```ts
+import { restore, createEffect } from "effector";
+
+// omit type realization
+const createUserFx = createEffect<string, User>((id) => {
+  // effect logic
+
+  return {
+    id: 4,
+    name: "Bob",
+    age: 18,
+  };
+});
+
+const $newUser = restore(createEffect, {
+  id: 0,
+  name: "",
+  age: -1,
+});
+
+createUserFx();
+
+// After successful completion of the effect
+// $newUser will be:
+// {
+// 	 id: 4,
+// 	 name: "Bob",
+// 	 age: 18,
+// }
+```
+
+### Multiple Store Updates (#multiple-store-updates)
+
+A store isn't limited to a single event subscription - you can subscribe to as many events as you need, and different stores can subscribe to the same event:
+
+```ts
+const categoryChanged = createEvent<string>();
+const searchQueryChanged = createEvent<string>();
+const filtersReset = createEvent();
+
+const $lastUsedFilter = createStore<string | null>(null);
+const $filters = createStore({
+  category: "all",
+  searchQuery: "",
+});
+
+// subscribe two different stores to the same event
+$lastUsedFilter.on(categoryChanged, (_, category) => category);
+$filters.on(categoryChanged, (filters, category) => ({
+  ...filters,
+  category,
+}));
+
+$filters.on(searchQueryChanged, (filters, searchQuery) => ({
+  ...filters,
+  searchQuery,
+}));
+
+$filters.reset(filtersReset);
+```
+
+In this example, we subscribe the `$filters` store to multiple events, and multiple stores to the same event `categoryChanged`.
+
+### Simplified Updates with `createApi` (#simplified-updates-with-createapi)
+
+When you need to create multiple handlers for one store, instead of creating separate events and subscribing to them, you can use [`createApi`](/en/api/effector/createApi). This function creates a set of events for updating the store in one place.<br/>
+The following code examples are equivalent:
+
+<Tabs>
+  <TabItem label="With createApi">
+
+```ts
+import { createStore, createApi } from "effector";
+
+const $counter = createStore(0);
+
+const { increment, decrement, reset } = createApi($counter, {
+  increment: (state) => state + 1,
+  decrement: (state) => state - 1,
+  reset: () => 0,
+});
+
+// usage
+increment(); // 1
+reset(); // 0
+```
+
+  </TabItem>
+  <TabItem label="Common usage">
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const $counter = createStore(0);
+
+const incrementClicked = createEvent();
+const decrementClicked = createEvent();
+const resetClicked = createEvent();
+
+$counter
+  .on(incrementClicked, (state) => state + 1)
+  .on(decrementClicked, (state) => state - 1)
+  .reset(resetClicked);
+
+// usage
+increment(); // 1
+reset(); // 0
+```
+
+  </TabItem>
+</Tabs>
+
+## Derived Stores (#derived-stores)
+
+Often you need to create a store whose value depends on other stores. For this, the [`map`](/en/api/effector/Store#map) method is used:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $currentUser = createStore({
+  id: 1,
+  name: "Winnie Pooh",
+});
+const $users = createStore<User[]>([]);
+
+// Filtered list
+const $activeUsers = $users.map((users) => users.filter((user) => user.active));
+
+// Computed value
+const $totalUsersCount = $users.map((users) => users.length);
+const $activeUsersCount = $activeUsers.map((users) => users.length);
+
+// Combining multiple stores
+const $friendsList = combine($users, $currentUser, (users, currentUser) =>
+  users.filter((user) => user.friendIds.includes(currentUser.id)),
+);
+```
+
+We also used the [`combine`](/en/api/effector/combine) method here, which allows us to combine values from multiple stores into one.<br/>
+You can also combine stores into an object:
+
+```ts
+import { combine } from "effector";
+
+const $form = combine({
+  name: $name,
+  age: $age,
+  city: $city,
+});
+
+// or with additional transformation
+const $formValidation = combine($name, $age, (name, age) => ({
+  isValid: name.length > 0 && age >= 18,
+  errors: {
+    name: name.length === 0 ? "Required" : null,
+    age: age < 18 ? "Must be 18+" : null,
+  },
+}));
+```
+
+:::info{title="Important note"}
+Derived stores update automatically when source stores change. You **don't** need to manually synchronize their values.
+:::
+
+## Resetting State (#resetting-store-state)
+
+You can reset store to default state via `reset` method:
+
+```ts
+const formSubmitted = createEvent();
+const formReset = createEvent();
+
+const $form = createStore({ email: "", password: "" })
+  // Clear form on submit and on explicit reset too
+  .reset(formSubmitted, formReset)
+  // or
+  .reset([formSubmitted, formReset]);
+```
+
+## `undefined` Values (#void-values)
+
+By default, effector skips updates with undefined value. This is done so that you don't have to return anything from reducers if store update is not required:
+
+```ts
+const $store = createStore(0).on(event, (_, newValue) => {
+  if (newValue % 2 === 0) {
+    return;
+  }
+
+  return newValue;
+});
+```
+
+:::warning{title="Attention!"}
+This behavior will be disabled in the future!
+Practice has shown that it would be better to simply return the previous store value.
+:::
+
+If you need to use `undefined` as a valid value, you need to explicitly specify it using `skipVoid: false` when creating the store:
+
+```ts
+import { createStore, createEvent } from "effector";
+
+const setVoidValue = createEvent<number>();
+
+// ❌ undefined will be skipped
+const $store = createStore(13).on(setVoidValue, (_, voidValue) => voidValue);
+
+// ✅ undefined allowed as values
+const $store = createStore(13, {
+  skipVoid: false,
+}).on(setVoidValue, (_, voidValue) => voidValue);
+
+setVoidValue(null);
+```
+
+:::tip{title="null instead of undefined"}
+You can use `null` instead of `undefined` for missing values.
+:::
+
+[Full API reference for store](/en/api/effector/Store)

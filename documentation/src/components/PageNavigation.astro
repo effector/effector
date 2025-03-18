@@ -1,16 +1,17 @@
 ---
-import Show from 'src/components/Show.astro'
-import { getPathParamsFromId } from 'src/languages'
-import { getLocalizedSidebar } from 'src/navigation'
-import { getPrevNext } from 'src/navigation'
-import {PAGE_NAVIGATION} from 'src/consts'
-import ArrowLeft from 'src/icons/ArrowLeft.astro'
-import ArrowRight from 'src/icons/ArrowRight.astro'
+import Show from "src/components/Show.astro";
+import { getPathParamsFromId, getTextLocalized } from "src/languages";
+import { getLocalizedSidebar, trimTrailingSlash } from "src/navigation";
+import { getPrevNext } from "src/navigation";
+import { PAGE_NAVIGATION } from "src/consts";
+import ArrowLeft from "src/icons/ArrowLeft.astro";
+import ArrowRight from "src/icons/ArrowRight.astro";
 
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 const baseSidebar = await getLocalizedSidebar(slug, lang);
 
-const { prevPage, nextPage } = getPrevNext(baseSidebar, Astro.url.pathname);
+const pagePath = trimTrailingSlash(Astro.url.pathname);
+const { prevPage, nextPage } = getPrevNext(baseSidebar, pagePath);
 ---
 
 <nav class="pagination-links" data-pagefind-ignore="all">
@@ -18,7 +19,7 @@ const { prevPage, nextPage } = getPrevNext(baseSidebar, Astro.url.pathname);
     <a href={prevPage?.link} rel="prev" class="pagination-link pagination-link-prev">
       <ArrowLeft class="pagination-link-icon" />
       <span>
-        {PAGE_NAVIGATION.previous.text[lang]}<br/>
+        {getTextLocalized(PAGE_NAVIGATION.previous, lang)}<br />
         <span class="pagination-link-title">{prevPage?.title}</span>
       </span>
     </a>
@@ -27,7 +28,7 @@ const { prevPage, nextPage } = getPrevNext(baseSidebar, Astro.url.pathname);
     <a href={nextPage?.link} rel="next" class="pagination-link pagination-link-next">
       <ArrowRight class="pagination-link-icon" />
       <span>
-        {PAGE_NAVIGATION.next.text[lang]}<br/>
+        {getTextLocalized(PAGE_NAVIGATION.next, lang)}<br />
         <span class="pagination-link-title">{nextPage?.title}</span>
       </span>
     </a>
@@ -35,65 +36,65 @@ const { prevPage, nextPage } = getPrevNext(baseSidebar, Astro.url.pathname);
 </nav>
 
 <style>
-    .pagination-links {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
-        gap: 1rem;
-        margin: 2em 0;
-    }
+  .pagination-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: 1rem;
+    margin: 2em 0;
+  }
 
-    .pagination-link {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: .75rem;
-        width: 100%;
-        flex-basis: calc(50% - .5rem);
-        flex-grow: 1;
-        border: 1px solid var(--theme-divider);
-        border-radius: .5rem;
-        padding: 1rem;
-        text-decoration: none; /* Ensure no underline */
-        color: var(--theme-text);
-        background-color: var(--theme-bg);
-        overflow-wrap: anywhere;
-    }
+  .pagination-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+    flex-basis: calc(50% - 0.5rem);
+    flex-grow: 1;
+    border: 1px solid var(--theme-divider);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-decoration: none; /* Ensure no underline */
+    color: var(--theme-text);
+    background-color: var(--theme-bg);
+    overflow-wrap: anywhere;
+  }
 
-    .pagination-link:hover {
-        background-color: var(--theme-text-accent);
-        color: var(--theme-card);
-    }
+  .pagination-link:hover {
+    background-color: var(--theme-text-accent);
+    color: var(--theme-card);
+  }
 
-    .pagination-link:focus,
-    .pagination-link:active {
-        text-decoration: none;
-    }
+  .pagination-link:focus,
+  .pagination-link:active {
+    text-decoration: none;
+  }
 
-    .pagination-link-prev {
-        justify-content: flex-start;
-    }
+  .pagination-link-prev {
+    justify-content: flex-start;
+  }
 
-    .pagination-link-next {
-        text-align: end;
-        flex-direction: row-reverse;
-    }
+  .pagination-link-next {
+    text-align: end;
+    flex-direction: row-reverse;
+  }
 
-    .pagination-link-icon {
-        color: var(--theme-text);
-        width: 1.5em;
-        height: 1.5em;
-    }
+  .pagination-link-icon {
+    color: var(--theme-text);
+    width: 1.5em;
+    height: 1.5em;
+  }
 
-    .pagination-link:hover .pagination-link-icon {
-        color: var(--theme-card);
-    }
+  .pagination-link:hover .pagination-link-icon {
+    color: var(--theme-card);
+  }
 
-    .pagination-link-title {
-        font-weight: bold;
-        color: var(--theme-text);
-    }
+  .pagination-link-title {
+    font-weight: bold;
+    color: var(--theme-text);
+  }
 
-    .pagination-link:hover .pagination-link-title {
-        color: var(--theme-card);
-    }
+  .pagination-link:hover .pagination-link-title {
+    color: var(--theme-card);
+  }
 </style>

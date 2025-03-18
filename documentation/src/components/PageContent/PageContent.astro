@@ -3,8 +3,8 @@ import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
 import MoreMenu from "../RightSidebar/MoreMenu.astro";
 import TableOfContents from "../RightSidebar/TableOfContents";
-import {getLocalizedSidebar} from 'src/navigation'
-import PageNavigation from 'src/components/PageNavigation.astro'
+import { getLocalizedSidebar } from "src/navigation";
+import PageNavigation from "src/components/PageNavigation.astro";
 
 type Props = {
   title: string;
@@ -88,8 +88,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     <slot />
   </section>
 
-  <PageNavigation />
-
+  <!-- <PageNavigation /> -->
 
   <nav class="mb-8 block xl:hidden" data-pagefind-ignore>
     <MoreMenu documentId={documentId} />
@@ -97,90 +96,90 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 </article>
 
 <style>
-    .content {
-        display: flex;
-        flex-direction: column;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-    }
+  .content {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
 
-    .content > section {
-        margin-bottom: 4rem;
-    }
+  .content > section {
+    margin-bottom: 4rem;
+  }
 
-    .main-section .navigation {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: space-between;
+  .main-section .navigation {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 
-        @media (min-width: 512px) {
-            flex-direction: row;
-            align-items: center;
-        }
+    @media (min-width: 512px) {
+      flex-direction: row;
+      align-items: center;
     }
+  }
 
-    .main-section .navigation .translations {
-        font-size: 1rem;
-    }
+  .main-section .navigation .translations {
+    font-size: 1rem;
+  }
 
-    .breadcrumbs {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 1rem;
-        margin: 0;
-        list-style-type: none;
-        color: var(--theme-text);
-    }
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    margin: 0;
+    list-style-type: none;
+    color: var(--theme-text);
+  }
 
-    .breadcrumbs li {
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: center;
-    }
+  .breadcrumbs li {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
 
-    .breadcrumbs li a {
-        text-wrap: nowrap;
-    }
+  .breadcrumbs li a {
+    text-wrap: nowrap;
+  }
 
-    .breadcrumbs li:last-child span {
-        font-weight: 600;
-    }
+  .breadcrumbs li:last-child span {
+    font-weight: 600;
+  }
 
-    .breadcrumbs li:not(:last-child)::after {
-        content: " ";
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="black" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
-        center;
-        display: inline-block;
-        height: 1ch;
-        width: 1ch;
-        margin-left: 0.5rem;
-        opacity: 0.5;
-    }
+  .breadcrumbs li:not(:last-child)::after {
+    content: " ";
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="black" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
+      center;
+    display: inline-block;
+    height: 1ch;
+    width: 1ch;
+    margin-left: 0.5rem;
+    opacity: 0.5;
+  }
 
-    :root.theme-dark .breadcrumbs li:not(:last-child)::after {
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="white" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
-        center;
-    }
+  :root.theme-dark .breadcrumbs li:not(:last-child)::after {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="white" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
+      center;
+  }
 
-    .breadcrumbs li a svg {
-        display: inline-block;
-        width: 2ch;
-        height: 2ch;
-        margin-top: -4px;
-    }
+  .breadcrumbs li a svg {
+    display: inline-block;
+    width: 2ch;
+    height: 2ch;
+    margin-top: -4px;
+  }
 
-    .breadcrumbs li a.active {
-        text-decoration: underline;
-    }
+  .breadcrumbs li a.active {
+    text-decoration: underline;
+  }
 
-    .translations a:hover {
-        text-decoration: underline;
-    }
+  .translations a:hover {
+    text-decoration: underline;
+  }
 
-    .translations a:not(:last-child)::after {
-        content: ", ";
-        color: var(--theme-text-light);
-    }
+  .translations a:not(:last-child)::after {
+    content: ", ";
+    color: var(--theme-text-light);
+  }
 </style>

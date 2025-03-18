@@ -54,7 +54,7 @@ export function useList<T, Key extends React.Key>(
     readonly placeholder?: React.ReactNode
   },
   {forceScope}?: {forceScope?: boolean},
-): JSX.Element
+): React.ReactNode
 export function useList<T>(
   list: Store<T[]> | Store<ReadonlyArray<T>>,
   renderItem:
@@ -65,7 +65,7 @@ export function useList<T>(
       }
     | ((item: T, index: number) => React.ReactNode),
   {forceScope}?: {forceScope?: boolean},
-): JSX.Element
+): React.ReactNode
 
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 

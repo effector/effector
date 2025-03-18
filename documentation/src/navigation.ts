@@ -1,74 +1,113 @@
 import { getCollection } from "astro:content";
 import { nanoid } from "nanoid";
-import { SITE, LINKS } from "./consts";
-import { getTextLocalized, createLink, type LText, isExternal } from "./languages";
+import { LINKS, SITE } from "./consts";
+import { type LText, createLink, getTextLocalized, isExternal } from "./languages";
 
 import IconEffector from "@icons/Effector.astro";
-import IconReact from "@icons/React.astro";
-import IconVue from "@icons/Vue.astro";
-import IconSolid from "@icons/Solid.astro";
-import IconNextJs from "@icons/NextJs.astro";
 import IconGithub from "@icons/Github.astro";
-import IconTwitter from "@icons/Twitter.astro";
-import IconDiscord from "@icons/Discord.astro";
+import IconNextJs from "@icons/NextJs.astro";
+import IconReact from "@icons/React.astro";
+import IconSolid from "@icons/Solid.astro";
+import IconTelegram from "@icons/Telegram.astro";
+import IconVue from "@icons/Vue.astro";
 
 const defaultSidebar: LSidebarGroup[] = [
   {
-    text: { en: "Introduction", ru: "Начало работы", uz: "Kirish" },
+    text: { en: "Quick start", ru: "Быстрый старт", uz: "Qayta boshlash" },
     items: [
       {
-        text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
-        link: "/introduction/motivation",
+        text: { en: "Get started", ru: "Начало работы", uz: "Ishni boshlash" },
+        link: "/introduction/get-started",
       },
       {
-        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
-        link: "/introduction/community",
+        text: { en: "Core concepts", ru: "Основные концепции", uz: "Asosiy tamoyillar" },
+        link: "/introduction/core-concepts",
       },
       {
         text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
         link: "/introduction/installation",
       },
       {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
-        link: "/introduction/ecosystem",
+        text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
+        link: "/introduction/motivation",
       },
       {
         text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
         link: "/introduction/examples",
       },
-      {
-        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
-        link: "/FAQ",
-      },
-    ],
-  },
-  {
-    text: { en: "Conventions", ru: "Соглашения", uz: "Shartnomalar" },
-    items: [
-      {
-        text: { en: "Naming", ru: "Именование", uz: "Nomlanmalar" },
-        link: "/conventions/naming",
-      },
     ],
   },
   {
     text: {
-      en: "TypeScript Guide",
-      ru: "Использование с TypeScript",
-      uz: "Typescript bilan ishlash",
+      en: "Essentials",
+      ru: "Основы",
+      uz: "Asosiy",
     },
     items: [
       {
-        text: { en: "Typing effector", ru: "Типизация effector", uz: "Effector tipizatsiyasi" },
-        link: "/typescript/typing-effector",
+        text: {
+          en: "Manage states",
+          ru: "Управление состоянием",
+          uz: "Holatni o'zgartirish",
+        },
+        link: "/essentials/manage-states",
       },
       {
-        text: { en: "Usage with `effector-react`", uz: "`effector-react` dan foydalaning" },
-        link: "/typescript/usage-with-effector-react",
+        text: {
+          en: "Events",
+          ru: "События",
+          uz: "O'zgaruvchilar",
+        },
+        link: "/essentials/events",
       },
       {
-        text: { en: "Utility Types", ru: "Служебные типы", uz: "Utilit turlari" },
-        link: "/typescript/utility-types",
+        text: {
+          en: "Work with async",
+          ru: "Работа с асинхронностью",
+          uz: "Asinkronlik bilan ishlash",
+        },
+        link: "/essentials/work-with-async",
+      },
+      {
+        text: {
+          en: "Unit composition",
+          ru: "Композиция юнитов",
+          uz: "Unit kompozitsiyasi",
+        },
+        link: "/essentials/unit-composition",
+      },
+    ],
+  },
+  {
+    text: { en: "Advanced", ru: "Продвинутые темы", uz: "O'zgaruvchilar" },
+    items: [
+      {
+        text: {
+          en: "Flow splitting",
+          ru: "Разделение потока данных",
+          uz: "Flow to'plamasi",
+        },
+        link: "/essentials/flow-split",
+      },
+      {
+        text: {
+          en: "Scope: Working with Isolated Contexts",
+          ru: "Scope: Работа с изолированными контекстами",
+          uz: "Scope: Isolatli kontekstlar bilan ishlash",
+        },
+        link: "/advanced/work-with-scope",
+      },
+      {
+        text: { en: "Store SID", ru: "Store и их sid", uz: "Store SID" },
+        link: "/explanation/sids",
+      },
+      {
+        text: {
+          en: "Computation Priority",
+          ru: "Приоритет вычислений",
+          uz: "Hisoblash ustuvorligi",
+        },
+        link: "/explanation/computation-priority",
       },
     ],
   },
@@ -76,74 +115,114 @@ const defaultSidebar: LSidebarGroup[] = [
     text: { en: "Guides", ru: "Руководства", uz: "Qo'llanmalar" },
     items: [
       {
-        text: { en: "Writing tests", uz: "Testlar yozish" },
+        text: {
+          en: "Best practices",
+          ru: "Лучшие практики",
+          uz: "To'g'ri usullar",
+        },
+        link: "/guides/best-practices",
+      },
+      {
+        text: {
+          en: "Troubleshooting",
+          ru: "Исправление ошибок",
+          uz: "Xatolarni o'zgartirish",
+        },
+        link: "/guides/troubleshooting",
+      },
+      {
+        text: {
+          en: "Typescript",
+          ru: "Типизация",
+          uz: "Typescript",
+        },
+        link: "/essentials/typescript",
+      },
+      {
+        text: {
+          en: "Testing",
+          ru: "Тестирование",
+          uz: "Testlash",
+        },
         link: "/guides/testing",
       },
       {
-        text: { en: "Server Side Rendering" },
+        text: {
+          en: "Server Side Rendering",
+          ru: "Работа с SSR",
+        },
         link: "/guides/server-side-rendering",
       },
       {
-        text: { en: "Migration guide" },
+        text: {
+          ru: "Использование с Websocket",
+          en: "Websockets",
+          uz: "Websocket bilan bog'lanish",
+        },
+        link: "/guides/websocket-integration",
+      },
+      {
+        text: {
+          en: "Migration guide",
+          ru: "Миграция с v23",
+        },
         link: "/guides/migration-guide-v23",
       },
       {
-        text: { en: "Migrating from Redux" },
+        text: {
+          en: "Migrating from Redux",
+          ru: "Миграция с Redux",
+        },
         link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
-    ],
-  },
-  {
-    text: { en: "Core principles", ru: "Основные принципы", uz: "Asosiy tamoyillar" },
-    items: [
       {
-        text: { en: "Releases policy" },
-        link: "/core-principles/releases",
-      },
-      {
-        text: { en: "Testing" },
-        link: "/core-principles/testing",
-      },
-      {
-        text: { en: "Typings" },
-        link: "/core-principles/typings",
+        text: {
+          en: "Usage with `effector-react`",
+          ru: "Использование с `effector-react`",
+          uz: "`effector-react` dan foydalaning",
+        },
+        link: "/typescript/usage-with-effector-react",
       },
     ],
   },
   {
-    text: {
-      en: "For library developers",
-      uz: "Biblioteka dasturchilari uchun",
-    },
+    text: { en: "Resources", ru: "Ресурсы", uz: "Resurslar" },
     items: [
       {
-        text: { en: "Universal @@unitShape protocol" },
-        link: "/ecosystem-development/unit-shape-protocol",
+        text: {
+          en: "Mindset in Effector",
+          uz: "Effectordan foydalanish",
+          ru: "Как мыслить в парадигме Effector",
+        },
+        link: "/resources/mindset",
       },
-    ],
-  },
-  {
-    text: { en: "Explanation", ru: "Погружение", uz: "Tushuntirish" },
-    items: [
+      {
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        link: "/introduction/ecosystem",
+      },
+      {
+        text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
+        link: "/introduction/community",
+      },
       {
         text: { en: "Glossary", ru: "Глоссарий", uz: "Lug'at" },
         link: "/explanation/glossary",
       },
       {
-        text: { en: "Events", ru: "События", uz: "Events" },
-        link: "/explanation/events",
-      },
-      {
-        text: { en: "Computation Priority", uz: "Hisoblash ustuvorligi" },
-        link: "/explanation/computation-priority",
-      },
-      {
-        text: { en: "Prior Art", ru: "Prior Art", uz: "Prior Art" },
+        text: { en: "Prior Art", ru: "Вдохновение", uz: "Taqdim etilganlar" },
         link: "/explanation/prior-art",
       },
       {
-        text: { en: "SIDs" },
-        link: "/explanation/sids",
+        text: { en: "For developers", ru: "Для разработчиков" },
+        link: "/ecosystem-development/unit-shape-protocol",
+      },
+      {
+        text: { en: "Releases policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
+        link: "/resources/releases",
+      },
+      {
+        text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
+        link: "/FAQ",
       },
     ],
   },
@@ -302,7 +381,7 @@ const effectorReact: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Low-level API" },
+    text: { en: "Low-level API", ru: "Низкоуровневое API" },
     collapsed: true,
     items: [
       {
@@ -383,11 +462,6 @@ const effectorVue: LSidebarGroup[] = [
     text: { en: "Common methods" },
     items: [
       {
-        text: { en: "VueEffector" },
-        link: "/api/effector-vue/VueEffector",
-        tags: ["useful"],
-      },
-      {
         text: { en: "EffectorScopePlugin" },
         link: "/api/effector-vue/EffectorScopePlugin",
         tags: ["useful"],
@@ -395,16 +469,6 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "createComponent" },
         link: "/api/effector-vue/createComponent",
-        tags: ["useful"],
-      },
-    ],
-  },
-  {
-    text: { en: "Options and properties", uz: "Variantlar va xususiyatlar" },
-    items: [
-      {
-        text: { en: "ComponentOptions" },
-        link: "/api/effector-vue/ComponentOptions",
         tags: ["useful"],
       },
     ],
@@ -430,7 +494,7 @@ const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Hooks" },
+    text: { en: "Composition API" },
     items: [
       {
         text: { en: "useUnit" },
@@ -449,6 +513,31 @@ const effectorVue: LSidebarGroup[] = [
       {
         text: { en: "useVModel" },
         link: "/api/effector-vue/useVModel",
+        tags: ["useful"],
+      },
+    ],
+  },
+  {
+    text: { en: "Options API" },
+    items: [
+      {
+        text: { en: "VueEffector" },
+        link: "/api/effector-vue/VueEffector",
+        tags: ["useful"],
+      },
+      {
+        text: { en: "VueEffector (Vue2)" },
+        link: "/api/effector-vue/VueEffectorVue2",
+        tags: ["useful"],
+      },
+    ],
+  },
+  {
+    text: { en: "Options and properties", uz: "Variantlar va xususiyatlar" },
+    items: [
+      {
+        text: { en: "ComponentOptions (Vue2)" },
+        link: "/api/effector-vue/ComponentOptions",
         tags: ["useful"],
       },
     ],
@@ -625,7 +714,7 @@ const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Low-level API" },
+    text: { en: "Low-level API", ru: "Низкоуровневое API" },
     collapsed: true,
     items: [
       {
@@ -651,7 +740,7 @@ const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Import map" },
+    text: { en: "Import map", ru: "Подпакеты" },
     items: [
       {
         text: { en: "effector/compat" },
@@ -668,7 +757,7 @@ const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Compiler Plugins" },
+    text: { en: "Compiler Plugins", ru: "Плагины для сборки" },
     items: [
       {
         text: { en: "Babel plugin" },
@@ -815,8 +904,7 @@ export const SOCIAL_LINKS: {
   link: string;
 }[] = [
   { text: { en: "GitHub" }, icon: IconGithub, link: LINKS.github },
-  { text: { en: "Twitter" }, icon: IconTwitter, link: LINKS.twitter },
-  { text: { en: "Discord" }, icon: IconDiscord, link: LINKS.discord },
+  { text: { en: "Telegram" }, icon: IconTelegram, link: LINKS.telegramRU },
 ];
 
 export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
@@ -828,8 +916,6 @@ export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
   },
   { text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" }, link: "/recipes" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
-  { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
-  { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
 ];
 
 export const MOBILE_NAVIGATION = createMobileNavigation([
@@ -875,7 +961,6 @@ export const FOOTER_LINKS = [
         link: "/core-principles/releases",
       },
       { text: { en: "What's new", ru: "Что нового", uz: "Yangiliklar" }, link: LINKS.changelog },
-      { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
     ],
   },
   {
@@ -897,6 +982,9 @@ export const FOOTER_LINKS = [
       { text: { en: "Youtube" }, link: LINKS.youtube },
       { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
       { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
+      { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
+      { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
+      { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
       { text: { en: "Docs powered by Astro" }, link: "https://astro.build" },
     ],
   },
@@ -1014,8 +1102,9 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
         const originalLink = createLink(item, SITE.defaultLanguage);
         if (slugs.has(originalLink.toLowerCase())) {
           return {
-            title: `${itemTitle} (${SITE.defaultLanguage.toUpperCase()})`,
+            title: `${itemTitle}`,
             link,
+            isFallback: true,
           };
         }
 
@@ -1031,10 +1120,10 @@ export async function getLocalizedSidebar(slug: string, lang: string) {
 
 export const getPrevNext = (
   sidebar: Awaited<ReturnType<typeof getLocalizedSidebar>>,
-  currentPath: string
+  currentPath: string,
 ) => {
-  const flatItems = sidebar.flatMap(group => group.items);
-  const currentIndex = flatItems.findIndex(item => item.link === currentPath);
+  const flatItems = sidebar.flatMap((group) => group.items);
+  const currentIndex = flatItems.findIndex((item) => item.link === currentPath);
 
   const prevPage = currentIndex > 0 ? flatItems[currentIndex - 1] : null;
   const nextPage = currentIndex < flatItems.length - 1 ? flatItems[currentIndex + 1] : null;
@@ -1100,4 +1189,8 @@ export function markActiveNavigation(link: string, navigation: LMobileNavItem[])
   }
 
   return nav;
+}
+
+export function trimTrailingSlash(link: string) {
+  return link.endsWith("/") ? link.slice(0, -1) : link;
 }

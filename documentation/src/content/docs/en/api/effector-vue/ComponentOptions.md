@@ -5,7 +5,7 @@ redirectFrom:
   - /docs/api/effector-vue/component-options
 ---
 
-# ComponentOptions (#ComponentOptions)
+# ComponentOptions (Vue2) (#ComponentOptions)
 
 ## `effector` (#ComponentOptions-effector)
 

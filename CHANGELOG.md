@@ -40,6 +40,27 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Drop support for UMD build ([PR #1097](https://github.com/effector/effector/pull/1097))
 
+## effector 23.3.0
+
+- Improve error messages: now errors for `skipVoid` and `store without sid` will point to the line of store creation. This will help locate troublesome units easily
+- Add support for multiple arguments to `scopeBind`. This feature indirectly allows to use multiple arguments in `reflect` ([issue reflect#91](https://github.com/effector/reflect/issues/91))
+- Fix issues with `clearNode` ([issue #1200](https://github.com/effector/effector/issues/1200))
+
+## effector-vue 23.1.1
+
+- Fix `Date` suppport in `useVModel`, `createGate` and options API ([PR #1228](https://github.com/effector/effector/pull/1228), thanks [egoson](https://github.com/egoson))
+
+## effector-react 23.3.0
+
+- Add react 19 support
+
+## effector-vue 23.1.0
+
+- Update useVModel bindings ([issue #1150](https://github.com/effector/effector/issues/1150))
+- Add support for options api for vue 3 (useful for large codebase migration from vue 2) ([issue #1178](https://github.com/effector/effector/issues/1178))
+
+Big thanks to [egoson](https://github.com/egoson) for making this release possible
+
 ## effector 23.2.3
 
 - Fix types for `attach({ effect })`, allowing to pass explicit `name` in this overload ([issue #1000](https://github.com/effector/effector/issues/1000))

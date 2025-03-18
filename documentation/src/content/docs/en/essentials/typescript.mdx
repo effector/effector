@@ -1,0 +1,498 @@
+---
+title: TypeScript in Effector
+description: Using TypeScript with Effector and type examples
+redirectFrom:
+  - /en/typescript/utility-types/
+  - /en/typescript/typing-effector/
+  - /typescript/utility-types
+  - /typescript/typing-effector
+  - /docs/typescript/utility-types
+  - /docs/typescript/typing-effector
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# TypeScript in effector (#typescript-in-effector)
+
+Effector provides first-class TypeScript support out of the box, giving you reliable typing and excellent development experience when working with the library. In this section, we'll look at both basic typing concepts and advanced techniques for working with types in effector.
+
+## Typing Events (#typing-events)
+
+Events in Effector can be typed by passing a type to the generic function. However, if nothing is passed, the event will have the type `EventCallable<void>`:
+
+```ts
+import { createEvent } from "effector";
+
+// Event without parameters
+const clicked = createEvent();
+// EventCallable<void>
+
+// Event with parameter
+const userNameChanged = createEvent<string>();
+// EventCallable<string>
+
+// Event with complex parameter
+const formSubmitted = createEvent<{
+  username: string;
+  password: string;
+}>();
+// EventCallable<{ username: string; password: string; }>
+```
+
+### Event Types (#event-types)
+
+In Effector, events can have several types, where `T` is the stored value type:
+
+- `EventCallable<T>` - an event that can be called.
+- `Event<T>` - a derived event that cannot be called manually.
+
+### Typing Event Methods (#typing-event-methods)
+
+#### event.prepend (#typing-event-prepend)
+
+To add types to events created using event.prepend, you need to add the type either in the prepend function argument or as a generic:
+
+```ts
+const message = createEvent<string>();
+
+const userMessage = message.prepend((text: string) => text);
+// userMessage has type EventCallable<string>
+
+const warningMessage = message.prepend<string>((warnMessage) => warnMessage);
+// warningMessage has type EventCallable<string>
+```
+
+## Typing Stores (#typing-stores)
+
+Stores can also be typed by passing a type to the generic function, or by specifying a default value during initialization, then TypeScript will infer the type from this value:
+
+```ts
+import { createStore } from "effector";
+
+// Basic store with primitive value
+// StoreWritable<number>
+const $counter = createStore(0);
+
+// Store with complex object type
+interface User {
+  id: number;
+  name: string;
+  role: "admin" | "user";
+}
+
+// StoreWritable<User>
+const $user = createStore<User>({
+  id: 1,
+  name: "Bob",
+  role: "user",
+});
+
+// Store<string>
+const $userNameAndRole = $user.map((user) => `User name and role: ${user.name} and ${user.role}`);
+```
+
+### Store Types (#store-types)
+
+In Effector, there are two types of stores, where T is the stored value type:
+
+- `Store<T>` - derived store type that cannot have new data written to it.
+- `StoreWritable<T>` - store type that can have new data written using on or sample.
+
+## Typing Effects (#typing-effects)
+
+In normal usage, TypeScript will infer types based on the function's return result and its arguments.
+However, `createEffect` supports typing of input parameters, return result, and errors through generics:
+
+<Tabs>
+  <TabItem label="Common usage">
+
+```ts
+import { createEffect } from "effector";
+
+// Base effect
+// Effect<string, User, Error>
+const fetchUserFx = createEffect(async (userId: string) => {
+  const response = await fetch(`/api/users/${userId}`);
+  const result = await response.json();
+
+  return result as User;
+});
+```
+
+  </TabItem>
+
+  <TabItem label="With generics">
+
+```ts
+import { createEffect } from "effector";
+
+// Base effect
+// Effect<string, User, Error>
+const fetchUserFx = createEffect<string, User>(async (userId) => {
+  const response = await fetch(`/api/users/${userId}`);
+  const result = await response.json();
+
+  return result;
+});
+```
+
+  </TabItem>
+</Tabs>
+
+### Typing Handler Function Outside Effect (#typing-effect-handler)
+
+If the handler function is defined outside the effect, you'll need to pass that function's type:
+
+```ts
+const sendMessage = async (params: { text: string }) => {
+  // ...
+  return "ok";
+};
+
+const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage);
+// => Effect<{text: string}, string, AxiosError>
+```
+
+### Custom Effect Errors (#typing-effect-errors)
+
+Some code may only throw certain types of exceptions. In effects, the third generic `Fail` is used to describe error types:
+
+```ts
+// Define API error types
+interface ApiError {
+  code: number;
+  message: string;
+}
+
+// Create typed effect
+const fetchUserFx = createEffect<string, User, ApiError>(async (userId) => {
+  const response = await fetch(`/api/users/${userId}`);
+
+  if (!response.ok) {
+    throw {
+      code: response.status,
+      message: "Failed to fetch user",
+    } as ApiError;
+  }
+
+  return response.json();
+});
+```
+
+## Typing Methods (#typing-effector-methods)
+
+### `sample` (#typing-sample)
+
+#### Typing `filter` (#typing-sample-filter)
+
+If you need to get a specific type, you'll need to manually specify the expected type, which can be done using [type predicates](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates):
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+
+const message = createEvent<UserMessage | WarnMessage>();
+const userMessage = createEvent<UserMessage>();
+
+sample({
+  clock: message,
+  filter: (msg): msg is UserMessage => msg.kind === "user",
+  target: userMessage,
+});
+```
+
+If you need to check for data existence in `filter`, you can simply pass `Boolean`:
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+// Events
+const formSubmitted = createEvent();
+const userDataSaved = createEvent<User>();
+
+// States
+const $currentUser = createStore<User | null>(null);
+
+// On form submit, send data only if user exists
+sample({
+  clock: formSubmitted,
+  source: $currentUser,
+  filter: Boolean, // filter out null
+  target: userDataSaved,
+});
+
+// Now userDataSaved will only receive existing user data
+```
+
+#### Typing `filter` and `fn` (#typing-sample-filter-and-fn)
+
+As mentioned above, using type predicates in `filter` will work correctly and the correct type will reach the `target`.
+However, this mechanism won't work as needed when using `filter` and `fn` together. In this case, you'll need to manually specify the data type of `filter` parameters and add type predicates. This happens because TypeScript cannot correctly infer the type in `fn` after `filter` if the type isn't explicitly specified. This is a limitation of TypeScript's type system.
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+type Message = UserMessage | WarnMessage;
+
+const message = createEvent<Message>();
+const userText = createEvent<string>();
+
+sample({
+  clock: message,
+  filter: (msg: Message): msg is UserMessage => msg.kind === "user",
+  fn: (msg) => msg.text,
+  target: userText,
+});
+
+// userMessage has type Event<string>
+```
+
+:::tip{title="It got smarter!"}
+Starting from TypeScript version >= 5.5, you don't need to write type predicates, just specify the argument type and TypeScript will understand what needs to be inferred:
+`filter: (msg: Message) => msg.kind === "user"`
+:::
+
+### attach (#typing-attach)
+
+To allow TypeScript to infer the types of the created effect, you can add a type to the first argument of `mapParams`, which will become the `Params` generic of the result:
+
+```ts
+const sendTextFx = createEffect<{ message: string }, "ok">(() => {
+  // ...
+
+  return "ok";
+});
+
+const sendWarningFx = attach({
+  effect: sendTextFx,
+  mapParams: (warningMessage: string) => ({ message: warningMessage }),
+});
+// sendWarningFx has type Effect<{message: string}, 'ok'>
+```
+
+### split (#typing-split)
+
+<Tabs>
+  <TabItem label="Before TS 5.5">
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+
+const message = createEvent<UserMessage | WarnMessage>();
+
+const { userMessage, warnMessage } = split(message, {
+  userMessage: (msg): msg is UserMessage => msg.kind === "user",
+  warnMessage: (msg): msg is WarnMessage => msg.kind === "warn",
+});
+// userMessage имеет тип Event<UserMessage>
+// warnMessage имеет тип Event<WarnMessage>
+```
+
+  </TabItem>
+
+  <TabItem label="After TS 5.5">
+
+```ts
+type UserMessage = { kind: "user"; text: string };
+type WarnMessage = { kind: "warn"; warn: string };
+
+const message = createEvent<UserMessage | WarnMessage>();
+
+const { userMessage, warnMessage } = split(message, {
+  userMessage: (msg) => msg.kind === "user",
+  warnMessage: (msg) => msg.kind === "warn",
+});
+// userMessage имеет тип Event<UserMessage>
+// warnMessage имеет тип Event<WarnMessage>
+```
+
+  </TabItem>
+</Tabs>
+
+### `createApi` (#typing-createApi)
+
+To allow TypeScript to infer types of created events, adding a type to second argument of given reducers
+
+```typescript
+const $count = createStore(0);
+
+const { add, sub } = createApi($count, {
+  add: (x, add: number) => x + add,
+  sub: (x, sub: number) => x - sub,
+});
+
+// add has type Event<number>
+// sub has type Event<number>
+```
+
+### `is` (#typing-is)
+
+`is` methods can help to infer a unit type (thereby `is` methods acts as [TypeScript type guards](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types)) which can help to write strongly-typed helper functions
+
+```typescript
+export function getUnitType(unit: unknown) {
+  if (is.event(unit)) {
+    // here unit has Event<any> type
+    return "event";
+  }
+  if (is.effect(unit)) {
+    // here unit has Effect<any, any> type
+    return "effect";
+  }
+  if (is.store(unit)) {
+    // here unit has Store<any> type
+    return "store";
+  }
+}
+```
+
+### `merge` (#typing-merge)
+
+When we wanna merge events we can get their union types:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge([firstEvent, secondEvent]);
+// Event<string | number>
+
+// You can also combine events with the same types
+const buttonClicked = createEvent<MouseEvent>();
+const linkClicked = createEvent<MouseEvent>();
+
+const anyClick = merge([buttonClicked, linkClicked]);
+// Event<MouseEvent>
+```
+
+`merge` accepts generic, where you can use what type do you expect from events:
+
+```ts
+import { createEvent, merge } from "effector";
+
+const firstEvent = createEvent<string>();
+const secondEvent = createEvent<number>();
+
+const merged = merge<number>([firstEvent, secondEvent]);
+//                                ^
+// Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+```
+
+## Type Utilities (#type-utilities)
+
+Effector provides a set of utility types for working with unit types:
+
+### UnitValue (#type-utilities-unit-values)
+
+The `UnitValue` type is used to extract the data type from units:
+
+```ts
+import { UnitValue, createEffect, createStore, createEvent } from "effector";
+
+const event = createEvent<{ id: string; name?: string } | { id: string }>();
+type UnitEventType = UnitValue<typeof event>;
+// {id: string; name?: string | undefined} | {id: string}
+
+const $store = createStore([false, true]);
+type UnitStoreType = UnitValue<typeof $store>;
+// boolean[]
+
+const effect = createEffect<{ token: string }, any, string>(() => {});
+type UnitEffectType = UnitValue<typeof effect>;
+// {token: string}
+
+const scope = fork();
+type UnitScopeType = UnitValue<typeof scope>;
+// any
+```
+
+### StoreValue (#type-utilities-store-value)
+
+`StoreValue` is essentially similar to `UnitValue`, but works only with stores:
+
+```ts
+import { createStore, StoreValue } from "effector";
+
+const $store = createStore(true);
+
+type StoreValueType = StoreValue<typeof $store>;
+// boolean
+```
+
+### EventPayload (#type-utilities-event-payload)
+
+Extracts the data type from events.
+Similar to `UnitValue`, but only for events:
+
+```ts
+import { createEvent, EventPayload } from "effector";
+
+const event = createEvent<{ id: string }>();
+
+type EventPayloadType = EventPayload<typeof event>;
+// {id: string}
+```
+
+### EffectParams (#type-utilities-effect-params)
+
+Takes an effect type as a generic parameter, allows getting the parameter type of an effect.
+
+```ts
+import { createEffect, EffectParams } from "effector";
+
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => {
+  // ...
+  return { name: "Alice", isAdmin: false };
+});
+
+type EffectParamsType = EffectParams<typeof fx>;
+// {id: string}
+```
+
+### EffectResult (#type-utilities-effect-results)
+
+Takes an effect type as a generic parameter, allows getting the return value type of an effect.
+
+```ts
+import { createEffect, EffectResult } from "effector";
+
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => ({ name: "Alice", isAdmin: false }));
+
+type EffectResultType = EffectResult<typeof fx>;
+// {name: string; isAdmin: boolean}
+```
+
+### EffectError (#type-utilities-effect-error)
+
+Takes an effect type as a generic parameter, allows getting the error type of an effect.
+
+```ts
+import { createEffect, EffectError } from "effector";
+
+const fx = createEffect<
+  { id: string },
+  { name: string; isAdmin: boolean },
+  { statusText: string; status: number }
+>(() => ({ name: "Alice", isAdmin: false }));
+
+type EffectErrorType = EffectError<typeof fx>;
+// {statusText: string; status: number}
+```

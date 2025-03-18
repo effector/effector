@@ -1,4 +1,4 @@
-import {ComputedRef, DeepReadonly, Ref, UnwrapRef} from '@vue/reactivity'
+import {ComputedRef, DeepReadonly, EffectScope, Reactive, Ref, UnwrapRef} from '@vue/reactivity'
 import {Domain, Store, Event, Effect, Scope} from 'effector'
 
 type GateConfig<T> = {
@@ -17,12 +17,12 @@ type Gate<Props> = {
 }
 
 type ExtractStore<T extends Record<string, Store<unknown>>> = {
-  [Key in keyof T]: T[Key] extends Store<infer U> ? Ref<UnwrapRef<U>> : never
+  [Key in keyof T]: T[Key] extends Store<infer U> ? Reactive<U> : never
 }
 
 export interface UseVModel {
   <T>(vm: Store<T>): Ref<T>
-  <T extends Record<string, Store<any>>>(vm: T): ExtractStore<T>
+  <T extends Record<string, Store<any>>>(vm: T, scope?: EffectScope): ExtractStore<T>
 }
 
 export function useStoreMap<State, Result, Keys = unknown>(
@@ -35,9 +35,10 @@ export function useStoreMap<State, Result, Keys = unknown>(
   },
   scope?: Scope,
 ): ComputedRef<Result>
-export function useVModel<T>(vm: Store<T>): Ref<UnwrapRef<T>>
+export function useVModel<T>(vm: Store<T>, scope?: EffectScope): Ref<UnwrapRef<T>>
 export function useVModel<T extends Record<string, Store<any>>>(
   vm: T,
+  scope?: EffectScope
 ): ExtractStore<T>
 /**
  * @deprecated since v24.0.0, use useUnit instead

@@ -101,6 +101,38 @@ getUsers.use(
 
 # Configuration (#configuration)
 
+## `hmr` (#configuration-hmr)
+
+:::info{title="since"}
+[effector 23.4.0](https://changelog.effector.dev/#effector-23.4.0)
+:::
+
+Enable Hot Module Replacement (HMR) support to clean up links, subscriptions and side effects managed by Effector. This prevents double-firing of Effects and watchers.
+
+:::warning{title="Experimental"}
+Although tested, this option is considered experimental and might have unexpected issues in different bundlers.
+:::
+
+### Formulae (#configuration-hmr-formulae)
+
+```json
+"effector/babel-plugin",
+  {
+    "hmr": "es"
+  }
+]
+```
+
+- Type: `"es"` | `"cjs"` | `"none"`
+  - `"es"`: Use `import.meta.hot` HMR API in bundlers that are ESM-compliant, like Vite and Rollup
+  - `"cjs"`: Use `module.hot` HMR API in bundlers that rely on CommonJS modules, like Webpack and Next.js
+  - `"none"`: Disable Hot Module Replacement.
+- Default: `none`
+
+:::info{title="In Production"}
+When bundling for production, make sure to set the `hmr` option to `"none"` to reduce bundle size and improve runtime performance.
+:::
+
 ## `importName` (#configuration-importName)
 
 Specifying import name or names to process by plugin. Import should be used in the code as specified.
@@ -140,7 +172,6 @@ SSR([Server Side Rendering](/en/api/effector/Scope)) and it's not required for c
 ```
 
 - Type: `string[]`
-
 - Factories can have any number of arguments.
 - Factories can create any number of units.
 - Factories can call any effector methods.

@@ -52,6 +52,8 @@ export type Node = {
   // reg: {[id: string]: StateRef}
   meta: {[tag: string]: any}
   family: {
+    /** amount of triggers during init */
+    triggers: number
     type: 'regular' | 'crosslink' | 'domain'
     links: Node[]
     owners: Node[]

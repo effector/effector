@@ -1,10 +1,13 @@
 ---
 title: FAQ
-description: Частозадаваемые вопросы про Effecor
+lang: ru
+description: Часто задаваемые вопросы про Effector
 redirectFrom:
   - /ru/FAQ
   - /ru/docs/faq
 ---
+
+# Часто задаваемые вопросы про Effector
 
 ## Зачем нужны плагины для babel/swc для SSR?
 

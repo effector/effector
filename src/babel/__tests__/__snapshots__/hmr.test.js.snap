@@ -1,0 +1,407 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hmr module cjs format 1`] = `
+"'use strict'
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+})
+exports.default = exports.exportedLet = exports.exportedConst = void 0
+
+var _effector = require('effector')
+
+var _factories = require('@withease/factories')
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
+function incorrect() {
+  const $si = (0, _effector.createStore)(0, {
+    sid: '-snxj9s',
+  })
+  const ei = (0, _effector.createEvent)({
+    sid: '-4v7pd2',
+  })
+  const iFx = (0, _effector.createEffect)(() => {}, {
+    sid: 'fcqi33',
+  })
+  return {
+    $si,
+    ei,
+    iFx,
+  }
+}
+
+const incorrectArrow = () =>
+  (0, _effector.createStore)(0, {
+    sid: 'tkkil4',
+  })
+
+const correct = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: 'iqxiwi',
+    fn: () =>
+      (0, _factories.createFactory)(() => {
+        const $si = (0, _effector.createStore)(0, {
+          sid: '-jhatvh',
+        })
+        const ei = (0, _effector.createEvent)({
+          sid: '-69j9k7',
+        })
+        const iFx = (0, _effector.createEffect)(() => {}, {
+          sid: '-wwg0zk',
+        })
+        return {
+          $si,
+          ei,
+          iFx,
+        }
+      }),
+  }),
+)
+const fx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEffect)(() => {}, {
+    sid: 'tbvz02',
+  }),
+)
+const attachedFx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.attach)({
+    and: {
+      effect: fx,
+    },
+    or: {
+      sid: 'vlalad',
+    },
+  }),
+)
+const $count = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)(0, {
+    sid: '-uk9gry',
+  }),
+)
+const increment = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-nc306u',
+  }),
+)
+const decrement = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-ddnzv',
+  }),
+)
+const exportedConst = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: '-2v9kq',
+  }),
+)
+exports.exportedConst = exportedConst
+let exportedLet = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: 'npo5bw',
+  }),
+)
+exports.exportedLet = exportedLet
+const model = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: '-clnt2f',
+    fn: () => (0, _factories.invoke)(correct),
+  }),
+)
+const incorrectModel = incorrect()
+const incorrectArrowModel = incorrectArrow()
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  $count.on(increment, count => count + 1),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () => $count.watch(console.log))
+const $store = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: $count,
+      },
+    ],
+    or: {
+      sid: '-jmsdfn',
+    },
+  }),
+)
+
+if (true) {
+  ;(0, _effector.withRegion)(_internalHMRRegion, () =>
+    (0, _effector.sample)({
+      and: [
+        {
+          clock: increment,
+          source: $count,
+          fn: count => count + 1,
+          target: $count,
+        },
+      ],
+      or: {
+        sid: 'k0vipu',
+      },
+    }),
+  )
+}
+
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: decrement,
+        source: $count,
+        fn: count => count - 1,
+        target: $count,
+      },
+    ],
+    or: {
+      sid: 'kgtjvl',
+    },
+  }),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: decrement,
+        target: increment.prepend(() => -1),
+      },
+    ],
+    or: {
+      sid: 'kko414',
+    },
+  }),
+)
+
+class Class {
+  constructor() {
+    this.event = (0, _effector.createEvent)(
+      {
+        sid: '-inls94',
+      },
+      {
+        and: {
+          sid: '-inls94',
+        },
+        sid: '-inls94',
+      },
+    )
+  }
+}
+
+var _default = (0, _effector.createEvent)({
+  sid: 'cq3mv4',
+})
+
+exports.default = _default
+
+if (module.hot) {
+  module.hot.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
+} else {
+  console.warn('[effector hmr] HMR is not available in current environment.')
+}
+"
+`;
+
+exports[`hmr module esm format 1`] = `
+"'use strict'
+
+Object.defineProperty(exports, '__esModule', {
+  value: true,
+})
+exports.default = exports.exportedLet = exports.exportedConst = void 0
+
+var _effector = require('effector')
+
+var _factories = require('@withease/factories')
+
+const _internalHMRRegion = (0, _effector.createNode)()
+
+function incorrect() {
+  const $si = (0, _effector.createStore)(0, {
+    sid: '-snxj9s',
+  })
+  const ei = (0, _effector.createEvent)({
+    sid: '-4v7pd2',
+  })
+  const iFx = (0, _effector.createEffect)(() => {}, {
+    sid: 'fcqi33',
+  })
+  return {
+    $si,
+    ei,
+    iFx,
+  }
+}
+
+const incorrectArrow = () =>
+  (0, _effector.createStore)(0, {
+    sid: 'tkkil4',
+  })
+
+const correct = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: 'iqxiwi',
+    fn: () =>
+      (0, _factories.createFactory)(() => {
+        const $si = (0, _effector.createStore)(0, {
+          sid: '-jhatvh',
+        })
+        const ei = (0, _effector.createEvent)({
+          sid: '-69j9k7',
+        })
+        const iFx = (0, _effector.createEffect)(() => {}, {
+          sid: '-wwg0zk',
+        })
+        return {
+          $si,
+          ei,
+          iFx,
+        }
+      }),
+  }),
+)
+const fx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEffect)(() => {}, {
+    sid: 'tbvz02',
+  }),
+)
+const attachedFx = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.attach)({
+    and: {
+      effect: fx,
+    },
+    or: {
+      sid: 'vlalad',
+    },
+  }),
+)
+const $count = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)(0, {
+    sid: '-uk9gry',
+  }),
+)
+const increment = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-nc306u',
+  }),
+)
+const decrement = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createEvent)({
+    sid: '-ddnzv',
+  }),
+)
+const exportedConst = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: '-2v9kq',
+  }),
+)
+exports.exportedConst = exportedConst
+let exportedLet = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.createStore)('', {
+    sid: 'npo5bw',
+  }),
+)
+exports.exportedLet = exportedLet
+const model = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.withFactory)({
+    sid: '-clnt2f',
+    fn: () => (0, _factories.invoke)(correct),
+  }),
+)
+const incorrectModel = incorrect()
+const incorrectArrowModel = incorrectArrow()
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  $count.on(increment, count => count + 1),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () => $count.watch(console.log))
+const $store = (0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: $count,
+      },
+    ],
+    or: {
+      sid: '-jmsdfn',
+    },
+  }),
+)
+
+if (true) {
+  ;(0, _effector.withRegion)(_internalHMRRegion, () =>
+    (0, _effector.sample)({
+      and: [
+        {
+          clock: increment,
+          source: $count,
+          fn: count => count + 1,
+          target: $count,
+        },
+      ],
+      or: {
+        sid: 'k0vipu',
+      },
+    }),
+  )
+}
+
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: decrement,
+        source: $count,
+        fn: count => count - 1,
+        target: $count,
+      },
+    ],
+    or: {
+      sid: 'kgtjvl',
+    },
+  }),
+)
+;(0, _effector.withRegion)(_internalHMRRegion, () =>
+  (0, _effector.sample)({
+    and: [
+      {
+        clock: decrement,
+        target: increment.prepend(() => -1),
+      },
+    ],
+    or: {
+      sid: 'kko414',
+    },
+  }),
+)
+
+class Class {
+  constructor() {
+    this.event = (0, _effector.createEvent)(
+      {
+        sid: '-inls94',
+      },
+      {
+        and: {
+          sid: '-inls94',
+        },
+        sid: '-inls94',
+      },
+    )
+  }
+}
+
+var _default = (0, _effector.createEvent)({
+  sid: 'cq3mv4',
+})
+
+exports.default = _default
+
+if (import.meta.hot || import.meta.webpackHot) {
+  ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
+    (0, _effector.clearNode)(_internalHMRRegion),
+  )
+} else {
+  console.warn('[effector hmr] HMR is not available in current environment.')
+}
+"
+`;

@@ -1,15 +1,15 @@
-import {Sandpack} from '@codesandbox/sandpack-react'
+import { Sandpack } from "@codesandbox/sandpack-react";
 
 const customSetup = {
   dependencies: {
-    effector: 'latest'
+    effector: "latest",
   },
-}
+};
 
-export default function LiveDemo({demoFile, layout = 'console'}) {
+export default function LiveDemo({ demoFile, layout = "console" }) {
   const files = {
-    '/index.js': demoFile,
-  }
+    "/index.js": demoFile,
+  };
 
   return (
     <Sandpack
@@ -17,7 +17,7 @@ export default function LiveDemo({demoFile, layout = 'console'}) {
       theme="auto"
       files={files}
       customSetup={customSetup}
-      options={{layout}}
+      options={{ layout }}
     />
-  )
+  );
 }

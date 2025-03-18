@@ -80,19 +80,29 @@ const $store = createStore(0);
 const $combined = combine($store, () => scopeBind(event));
 ```
 
+:::info{title="since"}
+Feature is available since `effector 23.1.0` release.
+Multiple function arguments are supported since `effector 23.3.0`
 :::
 
 :::warning
 Since `effector 23.1.0` release you don't need to personally pass the scope, but callbacks **must** adhere to the same rules as `Effect` handlers:
 
 - Synchronous functions can be used as they are.
+  <<<<<<< HEAD
 - Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/scope/).
   :::
+  =======
+- Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/Scope).
+
+:::
+
+> > > > > > > master
 
 ### Formulae (#scopeBind-methods-scopeBind-callback-formulae)
 
 ```ts
-scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T) => void;
+scopeBind(callback: (...args: Args) => T, options?: { scope?: Scope; safe?: boolean }): (...args: Args) => T;
 ```
 
 ### Arguments (#scopeBind-methods-scopeBind-callback-arguments)
@@ -104,7 +114,7 @@ scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T
 
 ### Returns (#scopeBind-methods-scopeBind-callback-returns)
 
-`(payload: T) => void` — A function with the same types as `callback`.
+`(...args: Args) => T` — A function with the same types as `callback`.
 
 ### Examples (#scopeBind-methods-scopeBind-callback-examples)
 

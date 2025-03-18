@@ -1,6 +1,7 @@
 import type {Scope, Store} from '../unit.h'
-import {forIn, includes} from '../collection'
 import {assert} from '../validate'
+import {forEach, forIn, includes} from '../collection'
+import {printErrorWithStack} from '../throw'
 
 const noopSerializer = (x: any) => x
 /**
@@ -10,10 +11,13 @@ export function serialize(
   scope: Scope,
   config: {ignore?: Array<Store<any>>} = {},
 ) {
-  if (scope.warnSerialize) {
+  if (scope.warnSerializeTraces.size) {
     console.error(
-      'There is a store without sid in this scope, its value is omitted',
+      'serialize: One or more stores dont have sids, their values are omitted',
     )
+    forEach(scope.warnSerializeTraces, stack => {
+      printErrorWithStack('store should have sid or `serialize: ignore`', stack)
+    })
   }
   assert(!scope.hasSidDoubles, 'duplicate sid found in this scope')
   const ignoredStores = config.ignore ? config.ignore.map(({sid}) => sid) : []

@@ -37,7 +37,7 @@ Do not modify the `state` value! It is a [derived store](/en/api/effector/Store#
 ### Example (#properties-state-example)
 
 ```tsx
-import {createGate, useGate} from 'effector-react';
+import { createGate, useGate } from "effector-react";
 
 const Gate = createGate();
 
@@ -79,7 +79,7 @@ Do not modify the `status` value! It is a [derived store](/en/api/effector/Store
 ### Example (#properties-status-example)
 
 ```tsx
-import {createGate, useGate} from 'effector-react';
+import { createGate, useGate } from "effector-react";
 
 const Gate = createGate();
 

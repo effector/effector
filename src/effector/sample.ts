@@ -1,5 +1,5 @@
 import type {Cmd, StateRef} from './index.h'
-import type {CommonUnit, DataCarrier} from './unit.h'
+import type {CommonUnit, DataCarrier, Store} from './unit.h'
 import {combine} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
@@ -21,7 +21,6 @@ import {createEvent} from './createUnit'
 import {createNode, createLinkNode, own} from './createNode'
 import {forEach} from './collection'
 import {STACK, VALUE} from './tag'
-import {merge} from './merge'
 import {applyTemplate} from './template'
 import {generateErrorTitle} from './naming'
 
@@ -118,7 +117,7 @@ export const createSampling = (
   } else {
     assertNodeSet(clock, errorTitle, 'clock')
     if (Array.isArray(clock)) {
-      clock = merge(clock as CommonUnit[])
+      clock = createLinkNode(clock as CommonUnit[], [], [], method)
     }
   }
   if (sourceIsClock) {
@@ -237,7 +236,10 @@ const syncSourceState = (
         mov({from: STACK, target: sourceRef}),
         mov({from: VALUE, store: true, target: hasSource}),
       ],
-      family: {owners: [source, target, clock], links: target},
+      family: {
+        owners: [...new Set([source, target, clock].flat())],
+        links: target,
+      },
       meta: {op: method},
       regional: true,
     })

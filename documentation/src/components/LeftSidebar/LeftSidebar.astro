@@ -2,7 +2,8 @@
 import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
 import { getLocalizedSidebar } from "../../navigation";
-import ChevronRight from 'src/icons/ChevronRight.astro'
+import ChevronRight from "src/icons/ChevronRight.astro";
+import SidebarScrollRestore from "./SidebarScrollRestore.astro";
 
 type Props = {
   currentPage: string;
@@ -17,186 +18,198 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
 ---
 
 <nav aria-labelledby="grid-left">
-  <ul class="nav-groups">
-    {baseSidebar.map((group, index) => (
-      <li>
-        <div class="nav-group">
-          <button
-            class="nav-group-title"
-            aria-expanded="true"
-            aria-controls={`group-${index}`}
-          >
-            {group.title}
-          <ChevronRight class="arrow" />
-          </button>
-          <ul id={`group-${index}`}>
-            {group.items.map((item) => (
-              <li class="nav-link">
-                <a
-                  href={item.link}
-                  aria-current={currentPageMatch === item.link ? "page" : false}
-                  target={item.link.startsWith("/") ? undefined : "_blank"}
-                >
-                  {item.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </li>
-    ))}
+  <ul id="sidebar" class="nav-groups">
+    {
+      baseSidebar.map((group, index) => (
+        <li>
+          <div class="nav-group">
+            <button class="nav-group-title" aria-expanded="true" aria-controls={`group-${index}`}>
+              {group.title}
+              <ChevronRight class="arrow" />
+            </button>
+            <ul id={`group-${index}`}>
+              {group.items.map((item) => (
+                <li class="nav-link">
+                  <a
+                    href={item.link}
+                    aria-current={currentPageMatch === item.link ? "page" : false}
+                    target={item.link.startsWith("/") ? undefined : "_blank"}
+                    data-fallback={item.isFallback}
+                  >
+                    <span> {item.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
   </ul>
+  <SidebarScrollRestore />
 </nav>
 
 <script>
   function setupNavigation() {
-    const navGroups = document.querySelectorAll('.nav-group');
+    const navGroups = document.querySelectorAll(".nav-group");
     navGroups.forEach((group) => {
-      const button = group.querySelector('button');
-      const content = group.querySelector('ul');
+      const button = group.querySelector("button");
+      const content = group.querySelector("ul");
       if (button && content) {
-        button.addEventListener('click', () => {
-          const expanded = button.getAttribute('aria-expanded') === 'true';
-          button.setAttribute('aria-expanded', (!expanded).toString());
+        button.addEventListener("click", () => {
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", (!expanded).toString());
 
-          content.classList.toggle('collapsed', expanded);
-          button.classList.toggle('collapsed', expanded);
+          content.classList.toggle("collapsed", expanded);
+          button.classList.toggle("collapsed", expanded);
         });
       }
     });
   }
 
-  document.addEventListener('DOMContentLoaded', setupNavigation);
-  document.addEventListener('astro:after-swap', setupNavigation);
+  document.addEventListener("DOMContentLoaded", setupNavigation);
+  document.addEventListener("astro:after-swap", setupNavigation);
 </script>
 
 <style>
-    nav {
-        width: 100%;
-    }
+  nav {
+    width: 100%;
+  }
 
+  .nav-groups {
+    --fast-ease: cubic-bezier(0, 0.18, 0.25, 1);
+    position: sticky;
+    top: calc(var(--theme-navbar-height) + 2rem);
+    padding: 2rem 0;
+    height: 100%;
+    max-height: 100vh;
+    overflow-x: visible;
+    overflow-y: auto;
+  }
+
+  .nav-groups > li + li {
+    margin-top: 1rem;
+  }
+
+  .nav-groups > :first-child {
+    padding-top: var(--doc-padding);
+  }
+
+  .nav-groups > :first-child h2 {
+    margin-top: 0;
+  }
+
+  .nav-groups > :last-child {
+    margin-bottom: var(--theme-navbar-height);
+    padding-bottom: 2rem;
+  }
+
+  .nav-group {
+    @apply flex flex-col;
+  }
+
+  .nav-group-title {
+    @apply rounded-md px-4 py-1;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1rem;
+    /*text-transform: uppercase;*/
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .nav-group-title:hover,
+  .nav-group-title:focus {
+    background-color: var(--theme-bg-hover);
+  }
+
+  .nav-group-title .arrow {
+    width: 1em;
+    height: 1em;
+    transition: transform 0.2s var(--fast-ease);
+  }
+
+  .nav-group-title.collapsed .arrow {
+    transform: rotate(90deg);
+  }
+
+  .nav-group ul {
+    display: flex;
+    flex-direction: column;
+    transition:
+      max-height 0.2s var(--fast-ease),
+      opacity 0.2s var(--fast-ease);
+    max-height: 1000px;
+    overflow: hidden;
+    opacity: 1;
+  }
+
+  .nav-group ul.collapsed {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nav-link a {
+    @apply flex items-center rounded-md px-7 py-1 text-base;
+    color: var(--theme-left-sidebar-item-text);
+    font: inherit;
+    text-decoration: none;
+  }
+
+  .nav-link a[data-fallback] span:after {
+    content: "EN";
+    font-weight: bold;
+    font-size: 0.75rem;
+    vertical-align: super;
+    margin-left: 5px;
+  }
+
+  .nav-link a:hover,
+  .nav-link a:focus {
+    background-color: var(--theme-bg-hover);
+  }
+
+  .nav-link a[aria-current="page"] {
+    background-color: var(--theme-accent);
+    color: var(--theme-bg);
+    font-weight: 600;
+  }
+
+  .nav-link a[href^="http://"]::after,
+    .nav-link a[href^="https://"]::after
+  {
+    display: inline-block;
+    background-image: url("/external.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 1em;
+    height: 1em;
+    content: "";
+  }
+
+  :global(.theme-dark) .nav-link a[href^="http://"]::after,
+    :global(.theme-dark) .nav-link a[href^="https://"]::after
+  {
+    filter: invert();
+  }
+
+  @media (min-width: 50em) {
     .nav-groups {
-        --fast-ease: cubic-bezier(0, 0.18, 0.25, 1);
-        position: sticky;
-        top: calc(var(--theme-navbar-height) + 2rem);
-        padding: 2rem 0;
-        height: 100%;
-        max-height: 100vh;
-        overflow-x: visible;
-        overflow-y: auto;
+      padding: 0;
     }
-
-    .nav-groups > li + li {
-        margin-top: 1rem;
-    }
-
-    .nav-groups > :first-child {
-        padding-top: var(--doc-padding);
-    }
-
-    .nav-groups > :first-child h2 {
-        margin-top: 0;
-    }
-
-    .nav-groups > :last-child {
-        margin-bottom: var(--theme-navbar-height);
-        padding-bottom: 2rem;
-    }
-
-    .nav-group {
-        @apply flex flex-col;
-    }
-
-    .nav-group-title {
-        @apply rounded-md py-1 px-4;
-        margin: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        font-weight: bold;
-        font-size: 1rem;
-        text-transform: uppercase;
-        background: none;
-        border: none;
-        cursor: pointer;
-        text-align: left;
-    }
-
-    .nav-group-title:hover,
-    .nav-group-title:focus {
-        background-color: var(--theme-bg-hover);
-    }
-
-    .nav-group-title .arrow {
-        width: 1em;
-        height: 1em;
-        transition: transform 0.2s var(--fast-ease);
-    }
-
-    .nav-group-title.collapsed .arrow {
-        transform: rotate(90deg);
-    }
-
-    .nav-group ul {
-        display: flex;
-        flex-direction: column;
-        transition: max-height 0.2s var(--fast-ease), opacity 0.2s var(--fast-ease);
-        max-height: 1000px;
-        overflow: hidden;
-        opacity: 1;
-    }
-
-    .nav-group ul.collapsed {
-        max-height: 0;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .nav-link a {
-        @apply flex items-center rounded-md px-7 py-1 text-base;
-        color: inherit;
-        font: inherit;
-        text-decoration: none;
-    }
-
-    .nav-link a:hover,
-    .nav-link a:focus {
-        background-color: var(--theme-bg-hover);
-    }
-
-    .nav-link a[aria-current="page"] {
-        background-color: var(--theme-accent);
-        color: var(--theme-bg);
-        font-weight: 600;
-    }
-
-    .nav-link a[href^="http://"]::after,
-    .nav-link a[href^="https://"]::after {
-        display: inline-block;
-        background-image: url("/external.svg");
-        background-position: center;
-        background-size: contain;
-        background-repeat: no-repeat;
-        width: 1em;
-        height: 1em;
-        content: "";
-    }
-
-    :global(.theme-dark) .nav-link a[href^="http://"]::after,
-    :global(.theme-dark) .nav-link a[href^="https://"]::after {
-        filter: invert();
-    }
-
-    @media (min-width: 50em) {
-        .nav-groups {
-            padding: 0;
-        }
-    }
+  }
 </style>
 
 <style is:global>
-    :root.theme-dark .nav-link a[aria-current="page"] {
-        color: hsla(var(--color-base-white), 100%, 1);
-    }
+  :root.theme-dark .nav-link a[aria-current="page"] {
+    color: hsla(var(--color-base-white), 100%, 1);
+  }
 </style>

@@ -800,7 +800,7 @@ describe('useUnit', () => {
       )
     }
 
-    function AppBase({page, data}: {data: any; page: JSX.Element}) {
+    function AppBase({page, data}: {data: any; page: React.ReactNode}) {
       const scope = React.useMemo(() => {
         const scope = fork({
           values: {
@@ -942,20 +942,11 @@ describe('useUnit', () => {
           </Provider>
         </React.StrictMode>,
       )
-      // @ ts-expect-error
-      // if (globalThis.REACT_17) {
-      //   expect(container.firstChild).toMatchInlineSnapshot(`
-      //     <div>
-      //       []
-      //     </div>
-      //   `)
-      // } else {
       expect(container.firstChild).toMatchInlineSnapshot(`
         <div>
           Loading....
         </div>
       `)
-      // }
       await act(async () => {
         await allSettled(event, {scope})
       })

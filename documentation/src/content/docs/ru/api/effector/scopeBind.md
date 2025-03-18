@@ -1,16 +1,14 @@
 ---
 title: scopeBind
 description: scopeBind это метод привязки ивента или эффекта к scope для последующего вызова
-redirectFrom:
-  - /api/effector/scopeBind
-  - /docs/api/effector/scopeBind
+lang: ru
 ---
 
 ```ts
 import { scopeBind } from "effector";
 ```
 
-`scopeBind` это метод привязки юнита (ивента или эффекта) к [скоупу](/en/api/effector/Scope) для последующего вызова. Effector поддерживает императивные вызовы ивентов внутри наблюдателей, однако есть случаи, когда вы должны явно привязать ивенты к скоупу, например, при запуске ивентов из колбеков внутри `setTimeout` или `setInterval`.
+`scopeBind` — метод для привязки юнита (эвента или эффекта) к [скоупу](/ru/api/effector/Scope), который может быть вызван позже. Эффектор поддерживает императивный вызов эвентов внутри обработчиков, однако существуют случаи, когда необходимо явно привязать эвенты к скоупу — например, при вызове эвентов из колбэков `setTimeout` или `setInterval`.
 
 # Методы (#scopeBind-methods)
 
@@ -25,20 +23,20 @@ scopeBind<T>(event: EventCallable<T>, options?: {scope?: Scope, safe?: boolean})
 
 ### Аргументы (#scopeBind-methods-scopeBind-event-arguments)
 
-1. `event` [_EventCallable_](/en/api/effector/Event) или [_Effect_](/en/api/effector/Effect), который будет привязан к скоупу.
-2. `options` (_Object_): Опциональная конфигурация.
-   - `scope` (_Scope_): Скоуп, к которому будет привязан юнит.
-   - `safe` (_Boolean_): Флаг, при включении которого не будет выбрасываться ошибка, если нет скоупа или он не передан.
+1. `event` [_EventCallable_](/ru/api/effector/Event) или [_Effect_](/ru/api/effector/Effect) для привязки к скоупу.
+2. `options` (_Object_): опциональные настройки
+   - `scope` (_Scope_): скоуп, к которому нужно привязать эвент
+   - `safe` (_Boolean_): флаг для подавления исключений, если скоуп отсутствует
 
 ### Возвращает (#scopeBind-methods-scopeBind-event-returns)
 
-`(payload: T) => void` — A function with the same types as `event`.
+`(payload: T) => void` — функция с теми же типами, что и у `event`.
 
 ### Примеры (#scopeBind-methods-scopeBind-event-examples)
 
-#### Стандартное использование (#scopeBind-methods-scopeBind-event-examples-basic-usage)
+#### Базовый пример (#scopeBind-methods-scopeBind-event-examples-basic-usage)
 
-Мы собираемся вызовать `changeLocation` внутри `history.listen`, но нет способа, с помощью которого effector мог бы ассоциировать определённый скоуп с этим ивентом, так что мы явно привяжем его к соответствующему скоупу с помощью `scopeBind`.
+Мы собираемся вызвать `changeLocation` внутри колбэка `history.listen`, поэтому нет способа для эффектора ассоциировать эвент с соответствующим скоупом. Нам нужно явно привязать эвент к скоупу, используя `scopeBind`.
 
 ```ts
 import { createStore, createEvent, attach, scopeBind } from "effector";
@@ -70,7 +68,7 @@ sample({
 
 Привязывает к скоупу колбек, который будет вызван позже. Привязанная версия функции имеет все свойства оригинальной, то есть если оригинальная функция выбросит ошибку, когда вызвана с определённым аргументом, то привязанная версия также выбросит ошибку при тех же обстоятельствах.
 
-:::info{title="Информация"}
+:::info{title="Обратите внимание"}
 Начиная с `effector 24` релиза scopeBind может быть вызван без `scope` и `safe` опций в: `map`, `watch`, `combine`
 
 ```ts
@@ -82,7 +80,7 @@ const $combined = combine($store, () => scopeBind(event));
 
 :::
 
-:::warning{title="Внимание"}
+:::warning{title="Обратите внимание"}
 С `effector 23.1.0` релиза вам не нужно самостоятельно передавать скоуп, но колбеки **обязаны** соответствовать правилам хендлеров внутри `Эффекта`:
 
 - Синхронные функции могут использоваться точно так же.
@@ -92,19 +90,19 @@ const $combined = combine($store, () => scopeBind(event));
 ### Формула (#scopeBind-methods-scopeBind-callback-formulae)
 
 ```ts
-scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T) => void;
+scopeBind(callback: (...args: Args) => T, options?: { scope?: Scope; safe?: boolean }): (...args: Args) => T;
 ```
 
 ### Аргументы (#scopeBind-methods-scopeBind-callback-arguments)
 
-1. `callback` (_Function_): Любая функция, которая должна быть привязана к скоупу.
-2. `options` (_Object_): Опциональная конфигурация.
-   - `scope` (_Scope_): Скоуп, к которому должен быть привязан колбек.
-   - `safe` (_Boolean_): Флаг, при включении которого не будет выбрасываться ошибка, если нет скоупа или он не передан.
+1. `callback` (_Function_): любая функция, которую нужно привязать к скоупу.
+2. `options` (_Object_): необязательные настройки.
+   - `scope` (_Scope_): скоуп, к которому нужно привязать эвент.
+   - `safe` (_Boolean_): флаг для подавления исключений, если скоуп отсутствует.
 
 ### Возвращает (#scopeBind-methods-scopeBind-callback-returns)
 
-`(payload: T) => void` — Функцию с тем же типом, что и переданный `колбек`.
+`(...args: Args) => T` — функция с теми же типами, что и у `callback`.
 
 ### Примеры (#scopeBind-methods-scopeBind-callback-examples)
 
