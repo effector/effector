@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "check:links": "tsx ./links-checker.ts",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -63,11 +64,13 @@
   "devDependencies": {
     "@types/mdast": "^4.0.4",
     "@types/unist": "^3.0.3",
+    "glob": "^11.0.1",
     "mdast-util-directive": "^3.0.0",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-tailwindcss": "^0.6.6",
+    "tsx": "^4.19.3",
     "typescript": "^5.5.4"
   }
 }

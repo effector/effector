@@ -61,13 +61,13 @@ const maybeDataReceived = createEvent<Data | null>();
 // maybeDataReceived: EventCallable<Data | null>
 ```
 
-[Read more in the explanation section](/en/explanation/events#typescript).
+[Read more in the explanation section](/en/essentials/events/#typescript).
 
 ## Call as function `event(argument)` (#eventCallable-call-argument)
 
 Initiates an event with the provided argument, which in turn activates any registered subscribers.
 
-[Read more in the explanation section](/en/explanation/events#event-calling).
+[Read more in the explanation section](/en/essentials/events#event-calling).
 
 ### Formulae (#eventCallable-call-argument-formulae)
 

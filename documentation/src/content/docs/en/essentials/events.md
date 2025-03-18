@@ -293,4 +293,4 @@ sample({
 Combining events through `sample` is preferred over directly calling events inside `watch` or other handlers, as it makes the data flow more explicit and predictable.
 :::
 
-[API reference for Event](/en/api/effecor/Event).
+[API reference for Event](/en/api/effector/Event).

@@ -64,13 +64,13 @@ const maybeDataReceived = createEvent<Data | null>();
 // maybeDataReceived: EventCallable<Data | null>
 ```
 
-[Подробнее в разделе объяснений](/ru/explanation/events#typescript).
+[Подробнее в разделе объяснений](/ru/essentials/events#typescript).
 
 ## Вызов как функция `event(argument)` (#eventCallable-call-argument)
 
 Инициирует событие с переданным аргументом, который, в свою очередь, активирует всех зарегистрированных подписчиков.
 
-[Подробнее в разделе объяснений](/ru/explanation/events#event-calling).
+[Подробнее в разделе объяснений](/ru/essentials/events#event-calling).
 
 ### Formulae (#eventCallable-call-argument-formulae)
 
@@ -137,7 +137,7 @@ stringifiedReceived("123"); // ОК
 [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
 :::
 
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
+Происходит, когда события или эффекты вызываются из [чистых функций](/ru/explanation/glossary#purity), таких как мапперы:
 
 ```ts
 const someHappened = createEvent<number>();
@@ -232,7 +232,7 @@ const second: EventCallable<T> = first.prepend(fn);
 [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
 :::
 
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
+Происходит, когда события или эффекты вызываются из [чистых функций](/ru/explanation/glossary#purity), таких как мапперы:
 
 ```ts
 const someHappened = createEvent<string>();
@@ -413,7 +413,7 @@ const second: Event<F> = first.map(fn);
 [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
 :::
 
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
+Происходит, когда события или эффекты вызываются из [чистых функций](/ru/explanation/glossary#purity), таких как мапперы:
 
 ```ts
 const someHappened = createEvent<number>();
@@ -527,7 +527,7 @@ const second: Event<T> = first.filter({ fn });
 [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
 :::
 
-Происходит, когда события или эффекты вызываются из [чистых функций](/glossary#purity), таких как guards:
+Происходит, когда события или эффекты вызываются из [чистых функций](/ru/explanation/glossary#purity), таких как guards:
 
 ```ts
 const countReceived = createEvent<number>();
@@ -661,7 +661,7 @@ const second: Event<F> = first.filterMap(fn);
 [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0-spacewatch)
 :::
 
-Происходит, когда события или эффекты вызываются из [чистых функций](/ru/glossary#purity), таких как мапперы:
+Происходит, когда события или эффекты вызываются из [чистых функций](/ru/explanation/glossary#purity), таких как мапперы:
 
 ```ts
 const countReceived = createEvent<number>();
@@ -760,7 +760,7 @@ listReceived(["redux", "mobx"]);
 Его основное предназначение — для краткосрочного отладки и логирования.
 :::
 
-[Подробнее в разделе объяснений](/ru/explanation/events#event-watch).
+[Подробнее в разделе объяснений](/ru/essentials/events#event-watch).
 
 #### Formulae (#event-methods-watch-watcher-formulae)
 
