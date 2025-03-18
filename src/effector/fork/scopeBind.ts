@@ -4,7 +4,7 @@ import type {Scope} from '../unit.h'
 
 /** bind event to scope */
 export function scopeBind(
-  unit: (x: any) => any,
+  unit: (...args: any[]) => any,
   {scope, safe}: {scope?: Scope; safe?: true} = {},
 ) {
   assert(
@@ -14,7 +14,7 @@ export function scopeBind(
 
   const targetForkPage = scope || forkPage!
 
-  return (x: any) => {
+  return (...args: any[]) => {
     let final: any
     let failed = false
 
@@ -25,7 +25,7 @@ export function scopeBind(
 
     setForkPage(targetForkPage)
     try {
-      final = unit(x)
+      final = unit(...args)
     } catch (err) {
       final = err
       failed = true

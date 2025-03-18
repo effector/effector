@@ -365,3 +365,11 @@ describe('scopeBind should not throw in safe context', () => {
     expect(fx2).rejects.toThrow()
   })
 })
+
+test('scopeBind should work with functions with multiply parameters', async () => {
+  const func = scopeBind((first: number, second: number) => first + second, {
+    scope: fork(),
+  })
+
+  expect(func(10, 20)).toBe(30)
+})
