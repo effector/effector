@@ -2271,6 +2271,284 @@ const result = _withFactory({
 "
 `;
 
+exports[`babel-plugin should hmr 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/hmr.js'
+import {withFactory as _withFactory} from 'effector'
+import {createEvent, createStore, sample, createEffect, attach} from 'effector'
+import {createFactory, invoke} from '@withease/factories'
+
+function incorrect() {
+  const $si = createStore(0, {
+    loc: {
+      file: _effectorFileName,
+      line: 5,
+      column: 14,
+    },
+    name: '$si',
+    sid: 'b1wwb8',
+  })
+  const ei = createEvent({
+    loc: {
+      file: _effectorFileName,
+      line: 6,
+      column: 13,
+    },
+    name: 'ei',
+    sid: '-rn78ie',
+  })
+  const iFx = createEffect(() => {}, {
+    loc: {
+      file: _effectorFileName,
+      line: 7,
+      column: 14,
+    },
+    name: 'iFx',
+    sid: '-2nwobz',
+  })
+  return {
+    $si,
+    ei,
+    iFx,
+  }
+}
+
+const incorrectArrow = () =>
+  createStore(0, {
+    loc: {
+      file: _effectorFileName,
+      line: 12,
+      column: 29,
+    },
+    name: 'incorrectArrow',
+    sid: 'ig6de0',
+  })
+
+const correct = _withFactory({
+  sid: '-vaa8eq',
+  fn: () =>
+    createFactory(() => {
+      const $si = createStore(0, {
+        loc: {
+          file: _effectorFileName,
+          line: 15,
+          column: 14,
+        },
+        name: '$si',
+        sid: '48znmn',
+      })
+      const ei = createEvent({
+        loc: {
+          file: _effectorFileName,
+          line: 16,
+          column: 13,
+        },
+        name: 'ei',
+        sid: '-2207ef',
+      })
+      const iFx = createEffect(() => {}, {
+        loc: {
+          file: _effectorFileName,
+          line: 17,
+          column: 14,
+        },
+        name: 'iFx',
+        sid: '-n7i45e',
+      })
+      return {
+        $si,
+        ei,
+        iFx,
+      }
+    }),
+  name: 'correct',
+  method: 'createFactory',
+  loc: {
+    file: _effectorFileName,
+    line: 14,
+    column: 16,
+  },
+})
+
+const fx = createEffect(() => {}, {
+  loc: {
+    file: _effectorFileName,
+    line: 22,
+    column: 11,
+  },
+  name: 'fx',
+  sid: 'ihds5a',
+})
+const attachedFx = attach({
+  and: {
+    effect: fx,
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 23,
+      column: 19,
+    },
+    name: 'attachedFx',
+    sid: '-6t8lif',
+  },
+})
+const $count = createStore(0, {
+  loc: {
+    file: _effectorFileName,
+    line: 25,
+    column: 15,
+  },
+  name: '$count',
+  sid: 'rphre8',
+})
+const increment = createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 26,
+    column: 18,
+  },
+  name: 'increment',
+  sid: '-ct7axc',
+})
+const decrement = createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 27,
+    column: 18,
+  },
+  name: 'decrement',
+  sid: '76wskz',
+})
+export const exportedConst = createStore('', {
+  loc: {
+    file: _effectorFileName,
+    line: 29,
+    column: 29,
+  },
+  name: 'exportedConst',
+  sid: 'ajite6',
+})
+export let exportedLet = createStore('', {
+  loc: {
+    file: _effectorFileName,
+    line: 30,
+    column: 25,
+  },
+  name: 'exportedLet',
+  sid: '-gtjyj0',
+})
+
+const model = _withFactory({
+  sid: '6t3o8j',
+  fn: () => invoke(correct),
+  name: 'model',
+  method: 'invoke',
+  loc: {
+    file: _effectorFileName,
+    line: 32,
+    column: 14,
+  },
+})
+
+const incorrectModel = incorrect()
+const incorrectArrowModel = incorrectArrow()
+$count.on(increment, count => count + 1)
+$count.watch(console.log)
+const $store = sample({
+  and: [
+    {
+      clock: $count,
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 39,
+      column: 15,
+    },
+    name: '$store',
+    sid: '-sr1fk1',
+  },
+})
+
+if (true) {
+  sample({
+    and: [
+      {
+        clock: increment,
+        source: $count,
+        fn: count => count + 1,
+        target: $count,
+      },
+    ],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 42,
+        column: 2,
+      },
+      sid: 'cs9di2',
+    },
+  })
+}
+
+sample({
+  and: [
+    {
+      clock: decrement,
+      source: $count,
+      fn: count => count - 1,
+      target: $count,
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 50,
+      column: 0,
+    },
+    sid: 'd87ent',
+  },
+})
+sample({
+  and: [
+    {
+      clock: decrement,
+      target: increment.prepend(() => -1),
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 57,
+      column: 0,
+    },
+    sid: 'dc1ytc',
+  },
+})
+
+class Class {
+  event = createEvent({
+    loc: {
+      file: _effectorFileName,
+      line: 63,
+      column: 10,
+    },
+    sid: '-rk7k',
+  })
+}
+
+export default createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 66,
+    column: 15,
+  },
+  sid: '1edb3c',
+})
+"
+`;
+
 exports[`babel-plugin should import from another packages 1`] = `
 "var _effectorFileName =
   '/src/babel/__tests__/fixtures/import-from-another-packages.js'

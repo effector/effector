@@ -2,7 +2,7 @@ import type {Template} from '../forest/index.h'
 import type {NodeUnit, Node, ID} from './index.h'
 import {getParent, getGraph} from './getter'
 import {createNode} from './createNode'
-import {is} from './is'
+import {is} from './validate'
 
 type DeclarationSourceReporter = (
   node: Node | 'region',
@@ -48,7 +48,7 @@ export const readSidRoot = (sid?: string | null) => {
    * If there is no regionStack or sidRoot in regionStack, return sid as is (including null and undefined cases)
    */
   if (!regionStack || !regionStack.sidRoot) return sid
- 
+
   /**
    * If sid is provided, return sidRoot + sid
    */
@@ -58,7 +58,7 @@ export const readSidRoot = (sid?: string | null) => {
 
   /**
    * If sid is not provided, but region stack is available:
-   * 
+   *
    * Try to derive sid from regionStack.sidRoot and regionStack.sidOffset.
    */
   return `${regionStack.sidRoot}|${regionStack.sidOffset++}`
