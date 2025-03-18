@@ -31,7 +31,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
               {group.items.map((item) => (
                 <li class="nav-link">
                   <a
-                    href={item.link}
+                    href={item.link.startsWith("/") ? `${item.link}/` : item.link}
                     aria-current={currentPageMatch === item.link ? "page" : false}
                     target={item.link.startsWith("/") ? undefined : "_blank"}
                     data-fallback={item.isFallback}
