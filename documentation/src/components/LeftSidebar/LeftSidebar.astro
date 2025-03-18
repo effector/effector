@@ -21,7 +21,7 @@ const activePanelIndex = getActiveTabSidebar(slug);
 const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
 ---
 
-<tabbed-sidebar class="navigation">
+<tabbed-sidebar id="sidebar" class="navigation">
   <nav aria-labelledby="grid-left">
     <div>
       <ul class="tabs navigation-panel">
@@ -69,7 +69,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
           data-initial={panelId === activePanelIndex ? "true" : "false"}
           role="tabpanel"
         >
-          <ul id="sidebar" class="nav-groups">
+          <ul class="nav-groups">
             {sidebarItems.map((group, index) => (
               <li>
                 <div class="nav-group">
@@ -99,11 +99,11 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
               </li>
             ))}
           </ul>
-          <SidebarScrollRestore />
         </div>
       ))
     }
   </nav>
+  <SidebarScrollRestore />
 </tabbed-sidebar>
 
 <script>

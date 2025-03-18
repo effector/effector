@@ -260,7 +260,7 @@ export const guidesAndRecipes: LSidebarGroup[] = [
     text: { en: "Resources", ru: "Ресурсы", uz: "Resurslar" },
     items: [
       {
-        text: { en: "Store SID", ru: "Хранилища и их SID", uz: "Store SID" },
+        text: { en: "Store SID", ru: "Сторы и их SID", uz: "Store SID" },
         link: "/explanation/sids",
       },
       {
@@ -383,7 +383,7 @@ export const effectorReact: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Import map" },
+    text: { en: "Import map", ru: "Подпакеты" },
     items: [
       {
         text: { en: "effector-react/compat" },
@@ -396,7 +396,7 @@ export const effectorReact: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Low-level API" },
+    text: { en: "Low-level API", ru: "Низкоуровневое API" },
     collapsed: true,
     items: [
       {
@@ -475,7 +475,7 @@ export const effectorSolid: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Import map" },
+    text: { en: "Import map", ru: "Подпакеты" },
     items: [
       {
         text: { en: "effector-solid/scope" },
@@ -597,7 +597,7 @@ export const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Import map" },
+    text: { en: "Import map", ru: "Подпакеты" },
     items: [
       {
         text: { en: "effector-vue/composition" },
@@ -768,7 +768,7 @@ export const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Low-level API" },
+    text: { en: "Low-level API", ru: "Низкоуровневое API" },
     collapsed: true,
     items: [
       {
@@ -794,7 +794,7 @@ export const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Import map" },
+    text: { en: "Import map", ru: "Подпакеты" },
     items: [
       {
         text: { en: "effector/compat" },
@@ -811,7 +811,7 @@ export const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Compiler Plugins" },
+    text: { en: "Compiler Plugins", ru: "Плагины для сборки" },
     items: [
       {
         text: { en: "Babel plugin" },
