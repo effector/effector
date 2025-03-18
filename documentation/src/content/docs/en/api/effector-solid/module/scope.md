@@ -11,11 +11,11 @@ import {} from "effector-solid/scope";
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends using the main module of `effector-solid` instead.
 :::
 
-Provides all exports from [effector-solid](/en/api/effector-solid), but enforces the application to use [Scope](/en/api/effector/scope) for all components.
+Provides all exports from [effector-solid](/en/api/effector-solid), but enforces the application to use [Scope](/en/api/effector/Scope) for all components.
 
 ## Usage (#usage)
 
-You can use this module in the same way as [effector-solid](/en/api/effector-solid), but it will require passing [Scope](/en/api/effector/scope) to [Provider](/en/api/effector-solid/Provider) component.
+You can use this module in the same way as [effector-solid](/en/api/effector-solid), but it will require passing [Scope](/en/api/effector/Scope) to [Provider](/en/api/effector-solid/Provider) component.
 
 ```jsx
 // main.js
@@ -48,7 +48,7 @@ Since `effector-solid/scope` is deprecated, it is recommended to migrate to [eff
 
 ## Scope enforcement (#scope-enforcement)
 
-All modern hooks of `effector-solid` are designed to work with [Scope](/en/api/effector/scope). If you want to imitate the behavior of the `effector-solid/scope` module, you can pass a second parameter to hooks with an option `forceScope: true`. In this case, the hook will throw an error if the [Scope](/en/api/effector/scope) is not passed to [Provider](/en/api/effector-solid/Provider).
+All modern hooks of `effector-solid` are designed to work with [Scope](/en/api/effector/Scope). If you want to imitate the behavior of the `effector-solid/scope` module, you can pass a second parameter to hooks with an option `forceScope: true`. In this case, the hook will throw an error if the [Scope](/en/api/effector/Scope) is not passed to [Provider](/en/api/effector-solid/Provider).
 
 ```diff
 - import { useUnit } from 'effector-solid/scope'

@@ -91,7 +91,7 @@ const sendWithAuthFx = createEffect(async () => {
 
 ## `.getState($store)` (#methods-getState)
 
-Возвращает значение хранилища в данном `Scope`.
+Возвращает значение стора в данном `Scope`.
 
 ### Формулы (#methods-getState-formulae)
 
@@ -104,11 +104,11 @@ const value: T = scope.getState($value);
 
 ### Возвращает (#methods-getState-returns)
 
-`T` значение хранилища
+`T` значение стора
 
 ### Примеры (#methods-getState-examples)
 
-Создайте два экземпляра приложения, вызовите события в них и проверьте значение хранилища `$counter` в обоих экземплярах:
+Создайте два экземпляра приложения, вызовите события в них и проверьте значение стора `$counter` в обоих экземплярах:
 
 ```js
 import { createStore, createEvent, fork, allSettled } from "effector";

@@ -47,7 +47,6 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@testing-library/jest-dom": "^5.16.4",
-    "@types/babel-core": "^6.25.6",
     "@types/connect": "^3.4.33",
     "@types/core-js": "^2.5.4",
     "@types/jest": "^27.0.3",

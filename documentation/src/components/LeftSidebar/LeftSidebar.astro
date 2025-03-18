@@ -6,6 +6,7 @@ import ChevronRight from "src/icons/ChevronRight.astro";
 import { trimTrailingSlash } from "src/libs/path";
 import { PANEL_ITEMS } from "src/sidebar-config";
 import { PANEL_FRAMEWORK_ITEMS } from "src/sidebar-config";
+import SidebarScrollRestore from "./SidebarScrollRestore.astro";
 
 type Props = {
   currentPage: string;
@@ -68,7 +69,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
           data-initial={panelId === activePanelIndex ? "true" : "false"}
           role="tabpanel"
         >
-          <ul class="nav-groups">
+          <ul id="sidebar" class="nav-groups">
             {sidebarItems.map((group, index) => (
               <li>
                 <div class="nav-group">
@@ -98,6 +99,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
               </li>
             ))}
           </ul>
+          <SidebarScrollRestore />
         </div>
       ))
     }

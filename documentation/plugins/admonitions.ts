@@ -8,7 +8,7 @@ import type { TextDirective } from "mdast-util-directive";
 
 export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
   return (tree: Root, file: VFile) => {
-    return map(tree, (node) => {
+    map(tree, (node) => {
       if (
         node.type === "containerDirective" ||
         node.type === "textDirective" ||
