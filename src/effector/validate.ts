@@ -1,22 +1,82 @@
-import type {Kind, Unit} from './index.h'
-import type {Domain, Effect, Event, Scope, Store} from './unit.h'
-import {DOMAIN, STORE, EVENT, EFFECT, SCOPE} from './tag'
-import {isObject, isFunction} from './is'
+export * as is from './is'
+import {forEach} from './collection'
+import {arrifyNodes} from './createNode'
+import type {NodeUnit} from './index.h'
+import type {DataCarrier} from './unit.h'
 import {getMeta} from './getter'
-import { UnitTargetable } from 'effector'
 
-export const unit = (obj: unknown): obj is Unit<any> =>
-  (isFunction(obj) || isObject(obj)) && 'kind' in obj
+export function assert(
+  condition: unknown,
+  message: string,
+  errorTitle?: string,
+): asserts condition {
+  if (!condition)
+    throw Error(`${errorTitle ? errorTitle + ': ' : ''}${message}`)
+}
 
-const is = (type: Kind) => (obj: unknown) => unit(obj) && obj.kind === type
+export const deprecate = (
+  condition: unknown,
+  subject: string,
+  suggestion?: string,
+  errorTitle?: string,
+) =>
+  !condition &&
+  console.error(
+    `${errorTitle ? errorTitle + ': ' : ''}${subject} is deprecated${
+      suggestion ? `, use ${suggestion} instead` : ''
+    }`,
+  )
 
-export const store = is(STORE) as (value: unknown) => value is Store<unknown>
-export const event = is(EVENT) as (value: unknown) => value is Event<unknown>
-export const effect = is(EFFECT) as (
+export const isObject = (value: unknown): value is Record<any, any> =>
+  typeof value === 'object' && value !== null
+export const isFunction = (value: unknown): value is Function =>
+  typeof value === 'function'
+
+export const isVoid = (value: unknown): value is void => value === undefined
+
+export const assertObject = (value: unknown) =>
+  assert(
+    isObject(value) || isFunction(value),
+    'expect first argument be an object',
+  ) // or function
+
+const assertNodeSetItem = (
   value: unknown,
-) => value is Effect<unknown, unknown, unknown>
-export const targetable = (obj: unknown): obj is UnitTargetable<unknown> => unit(obj) && !!(obj as any).targetable
-export const domain = is(DOMAIN) as (value: unknown) => value is Domain
-export const scope = is(SCOPE) as (value: unknown) => value is Scope
-export const attached = (unit: unknown) =>
-  effect(unit) && getMeta(unit, 'attached') === true
+  method: string,
+  valueName: string,
+  reason: string,
+): asserts value is DataCarrier =>
+  assert(
+    !(
+      (!isObject(value) && !isFunction(value)) ||
+      (!('family' in value) && !('graphite' in value))
+    ),
+    `${method}: expect ${valueName} to be a unit (store, event or effect)${reason}`,
+  )
+
+export const assertNodeSet = (
+  value: unknown,
+  method: string,
+  valueName: string,
+) => {
+  if (Array.isArray(value)) {
+    forEach(value, (item, i) =>
+      assertNodeSetItem(item, method, `${i} item of ${valueName}`, ''),
+    )
+  } else {
+    //@ts-expect-error some ts assertion edge case
+    assertNodeSetItem(value, method, valueName, ' or array of units')
+  }
+}
+
+export const assertTarget = (
+  method: string,
+  target: NodeUnit | NodeUnit[],
+  targetField: string = 'target',
+) =>
+  forEach(arrifyNodes(target), item =>
+    assert(
+      !getMeta(item, 'derived'),
+      `${method}: derived unit in "${targetField}" is not supported, use createStore/createEvent instead"`,
+    ),
+  )

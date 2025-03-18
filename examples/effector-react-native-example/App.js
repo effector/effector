@@ -3,7 +3,7 @@ import {Text, View, StyleSheet, TouchableOpacity} from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import {createStore, createEvent, createEffect} from 'effector'
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 
 const init = createEvent('init')
 const increment = createEvent('increment')
@@ -47,7 +47,7 @@ $counter.watch(state => {
 
 
 export default () => {
-  const count = useStore($counter)
+  const count = useUnit($counter)
   
   return (
     <View style={styles.container}>
