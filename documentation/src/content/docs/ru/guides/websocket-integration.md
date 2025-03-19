@@ -161,6 +161,106 @@ const $error = createStore("")
 Всегда обрабатывайте ошибки WebSocket соединения, так как они могут возникнуть по множеству причин: проблемы с сетью, таймауты, невалидные данные и т.д.
 :::
 
+## Типизация сообщений (#typed-socket-message)
+
+При работе с WebSocket важно обеспечить типобезопасность данных. Это позволяет предотвратить ошибки на этапе разработки и повысить надёжность приложения при обработке различных типов сообщений.
+
+Для этого воспользуемся библиотекой [Zod](https://zod.dev/), хотя можно использовать любую другую библиотеку для валидации.
+
+:::info{title="TypeScript и проверка типов"}
+Даже если вы не используете Zod или другую библиотеку валидации, базовую типизацию WebSocket сообщений можно реализовать и с помощью обычных TypeScript-интерфейсов. Но помните — они проверяют типы только на этапе компиляции и не защитят вас от неожиданных данных во время выполнения.
+:::
+
+Предположим, что мы ожидаем два типа сообщений: `balanceChanged` и `reportGenerated`, содержащие следующие поля:
+
+```ts
+export const messagesSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("balanceChanged"),
+    balance: z.number(),
+  }),
+  z.object({
+    type: z.literal("reportGenerated"),
+    reportId: z.string(),
+    reportName: z.string(),
+  }),
+]);
+
+// Получаем тип из схемы
+type MessagesSchema = z.infer<typeof messagesSchema>;
+```
+
+Теперь добавим эффект обработки сообщений, чтобы гарантировать, что они соответствуют ожидаемым типам, а также логику получения сообщений:
+
+```ts
+const parsedMessageReceived = createEvent<MessagesSchema>();
+
+const parseFx = createEffect((message: unknown): MessagesSchema => {
+  return messagesSchema.parse(JSON.parse(typeof message === "string" ? message : "{}"));
+});
+
+// Парсим сообщение при его получении
+sample({
+  clock: rawMessageReceived,
+  target: parseFx,
+});
+
+// Если парсинг удался — отправляем сообщение дальше
+sample({
+  clock: parseFx.doneData,
+  target: parsedMessageReceived,
+});
+```
+
+Мы также должны обработать ситуацию, когда сообщение не соответствует схеме:
+
+```ts
+const validationError = createEvent<Error>();
+
+// Если парсинг не удался — обрабатываем ошибку
+sample({
+  clock: parseFx.failData,
+  target: validationError,
+});
+```
+
+Вот и всё, теперь все входящие сообщения будут проверяться на соответствие схеме перед их обработкой, а также иметь типизацию.
+
+:::tip{title="Типизация отправляемых сообщений"}
+Такой же подход можно применить и для исходящих сообщений. Это позволит проверять их структуру перед отправкой и избежать ошибок.
+:::
+
+Если хочется более точечного контроля, можно сделать событие, которое будет срабатывать только для определенного типа сообщений:
+
+```ts
+type MessageType<T extends MessagesSchema["type"]> = Extract<MessagesSchema, { type: T }>;
+
+export const messageReceivedByType = <T extends MessageType>(type: T) => {
+  return sample({
+    clock: parsedMessageReceived,
+    filter: (message): message is MessageType<T> => {
+      return message.type === type;
+    },
+  });
+};
+```
+
+Пример использования:
+
+```ts
+sample({
+  clock: messageReceivedByType("balanceChanged"),
+  fn: (message) => {
+    // Typescript знает структуру message
+  },
+  target: doWhateverYouWant,
+});
+```
+
+:::info{title="Возвращаемые значения sample"}
+Если вы не уверены, какие данные возвращает sample, рекомендуем ознакомиться с документацией по [`sample`](/ru/essentials/unit-composition).
+:::
+
 ## Работа с `Socket.IO` (#socket-io)
 
 [Socket.IO](https://socket.io/) предоставляет более высокоуровневый API для работы с WebSocket, добавляя множество полезных возможностей "из коробки".

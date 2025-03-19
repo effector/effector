@@ -21,21 +21,21 @@ import { createStore, createEvent, createEffect, sample } from "effector";
 // Events for working with socket
 const disconnected = createEvent();
 const messageSent = createEvent<string>();
-const messageReceived = createEvent<string>();
+const rawMessageReceived = createEvent<string>();
 
 const $connection = createStore<WebSocket | null>(null)
   .on(connectWebSocketFx.doneData, (_, ws) => ws)
   .reset(disconnected);
 ```
 
-Let's create an effect for establishing connection:
+Then create an effect for establishing connection:
 
 ```ts
 const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
   const ws = new WebSocket(url);
 
   const scopeDisconnected = scopeBind(disconnected);
-  const scopeMessageReceived = scopeBind(messageReceived);
+  const scopeMessageReceived = scopeBind(rawMessageReceived);
 
   return new Promise((res, rej) => {
     ws.onopen = () => {
@@ -61,7 +61,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
 Note that we used the [`scopeBind`](/en/api/effector/scopeBind) function here to bind units with the current execution scope, as we don't know when `scopeMessageReceived` will be called inside `socket.onmessage`. Otherwise, the event will end up in the global scope.
 [Read more](/en/advanced/work-with-scope).
 
-:::warning{title="Working in 'scope-less' mode"}
+:::warning{title="Working in scope-less mode"}
 If you're working in scope-less mode for some reason, you don't need to use `scopeBind`.<br/>
 Keep in mind that [working with scope is the recommended way](/en/guides/best-practices#use-scope)!
 :::
@@ -71,9 +71,9 @@ Keep in mind that [working with scope is the recommended way](/en/guides/best-pr
 Let's create a store for the last received message:
 
 ```ts
-const $lastMessage = createStore("");
+const $lastMessage = createStore<string>("");
 
-$lastMessage.on(messageReceived, (_, newMessage) => newMessage);
+$lastMessage.on(rawMessageReceived, (_, newMessage) => newMessage);
 ```
 
 And also implement an effect for sending messages:
@@ -158,6 +158,106 @@ const $error = createStore("")
 
 :::warning{title="Error Handling"}
 Always handle WebSocket connection errors, as they can occur for many reasons: network issues, timeouts, invalid data, etc.
+:::
+
+## Typed Messages (#typed-socket-message)
+
+When working with WebSocket, ensuring type safety is crucial. This prevents errors during development and enhances the reliability of your application when handling various message types.
+
+For this purpose, we'll use the [Zod](https://zod.dev/) library, though you can use any validation library of your choice.
+
+:::info{title="TypeScript and Type Checking"}
+Even if you don't use Zod or another validation library, you can implement basic typing for WebSocket messages using standard TypeScript interfaces. However, remember that these only check types during compilation and won't protect you from unexpected data at runtime.
+:::
+
+Let's say we expect two types of messages: `balanceChanged` and `reportGenerated`, containing the following fields:
+
+```ts
+export const messagesSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("balanceChanged"),
+    balance: z.number(),
+  }),
+  z.object({
+    type: z.literal("reportGenerated"),
+    reportId: z.string(),
+    reportName: z.string(),
+  }),
+]);
+
+// Get type from schema
+type MessagesSchema = z.infer<typeof messagesSchema>;
+```
+
+Now add a message handling effect to ensure that messages match the expected types, along with the logic of receiving them:
+
+```ts
+const parsedMessageReceived = createEvent<MessagesSchema>();
+
+const parseFx = createEffect((message: unknown): MessagesSchema => {
+  return messagesSchema.parse(JSON.parse(typeof message === "string" ? message : "{}"));
+});
+
+// Parse the message when received
+sample({
+  clock: rawMessageReceived,
+  target: parseFx,
+});
+
+// If parsing succeeds, forward the message
+sample({
+  clock: parseFx.doneData,
+  target: parsedMessageReceived,
+});
+```
+
+We should also handle cases where a message doesn't match the schema:
+
+```ts
+const validationError = createEvent<Error>();
+
+// If parsing fails, handle the error
+sample({
+  clock: parseFx.failData,
+  target: validationError,
+});
+```
+
+That's it! Now all incoming messages will be validated against the schema before processing.
+
+:::tip{title="Typing Outgoing Messages"}
+You can apply the same approach to outgoing messages. This allows you to validate their structure before sending and avoid errors.
+:::
+
+If you want more granular control, you can create an event that triggers only for a specific message type:
+
+```ts
+type MessageType<T extends MessagesSchema["type"]> = Extract<MessagesSchema, { type: T }>;
+
+export const messageReceivedByType = <T extends MessageType>(type: T) => {
+  return sample({
+    clock: parsedMessageReceived,
+    filter: (message): message is MessageType<T> => {
+      return message.type === type;
+    },
+  });
+};
+```
+
+Usage example:
+
+```ts
+sample({
+  clock: messageReceivedByType("balanceChanged"),
+  fn: (message) => {
+    // TypeScript knows the structure of message
+  },
+  target: doWhateverYouWant,
+});
+```
+
+:::info{title="Return Values from sample"}
+If you're not sure what data `sample` returns, we recommend checking the [`sample` documentation](/en/essentials/unit-composition).
 :::
 
 ## Working with `Socket.IO` (#socket-io)
@@ -248,101 +348,4 @@ sample({
   clock: connectSocketFx.doneData,
   target: socketConnected,
 });
-```
-
-## Receive typed socket messages
-
-You can use any runtime validation library, to create strong contracts of your data. In this example we will use Zod.
-
-First create a schema describes all your incoming messages. We assume, that every message is an object contains unique field `type` alongside other fields, so we will use zod's `discriminatedUnion`:
-
-```ts
-export const messagesSchema = z.discriminatedUnion('type', [
-  z.object({
-    type: z.literal('balanceChanged'),
-    balance: z.number(),
-  }),
-  z.object({
-    type: z.literal('reportGenerated'),
-    reportId: z.string(),
-    reportName: z.string(),
-  }),
-  /// ... any other types
-])
-```
-
-Next we create some utility types for using in effector units:
-
-```ts
-type MessagesSchema = z.infer<typeof messagesSchema>
-type MessageType<T extends MessagesSchema['type']> = Extract<MessagesSchema, { type: T }>
-```
-
-Now we are ready to parse messages using our schema. Steps are - receive unknown message, parse it in effect and produce typed message for public use:
-
-```ts
-const rawMessageReceived = createEvent<unknown>()
-const anyMessageReceived = createEvent<MessagesSchema>
-
-const setupFx = createEffect((url: string): Promise<WebSocket> => {
-  const socket = new WebSocket(url)
-
-  const scopeRawMessageReceived = scopeBind(rawMessageReceived)
-
-  return new Promise((res, rej) => {
-    ws.onopen = () => {
-      res(ws)
-    }
-
-    ws.onmessage = (event) => {
-      scopeRawMessageReceived(event.data)
-    }
-  })
-})
-
-const parseFx = createEffect((message: unknown): MessagesSchema => {
-  return messagesSchema.parse(message)
-})
-
-sample({
-  clock: rawMessageReceived,
-  // parse unknown message
-  target: parseFx
-})
-
-sample({
-  clock: parseFx.doneData,
-  // we are ready to consume typed messages
-  target: anyMessageReceived
-})
-
-sample({
-  clock: parseFx.failData,
-  // do not forget to catch parse error
-})
-```
-
-But finally, we do not want to check message type every time anyMessageReceived called, so let's create custom operator, which will filter only required type:
-
-```ts
-export const messageReceived = <T extends MessageType>(type: T) => {
-  return sample({
-    clock: anyMessageReceived,
-    filter: (message): message is MessageType<T> => {
-      return message.type === type
-    },
-  })
-}
-```
-
-And use it like
-
-```ts
-sample({
-  clock: messageReceived('balanceChanged'), // autocomplete message types
-  fn: (message) => {
-    // message is inferred as { type: 'balanceChanged', balance: number }
-  },
-  target: doWhateverYouWant
-})
 ```
