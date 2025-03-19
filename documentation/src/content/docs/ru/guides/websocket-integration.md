@@ -235,7 +235,7 @@ sample({
 ```ts
 type MessageType<T extends MessagesSchema["type"]> = Extract<MessagesSchema, { type: T }>;
 
-export const messageReceivedByType = <T extends MessageType>(type: T) => {
+export const messageReceivedByType = <T extends MessagesSchema["type"]>(type: T) => {
   return sample({
     clock: parsedMessageReceived,
     filter: (message): message is MessageType<T> => {
