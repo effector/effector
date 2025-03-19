@@ -35,7 +35,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
   const ws = new WebSocket(url);
 
   const scopeDisconnected = scopeBind(disconnected);
-  const scopeMessageReceived = scopeBind(rawMessageReceived);
+  const scopeRawMessageReceived = scopeBind(rawMessageReceived);
 
   return new Promise((res, rej) => {
     ws.onopen = () => {
@@ -43,7 +43,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
     };
 
     ws.onmessage = (event) => {
-      scopeMessageReceived(event.data);
+      scopeRawMessageReceived(event.data);
     };
 
     ws.onclose = () => {
@@ -116,7 +116,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
   const ws = new WebSocket(url);
 
   const scopeDisconnected = scopeBind(disconnected);
-  const scopeMessageReceived = scopeBind(messageReceived);
+  const scopeRawMessageReceived = scopeBind(rawMessageReceived);
   const scopeSocketError = scopeBind(socketError);
 
   return new Promise((res, rej) => {
@@ -134,7 +134,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
     };
 
     ws.onmessage = (event) => {
-      scopeMessageReceived(event.data);
+      scopeRawMessageReceived(event.data);
     };
 
     ws.onclose = () => {

@@ -22,7 +22,7 @@ import { createStore, createEvent, createEffect, sample } from "effector";
 // События для работы с сокетом
 const disconnected = createEvent();
 const messageSent = createEvent<string>();
-const messageReceived = createEvent<string>();
+const rawMessageReceived = createEvent<string>();
 
 const $connection = createStore<WebSocket | null>(null)
   .on(connectWebSocketFx.doneData, (_, ws) => ws)
@@ -36,7 +36,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
   const ws = new WebSocket(url);
 
   const scopeDisconnected = scopeBind(disconnected);
-  const scopeMessageReceived = scopeBind(messageReceived);
+  const scopeRawMessageReceived = scopeBind(rawMessageReceived);
 
   return new Promise((res, rej) => {
     ws.onopen = () => {
@@ -44,7 +44,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
     };
 
     ws.onmessage = (event) => {
-      scopeMessageReceived(event.data);
+      scopeRawMessageReceived(event.data);
     };
 
     ws.onclose = () => {
@@ -117,7 +117,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
   const ws = new WebSocket(url);
 
   const scopeDisconnected = scopeBind(disconnected);
-  const scopeMessageReceived = scopeBind(messageReceived);
+  const scopeRawMessageReceived = scopeBind(rawMessageReceived);
   const scopeSocketError = scopeBind(socketError);
 
   return new Promise((res, rej) => {
