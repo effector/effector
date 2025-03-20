@@ -1,8 +1,11 @@
 ---
 import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
-import { getLocalizedSidebar } from "../../navigation";
+import { getActiveTabSidebar, getLocalizedPanelSidebar } from "../../navigation";
 import ChevronRight from "src/icons/ChevronRight.astro";
+import { trimTrailingSlash } from "src/libs/path";
+import { PANEL_ITEMS } from "src/sidebar-config";
+import { PANEL_FRAMEWORK_ITEMS } from "src/sidebar-config";
 import SidebarScrollRestore from "./SidebarScrollRestore.astro";
 
 type Props = {
@@ -11,45 +14,104 @@ type Props = {
 };
 
 const { currentPage } = Astro.props;
-const currentPageMatch = currentPage.endsWith("/") ? currentPage.slice(0, -1) : currentPage;
+const currentPageMatch = trimTrailingSlash(currentPage);
 
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
-const baseSidebar = await getLocalizedSidebar(slug, lang);
+const activePanelIndex = getActiveTabSidebar(slug);
+const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
 ---
 
-<nav aria-labelledby="grid-left">
-  <ul id="sidebar" class="nav-groups">
-    {
-      baseSidebar.map((group, index) => (
-        <li>
-          <div class="nav-group">
-            <button class="nav-group-title" aria-expanded="true" aria-controls={`group-${index}`}>
-              {group.title}
-              <ChevronRight class="arrow" />
-            </button>
-            <ul id={`group-${index}`}>
-              {group.items.map((item) => (
-                <li class="nav-link">
-                  <a
-                    href={item.link}
-                    aria-current={currentPageMatch === item.link ? "page" : false}
-                    target={item.link.startsWith("/") ? undefined : "_blank"}
-                    data-fallback={item.isFallback}
+<tabbed-sidebar id="sidebar" class="navigation">
+  <nav aria-labelledby="grid-left">
+    <div>
+      <ul class="tabs navigation-panel">
+        {
+          PANEL_ITEMS.map(({ text, id }, i) => (
+            <li role="presentation">
+              <button
+                role="tab"
+                class="tab-panel-item"
+                aria-selected={id === activePanelIndex ? "true" : "false"}
+              >
+                {text[lang as keyof typeof text] || text.en}
+              </button>
+            </li>
+          ))
+        }
+        <li role="presentation">
+          <ul class="frameworks-panel">
+            {
+              PANEL_FRAMEWORK_ITEMS.map(({ text, id, Icon }, i) => (
+                <li role="presentation">
+                  <button
+                    role="tab"
+                    class="tab-panel-item"
+                    data-icon={id}
+                    data-active={i === 0 ? "true" : "false"}
+                    class="tab-panel-item"
+                    aria-selected={id === activePanelIndex ? "true" : "false"}
                   >
-                    <span> {item.title}</span>
-                  </a>
+                    {Icon && <Icon size={18} />}
+                    <span>{text[lang as keyof typeof text] || text.en}</span>
+                  </button>
                 </li>
-              ))}
-            </ul>
-          </div>
+              ))
+            }
+          </ul>
         </li>
+      </ul>
+    </div>
+
+    {
+      localizedSidebar.map(({ sidebarItems, panelId }) => (
+        <div
+          hidden={panelId !== activePanelIndex}
+          data-initial={panelId === activePanelIndex ? "true" : "false"}
+          role="tabpanel"
+        >
+          <ul class="nav-groups">
+            {sidebarItems.map((group, index) => (
+              <li>
+                <div class="nav-group">
+                  <button
+                    class="nav-group-title"
+                    aria-expanded="true"
+                    aria-controls={`group-${index}`}
+                  >
+                    {group.title}
+                    <ChevronRight class="arrow" />
+                  </button>
+                  <ul id={`group-${index}`}>
+                    {group.items.map((item) => (
+                      <li class="nav-link">
+                        <a
+                          href={item.link}
+                          aria-current={currentPageMatch === item.link ? "page" : false}
+                          target={item.link.startsWith("/") ? undefined : "_blank"}
+                          data-fallback={item.isFallback}
+                        >
+                          <span> {item.title}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       ))
     }
-  </ul>
+  </nav>
   <SidebarScrollRestore />
-</nav>
+</tabbed-sidebar>
 
 <script>
+  import { Tabs } from "@components/Tabs/Tabs";
+  class TabbedSidebar extends Tabs {}
+
+  customElements.define("tabbed-sidebar", TabbedSidebar);
+
   function setupNavigation() {
     const navGroups = document.querySelectorAll(".nav-group");
     navGroups.forEach((group) => {
@@ -61,6 +123,10 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
           button.setAttribute("aria-expanded", (!expanded).toString());
 
           content.classList.toggle("collapsed", expanded);
+          content.setAttribute("aria-hidden", expanded.toString());
+          content.querySelectorAll("a").forEach((link) => {
+            link.setAttribute("tabindex", expanded ? "-1" : "0");
+          });
           button.classList.toggle("collapsed", expanded);
         });
       }
@@ -72,8 +138,74 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
 </script>
 
 <style>
-  nav {
+  .frameworks-panel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0.25rem;
+  }
+
+  .frameworks-panel li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .frameworks-panel li:hover {
+    background-color: var(--theme-bg);
+  }
+
+  .navigation-panel {
     width: 100%;
+    border-radius: 16px;
+    padding: 0.25rem;
+    background-color: var(--theme-bg-hover);
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .navigation-panel li {
+    padding: 0;
+    border-radius: 12px;
+    width: 100%;
+  }
+
+  .navigation-panel li button {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: var(--theme-left-sidebar-item-text);
+    border-radius: 12px;
+  }
+  .navigation-panel li button:hover {
+    background-color: var(--theme-navbar-bg);
+  }
+
+  .navigation-panel li button[aria-selected="true"] {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+  }
+
+  .tab-panel-item {
+    cursor: pointer;
+    @apply flex font-bold;
+  }
+
+  .navigation {
+    overflow-x: visible;
+    overflow-y: auto;
+    padding-top: 32px;
+    scrollbar-gutter: stable;
+    width: 100%;
+  }
+
+  nav > div {
+    padding-right: 12px;
   }
 
   .nav-groups {
@@ -83,8 +215,6 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
     padding: 2rem 0;
     height: 100%;
     max-height: 100vh;
-    overflow-x: visible;
-    overflow-y: auto;
   }
 
   .nav-groups > li + li {
@@ -125,7 +255,7 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
   }
 
   .nav-group-title:hover,
-  .nav-group-title:focus {
+  .nav-group-title:focus-visible {
     background-color: var(--theme-bg-hover);
   }
 
@@ -210,6 +340,6 @@ const baseSidebar = await getLocalizedSidebar(slug, lang);
 
 <style is:global>
   :root.theme-dark .nav-link a[aria-current="page"] {
-    color: hsla(var(--color-base-white), 100%, 1);
+    color: var(--theme-text);
   }
 </style>
