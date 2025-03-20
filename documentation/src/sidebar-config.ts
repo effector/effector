@@ -79,27 +79,6 @@ export const learning: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Advanced", ru: "Продвинутые темы", uz: "O'zgaruvchilar" },
-    items: [
-      {
-        text: {
-          en: "Flow splitting",
-          ru: "Разделение потока данных",
-          uz: "Flow to'plamasi",
-        },
-        link: "/essentials/flow-split",
-      },
-      {
-        text: {
-          en: "Scope: Working with Isolated Contexts",
-          ru: "Scope: Работа с изолированными контекстами",
-          uz: "Scope: Isolatli kontekstlar bilan ishlash",
-        },
-        link: "/advanced/work-with-scope",
-      },
-    ],
-  },
-  {
     text: {
       en: "Goodies",
       ru: "Будет полезно!",
@@ -129,6 +108,27 @@ export const learning: LSidebarGroup[] = [
           ru: "Как мыслить в парадигме Effector",
         },
         link: "/resources/mindset",
+      },
+    ],
+  },
+  {
+    text: { en: "Advanced", ru: "Продвинутые темы", uz: "O'zgaruvchilar" },
+    items: [
+      {
+        text: {
+          en: "Flow splitting",
+          ru: "Разделение потока данных",
+          uz: "Flow to'plamasi",
+        },
+        link: "/essentials/flow-split",
+      },
+      {
+        text: {
+          en: "Scope: Working with Isolated Contexts",
+          ru: "Scope: Работа с изолированными контекстами",
+          uz: "Scope: Isolatli kontekstlar bilan ishlash",
+        },
+        link: "/advanced/work-with-scope",
       },
     ],
   },
