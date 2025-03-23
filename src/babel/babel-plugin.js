@@ -22,8 +22,6 @@ module.exports = function (babel, options = {}) {
     restores,
     combines,
     samples,
-    forwards,
-    guards,
     attaches,
     splits,
     apis,
@@ -36,8 +34,6 @@ module.exports = function (babel, options = {}) {
     restoreCreators,
     combineCreators,
     sampleCreators,
-    forwardCreators,
-    guardCreators,
     attachCreators,
     splitCreators,
     apiCreators,
@@ -47,13 +43,7 @@ module.exports = function (babel, options = {}) {
     factories,
     importName,
     importReactNames,
-    reactSsr,
   } = normalizeOptions(options)
-  if (reactSsr) {
-    console.error(
-      '[effector/babel-plugin]: reactSsr option is deprecated, use imports from "effector-react" without aliases or /scope',
-    )
-  }
   const factoriesUsed = factories.length > 0
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
@@ -69,8 +59,6 @@ module.exports = function (babel, options = {}) {
     restoreCreators,
     combineCreators,
     sampleCreators,
-    forwardCreators,
-    guardCreators,
     attachCreators,
     splitCreators,
     apiCreators,
@@ -116,18 +104,6 @@ module.exports = function (babel, options = {}) {
     {
       flag: samples,
       set: sampleCreators,
-      fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
-    },
-    {
-      flag: forwards,
-      set: forwardCreators,
-      fn: (path, state, name, id) =>
-        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
-    },
-    {
-      flag: guards,
-      set: guardCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
     },
@@ -263,10 +239,6 @@ module.exports = function (babel, options = {}) {
             combineCreators.add(localName)
           } else if (sampleCreators.has(importedName)) {
             sampleCreators.add(localName)
-          } else if (forwardCreators.has(importedName)) {
-            forwardCreators.add(localName)
-          } else if (guardCreators.has(importedName)) {
-            guardCreators.add(localName)
           } else if (attachCreators.has(importedName)) {
             attachCreators.add(localName)
           } else if (splitCreators.has(importedName)) {
@@ -300,11 +272,6 @@ module.exports = function (babel, options = {}) {
           if (creatorsList.some(set => set.has(localName))) {
             this.effector_ignoredImports.add(localName)
           }
-        }
-      }
-      if (reactSsr) {
-        if (source === 'effector-react' || source === 'effector-react/compat') {
-          path.node.source.value = 'effector-react/scope'
         }
       }
       if (factoriesUsed) {
@@ -501,8 +468,6 @@ const normalizeOptions = options => {
         restore: [],
         combine: [],
         sample: [],
-        forward: [],
-        guard: [],
         attach: [],
         split: [],
         createApi: [],
@@ -526,8 +491,6 @@ const normalizeOptions = options => {
         restore: ['restore'],
         combine: ['combine'],
         sample: ['sample'],
-        forward: ['forward'],
-        guard: ['guard'],
         attach: ['attach'],
         split: ['split'],
         createApi: ['createApi'],
@@ -546,7 +509,6 @@ const normalizeOptions = options => {
   return readConfigFlags({
     options,
     properties: {
-      reactSsr: false,
       filename: true,
       stores: true,
       events: true,
@@ -555,8 +517,6 @@ const normalizeOptions = options => {
       restores: true,
       combines: true,
       samples: true,
-      forwards: true,
-      guards: true,
       attaches: true,
       splits: true,
       apis: true,
@@ -600,8 +560,6 @@ const normalizeOptions = options => {
       restoreCreators: new Set(options.restoreCreators || defaults.restore),
       combineCreators: new Set(options.combineCreators || defaults.combine),
       sampleCreators: new Set(options.sampleCreators || defaults.sample),
-      forwardCreators: new Set(options.forwardCreators || defaults.forward),
-      guardCreators: new Set(options.guardCreators || defaults.guard),
       attachCreators: new Set(options.attachCreators || defaults.attach),
       splitCreators: new Set(options.splitCreators || defaults.split),
       apiCreators: new Set(options.apiCreators || defaults.createApi),

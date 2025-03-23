@@ -1,6 +1,6 @@
 import type {Leaf} from '../forest/index.h'
 
-import type {BarrierPriorityTag} from './kernel'
+import type {BarrierPriorityTag, QueueInstance} from './kernel'
 import type {Domain, Scope} from './unit.h'
 
 export type ID = string
@@ -127,7 +127,12 @@ export type Compute = {
   id: ID
   type: 'compute'
   data: {
-    fn?: (data: any, scope: {[key: string]: any}, reg: Stack) => any
+    fn?: (
+      data: any,
+      scope: {[key: string]: any},
+      reg: Stack,
+      q: QueueInstance,
+    ) => any
     safe: boolean
     filter: boolean
     pure: boolean

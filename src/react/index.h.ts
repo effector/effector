@@ -1,13 +1,9 @@
 import type {Event, Store, EventCallable} from 'effector'
-import type {ComponentType, ReactNode} from 'react'
-
-export type StoreConsumer<State> = ComponentType<{
-  children: (state: State) => ReactNode,
-}>
+import type {ComponentType} from 'react'
 
 export type StoreView<State, Props> = ComponentType<Props> & {
-  mounted: Event<{props: Props, state: State}>,
-  unmounted: Event<{props: Props, state: State}>,
+  mounted: Event<{props: Props; state: State}>
+  unmounted: Event<{props: Props; state: State}>
 }
 
 export type Gate<Props = {}> = React.ComponentType<Props> & {

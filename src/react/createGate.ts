@@ -4,7 +4,7 @@ import {withDisplayName} from './withDisplayName'
 import {useGateBase} from './apiBase'
 import {getScope} from './scope'
 import {flattenConfig, processArgsToConfig} from '../effector/config'
-import {isObject} from '../effector/is'
+import {isObject} from '../effector/validate'
 
 export function createGateImplementation<State>({
   domain,

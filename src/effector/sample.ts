@@ -13,16 +13,15 @@ import {
   isObject,
   isVoid,
   isFunction,
-} from './is'
+  assert,
+  deprecate,
+} from './validate'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
-import {createNode} from './createNode'
-import {assert, deprecate} from './throw'
+import {createNode, createLinkNode, own} from './createNode'
 import {forEach} from './collection'
 import {STACK, VALUE} from './tag'
 import {applyTemplate} from './template'
-import {own} from './own'
-import {createLinkNode} from './forward'
 import {generateErrorTitle} from './naming'
 
 const sampleConfigFields = ['source', 'clock', 'target']
@@ -30,7 +29,7 @@ const sampleConfigFields = ['source', 'clock', 'target']
 const fieldErrorMessage = (method: string, field: string) =>
   method + `: ${field} should be defined`
 
-export function validateSampleConfig(config: any, method: string) {
+function validateSampleConfig(config: any, method: string) {
   let atLeastOneFieldExists = false
   forEach(sampleConfigFields, field => {
     if (field in config) {

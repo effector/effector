@@ -217,29 +217,6 @@ export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx);
 имеет свой собственный [sid](/ru/api/effector/babel-plugin#sid) и будет обрабатываться [serialize](/ru/api/effector/serialize)
 независимо, хотя без `factories` они будут использовать один и тот же `sid`.
 
-## `reactSsr` (#configuration-reactSsr)
-
-Заменяет импорты из `effector-react` на `effector-react/scope`. Полезно для сборки как серверных, так и клиентских
-сборок из одной кодовой базы.
-
-:::warning{title="Устарело"}
-С [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) команда разработчиков рекомендует удалить эту опцию из конфигурации `babel-plugin`, потому что [effector-react](/ru/api/effector-react) поддерживает SSR по умолчанию.
-:::
-
-### Формула (#configuration-reactSsr-formulae)
-
-```json
-[
-  "effector/babel-plugin",
-  {
-    "reactSsr": false
-  }
-]
-```
-
-- Тип: `boolean`
-- По умолчанию: `false`
-
 ## `addNames` (#configuration-addNames)
 
 Добавляет имя к вызовам фабрик юнитов. Полезно для минификации и обфускации production сборок.

@@ -1,14 +1,5 @@
 import type {BrowserObject} from 'webdriverio'
-import {
-  createStore,
-  createEffect,
-  createEvent,
-  restore,
-  combine,
-  sample,
-  split,
-  guard,
-} from 'effector'
+import {createStore, createEffect, createEvent, sample, split} from 'effector'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>
@@ -93,7 +84,7 @@ test('split support', async () => {
       const filter = createStore(true)
       const enumType = 3
       const typeStore = createStore<any>(enumType)
-      const source = guard({source: intervalStore, filter})
+      const source = sample({source: intervalStore, filter})
       const caseA = createEvent<any>()
       const caseB = createEvent<any>()
       split({source, match: typeStore, cases: {[enumType]: caseA, __: caseB}})

@@ -8,31 +8,12 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   combine,
   Store,
   Scope,
   StoreWritable,
 } from 'effector'
-import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-muteErrors(['fork(domain)', 'hydrate(domain', 'object with handlers'])
-
-test('usage with domain', async () => {
-  const app = createDomain()
-  const add = app.createEvent<number>()
-  const $count = app.createStore(0).on(add, (n, x) => n + x)
-  const addFx = app.createEffect(() => 0)
-  sample({clock: addFx.doneData, target: add})
-
-  const scope = fork(app, {
-    values: [[$count, 10]],
-    handlers: [[addFx, () => 5]],
-  })
-  await allSettled(addFx, {scope})
-  expect(scope.getState($count)).toBe(15)
-  expect($count.getState()).toBe(0)
-})
+import {argumentHistory} from 'effector/fixtures'
 
 test('usage without domain', async () => {
   const add = createEvent<number>()
@@ -185,82 +166,65 @@ describe('units without sids support', () => {
 })
 describe('fork values support', () => {
   test('values as js Map', async () => {
-    const app = createDomain()
-
-    const logsCache = app.createStore<string[]>([])
-    const settings = app.createStore({
+    const logsCache = createStore<string[]>([])
+    const settings = createStore({
       MAX_COUNT_CACHED_LOGS: 12,
     })
 
-    const scope = fork(app, {
+    const scope = fork({
       values: new Map()
         .set(settings, {MAX_COUNT_CACHED_LOGS: 2})
         .set(logsCache, ['LOG_MSG_MOCK']),
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
-    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+    expect(scope.getState(settings)).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values as tuple list', async () => {
-    const app = createDomain()
-
-    const logsCache = app.createStore<string[]>([])
-    const settings = app.createStore({
+    const logsCache = createStore<string[]>([])
+    const settings = createStore({
       MAX_COUNT_CACHED_LOGS: 12,
     })
 
-    const scope = fork(app, {
+    const scope = fork({
       values: [
         [settings, {MAX_COUNT_CACHED_LOGS: 2}],
         [logsCache, ['LOG_MSG_MOCK']],
       ],
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
-    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+    expect(scope.getState(settings)).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values as sid map', async () => {
-    const app = createDomain()
-
-    const logsCache = app.createStore([])
-    const settings = app.createStore({
+    const logsCache = createStore([])
+    const settings = createStore({
       MAX_COUNT_CACHED_LOGS: 12,
     })
 
-    const scope = fork(app, {
+    const scope = fork({
       values: {
         [logsCache.sid!]: ['LOG_MSG_MOCK'],
         [settings.sid!]: {MAX_COUNT_CACHED_LOGS: 2},
       },
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
-    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+    expect(scope.getState(settings)).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(scope.getState(logsCache)).toEqual(['LOG_MSG_MOCK'])
   })
   test('values validation', async () => {
     expect(() => {
       fork({
         values: new Map().set(null, () => {}),
       })
-    }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Values map can contain only writable stores as keys"`,
+    )
   })
   test('passed non store to values map should throw', () => {
-    const app = createDomain()
     const unit = createEvent()
     expect(() => {
-      fork(app, {
+      fork({
         values: new Map().set(unit, 0),
       })
     }).toThrowErrorMatchingInlineSnapshot(
@@ -509,24 +473,6 @@ describe('fork handlers support', () => {
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
-  test('handlers as sid map', async () => {
-    const fx = createEffect(() => 'not to call')
-
-    const acc = createStore<string[]>([]).on(fx.doneData, (list, val) => [
-      ...list,
-      val,
-    ])
-
-    const scope = fork({
-      handlers: {
-        [fx.sid!]: () => 'fn',
-      },
-    })
-
-    await allSettled(fx, {scope})
-
-    expect(scope.getState(acc)).toEqual(['fn'])
-  })
   test('handlers as a tuple list, but with sid doubles', async () => {
     const h1 = jest.fn()
     const h2 = jest.fn()
@@ -559,7 +505,9 @@ describe('handlers validation', () => {
       fork({
         handlers: new Map().set(null, () => {}),
       })
-    }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"Handlers map can contain only effects as keys"`,
+    )
   })
   test('passing non-effect unit to handlers should throw', () => {
     const unit = createEvent()

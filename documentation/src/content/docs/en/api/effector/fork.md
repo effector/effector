@@ -148,23 +148,6 @@ fork({
 });
 ```
 
-3.  Plain object: `{[sid: string]: handler}`
-
-```ts
-fork({
-  handlers: {
-    [getMessageFx.sid]: (params) => ({ id: 0, text: "message" }),
-    [getUserFx.sid]: async (params) => ({ name: "alice", age: 21 }),
-  },
-});
-```
-
-<br />
-
-:::warning{title="deprecation"}
-Such objects are deprecated since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) and will be removed in future versions. Array of tuples is preferred.
-:::
-
 ### Returns (#methods-fork-options-returns)
 
 [_Scope_](/en/api/effector/Scope): New fresh scope

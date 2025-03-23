@@ -4,8 +4,6 @@ import {
   createEffect,
   combine,
   sample,
-  forward,
-  guard,
   merge,
   split,
   createApi,
@@ -81,14 +79,6 @@ describe('basic checks for that the derived untis in target are forbidden', () =
       $map.reinit(),
     ).toThrowErrorMatchingInlineSnapshot(`"$map.reinit is not a function"`)
   })
-  test('forward', () => {
-    expect(() =>
-      // @ts-expect-error
-      forward({from: trigger, to: mappedEv}),
-    ).toThrowErrorMatchingInlineSnapshot(
-      `"[forward] (/src/effector/__tests__/derived.test.ts:87:6): derived unit in \\"to\\" is not supported, use createStore/createEvent instead\\""`,
-    )
-  })
   test('split', () => {
     expect(() => {
       split({
@@ -102,19 +92,7 @@ describe('basic checks for that the derived untis in target are forbidden', () =
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:94:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
-    )
-  })
-  test('guard', () => {
-    expect(() => {
-      guard({
-        source: trigger,
-        filter: Boolean,
-        // @ts-expect-error
-        target: mappedEv,
-      })
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"[guard] (/src/effector/__tests__/derived.test.ts:110:6): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:84:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('sample', () => {
@@ -125,7 +103,7 @@ describe('basic checks for that the derived untis in target are forbidden', () =
         target: mappedEv,
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/derived.test.ts:122:6): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[sample] (/src/effector/__tests__/derived.test.ts:100:6): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
 })
@@ -170,13 +148,6 @@ describe('call of derived events', () => {
   test('usage with sample throw error', () => {
     const a = createEvent()
     const b = sample({clock: a, source: a})
-    expect(b).toThrowErrorMatchingInlineSnapshot(
-      `"[event] unit 'b': call of derived event is not supported, use createEvent instead"`,
-    )
-  })
-  test('usage with guard throw error', () => {
-    const a = createEvent()
-    const b = guard({source: a, filter: () => true})
     expect(b).toThrowErrorMatchingInlineSnapshot(
       `"[event] unit 'b': call of derived event is not supported, use createEvent instead"`,
     )
@@ -313,7 +284,7 @@ describe('split cases', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:308:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:279:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('with derived event', () => {
@@ -329,7 +300,7 @@ describe('split cases', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:324:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:295:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
 })
@@ -347,7 +318,7 @@ describe('interal events', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:342:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:313:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('usage with effect.done is warned', () => {
@@ -362,7 +333,7 @@ describe('interal events', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:357:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:328:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('usage with effect.fail is warned', () => {
@@ -377,7 +348,7 @@ describe('interal events', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:372:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:343:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('usage with effect.doneData is warned', () => {
@@ -392,7 +363,7 @@ describe('interal events', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:387:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:358:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('usage with effect.failData is warned', () => {
@@ -407,7 +378,7 @@ describe('interal events', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:402:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:373:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('usage with store.updates is warned', () => {
@@ -422,7 +393,7 @@ describe('interal events', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:417:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:388:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
 })
@@ -439,7 +410,7 @@ describe('internal stores', () => {
         },
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[split] (/src/effector/__tests__/derived.test.ts:434:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[split] (/src/effector/__tests__/derived.test.ts:405:6): derived unit in \\"cases.a\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
 })
@@ -456,7 +427,7 @@ describe('sample target', () => {
         target: $derived,
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/derived.test.ts:453:6): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[sample] (/src/effector/__tests__/derived.test.ts:424:6): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   test('with derived event', () => {
@@ -470,7 +441,7 @@ describe('sample target', () => {
         target: derived,
       })
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/derived.test.ts:467:6): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+      `"[sample] (/src/effector/__tests__/derived.test.ts:438:6): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
     )
   })
   describe('interal events', () => {
@@ -484,7 +455,7 @@ describe('sample target', () => {
           target: fx.finally,
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"[sample] (/src/effector/__tests__/derived.test.ts:481:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+        `"[sample] (/src/effector/__tests__/derived.test.ts:452:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.done is warned', () => {
@@ -497,7 +468,7 @@ describe('sample target', () => {
           target: fx.done,
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"[sample] (/src/effector/__tests__/derived.test.ts:494:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+        `"[sample] (/src/effector/__tests__/derived.test.ts:465:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.fail is warned', () => {
@@ -510,7 +481,7 @@ describe('sample target', () => {
           target: fx.fail,
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"[sample] (/src/effector/__tests__/derived.test.ts:507:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+        `"[sample] (/src/effector/__tests__/derived.test.ts:478:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.doneData is warned', () => {
@@ -523,7 +494,7 @@ describe('sample target', () => {
           target: fx.doneData,
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"[sample] (/src/effector/__tests__/derived.test.ts:520:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+        `"[sample] (/src/effector/__tests__/derived.test.ts:491:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with effect.failData is warned', () => {
@@ -536,7 +507,7 @@ describe('sample target', () => {
           target: fx.failData,
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"[sample] (/src/effector/__tests__/derived.test.ts:533:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+        `"[sample] (/src/effector/__tests__/derived.test.ts:504:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
       )
     })
     test('usage with store.updates is warned', () => {
@@ -549,7 +520,7 @@ describe('sample target', () => {
           target: $store.updates,
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"[sample] (/src/effector/__tests__/derived.test.ts:546:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+        `"[sample] (/src/effector/__tests__/derived.test.ts:517:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
       )
     })
   })
@@ -564,7 +535,7 @@ describe('sample target', () => {
           target: fx.inFlight,
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"[sample] (/src/effector/__tests__/derived.test.ts:561:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
+        `"[sample] (/src/effector/__tests__/derived.test.ts:532:8): derived unit in \\"target\\" is not supported, use createStore/createEvent instead\\""`,
       )
     })
   })

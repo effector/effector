@@ -3,17 +3,8 @@ title: effector-vue/ssr
 description: Deprecated separate module of effector-vue that enforces library to use Scope
 ---
 
-```ts
-import {} from "effector-vue/ssr";
-```
+:::warning{title="Deleted"}
+Since [effector 24.0.0](https://changelog.effector.dev/#effector-24-0-0) this module was removed.
 
-:::warning{title="Deprecated"}
-Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends using main module of `effector-vue` of `effector-vue/composition` instead.
+To read documentation for this module, please refer to [the documentation for the version of effector-vue that was released before 24.0.0](https://v23.effector.dev/en/api/effector-vue/module/ssr/).
 :::
-
-Provides additional API for [effector-vue](/en/api/effector-vue) that enforces library to use [Scope](/en/api/effector/Scope)
-
-## APIs
-
-- [useEvent(event)](../useEvent)
-- [VueSSRPlugin](../VueSSRPlugin)

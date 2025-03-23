@@ -21,18 +21,13 @@ export default {
             'index.d.ts',
             'effector.cjs.d.ts',
             'effector.mjs.d.ts',
-            'effector.umd.d.ts',
             'compat.d.ts',
           ],
         ],
         'package.json',
         'inspect.d.ts',
       ]),
-    () =>
-      massCopy('src/babel', 'npm/effector', [
-        'babel-plugin.js',
-        'babel-plugin-react.js',
-      ]),
+    () => massCopy('src/babel', 'npm/effector', ['babel-plugin.js']),
     rollupEffector,
     publishScript('effector'),
   ],
@@ -47,13 +42,11 @@ export default {
             'index.d.ts',
             'effector-react.cjs.d.ts',
             'effector-react.mjs.d.ts',
-            'effector-react.umd.d.ts',
             'compat.d.ts',
           ],
         ],
         'README.md',
         'package.json',
-        ['scope.d.ts', ['scope.d.ts']],
       ]),
     rollupEffectorReact,
     publishScript('effector-react'),
@@ -65,16 +58,10 @@ export default {
       massCopy('packages/effector-solid', 'npm/effector-solid', [
         [
           'index.d.ts',
-          [
-            'index.d.ts',
-            'effector-solid.cjs.d.ts',
-            'effector-solid.mjs.d.ts',
-            'effector-solid.umd.d.ts',
-          ],
+          ['index.d.ts', 'effector-solid.cjs.d.ts', 'effector-solid.mjs.d.ts'],
         ],
         'README.md',
         'package.json',
-        'scope.d.ts',
       ]),
     rollupEffectorSolid,
     publishScript('effector-solid'),
@@ -90,22 +77,12 @@ export default {
             'index.d.ts',
             'effector-vue.cjs.d.ts',
             'effector-vue.mjs.d.ts',
-            'effector-vue.umd.d.ts',
             'compat.d.ts',
           ],
         ],
         [
           'composition.d.ts',
           ['composition.d.ts', 'composition.cjs.d.ts', 'composition.mjs.d.ts'],
-        ],
-        ['ssr.d.ts', ['ssr.d.ts', 'ssr.cjs.d.ts', 'ssr.mjs.d.ts']],
-        [
-          'options-vue3.d.ts',
-          [
-            'options-vue3.d.ts',
-            'options-vue3.mjs.d.ts',
-            'options-vue3.cjs.d.ts',
-          ],
         ],
         'README.md',
         'package.json',
@@ -119,15 +96,7 @@ export default {
     () =>
       Promise.all([
         massCopy('packages/forest', 'npm/forest', [
-          [
-            'index.d.ts',
-            [
-              'index.d.ts',
-              'forest.cjs.d.ts',
-              'forest.mjs.d.ts',
-              'forest.umd.d.ts',
-            ],
-          ],
+          ['index.d.ts', ['index.d.ts', 'forest.cjs.d.ts', 'forest.mjs.d.ts']],
           'server.d.ts',
         ]),
         massCopy('packages/forest', 'npm/forest', [

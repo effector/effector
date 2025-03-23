@@ -1,6 +1,6 @@
 import {Node, NodeUnit} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
-import {is} from './is'
+import {is} from './validate'
 import {includes, removeItem} from './collection'
 import {CROSSLINK} from './tag'
 

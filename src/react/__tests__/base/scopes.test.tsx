@@ -12,29 +12,19 @@ import {
   fork,
   allSettled,
   serialize,
-  hydrate,
   Scope,
 } from 'effector'
 
 import {
   Provider,
-  useStore,
   useList,
   useGate,
-  useEvent,
   useStoreMap,
   createGate,
   useUnit,
-} from 'effector-react/scope'
+} from 'effector-react'
 
-muteErrors([
-  'useEvent',
-  'useStore',
-  'fork(domain)',
-  'hydrate(domain',
-  'No scope found',
-  'AppFail',
-])
+muteErrors(['No scope found', 'AppFail'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -120,9 +110,9 @@ it('works', async () => {
       params: 'carol',
     }),
   ])
-  const User = () => <h2>{useStore(user)}</h2>
+  const User = () => <h2>{useUnit(user)}</h2>
   const Friends = () => useList(friends, friend => <li>{friend}</li>)
-  const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+  const Total = () => <small>Total: {useUnit(friendsTotal)}</small>
 
   const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
@@ -227,9 +217,9 @@ test('attach support', async () => {
       params: 'carol',
     }),
   ])
-  const User = () => <h2>{useStore(user)}</h2>
+  const User = () => <h2>{useUnit(user)}</h2>
   const Friends = () => useList(friends, friend => <li>{friend}</li>)
-  const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+  const Total = () => <small>Total: {useUnit(friendsTotal)}</small>
 
   const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
@@ -269,24 +259,24 @@ test('attach support', async () => {
 })
 
 test('computed values support', async () => {
-  const app = createDomain()
-
-  const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
+  const fetchUser = createEffect<string, {name: string; friends: string[]}>(
     async user => await request(`https://ssr.effector.dev/api/${user}`),
   )
-  const start = app.createEvent<string>()
+  const start = createEvent<string>()
   sample({clock: start, target: fetchUser})
-  const name = app
-    .createStore('guest')
-    .on(fetchUser.done, (_, {result}) => result.name)
+  const name = createStore('guest').on(
+    fetchUser.done,
+    (_, {result}) => result.name,
+  )
 
-  const friends = app
-    .createStore<string[]>([])
-    .on(fetchUser.done, (_, {result}) => result.friends)
+  const friends = createStore<string[]>([]).on(
+    fetchUser.done,
+    (_, {result}) => result.friends,
+  )
   const friendsTotal = friends.map(list => list.length)
 
-  const Total = () => <small>Total:{useStore(friendsTotal)}</small>
-  const User = () => <b>User:{useStore(name)}</b>
+  const Total = () => <small>Total:{useUnit(friendsTotal)}</small>
+  const User = () => <b>User:{useUnit(name)}</b>
   const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
       <section>
@@ -296,18 +286,15 @@ test('computed values support', async () => {
     </Provider>
   )
 
-  const serverScope = fork(app)
+  const serverScope = fork()
   await allSettled(start, {
     scope: serverScope,
     params: 'alice',
   })
-  const serialized = serialize(serverScope)
 
-  hydrate(app, {
-    values: serialized,
+  const clientScope = fork({
+    values: serialize(serverScope),
   })
-
-  const clientScope = fork(app)
 
   await render(<App root={clientScope} />)
 
@@ -315,11 +302,11 @@ test('computed values support', async () => {
     <section>
       <b>
         User:
-        guest
+        alice
       </b>
       <small>
         Total:
-        0
+        2
       </small>
     </section>
   `)
@@ -346,7 +333,7 @@ test('useGate support', async () => {
     return (
       <div>
         <header>Chat:{chatId}</header>
-        <p>Messages total:{useStore(messagesAmount)}</p>
+        <p>Messages total:{useUnit(messagesAmount)}</p>
       </div>
     )
   }
@@ -410,271 +397,6 @@ test('allSettled effect calls', async () => {
       console.error(err)
     })
   expect(fn).toBeCalled()
-})
-describe('useEvent', () => {
-  test('useEvent and effect calls', async () => {
-    const inc = createEvent()
-    const count = createStore(0).on(inc, x => x + 1)
-    const fx = createEffect(async () => {
-      inc()
-    })
-    const scope = fork()
-    const App = () => {
-      const fxe = useEvent(fx)
-      const x = useStore(count)
-      return (
-        <div>
-          <button id="btn" onClick={() => fxe()}>
-            clicked-{x}-times
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <button
-          id="btn"
-        >
-          clicked-
-          0
-          -times
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#btn').click()
-    })
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <button
-          id="btn"
-        >
-          clicked-
-          1
-          -times
-        </button>
-      </div>
-    `)
-    expect(count.getState()).toBe(0)
-    expect(scope.getState(count)).toBe(1)
-  })
-  test('useEvent function return value', async () => {
-    const fn = jest.fn()
-    const fx = createEffect(() => 'ok')
-    const scope = fork()
-    const App = () => {
-      const fxe = useEvent(fx)
-      return (
-        <div>
-          <button id="btn" onClick={() => fxe().then(fn)}>
-            click
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    await act(async () => {
-      container.firstChild.querySelector('#btn').click()
-    })
-    expect(argumentHistory(fn)).toEqual(['ok'])
-  })
-
-  test('object in useEvent', async () => {
-    const inc = createEvent()
-    const dec = createEvent()
-    const fx = createEffect(async () => 100)
-    const count = createStore(0)
-      .on(inc, x => x + 1)
-      .on(dec, x => x - 1)
-      .on(fx.doneData, (x, v) => x + v)
-    const scope = fork()
-    const App = () => {
-      const hndl = useEvent({fx, inc, dec})
-      const x = useStore(count)
-      return (
-        <div>
-          <span id="value">current value:{x}</span>
-          <button id="fx" onClick={() => hndl.fx()}>
-            fx
-          </button>
-          <button id="inc" onClick={() => hndl.inc()}>
-            inc
-          </button>
-          <button id="dec" onClick={() => hndl.dec()}>
-            dec
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          0
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#fx').click()
-      container.firstChild.querySelector('#inc').click()
-      container.firstChild.querySelector('#inc').click()
-    })
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          102
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#dec').click()
-    })
-    expect(count.getState()).toBe(0)
-    expect(scope.getState(count)).toBe(101)
-  })
-
-  test('array in useEvent', async () => {
-    const inc = createEvent()
-    const dec = createEvent()
-    const fx = createEffect(async () => 100)
-    const count = createStore(0)
-      .on(inc, x => x + 1)
-      .on(dec, x => x - 1)
-      .on(fx.doneData, (x, v) => x + v)
-    const scope = fork()
-    const App = () => {
-      const [a, b, c] = useEvent([fx, inc, dec])
-      const x = useStore(count)
-      return (
-        <div>
-          <span id="value">current value:{x}</span>
-          <button id="fx" onClick={() => a()}>
-            fx
-          </button>
-          <button id="inc" onClick={() => b()}>
-            inc
-          </button>
-          <button id="dec" onClick={() => c()}>
-            dec
-          </button>
-        </div>
-      )
-    }
-    await render(
-      <Provider value={scope}>
-        <App />
-      </Provider>,
-    )
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          0
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#fx').click()
-      container.firstChild.querySelector('#inc').click()
-      container.firstChild.querySelector('#inc').click()
-    })
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <span
-          id="value"
-        >
-          current value:
-          102
-        </span>
-        <button
-          id="fx"
-        >
-          fx
-        </button>
-        <button
-          id="inc"
-        >
-          inc
-        </button>
-        <button
-          id="dec"
-        >
-          dec
-        </button>
-      </div>
-    `)
-    await act(async () => {
-      container.firstChild.querySelector('#dec').click()
-    })
-    expect(count.getState()).toBe(0)
-    expect(scope.getState(count)).toBe(101)
-  })
 })
 describe('useStoreMap', () => {
   it('should render', async () => {
@@ -788,7 +510,7 @@ describe('useStoreMap', () => {
     const $a = app.createStore(10).on(inc, x => x + 1)
     const $b = app.createStore(20).on(inc, x => x + 1)
     const View = () => {
-      const current = useStore($show)
+      const current = useUnit($show)
       const selectedStore = current === 'A' ? $a : $b
       const value = useStoreMap({
         store: selectedStore,
@@ -803,7 +525,7 @@ describe('useStoreMap', () => {
       </Provider>
     )
 
-    const scope = fork(app)
+    const scope = fork()
     await render(<App root={scope} />)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
@@ -889,50 +611,6 @@ describe('useStoreMap', () => {
 })
 
 describe('behavior on scope changes', () => {
-  test('useStore should not stale', async () => {
-    const inc = createEvent()
-    const $store = createStore(0).on(inc, x => x + 1)
-    const Count = () => <p>{useStore($store)}</p>
-    const Inc = () => {
-      const boundInc = useEvent(inc)
-      return (
-        <button id="click" onClick={() => boundInc()}>
-          click
-        </button>
-      )
-    }
-    const App = ({scope}: {scope: Scope}) => (
-      <Provider value={scope}>
-        <div>
-          <Count />
-          <Inc />
-        </div>
-      </Provider>
-    )
-    const firstScope = fork()
-    const secondScope = fork({values: [[$store, 2]]})
-
-    await render(<App scope={firstScope} />)
-    await render(<App scope={secondScope} />)
-
-    await act(async () => {
-      container.firstChild.querySelector('#click').click()
-    })
-
-    expect(secondScope.getState($store)).toBe(3)
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        <p>
-          3
-        </p>
-        <button
-          id="click"
-        >
-          click
-        </button>
-      </div>
-    `)
-  })
   test('useStoreMap should not stale', async () => {
     const inc = createEvent()
     const $store = createStore(0).on(inc, x => x + 1)
@@ -941,7 +619,7 @@ describe('behavior on scope changes', () => {
       return <p>{value}</p>
     }
     const Inc = () => {
-      const boundInc = useEvent(inc)
+      const boundInc = useUnit(inc)
       return (
         <button id="click" onClick={() => boundInc()}>
           click
@@ -985,7 +663,7 @@ describe('behavior on scope changes', () => {
     const $store = createStore([0]).on(inc, ([x]) => [x + 1])
     const Count = () => useList($store, value => <p>{value}</p>)
     const Inc = () => {
-      const boundInc = useEvent(inc)
+      const boundInc = useUnit(inc)
       return (
         <button id="click" onClick={() => boundInc()}>
           click
@@ -1180,11 +858,11 @@ test('useUnit should bind units to scope', async () => {
 })
 
 describe('hooks throw errors, if Provider is not found', () => {
-  test('useUnit from `effector-react/scope` throws error, if no Provider', () => {
+  test('useUnit from `effector-react` throws error, if no Provider', () => {
     const $a = createStore(42)
 
     const AppFail = () => {
-      const a = useUnit($a)
+      const a = useUnit($a, {forceScope: true})
 
       return <div>{a}</div>
     }
@@ -1194,35 +872,7 @@ describe('hooks throw errors, if Provider is not found', () => {
     )
   })
 
-  test('useStore from `effector-react/scope` throws error, if no Provider', () => {
-    const $a = createStore(42)
-
-    const AppFail = () => {
-      const a = useStore($a)
-
-      return <div>{a}</div>
-    }
-
-    expect(() => render(<AppFail />)).rejects.toThrow(
-      'No scope found, consider adding <Provider> to app root',
-    )
-  })
-
-  test('useEvent from `effector-react/scope` throws error, if no Provider', () => {
-    const ev = createEvent()
-
-    const AppFail = () => {
-      const a = useEvent(ev)
-
-      return <div onClick={a}></div>
-    }
-
-    expect(() => render(<AppFail />)).rejects.toThrow(
-      'No scope found, consider adding <Provider> to app root',
-    )
-  })
-
-  test('useStoreMap from `effector-react/scope` throws error, if no Provider', () => {
+  test('useStoreMap from `effector-react` throws error, if no Provider', () => {
     const $a = createStore(42)
 
     const AppFail = () => {
@@ -1231,6 +881,7 @@ describe('hooks throw errors, if Provider is not found', () => {
         keys: [],
         fn: () => 42,
         defaultValue: 77,
+        forceScope: true,
       })
 
       return <div>{a}</div>
@@ -1241,13 +892,17 @@ describe('hooks throw errors, if Provider is not found', () => {
     )
   })
 
-  test('useList from `effector-react/scope` throws error, if no Provider', () => {
+  test('useList from `effector-react` throws error, if no Provider', () => {
     const $a = createStore([42])
 
     const AppFail = () => {
-      const a = useList($a, {
-        fn: () => <div>42</div>,
-      })
+      const a = useList(
+        $a,
+        {
+          fn: () => <div>42</div>,
+        },
+        {forceScope: true},
+      )
 
       return <div>{a}</div>
     }

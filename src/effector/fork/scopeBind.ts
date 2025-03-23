@@ -1,5 +1,5 @@
-import {assert} from '../throw'
-import {forkPage, setForkPage} from '../kernel'
+import {assert} from '../validate'
+import {forkPage, isKernelContext, setForkPage} from '../kernel'
 import type {Scope} from '../unit.h'
 
 /** bind event to scope */
@@ -7,7 +7,11 @@ export function scopeBind(
   unit: (...args: any[]) => any,
   {scope, safe}: {scope?: Scope; safe?: true} = {},
 ) {
-  assert(scope || forkPage || safe, 'scopeBind: scope not found')
+  assert(
+    scope || forkPage || safe || isKernelContext,
+    'scopeBind: scope not found',
+  )
+
   const targetForkPage = scope || forkPage!
 
   return (...args: any[]) => {
