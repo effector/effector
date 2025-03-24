@@ -41,6 +41,8 @@ scopeBind<T>(event: EventCallable<T>, options?: {scope?: Scope, safe?: boolean})
 We are going to call `changeLocation` inside `history.listen` callback so there is no way for effector to associate event with corresponding scope, and we should explicitly bind event to scope using `scopeBind`.
 
 ```ts
+import { createStore, createEvent, attach, scopeBind } from "effector";
+
 const $history = createStore(history);
 const initHistory = createEvent();
 const changeLocation = createEvent<string>();
@@ -62,7 +64,7 @@ sample({
 });
 ```
 
-[See full example](https://share.effector.dev/nJo1zRil)
+[See full example](https://share.effector.dev/xtP8Zk8J)
 
 ## `scopeBind(callback, options?)` (#scopeBind-methods-scopeBind-callback)
 
@@ -70,20 +72,21 @@ Binds arbitrary callback to a scope to be called later. The bound version of the
 
 :::info{title="since"}
 Feature is available since `effector 23.1.0` release.
+Multiple function arguments are supported since `effector 23.3.0`
 :::
 
 :::warning
 To be compatible with the Fork API, callbacks **must** adhere to the same rules as `Effect` handlers:
 
 - Synchronous functions can be used as they are.
-- Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/scope/).
+- Asynchronous functions must follow the [rules described in "Imperative Effect calls with scope"](/en/api/effector/Scope).
 
 :::
 
 ### Formulae (#scopeBind-methods-scopeBind-callback-formulae)
 
 ```ts
-scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T) => void;
+scopeBind(callback: (...args: Args) => T, options?: { scope?: Scope; safe?: boolean }): (...args: Args) => T;
 ```
 
 ### Arguments (#scopeBind-methods-scopeBind-callback-arguments)
@@ -95,11 +98,14 @@ scopeBind(callback: T, options?: { scope?: Scope; safe?: boolean }): (payload: T
 
 ### Returns (#scopeBind-methods-scopeBind-callback-returns)
 
-`(payload: T) => void` — A function with the same types as `callback`.
+`(...args: Args) => T` — A function with the same types as `callback`.
 
 ### Examples (#scopeBind-methods-scopeBind-callback-examples)
 
 ```ts
+import { createEvent, createStore, attach, scopeBind } from "effector";
+
+const $history = createStore(history);
 const locationChanged = createEvent();
 
 const listenToHistoryFx = attach({

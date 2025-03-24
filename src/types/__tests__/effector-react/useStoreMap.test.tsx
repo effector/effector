@@ -61,7 +61,7 @@ describe('useStoreMap', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Tuple type 'readonly [number]' of length '1' has no element at index '1'.
+        Tuple type '[number]' of length '1' has no element at index '1'.
         "
       `)
     })

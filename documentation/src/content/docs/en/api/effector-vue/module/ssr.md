@@ -11,7 +11,7 @@ import {} from "effector-vue/ssr";
 Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) the core team recommends using main module of `effector-vue` of `effector-vue/composition` instead.
 :::
 
-Provides additional API for [effector-vue](/en/api/effector-vue) that enforces library to use [Scope](/en/api/effector/scope)
+Provides additional API for [effector-vue](/en/api/effector-vue) that enforces library to use [Scope](/en/api/effector/Scope)
 
 ## APIs
 

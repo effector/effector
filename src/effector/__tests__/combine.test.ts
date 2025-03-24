@@ -9,7 +9,9 @@ import {
   fork,
   allSettled,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
+
+muteErrors('skipVoid')
 
 function rgbToHex(r: number, g: number, b: number) {
   return (
@@ -227,7 +229,6 @@ it('updates consistently', () => {
 describe('validations', () => {
   it('validate amount of arguments', () => {
     expect(() => {
-      //@ts-expect-error
       const $foo = combine()
     }).toThrowErrorMatchingInlineSnapshot(
       `"expect first argument be an object"`,

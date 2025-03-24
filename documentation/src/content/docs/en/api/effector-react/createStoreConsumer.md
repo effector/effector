@@ -13,7 +13,7 @@ import { createStoreConsumer } from "effector-react";
 :::warning{title="Deprecated"}
 since [effector-react 23.0.0](https://changelog.effector.dev/#effector-react-23-0-0).
 
-Consider using [hooks api](/en/api/effector-react/index#hooks) in modern projects.
+Consider using [hooks api](/en/api/effector-react#hooks) in modern projects.
 :::
 
 # Methods (#methods)

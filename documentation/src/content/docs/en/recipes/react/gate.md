@@ -28,7 +28,7 @@ const TodoGate = createGate();
 
 $todo.on(getTodoFx.doneData, (_, todo) => todo);
 
-// We callgetTodoFx effect every time Gate updates its state.
+// We call getTodoFx effect every time Gate updates its state.
 sample({ clock: TodoGate.state, target: getTodoFx });
 
 TodoGate.open.watch(() => {

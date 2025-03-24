@@ -64,7 +64,7 @@ const event = sample({ clock: event, source: $store });
   **Разновидности**:
 
   - **событие или эффект**: срабатывание этого события/эффекта будет запускать `target`
-  - **стор**: обновление этого стора будет запускать `target`
+  - **стор**: обновление этого стор будет запускать `target`
   - **массив юнитов**: срабатывание любого из юнитов будет запускать `target`. Сокращение для вызова [merge](/ru/api/effector/merge)
   - **поле отсутствует**: `source` будет использоваться в качестве `clock`
 
@@ -146,7 +146,7 @@ submitForm(12345678);
   **Разновидности**:
 
   - **событие или эффект**: срабатывание этого события/эффекта будет запускать `target`
-  - **стор**: обновление этого стора будет запускать `target`
+  - **стор**: обновление этого стор будет запускать `target`
   - **поле отсутствует**: `source` будет использоваться в качестве `clock`
 
 - **`fn?`**: `(sourceData, clockData) => result`
@@ -173,9 +173,9 @@ const sampleUnit = sample(
   (name, password) => ({ name, password }) /* 3 */,
 );
 
-forward({
-  from: sampleUnit,
-  to: signIn /* 4 */,
+sample({
+  clock: sampleUnit,
+  target: signIn /* 4 */,
 });
 
 submitForm(12345678);
@@ -185,7 +185,7 @@ submitForm(12345678);
 // 4. и передать результат вычислений в эффект signIn
 ```
 
-[Запустить пример](https://share.effector.dev/nln8pwfj)
+[Запустить пример](https://share.effector.dev/YCTp2KLe)
 
 ## `sample({name?})`
 

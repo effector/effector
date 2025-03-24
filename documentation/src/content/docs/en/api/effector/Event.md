@@ -61,13 +61,13 @@ const maybeDataReceived = createEvent<Data | null>();
 // maybeDataReceived: EventCallable<Data | null>
 ```
 
-[Read more in the explanation section](/en/explanation/events#typescript).
+[Read more in the explanation section](/en/essentials/events/#typescript).
 
 ## Call as function `event(argument)` (#eventCallable-call-argument)
 
 Initiates an event with the provided argument, which in turn activates any registered subscribers.
 
-[Read more in the explanation section](/en/explanation/events#event-calling).
+[Read more in the explanation section](/en/essentials/events#event-calling).
 
 ### Formulae (#eventCallable-call-argument-formulae)
 
@@ -467,7 +467,7 @@ const second = first.map((count) => count.toString());
 // second: Event<string>
 ```
 
-The `first` event can be represented as either `Event<T>` or `Event<T>`. <br/>
+The `first` event can be represented as either `Event<T>` or `EventCallable<T>`. <br/>
 The `second` event will always be represented as `Event<T>`.
 
 #### Examples (#event-methods-map-fn-examples)
@@ -826,7 +826,7 @@ Read more:
 ## Properties (#event-properties)
 
 These set of property is mostly set by [`effector/babel-plugin`](/en/api/effector/babel-plugin)
-or [`@effector/swc-plugin`](https://github.com/effector/swc-plugin). So they are exist only when babel or SWC is used.
+or [`@effector/swc-plugin`](/en/api/effector/swc-plugin). So they are exist only when babel or SWC is used.
 
 ### `.sid` (#event-properties-sid)
 
@@ -863,6 +863,10 @@ const another = demo;
 This property contains the full internal chain of units. For example, event can be created by the domain, so the
 composite name will contain a domain name inside it.
 
+:::tip{title="Keep in mind"}
+Usually, if long name is needed, is better to pass it explicitly to `name` field
+:::
+
 ```ts
 import { createEvent, createDomain } from "effector";
 
@@ -870,10 +874,10 @@ const first = createEvent();
 const domain = createDomain();
 const second = domain.createEvent();
 
-console.log(first);
+console.log(first.compositeName);
 // => { shortName: "first", fullName: "first", path: ["first"] }
 
-console.log(second);
+console.log(second.compositeName);
 // => { shortName: "second", fullName: "domain/second", path: ["domain", "second"] }
 ```
 

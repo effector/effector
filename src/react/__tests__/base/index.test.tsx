@@ -1,17 +1,21 @@
 import * as React from 'react'
+//@ts-expect-error
 import {act, render, container} from 'effector/fixtures/react'
 import {createStore, createEvent} from 'effector'
 import {connect} from 'effector-react'
+import {muteErrors} from 'effector/fixtures'
 
-test('connect api', async() => {
+muteErrors(['connect', 'useStore'])
+
+test('connect api', async () => {
   const text = createStore('foo')
   const store = text.map(text => ({text}))
-  const changeText = createEvent()
+  const changeText = createEvent<string>()
   text.on(changeText, (_, e) => e)
 
   class Display extends React.Component<{
-    text: string,
-    count: number,
+    text: string
+    count: number
   }> {
     render() {
       return (
@@ -23,6 +27,7 @@ test('connect api', async() => {
   }
   const ConnectedDisplay = connect(Display)(store)
 
+  //@ts-expect-error vue messed with JSX global types
   await render(<ConnectedDisplay count={1} />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <span>
@@ -32,7 +37,7 @@ test('connect api', async() => {
       1
     </span>
   `)
-  await act(async() => {
+  await act(async () => {
     changeText('bar')
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -45,7 +50,7 @@ test('connect api', async() => {
   `)
 })
 
-test('click counter', async() => {
+test('click counter', async () => {
   const count = createStore(0)
   const store = count.map(text => ({text}))
   const increment = createEvent()
@@ -66,6 +71,7 @@ test('click counter', async() => {
   }
   const ConnectedDisplay = connect(Display)(store)
 
+  //@ts-expect-error vue messed with JSX global types
   await render(<ConnectedDisplay />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <span>
@@ -77,7 +83,7 @@ test('click counter', async() => {
       </button>
     </span>
   `)
-  await act(async() => {
+  await act(async () => {
     container.firstChild.querySelector('#increment').click()
   })
   expect(container.firstChild).toMatchInlineSnapshot(`

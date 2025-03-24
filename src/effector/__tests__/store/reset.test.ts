@@ -1,18 +1,5 @@
-import {createStore, createEvent, forward} from 'effector'
+import {createStore, createEvent, sample} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 it('support spread of units', () => {
   const fn = jest.fn()
@@ -182,14 +169,14 @@ test('late forwarding', () => {
   A.reset(reset)
   B.reset(reset)
 
-  forward({from: A, to: B})
+  sample({clock: A, target: B})
 
   //@ts-expect-error
   A.setState('C')
   reset() // reset
 
   expect(A.getState()).toMatchInlineSnapshot(`"A"`)
-  expect(B.getState()).toMatchInlineSnapshot(`"B"`)
+  expect(B.getState()).toMatchInlineSnapshot(`"A"`)
 
   reset() // reset again
 

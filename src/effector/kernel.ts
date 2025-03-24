@@ -238,7 +238,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let pageForLaunch = currentPage
   let stackForLaunch = null
   let forkPageForLaunch = forkPage
-  let meta: Record<string, any> | void
+  let meta: Record<string, any> | undefined
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
@@ -289,7 +289,7 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
   let node: Node
   let value: Layer | undefined
   let page: Leaf | null
-  let reg: Record<string, StateRef> | void
+  let reg: Record<string, StateRef> | undefined
   kernelLoop: while ((value = deleteMin())) {
     const {idx, stack, type} = value
     node = stack.node

@@ -1,6 +1,6 @@
 import {
   createDomain,
-  forward,
+  sample,
   attach,
   createEvent,
   createStore,
@@ -12,33 +12,18 @@ import {
   combine,
   Store,
   Scope,
+  StoreWritable,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (
-      String(message).includes('forward') ||
-      String(message).includes('guard') ||
-      String(message).includes('object with handlers')
-    )
-      return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['fork(domain)', 'hydrate(domain', 'object with handlers'])
 
 test('usage with domain', async () => {
   const app = createDomain()
   const add = app.createEvent<number>()
   const $count = app.createStore(0).on(add, (n, x) => n + x)
   const addFx = app.createEffect(() => 0)
-  forward({from: addFx.doneData, to: add})
+  sample({clock: addFx.doneData, target: add})
 
   const scope = fork(app, {
     values: [[$count, 10]],
@@ -53,7 +38,7 @@ test('usage without domain', async () => {
   const add = createEvent<number>()
   const $count = createStore(0).on(add, (n, x) => n + x)
   const addFx = createEffect(() => 0)
-  forward({from: addFx.doneData, to: add})
+  sample({clock: addFx.doneData, target: add})
 
   const scope = fork({
     values: [[$count, 10]],
@@ -303,8 +288,11 @@ describe('fork values support', () => {
      * goal of this test is to create a lot of stores to pass to values
      * and ensure that combined stores will work as expected
      * */
-    let sumStore = createStore([0, []] as [number, any[]], {sid: 'sum'})
-    const stores: Store<number>[] = []
+    let sumStore: Store<[number, any[]]> = createStore(
+      [0, []] as [number, any[]],
+      {sid: 'sum'},
+    )
+    const stores: StoreWritable<number>[] = []
     const storesToShow: Store<number>[] = []
     function fab(n: number) {
       const store = createStore(n, {sid: `${n}.1`})
@@ -343,7 +331,9 @@ describe('fork values support', () => {
       return results
     })
     const scope = fork({
-      values: stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
+      values: stores
+        .filter((_, i) => i % 3 === 0)
+        .map(store => [store, 0] as [StoreWritable<number>, number]),
     })
     const basicCase = serialize(scope)
     expect(scope.getState(finalStore)).toMatchInlineSnapshot(`

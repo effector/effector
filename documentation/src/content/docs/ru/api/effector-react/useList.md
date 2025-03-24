@@ -10,6 +10,12 @@ lang: ru
 React-хук для эффективного рендеринга сторов хранящих массивы данных.
 Каждый элемент будет мемоизирован и обновлен только при изменении его данных
 
+# Когда нужно использовать `useList`?
+
+`useList` решает конкретную задачу эффективного рендера списков, с `useList` можно не проставлять key у списков компонентов и там реализован более оптимальный ререндер. Если есть ощущение что требуется что-то еще, то значит фича переросла `useList` и стоит использовать [`useStoreMap`](/ru/api/effector-react/useStoreMap). С `useStoreMap` можно взять конкретные данные из стора оптимальным образом, если нужен не весь стор, а только его часть
+
+# API (#api)
+
 ## Сокращённая запись (#useList-short)
 
 ### Формула (#useList-short-formulae)
@@ -194,14 +200,14 @@ const App = () => (
 ```jsx
 import ReactDOM from "react-dom";
 import { createEvent, createStore, restore } from "effector";
-import { useStore, useList } from "effector-react";
+import { useUnit, useList } from "effector-react";
 
 const renameUser = createEvent();
 const $user = restore(renameUser, "alice");
 const $friends = createStore(["bob"]);
 
 const App = () => {
-  const user = useStore($user);
+  const user = useUnit($user);
   return useList($friends, {
     keys: [user],
     fn: (friend) => (
@@ -221,4 +227,4 @@ setTimeout(() => {
 }, 500);
 ```
 
-[Запустить пример](https://share.effector.dev/ijRS5TYh)
+[Запустить пример](https://share.effector.dev/joHy2ADJ)

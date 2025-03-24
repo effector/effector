@@ -35,7 +35,7 @@ const launchCase = (
 export function split(...args: any[]) {
   const METHOD = 'split'
   let targets: Record<string, DataCarrier>
-  let clock: void | DataCarrier | DataCarrier[]
+  let clock: undefined | DataCarrier | DataCarrier[]
   let [[source, match], metadata] = processArgsToConfig(args)
   const errorTitle = generateErrorTitle(METHOD, metadata)
   const configForm = !match
@@ -72,7 +72,11 @@ export function split(...args: any[]) {
     )
   }
   const owners = new Set(
-    ([] as DataCarrier[]).concat(source, clock || [], Object.values(targets)),
+    ([] as DataCarrier[]).concat(
+      source as DataCarrier,
+      clock || [],
+      Object.values(targets),
+    ),
   )
   const caseNames = Object.keys(
     matchIsUnit || matchIsFunction ? targets : match,
@@ -155,7 +159,7 @@ export function split(...args: any[]) {
     createSampling(
       METHOD,
       clock,
-      source,
+      source as DataCarrier,
       null,
       splitterNode,
       null,

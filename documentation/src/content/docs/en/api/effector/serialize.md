@@ -17,7 +17,7 @@ import { serialize, type Scope } from "effector";
 A companion method for [_fork_](/en/api/effector/fork). It allows us to get a serialized value for all the store states within a [scope](/en/api/effector/Scope). The main purpose is an application state serialization on the server side during SSR.
 
 :::warning{title="Requirements"}
-[_Babel plugin_](/en/api/effector/babel-plugin) or [_SWC plugin_](https://github.com/effector/swc-plugin) is required for using this method, as these plugins provide the SIDs for stores, which are required for stable state serialization.
+[_Babel plugin_](/en/api/effector/babel-plugin) or [_SWC plugin_](/en/api/effector/swc-plugin) is required for using this method, as these plugins provide the SIDs for stores, which are required for stable state serialization.
 
 You can find deep-dive [explanation here](/en/explanation/sids)
 :::
@@ -51,16 +51,20 @@ If a store [does not have a sid](/en/api/effector/babel-plugin#sid), its value w
 #### Serialize forked instance state (#methods-serialize-examples-serializeForkedInstanceState)
 
 ```js
-import { createDomain, fork, serialize } from "effector";
+import { createStore, createEvent, allSettled, fork, serialize } from "effector";
 
-const domain = createDomain();
-const $store = domain.createStore(42);
-const scope = fork(domain);
+const inc = createEvent();
+const $store = createStore(42);
+$store.on(inc, (x) => x + 1);
 
-console.log(serialize(scope)); // => {[sid]: 42}
+const scope = fork();
+
+await allSettled(inc, { scope });
+
+console.log(serialize(scope)); // => {[sid]: 43}
 ```
 
-[Try it](https://share.effector.dev/zlRJbjei)
+[Try it](https://share.effector.dev/Uqos144z)
 
 #### Using with `onlyChanges` (#methods-serialize-examples-usingWithOnlyChanges)
 

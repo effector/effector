@@ -209,7 +209,15 @@ console.log(testScope.getState($friends));
 
 :::info{title="since"}
 
-introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
+Introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
+
+:::
+
+:::warning{title="Deprecated"}
+
+Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
+
+`fork` no longer requires `domain` as an argument, because it can automatically track all units starting from [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0).
 
 :::
 

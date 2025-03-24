@@ -2,8 +2,8 @@
 id: usage-with-effector-react
 title: Usage with effector-react
 redirectFrom:
-  - /docs/typescript/usage-with-effector-react
-  - /typescript/usage-with-effector-react
+  - /en/docs/typescript/usage-with-effector-react
+  - /en/typescript/usage-with-effector-react
 ---
 
 **TypeScript** is a typed superset of JavaScript. It became popular
@@ -287,7 +287,10 @@ import * as model from "./model";
 // export function ChatPage { ... }
 
 function ChatHistory() {
-  const [messageDeleting, onMessageDelete] = useUnit([model.$messageDeleting, model.messageDeleteClicked]);
+  const [messageDeleting, onMessageDelete] = useUnit([
+    model.$messageDeleting,
+    model.messageDeleteClicked,
+  ]);
 
   // Hook `useList` allows React not rerender messages really doesn't changed
   const messages = useList(model.$messages, (message) => (
@@ -315,7 +318,11 @@ function MessageForm() {
 }
 
 function SendMessage() {
-  const [userName, messageText, messageSending] = useUnit([model.$userName, model.$messageText, model.$messageSending]);
+  const [userName, messageText, messageSending] = useUnit([
+    model.$userName,
+    model.$messageText,
+    model.$messageSending,
+  ]);
 
   const [handleLogout, handleTextChange, handleEnterPress, handleSendClick] = useUnit([
     model.logoutClicked,

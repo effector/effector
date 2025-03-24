@@ -8,7 +8,7 @@ import {
   restore,
   attach,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
 describe('domain hooks', () => {
   test('domain.onCreateEvent(fn)', () => {
@@ -81,6 +81,8 @@ describe('domain hooks', () => {
 })
 
 describe('domain name', () => {
+  muteErrors('getType')
+
   test("should return it's own name on domain.getType()", () => {
     expect(createDomain('foo').getType()).toBe('foo')
   })
@@ -133,8 +135,11 @@ describe('config', () => {
 describe('domain ownership', () => {
   test('reference example', () => {
     const fn = jest.fn()
-    const add = createEvent()
-    const source = createStore([]).on(add, (list, item) => [...list, item])
+    const add = createEvent<string>()
+    const source = createStore<string[]>([]).on(add, (list, item) => [
+      ...list,
+      item,
+    ])
     const mappedA = source.map(list => list.length)
     const mappedB = source.map(list => list.length)
     mappedA.watch(e => fn(e))
@@ -152,9 +157,9 @@ describe('domain ownership', () => {
   test('edge case with domains', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const add = domain.createEvent()
+    const add = domain.createEvent<string>()
     const source = domain
-      .createStore([])
+      .createStore<string[]>([])
       .on(add, (list, item) => [...list, item])
     const mappedA = source.map(list => list.length)
     const mappedB = source.map(list => list.length)
@@ -173,9 +178,9 @@ describe('domain ownership', () => {
   test('clearNode(domain) should work as usual', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const add = domain.createEvent()
+    const add = domain.createEvent<string>()
     const source = domain
-      .createStore([])
+      .createStore<string[]>([])
       .on(add, (list, item) => [...list, item])
     const mappedA = source.map(list => list.length)
     source.map(list => list.length)
@@ -195,6 +200,7 @@ describe('domain ownership', () => {
     const domain = createDomain()
     clearNode(domain)
     //this mean onCreateEvent hook will be erased together with domain itself
+    //@ts-expect-error
     expect(domain.hooks.event.graphite.scope).toBe(null)
   })
 })
@@ -271,6 +277,7 @@ test('parent assignment', () => {
   const fn = jest.fn()
   const domain = createDomain()
   domain.onCreateEffect(fx => {
+    //@ts-expect-error
     domain.hooks.event(fx.doneData)
   })
   domain.onCreateStore(store => {

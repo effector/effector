@@ -1,37 +1,21 @@
 import {render} from 'solid-testing-library'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,
   createEvent,
   createStore,
   createEffect,
-  forward,
   fork,
   allSettled,
   serialize,
   hydrate,
   Scope,
+  sample,
 } from 'effector'
-import {
-  Provider,
-  useUnit,
-  useGate,
-  createGate,
-} from 'effector-solid/scope'
+import {Provider, useUnit, useGate, createGate} from 'effector-solid/scope'
 import {createSignal} from 'solid-js'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['fork(domain)', 'hydrate(domain'])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -65,7 +49,7 @@ test('computed values support', async () => {
     async user => await request(`https://ssr.effector.dev/api/${user}`),
   )
   const start = app.createEvent<string>()
-  forward({from: start, to: fetchUser})
+  sample({clock: start, target: fetchUser})
   const name = app
     .createStore('guest')
     .on(fetchUser.done, (_, {result}) => result.name)
@@ -129,7 +113,7 @@ test('useGate support', async () => {
 
   const activeChatGate = createGate<{chatId: string}>({})
 
-  forward({from: activeChatGate.open, to: getMessagesFx})
+  sample({clock: activeChatGate.open, target: getMessagesFx})
 
   const ChatPage = (props: {chatId: string}) => {
     useGate(activeChatGate, props)

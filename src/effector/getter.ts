@@ -6,8 +6,7 @@ export const getGraph = (graph: NodeUnit): Node =>
 export const getOwners = (node: Node) => node.family.owners
 export const getLinks = (node: Node) => node.family.links
 export const getStoreState = (store: Store<any>): StateRef => store.stateRef
-export const getValue = (stack: any) => stack.value
-export const getSubscribers = (store: Store<any>) => store.subscribers
+export const getValue = <T>(stack: {value: T}) => stack.value
 export const getParent = (unit: any) => unit.parent
 export const getForkPage = (val: any): Scope | void => val.scope
 export const getMeta = (unit: NodeUnit, field: string) =>

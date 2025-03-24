@@ -19,13 +19,13 @@ export function mutualSample<Mount, State, T>({
       source: state,
       clock: mount,
       fn: onMount,
-      greedy: true,
+      batch: false,
     }),
     onState: sample({
       source: mount,
       clock: state,
       fn: onState,
-      greedy: true,
+      batch: false,
     }),
   }
 }

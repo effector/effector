@@ -8,7 +8,6 @@ redirectFrom:
 There is the official Next.js bindings package - [`@effector/next`](https://github.com/effector/next). Follow its documentation to find out, how to integrate Next.js with effector.
 :::
 
-
 This is a simplified example of integration with the Next.js router.
 We create a similar model for storing the router instance:
 
@@ -48,7 +47,7 @@ import { useRouter } from 'next/router';
     ...
 
     const router = useRouter();
-    const attachRouter = useEvent(attachRouterEv);
+    const attachRouter = useUnit(attachRouterEv);
 
     useEffect(() => {
         attachRouter(router);

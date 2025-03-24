@@ -19,3 +19,12 @@ export const deprecate = (
       suggestion ? `, use ${suggestion} instead` : ''
     }`,
   )
+
+export const printErrorWithStack = (
+  message: string,
+  stack: string | undefined,
+) => {
+  const error = Error(message)
+  error.stack = stack
+  console.error(error)
+}

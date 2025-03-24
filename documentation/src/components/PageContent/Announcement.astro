@@ -1,11 +1,8 @@
 ---
-import { createLink, getPathParamsFromId, getTextLocalized } from "src/languages";
+import { createLink, getPathParamsFromId, getTextLocalized, isExternal } from "src/languages";
 import { ANNOUNCEMENT } from "../../consts";
 
 const { lang = "en" } = getPathParamsFromId(Astro.url.pathname);
-function isRemote(link: string) {
-  return link.startsWith("http://") || link.startsWith("https://");
-}
 ---
 
 {
@@ -17,7 +14,7 @@ function isRemote(link: string) {
         <div>
           <a
             href={createLink(ANNOUNCEMENT.button, lang)}
-            target={isRemote(ANNOUNCEMENT.button.link) ? "_blank" : undefined}
+            target={isExternal(ANNOUNCEMENT.button) ? "_blank" : undefined}
           >
             {getTextLocalized(ANNOUNCEMENT.button, lang)}
           </a>

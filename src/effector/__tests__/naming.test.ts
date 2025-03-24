@@ -7,7 +7,9 @@ describe('.map support', () => {
   it('should support event.map', () => {
     const foo = createEvent()
     const bar = foo.map({
+      //@ts-expect-error untyped feature
       name: 'Bar',
+      //@ts-expect-error
       fn: x => x,
     })
     expect(bar.shortName).toBe('Bar')
@@ -15,7 +17,9 @@ describe('.map support', () => {
   it('should support store.map', () => {
     const foo = createStore(0)
     const bar = foo.map({
+      //@ts-expect-error untyped feature
       name: 'Bar',
+      //@ts-expect-error
       fn: x => x + 1,
     })
     expect(bar.shortName).toBe('Bar')

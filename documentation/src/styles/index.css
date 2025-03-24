@@ -79,35 +79,35 @@ h6 {
 }
 
 .content section h1 {
-  border-top: 1px solid var(--theme-divider);
-  padding-top: 3rem;
-  font-size: 2.5rem;
+  border-bottom: 1px solid var(--theme-divider);
+  font-size: 2rem;
   line-height: 1;
-  margin: 3rem 0 2rem;
+  margin: 3rem 0 0;
+  padding-bottom: 3rem;
 }
 
 .content section h2 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   line-height: 1.2;
   margin: 4rem 0 1rem;
   letter-spacing: -0.02em;
 }
 
 .content section h3 {
-  font-size: 1.5rem;
+  font-size: 1.17rem;
   line-height: 1.2;
   margin: 2.5rem 0 1rem;
   letter-spacing: -0.02em;
 }
 
 .content section h4 {
-  font-size: 1.3rem;
+  font-size: 1rem;
   line-height: 1.2;
   letter-spacing: -0.05em;
 }
 
 .content section h5 {
-  font-size: 1.2rem;
+  font-size: 0.83rem;
   line-height: 1.2;
 }
 
@@ -120,7 +120,7 @@ h6 {
 }
 
 .content section :is(h1, h2, h3, h4, h5, h6) > code {
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 .href {
@@ -521,7 +521,7 @@ h2.heading {
 }
 
 .admonition {
-  @apply -mx-8 mb-2 box-border gap-2 p-4;
+  @apply -mx-3 mb-2 box-border gap-2 p-4;
   /* Strange behavior: tw adds `items-center` when `flex` is applied */
   display: flex;
   flex-direction: column;
@@ -551,6 +551,10 @@ h2.heading {
 
 .admonition code {
   background-color: var(--admonition-bg);
+  color: var(--admonition-text);
+}
+.admonition pre > code {
+  background-color: initial;
   color: var(--admonition-text);
 }
 

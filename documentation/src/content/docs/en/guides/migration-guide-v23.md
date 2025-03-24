@@ -94,22 +94,26 @@ It's safe to just swap the calls of the old hooks with the new one:
 
 ```ts
 const Component = () => {
-  const foo = useStore($foo)
-  const bar = useStore($bar)
-  const onSubmit = useEvent(triggerSubmit)
-}
+  const foo = useStore($foo);
+  const bar = useStore($bar);
+  const onSubmit = useEvent(triggerSubmit);
+};
 ```
+
 Becomes:
+
 ```ts
 const Component = () => {
-  const foo = useUnit($foo)
-  const bar = useUnit($bar)
-  const onSubmit = useUnit(triggerSubmit)
-}
+  const foo = useUnit($foo);
+  const bar = useUnit($bar);
+  const onSubmit = useUnit(triggerSubmit);
+};
 ```
+
 Or shorter:
+
 ```ts
 const Component = () => {
-  const [foo, bar, onSubmit] = useUnit([$foo, $bar, triggerSubmit])
-}
+  const [foo, bar, onSubmit] = useUnit([$foo, $bar, triggerSubmit]);
+};
 ```

@@ -1,31 +1,46 @@
 ---
 title: Motivation
 redirectFrom:
-  - /docs/introduction/motivation
-  - /introduction/motivation
+  - /en/docs/introduction/motivation
+  - /en/introduction/motivation
 ---
 
-Most applications have the logic for which they're created.
-This logic itself can be very complex and based on reactive principles, we call it **business logic**.
+# Motivation
 
-In order for the user to benefit from the logic described above, it is necessary to create a user interface
-and implement the logic for it; we call it **UI-logic**.
+Modern web application development is becoming more complex every day. Multiple frameworks, complex business logic, different approaches to state management — all of this creates additional challenges for developers. Effector offers an elegant solution to these problems.
 
-The easiest way to figure out what is what — is to remember what tasks your project manager comes to you with,
-or what the product tasks look like.
-There's no description of how buttons, dropdowns, and form fields should work internally or which api should be used.
-There is only a description of how the user interacts with the application.
-The users don't care what technologies and frameworks are used under the hood – it is up to the developers to decide, which tools to use to achieve required quality.
+## Why Effector?
 
-In most cases, the product requirements team doesn't think in terms of UI components; it thinks through user behavior scenarios.
-More importantly for developers, the way frameworks like React, Angular, or Vue work often doesn't allow
-the business logic to be described the way the product team described it. These frameworks are designed very differently
-and have different operating principles, whereas business logic is always based on the same principles:
+Effector was designed to describe application business logic in a simple and clear language using three basic primitives:
 
-1. users can interact with the application through the interface
-2. they can see changes on the page
-3. they can notice how the application interacts with the outside world
+- [Event](/en/api/effector/Event) — for describing events
+- [Store](/en/api/effector/Store) — for state management
+- [Effect](/en/api/effector/Effect) — for handling side effects
 
-Effector offers the possibility to describe the business logic in the same language as the product development team communicates,
-using basic primitives: Event, Store, Effect respectively. At the same time, the UI logic remains the responsibility of the framework.
-Let each framework solve its task as efficiently as possible.
+At the same time, user interface logic is handled by the framework.
+Let each framework efficiently address its specific task.
+
+## Separation of Concerns
+
+In modern development, business logic and user interface are clearly separated:
+
+**Business Logic** — is the essence of your application, the reason it exists. It can be complex and based on reactive principles, but it defines how your product works.
+
+**UI Logic** — is how users interact with business logic through the interface. These are buttons, forms, and other control elements.
+
+## This is Why Effector!
+
+In real projects, tasks from product managers rarely contain interface implementation details. Instead, they describe user interaction scenarios with the system. Effector allows you to describe these scenarios in the same language that the development team uses:
+
+- Users interact with the application → [Event](/en/api/effector/Event)
+- See changes on the page → [Store](/en/api/effector/Store)
+- Application interacts with the outside world → [Effect](/en/api/effector/Effect)
+
+## Framework agnostic
+
+Despite React, Angular, and Vue having different approaches to development, application business logic remains unchanged. Effector allows you to describe it uniformly, regardless of the chosen framework.
+This means you can:
+
+1. Focus on business logic, not framework specifics
+2. Easily reuse code between different parts of the application
+3. Create more maintainable and scalable solutions

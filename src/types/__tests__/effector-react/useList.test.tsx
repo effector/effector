@@ -12,7 +12,7 @@ type User = {
   bio: string
 }
 test('plain array support', () => {
-  const users = createStore<User[]>([
+  const $users = createStore<User[]>([
     {
       username: 'alice',
       email: 'alice@example.com',
@@ -29,7 +29,7 @@ test('plain array support', () => {
       bio: '- - -',
     },
   ])
-  const UserList = () => useList(users, ({username}) => <p>{username}</p>)
+  const UserList = () => useList($users, ({username}) => <p>{username}</p>)
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -39,7 +39,7 @@ test('plain array support', () => {
 })
 
 test('readonly array support', () => {
-  const users = createStore<ReadonlyArray<User>>([
+  const $users = createStore<ReadonlyArray<User>>([
     {
       username: 'alice',
       email: 'alice@example.com',
@@ -56,7 +56,7 @@ test('readonly array support', () => {
       bio: '- - -',
     },
   ])
-  const UserList = () => useList(users, ({username}) => <p>{username}</p>)
+  const UserList = () => useList($users, ({username}) => <p>{username}</p>)
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -66,7 +66,7 @@ test('readonly array support', () => {
 })
 
 test('getKey support', () => {
-  const users = createStore<User[]>([
+  const $users = createStore<User[]>([
     {
       username: 'alice',
       email: 'alice@example.com',
@@ -85,7 +85,7 @@ test('getKey support', () => {
   ])
 
   const UserList = () =>
-    useList(users, {
+    useList($users, {
       getKey: ({email}) => email,
       fn: ({username}, key: string) => (
         <p>
@@ -106,7 +106,7 @@ test('getKey support', () => {
 })
 
 test("usage as components' return value", () => {
-  const users = createStore<User[]>([
+  const $users = createStore<User[]>([
     {
       username: 'alice',
       email: 'alice@example.com',
@@ -123,12 +123,47 @@ test("usage as components' return value", () => {
       bio: '- - -',
     },
   ])
-  const UserList = () => useList(users, ({username}) => <p>{username}</p>)
+  const UserList = () => useList($users, ({username}) => <p>{username}</p>)
   const App = () => (
     <div>
       <UserList />
     </div>
   )
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
+test('edge cases with return values', () => {
+  const $users = createStore<User[]>([
+    {
+      username: 'alice',
+      email: 'alice@example.com',
+      bio: '. . .',
+    },
+    {
+      username: 'bob',
+      email: 'bob@example.com',
+      bio: '~/ - /~',
+    },
+    {
+      username: 'carol',
+      email: 'carol@example.com',
+      bio: '- - -',
+    },
+  ])
+  const Lists = () => (
+    <div>
+      {useList($users, () => null)}
+      {useList($users, () => (
+        <div>ok</div>
+      ))}
+      {useList($users, () => [<div>ok</div>])}
+    </div>
+  )
+
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors

@@ -3,6 +3,8 @@ import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
 import MoreMenu from "../RightSidebar/MoreMenu.astro";
 import TableOfContents from "../RightSidebar/TableOfContents";
+import { getLocalizedSidebar } from "src/navigation";
+import PageNavigation from "src/components/PageNavigation.astro";
 
 type Props = {
   title: string;
@@ -29,8 +31,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 <article
   id="article"
   class="content"
-  data-pagefind-body={indexing ? true : null}
-  data-pagefind-sort="weight[data-weight]"
+  {...indexing ? { "data-pagefind-body": "" } : {}}
   data-weight={pagefindWeight}
 >
   <section class="main-section">
@@ -86,6 +87,9 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     </nav>
     <slot />
   </section>
+
+  <!-- <PageNavigation /> -->
+
   <nav class="mb-8 block xl:hidden" data-pagefind-ignore>
     <MoreMenu documentId={documentId} />
   </nav>
@@ -98,7 +102,6 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     padding: 0;
     height: 100%;
     width: 100%;
-    /* max-width: 75ch; */
   }
 
   .content > section {

@@ -37,6 +37,8 @@ Do not modify the `state` value! It is a [derived store](/en/api/effector/Store#
 ### Example (#properties-state-example)
 
 ```tsx
+import { createGate, useGate } from "effector-react";
+
 const Gate = createGate();
 
 Gate.state.watch((state) => console.info("gate state updated", state));
@@ -77,6 +79,8 @@ Do not modify the `status` value! It is a [derived store](/en/api/effector/Store
 ### Example (#properties-status-example)
 
 ```tsx
+import { createGate, useGate } from "effector-react";
+
 const Gate = createGate();
 
 Gate.status.watch((opened) => console.info("is Gate opened?", opened));

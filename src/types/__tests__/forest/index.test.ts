@@ -43,8 +43,7 @@ describe('text', () => {
                       Type '{ value: string; } | null' is not assignable to type 'string | number | boolean | null'.
                         Type '{ value: string; }' is not assignable to type 'string | number | boolean | null'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
-          Argument of type '{ text: Store<{ value: string; } | null>; }' is not assignable to parameter of type '() => void'.
-            Object literal may only specify known properties, and 'text' does not exist in type '() => void'.
+          Object literal may only specify known properties, and 'text' does not exist in type '() => void'.
       "
     `)
     function dropInconsistentLine(text: string) {

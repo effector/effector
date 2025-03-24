@@ -1,8 +1,11 @@
 ---
 import { getPathParamsFromId, getTextLocalized, type LText } from "../languages";
+import ChevronDown from "@icons/ChevronDown.astro";
+import DropDownMenuItem from "./DropDownMenuItem.astro";
 
 interface Link {
   link: string;
+  icon?: (props: { size: number }) => any;
   text: LText;
 }
 
@@ -25,20 +28,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     <div class="button-title">
       <slot />
     </div>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
+    <ChevronDown size={18} />
   </button>
   <div class="flyout">
     <div class="items">
@@ -49,67 +39,14 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
               return (
                 <div class="group">
                   <p>{getTextLocalized(linkOrGroup, lang)}</p>
-                  {linkOrGroup.links.map((link) => {
-                    return (
-                      <a
-                        class:list={{
-                          link: true,
-                          active: Astro.url.pathname.startsWith(link.link),
-                        }}
-                        href={link.link}
-                        target={link.link.startsWith("/") ? undefined : "_blank"}
-                      >
-                        {getTextLocalized(link, lang)}
-                        {link.link.startsWith("https://") || link.link.startsWith("http://") ? (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <line x1="17" y1="7" x2="7" y2="17" />
-                            <polyline points="8 7 17 7 17 16" />
-                          </svg>
-                        ) : null}
-                      </a>
-                    );
-                  })}
+                  {linkOrGroup.links.map((link) => (
+                    <DropDownMenuItem link={link} lang={lang} />
+                  ))}
                 </div>
               );
             }
-            return (
-              <a
-                href={linkOrGroup.link}
-                class:list={{ link: true, active: Astro.url.pathname.startsWith(linkOrGroup.link) }}
-                target={linkOrGroup.link.startsWith("/") ? undefined : "_blank"}
-              >
-                {getTextLocalized(linkOrGroup, lang)}
-                {linkOrGroup.link.startsWith("https://") ||
-                linkOrGroup.link.startsWith("http://") ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <line x1="17" y1="7" x2="7" y2="17" />
-                    <polyline points="8 7 17 7 17 16" />
-                  </svg>
-                ) : null}
-              </a>
-            );
+
+            return <DropDownMenuItem link={linkOrGroup} lang={lang} />;
           })
         }
       </div>
@@ -133,16 +70,16 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     pointer-events: none;
   }
 
-  .menu button {
+  .menu .menu-button {
     display: flex;
     align-items: center;
     appearance: none;
     transition: color 0.3s;
-    padding: 0;
+    padding: 0.25rem 0.5rem;
     color: var(--theme-text);
   }
 
-  .menu:hover button {
+  .menu:hover .menu-button {
     color: var(--theme-text-light);
   }
 
@@ -168,7 +105,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     @apply rounded-xl p-3 shadow-xl;
     border: 1px solid var(--theme-divider);
     background-color: var(--theme-bg);
-    min-width: 8rem;
+    min-width: 10rem;
     overflow-y: auto;
   }
 
@@ -178,31 +115,12 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .group p {
+    @apply text-sm;
     margin-top: 1rem;
-  }
-
-  .link {
-    @apply rounded-md;
-    display: flex;
-    transition:
-      background-color 0.25s,
-      color 0.25s;
-    padding: 0 0.8rem;
-    color: currentColor;
-    font-weight: 500;
-    font-size: 0.9rem;
-    line-height: 2rem;
-    text-align: start;
-    white-space: nowrap;
-  }
-
-  .link:hover {
-    background-color: var(--theme-divider);
-    color: var(--theme-accent);
-  }
-
-  .link.active,
-  .group .link.active {
-    color: var(--theme-accent);
+    color: var(--theme-header-lighter);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    text-wrap: nowrap;
   }
 </style>

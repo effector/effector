@@ -1,33 +1,19 @@
 import {performance, PerformanceObserver} from 'perf_hooks'
 
 import {
-  createDomain,
+  createStore,
+  createEvent,
+  createEffect,
   combine,
   sample,
   attach,
-  guard,
   //@ts-expect-error
   withFactory,
   fork,
   serialize,
 } from 'effector'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('guard')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
-
 test('perf', async () => {
-  const app = createDomain()
-
   const stores = [] as any[]
   let factoryACalls = 0
   factoryC()
@@ -37,9 +23,8 @@ test('perf', async () => {
     warmTimes: 5,
     repeatTimes: 50,
     fn: () => {
-      const scope = fork(app)
+      const scope = fork()
       scope.getState(combined)
-      // const scope = fork(app, {values: new Map()})
     },
   })
   await runTestCase({
@@ -47,25 +32,25 @@ test('perf', async () => {
     warmTimes: 5,
     repeatTimes: 50,
     fn: () => {
-      const scope = fork(app)
+      const scope = fork()
       serialize(scope)
     },
   })
 
   function factoryA() {
     factoryACalls += 1
-    const a = app.createStore(0)
+    const a = createStore(0)
     const b = a.map(x => x + 1)
     const c = a.map(x => x.toString())
     const d = combine([a, b, c], lst => lst)
-    const fx = app.createEffect({
+    const fx = createEffect({
       handler: (params: [number, number, string]) => {},
     })
     const attached = attach({source: d, effect: fx})
     const sampled = sample({source: fx, clock: d})
-    const ea = app.createEvent()
+    const ea = createEvent()
     const eb = ea.map(x => x)
-    const ec = guard({source: sampled, clock: d, filter: Boolean})
+    const ec = sample({source: sampled, clock: d, filter: Boolean})
     stores.push(d)
   }
 
@@ -195,6 +180,7 @@ async function runTestCase({
         })
         rs(results)
       })
+      //@ts-expect-error probably buffered is browser only feature
       obs.observe({entryTypes: ['function'], buffered: true})
     })
     cb()

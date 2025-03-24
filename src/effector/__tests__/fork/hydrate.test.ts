@@ -1,7 +1,6 @@
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,
-  forward,
   combine,
   fork,
   allSettled,
@@ -16,18 +15,7 @@ import {
   sample,
 } from 'effector'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['fork(domain)', 'hydrate(domain'])
 
 describe('sidless stores support', () => {
   test('with scope', () => {
@@ -68,9 +56,9 @@ test('watch calls during hydration', async () => {
 
   const store = app.store(-1).on(start, x => x + 1)
 
-  forward({
-    from: store,
-    to: fx,
+  sample({
+    clock: store,
+    target: fx,
   })
 
   const combined = combine({a: store, b: store})
@@ -575,54 +563,54 @@ test('@effector/next custom hydration works', async () => {
     },
   }).on($count, () => getFixedDate())
 
-  const serverScope = fork();
+  const serverScope = fork()
 
-  await allSettled(up, { scope: serverScope });
-  await allSettled(up, { scope: serverScope });
-  await allSettled(up, { scope: serverScope });
+  await allSettled(up, {scope: serverScope})
+  await allSettled(up, {scope: serverScope})
+  await allSettled(up, {scope: serverScope})
 
-  const serverValues = serialize(serverScope);
+  const serverValues = serialize(serverScope)
 
-  const clientScope = fork();
+  const clientScope = fork()
 
-  expect(clientScope.getState($count)).toEqual(0);
-  expect(clientScope.getState($derived)).toEqual({ ref: 0 });
-  expect(clientScope.getState($combined)).toEqual({ ref: 0 });
+  expect(clientScope.getState($count)).toEqual(0)
+  expect(clientScope.getState($derived)).toEqual({ref: 0})
+  expect(clientScope.getState($combined)).toEqual({ref: 0})
   expect(clientScope.getState($nestedCombined)).toEqual({
-    ref: { ref: 0 },
-  });
-  expect(clientScope.getState($sampled)).toEqual(0);
-  expect(clientScope.getState(longUpFx.pending)).toEqual(false);
-  expect(clientScope.getState(longUpFx.inFlight)).toEqual(0);
-  expect(clientScope.getState($specialData)).toEqual(getFixedDate());
+    ref: {ref: 0},
+  })
+  expect(clientScope.getState($sampled)).toEqual(0)
+  expect(clientScope.getState(longUpFx.pending)).toEqual(false)
+  expect(clientScope.getState(longUpFx.inFlight)).toEqual(0)
+  expect(clientScope.getState($specialData)).toEqual(getFixedDate())
 
-  const promise = allSettled(longUpFx, { scope: clientScope });
+  const promise = allSettled(longUpFx, {scope: clientScope})
 
-  expect(clientScope.getState(longUpFx.inFlight)).toEqual(1);
+  expect(clientScope.getState(longUpFx.inFlight)).toEqual(1)
 
-  customHydrate(clientScope, serverValues);
+  customHydrate(clientScope, serverValues)
 
-  expect(clientScope.getState($count)).toEqual(3);
-  expect(clientScope.getState($derived)).toEqual({ ref: 3 });
-  expect(clientScope.getState($combined)).toEqual({ ref: 3 });
+  expect(clientScope.getState($count)).toEqual(3)
+  expect(clientScope.getState($derived)).toEqual({ref: 3})
+  expect(clientScope.getState($combined)).toEqual({ref: 3})
   expect(clientScope.getState($nestedCombined)).toEqual({
-    ref: { ref: 3 },
-  });
-  expect(clientScope.getState($sampled)).toEqual(3);
-  expect(clientScope.getState(longUpFx.pending)).toEqual(true);
-  expect(clientScope.getState(longUpFx.inFlight)).toEqual(1);
-  expect(clientScope.getState($specialData)).toEqual(getFixedDate());
+    ref: {ref: 3},
+  })
+  expect(clientScope.getState($sampled)).toEqual(3)
+  expect(clientScope.getState(longUpFx.pending)).toEqual(true)
+  expect(clientScope.getState(longUpFx.inFlight)).toEqual(1)
+  expect(clientScope.getState($specialData)).toEqual(getFixedDate())
 
-  await promise;
+  await promise
 
-  expect(clientScope.getState($count)).toEqual(4);
-  expect(clientScope.getState($derived)).toEqual({ ref: 4 });
-  expect(clientScope.getState($combined)).toEqual({ ref: 4 });
+  expect(clientScope.getState($count)).toEqual(4)
+  expect(clientScope.getState($derived)).toEqual({ref: 4})
+  expect(clientScope.getState($combined)).toEqual({ref: 4})
   expect(clientScope.getState($nestedCombined)).toEqual({
-    ref: { ref: 4 },
-  });
-  expect(clientScope.getState($sampled)).toEqual(4);
-  expect(clientScope.getState(longUpFx.pending)).toEqual(false);
-  expect(clientScope.getState(longUpFx.inFlight)).toEqual(0);
-  expect(clientScope.getState($specialData)).toEqual(getFixedDate());
+    ref: {ref: 4},
+  })
+  expect(clientScope.getState($sampled)).toEqual(4)
+  expect(clientScope.getState(longUpFx.pending)).toEqual(false)
+  expect(clientScope.getState(longUpFx.inFlight)).toEqual(0)
+  expect(clientScope.getState($specialData)).toEqual(getFixedDate())
 })

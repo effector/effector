@@ -7,20 +7,9 @@ import {
   createEffect,
   sample,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('guard')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors('guard')
 
 test('use case', () => {
   const clickRequest = createEvent()
@@ -343,7 +332,7 @@ describe('validation', () => {
     expect(() => {
       guard({source: undefined, filter, target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[guard] (/src/effector/__tests__/guard.test.ts:344:6): source should be defined"`,
+      `"[guard] (/src/effector/__tests__/guard.test.ts:333:6): source should be defined"`,
     )
   })
   test('clock validation', () => {
@@ -353,7 +342,7 @@ describe('validation', () => {
     expect(() => {
       guard({clock: undefined, filter, target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[guard] (/src/effector/__tests__/guard.test.ts:354:6): clock should be defined"`,
+      `"[guard] (/src/effector/__tests__/guard.test.ts:343:6): clock should be defined"`,
     )
   })
   test('no source no clock', () => {
@@ -363,7 +352,7 @@ describe('validation', () => {
       //@ts-expect-error
       guard({target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[guard] (/src/effector/__tests__/guard.test.ts:364:6): either source or clock should be defined"`,
+      `"[guard] (/src/effector/__tests__/guard.test.ts:353:6): either source or clock should be defined"`,
     )
   })
 })

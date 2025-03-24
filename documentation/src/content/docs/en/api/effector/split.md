@@ -15,12 +15,12 @@ Choose one of cases by given conditions. It "splits" source unit into several ev
 
 ## Case mode (#concepts-case-mode)
 
-Mode in which target case is selected by the name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#case-function) or from external [case store](/en/api/effector/split#case-store) which kept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one).
+Mode in which target case is selected by the name of its field. Case could be selected from data in `source` by [case function](/en/api/effector/split#concepts-case-function) or from external [case store](/en/api/effector/split#concepts-case-store) which kept current case name. After selection data from `source` will be sent to corresponding `cases[fieldName]` (if there is one), if none of the fields matches, then the data will be sent to `cases.__` (if there is one).
 
 **See also**:
 
-- [case store](/en/api/effector/split#case-store)
-- [case function](/en/api/effector/split#case-function)
+- [case store](/en/api/effector/split#concepts-case-store)
+- [case function](/en/api/effector/split#concepts-case-function)
 
 ## Matching mode (#concepts-matching-mode)
 
@@ -29,8 +29,8 @@ If one of the fields got `true` from store value or return of function, then the
 
 **See also**:
 
-- [matcher store](/en/api/effector/split#matcher-store)
-- [matcher function](/en/api/effector/split#matcher-function)
+- [matcher store](/en/api/effector/split#concepts-matcher-store)
+- [matcher function](/en/api/effector/split#concepts-matcher-function)
 
 ## Case store (#concepts-case-store)
 
@@ -42,9 +42,9 @@ split({
   // case store
   match: Store<'first' | 'second'>,
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -59,16 +59,16 @@ split({
   // case function
   match: (value: T) => 'first' | 'second',
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
 
 ## Matcher store (#concepts-matcher-store)
 
-Boolean store which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher functions](/en/api/effector/split#matcher-function)
+Boolean store which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher functions](/en/api/effector/split#concepts-matcher-function)
 
 ```ts
 split({
@@ -79,9 +79,9 @@ split({
     second: Store<boolean>
   },
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -92,7 +92,7 @@ split({
 Case store, case function and matcher store are supported since [effector 21.8.0](https://changelog.effector.dev/#effector-21-8-0)
 :::
 
-Boolean-returning function which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher stores](/en/api/effector/split#matcher-store), [should be **pure**](/en/explanation/glossary#purity)
+Boolean-returning function which indicates whether to choose the particular case or try the next one. Placed in fields of `match` object, might be mixed with [matcher stores](/en/api/effector/split#concepts-matcher-store), [should be **pure**](/en/explanation/glossary#purity)
 
 ```ts
 split({
@@ -103,9 +103,9 @@ split({
     second: (value: T) => boolean
   },
   cases: {
-    first: Unit<T>,
-    second: Unit<T>,
-    __?: Unit<T>
+    first: Unit<T> | Unit<T>[],
+    second: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -130,9 +130,9 @@ split({
   // case function
   match: (data: T) => 'a' | 'b',
   cases: {
-    a: Unit<T>,
-    b: Unit<T>,
-    __?: Unit<T>
+    a: Unit<T> | Unit<T>[],
+    b: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 split({
@@ -140,9 +140,9 @@ split({
   // case store
   match: Store<'a' | 'b'>,
   cases: {
-    a: Unit<T>,
-    b: Unit<T>,
-    __?: Unit<T>
+    a: Unit<T> | Unit<T>[],
+    b: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 split({
@@ -154,9 +154,9 @@ split({
     b: Store<boolean>
   },
   cases: {
-    a: Unit<T>,
-    b: Unit<T>,
-    __?: Unit<T>
+    a: Unit<T> | Unit<T>[],
+    b: Unit<T> | Unit<T>[],
+    __?: Unit<T> | Unit<T>[]
   }
 })
 ```
@@ -164,8 +164,8 @@ split({
 ### Arguments (#methods-split-source-match-cases-arguments)
 
 - `source`: [Unit](/en/explanation/glossary#common-unit) which will trigger computation in `split`
-- `match`: Single [store with string](/en/api/effector/split#case-store), single [function which returns string](/en/api/effector/split#case-function) or object with [boolean stores](/en/api/effector/split#matching-store) and [functions which returns boolean](/en/api/effector/split#matching-function)
-- `cases`: Object with [units](/en/explanation/glossary#common-unit) to which data will be passed from `source` after case selection
+- `match`: Single [store with string](/en/api/effector/split#concepts-case-store), single [function which returns string](/en/api/effector/split#concepts-case-function) or object with [boolean stores](/en/api/effector/split#concepts-matching-store) and [functions which returns boolean](/en/api/effector/split#concepts-matching-function)
+- `cases`: Object with [units](/en/explanation/glossary#common-unit) or arrays of units to which data will be passed from `source` after case selection
 
 ### Returns (#methods-split-source-match-cases-returns)
 
@@ -261,6 +261,44 @@ messageReceived({
 ```
 
 [Try it](https://share.effector.dev/32FNNk8H)
+
+#### Cases with arrays of units (#methods-split-source-match-cases-examples-cases-with-arrays-of-units)
+
+```js
+import { createEffect, createEvent, createStore, sample, split } from "effector";
+
+const $verificationCode = createStore("12345");
+const $error = createStore("");
+
+const modalToInputUsername = createEvent();
+const modalToAuthorizationMethod = createEvent();
+
+const checkVerificationCodeFx = createEffect((code) => {
+  throw "500";
+});
+
+sample({
+  clock: verificationCodeSubmitted,
+  source: $verificationCode,
+  target: checkVerificationCodeFx,
+});
+
+split({
+  source: checkVerificationCodeFx.failData,
+  match: (value) => (["400", "410"].includes(value) ? "verificationCodeError" : "serverError"),
+  cases: {
+    verificationCodeError: $verificationCodeError,
+    serverError: [$error, modalToAuthorizationMethod],
+  },
+});
+
+$error.updates.watch((value) => console.log("ERROR: " + value));
+modalToAuthorizationMethod.watch(() =>
+  console.log("Modal window to the authorization method content."),
+);
+// => ERROR: 500
+// => Modal window to the authorization method content.
+```
 
 ## `split(source, match)` (#methods-split-source-match)
 
@@ -370,6 +408,8 @@ TBD
 ### Examples (#methods-split-source-clock-match-cases-examples)
 
 ```js
+import { createStore, createEvent, createEffect, split } from "effector";
+
 const options = ["save", "delete", "forward"];
 const $message = createStore({ id: 1, text: "Bring me a cup of coffee, please!" });
 const $mode = createStore("");
@@ -378,7 +418,7 @@ const saveMessageFx = createEffect(() => "save");
 const forwardMessageFx = createEffect(() => "forward");
 const deleteMessageFx = createEffect(() => "delete");
 
-$mode.on(selectedMessageOption, (_, opt) => options.find((item) => item === opt));
+$mode.on(selectedMessageOption, (mode, opt) => options.find((item) => item === opt) ?? mode);
 
 split({
   source: $message,
@@ -395,4 +435,4 @@ selectedMessageOption("delet"); // nothing happens
 selectedMessageOption("delete");
 ```
 
-[Try it](https://share.effector.dev/VJmD5KdN)
+[Try it](https://share.effector.dev/1fRuqN0o)

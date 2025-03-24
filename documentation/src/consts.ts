@@ -86,6 +86,15 @@ export const ANNOUNCEMENT: Announcement | null = {
   },
 };
 
+export const PAGE_NAVIGATION = {
+  next: {
+    text: { en: "Next", ru: "Следующая", uz: "Keyingi" },
+  },
+  previous: {
+    text: { en: "Previous", ru: "Предыдущая", uz: "Oldingi" },
+  },
+} as const;
+
 export interface Announcement {
   title: LText;
   text: LText;

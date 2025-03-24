@@ -9,20 +9,9 @@ import {
   Event,
 } from 'effector'
 
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('guard')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors('guard')
 
 test('sid support', () => {
   const source = createStore(null)
@@ -181,7 +170,7 @@ it('should not accept undefined clocks', () => {
       clock: undefined,
     })
   }).toThrowErrorMatchingInlineSnapshot(
-    `"[sample] (/src/effector/__tests__/sample/sample.test.ts:178:4): clock should be defined"`,
+    `"[sample] (/src/effector/__tests__/sample/sample.test.ts:167:4): clock should be defined"`,
   )
 })
 
@@ -193,7 +182,6 @@ describe('sample type', () => {
     ${createEvent()}  | ${createStore(0)} | ${'event'}
     ${createEvent()}  | ${createEvent()}  | ${'event'}
   `(`$kind <- $source.kind by $clock.kind`, ({source, clock, kind}) => {
-    //@ts-expect-error
     expect(sample(source, clock).kind).toBe(kind)
   })
   test.each`
@@ -716,7 +704,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({source: undefined, target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:717:6): source should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:705:6): source should be defined"`,
     )
   })
   test('clock validation', () => {
@@ -726,7 +714,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({clock: undefined, target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:727:6): clock should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:715:6): clock should be defined"`,
     )
   })
   test('no source no clock', () => {
@@ -736,7 +724,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:737:6): either source or clock should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:725:6): either source or clock should be defined"`,
     )
   })
 })
@@ -850,7 +838,7 @@ describe('greedy deprecation', () => {
       greedy: true,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:847:4): greedy in sample is deprecated, use batch instead"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:835:4): greedy in sample is deprecated, use batch instead"`,
     )
   })
   test('greedy false is deprecated', () => {
@@ -862,7 +850,7 @@ describe('greedy deprecation', () => {
       greedy: false,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:859:4): greedy in sample is deprecated, use batch instead"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:847:4): greedy in sample is deprecated, use batch instead"`,
     )
   })
 })
