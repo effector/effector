@@ -717,133 +717,216 @@ export function split<
     : Event<S>
 } & {__: Event<S>}>
 
-type SplitType<
-  Cases extends CaseRecord,
-  Match,
-  Config,
-  Source extends Unit<any>,
-> =
-  UnitValue<Source> extends CaseTypeReader<Cases, keyof Cases>
-    ?
-      Match extends Unit<any>
-      ? Exclude<keyof Cases, '__'> extends UnitValue<Match>
-        ? Config
-        : {
-          error: 'match unit should contain case names'
-          need: Exclude<keyof Cases, '__'>
-          got: UnitValue<Match>
-        }
-
-      : Match extends (p: UnitValue<Source>) => void
-        ? Exclude<keyof Cases, '__'> extends ReturnType<Match>
-          ? Config
-          : {
-            error: 'match function should return case names'
-            need: Exclude<keyof Cases, '__'>
-            got: ReturnType<Match>
-          }
-
-      : Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
-        ? Exclude<keyof Cases, '__'> extends keyof Match
-          ? MatcherInferenceValidator<Cases, Match> extends Match
-            ? Config
-            : {
-              error: 'case should extends type inferred by matcher function'
-              incorrectCases: Show<MatcherInferenceIncorrectCases<Cases, Match>>
-            }
-          : {
-            error: 'match object should contain case names'
-            need: Exclude<keyof Cases, '__'>
-            got: keyof Match
-          }
-
-      : {error: 'not implemented'}
-
-  : {
-    error: 'source type should extends cases'
-    sourceType: UnitValue<Source>
-    caseType: CaseTypeReader<Cases, keyof Cases>
-  }
-
 /**
  * Chooses one of cases by given conditions. It "splits" source unit into several targets, which fires when payload matches their conditions.
  * Works like pattern matching for payload values and external units
  */
 export function split<
-  Cases,
-  Source,
-  Match extends (
-    | Unit<any>
-    | ((p: UnitValue<Source>) => void)
-    | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
-  ),
-  Clock,
+  Clock extends Unit<any> | RoTuple<Unit<any>>,
+  Source extends Unit<any>,
+  const Match extends MatchConstraint<Source>,
+  const Cases extends CaseRecord<InferMatchKeys<Match>>,
 >(
-  config:
-    {source: Source; match: Match; cases: Cases; clock: Clock} extends infer Config
-    ?
-      Config extends {cases: CaseRecord; match: any; source: Unit<any>; clock: Unit<any> | Array<Unit<any>>}
-        ? Source extends Unit<any>
-          ? Cases extends CaseRecord
-            ? Clock extends Unit<any> | Array<Unit<any>>
-              ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases; clock: Clock}, Source>
-              : {error: 'clock should be a unit or array of units'; got: Clock}
-            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
-          : {error: 'source should be a unit'; got: Source}
+  config: SplitConfig<Clock, Source, Match, Cases>
+): void;
 
-      : Config extends {cases: CaseRecord; match: any; source: Unit<any>}
-        ? Source extends Unit<any>
-          ? Cases extends CaseRecord
-            ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases}, Source>
-            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
-          : {error: 'source should be a unit'; got: Source}
+type MatchConstraint<Source> =
+  Unit<any>
+  | ((p: UnitValue<Source>) => void)
+  | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>;
+type CaseRecord<Keys extends PropertyKey = string> = Partial<Record<Keys, UnitTargetable<any> | RoTuple<UnitTargetable<any>>>>;
 
-      : {error: 'config should be object with fields "source", "match" and "cases"'; got: Config}
+type SplitConfig<
+  Clock,
+  Source,
+  Match extends MatchConstraint<Source>,
+  Cases extends CaseRecord<InferMatchKeys<Match>>
+> = Exclude<keyof Cases, '__'> extends InferMatchKeys<Match>
+  ? TypeOfMatch<Match> extends 'record'
+    ? SplitImpl<Clock, Source, Match, Cases>
+    : TypeOfMatch<Match> extends 'unit'
+      ? SplitImpl<Clock, Source, Match, Cases>
+      : TypeOfMatch<Match> extends 'fn'
+        ? SplitImpl<Clock, Source, Match, Cases>
+        : {clock?: Clock; source: Source; match: Match; cases: Cases}
+  : {
+    clock?: Clock;
+    source: Source;
+    match: RebuildMatch<Source, Match, Cases>;
+    cases: { [K in keyof Cases as K extends InferMatchKeys<Match> | '__' ? K : never]: Cases[K] };
+  };
 
-    : {error: 'cannot infer config object'}
-): void
+type InferMatchKeys<Match> = Match extends Unit<infer Keys>
+  ? Keys extends PropertyKey ? Keys : never
+  : Match extends (source: any) => infer Keys
+    ? Keys extends PropertyKey ? Keys : never
+    : Match extends Record<string, ((source: any) => boolean) | Store<boolean>>
+      ? keyof Match
+      : never;
 
-type CaseRecord = Record<string,  Unit<any> | Array<Unit<any>>>
+type TypeOfMatch<Match> =
+  Match extends Unit<any>
+    ? 'unit'
+    : Match extends (s: any) => void
+      ? 'fn'
+      : Match extends Record<string, ((p: any) => any) | Store<boolean>>
+        ? 'record'
+        : never;
 
-type MatcherInferenceIncorrectCases<Cases, Match> = {
-  [K in Exclude<keyof Match, keyof MatcherInferenceValidator<Cases, Match>>]: {
-    caseType: CaseValue<Cases, Match, K>
-    inferredType: Match[K] extends (p: any) => p is infer R ? R : never
+type RebuildMatch<
+  Source,
+  Match,
+  Cases,
+  Keys extends PropertyKey = Exclude<keyof Cases, '__'>
+> =
+  Match extends Unit<any>
+    ? Unit<Keys>
+    : Match extends (p: UnitValue<Source>) => void
+      ? (p: UnitValue<Source>) => Keys
+      : Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+        ? { [K in Keys]: K extends keyof Match ? Match[K] : (p: UnitValue<Source>) => boolean | Store<boolean> }
+        : never;
+
+type SplitImpl<
+  Clock,
+  Source,
+  Match,
+  Cases
+> = MatchCasesIsAssignable<Source, Match, Cases> extends infer AssignableDict
+  ? AssignableDict extends Record<string, 'yes'>
+    ? {
+      clock?: Clock;
+      source: Source;
+      match: Match;
+      cases: Cases
+    }
+    : MatchHasInference<Source, Match> extends 'yes'
+      ? {
+        clock?: Clock;
+        source: Source;
+        match: RebuildMatchInference<Source, Match, AssignableDict>;
+        cases: Show<RebuildCases<Source, Match, Cases>>;
+      }
+      : {
+        clock?: Clock;
+        source: RebuildSplitSource<Source, Cases>;
+        match: Match;
+        cases: Show<RebuildCases<Source, Match, Cases>>;
+      }
+  : never;
+
+type MatchValueReader<Match, K, Source> =
+  K extends keyof Match
+    ? Match[K] extends (src: any) => src is infer R
+      ? UnitValue<Source> extends R
+        ? UnitValue<Source>
+        : R
+      : UnitValue<Source>
+    : UnitValue<Source>;
+
+type MatchHasInference<Source, Match> =
+  Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+    ? 'yes' extends {
+      [K in keyof Match]: UnitValue<Source> extends MatchValueReader<Match, K, Source> ? 'no' : 'yes'
+    }[keyof Match] ? 'yes' : 'no'
+    : 'no';
+
+type MatchCasesIsAssignable<
+  Source,
+  Match,
+  Cases
+> =
+  {
+    [K in keyof Cases]: IfCaseAssignableToValue<Cases[K], MatchValueReader<Match, K, Source>>
   }
+
+type IfValidCaseValue<CaseValue, MatchValue, Y, N> =
+  WhichType<CaseValue> extends 'void' | 'unknown'
+    ? Y
+    : IfAssignable<MatchValue, CaseValue, Y, N>;
+
+type IfCaseAssignableToValue<Case, Value> =
+  Case extends UnitTargetable<any>
+    ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', ['no', UnitValue<Case>]>
+    : Case extends RoTuple<UnitTargetable<any>>
+      ? IsCaseAssignableToValueLoop<Case, Value>
+      : never;
+
+type IsCaseAssignableToValueLoop<Cases extends RoTuple<Unit<any>>, Value> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', 'no'> extends 'yes'
+        ? IsCaseAssignableToValueLoop<Rest, Value>
+        : ['no', UnitValue<Case>]
+      : never
+    : 'yes';
+
+type RebuildMatchInference<
+  Source,
+  Match,
+  AssignableDict
+> = Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+  ? {
+    [K in keyof Match]: K extends keyof AssignableDict
+      ? AssignableDict[K] extends ['no', infer Value]
+        ? Value extends UnitValue<Source>
+          ? (source: UnitValue<Source>) => source is Value
+          : never
+        : Match[K]
+      : Match[K]
+  }
+  : never;
+
+type RebuildCases<Source, Match, Cases> = {
+  [K in keyof Cases]: K extends InferMatchKeys<Match> | '__'
+    ? RebuildCase<MatchValueReader<Match, K, Source>, Cases[K]>
+    : Cases[K];
 }
 
-type MatcherInferenceValidator<Cases, Match> = {
-  [
-    K in keyof Match as
-      Match[K] extends (p: any) => p is infer R
-      ? R extends CaseValue<Cases, Match, K>
-        ? K
+type RebuildCase<MatchValue, Case> = Case extends UnitTargetable<infer CaseValue>
+  ? IfValidCaseValue<CaseValue, MatchValue, Case, UnitTargetable<MatchValue>>
+  : Case extends RoTuple<UnitTargetable<any>>
+    ? RebuildCaseLoop<Case, MatchValue>
+    : never;
+
+type RebuildCaseLoop<Cases extends readonly any[], Value, Result extends readonly any[] = []> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? RebuildCaseLoop<
+        Rest,
+        Value,
+        [
+          ...Result,
+          IfValidCaseValue<UnitValue<Case>, Value, Case, UnitTargetable<Value>>
+        ]
+      >
+      : Result
+    : Result;
+
+type RebuildSplitSource<Source, Cases> =
+  { [K in keyof Cases]: GetFirstUnassignableCase<UnitValue<Source>, Cases[K]> } extends infer Values
+    ? Values extends Record<string, never>
+      ? Source
+      : { [K in keyof Values as [Values[K]] extends [never] ? never : K]: Values[K] } extends infer InvalidValues
+        ? Unit<GetUnionLast<InvalidValues[keyof InvalidValues]>>
         : never
-      : K
-  ]: Match[K]
-}
+    : never;
 
-type CaseTypeReader<Cases, K extends keyof Cases> =
-  Cases[K] extends infer S
-  ? WhichType<
-    UnitValue<
-      S extends Array<any>
-      ? S[number]
-      : S
-    >
-  > extends 'void'
-    ? unknown
-    : UnitValue<
-      S extends Array<any>
-      ? S[number]
-      : S
-    >
-  : never
+type GetFirstUnassignableCase<SourceValue, Case> =
+  Case extends UnitTargetable<infer CaseValue>
+    ? IfValidCaseValue<CaseValue, SourceValue, SourceValue, CaseValue>
+    : Case extends RoTuple<UnitTargetable<any>>
+      ? GetFirstUnassignableCasesLoop<Case, SourceValue>
+      : never;
 
-type CaseValue<Cases, Match, K extends keyof Match> =
-  K extends keyof Cases
-  ? CaseTypeReader<Cases, K>
-  : never
+type GetFirstUnassignableCasesLoop<Cases extends RoTuple<Unit<any>>, Value> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', 'no'> extends 'yes'
+        ? GetFirstUnassignableCasesLoop<Rest, Value>
+        : UnitValue<Case>
+      : never
+    : never;
 
 /**
  * Shorthand for creating events attached to store by providing object with reducers for them
