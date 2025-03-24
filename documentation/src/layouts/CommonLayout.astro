@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+import HeadCommon from "../components/HeadCommon.astro";
+import HeadSEO from "../components/HeadSEO.astro";
+import Header from "../components/Header/Header.astro";
+import Footer from "../components/Footer/Footer.astro";
+import { SITE } from "../consts";
+
+type DocsEntry = CollectionEntry<"docs">["data"];
+export interface Props extends DocsEntry {
+  redirectTo?: string;
+}
+
+const { redirectTo, ...data } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPage = Astro.url.pathname;
+---
+
+<html dir={data.dir} lang={data.lang} class="initial">
+  <head>
+    <HeadCommon />
+    <HeadSEO {...data} canonicalUrl={canonicalURL} />
+    {redirectTo ? <meta http-equiv="refresh" content={`0;URL=${redirectTo}`} /> : null}
+    <title>
+      {`${data.title} | ${SITE.title}`}
+    </title>
+    <style>
+      body {
+        --doc-padding: 2rem;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <Header currentPage={currentPage} />
+    <slot />
+    <Footer />
+  </body>
+</html>

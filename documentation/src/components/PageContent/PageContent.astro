@@ -1,0 +1,185 @@
+---
+import type { MarkdownHeading } from "astro";
+import { getPathParamsFromId } from "../../languages";
+import MoreMenu from "../RightSidebar/MoreMenu.astro";
+import TableOfContents from "../RightSidebar/TableOfContents";
+import { getLocalizedSidebar } from "src/navigation";
+import PageNavigation from "src/components/PageNavigation.astro";
+
+type Props = {
+  title: string;
+  headings: MarkdownHeading[];
+  translations: { lang: string; slug: string }[];
+  breadcrumbs?: { title: string; path: string }[];
+  documentId: string;
+  pagefindWeight?: number;
+  indexing: boolean;
+};
+
+const {
+  title,
+  headings,
+  indexing,
+  documentId,
+  translations = [],
+  breadcrumbs = [],
+  pagefindWeight = 0,
+} = Astro.props;
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+---
+
+<article
+  id="article"
+  class="content"
+  {...indexing ? { "data-pagefind-body": "" } : {}}
+  data-weight={pagefindWeight}
+>
+  <section class="main-section">
+    <nav data-pagefind-ignore class="navigation">
+      <ul class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemscope itemtype="https://schema.org/ListItem">
+          <a itemprop="item" href={`/${lang}`}>
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"
+                fill="currentColor"></path>
+            </svg>
+          </a>
+          <meta itemprop="position" content="0" />
+        </li>
+        {
+          breadcrumbs.map(({ path, title }, index) => (
+            <li itemscope itemtype="https://schema.org/ListItem">
+              <a itemprop="item" href={path} class:list={{ active: Astro.url.pathname === path }}>
+                {title}
+              </a>
+              <meta itemprop="position" content={(index + 1).toString()} />
+            </li>
+          ))
+        }
+        <li itemscope itemtype="https://schema.org/ListItem">
+          <span itemprop="item">
+            {title}
+          </span>
+          <meta itemprop="position" content={breadcrumbs.length.toString()} />
+        </li>
+      </ul>
+      {
+        translations.length ? (
+          <span class="translations" data-pagefind-ignore>
+            [
+            {translations.map((tr) => (
+              <a href={`/${tr.lang}/${tr.slug}`}>{tr.lang}</a>
+            ))}
+            ]
+          </span>
+        ) : null
+      }
+    </nav>
+    <nav class="block xl:hidden" data-pagefind-ignore>
+      <TableOfContents
+        lang={lang}
+        collapsed
+        client:media="(max-width: 1280px)"
+        client:only="preact"
+        headings={headings}
+      />
+    </nav>
+    <slot />
+  </section>
+
+  <!-- <PageNavigation /> -->
+
+  <nav class="mb-8 block xl:hidden" data-pagefind-ignore>
+    <MoreMenu documentId={documentId} />
+  </nav>
+</article>
+
+<style>
+  .content {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .content > section {
+    margin-bottom: 4rem;
+  }
+
+  .main-section .navigation {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    @media (min-width: 512px) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .main-section .navigation .translations {
+    font-size: 1rem;
+  }
+
+  .breadcrumbs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    margin: 0;
+    list-style-type: none;
+    color: var(--theme-text);
+  }
+
+  .breadcrumbs li {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .breadcrumbs li a {
+    text-wrap: nowrap;
+  }
+
+  .breadcrumbs li:last-child span {
+    font-weight: 600;
+  }
+
+  .breadcrumbs li:not(:last-child)::after {
+    content: " ";
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="black" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
+      center;
+    display: inline-block;
+    height: 1ch;
+    width: 1ch;
+    margin-left: 0.5rem;
+    opacity: 0.5;
+  }
+
+  :root.theme-dark .breadcrumbs li:not(:last-child)::after {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 256 256"><polygon fill="white" points="79.093,0 48.907,30.187 146.72,128 48.907,225.813 79.093,256 207.093,128"/></svg>')
+      center;
+  }
+
+  .breadcrumbs li a svg {
+    display: inline-block;
+    width: 2ch;
+    height: 2ch;
+    margin-top: -4px;
+  }
+
+  .breadcrumbs li a.active {
+    text-decoration: underline;
+  }
+
+  .translations a:hover {
+    text-decoration: underline;
+  }
+
+  .translations a:not(:last-child)::after {
+    content: ", ";
+    color: var(--theme-text-light);
+  }
+</style>

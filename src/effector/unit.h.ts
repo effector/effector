@@ -29,7 +29,6 @@ export interface Event<E> extends Unit {
 }
 
 export interface Store<State> extends Unit {
-  subscribers: Map<CommonUnit, Subscription>
   id: string
   stateRef: StateRef
   reset(...units: CommonUnit[]): Store<State>
@@ -37,8 +36,7 @@ export interface Store<State> extends Unit {
   setState(newState: State): void
   //prettier-ignore
   map: (
-    & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
-    & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
+    & (<T>(fn: (_: State) => T, _: void) => Store<T>)
   );
   on<E>(
     event: CommonUnit<E>,
@@ -189,7 +187,7 @@ export interface Scope extends Unit {
   fxCount: Node
   storeChange: Node
   /** if any affected store is missing sid, then scope cannot be serialized correctly and data will be missing */
-  warnSerialize?: boolean
+  warnSerializeTraces: Set<string>
   warnSerializeNode: Node
 }
 

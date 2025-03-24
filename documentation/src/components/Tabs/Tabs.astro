@@ -1,0 +1,65 @@
+---
+import { initTabs } from "./init-tabs";
+
+interface Props {
+  syncId?: string;
+}
+
+const { syncId } = Astro.props;
+
+const html = await Astro.slots.render("default");
+const { content, tabs } = initTabs(html);
+---
+
+<tabs-container data-sync-id={syncId} data-rendered="false">
+  {
+    tabs && (
+      <ul role="tablist">
+        {tabs.map(({ id, label }, i) => (
+          <li role="presentation" class="tab">
+            <button
+              role="tab"
+              aria-selected={i === 0 ? "true" : "false"}
+              id={`tab-${id}`}
+              tabindex={i === 0 ? 0 : -1}
+            >
+              {label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  <Fragment set:html={content} />
+</tabs-container>
+
+<script>
+  import { Tabs } from "./Tabs";
+  class TabsContainer extends Tabs {}
+
+  customElements.define("tabs-container", TabsContainer);
+</script>
+
+<style>
+  ul[role="tablist"] {
+    display: flex;
+    gap: 20px;
+    border-bottom: 2px solid var(--theme-divider);
+    padding: 0px;
+    margin-bottom: 10px;
+  }
+
+  li {
+    cursor: pointer;
+    list-style: none;
+    margin: -2px;
+  }
+
+  .tab > button[role="tab"] {
+    border-radius: 2px;
+  }
+
+  .tab:has(> [aria-selected="true"]) {
+    border-bottom: 2px solid var(--theme-accent);
+  }
+</style>

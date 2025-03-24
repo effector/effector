@@ -7,12 +7,14 @@ import {
   createEffect,
   createDomain,
   Store,
-  Event,
   restore,
   fork,
+  EventCallable,
 } from 'effector'
 import {Provider, useStore, useStoreMap} from 'effector-react'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
+
+muteErrors(['useStore', 'No scope found', 'AppFail'])
 
 describe('useStore', () => {
   it('should render', async () => {
@@ -67,8 +69,10 @@ describe('useStore', () => {
     const fn = jest.fn()
     const storeA = createStore('A')
     const storeB = createStore('B')
+    // dont do this in prod!
     const changeCurrentStore = createEvent<Store<string>>()
-    const currentStore = createStore(storeA).on(
+    // dont do this in prod!
+    const currentStore = createStore<Store<string>>(storeA).on(
       changeCurrentStore,
       (_, store) => store,
     )
@@ -237,7 +241,7 @@ describe('useStore', () => {
 
     const Meta = (props: {
       store: Store<boolean>
-      toggle: Event<unknown>
+      toggle: EventCallable<unknown>
       v: 0 | 1
     }) => {
       const v = useStore(props.store)
@@ -453,13 +457,13 @@ describe('useStore', () => {
   test('throw error on forceScope if it is not available', async () => {
     const $store = createStore('original')
 
-    function App() {
+    function AppFail() {
       const value = useStore($store, {forceScope: true})
 
       return <p>{value}</p>
     }
 
-    expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+    expect(() => render(<AppFail />)).rejects.toMatchInlineSnapshot(
       `[Error: No scope found, consider adding <Provider> to app root]`,
     )
   })
@@ -963,7 +967,7 @@ describe('useStoreMap', () => {
   test('throw error on forceScope if it is not available', async () => {
     const $store = createStore('original')
 
-    function App() {
+    function AppFail() {
       const value = useStoreMap({
         store: $store,
         fn: t => t + 'mapped',
@@ -974,7 +978,7 @@ describe('useStoreMap', () => {
       return <p>{value}</p>
     }
 
-    expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+    expect(() => render(<AppFail />)).rejects.toMatchInlineSnapshot(
       `[Error: No scope found, consider adding <Provider> to app root]`,
     )
   })

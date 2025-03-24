@@ -11,20 +11,9 @@ import {
   allSettled,
   attach,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors('forward')
 
 describe('createEffect(handler) support', () => {
   test('with babel plugin', async () => {
@@ -86,7 +75,7 @@ describe('effect.finally', () => {
   test(`if used function will resolve`, async () => {
     const fn = jest.fn()
     const effect = createEffect({
-      async handler({fail}) {
+      async handler({fail}: {fail: boolean}) {
         if (fail) throw Error('[expected error]')
         return 'done!'
       },
@@ -109,7 +98,7 @@ describe('effect.finally', () => {
   test('if used function will throw', async () => {
     const fn = jest.fn()
     const effect = createEffect({
-      async handler({fail}) {
+      async handler({fail}: {fail: boolean}) {
         if (fail) throw Error('[expected error]')
         return 'done!'
       },
@@ -145,7 +134,7 @@ describe('createEffect with config', () => {
   it('supports default handler with config', async () => {
     const fn = jest.fn()
     const effect = createEffect('long request', {
-      async handler(params) {
+      async handler(params: string) {
         fn(params)
         return 'done!'
       },
@@ -155,7 +144,7 @@ describe('createEffect with config', () => {
   it('supports default handler without name', async () => {
     const fn = jest.fn()
     const effect = createEffect({
-      async handler(params) {
+      async handler(params: string) {
         fn(params)
         return 'done!'
       },
@@ -172,7 +161,7 @@ it('should return itself at .use call', () => {
 it('should handle both done and error in .finally', async () => {
   const fn = jest.fn()
   const effect = createEffect({
-    async handler(params) {
+    async handler(params: string) {
       if (params === 'bar') throw Error('error')
       return 'done!'
     },
@@ -238,13 +227,13 @@ it('should support forward', async () => {
   const fnHandler = jest.fn()
   const fnWatcher = jest.fn()
   const fetchData = createEffect({
-    async handler() {
+    async handler(payload: {url: string}) {
       return 'fetchData result'
     },
   })
 
   const logRequest = createEffect({
-    async handler(payload) {
+    async handler(payload: {url: string}) {
       fnHandler(payload)
       return 'logRequest result'
     },
@@ -356,7 +345,7 @@ describe('execution order', () => {
   it('should run both .done and .finally at the same tick', async () => {
     const fn = jest.fn()
     const fx = createEffect({
-      async handler() {
+      async handler(params: null) {
         return 'ok'
       },
     })
@@ -389,7 +378,7 @@ describe('execution order', () => {
   it('handle sync effect watchers in correct order', async () => {
     const fn = jest.fn()
     const eff = createEffect({
-      handler: () => [1, 2, 3],
+      handler: (params: string) => [1, 2, 3],
     })
 
     eff.watch(e => fn(e))
@@ -406,7 +395,7 @@ describe('execution order', () => {
     const uppercase = createEvent()
 
     const fx = createEffect({
-      handler() {
+      handler(params: string) {
         uppercase()
       },
     })
@@ -420,7 +409,7 @@ describe('execution order', () => {
   })
 
   test('effect.pending becomes false only after all concurrent requests will be settled', async () => {
-    const fx = createEffect()
+    const fx = createEffect<void, void>()
 
     expect(fx.pending.getState()).toBe(false)
 
@@ -438,8 +427,11 @@ describe('execution order', () => {
 
 it('should validate .use argument', () => {
   expect(() => {
-    createEffect().use(null)
-  }).toThrowErrorMatchingInlineSnapshot(`".use argument should be a function"`)
+    //@ts-expect-error
+    const fooFx = createEffect().use(null)
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"[effect] unit 'fooFx': .use argument should be a function"`,
+  )
 })
 
 describe('@farfetched/core agreement', () => {

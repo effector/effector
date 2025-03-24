@@ -12,19 +12,9 @@ import {
   createEffect,
   attach,
 } from 'effector'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('onlyChanges')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['onlyChanges', 'fork(domain)', 'hydrate(domain'])
 
 it('serialize stores to object of sid as keys', () => {
   const $a = createStore('value', {sid: 'a'})
@@ -333,7 +323,10 @@ describe('onlyChanges: true', () => {
         const triggerB = createEvent()
         const foo = createStore(0, {sid: 'foo'})
         const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         sample({
           clock: triggerA,
           source: combined,
@@ -362,7 +355,10 @@ describe('onlyChanges: true', () => {
         const triggerB = createEvent()
         const foo = createStore(0, {sid: 'foo'})
         const bar = createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         combined.on(triggerA, ({foo, bar}) => ({
           foo: foo + 1,
           bar: bar + 1,
@@ -488,7 +484,10 @@ describe('onlyChanges: false', () => {
         const triggerB = app.createEvent()
         const foo = app.createStore(0, {sid: 'foo'})
         const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         sample({
           clock: triggerA,
           source: combined,
@@ -534,7 +533,10 @@ describe('onlyChanges: false', () => {
         const triggerB = app.createEvent()
         const foo = app.createStore(0, {sid: 'foo'})
         const bar = app.createStore(0, {sid: 'bar'}).on(triggerB, x => x + 10)
-        const combined = createStore({foo:0, bar: 0}).on(combine({foo, bar}), (_, x) => x)
+        const combined = createStore({foo: 0, bar: 0}).on(
+          combine({foo, bar}),
+          (_, x) => x,
+        )
         combined.on(triggerA, ({foo, bar}) => ({
           foo: foo + 1,
           bar: bar + 1,
@@ -595,17 +597,24 @@ describe('serialize: missing sids', () => {
     // equals to situation, if user forgot to configure babel-plugin
     // or did not install the sid manually
     const $store = createStore('value', {sid: ''})
+    const $storeB = createStore('value', {sid: ''})
 
     const scope = fork()
 
     allSettled($store, {scope, params: 'scope value'})
+    allSettled($storeB, {scope, params: 'scope value'})
 
     const result = serialize(scope)
     expect(result).toEqual({})
     expect(scope.getState($store)).toEqual('scope value')
-    expect(console.error).toHaveBeenCalledWith(
-      'There is a store without sid in this scope, its value is omitted',
-    )
+
+    expect(argumentHistory(console.error as any)).toMatchInlineSnapshot(`
+      Array [
+        "serialize: One or more stores dont have sids, their values are omitted",
+        [Error: store should have sid or \`serialize: ignore\`],
+        [Error: store should have sid or \`serialize: ignore\`],
+      ]
+    `)
   })
   test('serialize: throws if duplicated sids', () => {
     const a = createStore(0, {sid: 'sameSid'})

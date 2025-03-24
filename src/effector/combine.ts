@@ -5,12 +5,12 @@ import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject, isVoid} from './is'
-import {unitObjectName} from './naming'
+import {generateErrorTitle, unitObjectName} from './naming'
 import {createLinkNode} from './forward'
-import {assert, deprecate} from './throw'
+import {assert} from './throw'
 import {readTemplate} from './region'
 import {forIn} from './collection'
-import {BARRIER, MAP, REG_A, VALUE} from './tag'
+import {MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
 
@@ -19,9 +19,17 @@ export function combine(...args: any[]): Store<any> {
   let stores
   let config
   ;[args, config] = processArgsToConfig(args)
+  const errorTitle = generateErrorTitle('combine', config)
   // skipVoid support, to be removed in effector 24
   const maybeExtConfig = args[args.length - 1]
-  const isExtendedConfig = !is.store(maybeExtConfig) && isObject(maybeExtConfig)
+  /**
+   * if there only one argument then it's a store or object with stores
+   * else if last argument is a store, then its `combine($foo, $bar)`
+   * else if last argument is not an object, then it's a handler
+   * else it's a config object
+   */
+  const isExtendedConfig =
+    args.length > 1 && !is.store(maybeExtConfig) && isObject(maybeExtConfig)
   const extConfig = isExtendedConfig && maybeExtConfig
   const rawHandler = isExtendedConfig ? args[args.length - 2] : maybeExtConfig
   if (isFunction(rawHandler)) {
@@ -56,7 +64,7 @@ export function combine(...args: any[]): Store<any> {
       shapeReady = true
     }
   }
-  let noArraySpread: boolean | void
+  let noArraySpread: boolean | undefined
   if (!shapeReady) {
     /*
     case combine(R,G,B, (R,G,B) => '~')
@@ -72,7 +80,7 @@ export function combine(...args: any[]): Store<any> {
       handler = (list: any[]) => fn(...list)
     }
   }
-  assert(isObject(structStoreShape), 'shape should be an object')
+  assert(isObject(structStoreShape), `${errorTitle}: shape should be an object`)
   return storeCombination(
     Array.isArray(structStoreShape),
     !noArraySpread,
@@ -89,8 +97,9 @@ const storeCombination = (
   obj: any,
   config?: Config,
   fn?: (upd: any) => any,
-  extConfig?: {skipVoid?: boolean},
+  extConfig?: false | {skipVoid?: boolean},
 ) => {
+  const errorTitle = generateErrorTitle('combine', config)
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
 
@@ -151,7 +160,7 @@ const storeCombination = (
       from: VALUE,
       store: true,
       target: isFresh,
-      priority: BARRIER,
+      priority: 'barrier',
       batch: true,
     }),
     /**
@@ -169,6 +178,7 @@ const storeCombination = (
       assert(
         !is.unit(child) && !isVoid(child),
         `combine expects a store in a field ${key}`,
+        errorTitle,
       )
       stateNew[key] = defaultState[key] = child
       return
@@ -192,8 +202,8 @@ const storeCombination = (
     if (fn) {
       const computedValue = fn(stateNew)
 
-      if (isVoid(computedValue) && (!extConfig || !("skipVoid" in extConfig))) {
-        console.error(requireExplicitSkipVoidMessage)
+      if (isVoid(computedValue) && (!extConfig || !('skipVoid' in extConfig))) {
+        console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
       }
 
       storeStateRef.current = computedValue

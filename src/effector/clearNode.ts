@@ -1,7 +1,7 @@
 import {Node, NodeUnit} from './index.h'
-import {getGraph, getOwners, getLinks, getSubscribers, getMeta} from './getter'
+import {getGraph, getOwners, getLinks} from './getter'
 import {is} from './is'
-import {removeItem} from './collection'
+import {includes, removeItem} from './collection'
 import {CROSSLINK} from './tag'
 
 const removeFromNode = (currentNode: Node, targetNode: Node) => {
@@ -9,10 +9,22 @@ const removeFromNode = (currentNode: Node, targetNode: Node) => {
   removeItem(getOwners(currentNode), targetNode)
   removeItem(getLinks(currentNode), targetNode)
 }
+/** These nodes should be cleared but dissalow clearing of any links */
+const nonPassableNodes = [
+  'on',
+  'reset',
+  'sample',
+  'split',
+  'merge',
+  'guard',
+  'forward',
+]
 const clearNodeNormalized = (
   targetNode: Node,
   deep: boolean,
   isDomainUnit: boolean,
+  regionNode: Node | null,
+  extractOnly: boolean,
 ) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
@@ -20,18 +32,38 @@ const clearNodeNormalized = (
   targetNode.scope = null
   let currentNode
   let list = getLinks(targetNode)
-  while ((currentNode = list.pop())) {
-    removeFromNode(currentNode, targetNode)
-    if (
-      deep ||
-      (isDomainUnit && getMeta(targetNode, 'op') !== 'sample') ||
-      currentNode.family.type === CROSSLINK
-    ) {
-      clearNodeNormalized(
-        currentNode,
-        deep,
-        getMeta(currentNode, 'op') !== 'on' && isDomainUnit,
-      )
+  const isRegionNode = targetNode.meta.isRegion
+  const nextRegionNode = isRegionNode ? targetNode : regionNode
+  if (list.length > 0) {
+    const targetIsOp = includes(nonPassableNodes, targetNode.meta.op)
+    const canGoDeep = !isRegionNode && !extractOnly
+    const domainSampleEdgeCase = canGoDeep && isDomainUnit && !targetIsOp
+    while ((currentNode = list.pop())) {
+      const isTrigger = includes(currentNode.next, targetNode)
+      removeFromNode(currentNode, targetNode)
+      if (isRegionNode) {
+        clearNodeNormalized(currentNode, false, false, targetNode, true)
+      }
+      if (!isTrigger) {
+        currentNode.family.triggers -= 1
+      }
+      if (
+        deep ||
+        domainSampleEdgeCase ||
+        (canGoDeep && currentNode.family.type === CROSSLINK && !targetIsOp) ||
+        (extractOnly &&
+          includes(nonPassableNodes, currentNode.meta.op) &&
+          ((isTrigger && currentNode.next.length === 0) ||
+            (!isTrigger && currentNode.family.triggers <= 0)))
+      ) {
+        clearNodeNormalized(
+          currentNode,
+          deep,
+          isDomainUnit && currentNode.meta.op !== 'on',
+          nextRegionNode,
+          extractOnly,
+        )
+      }
     }
   }
   list = getOwners(targetNode)
@@ -41,7 +73,9 @@ const clearNodeNormalized = (
       clearNodeNormalized(
         currentNode,
         deep,
-        getMeta(currentNode, 'op') !== 'on' && isDomainUnit,
+        currentNode.meta.op !== 'on',
+        nextRegionNode,
+        extractOnly,
       )
     }
   }
@@ -58,9 +92,7 @@ export const clearNode = (
   let isDomainUnit = false
   //@ts-expect-error
   if (graphite.ownerSet) graphite.ownerSet.delete(graphite)
-  if (is.store(graphite)) {
-    clearMap(getSubscribers(graphite))
-  } else if (is.domain(graphite)) {
+  if (is.domain(graphite)) {
     isDomainUnit = true
     const history = graphite.history
     clearMap(history.events)
@@ -68,5 +100,5 @@ export const clearNode = (
     clearMap(history.stores)
     clearMap(history.domains)
   }
-  clearNodeNormalized(getGraph(graphite), !!deep, isDomainUnit)
+  clearNodeNormalized(getGraph(graphite), !!deep, isDomainUnit, null, false)
 }

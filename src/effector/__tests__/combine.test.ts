@@ -9,7 +9,9 @@ import {
   fork,
   allSettled,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
+
+muteErrors('skipVoid')
 
 function rgbToHex(r: number, g: number, b: number) {
   return (
@@ -227,8 +229,7 @@ it('updates consistently', () => {
 describe('validations', () => {
   it('validate amount of arguments', () => {
     expect(() => {
-      //@ts-expect-error
-      combine()
+      const $foo = combine()
     }).toThrowErrorMatchingInlineSnapshot(
       `"expect first argument be an object"`,
     )
@@ -236,38 +237,44 @@ describe('validations', () => {
 
   it('validate shape', () => {
     expect(() => {
-      combine(null)
-    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+      const $foo = combine(null)
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[combine] unit '$foo': shape should be an object"`,
+    )
     expect(() => {
-      combine('text')
-    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+      const $foo = combine('text')
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[combine] unit '$foo': shape should be an object"`,
+    )
     expect(() => {
-      combine(0, () => {})
-    }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+      const $foo = combine(0, () => {})
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"[combine] unit '$foo': shape should be an object"`,
+    )
   })
 
   it('doesn`t allow events or other units in shape', () => {
     expect(() => {
-      combine({a: createEvent()})
+      const $foo = combine({a: createEvent()})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
     expect(() => {
-      combine({a: createEffect()})
+      const $foo = combine({a: createEffect()})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
     expect(() => {
-      combine({a: createDomain()})
+      const $foo = combine({a: createDomain()})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
   })
   it('doesn`t allow undefined in shape', () => {
     expect(() => {
-      combine({a: undefined})
+      const $foo = combine({a: undefined})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"combine expects a store in a field a"`,
+      `"[combine] unit '$foo': combine expects a store in a field a"`,
     )
   })
 })
@@ -431,5 +438,31 @@ describe('fn retriggers', () => {
     scope.getState($comb)
     await allSettled(inc, {scope})
     expect(argumentHistory(fn)).toEqual([0, 10, 11])
+  })
+})
+
+describe('dont have forbidden keys', () => {
+  describe.each(['domain', 'parent', 'sid', 'name'])('%s key', key => {
+    const $foo = createStore(0)
+    test('dont throw without babel', () => {
+      expect(() => {
+        // skip babel processing
+        ;({_: combine}._({[key]: $foo}))
+      }).not.toThrow()
+    })
+    test('dont throw with babel', () => {
+      expect(() => {
+        combine({[key]: $foo})
+      }).not.toThrow()
+    })
+    test('has expected state', () => {
+      const $store = combine({[key]: $foo})
+      expect($store.getState()).toEqual({[key]: 0})
+    })
+    test('dont throw with function', () => {
+      expect(() => {
+        combine({[key]: $foo}, x => x)
+      }).not.toThrow()
+    })
   })
 })

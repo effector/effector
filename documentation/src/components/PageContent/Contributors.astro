@@ -1,0 +1,208 @@
+---
+import { Octokit } from "@octokit/rest";
+import {
+  GITHUB_COMMITS_URL,
+  GITHUB_DOCS_CONTENT_DIR,
+  GITHUB_DOCS_ROOT,
+  GITHUB_REPO,
+} from "../../consts";
+import { getPathParamsFromId, getTextLocalized, translations } from "src/languages";
+
+// fetch all commits for just this page's path
+type Props = {
+  documentId: string;
+};
+const { documentId } = Astro.props;
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+
+const fullFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_CONTENT_DIR, documentId].join("");
+const commitsURL = [GITHUB_COMMITS_URL, fullFilePath].join("");
+
+const [owner, repo] = GITHUB_REPO.split("/");
+
+const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
+
+async function loadContributors() {
+  if (!import.meta.env.GITHUB_TOKEN) {
+    return [];
+  }
+  const filePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_CONTENT_DIR, documentId].join("");
+  const { data: commits } = await octokit.repos.listCommits({
+    owner,
+    repo,
+    path: filePath,
+    per_page: 100,
+  });
+
+  interface Contributor {
+    id: number;
+    login: string;
+    avatar: string;
+    commits: number;
+  }
+
+  const contributors = new Map<number, Contributor>();
+
+  function add(user: { id: number; login: string; avatar: string }) {
+    const exist = contributors.get(user.id);
+    // Let's count total amount of commits
+    if (exist) {
+      exist.commits++;
+    } else {
+      contributors.set(user.id, { ...user, commits: 1 });
+    }
+  }
+  commits.forEach((commit) => {
+    if (commit.author) {
+      add({
+        id: commit.author.id,
+        login: commit.author.login,
+        avatar: commit.author.avatar_url,
+      });
+    }
+    if (commit.committer) {
+      add({
+        id: commit.committer.id,
+        login: commit.committer.login,
+        avatar: commit.committer.avatar_url,
+      });
+    }
+  });
+  return Array.from(contributors.values())
+    .filter((user) => user.login !== "web-flow")
+    .sort((a, b) => b.commits - a.commits);
+}
+
+const contributors = await loadContributors().catch((error) => {
+  if (!import.meta.env.GITHUB_TOKEN) {
+    console.info("Provide GITHUB_TOKEN env with Personal Access Token.");
+  }
+  console.info("Failed to load contributors. Skipping...");
+  console.error(error);
+  return [];
+});
+
+const recentContributors = contributors.slice(0, 5).sort((a, b) => a.commits - b.commits); // only show avatars for the 3 most recent contributors
+const additionalContributors = contributors.length - recentContributors.length; // list the rest of them as # of extra contributors
+---
+
+<div class="title" data-pagefind-ignore>
+  {getTextLocalized(translations.Contributors, lang)}
+</div>
+
+<!-- Thanks to @5t3ph for https://smolcss.dev/#smol-avatar-list! -->
+<div class="contributors" data-pagefind-ignore>
+  {
+    recentContributors.length > 0 && (
+      <ul class="avatar-list" style={`--avatar-count: ${recentContributors.length}`}>
+        {recentContributors.map((contributor) => (
+          <li>
+            <a href={`https://github.com/${contributor.login}`}>
+              <img
+                alt={`Contributor ${contributor.login}`}
+                title={`Contributor ${contributor.login}`}
+                width="64"
+                height="64"
+                src={contributor.avatar}
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    additionalContributors > 0 && (
+      <span>
+        <a href={commitsURL}>{`and ${additionalContributors} additional contributor${
+          additionalContributors > 1 ? "s" : ""
+        }.`}</a>
+      </span>
+    )
+  }
+  <a href={commitsURL}>Commits</a>
+</div>
+
+<style>
+  .title {
+    @apply m-0 mb-2 border-0 p-0 uppercase;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-family:
+      Lexend Deca,
+      sans-serif;
+  }
+
+  .avatar-list {
+    --avatar-size: 2.5rem;
+    --avatar-count: 3;
+
+    display: grid;
+    list-style: none;
+    /* Default to displaying most of the avatar to
+  enable easier access on touch devices, ensuring
+  the WCAG touch target size is met or exceeded */
+    grid-template-columns: repeat(var(--avatar-count), max(44px, calc(var(--avatar-size) / 1.15)));
+    /* `padding` matches added visual dimensions of
+  the `box-shadow` to help create a more accurate
+  computed component size */
+    padding: 0.08em;
+    font-size: var(--avatar-size);
+  }
+
+  @media (any-hover: hover) and (any-pointer: fine) {
+    .avatar-list {
+      /* We create 1 extra cell to enable the computed
+    width to match the final visual width */
+      grid-template-columns: repeat(calc(var(--avatar-count) + 1), calc(var(--avatar-size) / 1.75));
+    }
+  }
+
+  .avatar-list li {
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+  }
+
+  .avatar-list li:hover ~ li a,
+  .avatar-list li:focus-within ~ li a {
+    transform: translateX(33%);
+  }
+
+  .avatar-list img,
+  .avatar-list a {
+    display: block;
+    border-radius: 50%;
+  }
+
+  .avatar-list a {
+    transition: transform 180ms ease-in-out;
+  }
+
+  .avatar-list img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: var(--theme-bg);
+    box-shadow:
+      0 0 0 0.05em var(--theme-bg),
+      0 0 0 0.08em var(--theme-divider-dark);
+  }
+
+  .avatar-list a:focus {
+    outline: 2px solid transparent;
+    /* Double-layer trick to work for dark and light backgrounds */
+    box-shadow:
+      0 0 0 0.08em var(--theme-accent),
+      0 0 0 0.12em white;
+  }
+
+  .contributors {
+    display: flex;
+    align-items: center;
+  }
+
+  .contributors > * + * {
+    margin-left: 0.75rem;
+  }
+</style>

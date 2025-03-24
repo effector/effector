@@ -15,10 +15,10 @@ jobs:
   common-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - run: yarn install --frozen-lockfile
       - run: yarn test
-      - run: yarn test:react-17
+      - run: yarn test:old-react

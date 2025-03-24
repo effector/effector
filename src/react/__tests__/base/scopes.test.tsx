@@ -1,22 +1,21 @@
 import React from 'react'
-//@ts-ignore
+//@ts-expect-error
 import {render, container, act} from 'effector/fixtures/react'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,
   createEvent,
   createStore,
   createEffect,
-  forward,
   sample,
   attach,
-  combine,
   fork,
   allSettled,
   serialize,
   hydrate,
   Scope,
 } from 'effector'
+
 import {
   Provider,
   useStore,
@@ -28,18 +27,14 @@ import {
   useUnit,
 } from 'effector-react/scope'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors([
+  'useEvent',
+  'useStore',
+  'fork(domain)',
+  'hydrate(domain',
+  'No scope found',
+  'AppFail',
+])
 
 async function request(url: string) {
   const users: Record<string, {name: string; friends: string[]}> = {
@@ -82,9 +77,9 @@ it('works', async () => {
     return request('https://ssr.effector.dev/api/' + user)
   })
   //assume that calling start() will trigger some effects
-  forward({
-    from: start,
-    to: fetchUser,
+  sample({
+    clock: start,
+    target: fetchUser,
   })
 
   const user = createStore('guest', {sid: 'user'})
@@ -189,10 +184,9 @@ test('attach support', async () => {
     mapParams: (user, {baseUrl}) => `${baseUrl}/${user}`,
   })
 
-  //assume that calling start() will trigger some effects
-  forward({
-    from: start,
-    to: fetchUser,
+  sample({
+    clock: start,
+    target: fetchUser,
   })
 
   const user = createStore('guest', {sid: 'user'})
@@ -281,7 +275,7 @@ test('computed values support', async () => {
     async user => await request(`https://ssr.effector.dev/api/${user}`),
   )
   const start = app.createEvent<string>()
-  forward({from: start, to: fetchUser})
+  sample({clock: start, target: fetchUser})
   const name = app
     .createStore('guest')
     .on(fetchUser.done, (_, {result}) => result.name)
@@ -345,7 +339,7 @@ test('useGate support', async () => {
 
   const activeChatGate = createGate<{chatId: string}>({})
 
-  forward({from: activeChatGate.open, to: getMessagesFx})
+  sample({clock: activeChatGate.open, target: getMessagesFx})
 
   const ChatPage = ({chatId}: {chatId: string}) => {
     useGate(activeChatGate, {chatId})
@@ -1083,7 +1077,7 @@ test('useUnit should bind stores to scope', async () => {
 
   const A = () => {
     const {a} = useUnit({a: $a})
-    return a
+    return <>{a}</>
   }
   const App = ({scope}: {scope: Scope}) => (
     <Provider value={scope}>
@@ -1189,13 +1183,13 @@ describe('hooks throw errors, if Provider is not found', () => {
   test('useUnit from `effector-react/scope` throws error, if no Provider', () => {
     const $a = createStore(42)
 
-    const View = () => {
+    const AppFail = () => {
       const a = useUnit($a)
 
       return <div>{a}</div>
     }
 
-    expect(() => render(<View />)).rejects.toThrow(
+    expect(() => render(<AppFail />)).rejects.toThrow(
       'No scope found, consider adding <Provider> to app root',
     )
   })
@@ -1203,13 +1197,13 @@ describe('hooks throw errors, if Provider is not found', () => {
   test('useStore from `effector-react/scope` throws error, if no Provider', () => {
     const $a = createStore(42)
 
-    const View = () => {
+    const AppFail = () => {
       const a = useStore($a)
 
       return <div>{a}</div>
     }
 
-    expect(() => render(<View />)).rejects.toThrow(
+    expect(() => render(<AppFail />)).rejects.toThrow(
       'No scope found, consider adding <Provider> to app root',
     )
   })
@@ -1217,13 +1211,13 @@ describe('hooks throw errors, if Provider is not found', () => {
   test('useEvent from `effector-react/scope` throws error, if no Provider', () => {
     const ev = createEvent()
 
-    const View = () => {
+    const AppFail = () => {
       const a = useEvent(ev)
 
       return <div onClick={a}></div>
     }
 
-    expect(() => render(<View />)).rejects.toThrow(
+    expect(() => render(<AppFail />)).rejects.toThrow(
       'No scope found, consider adding <Provider> to app root',
     )
   })
@@ -1231,7 +1225,7 @@ describe('hooks throw errors, if Provider is not found', () => {
   test('useStoreMap from `effector-react/scope` throws error, if no Provider', () => {
     const $a = createStore(42)
 
-    const View = () => {
+    const AppFail = () => {
       const a = useStoreMap({
         store: $a,
         keys: [],
@@ -1242,7 +1236,7 @@ describe('hooks throw errors, if Provider is not found', () => {
       return <div>{a}</div>
     }
 
-    expect(() => render(<View />)).rejects.toThrow(
+    expect(() => render(<AppFail />)).rejects.toThrow(
       'No scope found, consider adding <Provider> to app root',
     )
   })
@@ -1250,7 +1244,7 @@ describe('hooks throw errors, if Provider is not found', () => {
   test('useList from `effector-react/scope` throws error, if no Provider', () => {
     const $a = createStore([42])
 
-    const View = () => {
+    const AppFail = () => {
       const a = useList($a, {
         fn: () => <div>42</div>,
       })
@@ -1258,7 +1252,7 @@ describe('hooks throw errors, if Provider is not found', () => {
       return <div>{a}</div>
     }
 
-    expect(() => render(<View />)).rejects.toThrow(
+    expect(() => render(<AppFail />)).rejects.toThrow(
       'No scope found, consider adding <Provider> to app root',
     )
   })

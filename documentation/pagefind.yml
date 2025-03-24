@@ -1,0 +1,4 @@
+exclude_selectors:
+  - "pre > code"
+site: ./dist
+output_subdir: ./_pagefind

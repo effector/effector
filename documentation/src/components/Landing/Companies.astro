@@ -1,0 +1,221 @@
+---
+import { getPathParamsFromId, getTextLocalized, translations } from "../../languages";
+
+const companies = [
+  {
+    url: "aviasales.png",
+    alt: "Aviasales",
+    yOffset: true,
+  },
+  {
+    url: "healthSamurai.svg",
+    alt: "Health Samurai",
+  },
+  {
+    url: "raiffeisen.svg",
+    alt: "Raiffeisen Bank Russia",
+  },
+  {
+    url: "unicef.svg",
+    alt: "UNICEF (United Nations Children’s Fund)",
+  },
+  {
+    url: "joom.svg",
+    alt: "Joom Group",
+  },
+  {
+    url: "sber.png",
+    alt: "Sber",
+  },
+  {
+    url: "avito.svg",
+    alt: "Avito",
+    scale: 1.4,
+  },
+  {
+    url: "mts.svg",
+    alt: "MTS",
+  },
+  {
+    url: "docsvision.png",
+    alt: "Docsvision",
+    scale: 1.2,
+  },
+  {
+    url: "okoo.png",
+    alt: "Okoo",
+    yOffset: true,
+  },
+  {
+    url: "space307.svg",
+    alt: "space307",
+  },
+  {
+    url: "redmadrobot.png",
+    alt: "REDMADROBOT",
+    yOffset: true,
+  },
+  {
+    url: "travelpayouts.svg",
+    alt: "Travelpayouts",
+  },
+  {
+    url: "junto.png",
+    alt: "Junto",
+  },
+  {
+    url: "automationhero.svg",
+    alt: "automation hero",
+  },
+  {
+    url: "radity.png",
+    alt: "Radity",
+  },
+  {
+    url: "globalCtoForum.png",
+    alt: "Global CTO Forum",
+  },
+  {
+    url: "express24.svg",
+    alt: "Express24",
+    scale: 1.4,
+  },
+  {
+    url: "stellarX.svg",
+    alt: "StellarX",
+  },
+  {
+    url: "stmLabs.png",
+    alt: "STM Labs",
+  },
+  {
+    url: "tenpixls.png",
+    alt: "TenPixls",
+  },
+  {
+    url: "uptarget.png",
+    alt: "Uptarget",
+  },
+  {
+    url: "smartomato.svg",
+    alt: "смартомато",
+  },
+  {
+    url: "foxford.svg",
+    alt: "Фоксфорд",
+  },
+  {
+    url: "codengage.png",
+    alt: "Codengage",
+  },
+  {
+    url: "lunatask.png",
+    alt: "Lunatask",
+  },
+  {
+    url: "semrush.png",
+    alt: "Semrush",
+  },
+  {
+    url: "intouchHealth.png",
+    alt: "Intouch Health, a Teladoc company",
+  },
+];
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+---
+
+<section class="companies">
+  <h3>
+    {getTextLocalized(translations.Landing.Companies.title, lang)}
+  </h3>
+  <ul class="companies-list">
+    {
+      companies.map(({ url, alt, yOffset, scale }) => {
+        return (
+          <li
+            class="companies-item"
+            data-logo-offset={yOffset}
+            style={{ "--logo-scale": scale ?? null }}
+          >
+            <img alt={alt} src={`/logo/${url}`} title={alt} />
+          </li>
+        );
+      })
+    }
+  </ul>
+  <div class="companies-add-yours">
+    <span>
+      {getTextLocalized(translations.Landing.Companies.wantToAppear, lang)}
+    </span>
+    <a href="https://github.com/effector/effector/issues/278">
+      {getTextLocalized(translations.Landing.Companies.tellUs, lang)}
+    </a>
+  </div>
+</section>
+
+<style>
+  :root {
+    --logos-bg: hsla(var(--color-stone-10), 1);
+    /* --logos-bg: hsl(217.46deg 77.24% 85.16%); */
+    /* --logos-bg: #e3d0b3; */
+    --logos-text: hsla(var(--color-gray-10), 1);
+    --logos-text-light: hsla(var(--color-gray-30), 1);
+  }
+
+  .companies {
+    @apply px-5 pb-20 pt-8;
+    background-color: var(--logos-bg);
+    --container-max-width: 90vw;
+    --logo-card-size: 130px;
+  }
+
+  @media screen and (max-width: 966px) {
+    .companies {
+      --container-max-width: 80vw;
+      --logo-card-size: 150px;
+    }
+  }
+
+  .companies h3 {
+    @apply mb-10 text-4xl lg:mb-6;
+    -webkit-box-decoration-break: clone;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(to right bottom, var(--logos-text-light) 30%, var(--logos-text));
+    -webkit-background-clip: text;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .companies-list {
+    @apply mx-auto grid items-center justify-center gap-4;
+    max-width: var(--container-max-width);
+    grid-template-columns: repeat(auto-fill, minmax(var(--logo-card-size), 1fr));
+    justify-items: center;
+  }
+
+  .companies-item > img,
+  .companies-item > svg {
+    object-fit: contain;
+    width: 100%;
+    max-width: var(--logo-card-size);
+    aspect-ratio: 3/2;
+    transform: scale(var(--logo-scale, 1));
+  }
+
+  .companies-item > svg {
+    width: fit-content;
+  }
+
+  .companies-item[data-logo-offset] > img {
+    transform: translateY(-5%);
+  }
+
+  .companies-add-yours {
+    @apply mx-auto flex max-w-6xl justify-end gap-1 p-3 text-xs italic;
+  }
+
+  .companies-add-yours > span {
+    color: var(--logos-text);
+  }
+</style>

@@ -107,7 +107,7 @@ test('createApi void calls edge case (should pass)', () => {
 })
 
 test('createApi returns nothing from reducer (should pass)', () => {
-  const $isLoading = createStore(false)
+  const $isLoading = createStore(false, {skipVoid: false})
   const {start} = createApi($isLoading, {
     start: (_, p) => (p === 1 ? true : undefined),
   })
@@ -167,7 +167,7 @@ describe('type validation', () => {
 })
 
 test('optional return (should pass)', () => {
-  const playerPosition = createStore(0)
+  const playerPosition = createStore(0, {skipVoid: false})
 
   const api = createApi(playerPosition, {
     moveLeft: (pos, n: number) => pos - n,

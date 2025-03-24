@@ -1,0 +1,217 @@
+---
+title: Getting Started with Effector
+description: Learn how to install and start using Effector
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Quick start with Effector (#quick-start-with-effector)
+
+Effector is a powerful state manager that offers a fundamentally new approach to data management in applications. Unlike traditional solutions where state is changed directly through actions, Effector uses a reactive and declarative approach.
+
+## Effector Features (#effector-features)
+
+- Effector is reactive 🚀: Effector automatically tracks dependencies and updates all related parts of the application, eliminating the need to manually manage updates.
+- Declarative code 📝: You describe the relationships between data and their transformations, while Effector takes care of how and when to perform these transformations.
+- Predictable testing ✅: Isolated contexts make testing business logic simple and reliable.
+- Flexible architecture 🏗️: Effector works equally well for both small applications and large enterprise systems.
+- Versatility 🔄: While Effector integrates perfectly with popular frameworks, it can be used in any JavaScript environment.
+
+More about effector core concepts you can read [here](/en/introduction/core-concepts)
+
+## Install effector (#install-effector)
+
+To get started, install Effector using your favorite package manager:
+
+<Tabs>
+  <TabItem label="npm">
+
+```bash
+npm install effector
+```
+
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector
+```
+
+  </TabItem>
+</Tabs>
+
+### Creating Your First Store (#first-store)
+
+Now, let’s create a store, which represents a state of your application:
+
+```ts
+import { createStore } from "effector";
+
+const $counter = createStore(0);
+```
+
+### Adding events (#adding-events)
+
+Next, let’s create some events, that will update our store when triggered:
+
+```ts
+import { createEvent } from "effector";
+
+const incremented = createEvent();
+const decremented = createEvent();
+```
+
+### Connecting Events to Store (#connection-event-to-store)
+
+And link the events to the store:
+
+```ts
+// counter.js
+import { createEvent, createStore } from "effector";
+
+const $counter = createStore(0);
+
+const incremented = createEvent();
+const decremented = createEvent();
+
+$counter.on(incremented, (counter) => counter + 1);
+$counter.on(decremented, (counter) => counter - 1);
+
+// and call it somewhere in your app
+incremented();
+// counter will increase by 1
+decremented();
+// counter will decrease by -1
+decremented();
+// counter will decrease by -1
+```
+
+## Framework Integration (#effector-framework-integration)
+
+### Installation (#effector-framework-installation)
+
+If you want to use Effector with a specific framework, you’ll need to install an additional package:
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```bash
+npm install effector effector-react
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```bash
+npm install effector effector-vue
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```bash
+npm install effector effector-solid
+```
+
+  </TabItem>
+</Tabs>
+
+### Usage examples (#effector-framework-usage-examples)
+
+And use it like this:
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```jsx
+import { useUnit } from "effector-react";
+import { createEvent, createStore } from "effector";
+import { $counter, incremented, decremented } from "./counter.js";
+
+export const Counter = () => {
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // or
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // or
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+
+  return (
+    <div>
+      <h1>Count: {counter}</h1>
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```html
+<script setup>
+  import { useUnit } from "@effector-vue/composition";
+  import { $counter, incremented, decremented } from "./counter.js";
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // or
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // or
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+</script>
+
+<template>
+  <div>
+    <h1>Count: {{ counter }}</h1>
+    <button @click="onIncremented">Increment</button>
+    <button @click="onDecremented">Decrement</button>
+  </div>
+</template>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```jsx
+import { createEvent, createStore } from "effector";
+import { useUnit } from "effector-solid";
+import { $counter, incremented, decremented } from "./counter.js";
+
+const Counter = () => {
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // or
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // or
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+
+  return (
+    <div>
+      <h1>Count: {counter()}</h1>
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+  </TabItem>
+</Tabs>
+
+:::info{title="What about Svelte ?"}
+No additional packages are required to use Effector with Svelte. It works seamlessly with the base Effector package.
+:::

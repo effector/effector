@@ -1,9 +1,14 @@
 import {createEvent, createDomain} from 'effector'
+import {muteErrors} from 'effector/fixtures'
+
+muteErrors('getType')
 
 test("should return it's own name on event.getType()", () => {
   expect(createEvent('foo').getType()).toBe('foo')
   expect(createEvent({name: 'foo'}).getType()).toBe('foo')
+  //@ts-expect-error
   expect(createEvent('foo', {name: 'bar'}).getType()).toBe('foo')
+  //@ts-expect-error
   expect(createEvent(undefined, {name: 'bar'}).getType()).toBe('bar')
 })
 test('event from domains should has full path in name', () => {

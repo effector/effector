@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createStore, createEffect, attach, Effect} from 'effector'
+import {createStore, createEffect, attach, sample, Effect} from 'effector'
 
 const typecheck = '{global}'
 
@@ -32,6 +32,30 @@ describe('explicit generics', () => {
       "
     `)
   })
+})
+
+test('factories with generics support', () => {
+  function createModel<T>() {
+    const $data = createStore<T | null>(null)
+
+    const loadFx = attach({
+      source: {
+        /* Assume we use some $api with external API we don't control */
+      },
+      effect() {
+        const result: any = /* API returns `any` */ null
+
+        return result as T /* explicit cast, becase we know result is T */
+      },
+    })
+
+    sample({clock: loadFx.doneData, target: $data})
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
 })
 
 describe('with source', () => {
@@ -149,6 +173,16 @@ test('mapParams without arguments (should pass)', () => {
 test('without source and mapParams (should pass)', () => {
   const effect: Effect<number, string, boolean> = createEffect()
   const fx: Effect<number, string, boolean> = attach({effect})
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
+test('effect with explicit name (should pass)', () => {
+  const effect: Effect<void, void, Error> = createEffect()
+  const fx: Effect<void, void, Error> = attach({effect, name: 'fx'})
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors

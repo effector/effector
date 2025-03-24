@@ -1,0 +1,110 @@
+---
+import IconChevron from "@icons/Chevron.astro";
+
+interface Props {
+  subtitle: string;
+}
+
+/**
+ * Pass any content without slot to be a description.
+ * Add `slot="links"` to appear in the links section.
+ * Many links allowed. Only class `.primary` is supported now
+ */
+---
+
+<section class="hero">
+  <div class="title">effector</div>
+  <div class="subtitle">{Astro.props.subtitle}</div>
+  <p class="description">
+    <slot />
+  </p>
+  <div class="links">
+    <slot name="links" />
+  </div>
+</section>
+
+<style>
+  .hero {
+    @apply mx-5 mb-20 mt-12 flex flex-col justify-center gap-6;
+  }
+
+  .hero .title {
+    -webkit-box-decoration-break: clone;
+    -webkit-text-fill-color: transparent;
+    color: unset;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right bottom, var(--theme-text-light) 30%, var(--theme-text));
+    -webkit-background-clip: text;
+    font-family: "Lexend Deca";
+
+    @apply m-0 max-w-full p-0 text-center text-5xl font-bold;
+    line-height: 1;
+  }
+
+  .hero .subtitle {
+    -webkit-box-decoration-break: clone;
+    -webkit-text-fill-color: transparent;
+    color: unset;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right bottom, var(--theme-text-light) 30%, var(--theme-text));
+    -webkit-background-clip: text;
+    font-family: "Lexend Deca";
+
+    @apply m-0 p-0 text-center text-2xl font-medium;
+    line-height: 1.3;
+  }
+
+  .hero .description {
+    @apply text-center text-base;
+  }
+
+  .hero .links {
+    @apply flex justify-center;
+  }
+
+  .hero :global(a.primary) {
+    background: linear-gradient(170deg, hsl(var(--color-primary-70)), hsl(var(--color-primary-50)));
+    color: var(--theme-bg);
+
+    @apply flex rounded-3xl py-2 pl-6 pr-4 text-base transition-shadow hover:shadow-md;
+  }
+
+  /* Some shit happens with tailwind, and order of md/lg rules is changed */
+  @media (min-width: 768px) {
+    .hero .title {
+      @apply text-6xl;
+    }
+
+    .hero .subtitle {
+      @apply text-4xl;
+      line-height: 1.5;
+    }
+
+    .hero .description {
+      @apply text-lg;
+    }
+
+    .hero :global(a.primary) {
+      @apply text-lg;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      @apply mb-32 mt-24;
+    }
+
+    .hero .title {
+      @apply text-8xl;
+    }
+
+    .hero .subtitle {
+      @apply text-5xl;
+      line-height: 1.5;
+    }
+
+    .hero .description {
+      @apply text-xl;
+    }
+  }
+</style>

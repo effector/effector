@@ -1,0 +1,126 @@
+---
+import { getPathParamsFromId, getTextLocalized, type LText } from "../languages";
+import ChevronDown from "@icons/ChevronDown.astro";
+import DropDownMenuItem from "./DropDownMenuItem.astro";
+
+interface Link {
+  link: string;
+  icon?: (props: { size: number }) => any;
+  text: LText;
+}
+
+interface Group {
+  text: LText;
+  links: Link[];
+}
+
+export interface Props {
+  links: (Group | Link)[];
+  class?: string;
+}
+
+const { links } = Astro.props;
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+---
+
+<div class={`menu ${Astro.props.class}`}>
+  <button type="button" class="menu-button">
+    <div class="button-title">
+      <slot />
+    </div>
+    <ChevronDown size={18} />
+  </button>
+  <div class="flyout">
+    <div class="items">
+      <div class="group">
+        {
+          links.map((linkOrGroup) => {
+            if ("links" in linkOrGroup) {
+              return (
+                <div class="group">
+                  <p>{getTextLocalized(linkOrGroup, lang)}</p>
+                  {linkOrGroup.links.map((link) => (
+                    <DropDownMenuItem link={link} lang={lang} />
+                  ))}
+                </div>
+              );
+            }
+
+            return <DropDownMenuItem link={linkOrGroup} lang={lang} />;
+          })
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    overflow: visible;
+    pointer-events: auto;
+    color: var(--theme-text);
+  }
+
+  .menu :global(svg) {
+    pointer-events: none;
+  }
+
+  .menu .menu-button {
+    display: flex;
+    align-items: center;
+    appearance: none;
+    transition: color 0.3s;
+    padding: 0.25rem 0.5rem;
+    color: var(--theme-text);
+  }
+
+  .menu:hover .menu-button {
+    color: var(--theme-text-light);
+  }
+
+  .menu .flyout {
+    position: absolute;
+    top: 130%;
+    right: 0rem;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.25s,
+      visibility 0.25s,
+      transform 0.25s;
+  }
+
+  .menu:hover .flyout {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .items {
+    @apply rounded-xl p-3 shadow-xl;
+    border: 1px solid var(--theme-divider);
+    background-color: var(--theme-bg);
+    min-width: 10rem;
+    overflow-y: auto;
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .group p {
+    @apply text-sm;
+    margin-top: 1rem;
+    color: var(--theme-header-lighter);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    text-wrap: nowrap;
+  }
+</style>

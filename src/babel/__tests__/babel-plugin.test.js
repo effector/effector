@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import {transformFileSync} from '@babel/core'
-import {format} from 'prettier'
+import {formatCode} from './utils'
 
 describe('babel-plugin', () => {
   const fixturesDir = path.join(__dirname, 'fixtures')
@@ -65,17 +65,3 @@ describe('babel-plugin', () => {
     }
   }
 })
-
-function formatCode(code) {
-  return format(code, {
-    semi: false,
-    printWidth: 80,
-    tabWidth: 2,
-    singleQuote: true,
-    trailingComma: 'all',
-    bracketSpacing: false,
-    jsxBracketSameLine: true,
-    arrowParens: 'avoid',
-    parser: 'babel',
-  })
-}

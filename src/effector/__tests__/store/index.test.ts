@@ -7,10 +7,14 @@ import {
   fork,
   allSettled,
   serialize,
+  step,
+  attach,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
 describe('.map', () => {
+  muteErrors('skipVoid')
+
   it('supports basic mapping', () => {
     const fn = jest.fn()
     const newWord = createEvent<string>()
@@ -75,13 +79,13 @@ describe('.watch', () => {
   it('supports functions', () => {
     const fn = jest.fn()
     const newWord = createEvent<string>()
-    const a = createStore('word').on(newWord, (_, word) => word)
+    const $a = createStore('word').on(newWord, (_, word) => word)
 
-    const b = a.map(word => word.length)
+    const $b = $a.map(word => word.length)
 
-    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
+    const $sum = createStore(4).on($b, (ln, prevLn) => ln + prevLn)
 
-    sum.watch(fn)
+    $sum.watch(fn)
 
     newWord('lol')
 
@@ -120,13 +124,20 @@ describe('.watch', () => {
     const fn = jest.fn()
     const newWord = createEvent<string>('new word')
     const spyEvent = createEvent<number>()
-    const a = createStore('word').on(newWord, (_, word) => word)
+    const $a = createStore('word').on(newWord, (_, word) => word)
 
-    const b = a.map(word => word.length)
+    const $b = $a.map(word => word.length)
 
-    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
+    const $sum = createStore(4).on($b, (ln, prevLn) => ln + prevLn)
 
-    sum.watch(spyEvent, (store, event) => fn({store, event}))
+    const callJestfnFx = attach({
+      source: $sum,
+      effect(store, event: number) {
+        fn({store, event})
+      },
+    })
+
+    sample({clock: spyEvent, target: callJestfnFx})
 
     newWord('lol')
     expect(fn).toHaveBeenCalledTimes(0)
@@ -162,20 +173,26 @@ describe('.watch', () => {
   it('supports effects', () => {
     const fn = jest.fn()
     const newWord = createEvent<string>('new word')
-    const spyEvent = createEffect()
-    spyEvent.use(args => args)
-    const a = createStore('word').on(newWord, (_, word) => word)
+    const triggerFx = createEffect((arg: number) => {})
+    const $a = createStore('word').on(newWord, (_, word) => word)
 
-    const b = a.map(word => word.length)
+    const $b = $a.map(word => word.length)
 
-    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
+    const $sum = createStore(4).on($b, (ln, prevLn) => ln + prevLn)
 
-    sum.watch(spyEvent, (store, event) => fn({store, event}))
+    const callJestfnFx = attach({
+      source: $sum,
+      effect(store, event: number) {
+        fn({store, event})
+      },
+    })
+
+    sample({clock: triggerFx, target: callJestfnFx})
 
     newWord('lol')
     expect(fn).toHaveBeenCalledTimes(0)
-    spyEvent(1)
-    spyEvent(2)
+    triggerFx(1)
+    triggerFx(2)
     expect(fn).toHaveBeenCalledTimes(2)
 
     newWord('')
@@ -183,7 +200,7 @@ describe('.watch', () => {
     newWord(' ')
     expect(fn).toHaveBeenCalledTimes(2)
 
-    spyEvent(3)
+    triggerFx(3)
     newWord('long word')
     expect(fn).toHaveBeenCalledTimes(3)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -209,31 +226,31 @@ describe('.off', () => {
   it('allows to unsubscribe store from event', () => {
     const fn = jest.fn()
     const newWord = createEvent<string>()
-    const a = createStore('word').on(newWord, (_, word) => word)
+    const $a = createStore('word').on(newWord, (_, word) => word)
 
-    const b = a.map(word => word.length)
+    const $b = $a.map(word => word.length)
 
-    const sum = createStore(4).on(b, (ln, prevLn) => ln + prevLn)
+    const $sum = createStore(4).on($b, (ln, prevLn) => ln + prevLn)
 
-    sum.watch(fn)
+    $sum.watch(fn)
 
-    expect(a.getState()).toBe('word')
-    expect(b.getState()).toBe(4)
-    expect(sum.getState()).toBe(4)
+    expect($a.getState()).toBe('word')
+    expect($b.getState()).toBe(4)
+    expect($sum.getState()).toBe(4)
 
     newWord('lol')
 
-    expect(a.getState()).toBe('lol')
-    expect(b.getState()).toBe(3)
-    expect(sum.getState()).toBe(7)
+    expect($a.getState()).toBe('lol')
+    expect($b.getState()).toBe(3)
+    expect($sum.getState()).toBe(7)
 
-    a.off(newWord)
+    $a.off(newWord)
 
     newWord('long word')
 
-    expect(a.getState()).toBe('lol')
-    expect(b.getState()).toBe(3)
-    expect(sum.getState()).toBe(7)
+    expect($a.getState()).toBe('lol')
+    expect($b.getState()).toBe(3)
+    expect($sum.getState()).toBe(7)
 
     expect(fn).toHaveBeenCalledTimes(2)
 
@@ -249,14 +266,7 @@ describe('.off', () => {
 })
 
 describe('updateFilter', () => {
-  let consoleError: any
-  beforeEach(() => {
-    consoleError = console.error
-    console.error = () => {}
-  })
-  afterEach(() => {
-    console.error = consoleError
-  })
+  muteErrors('failure')
   it('prevent store from updates when returns false', () => {
     const fn = jest.fn()
     const moveTo = createEvent<{x: number; y: number}>()
@@ -329,24 +339,28 @@ describe('void skip pattern deprecation', () => {
 
   describe('writable stores', () => {
     test('createStore throw on undefined', () => {
-      expect(() => createStore(undefined)).toThrowErrorMatchingInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      expect(() => {
+        const $foo = createStore(undefined)
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"[store] unit '$foo': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('createStore throw on undefined, if used with {skipVoid: true}', () => {
-      expect(() =>
-        createStore(undefined, {skipVoid: true}),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+      expect(() => {
+        const $foo = createStore(undefined, {skipVoid: true})
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"[store] unit '$foo': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('createStore do not throw on undefined with skipVoid: false', () => {
       expect(() => createStore(undefined, {skipVoid: false})).not.toThrow()
     })
     test('createStore warns deprecation, if used with {skipVoid: true}', () => {
-      expect(() => createStore(null, {skipVoid: true})).not.toThrow()
+      expect(() => {
+        const $foo = createStore(null, {skipVoid: true})
+      }).not.toThrow()
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit '$foo': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('createStore does not warn anything, if {skipVoid} and undefined are not presented', () => {
@@ -360,18 +374,18 @@ describe('void skip pattern deprecation', () => {
         const store = createStore(0).on(inc, () => {})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+          `"Error: [store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
         )
       })
       test('store.on reducer skips updates with undefined and does not warn, if store has {skipVoid: true} (only warning of the store itself is shown)', () => {
         const inc = createEvent()
         const store = createStore(0, {skipVoid: true}).on(inc, () => {})
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+          `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
         )
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+          `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
         )
       })
       test('store.on reducer allows undefined as a value, if store has {skipVoid: false}', () => {
@@ -390,7 +404,7 @@ describe('void skip pattern deprecation', () => {
         sample({clock: inc, fn: () => {}, target: store})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+          `"Error: [store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
         )
       })
       test('sample target skips updates with undefined, but shows warning, if store has {skipVoid: true}', () => {
@@ -399,7 +413,7 @@ describe('void skip pattern deprecation', () => {
         sample({clock: inc, fn: () => {}, target: store})
         inc()
         expect(getWarning()).toMatchInlineSnapshot(
-          `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+          `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
         )
       })
       test('sample target allows undefined as a value, if store has {skipVoid: false}', () => {
@@ -431,17 +445,17 @@ describe('void skip pattern deprecation', () => {
 
   describe('store.map', () => {
     test('store.map warn on initial undefined', () => {
-      createStore(null).map(() => {})
+      const $foo = createStore(null).map(() => {})
 
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"[store] unit '$foo → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('store.map warn on initial undefined, if used with {skipVoid: true}', () => {
-      createStore(null).map(() => {}, {skipVoid: true})
+      const $foo = createStore(null).map(() => {}, {skipVoid: true})
 
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit '$foo → *': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('store.map skips updates with undefined, but shows warning', () => {
@@ -451,7 +465,7 @@ describe('void skip pattern deprecation', () => {
         .map(x => (x > 3 ? undefined : x))
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"Error: [store] unit 'store → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('store.map skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
@@ -463,7 +477,7 @@ describe('void skip pattern deprecation', () => {
       inc(5)
       inc(6)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit 'store → *': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('store.map do not warn on initial undefined, if used with {skipVoid: false}', () => {
@@ -485,16 +499,16 @@ describe('void skip pattern deprecation', () => {
 
   describe('combine', () => {
     test('combine warns on initial undefined', () => {
-      combine({a: createStore(null)}, () => {})
+      const $foo = combine({a: createStore(null)}, () => {})
 
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"[combine] unit '$foo': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('combine warn on initial undefined, if used with {skipVoid: true}', () => {
-      combine({a: createStore(null)}, () => {}, {skipVoid: true})
+      const $foo = combine({a: createStore(null)}, () => {}, {skipVoid: true})
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit '$foo': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('combine skips updates with undefined, but shows warning', () => {
@@ -504,7 +518,7 @@ describe('void skip pattern deprecation', () => {
       )
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
+        `"Error: [store] unit 'store': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
       )
     })
     test('combine skips updates with undefined, but shows one warning, if used with {skipVoid: true}', () => {
@@ -518,7 +532,7 @@ describe('void skip pattern deprecation', () => {
       inc(5)
       inc(6)
       expect(getWarning()).toMatchInlineSnapshot(
-        `"{skipVoid: true} is deprecated, use updateFilter instead"`,
+        `"[store] unit 'store': {skipVoid: true} is deprecated, use updateFilter instead"`,
       )
     })
     test('combine do not warn on initial undefined, if used with {skipVoid: false}', () => {
@@ -539,4 +553,29 @@ describe('void skip pattern deprecation', () => {
       expect(store.getState()).toBe(undefined)
     })
   })
+})
+
+test('patronum previousValue agreement', () => {
+  /**
+   * Tests agreement on non-breaking of internals between core effector and patronum previousValue
+   * previousValue assumes that previous store value will be in stack.a after last store node step
+   */
+  const fn = jest.fn()
+  const inc = createEvent()
+  const $foo = createStore(0)
+  $foo.on(inc, x => x + 1)
+  ;($foo as any).graphite.seq.push(
+    step.compute({
+      fn(upd, _, stack) {
+        fn([upd, stack.a])
+        return upd
+      },
+    }),
+  )
+  inc()
+  inc()
+  expect(argumentHistory(fn)).toEqual([
+    [1, 0],
+    [2, 1],
+  ])
 })

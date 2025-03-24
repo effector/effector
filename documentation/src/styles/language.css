@@ -1,0 +1,102 @@
+code .token.keyword,
+code .token.builtin {
+  color: var(--code-keyword);
+}
+
+code .token.literal-property,
+code .token.property {
+  color: var(--code-property);
+}
+
+code .token.string,
+code .token.attr-value {
+  color: var(--code-string);
+}
+
+code .token.number {
+  color: var(--code-number);
+}
+
+code .token.boolean,
+code .token.constant {
+  color: var(--code-constant);
+}
+
+code .token.function-variable,
+code .token.function {
+  color: var(--code-function);
+}
+
+code .token.operator,
+code .token.punctuation {
+  color: var(--code-punctuation);
+}
+
+code .token.tag {
+  color: var(--code-tag);
+}
+
+code .token.class-name {
+  color: var(--code-class);
+}
+
+code .token.inserted {
+  color: var(--code-function);
+}
+
+code .token.deleted.prefix,
+code .token.inserted.prefix {
+  user-select: none;
+}
+
+code .token.deleted {
+  color: var(--code-class);
+}
+
+code .token.attr-name {
+  color: var(--code-attr);
+}
+
+code .token.comment {
+  color: var(--code-comment);
+}
+
+pre[class*="language-"] {
+  background-color: var(--code-background);
+  color: var(--code-foreground);
+  @apply shadow-md;
+}
+
+/* Modified https://github.com/uloco/theme-bluloco-light */
+:root {
+  --code-background: #f9f9f9;
+  --code-foreground: #383a42;
+  --code-comment: #a0a1a7;
+  --code-keyword: #0098dd;
+  --code-function: #23974a;
+  --code-property: #a05a48;
+  --code-string: #c5a332;
+  --code-number: #ce33c0;
+  --code-constant: #823ff1;
+  --code-tag: #275fe4;
+  --code-attr: #df631c;
+  --code-class: #d52753;
+  --code-punctuation: #7a82da;
+}
+
+/* https://github.com/uloco/theme-bluloco-dark */
+.theme-dark:root {
+  --code-background: #282c34;
+  --code-foreground: #abb2bf;
+  --code-comment: #636d83;
+  --code-keyword: #10b1fe;
+  --code-function: #3fc56b;
+  --code-property: #ce9887;
+  --code-string: #f9c859;
+  --code-number: #ff78f8;
+  --code-constant: #9f7efe;
+  --code-tag: #3691ff;
+  --code-attr: #ff936a;
+  --code-class: #ff6480;
+  --code-punctuation: #7a82da;
+}

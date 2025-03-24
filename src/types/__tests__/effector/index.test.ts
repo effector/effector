@@ -381,7 +381,7 @@ describe('is guards', () => {
         "
         Type 'StoreWritable<number>' is not assignable to type 'Store<string>'.
           Types of property 'map' are incompatible.
-            Type '{ <T>(fn: (state: number, lastState?: T | undefined) => T, config?: { skipVoid?: boolean | undefined; } | undefined): Store<T>; <T>(fn: (state: number, lastState: T) => T, firstState: T): Store<...>; }' is not assignable to type '{ <T>(fn: (state: string, lastState?: T | undefined) => T, config?: { skipVoid?: boolean | undefined; } | undefined): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }'.
+            Type '<T>(fn: (state: number) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
               Types of parameters 'fn' and 'fn' are incompatible.
                 Types of parameters 'state' and 'state' are incompatible.
                   Type 'number' is not assignable to type 'string'.

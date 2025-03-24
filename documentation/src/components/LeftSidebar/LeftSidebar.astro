@@ -1,0 +1,345 @@
+---
+import type { MarkdownHeading } from "astro";
+import { getPathParamsFromId } from "../../languages";
+import { getActiveTabSidebar, getLocalizedPanelSidebar } from "../../navigation";
+import ChevronRight from "src/icons/ChevronRight.astro";
+import { trimTrailingSlash } from "src/libs/path";
+import { PANEL_ITEMS } from "src/sidebar-config";
+import { PANEL_FRAMEWORK_ITEMS } from "src/sidebar-config";
+import SidebarScrollRestore from "./SidebarScrollRestore.astro";
+
+type Props = {
+  currentPage: string;
+  headings: MarkdownHeading[];
+};
+
+const { currentPage } = Astro.props;
+const currentPageMatch = trimTrailingSlash(currentPage);
+
+const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
+const activePanelIndex = getActiveTabSidebar(slug);
+const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
+---
+
+<tabbed-sidebar id="sidebar" class="navigation">
+  <nav aria-labelledby="grid-left">
+    <div>
+      <ul class="tabs navigation-panel">
+        {
+          PANEL_ITEMS.map(({ text, id }, i) => (
+            <li role="presentation">
+              <button
+                role="tab"
+                class="tab-panel-item"
+                aria-selected={id === activePanelIndex ? "true" : "false"}
+              >
+                {text[lang as keyof typeof text] || text.en}
+              </button>
+            </li>
+          ))
+        }
+        <li role="presentation">
+          <ul class="frameworks-panel">
+            {
+              PANEL_FRAMEWORK_ITEMS.map(({ text, id, Icon }, i) => (
+                <li role="presentation">
+                  <button
+                    role="tab"
+                    class="tab-panel-item"
+                    data-icon={id}
+                    data-active={i === 0 ? "true" : "false"}
+                    class="tab-panel-item"
+                    aria-selected={id === activePanelIndex ? "true" : "false"}
+                  >
+                    {Icon && <Icon size={18} />}
+                    <span>{text[lang as keyof typeof text] || text.en}</span>
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    {
+      localizedSidebar.map(({ sidebarItems, panelId }) => (
+        <div
+          hidden={panelId !== activePanelIndex}
+          data-initial={panelId === activePanelIndex ? "true" : "false"}
+          role="tabpanel"
+        >
+          <ul class="nav-groups">
+            {sidebarItems.map((group, index) => (
+              <li>
+                <div class="nav-group">
+                  <button
+                    class="nav-group-title"
+                    aria-expanded="true"
+                    aria-controls={`group-${index}`}
+                  >
+                    {group.title}
+                    <ChevronRight class="arrow" />
+                  </button>
+                  <ul id={`group-${index}`}>
+                    {group.items.map((item) => (
+                      <li class="nav-link">
+                        <a
+                          href={item.link}
+                          aria-current={currentPageMatch === item.link ? "page" : false}
+                          target={item.link.startsWith("/") ? undefined : "_blank"}
+                          data-fallback={item.isFallback}
+                        >
+                          <span> {item.title}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </nav>
+  <SidebarScrollRestore />
+</tabbed-sidebar>
+
+<script>
+  import { Tabs } from "@components/Tabs/Tabs";
+  class TabbedSidebar extends Tabs {}
+
+  customElements.define("tabbed-sidebar", TabbedSidebar);
+
+  function setupNavigation() {
+    const navGroups = document.querySelectorAll(".nav-group");
+    navGroups.forEach((group) => {
+      const button = group.querySelector("button");
+      const content = group.querySelector("ul");
+      if (button && content) {
+        button.addEventListener("click", () => {
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", (!expanded).toString());
+
+          content.classList.toggle("collapsed", expanded);
+          content.setAttribute("aria-hidden", expanded.toString());
+          content.querySelectorAll("a").forEach((link) => {
+            link.setAttribute("tabindex", expanded ? "-1" : "0");
+          });
+          button.classList.toggle("collapsed", expanded);
+        });
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", setupNavigation);
+  document.addEventListener("astro:after-swap", setupNavigation);
+</script>
+
+<style>
+  .frameworks-panel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0.25rem;
+  }
+
+  .frameworks-panel li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .frameworks-panel li:hover {
+    background-color: var(--theme-bg);
+  }
+
+  .navigation-panel {
+    width: 100%;
+    border-radius: 16px;
+    padding: 0.25rem;
+    background-color: var(--theme-bg-hover);
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .navigation-panel li {
+    padding: 0;
+    border-radius: 12px;
+    width: 100%;
+  }
+
+  .navigation-panel li button {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: var(--theme-left-sidebar-item-text);
+    border-radius: 12px;
+  }
+  .navigation-panel li button:hover {
+    background-color: var(--theme-navbar-bg);
+  }
+
+  .navigation-panel li button[aria-selected="true"] {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+  }
+
+  .tab-panel-item {
+    cursor: pointer;
+    @apply flex font-bold;
+  }
+
+  .navigation {
+    overflow-x: visible;
+    overflow-y: auto;
+    padding-top: 32px;
+    scrollbar-gutter: stable;
+    width: 100%;
+  }
+
+  nav > div {
+    padding-right: 12px;
+  }
+
+  .nav-groups {
+    --fast-ease: cubic-bezier(0, 0.18, 0.25, 1);
+    position: sticky;
+    top: calc(var(--theme-navbar-height) + 2rem);
+    padding: 2rem 0;
+    height: 100%;
+    max-height: 100vh;
+  }
+
+  .nav-groups > li + li {
+    margin-top: 1rem;
+  }
+
+  .nav-groups > :first-child {
+    padding-top: var(--doc-padding);
+  }
+
+  .nav-groups > :first-child h2 {
+    margin-top: 0;
+  }
+
+  .nav-groups > :last-child {
+    margin-bottom: var(--theme-navbar-height);
+    padding-bottom: 2rem;
+  }
+
+  .nav-group {
+    @apply flex flex-col;
+  }
+
+  .nav-group-title {
+    @apply rounded-md px-4 py-1;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1rem;
+    /*text-transform: uppercase;*/
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .nav-group-title:hover,
+  .nav-group-title:focus-visible {
+    background-color: var(--theme-bg-hover);
+  }
+
+  .nav-group-title .arrow {
+    width: 1em;
+    height: 1em;
+    transition: transform 0.2s var(--fast-ease);
+  }
+
+  .nav-group-title.collapsed .arrow {
+    transform: rotate(90deg);
+  }
+
+  .nav-group ul {
+    display: flex;
+    flex-direction: column;
+    transition:
+      max-height 0.2s var(--fast-ease),
+      opacity 0.2s var(--fast-ease);
+    max-height: 1000px;
+    overflow: hidden;
+    opacity: 1;
+  }
+
+  .nav-group ul.collapsed {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nav-link a {
+    @apply flex items-center rounded-md px-7 py-1 text-base;
+    color: var(--theme-left-sidebar-item-text);
+    font: inherit;
+    text-decoration: none;
+  }
+
+  .nav-link a[data-fallback] span:after {
+    content: "EN";
+    font-weight: bold;
+    font-size: 0.75rem;
+    vertical-align: super;
+    margin-left: 5px;
+  }
+
+  .nav-link a:hover,
+  .nav-link a:focus {
+    background-color: var(--theme-bg-hover);
+  }
+
+  .nav-link a[aria-current="page"] {
+    background-color: var(--theme-accent);
+    color: var(--theme-bg);
+    font-weight: 600;
+  }
+
+  .nav-link a[href^="http://"]::after,
+    .nav-link a[href^="https://"]::after
+  {
+    display: inline-block;
+    background-image: url("/external.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 1em;
+    height: 1em;
+    content: "";
+  }
+
+  :global(.theme-dark) .nav-link a[href^="http://"]::after,
+    :global(.theme-dark) .nav-link a[href^="https://"]::after
+  {
+    filter: invert();
+  }
+
+  @media (min-width: 50em) {
+    .nav-groups {
+      padding: 0;
+    }
+  }
+</style>
+
+<style is:global>
+  :root.theme-dark .nav-link a[aria-current="page"] {
+    color: var(--theme-text);
+  }
+</style>

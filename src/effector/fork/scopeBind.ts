@@ -1,35 +1,39 @@
-import {createDefer} from '../defer'
-import {is} from '../is'
 import {assert} from '../throw'
-import {launch, forkPage} from '../kernel'
+import {forkPage, setForkPage} from '../kernel'
 import type {Scope} from '../unit.h'
-import type {Unit} from '../index.h'
 
 /** bind event to scope */
 export function scopeBind(
-  unit: Unit,
+  unit: (...args: any[]) => any,
   {scope, safe}: {scope?: Scope; safe?: true} = {},
 ) {
-  assert(
-    scope || forkPage || safe,
-    'scopeBind: scope not found',
-  )
-  const savedForkPage = scope || forkPage!
-  return is.effect(unit)
-    ? (params: any) => {
-        const req = createDefer()
-        launch({
-          target: unit,
-          params: {
-            params,
-            req,
-          },
-          scope: savedForkPage,
-        })
-        return req.req
-      }
-    : (params: any) => {
-        launch({target: unit, params, scope: savedForkPage})
-        return params
-      }
+  assert(scope || forkPage || safe, 'scopeBind: scope not found')
+  const targetForkPage = scope || forkPage!
+
+  return (...args: any[]) => {
+    let final: any
+    let failed = false
+
+    const lastForkPage = forkPage
+    function restoreLastForkPage() {
+      setForkPage(lastForkPage)
+    }
+
+    setForkPage(targetForkPage)
+    try {
+      final = unit(...args)
+    } catch (err) {
+      final = err
+      failed = true
+    }
+    restoreLastForkPage()
+
+    if (failed) throw final
+
+    if (final instanceof Promise) {
+      final.then(restoreLastForkPage, restoreLastForkPage)
+    }
+
+    return final
+  }
 }

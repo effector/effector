@@ -14,26 +14,11 @@ import {
   guard,
   forward,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
 import {withFactory} from '../region'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (
-      String(message).includes('forward') ||
-      String(message).includes('guard')
-    )
-      return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['forward', 'guard', 'branch computation stopped'])
 
 function compactMessage(m: Message) {
   return `${m.type} of '${m.name}' [${m.kind}] to value of '${
@@ -175,7 +160,6 @@ describe('inspect API', () => {
         "update of 'undefined' [forward] to value of '[object Object]' (id:string, sid:undefined, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'doneData' [event] to value of 'undefined' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'end' [event] to value of '[object Object]' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
-        "update of 'undefined' [guard] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '0' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'attachedFnFx.inFlight' [store] to value of '0' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
         "update of 'updates' [event] to value of '0' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
@@ -466,6 +450,7 @@ describe('inspectGraph API', () => {
           source: $source,
           target: targetEvent,
         },
+        isRegion: true,
       })
       expect(argumentHistory(declared)).toMatchInlineSnapshot(`
         Array [
@@ -573,11 +558,12 @@ describe('inspectGraph API', () => {
         id: expect.any(String),
         meta: {
           region: 'inner',
+          isRegion: true,
         },
         region: {
           type: 'region',
           id: expect.any(String),
-          meta: {region: 'outer'},
+          meta: {region: 'outer', isRegion: true},
           region: {
             type: 'factory',
             id: expect.any(String),
@@ -609,53 +595,66 @@ describe('inspectGraph API', () => {
 })
 
 describe('real use cases', () => {
-  test('measure effect timings', async () => {
-    const start = createEvent()
-
-    const fx1 = createEffect(() => new Promise(r => setTimeout(r, 12)))
-    const fx2 = createEffect(() => new Promise(r => setTimeout(r, 22)))
-    const fx3 = createEffect(() => new Promise(r => setTimeout(r, 32)))
-
-    sample({
-      clock: start,
-      target: [fx1, fx2, fx3],
+  describe('test with manual time advance', () => {
+    beforeAll(() => {
+      jest.useFakeTimers()
     })
+    afterAll(() => {
+      jest.useRealTimers()
+    })
+    test('measure effect timings', async () => {
+      const start = createEvent()
 
-    const scope = fork()
+      const fx1 = createEffect(() => new Promise(r => setTimeout(r, 10)))
+      const fx2 = createEffect(() => new Promise(r => setTimeout(r, 20)))
+      const fx3 = createEffect(() => new Promise(r => setTimeout(r, 30)))
 
-    const times: Record<string, number> = {}
-    const startRecord = (name: string) => {
-      const start = Date.now()
+      sample({
+        clock: start,
+        target: [fx1, fx2, fx3],
+      })
 
-      return () => {
-        times[name] = Date.now() - start
+      const scope = fork()
+
+      const times: Record<string, number> = {}
+      const startRecord = (name: string) => {
+        const start = Date.now()
+
+        return () => {
+          times[name] = Date.now() - start
+        }
       }
-    }
 
-    const timers = new Map<string, () => void>()
+      const timers = new Map<string, () => void>()
 
-    const unsub = inspect({
-      scope,
-      fn: m => {
-        if (m.kind === 'effect') {
-          timers.set(m.stack.fxID as string, startRecord(m.name!))
-        }
-        if (m.kind === 'event' && m.meta.named === 'finally') {
-          const stop = timers.get(m.stack.fxID as string)
-          stop?.()
-        }
-      },
+      const unsub = inspect({
+        scope,
+        fn: m => {
+          if (m.kind === 'effect') {
+            timers.set(m.stack.fxID as string, startRecord(m.name!))
+          }
+          if (m.kind === 'event' && m.meta.named === 'finally') {
+            const stop = timers.get(m.stack.fxID as string)
+            stop?.()
+          }
+        },
+      })
+
+      const promise = allSettled(start, {scope})
+      await jest.advanceTimersByTime(10)
+      await jest.advanceTimersByTime(10)
+      await jest.advanceTimersByTime(10)
+      await jest.advanceTimersByTime(10)
+      await promise
+
+      const floor = (n: number) => Math.floor(n / 10) * 10
+
+      expect(floor(times.fx1)).toEqual(10)
+      expect(floor(times.fx2)).toEqual(20)
+      expect(floor(times.fx3)).toEqual(30)
+
+      unsub()
     })
-
-    await allSettled(start, {scope})
-
-    const floor = (n: number) => Math.floor(n / 10) * 10
-
-    expect(floor(times.fx1)).toEqual(10)
-    expect(floor(times.fx2)).toEqual(20)
-    expect(floor(times.fx3)).toEqual(30)
-
-    unsub()
   })
   test('monitor out-of-scope computations', async () => {
     const start = createEvent()

@@ -1,7 +1,5 @@
-import type {DOMElement} from 'react'
+import {ReactElement, act} from 'react'
 import {Root, createRoot} from 'react-dom/client'
-
-import {act} from 'react-dom/test-utils'
 
 export {act}
 
@@ -31,14 +29,14 @@ export const cleanup = async () =>
   })
 afterEach(cleanup)
 
-export const render = async (node: DOMElement<any, any>) =>
+export const render = async (node: ReactElement<any, any>) =>
   act(async () => {
     if (!root) {
       root = createRoot(container)
     }
     root.render(node)
   })
-export async function renderHTML(node: DOMElement<any, any>) {
+export async function renderHTML(node: ReactElement<any, any>) {
   await render(node)
   return container.firstChild
 }

@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { InferGetStaticPropsType } from "astro";
+
+import { KNOWN_LANGUAGE_CODES } from "../../languages";
+import { getBreadcrumbs, translatedDocsIndex } from "../../docs";
+import { SITE } from "../../consts";
+
+import MainLayout from "../../layouts/MainLayout.astro";
+import NotTranslatedYet from "../../components/NotTranslatedYet.astro";
+import TranslationDisclaimer from "../../components/TranslationDisclaimer.astro";
+
+export async function getStaticPaths() {
+  const { sourceSlugs, docs } = translatedDocsIndex;
+  const paths: {
+    params: { lang: string; slug: string };
+    props: { post: CollectionEntry<"docs"> | null };
+  }[] = [];
+
+  // Create path for each slug for each language
+  for (const slug of sourceSlugs.values()) {
+    for (const lang of KNOWN_LANGUAGE_CODES) {
+      paths.push({
+        params: { lang, slug },
+        props: { post: docs[`${lang}/${slug}`] ?? null },
+      });
+    }
+  }
+
+  return paths;
+}
+
+export type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { slug, lang } = Astro.params;
+
+const { docs } = translatedDocsIndex;
+const breadcrumbs = getBreadcrumbs({ docs, path: Astro.url.pathname });
+
+const { post } = Astro.props;
+const defaultLanguagePost = docs[`${SITE.defaultLanguage}/${slug}`];
+
+const translations: { lang: string; slug: string }[] = [];
+
+// Create link for each translated page
+KNOWN_LANGUAGE_CODES.forEach((langCode) => {
+  if (langCode !== lang && docs[`${langCode}/${slug}`]) {
+    translations.push({ lang: langCode, slug: slug! });
+  }
+});
+
+const translationExists = Boolean(post);
+
+const { Content, headings } = post ? await post.render() : await defaultLanguagePost.render();
+const postData = (post ?? defaultLanguagePost).data;
+---
+
+<MainLayout
+  documentId={post?.id ?? defaultLanguagePost.id}
+  headings={headings}
+  {...postData}
+  translations={translations}
+  breadcrumbs={breadcrumbs}
+  indexing={translationExists}
+>
+  {!post ? <NotTranslatedYet lang={lang!} /> : null}
+  <Content />
+  {lang !== SITE.defaultLanguage ? <TranslationDisclaimer lang={lang!} /> : null}
+</MainLayout>

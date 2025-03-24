@@ -8,6 +8,7 @@ import {
   sample,
   serialize,
   createStore,
+  combine,
 } from 'effector'
 
 test('allSettled first argument validation', async () => {
@@ -41,6 +42,30 @@ test('allSettled first argument validation', async () => {
   )
 })
 
+test('derived units are not accepted', async () => {
+  const $foo = createStore(0)
+  const $bar = combine($foo, x => x)
+
+  const trigger = createEvent()
+  const derived = trigger.map(x => x)
+
+  const scope = fork()
+
+  await expect(
+    // @ts-expect-error
+    allSettled($bar, {scope, params: 1}),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"[allSettled] unit '$bar': unit should be targetable"`,
+  )
+
+  await expect(
+    // @ts-expect-error
+    allSettled(derived, {scope}),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"[allSettled] unit 'trigger → *': unit should be targetable"`,
+  )
+})
+
 test('allSettled(scope)', async () => {
   const scope = fork()
   const requestFx = createEffect(() => new Promise(rs => setTimeout(rs, 400)))
@@ -54,7 +79,7 @@ test('allSettled(scope)', async () => {
   await allSettled(scope)
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "el2wwt": true,
+      "-es2ed7": true,
     }
   `)
 })
@@ -131,75 +156,77 @@ describe('transactions', () => {
     await allSettled(trigger, {scope})
   })
   test('', async () => {
-    const app = createDomain()
-    const inner1 = app.createEffect(async (x: string) => {
+    const inner1 = createEffect(async (x: string) => {
       await new Promise(rs => setTimeout(rs, 50))
     })
-    const inner2 = app.createEffect(async (x: string) => {
+    const inner2 = createEffect(async (x: string) => {
       await new Promise(rs => setTimeout(rs, 50))
     })
-    const req1 = app.createEffect(async (x: string) => {
+    const req1 = createEffect(async (x: string) => {
       await inner1(x)
       await inner2(x)
       await inner1(`${x} 2`)
     })
-    const words = app
-      .createStore([] as string[])
-      .on(inner2.done, (list, {params: word}) => [...list, word])
-    const trigger = app.createEvent<string>()
-    const str = app.createStore('-').on(trigger, (_, x) => x)
+    const words = createStore<string[]>([]).on(
+      inner2.done,
+      (list, {params: word}) => [...list, word],
+    )
+    const trigger = createEvent<string>()
+    const str = createStore('-').on(trigger, (_, x) => x)
 
     sample({
       source: str,
       target: req1,
     })
 
-    const scope1 = fork(app)
+    const scope1 = fork()
     const promise1 = allSettled(trigger, {
       scope: scope1,
       params: 'a',
     })
     expect(() => {
-      const inner1 = app.createEffect(async (x: string) => {
+      const inner1 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 50))
       })
-      const inner2 = app.createEffect(async (x: string) => {
+      const inner2 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 40))
       })
-      const req1 = app.createEffect(async (x: string) => {
+      const req1 = createEffect(async (x: string) => {
         await Promise.all([inner1(x), inner2(x)])
       })
-      const words = app
-        .createStore([] as string[])
-        .on(inner2.done, (list, {params: word}) => [...list, word])
-      const str = app.createStore('-').on(trigger, (_, x) => x)
+      const words = createStore<string[]>([]).on(
+        inner2.done,
+        (list, {params: word}) => [...list, word],
+      )
+      const str = createStore('-').on(trigger, (_, x) => x)
 
       sample({
         source: str,
         target: req1,
       })
     }).not.toThrow()
-    const scope2 = fork(app)
+    const scope2 = fork()
     const promise2 = allSettled(trigger, {
       scope: scope2,
       params: 'b',
     })
     await promise1
     expect(() => {
-      const inner1 = app.createEffect(async (x: string) => {
+      const inner1 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 50))
       })
-      const inner2 = app.createEffect(async (x: string) => {
+      const inner2 = createEffect(async (x: string) => {
         await new Promise(rs => setTimeout(rs, 50))
       })
-      const req1 = app.createEffect(async (x: string) => {
+      const req1 = createEffect(async (x: string) => {
         await inner1(x)
         await inner2(x)
       })
-      const words = app
-        .createStore([] as string[])
-        .on(inner2.done, (list, {params: word}) => [...list, word])
-      const str = app.createStore('-').on(trigger, (_, x) => x)
+      const words = createStore<string[]>([]).on(
+        inner2.done,
+        (list, {params: word}) => [...list, word],
+      )
+      const str = createStore('-').on(trigger, (_, x) => x)
 
       sample({
         source: str,
@@ -209,20 +236,20 @@ describe('transactions', () => {
     await promise2
     expect(serialize(scope1)).toMatchInlineSnapshot(`
       Object {
-        "-ec3clm": Array [
+        "-36m1p8": "a",
+        "qutrpb": Array [
           "a",
         ],
-        "-ywmq49": "a",
       }
     `)
     expect(serialize(scope2)).toMatchInlineSnapshot(`
       Object {
-        "-36m1ni": "b",
-        "-ec3clm": Array [
+        "-36m1p8": "b",
+        "-7ytzr6": "b",
+        "-bi6cil": Array [
           "b",
         ],
-        "-ywmq49": "b",
-        "rsx11i": Array [
+        "qutrpb": Array [
           "b",
         ],
       }

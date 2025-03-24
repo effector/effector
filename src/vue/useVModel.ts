@@ -1,39 +1,39 @@
-import {Store, is, createStore} from "effector"
-import {onUnmounted, reactive, Ref, ref, watch} from "vue-next"
+import {Store, is, createWatch} from 'effector'
+import {type EffectScope, reactive, ref, watch, effectScope, onScopeDispose, toRaw, Reactive} from 'vue-next'
 
-import {unwrapProxy} from "./lib/unwrapProxy"
-import {deepCopy} from "./lib/deepCopy"
-import {stateReader} from "./lib/state-reader"
-import {createWatch} from "./lib/create-watch"
-import {getScope} from "./lib/get-scope"
-import { UseVModel } from "effector-vue/composition"
+import {deepCopy} from './lib/deepCopy'
+import {stateReader} from './lib/state-reader'
+import {getScope} from './lib/get-scope'
+import {UseVModel} from 'effector-vue/composition'
 
-function createVModel<T>(store: Store<T>, key?: string, shape?: Record<string, unknown>) {
-  if (!is.store(store)) throw Error("expect useVModel argument to be a store")
+function createVModel<T>(
+  store: Store<T>,
+  key?: string,
+  shape?: Record<string, unknown>,
+) {
+  if (!is.store(store)) throw Error('expect useVModel argument to be a store')
 
-  let {scope} = getScope()
+  const {scope} = getScope()
 
-  let _ = ref(
-    deepCopy(stateReader(store, scope))
-  )
+  const _ = ref(deepCopy(stateReader(store, scope)))
 
   let isSelfUpdate = false
   let fromEvent = false
 
-  let stop = createWatch(
-    store,
-    (payload) => {
+  const stop = createWatch({
+    unit: store,
+    fn: payload => {
       if (isSelfUpdate) {
         return
       }
 
       fromEvent = true
-      _.value = ref(deepCopy(payload)).value
+      _.value = deepCopy(payload)
     },
-    scope
-  )
+    scope,
+  })
 
-  onUnmounted(() => {
+  onScopeDispose(() => {
     stop()
   })
 
@@ -46,44 +46,51 @@ function createVModel<T>(store: Store<T>, key?: string, shape?: Record<string, u
 
   watch(
     watchFn,
-    (value) => {
+    value => {
       isSelfUpdate = true
 
       if (!fromEvent) {
-        let raw = ref(unwrapProxy(value)).value
         // @ts-ignore
-        store.setState(deepCopy(raw))
+        store.setState(deepCopy(toRaw(value)))
       }
 
       fromEvent = false
       isSelfUpdate = false
     },
-    {deep: true, immediate: false},
+    {deep: true}
   )
 
-  return _ as Ref<T>
-}
-
-function isStore<T,>(arg: Store<T> | Record<string, unknown>): arg is Store<T> {
-  return is.store(arg)
+  return _
 }
 
 // @ts-expect-error
-export const useVModel: UseVModel = <T, K extends string = keyof Store<unknown>>(vm: Store<T> | Record<K, Store<T>>) => {
-  if (isStore(vm)) {
-    return createVModel(vm)
-  }
+export const useVModel: UseVModel = <
+  T,
+  K extends string = keyof Store<unknown>,
+>(
+  vm: Store<T> | Record<K, Store<T>>,
+  scope?: EffectScope
+) => {
+  const vueScope = scope || effectScope()
 
-  const _ = reactive({})
+  return vueScope.run(() => {
+    const _ = reactive({}) as Reactive<Record<string, unknown>>
 
-  const shape = Object.fromEntries(
-    Object.entries<Store<T>>(vm).map(([key, value]) => [key, createVModel(value, key, _)])
-  )
+    if (is.store(vm)) {
+      return createVModel(vm)
+    }
 
-  for (const key in shape) {
-    // @ts-ignore
-    _[key] = shape[key]
-  }
+    const shape = Object.fromEntries(
+      Object.entries<Store<T>>(vm).map(([key, value]) => [
+        key,
+        createVModel(value, key, _)
+      ]),
+    )
 
-  return _
+    for (const key in shape) {
+      _[key] = shape[key]
+    }
+
+    return _
+  })
 }

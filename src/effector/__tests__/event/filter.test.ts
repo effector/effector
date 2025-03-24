@@ -4,7 +4,7 @@ import {argumentHistory} from 'effector/fixtures'
 describe('event.filter with config {fn: (T) => boolean}', () => {
   it('filter out when fn returns falsy', () => {
     const fn = jest.fn()
-    const event = createEvent()
+    const event = createEvent<number>()
     const filtered = event.filter({
       fn: x => x > 0,
     })
@@ -15,7 +15,7 @@ describe('event.filter with config {fn: (T) => boolean}', () => {
   })
   it('works with undefined as well', () => {
     const fn = jest.fn()
-    const event = createEvent()
+    const event = createEvent<number | void>()
     const filtered = event.filter({
       fn: x => x === undefined,
     })

@@ -1,0 +1,204 @@
+:root {
+  --font-fallback: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji;
+  --font-body: system-ui, var(--font-fallback);
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", Consolas, "Andale Mono WT", "Andale Mono",
+    "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+    "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+
+  /*
+   * Variables with --color-base prefix define
+   * the hue, and saturation values to be used for
+   * hsla colors.
+   *
+   * ex:
+   *
+   * --color-base-{color}: {hue}, {saturation};
+   *
+   */
+
+  --color-base-white: 0, 0%;
+  --color-base-black: 240, 100%;
+  --color-base-gray: 215, 14%;
+  --color-base-blue: 212, 100%;
+  --color-base-blue-dark: 212, 72%;
+  --color-base-green: 158, 79%;
+  --color-base-orange: 22, 100%;
+  --color-base-purple: 269, 79%;
+  --color-base-red: 351, 100%;
+  --color-base-yellow: 41, 100%;
+  --color-base-primary: 33, 100%;
+  --color-base-primary-light: 30, 87%;
+
+  /*
+   * Color palettes are made using --color-base
+   * variables, along with a lightness value to
+   * define different variants.
+   *
+   */
+
+  --color-zink-5: 210, 20%, 98.04%;
+  --color-zinc-10: 240deg, 5%, 96%;
+  --color-zinc-40: 240deg, 5%, 65%;
+  --color-zinc-60: 215deg, 14%, 34%;
+  --color-zinc-70: 240deg, 5%, 26%;
+  --color-zinc-80: 240deg, 4%, 16%;
+  --color-zinc-90: 240deg, 6%, 10%;
+
+  --color-stone-5: 60deg, 9%, 98%;
+  --color-stone-10: 60deg, 5%, 96%;
+  --color-stone-20: 20deg, 6%, 90%;
+  --color-stone-30: 24deg, 6%, 83%;
+  --color-stone-40: 24deg, 5%, 64%;
+  --color-stone-70: 30deg, 6%, 25%;
+  --color-stone-90: 24deg, 10%, 10%;
+
+  --color-gray-5: var(--color-base-gray), 5%;
+  --color-gray-10: var(--color-base-gray), 10%;
+  --color-gray-20: var(--color-base-gray), 20%;
+  --color-gray-30: var(--color-base-gray), 30%;
+  --color-gray-40: var(--color-base-gray), 40%;
+  --color-gray-50: var(--color-base-gray), 50%;
+  --color-gray-60: var(--color-base-gray), 60%;
+  --color-gray-70: var(--color-base-gray), 70%;
+  --color-gray-80: var(--color-base-gray), 80%;
+  --color-gray-90: var(--color-base-gray), 90%;
+  --color-gray-95: var(--color-base-gray), 95%;
+
+  --color-primary-20: var(--color-base-primary), 33%;
+  --color-primary-30: var(--color-base-primary), 37%;
+  --color-primary-40: var(--color-base-primary), 42%;
+  --color-primary-50: var(--color-base-primary), 50%;
+  --color-primary-60: var(--color-base-primary), 56%;
+  --color-primary-70: var(--color-base-primary), 61%;
+  --color-primary-80: var(--color-base-primary), 69%;
+  --color-primary-text: var(--color-white), 100%;
+
+  --color-blue: var(--color-base-blue), 61%;
+  --color-blue-dark: var(--color-base-blue-dark), 39%;
+  --color-green: var(--color-base-green), 42%;
+  --color-orange: var(--color-base-orange), 50%;
+  --color-purple: var(--color-base-purple), 54%;
+  --color-red: var(--color-base-red), 54%;
+  --color-yellow: var(--color-base-yellow), 59%;
+}
+
+:root {
+  --theme-accent-opacity: 0.15;
+  --theme-accent-color: var(--color-primary-50);
+  --theme-accent: hsl(var(--theme-accent-color));
+  --theme-text-accent: hsl(var(--color-primary-50));
+
+  --theme-divider: hsla(var(--color-gray-90), 1);
+  --theme-divider-light: hsla(var(--color-gray-95), 0.6);
+  --theme-divider-dark: hsla(var(--color-gray-70), 0.6);
+
+  --theme-backdrop-color: rgba(255, 255, 255, 0.3);
+
+  --theme-text: hsla(var(--color-gray-10), 1);
+  --theme-text-dark: hsla(var(--color-base-black), 1);
+  --theme-text-light: hsla(var(--color-gray-30), 1);
+  --theme-text-lighter: hsla(var(--color-gray-80), 1);
+
+  --theme-header-lighter: hlsa(var(--color-gray-10), 1);
+
+  --theme-bg: hsla(var(--color-stone-10), 1);
+  --theme-bg-hover: hsla(var(--color-gray-90), 1);
+  --theme-bg-offset: hsla(var(--color-gray-90), 1);
+  --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
+
+  --theme-card: hsla(0, 0%, 100%, 1);
+  --theme-card-hover: hsla(0, 0%, 98%, 1);
+  --theme-card-divider: hsla(0, 0%, 0%, 0.1);
+
+  --theme-code-inline-bg: hsla(var(--color-gray-90), 1);
+  --theme-code-inline-text: var(--theme-text);
+  --theme-code-bg: hsla(var(--color-stone-40), 1);
+  --theme-code-text: hsla(var(--color-gray-95), 1);
+
+  --theme-navbar-bg: rgba(255, 255, 255, 0.9);
+  --theme-navbar-height: 4rem;
+
+  --theme-selection-color: hsla(var(--color-blue), 1);
+  --theme-selection-bg: hsla(var(--color-blue), var(--theme-accent-opacity));
+
+  --theme-admonition-tip-bg: hsla(142deg, 69%, 58%, 26%);
+  --theme-admonition-tip-border: hsla(142deg, 71%, 45%, 1);
+  --theme-admonition-tip-text: hsla(143deg, 64%, 18%, 1);
+
+  --theme-admonition-info-bg: hsla(199deg, 89%, 48%, 20%);
+  --theme-admonition-info-border: hsla(199deg, 89%, 48%, 1);
+  --theme-admonition-info-text: hsla(201deg, 90%, 18%, 1);
+
+  --theme-admonition-warning-bg: hsla(38deg, 92%, 50%, 23%);
+  --theme-admonition-warning-border: hsla(38deg, 92%, 50%, 1);
+  --theme-admonition-warning-text: hsla(23deg, 83%, 18%, 1);
+
+  --theme-left-sidebar-item-text: hsla(var(--color-gray-40), 1);
+
+  color-scheme: light;
+}
+
+body {
+  background: var(--theme-bg);
+  color: var(--theme-text);
+}
+
+:root.theme-dark {
+  --theme-accent-opacity: 0.15;
+  --theme-accent-color: var(--color-primary-40);
+  --theme-accent: hsla(var(--theme-accent-color), 1);
+  --theme-text-accent: hsla(var(--color-primary-40), 1);
+
+  --theme-divider: hsla(var(--color-zinc-70), 1);
+  --theme-divider-light: hsla(var(--color-gray-30), 0.6);
+  --theme-divider-dark: hsla(var(--color-gray-40), 1);
+
+  --theme-backdrop-color: rgba(0, 0, 0, 0.3);
+
+  --theme-text: hsla(var(--color-gray-90), 1);
+  --theme-text-light: hsla(var(--color-gray-80), 1);
+  --theme-text-lighter: hsla(var(--color-gray-40), 1);
+
+  --theme-header-lighter: hlsa(var(--color-gray-10), 1);
+
+  --theme-bg: hsla(var(--color-zinc-80), 1);
+  --theme-bg-hover: hsla(var(--color-zinc-90), 1);
+  --theme-bg-offset: hsla(var(--color-zinc-70), 1);
+  --theme-bg-accent: hsla(var(--color-orange), var(--theme-accent-opacity));
+
+  --theme-card: hsla(var(--color-zinc-70), 1);
+  --theme-card-hover: hsla(var(--color-zinc-60), 1);
+  --theme-card-divider: hsla(0, 0%, 0%, 0.2);
+
+  --theme-code-inline-bg: hsla(var(--color-zinc-70), 1);
+  --theme-code-inline-text: hsla(var(--color-zinc-10), 1);
+  --theme-code-bg: hsla(var(--color-stone-90), 1);
+  --theme-code-text: hsla(var(--color-stone-30), 1);
+
+  --theme-selection-color: hsla(var(--color-base-white), 100%, 1);
+  --theme-selection-bg: hsla(var(--color-red), var(--theme-accent-opacity));
+
+  --theme-navbar-bg: hsla(var(--color-zinc-70), 0.8);
+
+  --theme-admonition-tip-bg: hsl(143deg, 45%, 24%);
+  --theme-admonition-tip-border: hsla(142deg, 71%, 28%, 1);
+  --theme-admonition-tip-text: hsl(143deg, 10%, 95%);
+
+  --theme-admonition-info-bg: hsl(199deg, 45%, 24%);
+  --theme-admonition-info-border: hsla(199deg, 89%, 28%, 1);
+  --theme-admonition-info-text: hsl(199deg, 10%, 95%);
+
+  --theme-admonition-warning-bg: hsl(38deg, 45%, 24%);
+  --theme-admonition-warning-border: hsla(38deg, 92%, 28%, 1);
+  --theme-admonition-warning-text: hsl(38deg, 10%, 95%);
+
+  --theme-left-sidebar-item-text: hsla(var(--color-base-white), 75%, 1);
+
+  color-scheme: dark;
+}
+
+::selection {
+  background-color: var(--theme-selection-bg);
+  color: var(--theme-selection-color);
+}

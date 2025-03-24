@@ -1,0 +1,29 @@
+---
+type Props = {};
+---
+
+<a href="#article" class="skiplink sr-only focus:not-sr-only"><span>Skip to Content</span></a>
+
+<style>
+  .skiplink,
+  .skiplink:focus,
+  .skiplink:focus-visible {
+    display: block;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    left: 5px;
+    z-index: 9;
+    outline: var(--theme-bg) solid 1px;
+    outline-offset: 0;
+    border-radius: 0.25em;
+    background-color: var(--theme-text-accent);
+    padding: 0.25em;
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.02),
+      0 1px 0 rgba(0, 0, 0, 0.06);
+    color: var(--theme-bg);
+    font-size: larger;
+    text-align: center;
+  }
+</style>

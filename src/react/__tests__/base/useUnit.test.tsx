@@ -15,6 +15,7 @@ import {
   launch,
 } from 'effector'
 import {useUnit} from 'effector-react'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   useUnit as useUnitScope,
   createGate,
@@ -23,7 +24,8 @@ import {
   useStore,
   Provider,
 } from 'effector-react/scope'
-import {argumentHistory} from 'effector/fixtures'
+
+muteErrors(['useEvent', 'useStore'])
 
 describe('useUnit', () => {
   it('should bind single store', async () => {
@@ -802,7 +804,7 @@ describe('useUnit', () => {
       )
     }
 
-    function AppBase({page, data}: {data: any; page: JSX.Element}) {
+    function AppBase({page, data}: {data: any; page: React.ReactNode}) {
       const scope = React.useMemo(() => {
         const scope = fork({
           values: {
@@ -944,20 +946,11 @@ describe('useUnit', () => {
           </Provider>
         </React.StrictMode>,
       )
-      // @ ts-expect-error
-      // if (globalThis.REACT_17) {
-      //   expect(container.firstChild).toMatchInlineSnapshot(`
-      //     <div>
-      //       []
-      //     </div>
-      //   `)
-      // } else {
       expect(container.firstChild).toMatchInlineSnapshot(`
         <div>
           Loading....
         </div>
       `)
-      // }
       await act(async () => {
         await allSettled(event, {scope})
       })
@@ -1225,6 +1218,16 @@ describe('useUnit', () => {
       </Provider>,
     )
     expect(failed).toBe(false)
+  })
+  test('avoiding prototype pollution', async () => {
+    const base = {fk: function fk() {}}
+    const $foo = createStore(0)
+    const App = () => {
+      // @ts-expect-error
+      const {foo} = useUnit({foo: $foo, __proto__: base})
+      return <div>{foo}</div>
+    }
+    await render(<App />)
   })
 })
 
