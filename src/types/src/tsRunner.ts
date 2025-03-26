@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import {promises as fs} from 'fs'
-import {resolve, relative} from 'path'
+import {resolve, relative, sep} from 'path'
 
 function createCompilerHost({
   options,
@@ -20,7 +20,7 @@ function createCompilerHost({
 }): ts.CompilerHost {
   const testFileNames = testFiles.map(({name}) => name)
   const testFileNamesRelative = testFileNames.map(name =>
-    name.replace('../__tests__/', '').replace(/\.(j|t)sx?$/gi, ''),
+    name.replace(`..${sep}__tests__${sep}`, '').replace(/\.(j|t)sx?$/gi, ''),
   )
   const tests = testFiles.map(({code}) => code)
   const declNames = declarations.map(({name}) => name)
@@ -119,7 +119,7 @@ export async function compile({
   const [declarations, filesContents] = await Promise.all([
     Promise.all(
       Object.entries(paths).map(async ([name, path]) => {
-        const fileName = resolve(__dirname, ...path.split(/\//gi))
+        const fileName = resolve(__dirname, ...path.split(sep))
         return {
           name,
           fileName,

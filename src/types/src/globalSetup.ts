@@ -1,4 +1,4 @@
-import {resolve, relative, extname} from 'path'
+import {resolve, relative, extname, sep} from 'path'
 import {promises as fs} from 'fs'
 import {compile} from './tsRunner'
 
@@ -106,11 +106,15 @@ async function runTypeScript(testFiles: string[]) {
       file: '',
     }
     const tsProcessed = []
+    const escapeSep = sep.replace(/[\\/]/g, '\\$&')
+    const lineMatchRx = new RegExp(
+      `\\.\\.${escapeSep}__tests__${escapeSep}(.+)\\((\\d+),(\\d+)\\): (.+)`,
+    )
     for (const line of report.split(/\n/)) {
       if (line.startsWith(' ')) {
         current.lines.push(line)
       } else {
-        const match = line.match(/\.\.\/__tests__\/(.+)\((\d+),(\d+)\): (.+)/)
+        const match = line.match(lineMatchRx)
         if (match) {
           const file = match[1].trim()
           const x = +match[3]
