@@ -752,9 +752,9 @@ Your support allows us to improve the developer experience 🧡.
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/miyaokamarina>
-            <img src=https://avatars.githubusercontent.com/u/37388187?v=4 width="100;"  alt=Marina Miyaoka/>
+            <img src=https://avatars.githubusercontent.com/u/37388187?v=4 width="100;"  alt=Eris/>
             <br />
-            <sub style="font-size:14px"><b>Marina Miyaoka</b></sub>
+            <sub style="font-size:14px"><b>Eris</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
