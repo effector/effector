@@ -29,7 +29,7 @@ Note that, by going through this example yourself, you will experience some bene
 
 ## Let's create API mock
 
-There is a directory structure inherited from the [feature-sliced](https://feature-sliced.design) methodology.
+There is a directory structure inherited from the [feature-sliced](https://feature-sliced.github.io/documentation/) methodology.
 
 Let's define a simple type, that our improvised API will return.
 
