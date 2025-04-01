@@ -109,7 +109,7 @@ test('case store case mismatch (should fail)', () => {
       Types of property '__' are incompatible.
         Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
           Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
-    Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: EventCallable<number>; readonly __: EventCallable<number>; }'.
+    Object literal may only specify known properties, and 'b' does not exist in type '{ a: EventCallable<number>; __: EventCallable<number>; }'.
     "
   `)
 })
@@ -155,7 +155,7 @@ test('case function case mismatch (should fail)', () => {
     "
     Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
       Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
-    Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: EventCallable<number>; readonly __: EventCallable<number>; }'.
+    Object literal may only specify known properties, and 'b' does not exist in type '{ a: EventCallable<number>; __: EventCallable<number>; }'.
     "
   `)
 })
@@ -569,7 +569,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -632,7 +632,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; readonly b: EventCallable<{ foo: 1; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -691,7 +691,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -754,7 +754,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; readonly b: EventCallable<{ foo: 1; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -819,7 +819,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
         "
       `)
     })
@@ -888,7 +888,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; bar: number; }>]; readonly b: EventCallable<{ foo: 1; bar: string; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; b: EventCallable<{ foo: 1; bar: string; }>; }'.
         "
       `)
     })
@@ -965,7 +965,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 2; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; }'.
         "
       `)
     })
@@ -1050,7 +1050,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 2; }>]; readonly b: EventCallable<{ foo: 2; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; b: EventCallable<{ foo: 2; }>; }'.
         "
       `)
     })
@@ -1107,7 +1107,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1167,7 +1167,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; readonly b: EventCallable<{ foo: 1; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1223,7 +1223,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1283,7 +1283,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; readonly b: EventCallable<{ foo: 1; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1345,7 +1345,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
         "
       `)
     })
@@ -1440,7 +1440,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; bar: number; }>]; readonly b: EventCallable<{ foo: 1; bar: string; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; b: EventCallable<{ foo: 1; bar: string; }>; }'.
         "
       `)
     })
@@ -1514,7 +1514,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 2; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; }'.
         "
       `)
     })
@@ -1596,7 +1596,7 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 2; }>]; readonly b: EventCallable<{ foo: 2; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; b: EventCallable<{ foo: 2; }>; }'.
         "
       `)
     })
@@ -1663,7 +1663,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' is missing in type '{ a: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1735,7 +1735,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'c' is missing in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; c: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; readonly b: EventCallable<{ foo: 1; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1801,7 +1801,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' is missing in type '{ a: (src: { foo: 1; bar: number; }) => true; }' but required in type '{ a: (src: { foo: 1; bar: number; }) => true; b: (p: { foo: 1; bar: number; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1873,7 +1873,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'c' is missing in type '{ a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; }' but required in type '{ a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; c: (p: { foo: 1; bar: number; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; }>]; readonly b: EventCallable<{ foo: 1; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1945,7 +1945,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' is missing in type '{ a: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
         "
       `)
     })
@@ -2023,7 +2023,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'c' is missing in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; c: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 1; bar: number; }>]; readonly b: EventCallable<{ foo: 1; bar: string; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; b: EventCallable<{ foo: 1; bar: string; }>; }'.
         "
       `)
     })
@@ -2107,7 +2107,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'b' is missing in type '{ a: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<{ foo: 2; }>]; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; }'.
         "
       `)
     })
@@ -2201,7 +2201,7 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Property 'c' is missing in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; c: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
-        Object literal may only specify known properties, and 'c' does not exist in type '{ readonly a: [EventCallable<{ foo: 2; }>]; readonly b: EventCallable<{ foo: 2; }>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; b: EventCallable<{ foo: 2; }>; }'.
         "
       `)
     })
@@ -2226,7 +2226,7 @@ describe('array cases', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'StoreWritable<\\"a\\" | \\"c\\">' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
-      Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<number>]; readonly __: [EventCallable<number>]; }'.
+      Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
       "
     `)
   })
@@ -2249,7 +2249,7 @@ describe('array cases', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
-      Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<number>]; readonly __: [EventCallable<number>]; }'.
+      Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
       "
     `)
   })
@@ -2275,7 +2275,37 @@ describe('array cases', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Object literal may only specify known properties, and 'c' does not exist in type '{ a: (src: number) => true; b: (p: number) => boolean | Store<boolean>; }'.
-      Object literal may only specify known properties, and 'b' does not exist in type '{ readonly a: [EventCallable<number>]; readonly __: [EventCallable<number>]; }'.
+      Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
+      "
+    `)
+  })
+
+  test('non-inline array in case (should fail)', () => {
+    type A = {tag: 'a'; value: 0}
+    type B = {tag: 'b'; value: 'b'}
+    const source = createEvent<A | B>()
+
+    const $aMatch = createStore(true)
+    const aCase = createEvent<A>()
+    const bCase = createEvent<B>()
+
+    // this works with "as const" modifier, but also should work without it
+    const arrayCase = [aCase, bCase]
+
+    split({
+      // @ts-expect-error
+      source,
+      match: {
+        a: $aMatch,
+      },
+      cases: {
+        // @ts-expect-error
+        a: arrayCase,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
       "
     `)
   })
