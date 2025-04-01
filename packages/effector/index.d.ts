@@ -845,8 +845,8 @@ type CaseRecord<Keys extends PropertyKey = string> = Partial<Record<Keys | '__',
 export function split<
   Clock extends Unit<any> | RoTuple<Unit<any>>,
   Source extends Unit<any>,
-  const Match extends MatchConstraint<Source>,
-  const Cases extends CaseRecord<InferMatchKeys<Match>>,
+  Match extends MatchConstraint<Source>,
+  Cases extends CaseRecord<InferMatchKeys<Match>>,
 >(
   config: SplitConfig<Clock, Source, Match, Cases>
 ): void;
