@@ -429,7 +429,7 @@ split({
   },
 });
 
-selectedMessageOption("delet"); // ничего не происходит
+selectedMessageOption("delete"); // ничего не происходит
 selectedMessageOption("delete");
 ```
 
