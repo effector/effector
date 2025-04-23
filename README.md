@@ -62,7 +62,7 @@ npm add effector
 
 **React**
 
-To getting started read our article [how to write React and Typescript application](https://effector.dev/docs/typescript/usage-with-effector-react).
+To getting started read our article [how to write React and Typescript application](https://effector.dev/en/typescript/usage-with-effector-react/).
 
 
 ```bash
@@ -95,13 +95,13 @@ Svelte works with effector out of the box, no additional packages needed. See [w
 
 ## Documentation
 
-For additional information, guides and api reference visit [our documentation site](https://effector.dev/docs/introduction/core-concepts)
+For additional information, guides and api reference visit [our documentation site](https://effector.dev/en/introduction/core-concepts/)
 
 ## Packages
 
-- [effector](https://effector.dev/docs/api/effector)
-- [effector-react](https://effector.dev/docs/api/effector-react)
-- [effector-vue](https://effector.dev/docs/api/effector-vue)
+- [effector](c)
+- [effector-react](https://effector.dev/en/api/effector-react/)
+- [effector-vue](https://effector.dev/en/api/effector-vue/)
 
 ## Articles
 
@@ -136,12 +136,12 @@ Use [effector-logger](https://github.com/effector/logger) for printing updates t
 
 <hr />
 
-## More examples [in documentation](https://effector.dev/docs/introduction/examples)
+## More examples [in documentation](https://effector.dev/en/introduction/examples/)
 
 ## Learn more
 
-- [Glossary](https://effector.dev/docs/glossary)
-- [Usage with TypeScript](https://effector.dev/docs/typescript/typing-effector)
+- [Glossary](https://effector.dev/en/explanation/glossary/)
+- [Usage with TypeScript](https://effector.dev/en/essentials/typescript/)
 - [API docs](https://effector.dev/en/api/effector/effector)
 - [Changelog](https://changelog.effector.dev)
 
