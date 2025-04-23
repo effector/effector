@@ -99,7 +99,7 @@ For additional information, guides and api reference visit [our documentation si
 
 ## Packages
 
-- [effector](c)
+- [effector](https://effector.dev/en/api/effector/)
 - [effector-react](https://effector.dev/en/api/effector-react/)
 - [effector-vue](https://effector.dev/en/api/effector-vue/)
 
