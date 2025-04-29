@@ -40,9 +40,9 @@ const second = createEvent();
 const $store = restore(first, "");
 const region = createNode();
 
-withRegion(domain, () => {
-  // Следующие связи, созданные с помощью `sample`, принадлежат предоставленному юниту `domain`
-  // и будут удалены, как только будет вызван `clearNode` на `domain`.
+withRegion(region, () => {
+  // Следующие связи, созданные с помощью `sample`, принадлежат предоставленному юниту `region`
+  // и будут удалены, как только будет вызван `clearNode` на `region`.
   sample({
     clock: second,
     target: first,
