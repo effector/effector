@@ -40,9 +40,9 @@ const second = createEvent();
 const $store = restore(first, "");
 const region = createNode();
 
-withRegion(domain, () => {
-  // Following links created with `sample` are owned by the provided unit `domain`
-  // and will be disposed as soon as `clearNode` is called on `domain`.
+withRegion(region, () => {
+  // Following links created with `sample` are owned by the provided unit `region`
+  // and will be disposed as soon as `clearNode` is called on `region`.
   sample({
     clock: second,
     target: first,
