@@ -402,6 +402,7 @@ export class Domain implements Unit<any> {
             write: (state: State) => SerializedState
             read: (json: SerializedState) => State
           }
+      skipVoid?: boolean
     },
   ): StoreWritable<State>
   sid: string | null
