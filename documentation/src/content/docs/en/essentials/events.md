@@ -49,7 +49,7 @@ sample({
 ```
 
 When the `firstTriggered` event is invoked, the `secondTriggered` event will be subsequently called, creating a sequence of events.
-[Remember, dont call events in pure functions](/en/introduction/core-concepts#purity), it's not supported!
+[Remember, dont call events in pure functions](/en/explanation/glossary#purity), it's not supported!
 
 :::tip{title="Good to know"}
 In Effector, any event supports only **a single argument**.
