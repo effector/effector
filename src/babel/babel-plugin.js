@@ -8,11 +8,54 @@ const defaultFactories = [
   'patronum', // there is also custom handling for patronum/{method} imports
 ]
 
+/** @import {SourceLocation, CallExpression, Identifier, ObjectExpression, ObjectProperty} from '@babel/types' */
+/** @import {ImportDeclaration, Node} from '@babel/types' */
+
+/** @typedef {import('@babel/types').ImportDeclaration} ImportDeclaration */
+/** @typedef {import('@babel/traverse').NodePath<ImportDeclaration>} ImportDeclarationPath */
+
+/** @typedef {{addLoc: boolean, addNames: boolean, debugSids: boolean}} SmallConfig */
+/**
+ * @typedef {object} ImportNamesMap
+ * @property {string | null} withFactory
+ * @property {string | null} clearNode
+ * @property {string | null} createNode
+ * @property {string | null} withRegion
+ * @property {ImportDeclaration | null} importDeclaration
+ * @property {ImportDeclarationPath | null} importDeclarationPath
+ * @property {boolean} hmrRegionInserted
+ * @property {boolean} hmrCodeInserted
+ */
+/**
+ * @typedef {object} FactoryTemplate
+ * @property {string} SID
+ * @property {import('@babel/traverse').NodePath} FN
+ * @property {string} NAME
+ * @property {string} METHOD
+ * @property {import('@babel/types').SourceLocation} LOC
+ */
+/**
+ * @typedef {(
+ *   params: {WITH_REGION: string, REGION_NAME: string, FN: import('@babel/traverse').NodePath}
+ * ) => import('@babel/types').CallExpression} WithRegionTemplate
+ */
+/**
+ * @typedef {(
+ *   params: {CREATE_NODE: string, REGION_NAME: string}
+ * ) => import('@babel/types').VariableDeclaration} CreateHMRRegionTemplate
+ */
+/**
+ * @typedef {(
+ *   importNamesMap: ImportNamesMap,
+ *   declaration: import('@babel/traverse').NodePath
+ * ) => import('@babel/types').IfStatement} HotCodeTemplate
+ */
 /**
  *
  * @param {import('@babel/core')} babel
  * @param {import('@babel/core').PluginOptions} options
  * @returns {import('@babel/core').PluginObj}
+ * @property {string[]} defaultFactories
  */
 module.exports = function (babel, options = {}) {
   const {
@@ -66,12 +109,61 @@ module.exports = function (babel, options = {}) {
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
   )
-  /**
-   * @type {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
-   */
+  /** @type {SmallConfig} */
   const smallConfig = {addLoc, addNames, debugSids}
   const {types: t, template} = babel
+  /**
+   * @type {(params: FactoryTemplate) => import('@babel/types').CallExpression}
+   */
   let factoryTemplate
+  /** @type {CreateHMRRegionTemplate} */
+  let createHMRRegionTemplate
+  /** @type {CreateHMRRegionTemplate} */
+  function createHMRRegion(params) {
+    if (!createHMRRegionTemplate) {
+      createHMRRegionTemplate = template(
+        'const REGION_NAME = CREATE_NODE({regional: true})',
+      )
+    }
+    return createHMRRegionTemplate(params)
+  }
+  /** @type {WithRegionTemplate} */
+  let withRegionTemplate
+  /** @type {WithRegionTemplate} */
+  function createWithRegion(params) {
+    if (!withRegionTemplate) {
+      withRegionTemplate = template('WITH_REGION(REGION_NAME, () => FN)')
+    }
+    return withRegionTemplate(params)
+  }
+  /** @type {import('@babel/types').ExpressionStatement} */
+  let hotProperty
+  /** @type {(params: {HOT_PROPERTY: import('@babel/types').ExpressionStatement, CLEAR_NODE: string, REGION_NAME: string}) => import('@babel/types').IfStatement} */
+  let hotCode
+  /** @type {HotCodeTemplate} */
+  function createHotCode(importNamesMap, declaration) {
+    if (!hotProperty) {
+      hotProperty = template.expression.ast(
+        hmr === 'cjs'
+          ? 'module.hot'
+          : '(import.meta.hot || import.meta.webpackHot)',
+      )
+    }
+    if (!hotCode) {
+      hotCode = template(`
+        if (HOT_PROPERTY) {
+          HOT_PROPERTY.dispose(() => CLEAR_NODE(REGION_NAME));
+        } else {
+          console.warn('[effector hmr] HMR is not available in current environment.');
+        }
+      `)
+    }
+    return hotCode({
+      HOT_PROPERTY: hotProperty,
+      CLEAR_NODE: addImport(t, declaration, 'clearNode', importNamesMap),
+      REGION_NAME,
+    })
+  }
   const creatorsList = [
     storeCreators,
     eventCreators,
@@ -210,35 +302,7 @@ module.exports = function (babel, options = {}) {
         ),
     },
   ]
-  /**
-   * @param {import('@babel/traverse').NodePath} path
-   * @param {string} method
-   * @returns {string}
-   */
-  function addImport(path, method) {
-    const programPath = path.find(path => path.isProgram())
-    const [newPath] = programPath.unshiftContainer(
-      'body',
-      t.importDeclaration(
-        [
-          t.importSpecifier(
-            programPath.scope.generateUidIdentifier(method),
-            t.identifier(method),
-          ),
-        ],
-        t.stringLiteral('effector'),
-      ),
-    )
-    let found
 
-    newPath.get('specifiers').forEach(specifier => {
-      if (specifier.node.imported.name === method) {
-        found = specifier
-      }
-    })
-
-    return found.node.local.name
-  }
   /**
    * @type {import('@babel/traverse').Visitor}
    */
@@ -348,15 +412,7 @@ module.exports = function (babel, options = {}) {
             this.effector_factoryPaths = factories
           }
         }
-        let normalizedSource = source
-        if (normalizedSource.startsWith('.')) {
-          const {resolve, parse} = require('path')
-          const currentFile = state.filename || ''
-          const {dir} = parse(currentFile)
-          const resolvedImport = resolve(dir, normalizedSource)
-          normalizedSource = stripRoot(rootPath, resolvedImport, true)
-        }
-        normalizedSource = stripExtension(normalizedSource)
+        const normalizedSource = normalizeSource(source, rootPath, state)
         if (
           this.effector_factoryPaths.includes(normalizedSource) ||
           // custom handling for patronum/{method} imports
@@ -418,7 +474,7 @@ module.exports = function (babel, options = {}) {
   /**
    *
    * @param {import('@babel/traverse').NodePath} path
-   * @param {Record<string, import('@babel/types').Node>} configObject
+   * @param {Record<string, Node>} configObject
    * @returns {void}
    */
   function pushArgumentConfig(path, configObject) {
@@ -463,7 +519,7 @@ module.exports = function (babel, options = {}) {
   }
   /**
    *
-   * @param {import('@babel/types').ObjectExpression} configNode
+   * @param {ObjectExpression} configNode
    * @param {string} propertyName
    * @returns {boolean}
    */
@@ -475,9 +531,9 @@ module.exports = function (babel, options = {}) {
   }
   /**
    *
-   * @param {import('@babel/types').ObjectExpression} configNode
+   * @param {ObjectExpression} configNode
    * @param {string} propertyName
-   * @param {import('@babel/types').Node} propertyNode
+   * @param {Node} propertyNode
    * @returns {void}
    */
   function appendPropertyToConfig(configNode, propertyName, propertyNode) {
@@ -495,14 +551,35 @@ module.exports = function (babel, options = {}) {
     name: 'effector/babel-plugin',
     pre() {
       this.effector_ignoredImports = new Set()
-      this.effector_withFactoryName = null
       this.effector_forceScopeSpecifiers = new Set()
+      /**
+       * object with obfuscated (by design, by babel) names of effector methods' imports
+       * @type {ImportNamesMap}
+       */
+      this.effector_importNames = {
+        withFactory: null,
+        clearNode: null,
+        createNode: null,
+        withRegion: null,
+        importDeclaration: null,
+        importDeclarationPath: null,
+        hmrRegionInserted: false,
+        hmrCodeInserted: false,
+      }
     },
     post() {
       this.effector_ignoredImports.clear()
       this.effector_needFactoryImport = false
-      this.effector_factoryImportAdded = false
-      this.effector_withFactoryName = null
+      this.effector_importNames = {
+        withFactory: null,
+        clearNode: null,
+        createNode: null,
+        withRegion: null,
+        importDeclaration: null,
+        importDeclarationPath: null,
+        hmrRegionInserted: false,
+        hmrCodeInserted: false,
+      }
       if (this.effector_factoryMap) {
         this.effector_factoryMap.clear()
         delete this.effector_factoryMap
@@ -515,7 +592,15 @@ module.exports = function (babel, options = {}) {
       Program: {
         enter(path, state) {
           if (hmr !== 'none') {
-            transformHmr(babel, path, hmr, factories)
+            transformHmr(
+              babel,
+              path,
+              factories,
+              this.effector_importNames,
+              createHMRRegion,
+              createWithRegion,
+              createHotCode,
+            )
           }
 
           path.traverse(importVisitor, state)
@@ -605,10 +690,12 @@ module.exports = function (babel, options = {}) {
             !path.node.effector_isFactory &&
             this.effector_factoryMap.has(name)
           ) {
-            if (!this.effector_factoryImportAdded) {
-              this.effector_factoryImportAdded = true
-              this.effector_withFactoryName = addImport(path, 'withFactory')
-            }
+            const withFactoryImportName = addImport(
+              t,
+              path,
+              'withFactory',
+              this.effector_importNames,
+            )
             const {source, importedName, localName} =
               this.effector_factoryMap.get(name)
             path.node.effector_isFactory = true
@@ -632,7 +719,7 @@ module.exports = function (babel, options = {}) {
             const factoryConfig = {
               SID: JSON.stringify(sid),
               FN: path.node,
-              FACTORY: this.effector_withFactoryName,
+              FACTORY: withFactoryImportName,
             }
             if (addLoc || addNames) {
               factoryConfig.NAME = JSON.stringify(
@@ -665,6 +752,8 @@ module.exports = function (babel, options = {}) {
   }
   return plugin
 }
+
+module.exports.defaultFactories = defaultFactories
 
 /**
  *
@@ -891,11 +980,38 @@ const normalizeOptions = options => {
     return new Set(array || defaults)
   }
 }
-
+/**
+ * @param {import('@babel/types')} t
+ * @param {import('@babel/traverse').NodePath} path
+ * @param {'withFactory' | 'clearNode' | 'createNode' | 'withRegion'} method
+ * @param {ImportNamesMap} importNamesMap
+ * @returns {string}
+ */
+function addImport(t, path, method, importNamesMap) {
+  if (importNamesMap[method] !== null) {
+    return importNamesMap[method]
+  }
+  const programPath = path.find(path => path.isProgram())
+  const uid = programPath.scope.generateUidIdentifier(method)
+  const specifier = t.importSpecifier(uid, t.identifier(method))
+  if (importNamesMap.importDeclaration === null) {
+    const importDeclaration = t.importDeclaration(
+      [specifier],
+      t.stringLiteral('effector'),
+    )
+    const [importPath] = programPath.unshiftContainer('body', importDeclaration)
+    importNamesMap.importDeclaration = importDeclaration
+    importNamesMap.importDeclarationPath = importPath
+  } else {
+    importNamesMap.importDeclaration.specifiers.push(specifier)
+  }
+  importNamesMap[method] = uid.name
+  return uid.name
+}
 /**
  *
  * @param {import('@babel/traverse').NodePath} path
- * @returns {import('@babel/types').Identifier}
+ * @returns {Identifier}
  */
 function findCandidateNameForExpression(path) {
   let id
@@ -919,11 +1035,11 @@ function findCandidateNameForExpression(path) {
 
 /**
  *
- * @param {import('@babel/types').Identifier} fileNameIdentifier
+ * @param {Identifier} fileNameIdentifier
  * @param {number} lineNumber
  * @param {number} columnNumber
  * @param {import('@babel/types')} t
- * @returns {import('@babel/types').ObjectExpression}
+ * @returns {ObjectExpression}
  */
 function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const fileLineLiteral = t.numericLiteral(lineNumber != null ? lineNumber : -1)
@@ -943,7 +1059,7 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
  * @param {import('@babel/core').PluginPass} state
  * @param {import('@babel/types').Identifier} nameNodeId
  * @param {import('@babel/types')} t
- * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {SmallConfig}
  * @param {string | undefined} checkBindingName
  * @returns {void}
  */
@@ -1010,7 +1126,7 @@ function setRestoreNameAfter(
  * @param {import('@babel/core').PluginPass} state
  * @param {import('@babel/types').Identifier} nameNodeId
  * @param {import('@babel/types')} t
- * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {SmallConfig}
  * @param {boolean} fillFirstArg
  * @param {string | undefined} checkBindingName
  * @returns {void}
@@ -1094,7 +1210,7 @@ function isLocalVariable(path, checkBindingName) {
  * @param {import('@babel/core').PluginPass} state
  * @param {import('@babel/types').Identifier} nameNodeId
  * @param {import('@babel/types')} t
- * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {SmallConfig}
  * @param {boolean} singleArgument
  * @param {string | undefined} checkBindingName
  * @param {boolean} allowEmptyArguments
@@ -1168,7 +1284,7 @@ function setConfigForConfMethod(
  * @param {import('@babel/core').PluginPass} state
  * @param {import('@babel/types').Identifier} nameNodeId
  * @param {import('@babel/types')} t
- * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {SmallConfig}
  * @param {string | undefined} checkBindingName
  * @returns {void}
  */
@@ -1233,6 +1349,23 @@ function setEventNameAfter(
   }
 }
 /**
+ * @param {string} source
+ * @param {string} rootPath
+ * @param {import('@babel/core').PluginPass} state
+ * @returns {string}
+ */
+function normalizeSource(source, rootPath, state) {
+  let normalizedSource = source
+  if (normalizedSource.startsWith('.')) {
+    const {resolve, parse} = require('path')
+    const currentFile = state.filename || ''
+    const {dir} = parse(currentFile)
+    const resolvedImport = resolve(dir, normalizedSource)
+    normalizedSource = stripRoot(rootPath, resolvedImport, true)
+  }
+  return stripExtension(normalizedSource)
+}
+/**
  * @param {string} path
  * @returns {string}
  */
@@ -1247,13 +1380,13 @@ function stripExtension(path) {
 /**
  *
  * @param {string} babelRoot
- * @param {string} fileName
+ * @param {string | undefined} fileName
  * @param {boolean} omitFirstSlash
  * @returns {string}
  */
 function stripRoot(babelRoot, fileName, omitFirstSlash) {
   const {sep, normalize} = require('path')
-  const rawPath = fileName.replace(babelRoot, '')
+  const rawPath = (fileName || '').replace(babelRoot, '')
   let normalizedSeq = normalize(rawPath).split(sep)
   if (omitFirstSlash && normalizedSeq.length > 0 && normalizedSeq[0] === '') {
     normalizedSeq = normalizedSeq.slice(1)
@@ -1264,7 +1397,7 @@ function stripRoot(babelRoot, fileName, omitFirstSlash) {
 /**
  * "foo src/index.js [12,30]"
  * @param {string} babelRoot
- * @param {string} fileName
+ * @param {string | undefined} fileName
  * @param {string} varName
  * @param {number} line
  * @param {number} column
@@ -1354,32 +1487,30 @@ function isSupportHMR(path) {
  *
  * @param {import('@babel/core')} babel
  * @param {import('@babel/traverse').NodePath} path
- * @param {'module' | 'commonjs'} env
  * @param {string[]} factories
+ * @param {ImportNamesMap} importNamesMap
+ * @param {CreateHMRRegionTemplate} createHMRRegion
+ * @param {WithRegionTemplate} createWithRegion
+ * @param {HotCodeTemplate} createHotCode
  * @returns {void}
  */
-function transformHmr(babel, path, env, factories) {
+function transformHmr(
+  babel,
+  path,
+  factories,
+  importNamesMap,
+  createHMRRegion,
+  createWithRegion,
+  createHotCode,
+) {
   /** @type {Set<string>} */
   const watchedFactories = new Set(DEFAULT_WATCHED_CALLS)
 
-  const buildUnitInit = babel.template(`
-    withRegion(${REGION_NAME}, () => %%statement%%)
-  `)
-
-  const buildImportSpecifier = importName => ({
-    type: 'ImportSpecifier',
-    local: {
-      type: 'Identifier',
-      name: importName,
-    },
-    imported: {
-      type: 'Identifier',
-      name: importName,
-    },
-  })
+  /** @type {(params: WithRegionTemplate) => import('@babel/types').CallExpression} */
+  let withRegionCallTemplate
 
   path.traverse({
-    ImportDeclaration: declaration => {
+    ImportDeclaration(declaration) {
       const source = declaration.node.source.value
       const specifiers = declaration.node.specifiers.map(
         specifier => specifier.local.name,
@@ -1396,17 +1527,8 @@ function transformHmr(babel, path, env, factories) {
       if (source !== 'effector') {
         return
       }
-
-      declaration.insertAfter(
-        babel.template.ast(`const _internalHMRRegion = createNode();`),
-      )
-
-      for (const specifier of ['withRegion', 'createNode', 'clearNode']) {
-        if (specifiers.includes(specifier)) continue
-        declaration.node.specifiers.push(buildImportSpecifier(specifier))
-      }
     },
-    CallExpression: call => {
+    CallExpression(call) {
       const isWatchedFactoryCall =
         watchedFactories.has(call.node.callee.name) ||
         watchedFactories.has(call.node.callee.property?.name)
@@ -1414,37 +1536,38 @@ function transformHmr(babel, path, env, factories) {
       if (!isSupportHMR(call) || !isWatchedFactoryCall) {
         return
       }
-
-      call.replaceWith(buildUnitInit({statement: call.node}))
+      if (!importNamesMap.hmrRegionInserted) {
+        const createNodeName = addImport(
+          babel.types,
+          call,
+          'createNode',
+          importNamesMap,
+        )
+        const regionNode = createHMRRegion({
+          CREATE_NODE: createNodeName,
+          REGION_NAME,
+        })
+        importNamesMap.importDeclarationPath.insertAfter(regionNode)
+        importNamesMap.hmrRegionInserted = true
+      }
+      if (!importNamesMap.hmrCodeInserted) {
+        const hotCode = createHotCode(importNamesMap, call)
+        const programPath = path.find(path => path.isProgram())
+        programPath.pushContainer('body', hotCode)
+        importNamesMap.hmrCodeInserted = true
+      }
+      call.replaceWith(
+        createWithRegion({
+          WITH_REGION: addImport(
+            babel.types,
+            call,
+            'withRegion',
+            importNamesMap,
+          ),
+          REGION_NAME,
+          FN: call.node,
+        }),
+      )
     },
   })
-
-  switch (env) {
-    case 'es': {
-      path.node.body.push(
-        babel.template.ast(`
-          if (import.meta.hot || import.meta.webpackHot) {
-            (import.meta.hot || import.meta.webpackHot).dispose(() => clearNode(_internalHMRRegion));
-          } else {
-            console.warn('[effector hmr] HMR is not available in current environment.');
-          }
-        `),
-      )
-
-      break
-    }
-    case 'cjs': {
-      path.node.body.push(
-        babel.template.ast(`
-          if (module.hot) {
-            module.hot.dispose(() => clearNode(_internalHMRRegion));
-          } else {
-            console.warn('[effector hmr] HMR is not available in current environment.');
-          }
-        `),
-      )
-
-      break
-    }
-  }
 }
