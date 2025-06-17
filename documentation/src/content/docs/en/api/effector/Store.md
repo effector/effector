@@ -1,5 +1,5 @@
 ---
-title: Store
+title: Store API
 keywords:
   - store
   - unit
@@ -9,11 +9,36 @@ redirectFrom:
   - /docs/api/effector/store
 ---
 
+# Store API (Store Unit)
+
 ```ts
-import { type Store, type StoreWritable } from "effector";
+import { type Store, type StoreWritable, createStore } from "effector";
+
+const $store = createStore();
 ```
 
-_Store_ is an object that holds the state value. Store gets updates when it receives a value that is not equal (`!==`) to the current one and to `undefined`. Store is a [Unit](/en/explanation/glossary#common-unit). Some stores can be [derived](#store-derived).
+A _Store_ is an object that holds the state value. The store updates when the new value is not strictly equal (`!==`) to the current one and is not `undefined` (unless the store is configured with `skipVoid: false`). A store is a [Unit](/ru/explanation/glossary#common-unit). Some stores can be [derived](#store-derived).
+
+:::tip{title="What is a store anyway?"}
+If you're not yet familiar with how to work with a store, feel free to start [here](/en/essentials/manage-states).
+:::
+
+## Store Interface (#store-interface)
+
+Available store methods and properties:
+
+| Method/Property                                       | Description                                                  |
+| ----------------------------------------------------- | ------------------------------------------------------------ |
+| [`map(fn)`](#methods-map-fn)                          | Creates a new derived store                                  |
+| [`on(trigger, reducer)`](#methods-on-trigger-reducer) | Updates state via a `reducer` when the `trigger` is fired    |
+| [`watch(watcher)`](#methods-watch-watcher)            | Calls the `watcher` function every time the store is updated |
+| [`reset(...triggers)`](#methods-reset-triggers)       | Resets the store to its initial state                        |
+| [`off(trigger)`](#methods-off-trigger)                | Removes the subscription to the specified trigger            |
+| [`updates()`](#properties-updates)                    | Event that fires when the store updates                      |
+| [`reinit()`](#properties-reinit)                      | Event to reinitialize the store                              |
+| [`shortName`](#properties-shortName)                  | ID or short name of the store                                |
+| [`defaultState`](#properties-defaultState)            | Initial state of the store                                   |
+| [`getState()`](#utility-methods-getState)             | Returns the current state                                    |
 
 ## Immutability (#immutability)
 
@@ -44,39 +69,44 @@ Updating objects works in a similar way.
 
 A store in effector should be as small as possible, responsible for a specific part of the business logic, unlike, for example, Redux, whose store tends to hold everything together. When the state is atomic, the need for spreading objects becomes less frequent. However, if there is a need to frequently update deeply nested data, it is acceptable to use [immer](https://immerjs.github.io/immer/produce) to simplify repetitive code when updating the state.
 
-# Store Methods (#methods)
+## Store Methods (#methods)
 
-## `.map(fn)` (#methods-map-fn)
+### `.map(fn)` (#methods-map-fn)
 
-Creates a derived store. It will call a provided function with the state when the original store updates, and will use the result to update the derived store.
+Accepts a function `fn` and returns a derived store that automatically updates when the original store changes.
 
-### Formulae (#methods-map-fn-formulae)
+- **Formulae**
 
 ```ts
-const $second = $first.map(fn);
+$source.map(fn, config?);
 ```
 
-### Arguments (#methods-map-fn-arguments)
+- **Type**
 
-1. `fn` (_Function_): Function that receives `state` and returns a new state for the derived store.
-2. `config` (_Object_): Optional configuration.
+```ts
+const $derived = $source.map<T>(
+  fn: (value: SourceValue) => T,
+  config?: {
+    skipVoid?: boolean
+  }
+): Store<T>
+```
 
-### Returns (#methods-map-fn-returns)
+- **Examples**
 
-[_DerivedStore_](/en/api/effector/Store#readonly): New derived store.
+Basic usage:
 
-### Examples (#methods-map-fn-examples)
-
-#### Basic (#methods-map-fn-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
-const changed = createEvent();
-const $title = createStore("").on(changed, (_, newTitle) => newTitle);
-const $length = $title.map((title) => title.length);
+const changed = createEvent<string>();
 
-$length.watch((length) => {
+const $title = createStore("");
+const $titleLength = $title.map((title) => title.length);
+
+$title.on(changed, (_, newTitle) => newTitle);
+
+$titleLength.watch((length) => {
   console.log("new length", length);
 });
 
@@ -87,111 +117,121 @@ changed("hello world");
 
 [Try it](https://share.effector.dev/XGKGMvpF)
 
-#### SkipVoid (#methods-map-fn-examples-skipVoid)
+You can pass a config object with `skipVoid: false` to allow the store to accept `undefined`:
 
 ```js
-const $length = $title.map((title) => title.length, { skipVoid: false });
+const $titleLength = $title.map((title) => title.length, { skipVoid: false });
 ```
 
-## `.on(trigger, reducer)` (#methods-on-trigger-reducer)
+- **Detailed Description**
 
-Updates state when `trigger` is triggered by using a [reducer](/en/explanation/glossary#reducer).
+The `map` method runs the function `fn` with the current store state as input every time the original store updates.
+The return value becomes the new state of the derived store.
 
-### Formulae (#methods-on-trigger-reducer-formulae)
+- **Returns**
+
+Returns a new [derived store](/en/api/effector/Store#readonly).
+
+### `.on(trigger, reducer)` (#methods-on-trigger-reducer)
+
+Updates state using a [reducer](/en/explanation/glossary#reducer) when the `trigger` is fired.
+
+- **Formulae**
 
 ```ts
 $store.on(trigger, reducer);
 ```
 
-### Arguments (#methods-on-trigger-reducer-arguments)
+- **Type**
 
-1. `trigger`: _Event_, _Effect_, or another _Store_.
-2. `reducer`: _Reducer_: Function that receives `state` and `params` and returns a new state.
+```ts
+$store.on<T>(
+  trigger: Unit<T> | Unit<T>[]
+  reducer: (state: State, payload: T) => State | void
+): this
+```
 
-### Returns (#methods-on-trigger-reducer-returns)
+- **Examples**
 
-[_Store_](/en/api/effector/Store): Current store.
-
-### Examples (#methods-on-trigger-reducer-examples)
-
-#### Basic (#methods-on-trigger-reducer-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
-const $store = createStore(0);
-const changed = createEvent();
+const $counter = createStore(0);
+const incrementedBy = createEvent<number>();
 
-$store.on(changed, (value, incrementor) => value + incrementor);
+$counter.on(incrementedBy, (value, incrementor) => value + incrementor);
 
-$store.watch((value) => {
+$counter.watch((value) => {
   console.log("updated", value);
 });
 
-changed(2);
-changed(2);
+incrementedBy(2);
+incrementedBy(2);
 ```
 
 [Try it](https://share.effector.dev/O0JnDtIl)
 
-## `.watch(watcher)` (#methods-watch-watcher)
+- **Returns**
 
-Calls `watcher` function each time when the store is updated.
+Returns the [current store](/en/api/effector/Store).
 
-### Formulae (#methods-watch-watcher-formulae)
+### `.watch(watcher)` (#methods-watch-watcher)
+
+Calls the `watcher` function whenever the store updates.
+
+- **Formulae**
 
 ```ts
 const unwatch = $store.watch(watcher);
 ```
 
-### Arguments (#methods-watch-watcher-arguments)
+- **Type**
 
-1. `watcher`: [_Watcher_](/en/explanation/glossary#watcher): Watcher function that receives the current store state as the first argument.
+```ts
+$store.watch(watcher: (state: State) => any): Subscription
+```
 
-### Returns (#methods-watch-watcher-returns)
+- **Examples**
 
-[_Subscription_](/en/explanation/glossary#subscription): Unsubscribe function.
-
-### Examples (#methods-watch-watcher-examples)
-
-#### Basic (#methods-watch-watcher-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
-const add = createEvent();
-const $store = createStore(0).on(add, (state, payload) => state + payload);
+const add = createEvent<number>();
+const $store = createStore(0);
+
+$store.on(add, (state, payload) => state + payload);
 
 $store.watch((value) => console.log(`current value: ${value}`));
+
 add(4);
 add(3);
 ```
 
 [Try it](https://share.effector.dev/aj0A6OI4)
 
-## `.reset(...triggers)` (#methods-reset-triggers)
+- **Returns**
 
-Resets store state to the default value.
+Returns a [subscription cancellation function](/en/explanation/glossary#subscription).
 
-### Formulae (#methods-reset-triggers-formulae)
+### `.reset(...triggers)` (#methods-reset-triggers)
+
+Resets the store to its default value when any of the `triggers` fire.
+
+- **Formulae**
 
 ```ts
 $store.reset(...triggers);
 ```
 
-### Arguments (#methods-reset-triggers-arguments)
+- **Type**
 
-1. `triggers`: (_(Event | Effect | Store)[]_): any number of _Events_, _Effects_, or _Stores_.
+```ts
+$store.reset(...triggers: Array<Unit<any>>): this
+```
 
-### Returns (#methods-reset-triggers-returns)
+- **Examples**
 
-[_Store_](/en/api/effector/Store): Current store.
-
-### Examples (#methods-reset-triggers-examples)
-
-#### Basic (#methods-reset-triggers-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
 const increment = createEvent();
@@ -210,29 +250,29 @@ reset();
 
 [Try it](https://share.effector.dev/7W8m2Zdg)
 
-## `.off(trigger)` (#methods-off-trigger)
+- **Returns**
 
-Removes reducer for the given `trigger`.
+Returns the current store.
 
-### Formulae (#methods-off-trigger-formulae)
+### `.off(trigger)` (#methods-off-trigger)
+
+Removes the reducer for the specified `trigger`.
+
+- **Formulae**
 
 ```ts
 $store.off(trigger);
 ```
 
-### Arguments (#methods-off-trigger-arguments)
+- **Type**
 
-1. `trigger`: _Event_, _Effect_, or _Store_.
+```ts
+$store.off(trigger: Unit<any>): this
+```
 
-### Returns (#methods-off-trigger-returns)
+- **Examples**
 
-[_Store_](/en/api/effector/Store): Current store.
-
-### Examples (#methods-off-trigger-examples)
-
-#### Basic (#methods-off-trigger-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore, merge } from "effector";
 
 const changedA = createEvent();
@@ -247,17 +287,19 @@ $store.off(changed);
 
 [Try it](https://share.effector.dev/bzdoyLHm)
 
-# Store Properties (#properties)
+- **Returns**
 
-## `.updates` (#properties-updates)
+Returns the current store.
 
-### Returns (#properties-updates-returns)
+## Store Properties (#properties)
 
-[_Event_](/en/api/effector/Event): Event that represents updates of the given store.
+### `.updates` (#properties-updates)
 
-### Example (#properties-updates-example)
+An event that fires on every store update.
 
-```js
+- **Examples**
+
+```ts
 import { createStore, is } from "effector";
 
 const $clicksAmount = createStore(0);
@@ -270,15 +312,17 @@ $clicksAmount.updates.watch((amount) => {
 
 [Try it](https://share.effector.dev/F5L5kLTE)
 
-## `.reinit` (#properties-reinit)
+- **Returns**
 
-### Returns (#properties-reinit-returns)
+A [derived event](/en/api/effector/Event#event) representing the store's updates.
 
-[_EventCallable_](/en/api/effector/Event#eventCallable): Event that can reinitialize a store with a default value.
+### `.reinit` (#properties-reinit)
 
-### Example (#properties-reinit-example)
+Event to reinitialize the store to its default state.
 
-```js
+- **Examples**
+
+```ts
 import { createStore, createEvent, sample, is } from "effector";
 
 const $counter = createStore(0);
@@ -292,41 +336,62 @@ console.log($counter.getState());
 
 [Try it](https://share.effector.dev/vtJncyYn)
 
-## `.shortName` (#properties-shortName)
+- **Returns**
 
-### Returns (#properties-shortName-returns)
+An [event](/en/api/effector/Event#eventCallable) that reinitializes the store.
 
-(_`string`_): ID or short name of the store.
+### `.shortName` (#properties-shortName)
 
-## `.defaultState` (#properties-defaultState)
+A string property containing the store's ID or short name.
 
-### Returns (#properties-defaultState-returns)
+- **Examples**
 
-(_`State`_): Default state of the store.
+```ts
+const $store = createStore(0, {
+  name: "someName",
+});
 
-### Example (#properties-defaultState-example)
+console.log($store.shortName); // someName
+```
+
+[Try it](https://share.effector.dev/vtJncyYn)
+
+- **Returns**
+
+The store’s ID or short name.
+
+### `.defaultState` (#properties-defaultState)
+
+The store’s default state value.
+
+- **Example**
 
 ```ts
 const $store = createStore("DEFAULT");
-console.log($store.defaultState === "DEFAULT");
+
+console.log($store.defaultState === "DEFAULT"); // true
 ```
 
-# Utility methods (#utility-methods)
+- **Returns**
 
-## `.getState()` (#utility-methods-getState)
+The default state value.
+
+## Utility Methods (#utility-methods)
+
+### `.getState()` (#utility-methods-getState)
 
 Returns the current state of the store.
 
-### Returns (#utility-methods-getState-returns)
+:::warning{title="Caution!"}
+Using `getState()` in business logic is not recommended — it's better to pass data through `sample`.
+:::
 
-(_`State`_): Current state of the store.
+- **Examples**
 
-### Example (#utility-methods-getState-example)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
-const add = createEvent();
+const add = createEvent<number>();
 
 const $number = createStore(0).on(add, (state, data) => state + data);
 
@@ -338,21 +403,14 @@ console.log($number.getState());
 
 [Try it](https://share.effector.dev/YrnlMuRj)
 
-# Readonly store (#readonly)
+- **Returns**
 
-TBD
+The current state of the store.
 
-# Types (#types)
+## Related APIs (#related-api)
 
-```ts
-import { type StoreValue } from "effector";
-```
-
-## `StoreValue<S>` (#types-StoreValue)
-
-Extracts type of `Store` or `StoreWritable` value.
-
-```ts
-const $store: Store<Value>;
-type Value = StoreValue<typeof $store>;
-```
+- [`createStore`](/en/api/effector/createStore) – Creates a new store
+- [`combine`](/en/api/effector/combine) – Combines multiple stores into a derived store
+- [`sample`](/en/api/effector/sample) – A core operator for connecting units
+- [`createEvent`](/en/api/effector/createEvent) – Creates an event
+- [`createEffect`](/en/api/effector/createEffect) – Creates an effect
