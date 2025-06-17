@@ -8,6 +8,12 @@ const defaultFactories = [
   'patronum', // there is also custom handling for patronum/{method} imports
 ]
 
+/**
+ *
+ * @param {import('@babel/core')} babel
+ * @param {import('@babel/core').PluginOptions} options
+ * @returns {import('@babel/core').PluginObj}
+ */
 module.exports = function (babel, options = {}) {
   const {
     addNames,
@@ -60,6 +66,9 @@ module.exports = function (babel, options = {}) {
   const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
   )
+  /**
+   * @type {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+   */
   const smallConfig = {addLoc, addNames, debugSids}
   const {types: t, template} = babel
   let factoryTemplate
@@ -201,6 +210,11 @@ module.exports = function (babel, options = {}) {
         ),
     },
   ]
+  /**
+   * @param {import('@babel/traverse').NodePath} path
+   * @param {string} method
+   * @returns {string}
+   */
   function addImport(path, method) {
     const programPath = path.find(path => path.isProgram())
     const [newPath] = programPath.unshiftContainer(
@@ -225,6 +239,9 @@ module.exports = function (babel, options = {}) {
 
     return found.node.local.name
   }
+  /**
+   * @type {import('@babel/traverse').Visitor}
+   */
   const importVisitor = {
     ImportDeclaration(path, state) {
       const createFactoryTemplate = () => {
@@ -364,6 +381,22 @@ module.exports = function (babel, options = {}) {
       }
     },
   }
+  /**
+   * @param {Array<{
+   *  flag: boolean,
+   *  set: Set<string>,
+   *  fn: (
+   *    path: import('@babel/traverse').NodePath,
+   *    state: import('@babel/core').PluginPass,
+   *    name: string,
+   *    candidateName: import('@babel/types').Identifier
+   *  ) => void
+   * }>} methodParsers
+   * @param {import('@babel/traverse').NodePath} path
+   * @param {import('@babel/core').PluginPass} state
+   * @param {string} name
+   * @returns {void}
+   */
   function applyMethodParsers(methodParsers, path, state, name) {
     for (let i = 0; i < methodParsers.length; i++) {
       const {flag, set, fn} = methodParsers[i]
@@ -373,46 +406,91 @@ module.exports = function (babel, options = {}) {
     }
   }
 
+  /**
+   *
+   * @param {import('@babel/traverse').NodePath} path
+   * @returns {boolean}
+   */
   function hasSecondArgument(path) {
     return path.node.arguments.length >= 2
   }
 
   /**
-   * @param path Node
-   * @param configObject example { forceScope: t.booleanLiteral(true) }
+   *
+   * @param {import('@babel/traverse').NodePath} path
+   * @param {Record<string, import('@babel/types').Node>} configObject
+   * @returns {void}
    */
   function pushArgumentConfig(path, configObject) {
     path.node.arguments.push(
       t.objectExpression(
-        Object.entries(configObject)
-          .map(([key, value]) => t.objectProperty(t.identifier(key), value))
-      )
+        Object.entries(configObject).map(([key, value]) =>
+          t.objectProperty(t.identifier(key), value),
+        ),
+      ),
     )
   }
+  /**
+   *
+   * @param {import('@babel/traverse').NodePath} path
+   * @returns {boolean}
+   */
   function hasThirdArgument(path) {
     return path.node.arguments.length >= 3
   }
+  /**
+   *
+   * @param {import('@babel/traverse').NodePath} path
+   * @param {string[]} argumentsAsKeys
+   * @returns {void}
+   */
   function convertArgumentsToConfig(path, argumentsAsKeys) {
-    const objectProperties = argumentsAsKeys.map((keyName, index) => t.objectProperty(
-      t.identifier(keyName),
-      t.cloneNode(path.node.arguments[index]),
-    ))
+    const objectProperties = argumentsAsKeys.map((keyName, index) =>
+      t.objectProperty(
+        t.identifier(keyName),
+        t.cloneNode(path.node.arguments[index]),
+      ),
+    )
     path.node.arguments = [t.objectExpression(objectProperties)]
   }
+  /**
+   *
+   * @param {import('@babel/traverse').NodePath} path
+   * @returns {boolean}
+   */
   function isFirstArgumentConfig(path) {
     return t.isObjectExpression(path.node.arguments[0])
   }
+  /**
+   *
+   * @param {import('@babel/types').ObjectExpression} configNode
+   * @param {string} propertyName
+   * @returns {boolean}
+   */
   function hasPropertyInConfig(configNode, propertyName) {
-    return !!configNode.properties.find(property => t.isIdentifier(property.key) && property.key.name === propertyName)
+    return !!configNode.properties.find(
+      property =>
+        t.isIdentifier(property.key) && property.key.name === propertyName,
+    )
   }
+  /**
+   *
+   * @param {import('@babel/types').ObjectExpression} configNode
+   * @param {string} propertyName
+   * @param {import('@babel/types').Node} propertyNode
+   * @returns {void}
+   */
   function appendPropertyToConfig(configNode, propertyName, propertyNode) {
     if (t.isObjectExpression(configNode)) {
       configNode.properties.push(
-        t.objectProperty(t.identifier(propertyName), propertyNode)
+        t.objectProperty(t.identifier(propertyName), propertyNode),
       )
     }
   }
 
+  /**
+   * @type {import('@babel/core').PluginObj}
+   */
   const plugin = {
     name: 'effector/babel-plugin',
     pre() {
@@ -494,12 +572,26 @@ module.exports = function (babel, options = {}) {
                       convertArgumentsToConfig(path, ['store', 'fn'])
 
                       // Add keys: []
-                      appendPropertyToConfig(path.node.arguments[0], 'keys', t.arrayExpression())
+                      appendPropertyToConfig(
+                        path.node.arguments[0],
+                        'keys',
+                        t.arrayExpression(),
+                      )
                       // Add forceScope: true
-                      appendPropertyToConfig(path.node.arguments[0], 'forceScope', t.booleanLiteral(true))
-                    }
-                    else if (isFirstArgumentConfig(path) && !hasPropertyInConfig(path.node.arguments[0], "forceScope")) {
-                      appendPropertyToConfig(path.node.arguments[0], 'forceScope', t.booleanLiteral(true))
+                      appendPropertyToConfig(
+                        path.node.arguments[0],
+                        'forceScope',
+                        t.booleanLiteral(true),
+                      )
+                    } else if (
+                      isFirstArgumentConfig(path) &&
+                      !hasPropertyInConfig(path.node.arguments[0], 'forceScope')
+                    ) {
+                      appendPropertyToConfig(
+                        path.node.arguments[0],
+                        'forceScope',
+                        t.booleanLiteral(true),
+                      )
                     }
                     break
                   }
@@ -574,6 +666,15 @@ module.exports = function (babel, options = {}) {
   return plugin
 }
 
+/**
+ *
+ * @param {boolean} addLoc
+ * @param {boolean} enableFileName
+ * @param {import('@babel/types')} t
+ * @param {import('@babel/traverse').NodePath} path
+ * @param {import('@babel/core').PluginPass} state
+ * @returns {void}
+ */
 function addFileNameIdentifier(addLoc, enableFileName, t, path, state) {
   if (addLoc && !state.fileNameIdentifier) {
     const fileName = enableFileName
@@ -734,6 +835,13 @@ const normalizeOptions = options => {
     },
   })
 
+  /**
+   *
+   * @param {import('@babel/core').PluginOptions} options
+   * @param {string} name
+   * @param {string[]} defaults
+   * @returns {string[]}
+   */
   function readReactImportOption(options, name, defaults) {
     if (options && options.importReactNames && options.importReactNames[name]) {
       if (Array.isArray(options.importReactNames[name]))
@@ -743,6 +851,11 @@ const normalizeOptions = options => {
     return defaults
   }
 
+  /**
+   *
+   * @param {{options: import('@babel/core').PluginOptions, properties: Record<string, any>, result: Record<string, any>}}
+   * @returns {Record<string, any>}
+   */
   function readConfigFlags({options, properties, result}) {
     for (const property in properties) {
       if (property in options) {
@@ -753,6 +866,13 @@ const normalizeOptions = options => {
     }
     return result
   }
+
+  /**
+   *
+   * @param {Record<string, string[] | undefined> | undefined} shape
+   * @param {Record<string, string[] | undefined> | undefined} defaults
+   * @returns {Record<string, any>}
+   */
   function readConfigShape(shape = {}, defaults = {}) {
     const result = {}
     for (const key in defaults) {
@@ -760,11 +880,23 @@ const normalizeOptions = options => {
     }
     return result
   }
+
+  /**
+   *
+   * @param {string[] | undefined} array
+   * @param {string[]} defaults
+   * @returns {Set<string>}
+   */
   function readConfigArray(array, defaults) {
     return new Set(array || defaults)
   }
 }
 
+/**
+ *
+ * @param {import('@babel/traverse').NodePath} path
+ * @returns {import('@babel/types').Identifier}
+ */
 function findCandidateNameForExpression(path) {
   let id
   path.find(path => {
@@ -785,6 +917,14 @@ function findCandidateNameForExpression(path) {
   return id
 }
 
+/**
+ *
+ * @param {import('@babel/types').Identifier} fileNameIdentifier
+ * @param {number} lineNumber
+ * @param {number} columnNumber
+ * @param {import('@babel/types')} t
+ * @returns {import('@babel/types').ObjectExpression}
+ */
 function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const fileLineLiteral = t.numericLiteral(lineNumber != null ? lineNumber : -1)
   const fileColumnLiteral = t.numericLiteral(
@@ -796,6 +936,17 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
+
+/**
+ *
+ * @param {import('@babel/traverse').NodePath} path
+ * @param {import('@babel/core').PluginPass} state
+ * @param {import('@babel/types').Identifier} nameNodeId
+ * @param {import('@babel/types')} t
+ * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {string | undefined} checkBindingName
+ * @returns {void}
+ */
 function setRestoreNameAfter(
   path,
   state,
@@ -852,6 +1003,18 @@ function setRestoreNameAfter(
     configExpr.properties.push(stableID)
   }
 }
+
+/**
+ *
+ * @param {import('@babel/traverse').NodePath} path
+ * @param {import('@babel/core').PluginPass} state
+ * @param {import('@babel/types').Identifier} nameNodeId
+ * @param {import('@babel/types')} t
+ * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {boolean} fillFirstArg
+ * @param {string | undefined} checkBindingName
+ * @returns {void}
+ */
 function setStoreNameAfter(
   path,
   state,
@@ -911,12 +1074,32 @@ function setStoreNameAfter(
     configExpr.properties.push(stableID)
   }
 }
+
+/**
+ *
+ * @param {import('@babel/traverse').NodePath} path
+ * @param {string | undefined} checkBindingName
+ * @returns {boolean}
+ */
 function isLocalVariable(path, checkBindingName) {
   if (!checkBindingName) return false
   const binding = path.scope.getBinding(checkBindingName)
   if (binding) return binding.kind !== 'module'
   return false
 }
+
+/**
+ *
+ * @param {import('@babel/traverse').NodePath} path
+ * @param {import('@babel/core').PluginPass} state
+ * @param {import('@babel/types').Identifier} nameNodeId
+ * @param {import('@babel/types')} t
+ * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {boolean} singleArgument
+ * @param {string | undefined} checkBindingName
+ * @param {boolean} allowEmptyArguments
+ * @returns {void}
+ */
 function setConfigForConfMethod(
   path,
   state,
@@ -979,6 +1162,16 @@ function setConfigForConfMethod(
   }
 }
 
+/**
+ *
+ * @param {import('@babel/traverse').NodePath} path
+ * @param {import('@babel/core').PluginPass} state
+ * @param {import('@babel/types').Identifier} nameNodeId
+ * @param {import('@babel/types')} t
+ * @param {{addLoc: boolean, addNames: boolean, debugSids: boolean}}
+ * @param {string | undefined} checkBindingName
+ * @returns {void}
+ */
 function setEventNameAfter(
   path,
   state,
@@ -1039,6 +1232,10 @@ function setEventNameAfter(
     configExpr.properties.push(stableID)
   }
 }
+/**
+ * @param {string} path
+ * @returns {string}
+ */
 function stripExtension(path) {
   const {extname} = require('path')
   const ext = extname(path)
@@ -1047,6 +1244,13 @@ function stripExtension(path) {
   }
   return path
 }
+/**
+ *
+ * @param {string} babelRoot
+ * @param {string} fileName
+ * @param {boolean} omitFirstSlash
+ * @returns {string}
+ */
 function stripRoot(babelRoot, fileName, omitFirstSlash) {
   const {sep, normalize} = require('path')
   const rawPath = fileName.replace(babelRoot, '')
@@ -1059,6 +1263,13 @@ function stripRoot(babelRoot, fileName, omitFirstSlash) {
 }
 /**
  * "foo src/index.js [12,30]"
+ * @param {string} babelRoot
+ * @param {string} fileName
+ * @param {string} varName
+ * @param {number} line
+ * @param {number} column
+ * @param {boolean} debugSids
+ * @returns {string}
  */
 function generateStableID(
   babelRoot,
@@ -1074,6 +1285,11 @@ function generateStableID(
     hashCode(`${varName} ${normalizedPath} [${line}, ${column}]`) + appendix
   )
 }
+
+/**
+ * @param {string} s
+ * @returns {string}
+ */
 function hashCode(s) {
   let h = 0
   let i = 0
@@ -1082,18 +1298,27 @@ function hashCode(s) {
   return h.toString(36)
 }
 
+/**
+ *
+ * @param {import('@babel/types')} t
+ * @param {string} field
+ * @param {import('@babel/types').Node} content
+ * @returns {import('@babel/types').ObjectProperty}
+ */
 function property(t, field, content) {
   return t.objectProperty(t.identifier(field), content)
 }
 
+/**
+ *
+ * @param {import('@babel/types')} t
+ * @param {string} field
+ * @param {string} value
+ * @returns {import('@babel/types').ObjectProperty}
+ */
 function stringProperty(t, field, value) {
   return property(t, field, t.stringLiteral(value))
 }
-
-/**
- * @import { NodePath } from '@babel/traverse';
- * @import { Program, CallExpression } from '@babel/types;
- */
 
 const REGION_NAME = '_internalHMRRegion'
 const DEFAULT_WATCHED_CALLS = [
@@ -1108,7 +1333,8 @@ const DEFAULT_WATCHED_CALLS = [
 ]
 
 /**
- * @param {NodePath<any>} path
+ *
+ * @param {import('@babel/traverse').NodePath} path
  * @returns {boolean}
  */
 function isSupportHMR(path) {
@@ -1126,8 +1352,8 @@ function isSupportHMR(path) {
 
 /**
  *
- * @param {Babel} babel
- * @param {NodePath<Program>} path
+ * @param {import('@babel/core')} babel
+ * @param {import('@babel/traverse').NodePath} path
  * @param {'module' | 'commonjs'} env
  * @param {string[]} factories
  * @returns {void}
@@ -1153,11 +1379,6 @@ function transformHmr(babel, path, env, factories) {
   })
 
   path.traverse({
-    /**
-     *
-     * @param {NodePath<ImportDeclaration>} call
-     * @returns
-     */
     ImportDeclaration: declaration => {
       const source = declaration.node.source.value
       const specifiers = declaration.node.specifiers.map(
@@ -1185,11 +1406,6 @@ function transformHmr(babel, path, env, factories) {
         declaration.node.specifiers.push(buildImportSpecifier(specifier))
       }
     },
-    /**
-     *
-     * @param {NodePath<CallExpression>} call
-     * @returns
-     */
     CallExpression: call => {
       const isWatchedFactoryCall =
         watchedFactories.has(call.node.callee.name) ||
