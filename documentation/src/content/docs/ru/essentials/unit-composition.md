@@ -330,7 +330,7 @@ const adminSelected = sample({
   source: $users,
   // сработает только если пользователь найден и он админ
   filter: (users, id) => !!users.find((user) => user.id === id && user.role === "admin"),
-  fn: (users, id) => users[id],
+  fn: (users, id) => users.find((user) => user.id === id)!,
 });
 // adminSelected имеет тип Event<User>
 
