@@ -1,52 +1,21 @@
-import {join} from 'path'
-import {readFile} from 'fs/promises'
-import {transformAsync} from '@babel/core'
+// @ts-expect-error no types
 import tsPreset from '@babel/preset-typescript'
 
-import babelPlugin from '../babel-plugin'
-import {formatCode} from './utils'
-
-const jsSetup = format => ({
-  plugins: [[babelPlugin, {hmr: format, addNames: false, addLoc: false}]],
-  configFile: false,
-  babelrc: false,
-})
-
-const tsSetup = format => ({
-  plugins: [[babelPlugin, {hmr: format, addNames: false, addLoc: false}]],
-  presets: [[tsPreset, {isTSX: true, allExtensions: true}]],
-  configFile: false,
-  babelrc: false,
-})
-
-const configSetup = (format, lang) =>
-  lang === 'ts' ? tsSetup(format) : jsSetup(format)
-
-async function compile(sourceCode, config) {
-  const {code} = await transformAsync(sourceCode, config)
-  return formatCode(code)
-}
-
-async function readAndTransform(filename, config) {
-  const sourceCode = await readFile(join(__dirname, filename), 'utf-8')
-  return compile(sourceCode, config)
-}
-
-async function transform(format) {
-  return readAndTransform('./hmr.js', jsSetup(format))
-}
-
-async function transformTs(filename) {
-  return readAndTransform(filename, tsSetup('es'))
-}
+// @ts-expect-error no types
+import babelPlugin from '../../babel-plugin'
+import {compile, configSetup, readAndCompile} from '../utils'
 
 describe('hmr module', () => {
   test('esm format', async () => {
-    expect(await transform('es')).toMatchSnapshot()
+    expect(
+      await readAndCompile(__dirname, 'hmr.js', configSetup('es', 'js')),
+    ).toMatchSnapshot()
   })
 
   test('cjs format', async () => {
-    expect(await transform('cjs')).toMatchSnapshot()
+    expect(
+      await readAndCompile(__dirname, 'hmr.js', configSetup('cjs', 'js')),
+    ).toMatchSnapshot()
   })
 })
 
