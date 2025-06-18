@@ -22,14 +22,23 @@ export function formatCode(code: string) {
   })
 }
 
+function getPlugins(format: 'es' | 'cjs') {
+  return format === 'es'
+    ? [[babelPlugin, {hmr: format, addNames: false, addLoc: false}]]
+    : [
+        [babelPlugin, {hmr: format, addNames: false, addLoc: false}],
+        '@babel/plugin-transform-modules-commonjs',
+      ]
+}
+
 const jsSetup = (format: 'es' | 'cjs') => ({
-  plugins: [[babelPlugin, {hmr: format, addNames: false, addLoc: false}]],
+  plugins: getPlugins(format),
   configFile: false,
   babelrc: false,
 })
 
 const tsSetup = (format: 'es' | 'cjs') => ({
-  plugins: [[babelPlugin, {hmr: format, addNames: false, addLoc: false}]],
+  plugins: getPlugins(format),
   presets: [[tsPreset, {isTSX: true, allExtensions: true}]],
   configFile: false,
   babelrc: false,
