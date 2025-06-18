@@ -1,14 +1,39 @@
 ---
-title: Store
+title: Store API
 description: Store, его методы и свойства
 lang: ru
 ---
 
+# Store API (#store-unit)
+
 ```ts
-import { type Store, type StoreWritable } from "effector";
+import { type Store, type StoreWritable, createStore } from "effector";
+
+const $store = createStore();
 ```
 
-_Store_ — это объект, который хранит значение состояния. Стор обновляется, когда получает значение, которое не равно (`!==`) текущему и не равно `undefined`. Стор является [Unit](/ru/explanation/glossary#common-unit). Некоторые сторы могут быть [производными](#store-derived).
+_Store_ — это объект, который хранит значение состояния. Обновление стора происходит когда новое значение не равно (`!==`) текущему, а также когда не равно `undefined` (если в конфигурации стора не указан `skipVoid:false`). Стор является [Unit](/ru/explanation/glossary#common-unit). Некоторые сторы могут быть [производными](#store-derived).
+
+:::tip{title="Кто такой этот ваш стор?"}
+Если вы еще не знакомы как работать со стором, то добро пожаловать [сюда](/ru/essentials/manage-states).
+:::
+
+## Интерфейс стора (#store-interface)
+
+Доступные методы и свойства стора:
+
+| Метод/Свойство                                         | Описание                                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------- |
+| [`map(fn)`](#methods-map-fn)                           | Создает новый производный стор                                |
+| [`on(trigger, reducer)` ](#methods-on-trigger-reducer) | Обновление стейта c помощью `reducer`, когда вызван `trigger` |
+| [`watch(watcher)`](#methods-watch-watcher)             | Вызывает функцию `watcher` каждый раз, когда стор обновляется |
+| [`reset(...triggers)`](#methods-reset-triggers)        | Метод для сброса к начальному состоянию                       |
+| [`off(trigger)`](#methods-off-trigger)                 | Удаляет подписку на указанный триггер                         |
+| [`updates()`](#properties-updates)                     | Событие срабатывающие при обновление стора                    |
+| [`reinit()`](#properties-reinit)                       | Событие для реинициализации стора                             |
+| [`shortName`](#properties-shortName)                   | ID или короткое имя store                                     |
+| [`defaultState`](#properties-defaultState)             | Начальное состояние стора                                     |
+| [`getState()`](#utility-methods-getState)              | Возвращает текущий стейт                                      |
 
 ## Иммутабельность (#immutability)
 
@@ -39,39 +64,44 @@ $items.on(addItem, (items, newItem) => {
 
 Сторы в effector должен быть размером как можно меньше, чтобы отвечать за конкретную часть в бизнес логике, в отличии от например redux стора, который имеет тенденцию к тому чтобы держать рядом всё и сразу. Когда состояние атомарное, то необходимости в спредах объектов становится меньше. Однако, если возникает потребность часто обновлять сильно вложенные данные, для обновления состояния допустимо применять [immer](https://immerjs.github.io/immer/produce) чтобы упростить повторяющийся код
 
-# Методы стора (#methods)
+## Методы стора (#methods)
 
-## `.map(fn)` (#methods-map-fn)
+### `.map(fn)` (#methods-map-fn)
 
-Создает производный стор. Он вызывает переданную функцию с состоянием, когда оригинальный стор обновляется, и использует результат для обновления производного стора.
+Принимает функцию `fn` и возвращает производный стор, который автоматически обновляется, когда исходный стор изменяется.
 
-### Формула (#methods-map-fn-formulae)
+- **Формула**
 
 ```ts
-const $second = $first.map(fn);
+$source.map(fn, config?);
 ```
 
-### Аргументы (#methods-map-fn-arguments)
+- **Тип**
 
-1. `fn` (_Function_): Функция, которая принимает `state` и возвращает новое состояние для производного стора.
-2. `config` (_Object_): Необязательная конфигурация.
+```ts
+const $derived = $source.map<T>(
+  fn: (value: SourceValue) => T,
+  config?: {
+    skipVoid?: boolean
+  }
+): Store<T>
+```
 
-### Возвращает (#methods-map-fn-returns)
+- **Примеры**
 
-[_DerivedStore_](/ru/api/effector/Store#readonly): Новый производный стор.
+Базовое использование:
 
-### Примеры (#methods-map-fn-examples)
-
-#### Основной пример (#methods-map-fn-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
-const changed = createEvent();
-const $title = createStore("").on(changed, (_, newTitle) => newTitle);
-const $length = $title.map((title) => title.length);
+const changed = createEvent<string>();
 
-$length.watch((length) => {
+const $title = createStore("");
+const $titleLength = $title.map((title) => title.length);
+
+$title.on(changed, (_, newTitle) => newTitle);
+
+$titleLength.watch((length) => {
   console.log("new length", length);
 });
 
@@ -82,111 +112,121 @@ changed("hello world");
 
 [Попробовать](https://share.effector.dev/XGKGMvpF)
 
-#### Пропускать пустые значения (#methods-map-fn-examples-skipVoid)
+Вторым аргументом можно передать объект конфига со значением `skipVoid:false`, тогда стор сможет принимать `undefined` значения:
 
 ```js
-const $length = $title.map((title) => title.length, { skipVoid: false });
+const $titleLength = $title.map((title) => title.length, { skipVoid: false });
 ```
 
-## `.on(trigger, reducer)` (#methods-on-trigger-reducer)
+- **Детальное описание**
 
-Обновляет состояние, когда `trigger` срабатывает, используя [reducer](/ru/explanation/glossary#reducer).
+Метод `map` вызывает переданную функцию `fn` с состоянием исходного стора в аргументе, каждый раз когда оригинальный стор обновляется.<br/>
+Результат выполнения функции используется как значение стора.
 
-### Формула (#methods-on-trigger-reducer-formulae)
+- **Возвращаемое значение**
+
+Возвращает новый [производный стор](/ru/api/effector/Store#readonly).
+
+### `.on(trigger, reducer)` (#methods-on-trigger-reducer)
+
+Обновляет состояние используя [reducer](/ru/explanation/glossary#reducer), при срабатывании `trigger`.
+
+- **Формула**
 
 ```ts
 $store.on(trigger, reducer);
 ```
 
-### Аргументы (#methods-on-trigger-reducer-arguments)
+- **Тип**
 
-1. `trigger`: _Event_, _Effect_ или другой _Store_.
-2. `reducer`: _Reducer_: Функция, которая принимает `state` и `params` и возвращает новое состояние.
+```ts
+$store.on<T>(
+  trigger: Unit<T> | Unit<T>[]
+  reducer: (state: State, payload: T) => State | void
+): this
+```
 
-### Возвращает (#methods-on-trigger-reducer-returns)
+- **Примеры**
 
-[_Store_](/ru/api/effector/Store): Текущий стор.
-
-### Примеры (#methods-on-trigger-reducer-examples)
-
-#### Основной пример (#methods-on-trigger-reducer-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
-const $store = createStore(0);
-const changed = createEvent();
+const $counter = createStore(0);
+const incrementedBy = createEvent<number>();
 
-$store.on(changed, (value, incrementor) => value + incrementor);
+$counter.on(incrementedBy, (value, incrementor) => value + incrementor);
 
-$store.watch((value) => {
+$counter.watch((value) => {
   console.log("updated", value);
 });
 
-changed(2);
-changed(2);
+incrementedBy(2);
+incrementedBy(2);
 ```
 
 [Попробовать](https://share.effector.dev/O0JnDtIl)
 
-## `.watch(watcher)` (#methods-watch-watcher)
+- **Возвращаемое значение**
+
+Возвращает [текущий стор](/ru/api/effector/Store).
+
+### `.watch(watcher)` (#methods-watch-watcher)
 
 Вызывает функцию `watcher` каждый раз, когда стор обновляется.
 
-### Формула (#methods-watch-watcher-formulae)
+- **Формула**
 
 ```ts
 const unwatch = $store.watch(watcher);
 ```
 
-### Аргументы (#methods-watch-watcher-arguments)
+- **Тип**
 
-1. `watcher`: [_Watcher_](/ru/explanation/glossary#watcher): Функция-наблюдатель, которая принимает текущее состояние стора в качестве первого аргумента.
+```ts
+$store.watch(watcher: (state: State) => any): Subscription
+```
 
-### Возвращает (#methods-watch-watcher-returns)
+- **Примеры**
 
-[_Subscription_](/ru/explanation/glossary#subscription): Функция для отмены подписки.
-
-### Примеры (#methods-watch-watcher-examples)
-
-#### Основной пример (#methods-watch-watcher-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
-const add = createEvent();
-const $store = createStore(0).on(add, (state, payload) => state + payload);
+const add = createEvent<number>();
+const $store = createStore(0);
+
+$store.on(add, (state, payload) => state + payload);
 
 $store.watch((value) => console.log(`current value: ${value}`));
+
 add(4);
 add(3);
 ```
 
 [Попробовать](https://share.effector.dev/aj0A6OI4)
 
-## `.reset(...triggers)` (#methods-reset-triggers)
+- **Возвращаемое значение**
 
-Сбрасывает состояние стора до значения по умолчанию.
+Возвращает [функцию для отмены подписки](/ru/explanation/glossary#subscription).
 
-### Формула (#methods-reset-triggers-formulae)
+### `.reset(...triggers)` (#methods-reset-triggers)
+
+Сбрасывает состояние стора до значения по умолчанию при срабатывании любого `trigger`.
+
+- **Формула**
 
 ```ts
 $store.reset(...triggers);
 ```
 
-### Аргументы (#methods-reset-triggers-arguments)
+- **Тип**
 
-1. `triggers`: (_(Event | Effect | Store)[]_): любое количество _Events_, _Effects_ или _Stores_.
+```ts
+$store.reset(...triggers: Array<Unit<any>>): this
+```
 
-### Возвращает (#methods-reset-triggers-returns)
+- **Примеры**
 
-[_Store_](/ru/api/effector/Store): Текущий стор.
-
-### Примеры (#methods-reset-triggers-examples)
-
-#### Основной пример (#methods-reset-triggers-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore } from "effector";
 
 const increment = createEvent();
@@ -205,29 +245,29 @@ reset();
 
 [Попробовать](https://share.effector.dev/7W8m2Zdg)
 
-## `.off(trigger)` (#methods-off-trigger)
+- **Возвращаемое значение**
+
+Возвращает текущий стор.
+
+### `.off(trigger)` (#methods-off-trigger)
 
 Удаляет reducer для указанного `trigger`.
 
-### Формула (#methods-off-trigger-formulae)
+- **Формула**
 
 ```ts
 $store.off(trigger);
 ```
 
-### Аргументы (#methods-off-trigger-arguments)
+- **Тип**
 
-1. `trigger`: _Event_, _Effect_ или _Store_.
+```ts
+$store.off(trigger: Unit<any>): this
+```
 
-### Возвращает (#methods-off-trigger-returns)
+- **Примеры**
 
-[_Store_](/ru/api/effector/Store): Текущий стор.
-
-### Примеры (#methods-off-trigger-examples)
-
-#### Основной пример (#methods-off-trigger-examples-basic)
-
-```js
+```ts
 import { createEvent, createStore, merge } from "effector";
 
 const changedA = createEvent();
@@ -242,17 +282,19 @@ $store.off(changed);
 
 [Попробовать](https://share.effector.dev/bzdoyLHm)
 
-# Свойства стора (#properties)
+- **Возвращаемое значение**
 
-## `.updates` (#properties-updates)
+Возвращает текущий стор.
 
-### Возвращает (#properties-updates-returns)
+## Свойства стора (#properties)
 
-[_Event_](/ru/api/effector/Event): Событие, представляющее обновления данного стора.
+### `.updates` (#properties-updates)
 
-### Пример (#properties-updates-example)
+Событие срабатывающие при обновление стора.
 
-```js
+- **Примеры**
+
+```ts
 import { createStore, is } from "effector";
 
 const $clicksAmount = createStore(0);
@@ -265,15 +307,17 @@ $clicksAmount.updates.watch((amount) => {
 
 [Попробовать](https://share.effector.dev/F5L5kLTE)
 
-## `.reinit` (#properties-reinit)
+- **Возвращаемое значение**
 
-### Возвращает (#properties-reinit-returns)
+[Производное событие](/ru/api/effector/Event#event), представляющее обновления данного стора.
 
-[_EventCallable_](/ru/api/effector/Event#eventCallable): Событие, которое может реинициализировать стор до значения по умолчанию.
+### `.reinit` (#properties-reinit)
 
-### Пример (#properties-reinit-example)
+Событие для реинициализации стора.
 
-```js
+- **Примеры**
+
+```ts
 import { createStore, createEvent, sample, is } from "effector";
 
 const $counter = createStore(0);
@@ -287,41 +331,62 @@ console.log($counter.getState());
 
 [Попробовать](https://share.effector.dev/vtJncyYn)
 
-## `.shortName` (#properties-shortName)
+- **Возвращаемое значение**
 
-### Возвращает (#properties-shortName-returns)
+[Событие](/ru/api/effector/Event#eventCallable), которое может реинициализировать стор до значения по умолчанию.
 
-(_`string`_): ID или короткое имя store.
+### `.shortName` (#properties-shortName)
 
-## `.defaultState` (#properties-defaultState)
+Cтроковое свойство, которое содержит ID или короткое имя стора.
 
-### Возвращает (#properties-defaultState-returns)
+- **Примеры**
 
-(_`State`_): Значение состояния по умолчанию.
+```ts
+const $store = createStore(0, {
+  name: "someName",
+});
 
-### Пример (#properties-defaultState-example)
+console.log($store.shortName); // someName
+```
+
+[Попробовать](https://share.effector.dev/vtJncyYn)
+
+- **Возвращаемое значение**
+
+ID или короткое имя store.
+
+### `.defaultState` (#properties-defaultState)
+
+Свойство, которое содержит значение состояния по умолчанию стора.
+
+- **Пример**
 
 ```ts
 const $store = createStore("DEFAULT");
-console.log($store.defaultState === "DEFAULT");
+
+console.log($store.defaultState === "DEFAULT"); // true
 ```
 
-# Вспомогательные методы (#utility-methods)
+- **Возвращаемое значение**
 
-## `.getState()` (#utility-methods-getState)
+Значение состояния по умолчанию.
 
-Возвращает текущее состояние стора.
+## Вспомогательные методы (#utility-methods)
 
-### Возвращает (#utility-methods-getState-returns)
+### `.getState()` (#utility-methods-getState)
 
-(_`State`_): Текущее состояние стора.
+Метод, который возвращает текущее состояние стора.
 
-### Пример (#utility-methods-getState-example)
+:::warning{title="Осторожно!"}
+`getState()` не рекомендуется использовать в бизнес-логике - лучше передавать данные через `sample`.
+:::
 
-```js
+- **Примеры**
+
+```ts
 import { createEvent, createStore } from "effector";
 
-const add = createEvent();
+const add = createEvent<number>();
 
 const $number = createStore(0).on(add, (state, data) => state + data);
 
@@ -333,21 +398,14 @@ console.log($number.getState());
 
 [Попробовать](https://share.effector.dev/YrnlMuRj)
 
-# Стор только для чтения (#readonly)
+- **Возвращаемое значение**
 
-TBD
+Текущее состояние стора.
 
-# Типы (#types)
+## Связанные API (#related-api)
 
-```ts
-import { type StoreValue } from "effector";
-```
-
-## `StoreValue<S>` (#types-StoreValue)
-
-Извлекает тип значения `Store` или `StoreWritable`.
-
-```ts
-const $store: Store<Value>;
-type Value = StoreValue<typeof $store>;
-```
+- [`createStore`](/ru/api/effector/createStore) - Создает новый стор
+- [`combine`](/ru/api/effector/combine) - Комбинирует несколько сторов и возращает новый производный стор
+- [`sample`](/ru/api/effector/sample) - Ключевой оператор для построения связей между юнитами
+- [`createEvent`](/ru/api/effector/createEvent) - Создает события
+- [`createEffect`](/ru/api/effector/createEffect) - Создает эффекты
