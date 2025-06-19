@@ -88,6 +88,27 @@ const scopeEvent = scopeBind(event, {
 });
 ```
 
+### `call of derived event is not supported, use createEvent instead` (#call-of-derived-event-is-not-supported)
+
+Эта ошибка возникает, когда вы пытаетесь вызвать производное событие как функцию. Производные события создаются методами как `.map()`, `.filter()`, `.filterMap()`, а также оператором `sample`.
+
+Чтобы исправить используйте событие созданное через `createEvent`.
+
+### unit call from pure function is not supported, use operators like sample instead (#unit-call-from-pure-not-supported)
+
+Эта ошибка возникает, когда вы пытаетесь вызвать события или эффекты из чистых функций в Effector:
+
+- **Вызов событий в методах событий**<br/>
+  Когда вы пытаетесь вызвать одно событие внутри `.map()`, `.filter()`, `.filterMap()` или `.prepend()` другого события.
+
+- ** Вызов событий в обработчиках сторов**<br/>
+  При попытке вызвать событие в обработчике `.on()` или внутри функции `.map()` стора.
+
+- **Вызов событий в функциях `sample`**<br/>
+  При вызове события в функции fn или filter оператора `sample`.
+
+Как исправить: Вместо вызова событий в чистых функциях используйте декларативные операторы, например `sample`.
+
 ## Частые проблемы (#gotchas)
 
 ### `sample.fn` не сужает тип, который приходит из `sample.filter` (#sample-types-error)
