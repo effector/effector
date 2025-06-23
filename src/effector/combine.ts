@@ -13,6 +13,8 @@ import {forIn} from './collection'
 import {MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
+import {createNode} from './createNode'
+import {own} from './own'
 
 export function combine(...args: any[]): Store<any> {
   let handler
@@ -118,6 +120,14 @@ const storeCombination = (
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
+  /**
+   * Easiest way to clean orphaned stateRefs which participate in initialization graph
+   * (has `addRefOp` calls).
+   * If you need to distinguish these nodes during graph analysis,
+   * note that they are not regional
+   * (because they belong explicitly to the unit) which is pretty uncommon
+   */
+  own(store, [createNode({meta: {stateRef: rawShape}})])
   const rawShapeReader = read(rawShape)
   /**
    * usual ref reading has very high priority, which leads to data races
@@ -193,6 +203,7 @@ const storeCombination = (
   })
 
   store.defaultShape = obj
+  setMeta(store, 'defaultShape', obj)
   addRefOp(storeStateRef, {
     type: MAP,
     from: rawShape,
