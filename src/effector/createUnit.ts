@@ -388,6 +388,7 @@ export function createStore<State>(
       ...meta,
       defaultState,
       storeTrace,
+      stateRef: plainState,
     },
     regional: true,
   })
