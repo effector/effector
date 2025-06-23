@@ -32,14 +32,19 @@ const clearNodeNormalized = (
   targetNode.scope = null
   let currentNode
   let list = getLinks(targetNode)
-  if (targetNode.meta.stateRef) {
-    targetNode.meta.stateRef.before = []
+  const {stateRef, defaultShape, isRegion: isRegionNode, op} = targetNode.meta
+  if (stateRef) {
+    stateRef.before = []
     targetNode.meta.stateRef = null
   }
-  const isRegionNode = targetNode.meta.isRegion
+  if (defaultShape) {
+    for (const key in defaultShape) {
+      defaultShape[key] = null
+    }
+  }
   const nextRegionNode = isRegionNode ? targetNode : regionNode
   if (list.length > 0) {
-    const targetIsOp = includes(nonPassableNodes, targetNode.meta.op)
+    const targetIsOp = includes(nonPassableNodes, op)
     const canGoDeep = !isRegionNode && !extractOnly
     const domainSampleEdgeCase = canGoDeep && isDomainUnit && !targetIsOp
     while ((currentNode = list.pop())) {
