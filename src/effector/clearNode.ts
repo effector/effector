@@ -32,6 +32,10 @@ const clearNodeNormalized = (
   targetNode.scope = null
   let currentNode
   let list = getLinks(targetNode)
+  if (targetNode.meta.stateRef) {
+    targetNode.meta.stateRef.before = []
+    targetNode.meta.stateRef = null
+  }
   const isRegionNode = targetNode.meta.isRegion
   const nextRegionNode = isRegionNode ? targetNode : regionNode
   if (list.length > 0) {
