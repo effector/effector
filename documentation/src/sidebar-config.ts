@@ -326,7 +326,7 @@ export const effectorReact: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Hooks" },
+    text: { en: "Hooks", ru: "Хуки" },
     items: [
       {
         text: { en: "useUnit", ru: "useUnit", uz: "useUnit" },
@@ -354,7 +354,7 @@ export const effectorReact: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Components", uz: "Komponentlar" },
+    text: { en: "Components", ru: "Компоненты", uz: "Komponentlar" },
     items: [
       {
         text: { en: "Provider", ru: "Provider", uz: "Provider" },
@@ -364,7 +364,7 @@ export const effectorReact: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Gates" },
+    text: { en: "Gates", ru: "Гейты" },
     items: [
       {
         text: { en: "Gate" },
@@ -440,7 +440,7 @@ export const effectorSolid: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Hooks" },
+    text: { en: "Hooks", ru: "Хуки" },
     items: [
       {
         text: { en: "useUnit" },
@@ -455,7 +455,7 @@ export const effectorSolid: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Gates" },
+    text: { en: "Gates", ru: "Гейты" },
     items: [
       {
         text: { en: "Gate" },
@@ -500,7 +500,7 @@ export const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Common methods" },
+    text: { en: "Common methods", ru: "Базовые методы" },
     items: [
       {
         text: { en: "EffectorScopePlugin" },
@@ -515,7 +515,7 @@ export const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Gates" },
+    text: { en: "Gates", ru: "Гейты" },
     items: [
       {
         text: { en: "Gate" },
@@ -651,7 +651,7 @@ export const effector: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Creators", ru: "Создатели" },
+    text: { en: "Creators", ru: "Создание юнитов" },
     items: [
       {
         text: { en: "createEvent" },
