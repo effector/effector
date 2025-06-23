@@ -673,16 +673,6 @@ export const effector: LSidebarGroup[] = [
         text: { en: "createDomain" },
         link: "/api/effector/createDomain",
       },
-      {
-        text: { en: "attach" },
-        link: "/api/effector/attach",
-        tags: ["useful"],
-      },
-      {
-        text: { en: "merge" },
-        link: "/api/effector/merge",
-        tags: ["useful"],
-      },
     ],
   },
   {
@@ -696,6 +686,16 @@ export const effector: LSidebarGroup[] = [
       {
         text: { en: "combine" },
         link: "/api/effector/combine",
+        tags: ["useful"],
+      },
+      {
+        text: { en: "attach" },
+        link: "/api/effector/attach",
+        tags: ["useful"],
+      },
+      {
+        text: { en: "merge" },
+        link: "/api/effector/merge",
         tags: ["useful"],
       },
       {
