@@ -211,7 +211,7 @@ export const createSampling = (
   )
   // @ts-expect-error
   own(source, [jointNode])
-  Object.assign(jointNode.meta, metadata, {joint: true})
+  Object.assign(jointNode.meta, metadata, {joint: true, stateRef: clockState})
   return target
 }
 
