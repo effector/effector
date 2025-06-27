@@ -9,7 +9,7 @@ redirectFrom:
   - /docs/api/effector/store
 ---
 
-# Store API (Store Unit)
+# Store API (#store-api)
 
 ```ts
 import { type Store, type StoreWritable, createStore } from "effector";

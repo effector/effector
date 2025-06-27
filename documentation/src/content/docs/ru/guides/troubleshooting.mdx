@@ -94,18 +94,18 @@ const scopeEvent = scopeBind(event, {
 
 Чтобы исправить используйте событие созданное через `createEvent`.
 
-### unit call from pure function is not supported, use operators like sample instead (#unit-call-from-pure-not-supported)
+### `unit call from pure function is not supported, use operators like sample instead` (#unit-call-from-pure-not-supported)
 
-Эта ошибка возникает, когда вы пытаетесь вызвать события или эффекты из чистых функций в Effector:
+Эта ошибка возникает, когда вы пытаетесь вызвать события или эффекты из [чистых функций](/ru/explanation/glossary#purity) в Effector:
 
 - **Вызов событий в методах событий**<br/>
   Когда вы пытаетесь вызвать одно событие внутри `.map()`, `.filter()`, `.filterMap()` или `.prepend()` другого события.
 
-- ** Вызов событий в обработчиках сторов**<br/>
-  При попытке вызвать событие в обработчике `.on()` или внутри функции `.map()` стора.
+- **Вызов событий в обработчиках сторов**<br/>
+  При попытке вызвать событие в обработчике [`.on()`](/ru/api/effector/Store#methods-on-trigger-reducer), внутри метода [`.map()`](/ru/api/effector/Store#methods-map-fn), или свойства конфигурации [`updateFilter()`](/ru/api/effector/createStore#createStore-formulae) стора.
 
 - **Вызов событий в функциях `sample`**<br/>
-  При вызове события в функции fn или filter оператора `sample`.
+  При вызове события в функции `fn` или `filter` оператора `sample`.
 
 Как исправить: Вместо вызова событий в чистых функциях используйте декларативные операторы, например `sample`.
 
