@@ -177,6 +177,12 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Запустить пример](https://share.effector.dev/LeurvtYA)
 
+## Основные ошибки (#common-errors)
+
+Ниже приведен список возможных ошибок, с которыми вы можете столкнуться при работе с эффектами:
+
+- [`no handler used in [effect name]`](/ru/guides/troubleshooting#no-handler-used)
+
 ## Связанные API и статьи (#related-api-and-docs-to-create-effect)
 
 - **API**

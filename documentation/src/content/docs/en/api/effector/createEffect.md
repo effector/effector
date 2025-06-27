@@ -179,6 +179,12 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Run example](https://share.effector.dev/LeurvtYA)
 
+## Common errors (#common-errors)
+
+Below is a list of possible errors you may encounter when working with effects:
+
+- [`no handler used in [effect name]`](/en/guides/troubleshooting#no-handler-used)
+
 ## Related API and Articles (#related-api-and-docs-to-create-effect)
 
 - **API**
