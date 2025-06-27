@@ -1,5 +1,5 @@
 ---
-title: Effect
+title: Effect API
 keywords:
   - effect
   - side-effect
@@ -7,70 +7,97 @@ keywords:
   - эффект
   - сайд-эффект
   - юнит
-description: Effect, его методы и свойства
+description: Эффект API, методы, свойства и их описание
 lang: ru
 ---
 
-_Effect (эффект)_ это контейнер для сайд-эффектов, возможно асинхронных. В комплекте имеет ряд заранее созданных эвентов и сторов, облегчающих стандартные действия. Является [юнитом](/ru/explanation/glossary#common-unit)
+[eventTypes]: /ru/api/effector/Event#event-types
+[storeTypes]: /ru/essentials/typescript#store-types
 
-Эффекты можно вызывать как обычные функции (_императивный вызов_) а также подключать их и их свойства в различные методы api включая [sample](/ru/api/effector/sample), [guard](/ru/api/effector/guard) и [split](/ru/api/effector/split) (_декларативное подключение_). При императивном вызове принимают максимум один аргумент и всегда возвращают промис, отражающий ход выполнения сайд-эффекта
-
-# Методы (#methods)
-
-## `use(handler)` (#use-handler)
-
-Определяет имплементацию эффекта: функцию, которая будет вызвана при срабатывании. Используется для случаев когда имплементация не установлена [при создании](/ru/api/effector/createEffect) или когда требуется изменение поведения эффекта при тестировании
-
-Если на момент вызова эффект уже имел имплементацию, то она будет заменена на новую
-
-:::tip{title="Статья от автора"}
-[Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
-:::
-
-:::info
-Нужно предоставить имплементацию либо через use, либо через [createEffect](/ru/api/effector/createEffect), иначе при вызове эффекта возникнет ошибка "no handler used in _%effect name%_"
-:::
-
-### Формула (#use-handler-formulae)
+# Effect API (#effect-api)
 
 ```ts
-declare const fx: Effect<T, S>;
+import { type Effect, createEffect } from "effector";
 
-fx.use(/*handler*/ (params: T) => S | Promise<S>);
+const effectFx = createEffect();
 ```
 
-### Аргументы (#use-handler-arguments)
+Эффект – это контейнер для сайд-эффектов, как синхронных, так и асинхронных. В комплекте имеет ряд заранее созданных [событий](/ru/api/effector/Event) и [сторов](/ru/api/effector/Store), облегчающих стандартные действия. Является [юнитом](/ru/explanation/glossary#common-unit).
 
-1. **`handler`**: `(params: T) => S | Promise<S>`
+Эффекты можно вызывать как обычные функции (_императивный вызов_) а также подключать их и их свойства в различные методы api включая [sample](/ru/api/effector/sample), и [split](/ru/api/effector/split) (_декларативное подключение_).
 
-   Функция-имплементация эффекта. Может быть как синхронной, так и асинхронной
-
-   **Аргументы**
-
-   1. **`params`**: Данные, с которыми был вызван эффект
-
-   **Возвращает**
-
-   Результат выполнения эффекта в виде значения, либо в виде промиса со значением
-
-### Возвращает (#use-handler-return)
-
-Текущий эффект
-
-:::info
-Если значение имплементации известно сразу, то оптимальнее использовать `createEffect(handler)`
-
-`createEffect().use(handler)` это антипаттерн, который ухудшает вывод типов
+:::tip{title="эффективный эффект"}
+Если вы не знакомы с эффектами и способами работы с ними, то вам сюда [Асинхронность в effector с помощью эффектов](/ru/essentials/work-with-async).
 :::
 
-### Пример (#use-handler-example)
+## Интерфейс Effect (#effect-interface)
+
+Доступные методы и свойства событий:
+| <div style="width:170px">Метод/Свойство</div> | Описание |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [`use(handler)`](#use-method) | Заменяет обработчик эффекта на новую функцию `handler`. |
+| [`use.getCurrent()`](#use-getCurrent-method) | Возвращает текущий обработчик эффекта. |
+| [`watch(watcher)`](#watch-method) | Добавляет слушатель, вызывающий `watcher` при каждом вызове эффекта. |
+| [`map(fn)`](#map-method) | Создаёт новое [производное событие][eventTypes] с результатом вызова `fn` для параметров эффекта. |
+| [`prepend(fn)`](#prepend-method) | Создаёт новое [событие][eventTypes] , трансформирующее входные данные через `fn` перед вызовом эффекта. |
+| [`filterMap(fn)`](#filterMap-method) | Создаёт новое [производное событие][eventTypes], срабатывающее с результатом `fn`, если тот не вернул `undefined`. |
+| [`done`](#done-property) | [Производное событие][eventTypes] `Event<{Params, Done}>`, срабатывающее при успешном завершении эффекта. |
+| [`doneData`](#doneData-property) | [Производное событие][eventTypes] `Event<Done>` с результатом успешного выполнения эффекта. |
+| [`fail`](#fail-property) | [Производное событие][eventTypes] `Event<{Params, Fail}>`, срабатывающее при ошибке выполнения эффекта. |
+| [`failData`](#failData-property) | [Производное событие][eventTypes] `Event<Fail>` с данными ошибки эффекта. |
+| [`finally`](#finally-property) | [Производное событие][eventTypes] `Event<{Params, status, Done?, Fail?}>`, срабатывающее при любом завершении эффекта. |
+| [`pending`](#pending-property) | [Производный стор][storeTypes] `Store<boolean>` со статусом выполнения эффекта (`true` во время выполнения). |
+| [`inFlight`](#inFlight-property) | [Производный стор][storeTypes] `Store<number>` с количеством активных вызовов эффекта. |
+| [`sid`](#sid-property) | Уникальный идентификатор [юнита](/ru/explanation/glossary#common-unit). |
+| [`shortName`](#shortName-property) | Свойство типа `string`, содержащее имя переменной, в которой объявлен эффект. |
+| [`compositeName`](#compositeName-property) | Комплексное имя эффекта (включая домен и короткое имя) — удобно для логирования и трассировки. |
+
+## Особенности эффекта (#effect-peculiarities)
+
+1. При императивном вызове всегда возвращают промис, отражающий ход выполнения сайд-эффекта.
+2. Эффекты принимают только один аргумент, [как и события](/ru/api/effector/Event#event-peculiarities).
+3. Имеют встроенные сторы ([`pending`](#pending-property), [`inFlight`](#inFlight-property)) и события ([`done`](#done-property), [`fail`](#fail-property), [`finally`](#finally-property) и др.) для удобства работы.
+
+## Методы эффектов (#effect-methods)
+
+### `.use(handler)` (#use-method)
+
+:::warning{title="use - это антипаттерн"}
+Если значение имплементации известно сразу, то оптимальнее использовать `createEffect(handler)`.
+
+Метод `use(handler)` – это антипаттерн, который ухудшает вывод типов.
+:::
+
+Определяет имплементацию эффекта: функцию, которая будет вызвана при срабатывании. Используется для случаев когда имплементация не установлена [при создании](/ru/api/effector/createEffect) или когда требуется изменение поведения эффекта при тестировании.<br/>
+Принимает аргумент `params`, который является данные, с которыми был вызван эффект.
+
+:::info{title="use в приоритете"}
+Если на момент вызова эффект уже имел имплементацию, то она будет заменена на новую.
+:::
+
+- **Формула**
+
+```ts
+const fx: Effect<Params, Done>;
+fx.use(handler);
+```
+
+- **Тип**
+
+```ts
+effect.use(handler: (params: Params) => Promise<Done> | Done): Effect<
+  Params,
+  Done,
+  Fail
+>
+```
+
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
 
 const fetchUserReposFx = createEffect();
-
-// ....
 
 fetchUserReposFx.use(async ({ name }) => {
   console.log("fetchUserReposFx вызван для github пользователя", name);
@@ -86,26 +113,32 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Запустить пример](https://share.effector.dev/Vp8tPzBh)
 
-## `use.getCurrent()` (#use-getCurrent)
+- **Возвращаемое значение**
 
-Метод для получения текущей имплементации эффекта. Используется для тестирования
+Возвращает текущий эффект.
 
-Если у эффекта ещё не была установлена имплементация, то будет возвращена функция по умолчанию, при срабатывании она [выбрасывает ошибку](https://share.effector.dev/8PBjt3TL)
+---
 
-### Формула (#getCurrent-formulae)
+### `.use.getCurrent()` (#use-getCurrent-method)
+
+Метод для получения текущей имплементации эффекта. Используется для тестирования.
+
+Если у эффекта ещё не была установлена имплементация, то будет возвращена функция по умолчанию, при срабатывании она [выбрасывает ошибку](https://share.effector.dev/8PBjt3TL).
+
+- **Формула**
 
 ```ts
-declare const fx: Effect<P, D>
-
-fx.use.getCurrent()
--> (params: P) => D
+const fx: Effect<Params, Done>;
+const handler = fx.use.getCurrent();
 ```
 
-### Возвращает (#getCurrent-return)
+- **Тип**
 
-Функцию-имплементацию эффекта, которая была установлена через [createEffect](/ru/api/effector/createEffect) или с помощью метода [use](#use)
+```ts
+effect.use.getCurrent(): (params: Params) => Promise<Done>
+```
 
-### Пример (#getCurrent-example)
+- **Примеры**
 
 ```js
 const handlerA = () => "A";
@@ -123,34 +156,30 @@ console.log(fx.use.getCurrent() === handlerB);
 
 [Запустить пример](https://share.effector.dev/CM6hgtOM)
 
-## `watch(watcher)` (#watch-watcher)
+- **Возвращаемое значение**
 
-Вызывает дополнительную функцию с сайд-эффектами при каждом срабатывании эффекта
+Возвращает функцию-имплементацию эффекта, которая была установлена через [createEffect](/ru/api/effector/createEffect) или с помощью метода [use](#use-method).
 
-:::info
-По мере усложнения логики проекта оптимальнее заменить на комбинацию дополнительного эффекта и [sample](/ru/api/effector/sample)
-:::
+---
 
-### Формула (#watch-watcher-formulae)
+### `.watch(watcher)` (#watch-method)
+
+Вызывает дополнительную функцию с сайд-эффектами при каждом срабатывании эффекта. Не стоит использовать для логики, лучше заменить на [`sample`](/ru/api/effector/sample).
+
+- **Формула**
 
 ```ts
-declare const fx: Effect<T, any>
-
-fx.watch(/*watcher*/ (data: T) => any)
--> Subscription
+const fx: Effect<Params, Done>;
+const unwatch = fx.watch(watcher);
 ```
 
-### Аргументы (#watch-watcher-arguments)
+- **Тип**
 
-1. **`watcher`**: `(data: T) => any`
+```ts
+effect.watch(watcher: (payload: Params) => any): Subscription
+```
 
-   Функция с сайд-эффектами, в качестве первого аргумента получает значение с которым был вызван эффект. Возвращаемое значение не используется
-
-### Возвращает (#watch-watcher-return)
-
-[_Subscription_](/ru/explanation/glossary#subscription): Функция отмены подписки, после её вызова `watcher` перестаёт получать обновления и удаляется из памяти. Повторные вызовы функции отмены подписки не делают ничего
-
-### Пример (#watch-watcher-example)
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
@@ -167,90 +196,38 @@ await fx(10);
 
 [Запустить пример](https://share.effector.dev/iNb7YIdV)
 
-## `prepend(fn)` (#prepend-fn)
+- **Возвращаемое значение**
 
-Создаёт событие-триггер для преобразования данных _перед_ запуском эффекта. По сравнению с [map](#map), работает в обратном направлении
+[Функция отмены подписки](/ru/explanation/glossary#subscription), после её вызова `watcher` перестаёт получать обновления и удаляется из памяти.
 
-### Формула (#prepend-fn-formulae)
+---
 
-```ts
-declare const fx: Effect<S, any>
+### `.map(fn)` (#map-method)
 
-const trigger = fx.prepend(/*fn*/(data: T) => S)
--> Event<T>
-```
+Создает [производное событие][eventTypes] на основе данных эффекта. Работает по аналогии с [`Event.map(fn)`](/ru/api/effector/Event#event-methods-map-fn).
 
-При вызове события `trigger`, функция-обработчик `fn` будет вызвана с поступившими данными, после чего `fx` будет вызван с результатом вычислений
-
-```
-
-    trigger -> fn -> fx
-
-```
-
-### Аргументы (#prepend-fn-arguments)
-
-1.  **`fn`**: `(data: T) => S`
-
-    Функция-обработчик, которая будет вычислять данные для передачи в `fx` на основе данных события `trigger`. [Должна быть **чистой**](/ru/explanation/glossary#purity)
-
-    **Аргументы**
-
-    - **`data`**: Данные с которыми сработало событие `trigger`
-
-    **Возвращает**
-
-    Данные для передачи в `fx`
-
-### Возвращает (#prepend-fn-return)
-
-Новое событие
-
-## `map(fn)` (#map-fn)
-
-Создает производное событие на основе данных эффекта
-
-### Формула (#map-fn-formulae)
+- **Формула**
 
 ```ts
-declare const fxA: Effect<T, any>
-
-const eventB = fxA.map(/*fn*/(data: T) => S)
--> Event<S>
+const fx: Effect<Params, Done>;
+const eventB = fx.map(fn);
 ```
 
-При вызове `fxA`, функция-обработчик `fn` будет вызвана с поступившими данными, после чего производное событие `eventB` будет вызвано с результатом вычислений
+- **Тип**
 
+```ts
+effect.map<T>(fn: (params: Params) => T): Event<T>
 ```
 
-    fxA -> fn -> eventB
-
-```
-
-### Аргументы (#map-fn-arguments)
-
-1.  **`fn`**: `(data: T) => S`
-
-    Функция-обработчик, которая будет вычислять данные для передачи в производное событие `eventB` на основе данных из `fxA`. [Должна быть **чистой**](/ru/explanation/glossary#purity)
-
-    **Аргументы**
-
-    - **`data`**: Данные с которыми сработал эффект `fxA`
-
-    **Возвращает**
-
-    Данные для передачи в производное событие `eventB`
-
-### Возвращает (#map-fn-return)
-
-Новое, производное событие
-
-### Пример (#map-fn-example)
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
 
-const updateUserFx = createEffect(({ name, role }) => {});
+const updateUserFx = createEffect(({ name, role }) => {
+  // ...
+});
+
 const userNameUpdate = updateUserFx.map(({ name }) => name);
 const userRoleUpdate = updateUserFx.map(({ role }) => role.toUpperCase());
 
@@ -268,26 +245,117 @@ await updateUserFx({ name: "john", role: "admin" });
 
 [Запустить пример](https://share.effector.dev/4UFLTo5p)
 
-# Свойства (#properties)
+- **Возвращаемое значение**
 
-## `done` (#done)
+Возвращает новое [производное событие][eventTypes].
 
-[Событие](/ru/api/effector/Event), которое срабатывает с результатом выполнения эффекта и аргументом, переданным при вызове
+---
 
-### Формула (#done-formulae)
+### `.prepend(fn)` (#prepend-method)
+
+Создаёт новое событие для преобразования данных _перед_ запуском эффекта. По сравнению с [map](#effect-methods-map), работает в обратном направлении. Работает по аналогии с [`Event.prepend(fn)`](/ru/api/effector/Event#eventCallable-methods-prepend-fn).
+
+- **Формула**
 
 ```ts
-declare const fx: Effect<P, D>
-
-fx.done
--> Event<{params: P; result: D}>
+const fx: Effect<Params, Done>;
+const trigger = fx.prepend(fn);
 ```
 
-:::info{title="Вызов вручную запрещён"}
-Это свойство управляется самим эффектом
-:::
+- **Тип**
 
-### Пример (#done-example)
+```ts
+effect.prepend<Before>(fn: (_: Before) => Params): EventCallable<Before>
+```
+
+- **Примеры**
+
+```js
+import { createEffect } from "effector";
+
+const saveFx = createEffect(async (data) => {
+  console.log('saveFx вызван с: 'data)
+  await api.save(data);
+});
+
+// создаем событие-триггер для эффекта
+const saveForm = saveFx.prepend((form) => ({
+  ...form,
+  modified: true
+}));
+
+saveForm({ name: "John", email: "john@example.com" });
+// => saveFx вызван с : { name: "John", email: "john@example.com", modified: true }
+```
+
+- **Возвращаемое значение**
+
+Возвращает новое [событие][eventTypes].
+
+---
+
+### `.filterMap(fn)` (#filterMap-method)
+
+Создаёт [производное событие][eventTypes], срабатывающее с результатом `fn`, если тот не вернул `undefined`.
+
+- **Формула**
+
+```ts
+const fx: Effect<Params, Done>;
+const filtered = fx.filterMap(fn);
+```
+
+- **Тип**
+
+```ts
+effect.filterMap<T>(fn: (payload: Params) => T | undefined): Event<T>
+```
+
+- **Примеры**
+
+```js
+import { createEffect } from "effector";
+
+const fetchUserFx = createEffect(async (id) => {
+  const user = await api.getUser(id);
+  return user;
+});
+
+const adminUserFetched = fetchUserFx.filterMap((user) => {
+  if (user.role === "admin") {
+    return user;
+  }
+  return undefined;
+});
+
+adminUserFetched.watch((admin) => {
+  console.log("Загружен администратор:", admin.name);
+});
+
+await fetchUserFx(1); // обычный пользователь - событие не сработает
+await fetchUserFx(2); // администратор
+// => Загружен администратор: John
+```
+
+- **Возвращаемое значение**
+
+Возвращает новое [производное событие][eventTypes].
+
+## Свойства эффектов (#effect-properties)
+
+### `.done` (#done-property)
+
+[Производное событие][eventTypes], которое срабатывает с результатом выполнения эффекта и аргументом, переданным при вызове.
+
+- **Тип**
+
+```ts
+interface Effect<Params, Done> {
+  done: Event<{ params: Params; result: Done }>;
+}
+```
+
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
@@ -302,30 +370,23 @@ await fx(2);
 // => Вызов с аргументом 2 завершён со значением 3
 ```
 
-[Запустить пример](https://share.effector.dev/tnSg24Ca)
+[Запустить пример](https://share.effector.dev/tnSg24Ca).
 
-## `doneData` (#doneData)
+---
 
-[Событие](/ru/api/effector/Event), которое срабатывает с результатом выполнения эффекта
+### `.doneData` (#doneData-property)
 
-### Формула (#doneData-formulae)
+[Производное событие][eventTypes], которое срабатывает с результатом успешного выполнения эффекта.
+
+- **Тип**
 
 ```ts
-declare const fx: Effect<any, D>
-
-fx.doneData
--> Event<D>
+interface Effect<any, Done> {
+  doneData: Event<Done>;
+}
 ```
 
-:::info{title="Вызов вручную запрещён"}
-Это свойство управляется самим эффектом
-:::
-
-:::info
-Добавлено в effector 20.12.0
-:::
-
-### Пример (#doneData-example)
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
@@ -340,26 +401,23 @@ await fx(2);
 // => Эффект успешно выполнился, вернув 3
 ```
 
-[Запустить пример](https://share.effector.dev/KexWC7GO)
+[Запустить пример](https://share.effector.dev/KexWC7GO).
 
-## `fail` (#fail)
+---
 
-[Событие](/ru/api/effector/Event), которое срабатывает с ошибкой, возникшей при выполнении эффекта и аргументом, переданным при вызове
+### `.fail` (#fail-property)
 
-### Формула (#fail-formulae)
+[Производное событие][eventTypes], которое срабатывает с ошибкой, возникшей при выполнении эффекта и аргументом, переданным при вызове.
+
+- **Тип**
 
 ```ts
-declare const fx: Effect<P, any, E>
-
-fx.fail
--> Event<{params: P; error: E}>
+interface Effect<Params, any, Fail> {
+  fail: Event<{ params: Params; error: Fail }>;
+}
 ```
 
-:::info{title="Вызов вручную запрещён"}
-Это свойство управляется самим эффектом
-:::
-
-### Пример (#fail-example)
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
@@ -376,30 +434,23 @@ fx(2);
 // => Вызов с аргументом 2 завершился с ошибкой 1
 ```
 
-[Запустить пример](https://share.effector.dev/5xHVmzIJ)
+[Запустить пример](https://share.effector.dev/5xHVmzIJ).
 
-## `failData` (#failData)
+---
 
-:::info
-Добавлено в effector 20.12.0
-:::
+### `.failData` (#failData-property)
 
-[Событие](/ru/api/effector/Event), которое срабатывает с ошибкой, возникшей при выполнении эффекта
+[Производное событие][eventTypes], которое срабатывает с ошибкой, возникшей при выполнении эффекта.
 
-### Формула (#failData-formulae)
+- **Тип**
 
 ```ts
-declare const fx: Effect<any, any, E>
-
-fx.failData
--> Event<E>
+interface Effect<any, any, Fail> {
+  failData: Event<Fail>;
+}
 ```
 
-:::info{title="Вызов вручную запрещён"}
-Это свойство управляется самим эффектом
-:::
-
-### Пример (#failData-example)
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
@@ -416,40 +467,45 @@ fx(2);
 // => Вызов завершился с ошибкой 1
 ```
 
-[Запустить пример](https://share.effector.dev/i5ktYSqM)
+[Запустить пример](https://share.effector.dev/i5ktYSqM).
 
-## `finally` (#finally)
+---
 
-:::info
-Добавлено в effector 20.0.0
-:::
+### `.finally` (#finally-property)
 
-[Событие](/ru/api/effector/Event), которое срабатывает при завершении эффекта с подробной информацией об аргументах, результатах и статусе выполнения
+[Производное событие][eventTypes], которое срабатывает как при успехе, так и в случае ошибки завершении эффекта с подробной информацией об аргументах, результатах и статусе выполнения.
 
-### Формула (#finally-formulae)
+- **Тип**
 
 ```ts
-declare const fx: Effect<P, D, E>
-
-fx.finally
--> Event<
-  | {status: 'done'; params: P; result: D}
-  | {status: 'fail'; params: P; error: E}
->
+interface Effect<Params, Done, Fail> {
+  finally: Event<
+    | {
+        status: "done";
+        params: Params;
+        result: Done;
+      }
+    | {
+        status: "fail";
+        params: Params;
+        error: Fail;
+      }
+  >;
+}
 ```
 
-:::info{title="Вызов вручную запрещён"}
-Это свойство управляется самим эффектом
-:::
-
-### Пример (#finally-example)
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
 
 const fetchApiFx = createEffect(async ({ time, ok }) => {
   await new Promise((resolve) => setTimeout(resolve, time));
-  if (ok) return `${time} ms`;
+
+  if (ok) {
+    return `${time} ms`;
+  }
+
   throw Error(`${time} ms`);
 });
 
@@ -465,53 +521,43 @@ fetchApiFx.finally.watch((value) => {
 });
 
 await fetchApiFx({ time: 100, ok: true });
-// => Вызов с аргументом {time: 100, ok: true}
-//    завершён со значением 100 ms
+// => Вызов с аргументом {time: 100, ok: true} завершён со значением 100 ms
 
 fetchApiFx({ time: 100, ok: false });
-// => Вызов с аргументом {time: 100, ok: false}
-//    завершён с ошибкой 100 ms
+// => Вызов с аргументом {time: 100, ok: false} завершён с ошибкой 100 ms
 ```
 
-[Запустить пример](https://share.effector.dev/Oqvy2x35)
+[Запустить пример](https://share.effector.dev/Oqvy2x35).
 
-## `pending` (#pending)
+---
 
-[Стор](/ru/api/effector/Store), который показывает, что эффект находится в процессе выполнения
+### `.pending` (#pending-property)
 
-### Формула (#pending-formulae)
+[Производный стор][storeTypes], который показывает, что эффект находится в процессе выполнения.
+
+- **Тип**
 
 ```ts
-declare const fx: Effect<any, any>
-
-fx.pending
--> Store<boolean>
+interface Effect<any, any> {
+  pending: Store<boolean>;
+}
 ```
+
+- **Детальное описание**
 
 Это свойство избавляет от необходимости писать подобный код:
 
 ```js
-import { createEffect, createStore } from "effector";
-
-const requestFx = createEffect();
-
 const $isRequestPending = createStore(false)
   .on(requestFx, () => true)
   .on(requestFx.done, () => false)
   .on(requestFx.fail, () => false);
 ```
 
-:::info{title="Изменение значения вручную запрещено"}
-Это свойство управляется самим эффектом
-:::
-
-### Пример (#pending-example)
-
-#### Отображение индикатора загрузки с React (#pending-example-react)
+- **Примеры**
 
 ```jsx
 import React from "react";
-import ReactDOM from "react-dom";
 import { createEffect } from "effector";
 import { useUnit } from "effector-react";
 
@@ -527,50 +573,39 @@ const App = () => {
   return <div>{loading ? "Загрузка..." : "Загрузка завершена"}</div>;
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
-
 fetchApiFx(1000);
 // => true
 // => false
 ```
 
-[Запустить пример](https://share.effector.dev/YX24VysD)
+[Запустить пример](https://share.effector.dev/YX24VysD).
 
-## `inFlight` (#inFlight)
+---
 
-:::info
-Добавлено в effector 20.11.0
-:::
+### `.inFlight` (#inFlight-property)
 
-[Стор](/ru/api/effector/Store), который показывает число запущенных эффектов, которые находятся в процессе выполнения. Используется для ограничения числа одновременных запросов
+[Производный стор][storeTypes], который показывает число запущенных эффектов, которые находятся в процессе выполнения. Может использоваться для ограничения числа одновременных запросов.
 
-### Формула (#inFlight-formulae)
+- **Тип**
 
 ```ts
-declare const fx: Effect<any, any>
-
-fx.inFlight
--> Store<number>
+interface Effect<any, any> {
+  inFlight: Store<number>;
+}
 ```
+
+- **Детальное описание**
 
 Это свойство избавляет от необходимости писать подобный код:
 
 ```js
-import { createEffect, createStore } from "effector";
-
-const requestFx = createEffect();
-
 const $requestsInFlight = createStore(0)
   .on(requestFx, (n) => n + 1)
   .on(requestFx.done, (n) => n - 1)
   .on(requestFx.fail, (n) => n - 1);
 ```
 
-:::info{title="Изменение значения вручную запрещено"}
-Это свойство управляется самим эффектом
-:::
-
-### Пример (#inFlight-example)
+- **Примеры**
 
 ```js
 import { createEffect } from "effector";
@@ -596,30 +631,92 @@ await Promise.all([req1, req2]);
 // => выполняется запросов: 0
 ```
 
-[Запустить пример](https://share.effector.dev/ADD0M4NV)
+[Запустить пример](https://share.effector.dev/ADD0M4NV).
 
-## `shortName` (#shortName)
+---
 
-Имя эффекта. Задаётся либо явно, через поле `name` в [createEffect](/ru/api/effector/createEffect), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin). Используется для обработки сущностей программно, например при использовании [хуков домена](/ru/api/effector/Domain#onCreateEffect)
+### `.sid` (#sid-property)
 
-### Формула (#shortName-formulae)
+Уникальный идентификатор юнита. Важно отметить, что SID не изменяется при каждом запуске приложения, он статически записывается в пакет вашего приложения для абсолютной идентификации юнитов. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin).
 
-```ts
-declare const fx: Effect<any, any>
-
-fx.shortName
--> string
-```
-
-## `sid` (#sid)
-
-Стабильный идентификатор эффекта. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin)
-
-### Формула (#sid-formulae)
+- **Тип**
 
 ```ts
-declare const fx: Effect<any, any>
-
-fx.sid
--> string | null
+interface Effect<any, any> {
+  sid: string | null;
+}
 ```
+
+---
+
+### `.shortName` (#shortName-property)
+
+Свойство типа `string`, содержащее имя переменной, в которой объявлен эффект. Имя эффекта. Задаётся либо явно, через поле `name` в [createEffect](/ru/api/effector/createEffect), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin).
+
+- **Тип**
+
+```ts
+interface Effect<any, any> {
+  shortName: string;
+}
+```
+
+---
+
+### `.compositeName` (#compositeName-property)
+
+Комплексное имя эффекта (включая домен и короткое имя) — удобно для логирования и трассировки.
+
+- **Тип**
+
+```ts
+interface Effect<any, any> {
+  compositeName: {
+    shortName: string;
+    fullName: string;
+    path: Array<string>;
+  };
+}
+```
+
+- **Примеры**
+
+```ts
+import { createEffect, createDomain } from "effector";
+
+const first = createEffect();
+const domain = createDomain();
+const second = domain.createEffect();
+
+console.log(first.compositeName);
+// {
+//     "shortName": "first",
+//     "fullName": "first",
+//     "path": [
+//         "first"
+//      ]
+// }
+
+console.log(second.compositeName);
+// {
+//     "shortName": "second",
+//     "fullName": "domain/second",
+//     "path": [
+//         "domain",
+//         "second"
+//      ]
+// }
+```
+
+## Связанные API и статьи (#related-api-and-docs-to-effect)
+
+- **API**
+  - [`createEffect`](/ru/api/effector/createEffect) - Создание нового эффекта
+  - [`Event API`](/ru/api/effector/Event) - Описание событий, его методов и свойств
+  - [`Store API`](/ru/api/effector/Store) - Описание сторов, его методов и свойств
+  - [`sample`](/ru/api/effector/sample) - Ключевой оператор для построения связей между юнитами
+  - [`attach`](/ru/api/effector/attach) - Создает новые эффекты на основе других эффектов
+- **Статьи**
+  - [Работа с эффектами](/ru/essentials/work-with-async)
+  - [Как типизировать эффекты и не только](/ru/essentials/typescript)
+  - [Гайд по тестированию эффектов и других юнитов](/ru/guides/testing)

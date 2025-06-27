@@ -1,40 +1,40 @@
 ---
 title: createEffect
-description: метод для создания эффекта
+description: Метод для создания эффекта
 lang: ru
 ---
 
-Метод для создания [эффектов](/ru/api/effector/Effect).
+# createEffect (#create-effect)
 
-## createEffect с обработчиком событий
+```ts
+import { createEffect } from "effector";
 
-### Формула (#formulae_handler)
-
-```typescript
-createEffect(handler?)
+const effectFx = createEffect();
 ```
 
-**Аргументы**
+Метод для создания [эффектов](/ru/api/effector/Effect). Возвращает новый [эффект](/ru/api/effector/Effect).
 
-1. `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть задана с помощью [use(handler)](/ru/api/effector/Effect#use-handler)
+## Способы создания эффектов (#how-to-create-effects)
 
-**Возвращает**
+Метод `createEffect` поддерживает несколько способов создания эффектов:
 
-[_Effect_](/ru/api/effector/Effect): Новый эффект
+1. С обработчиком - это самый простой способ.
+2. С конфигурацией.
+3. А также без обработчика, его можно будет задать позже с помощью метода [`.use(handler)`](/ru/api/effector/Effect#use-method).
 
-:::info
-Вы должны задать обработчик в [createEffect](/ru/api/effector/createEffect) или же в [.use](/ru/api/effector/Effect#use-handler) методе позже, иначе эффект выбросит исключение "no handler used in _%effect name%_"
-:::
+### С обработчиком (#create-with-handler)
 
-:::info{title="since"}
-[effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
-:::
+- **Тип**
 
-### Примеры
+```ts
+createEffect<Params, Done, Fail = Error>(
+  handler: (params: Params) => Done | Promise<Done>,
+): Effect<Params, Done, Fail>
+```
 
-#### Создание эффекта с обработчиком событий
+- **Пример**
 
-```js
+```ts
 import { createEffect } from "effector";
 
 const fetchUserReposFx = createEffect(async ({ name }) => {
@@ -50,35 +50,47 @@ fetchUserReposFx.done.watch(({ params, result }) => {
 await fetchUserReposFx({ name: "zerobias" });
 ```
 
-[Запустить пример](https://share.effector.dev/7K23rdej)
+### С конфигурацией (#create-with-config)
 
-#### Изменение состояния по завершению эффекта
+Поле `name` используется для улучшения сообщений об ошибках и отладки.
 
-```js
-import { createStore, createEffect } from "effector";
+- **Тип**
 
-const fetchUserReposFx = createEffect(async ({ name }) => {
-  const url = `https://api.github.com/users/${name}/repos`;
-  const req = await fetch(url);
-  return req.json();
-});
-
-const $repos = createStore([]).on(fetchUserReposFx.doneData, (_, repos) => repos);
-
-$repos.watch((repos) => {
-  console.log(`${repos.length} repos`);
-});
-// => 0 репозиториев
-
-await fetchUserReposFx({ name: "zerobias" });
-// => 26 репозиториев
+```ts
+export function createEffect<Params, Done, Fail = Error>(config: {
+  name?: string;
+  handler?: (params: Params) => Promise<Done> | Done;
+}): Effect<Params, Done, Fail>;
 ```
 
-[Запустить пример](https://share.effector.dev/uAJFC1XM)
+- **Пример**
 
-#### Назначение обработчика для эффекта после его создания
+```ts
+import { createEffect } from "effector";
 
-```js
+const fetchUserReposFx = createEffect({
+  name: "fetch user repositories",
+  async handler({ name }) {
+    const url = `https://api.github.com/users/${name}/repos`;
+    const req = await fetch(url);
+    return req.json();
+  },
+});
+
+await fetchUserReposFx({ name: "zerobias" });
+```
+
+### Без обработчика (#create-without-handler)
+
+Чаще всего используется для тестов. [Более подробная информация](/ru/api/effector/Effect#use-method).
+
+:::warning{title="use - это антипаттерн"}
+Старайтесь не использовать `.use()`, так как это является антипаттерном и ухудшает вывод типов.
+:::
+
+- **Пример**
+
+```ts
 import { createEffect } from "effector";
 
 const fetchUserReposFx = createEffect();
@@ -92,9 +104,39 @@ fetchUserReposFx.use(async ({ name }) => {
 await fetchUserReposFx({ name: "zerobias" });
 ```
 
-[Запустить пример](https://share.effector.dev/e1QPH9Uq)
+## Примеры (#examples)
 
-#### Наблюдение за состоянием эффекта
+- **Изменение состояния по завершению эффекта**:
+
+```ts
+import { createStore, createEffect } from "effector";
+
+interface Repo {
+  // ...
+}
+
+const $repos = createStore<Repo[]>([]);
+
+const fetchUserReposFx = createEffect(async (name: string) => {
+  const url = `https://api.github.com/users/${name}/repos`;
+  const req = await fetch(url);
+  return req.json();
+});
+
+$repos.on(fetchUserReposFx.doneData, (_, repos) => repos);
+
+$repos.watch((repos) => {
+  console.log(`${repos.length} repos`);
+});
+// => 0 репозиториев
+
+await fetchUserReposFx("zerobias");
+// => 26 репозиториев
+```
+
+[Запустить пример](https://share.effector.dev/uAJFC1XM)
+
+- **Наблюдение за состоянием эффекта**:
 
 ```js
 import { createEffect } from "effector";
@@ -135,43 +177,19 @@ await fetchUserReposFx({ name: "zerobias" });
 
 [Запустить пример](https://share.effector.dev/LeurvtYA)
 
-## createEffect с параметрами
+## Основные ошибки (#common-errors)
 
-Создает эффект с обработчиком событий и именем, которые заданы в объекте параметров
+Ниже приведен список возможных ошибок, с которыми вы можете столкнуться при работе с эффектами:
 
-### Формула (#formulae_config)
+- [`no handler used in [effect name]`](/ru/guides/troubleshooting#no-handler-used)
 
-```typescript
-createEffect({ handler, name });
-```
+## Связанные API и статьи (#related-api-and-docs-to-create-effect)
 
-**Аргументы**
-
-1. `config`? (_Params_): Эффект
-   - `handler` (_Function_): Функция для обработки вызовов эффектов, также может быть назначена с [use(handler)](#use)
-   - `name`? (_string_): Необязательное имя эффекта
-
-**Возвращает**
-
-[_Effect_](/ru/api/effector/Effect): Новый эффект
-
-### Примеры
-
-#### Создание эффекта с заданным именем
-
-```js
-import { createEffect } from "effector";
-
-const fetchUserReposFx = createEffect({
-  name: "fetch user repositories",
-  async handler({ name }) {
-    const url = `https://api.github.com/users/${name}/repos`;
-    const req = await fetch(url);
-    return req.json();
-  },
-});
-
-await fetchUserReposFx({ name: "zerobias" });
-```
-
-[Запустить пример](https://share.effector.dev/GynSzKee)
+- **API**
+  - [`Effect API`](/ru/api/effector/Effect) - Описание эффектов, его методов и свойств
+  - [`sample`](/ru/api/effector/sample) - Ключевой оператор для построения связей между юнитами
+  - [`attach`](/ru/api/effector/attach) - Создает новые эффекты на основе других эффектов
+- **Статьи**
+  - [Работа с эффектами](/ru/essentials/work-with-async)
+  - [Как типизировать эффекты и не только](/ru/essentials/typescript)
+  - [Гайд по тестированию эффектов и других юнитов](/ru/guides/testing)
