@@ -1,59 +1,66 @@
 ---
 title: createStore
-description: Метод для создания независимого стора
+description: Метод для создания стора
 lang: ru
 ---
 
-Метод для создания независимого [store](/ru/api/effector/Store)
+# createStore (#create-store)
+
+```ts
+import { createStore } from "effector";
+
+const $store = createStore();
+```
+
+Метод для создания [стора][storeApi].
 
 ## Формула (#createStore-formulae)
 
 ```ts
-createStore<T>(defaultState: T): Store<T>
-createStore<T>(defaultState: T, config: {
-  name?: string
-  updateFilter?: (update: T, current: T) => boolean
-  serialize?: 'ignore'
-}): Store<T>
+createStore(
+  defaultState: State, // Исходное состояние стора
+  config?: { // Объект конфигурации с дополнительными опциями
+    skipVoid?: boolean; // Контролирует обновления со значением undefined
+    name?: string; // Имя стора для отладки
+    sid?: string // Стабильный идентификатор для SSR
+    updateFilter?: (update: State, current: State) => boolean // Функция фильтрации обновлений
+    serialize?: // Конфигурация сериализации для SSR
+    | 'ignore'
+    | {
+        write: (state: State) => SerializedState
+        read: (json: SerializedState) => State
+      }
+    domain?: Domain; // Домен, к которому принадлежит стор
+  },
+): StoreWritable<State>
 ```
 
-### Аргументы (#createStore-args)
+- **Аргументы**
 
 1. **`defaultState`**: Исходное состояние
 2. **`config`**: Опциональный объект конфигурации
 
-   - **`name`**: Имя стора. Babel-plugin может определить его из имени переменной стора, если имя не передано явно в конфигурации
-   - **`updateFilter`**: `(update: T, current: T) => boolean`
+   - **`skipVoid`**: Опциональный аргумент. Определяет пропускает ли [стор][storeApi] `undefined` значения. По умолчанию `true`. В случае если передать в стор, у которого `skipVoid:true`, значение `undefined`, тогда вы получите [ошибку в консоль][storeUndefinedError].<br/><br/>
 
-     Функция, которая предотвращает обновление стора, если она возвращает `false`. Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в стор, равняется _undefined_ или текущему значению стора) недостаточно.
+   - **`name`**: Опциональный аргумент. Имя стора. [Babel-plugin][babel] может определить его из имени переменной стора, если имя не передано явно в конфигурации.<br/><br/>
+   - **`sid`**: Опциональный аргумент. Уникальный идентификатор стора. [Он используется для различения сторов между разными окружениями][storeSid]. При использовании [Babel-plugin][babel] проставляется автоматически.<br/><br/>
+   - **`updateFilter`**:
+     Опциональный аргумент. Функция, которая предотвращает обновление стора, если она возвращает `false`. Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в стор, равняется `undefined` или текущему значению стора) недостаточно.
 
-     **Аргументы**
+     <br/>
 
-     - **`update`**: Значение, которое предлагается записать в стор
-     - **`current`**: Текущее значение стора
+   - **`serialize`**: Опциональный аргумент отвечающий за сериализацию стора.
 
-     **Возвращает**: `boolean`
+     - `'ignore'`: исключает стор из сериализации при вызовах [serialize][serialize].
+     - Объект с методами `write` и `read` для кастомной сериализации. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стор к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize][serialize].
 
-     Если возвращается _false_, то обновления не будет
+- **Возвращаемое значение**
 
-   - **`serialize`**: `'ignore'`
+Возвращает новый [стор][storeApi].
 
-     Опция, запрещающая сериализацию стор при вызовах [serialize](/ru/api/effector/serialize)
+## Примеры (#examples)
 
-   - **`serialize`**: Объект конфигурации кастомной сериализации стор. `write` вызывается при вызове [serialize](/ru/api/effector/serialize) и приводит состояние стор к JSON-значению – примитив или простой объект/массив. `read` вызывается при [fork](/ru/api/effector/fork), если предоставленные `values` – результат вызова [serialize](/ru/api/effector/serialize)
-
-### Возвращает (#createStore-return)
-
-Новый [стор](/ru/api/effector/Store)
-
-:::info
-
-- Опция `updateFilter` добавлена в effector 21.8.0
-- Опция `serialize` добавлена в effector 22.0.0
-
-:::
-
-## Пример
+Базовое использование стора:
 
 ```js
 import { createEvent, createStore } from "effector";
@@ -76,7 +83,7 @@ $todos.watch((state) => {
 
 [Запустить пример](https://share.effector.dev/tquiUgdq)
 
-#### Пример с кастомной конфигурацией `serialize`
+Пример с кастомной конфигурацией `serialize`:
 
 ```ts
 import { createEvent, createStore, serialize, fork, allSettled } from "effector";
@@ -115,3 +122,28 @@ console.log(currentValue);
 ```
 
 [Запустить пример](https://share.effector.dev/YFkUlqPv)
+
+## Связанные API и статьи (#related-api-and-docs-to-create-store)
+
+- **API**
+  - [`Store API`][storeApi] - API стора, его методы, свойства и описание
+  - [`createApi`][createApi] - Создание набора событий для стора
+  - [`combine`][combine] - Создание нового стора на основе других сторов
+  - [`sample`][sample] - Связывание сторов с другими юнитами
+- **Статьи**
+  - [Как управлять состоянием][storeGuide]
+  - [Гайд по работе с SSR][ssr]
+  - [Что такое SID и зачем они нужны сторам][storeSid]
+  - [Как типизировать сторы и другие юниты][typescript]
+
+[storeApi]: /ru/api/effector/Store
+[storeUndefinedError]: /ru/guides/troubleshooting#store-undefined
+[storeSid]: /ru/explanation/sids
+[ssr]: /ru/guides/server-side-rendering
+[storeGuide]: /ru/essentials/manage-states
+[combine]: /ru/api/effector/combine
+[sample]: /ru/api/effector/sample
+[createApi]: /ru/api/effector/createApi
+[serialize]: /ru/api/effector/serialize
+[typescript]: /ru/essentials/typescript
+[babel]: /ru/api/effector/babel-plugin
