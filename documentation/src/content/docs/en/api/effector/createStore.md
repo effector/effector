@@ -47,7 +47,7 @@ createStore(
    - **`name`**: Optional argument. Store name. [Babel-plugin][babel] can determine it from the store variable name if the name is not explicitly passed in the configuration.<br/><br/>
    - **`sid`**: Optional argument. Unique store identifier. [It's used to distinguish stores between different environments][storeSid]. When using [Babel-plugin][babel], it's set automatically.<br/><br/>
    - **`updateFilter`**:
-     Optional argument. A function that prevents store updates if it returns `false`. Should be used when the standard update prevention (if the value to be written to the store equals `undefined` or the current store value) is insufficient.
+     Optional argument. A [pure function][pureFn] that prevents store updates if it returns `false`. Should be used when the standard update prevention (if the value to be written to the store equals `undefined` or the current store value) is insufficient.
 
      <br/>
 
@@ -71,15 +71,15 @@ const addTodo = createEvent();
 const clearTodos = createEvent();
 
 const $todos = createStore([])
-  .on(addTodo, (state, todo) => [...state, todo])
+  .on(addTodo, (todos, newTodo) => [...todos, newTodo])
   .reset(clearTodos);
 
 const $selectedTodos = $todos.map((todos) => {
   return todos.filter((todo) => !!todo.selected);
 });
 
-$todos.watch((state) => {
-  console.log("todos", state);
+$todos.watch((todos) => {
+  console.log("todos", todos);
 });
 ```
 
@@ -117,13 +117,21 @@ console.log(serverValues);
 const clientScope = fork({ values: serverValues });
 // `serialize.read` for store `$date` was called
 
-const currentValue = clientScope.getState($date);
-console.log(currentValue);
+const currentDate = clientScope.getState($date);
+console.log(currentDate);
 // => Date 11/5/2022, 10:40:13 PM
 // ISO date string converted back to Date object
 ```
 
 [Run example](https://share.effector.dev/YFkUlqPv)
+
+## Common Errors (#common-errors)
+
+Below is a list of possible errors you may encounter when working with stores:
+
+- [`store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option`][storeUndefinedError].
+- [`serialize: One or more stores dont have sids, their values are omitted`][serializeError].
+- [`unit call from pure function is not supported, use operators like sample instead`][unitCallError].
 
 ## Related API and Articles (#related-api-and-docs-to-create-store)
 
@@ -149,3 +157,6 @@ console.log(currentValue);
 [serialize]: /en/api/effector/serialize
 [typescript]: /en/essentials/typescript
 [babel]: /en/api/effector/babel-plugin
+[pureFn]: /en/explanation/glossary/#purity
+[unitCallError]: /en/guides/troubleshooting#unit-call-from-pure-not-supported
+[serializeError]: /en/guides/troubleshooting/#store-without-sid

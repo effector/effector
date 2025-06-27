@@ -45,7 +45,7 @@ createStore(
    - **`name`**: Опциональный аргумент. Имя стора. [Babel-plugin][babel] может определить его из имени переменной стора, если имя не передано явно в конфигурации.<br/><br/>
    - **`sid`**: Опциональный аргумент. Уникальный идентификатор стора. [Он используется для различения сторов между разными окружениями][storeSid]. При использовании [Babel-plugin][babel] проставляется автоматически.<br/><br/>
    - **`updateFilter`**:
-     Опциональный аргумент. Функция, которая предотвращает обновление стора, если она возвращает `false`. Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в стор, равняется `undefined` или текущему значению стора) недостаточно.
+     Опциональный аргумент. [Чистая функция][pureFn], которая предотвращает обновление стора, если она возвращает `false`. Следует использовать для случаев, когда стандартного запрета на обновление (если значение, которое предполагается записать в стор, равняется `undefined` или текущему значению стора) недостаточно. Если вызывать юниты внутри, то можно столкнуться с [ошибкой][unitCallError].
 
      <br/>
 
@@ -69,15 +69,15 @@ const addTodo = createEvent();
 const clearTodos = createEvent();
 
 const $todos = createStore([])
-  .on(addTodo, (state, todo) => [...state, todo])
+  .on(addTodo, (todos, newTodo) => [...todos, newTodo])
   .reset(clearTodos);
 
 const $selectedTodos = $todos.map((todos) => {
   return todos.filter((todo) => !!todo.selected);
 });
 
-$todos.watch((state) => {
-  console.log("todos", state);
+$todos.watch((todos) => {
+  console.log("todos", todos);
 });
 ```
 
@@ -115,13 +115,21 @@ console.log(serverValues);
 const clientScope = fork({ values: serverValues });
 // `serialize.read` стор `$date` был вызван
 
-const currentValue = clientScope.getState($date);
-console.log(currentValue);
+const currentDate = clientScope.getState($date);
+console.log(currentDate);
 // => Date 11/5/2022, 10:40:13 PM
 // Строка ISO-даты приведена обратно к объекту Date
 ```
 
 [Запустить пример](https://share.effector.dev/YFkUlqPv)
+
+## Типичные ошибки (#common-errors)
+
+Ниже приведен список возможных ошибок, с которыми вы можете столкнуться при работе со сторами:
+
+- [`store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option`][storeUndefinedError].
+- [`serialize: One or more stores dont have sids, their values are omitted`][serializeError].
+- [`unit call from pure function is not supported, use operators like sample instead`][unitCallError].
 
 ## Связанные API и статьи (#related-api-and-docs-to-create-store)
 
@@ -147,3 +155,6 @@ console.log(currentValue);
 [serialize]: /ru/api/effector/serialize
 [typescript]: /ru/essentials/typescript
 [babel]: /ru/api/effector/babel-plugin
+[pureFn]: /ru/explanation/glossary/#purity
+[unitCallError]: /ru/guides/troubleshooting#unit-call-from-pure-not-supported
+[serializeError]: /ru/guides/troubleshooting/#store-without-sid
