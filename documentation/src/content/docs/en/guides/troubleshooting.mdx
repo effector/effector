@@ -96,13 +96,13 @@ To fix this, use an event created via `createEvent`.
 
 ### `unit call from pure function is not supported, use operators like sample instead` (#unit-call-from-pure-not-supported)
 
-This error occurs when you try to call events or effects from pure functions in Effector:
+This error occurs when you try to call events or effects from [pure functions](/en/explanation/glossary#purity) in Effector:
 
 - **Calling events in event methods**<br/>
   When you try to call one event inside another event's `.map()`, `.filter()`, `.filterMap()`, or `.prepend()` methods.
 
 - **Calling events in store handlers**<br/>
-  When attempting to call an event in a `.on()` handler or within a store's `.map()` function.
+  When attempting to call an event in a [`.on()`](/en/api/effector/Store#methods-on-trigger-reducer) handler, inside the [`.map()`](/en/api/effector/Store#methods-map-fn) method, or in the [`updateFilter()`](/en/api/effector/createStore#createStore-formulae) configuration property of a store.
 
 - **Calling events in `sample` functions**<br/>
   When calling an event in the `fn` or `filter` function of the `sample` operator.
