@@ -33,9 +33,9 @@ Available methods and properties of effects:
 | [`use(handler)`](#use-method) | Replaces the effect's handler with a new `handler` function. |
 | [`use.getCurrent()`](#use-getCurrent-method) | Returns the current effect handler. |
 | [`watch(watcher)`](#watch-method) | Adds a listener that calls `watcher` on each effect invocation. |
-| [`map(fn)`](#map-method) | Creates a new [derived event][eventTypes] with the result of calling `fn` on the effect's parameters. |
+| [`map(fn)`](#map-method) | Creates a new [derived event][eventTypes] that triggers when the effect is called with the result of calling `fn` on the effect's parameters. |
 | [`prepend(fn)`](#prepend-method) | Creates a new [event][eventTypes] that transforms input data through `fn` before calling the effect. |
-| [`filterMap(fn)`](#filterMap-method) | Creates a new [derived event][eventTypes] that triggers with the result of `fn` if it doesn't return `undefined`. |
+| [`filterMap(fn)`](#filterMap-method) | Creates a new [derived event][eventTypes] that triggers when the effect is called with the result of fn, if it didn't return `undefined`. |
 | [`done`](#done-property) | [Derived event][eventTypes] that triggers when the effect completes successfully with params and result. |
 | [`doneData`](#doneData-property) | [Derived event][eventTypes] with the result of successful effect execution with result. |
 | [`fail`](#fail-property) | [Derived event][eventTypes] that triggers when the effect execution fails with params and error. |
@@ -199,7 +199,7 @@ await fx(10);
 
 ### `.map(fn)` (#map-method)
 
-Creates a [derived event][eventTypes] based on effect data. Works similarly to [`Event.map(fn)`](/en/api/effector/Event#event-methods-map-fn).
+The map method creates a [derived event][eventTypes]. The event is triggered at the moment the effect is executed, using the same arguments as the effect and the result returned by the `fn` function. Works similarly to [`Event.map(fn)`](/en/api/effector/Event#event-methods-map-fn).
 
 - **Formula**
 
@@ -216,26 +216,32 @@ effect.map<T>(fn: (params: Params) => T): Event<T>
 
 - **Examples**
 
-```js
+```ts
 import { createEffect } from "effector";
 
-const updateUserFx = createEffect(({ name, role }) => {
+interface User {
   // ...
+}
+
+const saveUserFx = createEffect(async ({ id, name, email }: User) => {
+  // ...
+  return response.json();
 });
 
-const userNameUpdate = updateUserFx.map(({ name }) => name);
-const userRoleUpdate = updateUserFx.map(({ role }) => role.toUpperCase());
-
-userNameUpdate.watch((name) => {
-  console.log(`Started changing user name to ${name}`);
-});
-userRoleUpdate.watch((role) => {
-  console.log(`Started changing user role to ${role}`);
+const userNameSaving = saveUserFx.map(({ name }) => {
+  console.log("Starting user save: ", name);
+  return name;
 });
 
-await updateUserFx({ name: "john", role: "admin" });
-// => Started changing user name to john
-// => Started changing user role to ADMIN
+const savingNotification = saveUserFx.map(({ name, email }) => {
+  console.log("Save notification");
+  return `Saving user: ${name} (${email})`;
+});
+
+// When calling the effect, both derived events will trigger
+await saveUserFx({ id: 1, name: "John", email: "john@example.com" });
+// => Starting user save: John
+// => Saving user: John (john@example.com)
 ```
 
 [Run example](https://share.effector.dev/4UFLTo5p)
@@ -291,7 +297,7 @@ Returns a new [event][eventTypes].
 
 ### `.filterMap(fn)` (#filterMap-method)
 
-Creates a [derived event][eventTypes] that triggers with the result of `fn` if it doesn't return `undefined`.
+The `filterMap` method creates a [derived event][eventTypes]. The `fn` function computation runs simultaneously with the effect, however if the function returns `undefined`, the event doesn't trigger. Works similarly to the [`.map(fn)`](#map-method) method, but with filtering by return value.
 
 - **Formula**
 
@@ -308,28 +314,40 @@ effect.filterMap<T>(fn: (payload: Params) => T | undefined): Event<T>
 
 - **Examples**
 
-```js
+```ts
 import { createEffect } from "effector";
 
-const fetchUserFx = createEffect(async (id) => {
-  const user = await api.getUser(id);
-  return user;
-});
-
-const adminUserFetched = fetchUserFx.filterMap((user) => {
-  if (user.role === "admin") {
-    return user;
+const validateAndSaveFx = createEffect(async (userData) => {
+  if (!userData.isValid) {
+    throw new Error("Invalid data");
   }
-  return undefined;
+
+  return await saveToDatabase(userData);
 });
 
-adminUserFetched.watch((admin) => {
-  console.log("Admin loaded:", admin.name);
+// Create event only for valid data
+const validDataProcessing = validateAndSaveFx.filterMap((userData) => {
+  if (userData.isValid && userData.priority === "high") {
+    return {
+      id: userData.id,
+      timestamp: Date.now(),
+    };
+  }
+  // If data is invalid or priority is not high, the event won't trigger
 });
 
-await fetchUserFx(1); // regular user - event won't trigger
-await fetchUserFx(2); // admin
-// => Admin loaded: John
+validDataProcessing.watch(({ id, timestamp }) => {
+  console.log(`Processing high-priority data ID: ${id} at ${timestamp}`);
+});
+
+// Example calls
+await validateAndSaveFx({
+  id: 1,
+  isValid: true,
+  priority: "high",
+  role: "user",
+});
+// => Processing high-priority data ID: 1 at 1703123456789
 ```
 
 - **Return value**
