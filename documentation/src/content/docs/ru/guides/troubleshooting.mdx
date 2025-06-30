@@ -23,6 +23,10 @@ const $store = createStore(0, {
 });
 ```
 
+### `no handler used in [effect name]` (#no-handler-used)
+
+Эта ошибка возникает при вызове эффекта без обработчика. Убедитесь, что вы передали обработчик в метод `createEffect` при создании, или позже при использовании метода `.use(handler)`.
+
 ### `serialize: One or more stores dont have sids, their values are omitted` (#store-without-sid)
 
 :::info{title="До версии 23.3.0"}

@@ -6,45 +6,37 @@ redirectFrom:
   - /docs/api/effector/createEffect
 ---
 
+# createEffect (#create-effect)
+
 ```ts
-import { createEffect, type Effect } from "effector";
+import { createEffect } from "effector";
+
+const effectFx = createEffect();
 ```
 
-Method for creating an [effect](/en/api/effector/Effect).
+Method for creating [effects](/en/api/effector/Effect). Returns a new [effect](/en/api/effector/Effect).
 
-# Methods (#methods)
+## How to Create Effects (#how-to-create-effects)
 
-## `createEffect(handler)` (#methods-createEffect-handler)
+The `createEffect` method supports several ways to create effects:
 
-Creates an effect with the given handler.
+1. With a handler - this is the simplest way.
+2. With configuration.
+3. Without a handler, which can be set later using the [`.use(handler)`](/en/api/effector/Effect#use-method) method.
 
-### Formulae (#methods-createEffect-handler-formulae)
+### With Handler (#create-with-handler)
 
-```typescript
-createEffect(handler?): Effect<Params, Done, Fail>
+- **Type**
+
+```ts
+createEffect<Params, Done, Fail = Error>(
+  handler: (params: Params) => Done | Promise<Done>,
+): Effect<Params, Done, Fail>
 ```
 
-### Arguments (#methods-createEffect-handler-arguments)
+- **Example**
 
-1. `handler` (_Function_): Function to handle effect calls, can also be set using [`.use(handler)`](/en/api/effector/Effect#methods-use-handler).
-
-### Returns (#methods-createEffect-handler-returns)
-
-[_Effect_](/en/api/effector/Effect): A new effect.
-
-:::tip{title="Reminder"}
-You must provide a handler either in [`createEffect`](/en/api/effector/createEffect) or in [`.use`](/en/api/effector/Effect#methods-use-handler) method later; otherwise, the effect will throw with the `no handler used in _%effect name%_` error.
-:::
-
-:::info{title="since"}
-[effector 21.3.0](https://changelog.effector.dev/#effector-21-3-0)
-:::
-
-### Examples (#methods-createEffect-handler-examples)
-
-#### Create effect with handler (#methods-createEffect-handler-examples-create-effect-with-handler)
-
-```js
+```ts
 import { createEffect } from "effector";
 
 const fetchUserReposFx = createEffect(async ({ name }) => {
@@ -60,35 +52,47 @@ fetchUserReposFx.done.watch(({ params, result }) => {
 await fetchUserReposFx({ name: "zerobias" });
 ```
 
-[Try it](https://share.effector.dev/7K23rdej)
+### With Configuration (#create-with-config)
 
-#### Change state on effect completion (#methods-createEffect-handler-examples-change-state-on-effect-completion)
+The `name` field is used to improve error messages and debugging.
 
-```js
-import { createStore, createEffect } from "effector";
+- **Type**
 
-const fetchUserReposFx = createEffect(async ({ name }) => {
-  const url = `https://api.github.com/users/${name}/repos`;
-  const req = await fetch(url);
-  return req.json();
-});
-
-const $repos = createStore([]).on(fetchUserReposFx.doneData, (_, repos) => repos);
-
-$repos.watch((repos) => {
-  console.log(`${repos.length} repos`);
-});
-// => 0 repos
-
-await fetchUserReposFx({ name: "zerobias" });
-// => 26 repos
+```ts
+export function createEffect<Params, Done, Fail = Error>(config: {
+  name?: string;
+  handler?: (params: Params) => Promise<Done> | Done;
+}): Effect<Params, Done, Fail>;
 ```
 
-[Try it](https://share.effector.dev/uAJFC1XM)
+- **Example**
 
-#### Set handler to effect after creating (#methods-createEffect-handler-examples-set-handler-to-effect-after-creating)
+```ts
+import { createEffect } from "effector";
 
-```js
+const fetchUserReposFx = createEffect({
+  name: "fetch user repositories",
+  async handler({ name }) {
+    const url = `https://api.github.com/users/${name}/repos`;
+    const req = await fetch(url);
+    return req.json();
+  },
+});
+
+await fetchUserReposFx({ name: "zerobias" });
+```
+
+### Without Handler (#create-without-handler)
+
+Most commonly used for testing. [More detailed information](/en/api/effector/Effect#use-method).
+
+:::warning{title="use is an anti-pattern"}
+Try to avoid using `.use()`, as it's an anti-pattern and degrades type inference.
+:::
+
+- **Example**
+
+```ts
 import { createEffect } from "effector";
 
 const fetchUserReposFx = createEffect();
@@ -102,9 +106,39 @@ fetchUserReposFx.use(async ({ name }) => {
 await fetchUserReposFx({ name: "zerobias" });
 ```
 
-[Try it](https://share.effector.dev/e1QPH9Uq)
+## Examples (#examples)
 
-#### Watch effect status (#methods-createEffect-handler-examples-watch-effect-status)
+- **Updating state on effect completion**:
+
+```ts
+import { createStore, createEffect } from "effector";
+
+interface Repo {
+  // ...
+}
+
+const $repos = createStore<Repo[]>([]);
+
+const fetchUserReposFx = createEffect(async (name: string) => {
+  const url = `https://api.github.com/users/${name}/repos`;
+  const req = await fetch(url);
+  return req.json();
+});
+
+$repos.on(fetchUserReposFx.doneData, (_, repos) => repos);
+
+$repos.watch((repos) => {
+  console.log(`${repos.length} repos`);
+});
+// => 0 repos
+
+await fetchUserReposFx("zerobias");
+// => 26 repos
+```
+
+[Run example](https://share.effector.dev/uAJFC1XM)
+
+- **Watching effect state**:
 
 ```js
 import { createEffect } from "effector";
@@ -121,12 +155,12 @@ fetchUserReposFx.pending.watch((pending) => {
 
 fetchUserReposFx.done.watch(({ params, result }) => {
   console.log(params); // {name: 'zerobias'}
-  console.log(result); // resolved value
+  console.log(result); // resolved value, result
 });
 
 fetchUserReposFx.fail.watch(({ params, error }) => {
   console.error(params); // {name: 'zerobias'}
-  console.error(error); // rejected value
+  console.error(error); // rejected value, error
 });
 
 fetchUserReposFx.finally.watch(({ params, status, result, error }) => {
@@ -134,7 +168,7 @@ fetchUserReposFx.finally.watch(({ params, status, result, error }) => {
   console.log(`handler status: ${status}`);
 
   if (error) {
-    console.error("handler rejected", error);
+    console.log("handler rejected", error);
   } else {
     console.log("handler resolved", result);
   }
@@ -143,45 +177,21 @@ fetchUserReposFx.finally.watch(({ params, status, result, error }) => {
 await fetchUserReposFx({ name: "zerobias" });
 ```
 
-[Try it](https://share.effector.dev/LeurvtYA)
+[Run example](https://share.effector.dev/LeurvtYA)
 
-## `createEffect(config)` (#methods-createEffect-config)
+## Common errors (#common-errors)
 
-Creates an effect with handler and name from a given config object.
+Below is a list of possible errors you may encounter when working with effects:
 
-### Formulae (#methods-createEffect-config-formulae)
+- [`no handler used in [effect name]`](/en/guides/troubleshooting#no-handler-used)
 
-```typescript
-createEffect({ handler, name }): Effect<Params, Done, Fail>
-```
+## Related API and Articles (#related-api-and-docs-to-create-effect)
 
-### Arguments (#methods-createEffect-config-arguments)
-
-1. `config?: {}` (_Object_): Effect configuration.
-   - `handler` (_Function_): Function to handle effect calls, can also be set using [`.use(handler)`](#use).
-   - `name?` (_string_): Optional effect name.
-
-### Returns (#methods-createEffect-config-returns)
-
-[_Effect_](/en/api/effector/Effect): A new effect.
-
-### Examples (#methods-createEffect-config-examples)
-
-#### Create named effect (#methods-createEffect-config-examples-create-named-effect)
-
-```js
-import { createEffect } from "effector";
-
-const fetchUserReposFx = createEffect({
-  name: "fetch user repositories",
-  async handler({ name }) {
-    const url = `https://api.github.com/users/${name}/repos`;
-    const req = await fetch(url);
-    return req.json();
-  },
-});
-
-await fetchUserReposFx({ name: "zerobias" });
-```
-
-[Try it](https://share.effector.dev/GynSzKee)
+- **API**
+  - [`Effect API`](/en/api/effector/Effect) - Description of effects, their methods and properties
+  - [`sample`](/en/api/effector/sample) - Key operator for building connections between units
+  - [`attach`](/en/api/effector/attach) - Creates new effects based on other effects
+- **Articles**
+  - [Working with effects](/en/essentials/work-with-async)
+  - [How to type effects and other units](/en/essentials/typescript)
+  - [Guide to testing effects and other units](/en/guides/testing)
