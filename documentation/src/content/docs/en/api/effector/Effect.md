@@ -9,7 +9,7 @@ redirectFrom:
 [eventTypes]: /en/api/effector/Event#event-types
 [storeTypes]: /en/essentials/typescript#store-types
 
-# Effect API (#effect-api)
+# Effect API (#methods)
 
 ```ts
 import { type Effect, createEffect } from "effector";
@@ -30,22 +30,22 @@ If you're not familiar with effects and how to work with them, check out [Asynch
 Available methods and properties of effects:
 | <div style="width:170px">Method/Property</div> | Description |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [`use(handler)`](#use-method) | Replaces the effect's handler with a new `handler` function. |
-| [`use.getCurrent()`](#use-getCurrent-method) | Returns the current effect handler. |
-| [`watch(watcher)`](#watch-method) | Adds a listener that calls `watcher` on each effect invocation. |
-| [`map(fn)`](#map-method) | Creates a new [derived event][eventTypes] that triggers when the effect is called with the result of calling `fn` on the effect's parameters. |
-| [`prepend(fn)`](#prepend-method) | Creates a new [event][eventTypes] that transforms input data through `fn` before calling the effect. |
-| [`filterMap(fn)`](#filterMap-method) | Creates a new [derived event][eventTypes] that triggers when the effect is called with the result of fn, if it didn't return `undefined`. |
-| [`done`](#done-property) | [Derived event][eventTypes] that triggers when the effect completes successfully with params and result. |
-| [`doneData`](#doneData-property) | [Derived event][eventTypes] with the result of successful effect execution with result. |
-| [`fail`](#fail-property) | [Derived event][eventTypes] that triggers when the effect execution fails with params and error. |
-| [`failData`](#failData-property) | [Derived event][eventTypes] with the effect's error data. |
-| [`finally`](#finally-property) | [Derived event][eventTypes] that triggers on any effect completion. |
-| [`pending`](#pending-property) | [Derived store][storeTypes] `Store<boolean>` with the effect execution status (`true` during execution). |
-| [`inFlight`](#inFlight-property) | [Derived store][storeTypes] `Store<number>` with the count of active effect calls. |
-| [`sid`](#sid-property) | Unique identifier of the [unit](/explanation/glossary#common-unit). |
-| [`shortName`](#shortName-property) | String property containing the variable name in which the effect was declared. |
-| [`compositeName`](#compositeName-property) | Composite effect name (including domain and short name) — useful for logging and tracing. |
+| [`use(handler)`](#methods-use-handler) | Replaces the effect's handler with a new `handler` function. |
+| [`use.getCurrent()`](#methods-use-getCurrent) | Returns the current effect handler. |
+| [`watch(watcher)`](#methods-watch-watcher) | Adds a listener that calls `watcher` on each effect invocation. |
+| [`map(fn)`](#methods-map-fn) | Creates a new [derived event][eventTypes] that triggers when the effect is called with the result of calling `fn` on the effect's parameters. |
+| [`prepend(fn)`](#methods-prepend-fn) | Creates a new [event][eventTypes] that transforms input data through `fn` before calling the effect. |
+| [`filterMap(fn)`](#methods-filterMap-fn) | Creates a new [derived event][eventTypes] that triggers when the effect is called with the result of fn, if it didn't return `undefined`. |
+| [`done`](#properties-done) | [Derived event][eventTypes] that triggers when the effect completes successfully with params and result. |
+| [`doneData`](#properties-doneData) | [Derived event][eventTypes] with the result of successful effect execution with result. |
+| [`fail`](#properties-fail) | [Derived event][eventTypes] that triggers when the effect execution fails with params and error. |
+| [`failData`](#properties-failData) | [Derived event][eventTypes] with the effect's error data. |
+| [`finally`](#properties-finally) | [Derived event][eventTypes] that triggers on any effect completion. |
+| [`pending`](#properties-pending) | [Derived store][storeTypes] `Store<boolean>` with the effect execution status (`true` during execution). |
+| [`inFlight`](#properties-inFlight) | [Derived store][storeTypes] `Store<number>` with the count of active effect calls. |
+| [`sid`](#properties-sid) | Unique identifier of the [unit](/explanation/glossary#common-unit). |
+| [`shortName`](#properties-shortName) | String property containing the variable name in which the effect was declared. |
+| [`compositeName`](#properties-compositeName) | Composite effect name (including domain and short name) — useful for logging and tracing. |
 
 ## Effect Peculiarities (#effect-peculiarities)
 
@@ -55,7 +55,7 @@ Available methods and properties of effects:
 
 ## Effect Methods (#effect-methods)
 
-### `.use(handler)` (#use-method)
+### `.use(handler)` (#methods-use-handler)
 
 :::warning{title="use is an anti-pattern"}
 If the implementation value is known immediately, it's better to use `createEffect(handler)`.
@@ -114,7 +114,7 @@ Returns the current effect.
 
 ---
 
-### `.use.getCurrent()` (#use-getCurrent-method)
+### `.use.getCurrent()` (#methods-use-getCurrent)
 
 Method for getting the current effect implementation. Used for testing.
 
@@ -157,7 +157,7 @@ Returns the effect's implementation function that was set through [createEffect]
 
 ---
 
-### `.watch(watcher)` (#watch-method)
+### `.watch(watcher)` (#methods-watch-watcher)
 
 Calls an additional function with side effects on each effect trigger. Shouldn't be used for logic, better to replace with [`sample`](/en/api/effector/sample).
 
@@ -197,7 +197,7 @@ await fx(10);
 
 ---
 
-### `.map(fn)` (#map-method)
+### `.map(fn)` (#methods-map-fn)
 
 The map method creates a [derived event][eventTypes]. The event is triggered at the moment the effect is executed, using the same arguments as the effect and the result returned by the `fn` function. Works similarly to [`Event.map(fn)`](/en/api/effector/Event#event-methods-map-fn).
 
@@ -252,7 +252,7 @@ Returns a new [derived event][eventTypes].
 
 ---
 
-### `.prepend(fn)` (#prepend-method)
+### `.prepend(fn)` (#methods-prepend-fn)
 
 Creates a new event to transform data _before_ running the effect. Compared to [map](#effect-methods-map), it works in the opposite direction. Works similarly to [`Event.prepend(fn)`](/en/api/effector/Event#eventCallable-methods-prepend-fn).
 
@@ -295,7 +295,7 @@ Returns a new [event][eventTypes].
 
 ---
 
-### `.filterMap(fn)` (#filterMap-method)
+### `.filterMap(fn)` (#methods-filterMap-fn)
 
 The `filterMap` method creates a [derived event][eventTypes]. The `fn` function computation runs simultaneously with the effect, however if the function returns `undefined`, the event doesn't trigger. Works similarly to the [`.map(fn)`](#map-method) method, but with filtering by return value.
 
@@ -356,7 +356,7 @@ Returns a new [derived event][eventTypes].
 
 ## Effect Properties (#effect-properties)
 
-### `.done` (#done-property)
+### `.done` (#properties-done)
 
 [Derived event][eventTypes] that triggers with the result of effect execution and the argument passed during the call.
 
@@ -387,7 +387,7 @@ await fx(2);
 
 ---
 
-### `.doneData` (#doneData-property)
+### `.doneData` (#properties-doneData)
 
 [Derived event][eventTypes] that triggers with the result of successful effect execution.
 
@@ -418,7 +418,7 @@ await fx(2);
 
 ---
 
-### `.fail` (#fail-property)
+### `.fail` (#properties-fail)
 
 [Derived event][eventTypes] that triggers with the error that occurred during effect execution and the argument passed during the call.
 
@@ -451,7 +451,7 @@ fx(2);
 
 ---
 
-### `.failData` (#failData-property)
+### `.failData` (#properties-failData)
 
 [Derived event][eventTypes] that triggers with the error that occurred during effect execution.
 
@@ -484,7 +484,7 @@ fx(2);
 
 ---
 
-### `.finally` (#finally-property)
+### `.finally` (#properties-finally)
 
 [Derived event][eventTypes] that triggers on both success and failure of effect completion with detailed information about arguments, results, and execution status.
 
@@ -544,7 +544,7 @@ fetchApiFx({ time: 100, ok: false });
 
 ---
 
-### `.pending` (#pending-property)
+### `.pending` (#properties-pending)
 
 [Derived store][storeTypes] that shows whether the effect is currently executing.
 
@@ -595,7 +595,7 @@ fetchApiFx(1000);
 
 ---
 
-### `.inFlight` (#inFlight-property)
+### `.inFlight` (#properties-inFlight)
 
 [Derived store][storeTypes] that shows the number of running effects that are currently executing. Can be used to limit the number of concurrent requests.
 
@@ -648,7 +648,7 @@ await Promise.all([req1, req2]);
 
 ---
 
-### `.sid` (#sid-property)
+### `.sid` (#properties-sid)
 
 Unique unit identifier. It's important to note that SID doesn't change on each application run, it's statically written into your application bundle for absolute unit identification. Set automatically through [Babel plugin](/en/api/effector/babel-plugin).
 
@@ -662,7 +662,7 @@ interface Effect<any, any> {
 
 ---
 
-### `.shortName` (#shortName-property)
+### `.shortName` (#properties-shortName)
 
 String property containing the variable name in which the effect was declared. Effect name. Set either explicitly through the `name` field in [createEffect](/en/api/effector/createEffect), or automatically through [babel plugin](/en/api/effector/babel-plugin).
 
@@ -676,7 +676,7 @@ interface Effect<any, any> {
 
 ---
 
-### `.compositeName` (#compositeName-property)
+### `.compositeName` (#properties-compositeName)
 
 Composite effect name (including domain and short name) — useful for logging and tracing.
 
