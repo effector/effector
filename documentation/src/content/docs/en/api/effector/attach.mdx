@@ -1,0 +1,390 @@
+---
+title: attach API
+description: attach API - reusing effect logic, creating new effects based on existing ones with automatic data passing from stores. Examples, description and operational features.
+lang: en
+redirectFrom:
+  - /api/effector/attach
+  - /docs/api/effector/attach
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+[effectApi]: /en/api/effector/Effect
+[storeApi]: /en/api/effector/Store
+
+# `attach` API (#methods)
+
+```ts
+import { attach } from "effector";
+```
+
+The `attach` method allows creating new attached [effects][effectApi] based on existing ones with the ability to access data from [stores][storeApi]. This method enables reusing effect logic with different parameters and automatically passing data from stores.
+
+:::info{title="there are no derived effects!"}
+All attached effects are fully-fledged [effects][effectApi], just like regular ones created with [createEffect](/en/api/effector/createEffect).
+:::
+
+## Algorithm (#algorithm)
+
+1. You call the effect returned by `attach`, passing your parameters.
+2. If `source` is specified, Effector takes the current value from this store.
+3. If `mapParams` is specified, this function is called with your parameters and (if present) data from `source`.
+4. The result of the `mapParams` function is passed to the original `effect`.
+5. The result of executing the original effect is returned.
+
+## `attach` Configuration Forms (#attach-config-forms)
+
+| <div style="width:220px">Form</div>                                                | Description                                                                                                                            |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [`attach({ effect })`](#methods-attach-effect)                                     | Creates a local copy of the effect with the same behavior.                                                                             |
+| [`attach({ source, effect })`](#methods-attach-source-effect)                      | Creates an effect that automatically passes data from `source` to the original effect when called.                                     |
+| [`attach({ mapParams, effect })`](#methods-attach-effect-mapParams)                | Creates an effect with input parameter transformation via `mapParams` function before passing to the original effect.                  |
+| [`attach({ source, mapParams, effect })`](#methods-attach-source-mapParams-effect) | Creates an effect that combines data from `source` with input parameters via `mapParams` and passes the result to the original effect. |
+
+## Configurations (#config)
+
+### `attach({ effect })` (#methods-attach-effect)
+
+Creates a new attached [effect][effectApi] that will call `effect` with the passed parameters as is. This allows creating separate effects with shared behavior.
+
+- **Formula**
+
+```ts
+const attachedFx = attach({
+  effect, // original effect whose behavior we're copying
+  name? // name of the new effect
+});
+```
+
+- **Type**
+
+```ts
+export function attach<FX extends Effect<any, any, any>>(config: {
+  effect: FX;
+  name?: string;
+}): Effect<EffectParams<FX>, EffectResult<FX>, EffectError<FX>>;
+```
+
+- **Examples**
+
+This allows creating a _local_ copy of an effect to react only to calls from the current _local_ code.
+
+```ts
+const httpRequestFx = createEffect(async ({ url, options = {} }) => {
+  console.log(`Executing request: ${url}`);
+
+  const response = await fetch(url, {
+    ...options,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP Error: ${response.status}`);
+  }
+
+  return response.json();
+});
+
+const fetchUsersFx = attach({
+  effect: httpRequestFx,
+});
+
+fetchUsersFx({ url: "/api/users" });
+```
+
+[Run example](https://share.effector.dev/7Uhk4XfW).
+
+### `attach({ source, effect })` (#methods-attach-source-effect)
+
+Creates a new attached [effect][effectApi] that when called will run the original `effect` or handler with data from `source`.
+
+- **Formula**
+
+```ts
+const attachedFx = attach({
+  source, // data source passed to the effect
+  effect, // original effect whose behavior we're copying
+  name? // name of the new effect
+  domain? // domain, in case effect is a handler
+});
+```
+
+- **Type**
+
+```ts
+export function attach<
+  States extends StoreShape,
+  FX extends
+    | Effect<GetShapeValue<States>, any, any>
+    | ((state: GetShapeValue<States>, ...params: any[]) => any),
+>(config: {
+  source: States;
+  effect: FX;
+  name?: string;
+  domain?: Domain;
+}): Effect<void, EffectResult<FX>, EffectError<FX>>;
+```
+
+- **Features**
+
+  - The `effect` argument can be either an [effect][effectApi] or a regular handler.
+  - The `source` argument is not reactive - store changes don't automatically trigger effect execution.
+  - `source` can be a store, an object of stores, or an array of stores.
+  - The `domain` parameter can only be passed if `effect` is a handler.<br /><br />
+
+- **Examples**
+
+<Tabs>
+<TabItem label="Single store" >
+Simple usage with one store and handler:<br/><br/>
+
+```ts
+// Effect for loading data
+const loadDataFx = createEffect(async (id: number) => {
+  return fetch(`/api/data/${id}`).then((res) => res.json());
+});
+
+// Store with current id
+const $currentId = createStore(1);
+
+// Effect with store binding
+const loadCurrentDataFx = attach({
+  source: $currentId,
+  effect: async (id: number) => {
+    const res = await fetch(`/api/data/${id}`);
+    return await res.json();
+  },
+});
+```
+
+</TabItem>
+<TabItem label="source as object" >
+`source` argument as object:<br/><br/>
+
+```ts
+import { createEffect, createStore, attach } from "effector";
+
+const requestPageFx = createEffect<{ page: number; size: number }, string[]>(
+  async ({ page, size }) => {
+    console.log("Requested", page);
+    return page * size;
+  },
+);
+
+const $page = createStore(1);
+const $size = createStore(20);
+
+const requestNextPageFx = attach({
+  source: { page: $page, size: $size },
+  effect: requestPageFx,
+});
+
+$page.on(requestNextPageFx.done, (page) => page + 1);
+
+requestPageFx.doneData.watch((position) => console.log("requestPageFx.doneData", position));
+
+await requestNextPageFx();
+// => Requested 1
+// => requestPageFx.doneData 20
+```
+
+</TabItem>
+<TabItem label="source as array" >
+Usage with array of stores:<br/><br/>
+
+```ts
+const $lat = createStore(55.7558);
+const $lon = createStore(37.6173);
+
+// Weather fetching effect
+const fetchWeatherFx = createEffect(([lat, lon]: [number, number]) =>
+  fetch(`/api/weather?lat=${lat}&lon=${lon}`).then((res) => res.json()),
+);
+
+// Combining array of stores
+const loadWeatherFx = attach({
+  source: combine([$lat, $lon]),
+  effect: fetchWeatherFx,
+});
+```
+
+</TabItem>
+
+</Tabs>
+
+- **Return value**
+
+Returns a new [effect][effectApi].
+
+### `attach({ mapParams, effect })` (#methods-attach-effect-mapParams)
+
+Creates a new attached [effect][effectApi] that when called will run the original `effect`, transforming parameters with the `mapParams` function.
+
+- **Formula**
+
+```ts
+const attachedFx = attach({
+  effect, // original effect whose behavior we're copying
+  mapParams, // function for data transformation
+  name? // name of the new effect
+});
+```
+
+- **Type**
+
+```ts
+export function attach<Params, FX extends Effect<any, any, any>>(config: {
+  effect: FX;
+  mapParams: (params: Params) => EffectParams<FX>;
+  name?: string;
+}): Effect<Params, EffectResult<FX>, EffectError<FX>>;
+```
+
+- **Features**
+
+  - If `mapParams` fails with an error, the attached effect will immediately complete its execution with error, and the original effect won't be called.
+  - `mapParams` must return the same type that `originalFx` accepts as parameters. In case of error, you need to control error type compatibility with the effect yourself, TypeScript won't help here.
+
+  ```ts
+  const attachedFx: Effect<void, Done, Fail> = attach({
+  effect: originalFx,
+  mapParams: (): A {
+    throw new AnyNonFailType(); // This might be incompatible with type `Fail`.
+  },
+  });
+  ```
+
+- **Examples**
+
+Using `mapParams` to transform arguments:
+
+```ts
+import { createEffect, attach } from "effector";
+
+const originalFx = createEffect((a: { input: number }) => a);
+
+const attachedFx = attach({
+  effect: originalFx,
+  mapParams(a: number) {
+    return { input: a * 100 };
+  },
+});
+
+originalFx.watch((params) => console.log("originalFx started", params));
+
+attachedFx(1);
+// => originalFx { input: 100 }
+```
+
+[Run example](https://share.effector.dev/CEGzfidC)
+
+As well as handling exceptions:
+
+```ts
+import { createEffect, attach } from "effector";
+
+const originalFx = createEffect((a: { a: number }) => a);
+
+const attachedFx = attach({
+  effect: originalFx,
+  mapParams(a: number) {
+    throw new Error("custom error");
+    return { a };
+  },
+});
+
+attachedFx.failData.watch((error) => console.log("attachedFx.failData", error));
+
+attachedFx(1);
+// => attachedFx.failData
+// =>   Error: custom error
+```
+
+[Run example](https://share.effector.dev/4ZjCRKAD)
+
+- **Return value**
+
+Returns a new [effect][effectApi].
+
+### `attach({ source, mapParams, effect })` (#methods-attach-source-mapParams-effect)
+
+Creates a new attached [effect][effectApi] that will read values from the `source` store, pass them with parameters to the `mapParams` function, and then call `effect` with the result.
+
+- **Formula**
+
+```ts
+const attachedFx = attach({
+  source, // data source passed to the effect
+  mapParams, // function for data transformation
+  effect, // original effect whose behavior we're copying
+  name? // name of the new effect
+});
+```
+
+- **Type**
+
+```ts
+export function attach<
+  States extends StoreShape,
+  FX extends Effect<any, any, any>,
+  FN extends (params: any, source: GetShapeValue<States>) => EffectParams<FX>,
+>(config: {
+  source: States;
+  effect: FX;
+  mapParams: FN;
+  name?: string;
+}): Effect<Parameters<FN>[0], EffectResult<FX>, EffectError<FX>>;
+```
+
+- **Features**
+
+  - If `mapParams` fails with an error, the attached effect will immediately complete its execution with error, and the original effect won't be called.
+  - The `mapParams` function must return the same type that the effect in the `effect` argument accepts as parameters. In case of error, you need to control error type compatibility with the effect yourself, TypeScript won't help here.
+  - The `source` argument is not reactive - store changes don't automatically trigger effect execution.
+  - `source` can be a store, an object of stores, or an array of stores.
+
+- **Examples**
+
+```ts
+import { createStore, createEvent, createEffect, attach, sample } from "effector";
+
+const $credentials = createStore({ username: "", password: "" });
+const $authToken = createStore("");
+
+const apiFx = createEffect(async ({ url, data, token }) => {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+});
+
+const loginFx = attach({
+  source: { creds: $credentials, token: $authToken },
+  mapParams: (_, { creds, token }) => ({
+    url: "/api/login",
+    data: creds,
+    token,
+  }),
+  effect: apiFx,
+});
+```
+
+- **Return value**
+
+Returns a new [effect][effectApi].
+
+## Related API and Articles (#related-api-and-docs-to-attach)
+
+- **API**
+  - [`Effect API`](/en/api/effector/Effect) - Description of effects, their methods and properties
+  - [`createEffect`](/en/api/effector/createEffect) - Creating a new effect
+  - [`sample`](/en/api/effector/sample) - Key operator for building connections between units
+  - [`Store API`](/en/api/effector/Store) - Description of stores, their methods and properties
+- **Articles**
+  - [Working with effects](/en/essentials/work-with-async)
+  - [Typing `attach`, other methods and units](/en/essentials/typescript)
