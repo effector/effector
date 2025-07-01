@@ -6,7 +6,7 @@ redirectFrom:
   - /docs/api/effector/createEvent
 ---
 
-# createEvent (#create-event)
+# createEvent (#methods)
 
 ```ts
 import { createEvent } from "effector";
@@ -16,7 +16,7 @@ const event = createEvent();
 
 Method for creating [events][eventApi].
 
-## Formula (#formulae)
+## Formula (#methods-createEvent-name-formulae)
 
 ```ts
 createEvent<E = void>(eventName?: string): EventCallable<E>
@@ -40,7 +40,7 @@ createEvent<E = void>(config: {
 
 Returns a new callable [event][eventTypes].
 
-## Examples (#examples)
+## Examples (#methods-createEvent-name-examples)
 
 Updating state by calling an event:
 
@@ -89,6 +89,13 @@ extractPartOfArray([1, 2, 3, 4, 5, 6]);
 ```
 
 [Run example](https://share.effector.dev/4lWsZr2k)
+
+## Common errors (#common-errors)
+
+Below is a list of possible errors you may encounter when working with events:
+
+- [`call of derived event is not supported, use createEvent instead`](/en/guides/troubleshooting/#call-of-derived-event-is-not-supported)
+- [`unit call from pure function is not supported, use operators like sample instead`](/en/guides/troubleshooting/#unit-call-from-pure-not-supported)
 
 ## Related API and Articles (#related-api-and-docs-to-create-event)
 
