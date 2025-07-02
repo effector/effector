@@ -35,10 +35,15 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     hooks: {},
   } as Domain
 
-  node.meta = initUnit(DOMAIN, domain, {
-    parent: config?.domain || config?.parent,
-    or: {...config, derived: true},
-  })
+  node.meta = initUnit(
+    DOMAIN,
+    domain,
+    {
+      parent: config?.domain || config?.parent,
+      or: {...config, derived: true},
+    },
+    createDomain,
+  )
 
   forIn(
     {
