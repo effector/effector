@@ -13,6 +13,7 @@ module.exports = function (babel, options = {}) {
     addNames,
     addLoc,
     debugSids,
+    transformLegacyDomainMethods,
     hmr,
     filename: enableFileName,
     stores,
@@ -559,7 +560,7 @@ module.exports = function (babel, options = {}) {
           }
         }
 
-        if (t.isMemberExpression(path.node.callee)) {
+        if (transformLegacyDomainMethods && t.isMemberExpression(path.node.callee)) {
           applyMethodParsers(
             domainMethodParsers,
             path,
@@ -650,6 +651,7 @@ const normalizeOptions = options => {
     options,
     properties: {
       reactSsr: false,
+      transformLegacyDomainMethods: true,
       forceScope: false,
       filename: true,
       stores: true,
