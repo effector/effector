@@ -87,7 +87,7 @@ const aliases = {
   },
 }
 
-const babelPlugin = resolvePath(__dirname, 'src', 'babel', 'babel-plugin.js')
+const babelPlugin = resolvePath(__dirname, 'src', 'babel', 'local-reexport.js')
 const locationPlugin = resolvePath(
   __dirname,
   'src',

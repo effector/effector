@@ -57,7 +57,7 @@ const defaultFactories = [
  * @returns {import('@babel/core').PluginObj}
  * @property {string[]} defaultFactories
  */
-module.exports = function (babel, options = {}) {
+export default function babelPlugin(babel, options = {}) {
   const {
     addNames,
     addLoc,
@@ -759,8 +759,6 @@ module.exports = function (babel, options = {}) {
   }
   return plugin
 }
-
-module.exports.defaultFactories = defaultFactories
 
 /**
  *

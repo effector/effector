@@ -3,6 +3,9 @@ import path from 'path'
 import {transformFileSync} from '@babel/core'
 import {formatCode} from './utils'
 
+// @ts-expect-error no types
+import babelPlugin from '../babel-plugin'
+
 describe('babel-plugin', () => {
   const fixturesDir = path.join(__dirname, 'fixtures')
   const testCases = fs
@@ -26,12 +29,8 @@ describe('babel-plugin', () => {
           babelrc: false,
           envName: 'test',
           plugins: [
-            [path.resolve(__dirname, '../babel-plugin.js'), options],
-            [
-              path.resolve(__dirname, '../babel-plugin.js'),
-              options,
-              'effector-logger',
-            ],
+            [babelPlugin, options],
+            [babelPlugin, options, 'effector-logger'],
           ],
         })?.code
 
@@ -48,7 +47,7 @@ describe('babel-plugin', () => {
           configFile: false,
           babelrc: false,
           envName: 'test',
-          plugins: [[path.resolve(__dirname, '../babel-plugin.js'), options]],
+          plugins: [[babelPlugin, options]],
         })?.code
 
         expect(formatCode(fixture)).toMatchSnapshot()

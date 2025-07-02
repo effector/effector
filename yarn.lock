@@ -1294,10 +1294,10 @@
     "@babel/helper-module-imports" "^7.10.4"
     "@rollup/pluginutils" "^3.1.0"
 
-"@rollup/plugin-commonjs@^15.1.0":
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-15.1.0.tgz#1e7d076c4f1b2abf7e65248570e555defc37c238"
-  integrity sha512-xCQqz4z/o0h2syQ7d9LskIMvBSH4PX5PjYdpSSvgS+pQik3WahkQVNWg3D8XJeYjZoVWnIUQYDghuEMRGrmQYQ==
+"@rollup/plugin-commonjs@^18.1.0":
+  version "18.1.0"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-18.1.0.tgz#5a760d757af168a50727c0ae080251fbfcc5eb02"
+  integrity sha512-h3e6T9rUxVMAQswpDIobfUHn/doMzM9sgkMrsMWCFLmB84PSoC8mV8tOloAJjSRwdqhXBqstlX2BwBpHJvbhxg==
   dependencies:
     "@rollup/pluginutils" "^3.1.0"
     commondir "^1.0.1"
@@ -1943,7 +1943,7 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.4.38.tgz#552a6770098bfd556fa3e2c686c9d3b4f4cd94c2"
   integrity sha512-q0xCiLkuWWQLzVrecPb0RMsNWyxICOjPrcrwxTUEHb1fsnvni4dcuyG7RT/Ie7VPTvnjzIaWzRMUBsrqNj/hhw==
 
-"@vue/test-utils@^1.1.0":
+"@vue/test-utils@^1.1.0", "vue-test-utils-legacy@npm:@vue/test-utils@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.1.0.tgz#76305e73a786c921ede1352849614e26c7113f94"
   integrity sha512-M+3jtVqNYIrvzO5gaxogre5a5+96h0hN/dXw+5Lj0t+dp6fAhYcUjpLrC9j9cEEkl2Rcuh/gKYRUmR5N4vcqPw==
@@ -2650,9 +2650,9 @@ camelcase@^6.2.0:
   integrity sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
 
 caniuse-lite@^1.0.30001219:
-  version "1.0.30001623"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001623.tgz"
-  integrity sha512-X/XhAVKlpIxWPpgRTnlgZssJrF0m6YtRA0QDWgsBNT12uZM6LPRydR7ip405Y3t1LamD8cP2TZFEDZFBf5ApcA==
+  version "1.0.30001723"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001723.tgz"
+  integrity sha512-1R/elMjtehrFejxwmexeXAtae5UO9iSyFn6G/I806CYC/BLyyBk1EPhrKBkWhy6wM6Xnm47dSJQec+tLJ39WHw==
 
 chalk@2.4.1:
   version "2.4.1"
@@ -7443,15 +7443,6 @@ vue-template-compiler@^2.6.12:
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
-
-"vue-test-utils-legacy@npm:@vue/test-utils@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.1.0.tgz#76305e73a786c921ede1352849614e26c7113f94"
-  integrity sha512-M+3jtVqNYIrvzO5gaxogre5a5+96h0hN/dXw+5Lj0t+dp6fAhYcUjpLrC9j9cEEkl2Rcuh/gKYRUmR5N4vcqPw==
-  dependencies:
-    dom-event-types "^1.0.0"
-    lodash "^4.17.15"
-    pretty "^2.0.0"
 
 "vue-test-utils-next@npm:@vue/test-utils@^2.0.0-beta.7":
   version "2.0.0-beta.7"
