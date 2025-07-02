@@ -49,7 +49,7 @@ sample({
 ```
 
 When the `firstTriggered` event is invoked, the `secondTriggered` event will be subsequently called, creating a sequence of events.
-[Remember, dont call events in pure functions](/en/introduction/core-concepts#purity), it's not supported!
+[Remember, dont call events in pure functions](/en/explanation/glossary#purity), it's not supported!
 
 :::tip{title="Good to know"}
 In Effector, any event supports only **a single argument**.
@@ -74,7 +74,7 @@ This rule also contributes to the clarity of each argument's meaning, both at th
 
 ## Watching the event (#event-watch)
 
-To ascertain when an event is called, effector and its ecosystem offer various methods with distinct capabilities. Debugging is the primary use case for this purpose, and we highly recommend using [`patronum/debug`](https://patronum.effector.dev/methods/debug/) to display when an event is triggered and the argument it carries.
+To ascertain when an event is called, effector and its ecosystem offer various methods with distinct capabilities. Debugging is the primary use case for this purpose, and we highly recommend using [`patronum/debug`](https://patronum.effector.dev/operators/debug/) to display when an event is triggered and the argument it carries.
 
 ```ts
 import { createEvent, sample } from "effector";

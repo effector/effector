@@ -133,6 +133,28 @@ Although tested, this option is considered experimental and might have unexpecte
 When bundling for production, make sure to set the `hmr` option to `"none"` to reduce bundle size and improve runtime performance.
 :::
 
+## `forceScope` (#configuration-forceScope)
+
+:::info{title="since"}
+[effector 23.4.0](https://changelog.effector.dev/#effector-23.4.0)
+:::
+
+Adds `forceScope` to all hooks from `effector-react`. This prevents mistakes when events called in non-scoped environment.
+
+### Formulae (#configuration-forceScope-formulae)
+
+```json
+"effector/babel-plugin",
+  {
+    "forceScope": true
+  }
+```
+
+- Type: `boolean`
+  - `true`: Adds `{ forceScope: true }` to hooks like `useUnit`
+  - `false`: Do nothing
+- Default: `false`
+
 ## `importName` (#configuration-importName)
 
 Specifying import name or names to process by plugin. Import should be used in the code as specified.

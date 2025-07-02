@@ -49,6 +49,7 @@ module.exports = function (babel, options = {}) {
     importName,
     importReactNames,
     reactSsr,
+    forceScope,
   } = normalizeOptions(options)
   if (reactSsr) {
     console.error(
@@ -287,6 +288,12 @@ module.exports = function (babel, options = {}) {
           if (!s.imported) continue
           const importedName = s.imported.name
           const localName = s.local.name
+
+          // effector-react/scope already forced scope
+          if (importReactNames.nossr.has(source)) {
+            this.effector_forceScopeSpecifiers.add(localName)
+          }
+
           if (importedName === localName) continue
           if (reactMethods.createGate.has(importedName)) {
             reactMethods.createGate.add(localName)
@@ -365,11 +372,53 @@ module.exports = function (babel, options = {}) {
       }
     }
   }
+
+  function hasSecondArgument(path) {
+    return path.node.arguments.length >= 2
+  }
+
+  /**
+   * @param path Node
+   * @param configObject example { forceScope: t.booleanLiteral(true) }
+   */
+  function pushArgumentConfig(path, configObject) {
+    path.node.arguments.push(
+      t.objectExpression(
+        Object.entries(configObject)
+          .map(([key, value]) => t.objectProperty(t.identifier(key), value))
+      )
+    )
+  }
+  function hasThirdArgument(path) {
+    return path.node.arguments.length >= 3
+  }
+  function convertArgumentsToConfig(path, argumentsAsKeys) {
+    const objectProperties = argumentsAsKeys.map((keyName, index) => t.objectProperty(
+      t.identifier(keyName),
+      t.cloneNode(path.node.arguments[index]),
+    ))
+    path.node.arguments = [t.objectExpression(objectProperties)]
+  }
+  function isFirstArgumentConfig(path) {
+    return t.isObjectExpression(path.node.arguments[0])
+  }
+  function hasPropertyInConfig(configNode, propertyName) {
+    return !!configNode.properties.find(property => t.isIdentifier(property.key) && property.key.name === propertyName)
+  }
+  function appendPropertyToConfig(configNode, propertyName, propertyNode) {
+    if (t.isObjectExpression(configNode)) {
+      configNode.properties.push(
+        t.objectProperty(t.identifier(propertyName), propertyNode)
+      )
+    }
+  }
+
   const plugin = {
     name: 'effector/babel-plugin',
     pre() {
       this.effector_ignoredImports = new Set()
       this.effector_withFactoryName = null
+      this.effector_forceScopeSpecifiers = new Set()
     },
     post() {
       this.effector_ignoredImports.clear()
@@ -403,6 +452,60 @@ module.exports = function (babel, options = {}) {
           if (!this.effector_ignoredImports.has(name)) {
             applyMethodParsers(methodParsers, path, state, name)
             applyMethodParsers(reactMethodParsers, path, state, name)
+
+            if (forceScope && this.effector_forceScopeSpecifiers.has(name)) {
+              const binding = path.scope.getBinding(name)
+
+              if (binding && t.isImportSpecifier(binding.path.node)) {
+                const hookName = binding.path.node.imported.name
+                const forceScopeConfig = {forceScope: t.booleanLiteral(true)}
+
+                switch (hookName) {
+                  case 'useEvent':
+                  case 'useStore':
+                  case 'useUnit': {
+                    if (!hasSecondArgument(path)) {
+                      pushArgumentConfig(path, forceScopeConfig)
+                    }
+                    break
+                  }
+
+                  case 'useList': {
+                    if (!hasThirdArgument(path)) {
+                      pushArgumentConfig(path, forceScopeConfig)
+                    }
+                    break
+                  }
+
+                  case 'useGate': {
+                    if (!hasThirdArgument(path)) {
+                      // If no props passed
+                      if (!hasSecondArgument(path)) {
+                        pushArgumentConfig(path, {})
+                      }
+                      // Add forceScope: true
+                      pushArgumentConfig(path, forceScopeConfig)
+                    }
+                    break
+                  }
+
+                  case 'useStoreMap': {
+                    if (hasSecondArgument(path)) {
+                      convertArgumentsToConfig(path, ['store', 'fn'])
+
+                      // Add keys: []
+                      appendPropertyToConfig(path.node.arguments[0], 'keys', t.arrayExpression())
+                      // Add forceScope: true
+                      appendPropertyToConfig(path.node.arguments[0], 'forceScope', t.booleanLiteral(true))
+                    }
+                    else if (isFirstArgumentConfig(path) && !hasPropertyInConfig(path.node.arguments[0], "forceScope")) {
+                      appendPropertyToConfig(path.node.arguments[0], 'forceScope', t.booleanLiteral(true))
+                    }
+                    break
+                  }
+                } // switch hookName
+              }
+            }
           }
           if (
             factoriesUsed &&
@@ -549,6 +652,7 @@ const normalizeOptions = options => {
     properties: {
       reactSsr: false,
       transformLegacyDomainMethods: true,
+      forceScope: false,
       filename: true,
       stores: true,
       events: true,
@@ -621,6 +725,7 @@ const normalizeOptions = options => {
       ),
       addLoc: Boolean(options.addLoc),
       debugSids: Boolean(options.debugSids),
+      forceScope: Boolean(options.forceScope),
       hmr: options.hmr || 'none',
       addNames:
         typeof options.addNames !== 'undefined'

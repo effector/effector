@@ -123,7 +123,7 @@ const connectWebSocketFx = createEffect((url: string): Promise<WebSocket> => {
     const timeout = setTimeout(() => {
       const error = new Error("Connection timeout");
 
-      socketError(error);
+      scopeSocketError(error);
       reject(error);
       socket.close();
     }, TIMEOUT);

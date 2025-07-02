@@ -23,6 +23,10 @@ const $store = createStore(0, {
 });
 ```
 
+### `no handler used in [effect name]` (#no-handler-used)
+
+This error occurs when calling an effect without a handler. Make sure you passed a handler to the `createEffect` method during creation, or later when using the `.use(handler)` method.
+
 ### `serialize: One or more stores dont have sids, their values are omitted` (#store-without-sid)
 
 :::info{title="Before version 23.3.0"}
@@ -87,6 +91,27 @@ const scopeEvent = scopeBind(event, {
   safe: true,
 });
 ```
+
+### `call of derived event is not supported, use createEvent instead` (#call-of-derived-event-is-not-supported)
+
+This error occurs when you try to call a derived event as a function. Derived events are created by methods like `.map()`, `.filter()`, `.filterMap()`, as well as the `sample` operator.
+
+To fix this, use an event created via `createEvent`.
+
+### `unit call from pure function is not supported, use operators like sample instead` (#unit-call-from-pure-not-supported)
+
+This error occurs when you try to call events or effects from [pure functions](/en/explanation/glossary#purity) in Effector:
+
+- **Calling events in event methods**<br/>
+  When you try to call one event inside another event's `.map()`, `.filter()`, `.filterMap()`, or `.prepend()` methods.
+
+- **Calling events in store handlers**<br/>
+  When attempting to call an event in a [`.on()`](/en/api/effector/Store#methods-on-trigger-reducer) handler, inside the [`.map()`](/en/api/effector/Store#methods-map-fn) method, or in the [`updateFilter()`](/en/api/effector/createStore#createStore-formulae) configuration property of a store.
+
+- **Calling events in `sample` functions**<br/>
+  When calling an event in the `fn` or `filter` function of the `sample` operator.
+
+How to fix: Instead of calling events in pure functions, use declarative operators, for example, `sample`.
 
 ## Gotchas (#gotchas)
 
