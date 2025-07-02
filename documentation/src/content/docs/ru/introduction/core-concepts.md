@@ -244,7 +244,7 @@ getSupersFx();
 `sample` является основным методом работы с юнитами, который позволяет декларативно запустить цепочку действий.
 :::
 
-```ts
+```ts ins={27-37}
 import { createStore, createEvent, createEffect, sample } from "effector";
 
 const $supers = createStore([]);

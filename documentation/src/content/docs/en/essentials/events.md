@@ -159,7 +159,7 @@ Events in effector can be combined in various ways to create more complex logic.
 
 You can create a new event based on an existing one using the `map` method, which will be fired after original event:
 
-```ts
+```ts mark={5}
 import { createEvent, createStore } from "effector";
 
 const userClicked = createEvent<{ id: number; name: string }>();
@@ -206,7 +206,7 @@ const typeSafeAdminClicked = sample({
 You can use the `merge` method, which combines an array of units into a single event that will
 trigger when any of the array elements is called:
 
-```ts
+```ts mark={6}
 const buttonClicked = createEvent();
 const linkClicked = createEvent();
 const iconClicked = createEvent();
@@ -222,7 +222,7 @@ sample({
 
 Or you can use `sample` with array in `clock`, which under the hood use the same method `merge` for arrays.
 
-```ts
+```ts mark={7}
 const buttonClicked = createEvent();
 const linkClicked = createEvent();
 const iconClicked = createEvent();
@@ -240,7 +240,7 @@ sample({
 
 Let's say your application encounters different errors with different structures, but the error handling should happen centrally:
 
-```ts
+```ts wrap
 import { createEvent } from "effector";
 
 // Main error handling event
@@ -267,17 +267,17 @@ showValidationError("email"); // 🔴 Error: Field email is filled incorrectly
 In this example:
 
 1. We have a main showError event that accepts a string
-2. Using prepend, we create two new events, each of which:
+2. Using `prepend` we create two new events, each of which:
 
-- Accepts its own data type (number for network errors, string for validation errors)
-- Transforms this data into an error string
+- Accepts its own data type
+- Transforms this data into a string
 - Passes the result to the main showError event
 
 ### Conditional event triggering (#conditional-event-triggering)
 
 The action chain when calling an event can trigger based on store states:
 
-```ts
+```ts mark={7}
 const buttonClicked = createEvent<void>();
 const $isEnabled = createStore(true);
 
