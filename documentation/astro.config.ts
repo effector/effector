@@ -24,13 +24,12 @@ export default defineConfig({
     preact({ compat: true }),
     expressiveCode({
       themes: ["github-light-default", "plastic"],
-      emitExternalStylesheet: true,
       themeCssRoot: "html",
       styleOverrides: {
-        borderColor: (a) => {
-          console.log(a.theme.name);
-
-          return "var(--theme-divider);";
+        borderColor: "var(--theme-divider);",
+        frames: {
+          shadowColor: "transparent",
+          tooltipSuccessBackground: "var(--theme-admonition-tip-border)",
         },
       },
       themeCssSelector: (theme) => {
@@ -59,18 +58,10 @@ export default defineConfig({
         rehypeAutolinkHeadings,
 
         {
-          behavior: "prepend",
+          // behavior: "wrap",
           properties: { class: "href" },
         },
       ],
-      // [
-      //   copyCodeButton,
-      //   {
-      //     iconSize: 16,
-      //     buttonClass: "copy-code-button",
-      //     showOnHover: true,
-      //   },
-      // ],
     ],
   },
   vite: {
