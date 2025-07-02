@@ -169,13 +169,13 @@ export async function rollupEffector() {
         external: externals,
         plugins: [
           plugins.resolve,
+          plugins.babel,
           commonjs({
             extensions,
             ignoreDynamicRequires: true,
             transformMixedEsModules: false,
             ignore: id => /path/.test(id),
           }),
-          plugins.babel,
         ],
       })
       await buildPlugin.write({
