@@ -12,7 +12,8 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { remarkHeadingId } from "@effector/remark-heading-id";
 
 import { admonitions } from "./plugins/admonitions";
-import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
+
+import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,6 +22,27 @@ export default defineConfig({
   integrations: [
     tailwind({ applyBaseStyles: false }),
     preact({ compat: true }),
+    expressiveCode({
+      themes: ["github-light-default", "plastic"],
+      emitExternalStylesheet: true,
+      themeCssRoot: "html",
+      styleOverrides: {
+        borderColor: (a) => {
+          console.log(a.theme.name);
+
+          return "var(--theme-divider);";
+        },
+      },
+      themeCssSelector: (theme) => {
+        if (theme.name === "plastic") return ".theme-dark";
+        if (theme.name === "github-light-default") return "";
+        return false;
+      },
+      removeUnusedThemes: true,
+      shiki: {
+        bundledLangs: ["js", "ts", "tsx"],
+      },
+    }),
     mdx({ extendMarkdownConfig: true }),
   ],
   prefetch: true,
@@ -35,11 +57,20 @@ export default defineConfig({
     rehypePlugins: [
       [
         rehypeAutolinkHeadings,
+
         {
           behavior: "prepend",
           properties: { class: "href" },
         },
       ],
+      // [
+      //   copyCodeButton,
+      //   {
+      //     iconSize: 16,
+      //     buttonClass: "copy-code-button",
+      //     showOnHover: true,
+      //   },
+      // ],
     ],
   },
   vite: {
