@@ -181,7 +181,7 @@ If you are not familiar with `createEvent` and events, you will learn how to wor
 
 You can update a store using event parameters by passing data to the event like a regular function and using it in the handler:
 
-```ts
+```ts mark={12}
 import { createStore, createEvent } from "effector";
 
 const userUpdated = createEvent<{ name: string }>();
@@ -249,7 +249,7 @@ Advantages of using `sample` for state updates:
 
 If your store work involves replacing the old state with a new one when an event is called, you can use the [`restore`](/en/api/effector/restore) method:
 
-```ts
+```ts mark={5}
 import { restore, createEvent } from "effector";
 
 const nameChanged = createEvent<string>();
@@ -259,7 +259,7 @@ const $counter = restore(nameChanged, "");
 
 The code above is equivalent to the code below:
 
-```ts
+```ts mark={5}
 import { createStore, createEvent } from "effector";
 
 const nameChanged = createEvent<string>();
@@ -308,7 +308,7 @@ createUserFx();
 
 A store isn't limited to a single event subscription - you can subscribe to as many events as you need, and different stores can subscribe to the same event:
 
-```ts
+```ts "categoryChanged"
 const categoryChanged = createEvent<string>();
 const searchQueryChanged = createEvent<string>();
 const filtersReset = createEvent();

@@ -245,7 +245,7 @@ Here, the [`sample`](/en/essentials/unit-composition) method comes to our aid. I
 `sample` is the primary method for working with units, allowing you to declaratively trigger a chain of actions.
 :::
 
-```ts
+```ts ins={27-37}
 import { createStore, createEvent, createEffect, sample } from "effector";
 
 const $supers = createStore([]);
