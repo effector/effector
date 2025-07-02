@@ -607,11 +607,14 @@ module.exports = function (babel, options = {}) {
         },
       },
 
-      CallExpression(path, state) {
+      'CallExpression|TaggedTemplateExpression'(path, state) {
+        const isTaggedTemplate = t.isTaggedTemplateExpression(path.node)
+        const callee = isTaggedTemplate ? path.node.tag : path.node.callee
+
         addFileNameIdentifier(addLoc, enableFileName, t, path, state)
 
-        if (t.isIdentifier(path.node.callee)) {
-          const name = path.node.callee.name
+        if (t.isIdentifier(callee)) {
+          const name = callee.name
           if (!this.effector_ignoredImports.has(name)) {
             applyMethodParsers(methodParsers, path, state, name)
             applyMethodParsers(reactMethodParsers, path, state, name)
@@ -703,7 +706,11 @@ module.exports = function (babel, options = {}) {
             const resultName = idNode ? idNode.name : ''
             let loc
             path.find(path => {
-              if (path.isCallExpression()) {
+              if (
+                isTaggedTemplate
+                  ? path.isTaggedTemplateExpression()
+                  : path.isCallExpression()
+              ) {
                 loc = path.node.loc.start
                 return true
               }
@@ -739,12 +746,12 @@ module.exports = function (babel, options = {}) {
           }
         }
 
-        if (transformLegacyDomainMethods && t.isMemberExpression(path.node.callee)) {
+        if (transformLegacyDomainMethods && t.isMemberExpression(callee)) {
           applyMethodParsers(
             domainMethodParsers,
             path,
             state,
-            path.node.callee.property.name,
+            callee.property.name,
           )
         }
       },
@@ -1528,10 +1535,12 @@ function transformHmr(
         return
       }
     },
-    CallExpression(call) {
+    'CallExpression|TaggedTemplateExpression'(call) {
+      const isTaggedTemplate = babel.types.isTaggedTemplateExpression(call.node)
+      const callee = isTaggedTemplate ? call.node.tag : call.node.callee
       const isWatchedFactoryCall =
-        watchedFactories.has(call.node.callee.name) ||
-        watchedFactories.has(call.node.callee.property?.name)
+        watchedFactories.has(callee.name) ||
+        watchedFactories.has(callee.property?.name)
 
       if (!isSupportHMR(call) || !isWatchedFactoryCall) {
         return
