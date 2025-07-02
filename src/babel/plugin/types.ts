@@ -146,7 +146,7 @@ export type EffectorPluginOptionsNormalized = {
   addLoc: boolean
   debugSids: boolean
   forceScope: boolean
-  hmr: 'cjs' | 'esm' | 'none' | true
+  hmr: 'cjs' | 'esm' | boolean
   addNames: boolean
   reactSsr: boolean
   transformLegacyDomainMethods: boolean

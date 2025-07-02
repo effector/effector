@@ -469,11 +469,13 @@ export function transformHmr(
   path: NodePath<Program>,
   factories: string[],
   importNamesMap: ImportNamesMap,
+  hmrMode: 'cjs' | 'esm',
   createHMRRegion: CreateHMRRegionTemplate,
   createWithRegion: WithRegionTemplate,
   createHotCode: (
     importNamesMap: ImportNamesMap,
     declaration: NodePath,
+    hmrMode: 'cjs' | 'esm',
   ) => IfStatement,
 ) {
   const watchedFactories = new Set(DEFAULT_WATCHED_CALLS)
@@ -523,7 +525,7 @@ export function transformHmr(
         importNamesMap.hmrRegionInserted = true
       }
       if (!importNamesMap.hmrCodeInserted) {
-        const hotCode = createHotCode(importNamesMap, call)
+        const hotCode = createHotCode(importNamesMap, call, hmrMode)
         const programPath = findProgramPath(path)
         programPath.pushContainer('body', hotCode)
         importNamesMap.hmrCodeInserted = true

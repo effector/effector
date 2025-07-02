@@ -154,7 +154,7 @@ export function normalizeOptions(options: EffectorPluginOptions) {
       addLoc: Boolean(options.addLoc),
       debugSids: Boolean(options.debugSids),
       forceScope: Boolean(options.forceScope),
-      hmr: options.hmr || 'none',
+      hmr: options.hmr === 'none' ? false : options.hmr || false,
       addNames:
         typeof options.addNames !== 'undefined'
           ? Boolean(options.addNames)

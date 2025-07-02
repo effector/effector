@@ -94,10 +94,11 @@ export default function effectorBabelPlugin(
   function createHotCode(
     importNamesMap: ImportNamesMap,
     declaration: NodePath,
+    hmrMode: 'cjs' | 'esm',
   ) {
     if (!hotProperty) {
       hotProperty = template.expression.ast(
-        hmr === 'cjs'
+        hmrMode === 'cjs'
           ? 'module.hot'
           : '(import.meta.hot || import.meta.webpackHot)',
       ) as any as ExpressionStatement
@@ -267,12 +268,21 @@ export default function effectorBabelPlugin(
     visitor: {
       Program: {
         enter(path, state) {
-          if (hmr !== 'none') {
+          if (hmr) {
+            const hmrMode =
+              hmr === 'cjs'
+                ? 'cjs'
+                : hmr === 'esm'
+                ? 'esm'
+                : !!state.file.opts.caller?.supportsStaticESM
+                ? 'esm'
+                : 'cjs'
             transformHmr(
               babel,
               path,
               factories,
               this.effector_importNames,
+              hmrMode,
               createHMRRegion,
               createWithRegion,
               createHotCode,
