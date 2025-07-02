@@ -19,6 +19,7 @@ const defaultFactories = [
   '@effector/reflect/scope',
   'atomic-router',
   '@withease/factories',
+  'effector-action',
   'patronum', // there is also custom handling for patronum/{method} imports
 ]
 
