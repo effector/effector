@@ -56,9 +56,8 @@ export default defineConfig({
     rehypePlugins: [
       [
         rehypeAutolinkHeadings,
-
         {
-          // behavior: "wrap",
+          behavior: "prepend",
           properties: { class: "href" },
         },
       ],
