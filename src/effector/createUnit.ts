@@ -47,7 +47,17 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
+export const initUnit = (
+  kind: Kind,
+  unit: any,
+  rawConfig: any,
+  caller: (...args: any[]) => void,
+) => {
+  const traceError = Error()
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(traceError, caller)
+  }
+  const unitTrace = traceError.stack
   const config = flattenConfig(rawConfig)
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
@@ -63,6 +73,7 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
     serialize: config.serialize,
     derived: config.derived,
     config,
+    unitTrace,
   }
   unit.targetable = !config.derived
   unit.parent = parent
@@ -157,7 +168,7 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(config.actualOp || EVENT, event, config),
+      meta: initUnit(config.actualOp || EVENT, event, config, createEvent),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -231,11 +242,6 @@ export function createStore<State>(
   const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
   const errorTitle = generateErrorTitle('store', config)
-  const traceError = Error()
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(traceError, createStore)
-  }
-  const storeTrace = traceError.stack
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
@@ -353,7 +359,7 @@ export function createStore<State>(
       )
     },
   } as unknown as Store<State>
-  const meta = initUnit(STORE, store, config)
+  const meta = initUnit(STORE, store, config, createStore)
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
@@ -371,7 +377,7 @@ export function createStore<State>(
         if (isVoidUpdate && !explicitSkipVoid) {
           printErrorWithStack(
             `${errorTitle}: ${requireExplicitSkipVoidMessage}`,
-            storeTrace,
+            getMeta(store, 'unitTrace'),
           )
         }
 
@@ -387,7 +393,7 @@ export function createStore<State>(
     meta: {
       ...meta,
       defaultState,
-      storeTrace,
+      stateRef: plainState,
     },
     regional: true,
   })

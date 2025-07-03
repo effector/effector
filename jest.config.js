@@ -200,9 +200,9 @@ module.exports = {
           testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
           transform,
         },
-      },
-      'babel',
-      {
+        babel: {
+          testMatch: [`<rootDir>/src/babel/**/*.test.(j|t)s`],
+        },
         react: {
           testEnvironment: 'jsdom',
           testMatch: [`<rootDir>/src/react/**/*.test.tsx`],

@@ -304,6 +304,7 @@ test('event by event', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<number>' is not assignable to type 'Event<string>'.
+      Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -334,6 +335,7 @@ test('store by event', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<number>' is not assignable to type 'Event<string>'.
+      Type 'number' is not assignable to type 'string'.
     "
   `)
 })
@@ -364,6 +366,7 @@ test('effect by event', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Event<string>' is not assignable to type 'Event<number>'.
+      Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -430,6 +433,7 @@ describe('sample(Store<T>):Store<T>', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -452,6 +456,7 @@ describe('sample(Store<T>):Store<T>', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<string>' is not assignable to type 'Event<number>'.
+          Type 'string' is not assignable to type 'number'.
         "
       `)
     })
