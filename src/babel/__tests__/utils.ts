@@ -5,7 +5,6 @@ import {transformAsync} from '@babel/core'
 // @ts-expect-error no types
 import tsPreset from '@babel/preset-typescript'
 
-// @ts-expect-error no types
 import babelPlugin from '../babel-plugin'
 
 export function formatCode(code: string) {
@@ -24,9 +23,17 @@ export function formatCode(code: string) {
 
 function getPlugins(format: 'es' | 'cjs') {
   return format === 'es'
-    ? [[babelPlugin, {hmr: format, addNames: false, addLoc: false}]]
+    ? [
+        [
+          babelPlugin,
+          {hmr: format, addNames: false, addLoc: false, forceScope: true},
+        ],
+      ]
     : [
-        [babelPlugin, {hmr: format, addNames: false, addLoc: false}],
+        [
+          babelPlugin,
+          {hmr: format, addNames: false, addLoc: false, forceScope: true},
+        ],
         '@babel/plugin-transform-modules-commonjs',
       ]
 }

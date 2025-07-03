@@ -14,7 +14,7 @@ import type {PluginPass} from '@babel/core'
 export type WithRegionTemplate = (params: {
   WITH_REGION: string
   REGION_NAME: string
-  FN: NodePath
+  FN: CallExpression | TaggedTemplateExpression
 }) => CallExpression
 
 export type CreateHMRRegionTemplate = (params: {
@@ -31,11 +31,17 @@ export type FactoryTemplate = (params: {
   LOC?: ObjectExpression
 }) => CallExpression
 
-export type HotCode = (params: {
+export type HotCodeSyntaxTemplate = (params: {
   HOT_PROPERTY: ExpressionStatement
   CLEAR_NODE: string
   REGION_NAME: string
 }) => IfStatement
+
+export type HotCodeTemplate = (
+  importNamesMap: ImportNamesMap,
+  declaration: NodePath<TaggedTemplateExpression> | NodePath<CallExpression>,
+  hmrMode: 'cjs' | 'es',
+) => IfStatement
 
 export type SmallConfig = {
   addLoc: boolean
@@ -75,7 +81,7 @@ export type PluginState = PluginPass & {
   effector_ignoredImports: Set<string>
   effector_forceScopeSpecifiers: Set<string>
   effector_importNames: ImportNamesMap
-  effector_factoryMap?: Map<string, FactoryInfo>
+  effector_factoryMap: Map<string, FactoryInfo>
   effector_factoryPaths?: string[]
   effector_needFactoryImport?: boolean
   fileNameIdentifier?: Identifier
@@ -85,7 +91,7 @@ export type EffectorPluginOptions = {
   addLoc?: boolean
   addNames?: boolean
   debugSids?: boolean
-  hmr?: 'cjs' | 'esm' | 'none' | true
+  hmr?: 'cjs' | 'es' | 'none' | true
   factories?: string[]
   transformLegacyDomainMethods?: boolean
   forceScope?: boolean
@@ -146,7 +152,7 @@ export type EffectorPluginOptionsNormalized = {
   addLoc: boolean
   debugSids: boolean
   forceScope: boolean
-  hmr: 'cjs' | 'esm' | boolean
+  hmr: 'cjs' | 'es' | boolean
   addNames: boolean
   reactSsr: boolean
   transformLegacyDomainMethods: boolean

@@ -1,20 +1,19 @@
 import type {NodePath} from '@babel/traverse'
-import type {Node, PluginPass} from '@babel/core'
+import type {PluginPass} from '@babel/core'
 import type {
   Identifier,
   Expression,
   PatternLike,
-  IfStatement,
   Program,
   CallExpression,
+  ImportSpecifier,
 } from '@babel/types'
 
 import type {
-  CreateHMRRegionTemplate,
   ImportNamesMap,
+  MethodParser,
   PluginState,
   SmallConfig,
-  WithRegionTemplate,
 } from './types'
 
 export const REGION_NAME = '_internalHMRRegion'
@@ -72,6 +71,29 @@ export function addImport(
   }
   importNamesMap[method] = uid.name
   return uid.name
+}
+
+export function getImportedName(
+  t: typeof import('@babel/types'),
+  node: ImportSpecifier,
+) {
+  return t.isIdentifier(node.imported)
+    ? node.imported.name
+    : node.imported.value
+}
+
+export function applyMethodParsers(
+  methodParsers: MethodParser[],
+  path: NodePath<any>,
+  state: PluginState,
+  name: string,
+) {
+  for (let i = 0; i < methodParsers.length; i++) {
+    const {flag, set, fn} = methodParsers[i]
+    if (flag && set.has(name)) {
+      fn(path, state, name, findCandidateNameForExpression(path))
+    }
+  }
 }
 
 export function findCandidateNameForExpression(
@@ -424,7 +446,7 @@ function hashCode(s: string) {
   return h.toString(36)
 }
 
-function property(
+export function property(
   t: typeof import('@babel/types'),
   field: string,
   content: Expression | PatternLike,
@@ -440,112 +462,6 @@ function stringProperty(
   return property(t, field, t.stringLiteral(value))
 }
 
-const DEFAULT_WATCHED_CALLS = [
-  'map',
-  'filter',
-  'filterMap',
-  'subscribe',
-  'on',
-  'watch',
-  'reset',
-  'prepend',
-]
-
-export function isSupportHMR(path: NodePath) {
-  return !path.findParent(
-    parent =>
-      parent &&
-      [
-        'FunctionDeclaration',
-        'ArrowFunctionExpression',
-        'ExportDefaultDeclaration',
-        'ClassDeclaration',
-      ].includes(parent.node.type),
-  )
-}
-
-export function transformHmr(
-  babel: typeof import('@babel/core'),
-  path: NodePath<Program>,
-  factories: string[],
-  importNamesMap: ImportNamesMap,
-  hmrMode: 'cjs' | 'esm',
-  createHMRRegion: CreateHMRRegionTemplate,
-  createWithRegion: WithRegionTemplate,
-  createHotCode: (
-    importNamesMap: ImportNamesMap,
-    declaration: NodePath,
-    hmrMode: 'cjs' | 'esm',
-  ) => IfStatement,
-) {
-  const watchedFactories = new Set(DEFAULT_WATCHED_CALLS)
-
-  path.traverse({
-    ImportDeclaration(declaration) {
-      const source = declaration.node.source.value
-      const specifiers = declaration.node.specifiers.map(
-        specifier => specifier.local.name,
-      )
-
-      if (!['effector', ...factories].includes(source)) {
-        return
-      }
-
-      for (const specifier of specifiers) {
-        watchedFactories.add(specifier)
-      }
-
-      if (source !== 'effector') {
-        return
-      }
-    },
-    'CallExpression|TaggedTemplateExpression'(call) {
-      const isTaggedTemplate = babel.types.isTaggedTemplateExpression(call.node)
-      const callee = isTaggedTemplate ? call.node.tag : call.node.callee
-      const isWatchedFactoryCall =
-        watchedFactories.has(callee.name) ||
-        watchedFactories.has(callee.property?.name)
-
-      if (!isSupportHMR(call) || !isWatchedFactoryCall) {
-        return
-      }
-      if (!importNamesMap.hmrRegionInserted) {
-        const createNodeName = addImport(
-          babel.types,
-          call,
-          'createNode',
-          importNamesMap,
-        )
-        const regionNode = createHMRRegion({
-          CREATE_NODE: createNodeName,
-          REGION_NAME,
-        })
-        /** guaranteed to be initialized after addImport call */
-        importNamesMap.importDeclarationPath!.insertAfter(regionNode)
-        importNamesMap.hmrRegionInserted = true
-      }
-      if (!importNamesMap.hmrCodeInserted) {
-        const hotCode = createHotCode(importNamesMap, call, hmrMode)
-        const programPath = findProgramPath(path)
-        programPath.pushContainer('body', hotCode)
-        importNamesMap.hmrCodeInserted = true
-      }
-      call.replaceWith(
-        createWithRegion({
-          WITH_REGION: addImport(
-            babel.types,
-            call,
-            'withRegion',
-            importNamesMap,
-          ),
-          REGION_NAME,
-          FN: call.node,
-        }),
-      )
-    },
-  })
-}
-
-function findProgramPath(path: NodePath<any>) {
+export function findProgramPath(path: NodePath<any>) {
   return path.find(path => path.isProgram())! as NodePath<Program>
 }

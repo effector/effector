@@ -6,16 +6,12 @@ exports[`hmr module cjs format 1`] = `
 Object.defineProperty(exports, '__esModule', {
   value: true,
 })
-exports.default = exports.exportedLet = exports.exportedConst = void 0
-
+exports.exportedLet = exports.exportedConst = exports.default = void 0
 var _effector = require('effector')
-
 var _factories = require('@withease/factories')
-
 const _internalHMRRegion = (0, _effector.createNode)({
   regional: true,
 })
-
 function incorrect() {
   const $si = (0, _effector.createStore)(0, {
     sid: 's50ivo',
@@ -32,12 +28,10 @@ function incorrect() {
     iFx,
   }
 }
-
 const incorrectArrow = () =>
   (0, _effector.createStore)(0, {
     sid: 'kf1ayc',
   })
-
 const correct = (0, _effector.withRegion)(_internalHMRRegion, () =>
   (0, _effector.withFactory)({
     sid: '-ikkxki',
@@ -90,18 +84,20 @@ const decrement = (0, _effector.withRegion)(_internalHMRRegion, () =>
     sid: '-ue8y8v',
   }),
 )
-const exportedConst = (0, _effector.withRegion)(_internalHMRRegion, () =>
-  (0, _effector.createStore)('', {
-    sid: 'kijuqq',
-  }),
-)
-exports.exportedConst = exportedConst
-let exportedLet = (0, _effector.withRegion)(_internalHMRRegion, () =>
-  (0, _effector.createStore)('', {
-    sid: 'ajlqjc',
-  }),
-)
-exports.exportedLet = exportedLet
+const exportedConst = (exports.exportedConst = (0, _effector.withRegion)(
+  _internalHMRRegion,
+  () =>
+    (0, _effector.createStore)('', {
+      sid: 'kijuqq',
+    }),
+))
+let exportedLet = (exports.exportedLet = (0, _effector.withRegion)(
+  _internalHMRRegion,
+  () =>
+    (0, _effector.createStore)('', {
+      sid: 'ajlqjc',
+    }),
+))
 const model = (0, _effector.withRegion)(_internalHMRRegion, () =>
   (0, _effector.withFactory)({
     sid: 'ueg7w5',
@@ -126,7 +122,6 @@ const $store = (0, _effector.withRegion)(_internalHMRRegion, () =>
     },
   }),
 )
-
 if (true) {
   ;(0, _effector.withRegion)(_internalHMRRegion, () =>
     (0, _effector.sample)({
@@ -144,7 +139,6 @@ if (true) {
     }),
   )
 }
-
 ;(0, _effector.withRegion)(_internalHMRRegion, () =>
   (0, _effector.sample)({
     and: [
@@ -173,19 +167,14 @@ if (true) {
     },
   }),
 )
-
 class Class {
   event = (0, _effector.createEvent)({
     sid: 'xp6hes',
   })
 }
-
-var _default = (0, _effector.createEvent)({
+var _default = (exports.default = (0, _effector.createEvent)({
   sid: 'z4bcpo',
-})
-
-exports.default = _default
-
+}))
 if (module.hot) {
   module.hot.dispose(() => (0, _effector.clearNode)(_internalHMRRegion))
 } else {
@@ -201,14 +190,11 @@ exports[`hmr module esm format 1`] = `
   withRegion as _withRegion,
   withFactory as _withFactory,
 } from 'effector'
-
 const _internalHMRRegion = _createNode({
   regional: true,
 })
-
 import {createEvent, createStore, sample, createEffect, attach} from 'effector'
 import {createFactory, invoke} from '@withease/factories'
-
 function incorrect() {
   const $si = createStore(0, {
     sid: 's50ivo',
@@ -225,12 +211,10 @@ function incorrect() {
     iFx,
   }
 }
-
 const incorrectArrow = () =>
   createStore(0, {
     sid: 'kf1ayc',
   })
-
 const correct = _withRegion(_internalHMRRegion, () =>
   _withFactory({
     sid: '-ikkxki',
@@ -253,13 +237,11 @@ const correct = _withRegion(_internalHMRRegion, () =>
       }),
   }),
 )
-
 const fx = _withRegion(_internalHMRRegion, () =>
   createEffect(() => {}, {
     sid: 'jvh2by',
   }),
 )
-
 const attachedFx = _withRegion(_internalHMRRegion, () =>
   attach({
     and: {
@@ -270,25 +252,21 @@ const attachedFx = _withRegion(_internalHMRRegion, () =>
     },
   }),
 )
-
 const $count = _withRegion(_internalHMRRegion, () =>
   createStore(0, {
     sid: 's9hq26',
   }),
 )
-
 const increment = _withRegion(_internalHMRRegion, () =>
   createEvent({
     sid: 'mq1bc6',
   }),
 )
-
 const decrement = _withRegion(_internalHMRRegion, () =>
   createEvent({
     sid: '-ue8y8v',
   }),
 )
-
 export const exportedConst = _withRegion(_internalHMRRegion, () =>
   createStore('', {
     sid: 'kijuqq',
@@ -299,21 +277,16 @@ export let exportedLet = _withRegion(_internalHMRRegion, () =>
     sid: 'ajlqjc',
   }),
 )
-
 const model = _withRegion(_internalHMRRegion, () =>
   _withFactory({
     sid: 'ueg7w5',
     fn: () => invoke(correct),
   }),
 )
-
 const incorrectModel = incorrect()
 const incorrectArrowModel = incorrectArrow()
-
 _withRegion(_internalHMRRegion, () => $count.on(increment, count => count + 1))
-
 _withRegion(_internalHMRRegion, () => $count.watch(console.log))
-
 const $store = _withRegion(_internalHMRRegion, () =>
   sample({
     and: [
@@ -326,7 +299,6 @@ const $store = _withRegion(_internalHMRRegion, () =>
     },
   }),
 )
-
 if (true) {
   _withRegion(_internalHMRRegion, () =>
     sample({
@@ -344,7 +316,6 @@ if (true) {
     }),
   )
 }
-
 _withRegion(_internalHMRRegion, () =>
   sample({
     and: [
@@ -360,7 +331,6 @@ _withRegion(_internalHMRRegion, () =>
     },
   }),
 )
-
 _withRegion(_internalHMRRegion, () =>
   sample({
     and: [
@@ -374,17 +344,14 @@ _withRegion(_internalHMRRegion, () =>
     },
   }),
 )
-
 class Class {
   event = createEvent({
     sid: 'xp6hes',
   })
 }
-
 export default createEvent({
   sid: 'z4bcpo',
 })
-
 if (import.meta.hot || import.meta.webpackHot) {
   ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
     _clearNode(_internalHMRRegion),

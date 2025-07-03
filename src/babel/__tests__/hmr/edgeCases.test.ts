@@ -1,7 +1,6 @@
 // @ts-expect-error no types
 import tsPreset from '@babel/preset-typescript'
 
-// @ts-expect-error no types
 import babelPlugin from '../../babel-plugin'
 import {compile, configSetup} from '../utils'
 
@@ -9,9 +8,10 @@ test('dont throw on already imported methods', async () => {
   const code = `
   import {createNode, withRegion} from 'effector'
   `
-  expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(
-    `""`,
-  )
+  expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(`
+    "export {}
+    "
+  `)
 })
 
 test('reference with factories', async () => {
@@ -31,7 +31,6 @@ test('reference with factories', async () => {
   ).toMatchInlineSnapshot(`
     "import {withFactory as _withFactory} from 'effector'
     import {debug} from 'patronum'
-
     _withFactory({
       sid: 'ujj0q3',
       fn: () => debug(),
@@ -62,12 +61,10 @@ describe('factories in functions', () => {
         const $foo = createStore(0, {
           sid: '1uohh2',
         })
-
         _withFactory({
           sid: 'ul6elm',
           fn: () => debug($foo),
         })
-
         return $foo
       }
       "
@@ -95,11 +92,9 @@ describe('factories in functions', () => {
         withRegion as _withRegion,
         withFactory as _withFactory,
       } from 'effector'
-
       const _internalHMRRegion = _createNode({
         regional: true,
       })
-
       import {createStore} from 'effector'
       import {debug} from 'patronum'
       export const $bar = _withRegion(_internalHMRRegion, () =>
@@ -111,15 +106,12 @@ describe('factories in functions', () => {
         const $foo = createStore(0, {
           sid: '2srq9g',
         })
-
         _withFactory({
           sid: 'll4v7n',
           fn: () => debug($foo),
         })
-
         return $foo
       }
-
       if (import.meta.hot || import.meta.webpackHot) {
         ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
           _clearNode(_internalHMRRegion),
@@ -135,9 +127,10 @@ describe('factories in functions', () => {
 describe('put hmr only to modules with effector', () => {
   test('no effector no hmr', async () => {
     const code = `import {useMemo} from 'react'`
-    expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(
-      `""`,
-    )
+    expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(`
+      "export {}
+      "
+    `)
   })
 
   test('has factories has hmr', async () => {
@@ -153,20 +146,16 @@ describe('put hmr only to modules with effector', () => {
         withRegion as _withRegion,
         withFactory as _withFactory,
       } from 'effector'
-
       const _internalHMRRegion = _createNode({
         regional: true,
       })
-
       import {debug} from 'patronum'
-
       _withRegion(_internalHMRRegion, () =>
         _withFactory({
           sid: 'uiz86g',
           fn: () => debug(),
         }),
       )
-
       if (import.meta.hot || import.meta.webpackHot) {
         ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
           _clearNode(_internalHMRRegion),
@@ -189,19 +178,15 @@ describe('put hmr only to modules with effector', () => {
         clearNode as _clearNode,
         withRegion as _withRegion,
       } from 'effector'
-
       const _internalHMRRegion = _createNode({
         regional: true,
       })
-
       import {createStore} from 'effector'
-
       const $foo = _withRegion(_internalHMRRegion, () =>
         createStore(0, {
           sid: 'fjm8r',
         }),
       )
-
       if (import.meta.hot || import.meta.webpackHot) {
         ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
           _clearNode(_internalHMRRegion),
@@ -218,9 +203,10 @@ describe('put hmr only to modules with effector', () => {
     import {createStore} from 'effector'
     import {useMemo} from 'react'
     `
-    expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(
-      `""`,
-    )
+    expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(`
+      "export {}
+      "
+    `)
   })
 })
 
@@ -230,9 +216,10 @@ describe('imports correctness', () => {
     import type {Store} from 'effector'
     import {debug} from 'patronum'
     `
-    expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(
-      `""`,
-    )
+    expect(await compile(code, configSetup('es', 'ts'))).toMatchInlineSnapshot(`
+      "export {}
+      "
+    `)
   })
   test('imports in the end of file', async () => {
     const code = `
@@ -248,28 +235,22 @@ describe('imports correctness', () => {
         withRegion as _withRegion,
         withFactory as _withFactory,
       } from 'effector'
-
       const _internalHMRRegion = _createNode({
         regional: true,
       })
-
       import {debug} from 'patronum'
-
       _withRegion(_internalHMRRegion, () =>
         _withFactory({
           sid: 'uiffl3',
           fn: () => debug(),
         }),
       )
-
       import {createStore} from 'effector'
-
       const $foo = _withRegion(_internalHMRRegion, () =>
         createStore(0, {
           sid: '1dmv15',
         }),
       )
-
       if (import.meta.hot || import.meta.webpackHot) {
         ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
           _clearNode(_internalHMRRegion),
@@ -305,11 +286,9 @@ test('complex case', async () => {
       withRegion as _withRegion,
       withFactory as _withFactory,
     } from 'effector'
-
     const _internalHMRRegion = _createNode({
       regional: true,
     })
-
     import {createStore} from 'effector'
     import {createJsonQuery} from '@farfetched/core'
     import {createFactory, invoke} from '@withease/factories'
@@ -317,12 +296,10 @@ test('complex case', async () => {
       const $name = createStore('', {
         sid: 'ukhrz6',
       })
-
       const query = _withFactory({
         sid: 'amt93u',
         fn: () => createJsonQuery({}),
       })
-
       return {
         name: $name,
         query,
@@ -340,7 +317,6 @@ test('complex case', async () => {
         fn: () => invoke(() => wrappedfactory()),
       }),
     )
-
     if (import.meta.hot || import.meta.webpackHot) {
       ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
         _clearNode(_internalHMRRegion),
@@ -367,27 +343,22 @@ test('backtick functions are supported', async () => {
       withRegion as _withRegion,
       withFactory as _withFactory,
     } from 'effector'
-
     const _internalHMRRegion = _createNode({
       regional: true,
     })
-
     import {createStore} from 'effector'
     import {format} from 'patronum'
-
     const $foo = _withRegion(_internalHMRRegion, () =>
       createStore(0, {
         sid: '1dmuzf',
       }),
     )
-
     const $bar = _withRegion(_internalHMRRegion, () =>
       _withFactory({
         sid: '-qqz9ix',
         fn: () => format\`\${$foo}\`,
       }),
     )
-
     if (import.meta.hot || import.meta.webpackHot) {
       ;(import.meta.hot || import.meta.webpackHot).dispose(() =>
         _clearNode(_internalHMRRegion),

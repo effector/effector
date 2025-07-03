@@ -3,7 +3,6 @@ import path from 'path'
 import {transformFileSync} from '@babel/core'
 import {formatCode} from './utils'
 
-// @ts-expect-error no types
 import babelPlugin from '../babel-plugin'
 
 describe('babel-plugin', () => {
