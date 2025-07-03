@@ -222,6 +222,12 @@ describe('guard(source, config)', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+              Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+                Types of property 'map' are incompatible.
+                  Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+                    Types of parameters 'fn' and 'fn' are incompatible.
+                      Types of parameters 'state' and 'state' are incompatible.
+                        Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -432,6 +438,11 @@ describe('guard(config)', () => {
           The last overload gave the following error.
             Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
               Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+                Types of property 'map' are incompatible.
+                  Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+                    Types of parameters 'fn' and 'fn' are incompatible.
+                      Types of parameters 'state' and 'state' are incompatible.
+                        Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -450,6 +461,12 @@ describe('guard(config)', () => {
         No overload matches this call.
           The last overload gave the following error.
             Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.
+              Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+                Types of property 'map' are incompatible.
+                  Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+                    Types of parameters 'fn' and 'fn' are incompatible.
+                      Types of parameters 'state' and 'state' are incompatible.
+                        Type 'string' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -518,6 +535,7 @@ describe('guard(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })

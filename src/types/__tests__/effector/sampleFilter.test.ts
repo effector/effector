@@ -136,6 +136,7 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -236,6 +237,7 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Type 'number' is not assignable to type 'string'.
         "
       `)
     })

@@ -362,15 +362,19 @@ describe('array support', () => {
           No overload matches this call.
             The last overload gave the following error.
               Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
-                Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
-                  Types of property '__' are incompatible.
-                    Type 'string' is not assignable to type 'number'.
+                Types of property '__' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+                    Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+                      Types of property '__' are incompatible.
+                        Type 'string' is not assignable to type 'number'.
           No overload matches this call.
             The last overload gave the following error.
               Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
-                Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
-                  Types of property '__' are incompatible.
-                    Type 'string' is not assignable to type 'number'.
+                Types of property '__' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+                    Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+                      Types of property '__' are incompatible.
+                        Type 'string' is not assignable to type 'number'.
           "
         `)
       })
