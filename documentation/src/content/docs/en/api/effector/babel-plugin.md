@@ -109,8 +109,8 @@ getUsers.use(
 
 Enable Hot Module Replacement (HMR) support to clean up links, subscriptions and side effects managed by Effector. This prevents double-firing of Effects and watchers.
 
-:::warning{title="Experimental"}
-Although tested, this option is considered experimental and might have unexpected issues in different bundlers.
+:::warning{title="Interaction with factories"}
+HMR support show best results when all factories in project are [properly declared](/en/api/effector/babel-plugin#configuration-factories), which help plugin and runtime to know which code to clear on hot updates
 :::
 
 ### Formulae (#configuration-hmr-formulae)
@@ -123,14 +123,15 @@ Although tested, this option is considered experimental and might have unexpecte
 ]
 ```
 
-- Type: `"es"` | `"cjs"` | `"none"`
+- Type: `boolean` | `"es"` | `"cjs"`
+  - `true`: Use hmr with auto-detection of target case. Based on [supportsStaticESM](https://babeljs.io/docs/options#caller) babel feature with wide support in bundlers
   - `"es"`: Use `import.meta.hot` HMR API in bundlers that are ESM-compliant, like Vite and Rollup
-  - `"cjs"`: Use `module.hot` HMR API in bundlers that rely on CommonJS modules, like Webpack and Next.js
-  - `"none"`: Disable Hot Module Replacement.
-- Default: `none`
+  - `"cjs"`: Use `module.hot` HMR API in bundlers that rely on CommonJS modules, like Webpack, Next.js or React Native
+  - `false`: Disable Hot Module Replacement
+- Default: `false`
 
 :::info{title="In Production"}
-When bundling for production, make sure to set the `hmr` option to `"none"` to reduce bundle size and improve runtime performance.
+When bundling for production, make sure to set the `hmr` option to `false` or remove it to reduce bundle size and improve runtime performance.
 :::
 
 ## `forceScope` (#configuration-forceScope)

@@ -107,7 +107,7 @@ export default {
       ...compiledFile('inspect'),
       ...esmFile('inspect'),
       'inspect.d.ts',
-      'babel-plugin.js',
+      ...compiledFile('babel-plugin'),
       'babel-plugin-react.js',
     ],
     keywords,
