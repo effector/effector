@@ -421,7 +421,6 @@ export type ID = string
 export type StateRefOp =
   | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
   | {type: 'field'; from: StateRef; field: string}
-  | {type: 'closure'; of: StateRef}
 export type StateRef = {
   id: ID
   current: any
@@ -1766,17 +1765,17 @@ type TargetFilterFnConfig<
   FilterFun,
   FN,
 > = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : never
 
 type TargetConfigCheck<
@@ -1872,17 +1871,17 @@ type SampleFilterTargetDef<
         ? TargetConfigCheck<
             Mode, Target, Source, Clock, FN,
             Mode extends 'clock | source | filter | fn | target'
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock | source | filter |    | target'
-            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter | fn | target'
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter |    | target'
-            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter | fn | target'
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    | target'
-            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : never,
             SomeFN
           >
@@ -2038,17 +2037,17 @@ type SampleFilterTargetDef<
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
           Mode extends 'clock | source |        | fn | target'
-          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock | source |        |    | target'
-          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source |        | fn | target'
-          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source |        |    | target'
-          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        |        | fn | target'
-          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        |        |    | target'
-          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : never,
           SomeFN
         >

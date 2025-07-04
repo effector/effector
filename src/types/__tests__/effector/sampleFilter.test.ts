@@ -753,7 +753,7 @@ test('incorrect filter (should fail)', () => {
     Argument of type '[{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }]' is not assignable to parameter of type '[config: never] | [config: never]'.
       Type '[{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }]' is not assignable to type '[config: never]'.
         Type '{ source: EventCallable<void>; filter: null; target: EventCallable<void>; }' is not assignable to type 'never'.
-          The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
+          The intersection '{ source: EventCallable<void>; clock?: undefined; filter: (src: void) => boolean; target: EventCallable<void>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }' was reduced to 'never' because property 'filter' has conflicting types in some constituents.
     "
   `)
 })
