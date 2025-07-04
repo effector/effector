@@ -14,7 +14,7 @@ import {
   isVoid,
   isFunction,
 } from './is'
-import {createStore} from './createUnit'
+import {createStore, getUnitTrace, setUnitTrace} from './createUnit'
 import {createEvent} from './createUnit'
 import {createNode} from './createNode'
 import {assert, deprecate} from './throw'
@@ -216,6 +216,7 @@ export const createSampling = (
   // @ts-expect-error
   own(source, [jointNode])
   Object.assign(jointNode.meta, metadata, {joint: true, stateRef: clockState})
+  setUnitTrace(jointNode, getUnitTrace(sample))
   return target
 }
 

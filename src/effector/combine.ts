@@ -1,5 +1,10 @@
 import type {Store} from './unit.h'
-import {createStore, requireExplicitSkipVoidMessage} from './createUnit'
+import {
+  createStore,
+  getUnitTrace,
+  requireExplicitSkipVoidMessage,
+  setUnitTrace,
+} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
@@ -87,6 +92,7 @@ export function combine(...args: any[]): Store<any> {
     Array.isArray(structStoreShape),
     !noArraySpread,
     structStoreShape,
+    getUnitTrace(combine),
     config,
     handler,
     extConfig,
@@ -97,6 +103,7 @@ const storeCombination = (
   isArray: boolean,
   needSpread: boolean,
   obj: any,
+  unitTrace: string,
   config?: Config,
   fn?: (upd: any) => any,
   extConfig?: false | {skipVoid?: boolean},
@@ -117,6 +124,7 @@ const storeCombination = (
     ...extConfig,
     and: config,
   })
+  setUnitTrace(store, unitTrace)
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)

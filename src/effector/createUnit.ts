@@ -47,17 +47,23 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
+export const setUnitTrace = (unit: any, unitTrace: string) =>
+  setMeta(unit, 'unitTrace', unitTrace)
+
+export const getUnitTrace = (caller: (...args: any[]) => void) => {
+  const traceError = Error('unit trace')
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(traceError, caller)
+  }
+  return traceError.stack!
+}
+
 export const initUnit = (
   kind: Kind,
   unit: any,
   rawConfig: any,
-  caller: (...args: any[]) => void,
+  unitTrace: string,
 ) => {
-  const traceError = Error()
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(traceError, caller)
-  }
-  const unitTrace = traceError.stack
   const config = flattenConfig(rawConfig)
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
@@ -168,7 +174,12 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(config.actualOp || EVENT, event, config, createEvent),
+      meta: initUnit(
+        config.actualOp || EVENT,
+        event,
+        config,
+        getUnitTrace(createEvent),
+      ),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -359,7 +370,7 @@ export function createStore<State>(
       )
     },
   } as unknown as Store<State>
-  const meta = initUnit(STORE, store, config, createStore)
+  const meta = initUnit(STORE, store, config, getUnitTrace(createStore))
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},

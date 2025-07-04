@@ -5,7 +5,12 @@ import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch, setForkPage, forkPage, isWatch} from './kernel'
-import {createStore, createEvent} from './createUnit'
+import {
+  createStore,
+  createEvent,
+  setUnitTrace,
+  getUnitTrace,
+} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {assert} from './throw'
@@ -38,6 +43,7 @@ export function createEffect<Params, Done, Fail = Error>(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     {...maybeConfig, actualOp: EFFECT},
   ) as unknown as Effect<Params, Done, Fail>
+  setUnitTrace(instance, getUnitTrace(createEffect))
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))
   //@ts-expect-error

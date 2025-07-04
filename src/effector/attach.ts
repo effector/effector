@@ -1,7 +1,7 @@
 import type {Domain} from './unit.h'
 import {combine} from './combine'
 import {createEffect, onSettled, runFn} from './createEffect'
-import {applyParentHook} from './createUnit'
+import {applyParentHook, getUnitTrace, setUnitTrace} from './createUnit'
 import {processArgsToConfig} from './config'
 import {
   getGraph,
@@ -33,6 +33,7 @@ export function attach(config: any) {
   }
   const attached = createEffect(config, injected)
   setMeta(attached, 'attached', true)
+  setUnitTrace(attached, getUnitTrace(attach))
   const {runner} = getGraph(attached).scope as {runner: Node}
   let runnerSteps: Array<Cmd>
   const runnerFnStep = (upd: any, _: any, stack: Stack) => {

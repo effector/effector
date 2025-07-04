@@ -6,6 +6,7 @@ import {
   createEvent,
   createNamedEvent,
   createStore,
+  getUnitTrace,
   initUnit,
 } from './createUnit'
 import {createEffect} from './createEffect'
@@ -42,7 +43,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
       parent: config?.domain || config?.parent,
       or: {...config, derived: true},
     },
-    createDomain,
+    getUnitTrace(createDomain),
   )
 
   forIn(

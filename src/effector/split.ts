@@ -10,7 +10,7 @@ import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
 import {assert} from './throw'
-import {createEvent} from './createUnit'
+import {createEvent, getUnitTrace, setUnitTrace} from './createUnit'
 import {applyTemplate} from './template'
 import {createSampling} from './sample'
 import {generateErrorTitle} from './naming'
@@ -172,5 +172,6 @@ export function split(...args: any[]) {
       false,
     )
   }
+  setUnitTrace(splitterNode, getUnitTrace(split))
   if (!configForm) return targets
 }
