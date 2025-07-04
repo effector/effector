@@ -126,6 +126,10 @@ export const createSampling = (
   }
   // @ts-expect-error
   if (!metadata && !name) name = source.shortName
+  /** name field from sample config (from user) has highest priority */
+  if (metadata && name) {
+    ;(metadata as any).name = name
+  }
   let filterType: 'none' | 'unit' | 'fn' = 'none'
   if (filterRequired || filter) {
     if (is.unit(filter)) {
