@@ -252,7 +252,11 @@ describe('any to void', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -2226,6 +2230,9 @@ describe('array cases', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'StoreWritable<\\"a\\" | \\"c\\">' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
+        Types of property '__' are incompatible.
+          Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+            Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
       Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
       "
     `)
@@ -2249,6 +2256,7 @@ describe('array cases', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+        Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
       Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
       "
     `)
