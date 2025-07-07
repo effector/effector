@@ -39,9 +39,10 @@ Use the `--exact`/`--save-exact` option in your package manager to install speci
 | `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.15`                     | `@swc1.4.0`            |
 | `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`            |
 | `>=1.7.0 <1.8.0`    | `>=15.0.0-canary.122 <=15.0.2`           | `@swc1.7.0`            |
-| `>=1.9.0 <1.10.0`   | `>=15.0.3 <=15.1.6`                      | `@swc1.9.0`            |
+| `>=1.9.0 <1.10.0`   | `>=15.0.3 <15.2.0`                       | `@swc1.9.0`            |
 | `>=1.10.0 <1.11.0`  | `>=15.2.0 <15.2.1`                       | `@swc1.10.0`           |
-| `>=1.11.0`          | `>=15.2.1`                               | `@swc1.11.0`           |
+| `>=1.11.0`          | `>=15.2.1 <15.4.0`                       | `@swc1.11.0`           |
+| `>=1.12.0`          | `>=15.4.0`                               | `@swc1.12.0`           |
 
 For more information on compatibility, refer to the SWC documentation on [Selecting the SWC Version](https://swc.rs/docs/plugin/selecting-swc-core) and interactive [compatibility table](https://plugins.swc.rs) on SWC website.
 
@@ -65,7 +66,7 @@ const nextConfig = {
 You'll also need to install the official [`@effector/next`](https://github.com/effector/next) bindings to enable SSR/SSG.
 
 :::warning{title="Turbopack"}
-Note that some functionality may be broken when using Turbopack with NextJS, especially with [relative `factories`](#configuration-factories). Use at your own risk.
+Note that some functionality may be broken when using Turbopack with Next.js, especially with [relative `factories`](#configuration-factories). Use at your own risk.
 :::
 
 ## .swcrc (#usage-swcrc)
@@ -90,7 +91,7 @@ Add a new entry to `jsc.experimental.plugins` option in your `.swcrc`.
 Specify an array of module names or files to treat as [custom factories](/en/explanation/sids/#custom-factories). When using SSR, factories is required for ensuring unique [`SID`](/en/explanation/sids)s across your application.
 
 :::tip
-Community packages (`patronum`, `@farfetched/core`, `atomic-router` and [`@withease/factories`](https://github.com/withease/factories)) are always enabled, so you don't need to list them explicitly.
+Community packages ([`patronum`](https://patronum.effector.dev), [`@farfetched/core`](https://ff.effector.dev/), [`atomic-router`](https://atomic-router.github.io/), [`effector-action`](https://github.com/AlexeyDuybo/effector-action) and [`@withease/factories`](https://withease.effector.dev/factories/)) are always enabled, so you don't need to list them explicitly.
 :::
 
 ### Formulae (#configuration-factories-formulae)
@@ -109,20 +110,17 @@ Otherwise, if you specify a package name or TypeScript alias, it's interpreted a
 ### Examples (#configuration-factories-examples)
 
 ```json
-// configuraiton
 ["@effector/swc-plugin", { "factories": ["./src/factory"] }]
 ```
 
-```ts
-// file: /src/factory.ts
+```ts title="/src/factory.ts"
 import { createStore } from "effector";
 
 /* createBooleanStore is a factory */
 export const createBooleanStore = () => createStore(true);
 ```
 
-```ts
-// file: /src/widget/user.ts
+```ts title="/src/widget/user.ts"
 import { createBooleanStore } from "../factory";
 
 const $boolean = createBooleanStore(); /* Treated as a factory! */
@@ -143,14 +141,14 @@ Append the full file path and Unit name to generated `SID`s for easier debugging
 
 ## `hmr` (#configuration-hmr)
 
-:::info{title="since"}
+:::info{title="Since"}
 `@effector/swc-plugin@0.7.0`
 :::
 
 Enable Hot Module Replacement (HMR) support to clean up links, subscriptions and side effects managed by Effector. This prevents double-firing of Effects and watchers.
 
-:::warning{title="Experimental"}
-Although tested, this option is considered experimental and might have unexpected issues in different bundlers.
+:::warning{title="Interaction with factories"}
+Hot Module Replacement works best when all factories in the project are [properly declared](#configuration-factories). A correct configuration allows the plugin to detect what code should be cleaned up during hot reload.
 :::
 
 ### Formulae (#configuration-hmr-formulae)
@@ -159,14 +157,14 @@ Although tested, this option is considered experimental and might have unexpecte
 ["@effector/swc-plugin", { "hmr": "es" }]
 ```
 
-- Type: `"es"` | `"cjs"` | `"none"`
+- Type: `"es"` | `"cjs"` | `false`
   - `"es"`: Use `import.meta.hot` HMR API in bundlers that are ESM-compliant, like Vite and Rollup
-  - `"cjs"`: Use `module.hot` HMR API in bundlers that rely on CommonJS modules, like Webpack and Next.js
-  - `"none"`: Disable Hot Module Replacement.
-- Default: `none`
+  - `"cjs"`: Use `module.hot` HMR API in bundlers that rely on CommonJS modules, like Webpack, Next.js or Metro (React Native)
+  - `false`: Disable Hot Module Replacement
+- Default: `false`
 
 :::info{title="In Production"}
-When bundling for production, make sure to set the `hmr` option to `"none"` to reduce bundle size and improve runtime performance.
+When bundling for production, make sure to set the `hmr` option to `false` to reduce bundle size and improve runtime performance.
 :::
 
 ## `addNames` (#configuration-addNames)
@@ -189,7 +187,7 @@ Include location information (file paths and line numbers) for [Units](/en/expla
 ### Formulae (#configuration-addLoc-formulae)
 
 ```json
-["@effector/swc-plugin", { "addLoc": false }]
+["@effector/swc-plugin", { "addLoc": true }]
 ```
 
 - Type: `boolean`
@@ -206,7 +204,12 @@ Read more about [Scope enforcement](/en/api/effector-react/module/scope/#scope-e
 ### Formulae (#configuration-forceScope-formulae)
 
 ```json
-["@effector/swc-plugin", { "forceScope": false }]
+[
+  "@effector/swc-plugin",
+  {
+    "forceScope": { "hooks": true, "reflect": false }
+  }
+]
 ```
 
 - Type: `boolean | { hooks: boolean, reflect: boolean }`
@@ -218,7 +221,7 @@ Enforces all hooks from [`effector-react`](/en/api/effector-react#hooks) and [`e
 
 #### `reflect` (#configuration-forceScope-formulae-reflect)
 
-:::info{title="since"}
+:::info{title="Since"}
 Supported by `@effector/reflect` since 9.0.0
 :::
 
@@ -237,7 +240,7 @@ Instead of using unit creators directly on domain, consider using the `domain` a
 ### Formulae (#configuration-transformLegacyDomainMethods-formulae)
 
 ```json
-["@effector/swc-plugin", { "transformLegacyDomainMethods": true }]
+["@effector/swc-plugin", { "transformLegacyDomainMethods": false }]
 ```
 
 - Type: `boolean`
