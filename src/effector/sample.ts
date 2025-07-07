@@ -124,11 +124,27 @@ export const createSampling = (
   if (sourceIsClock) {
     source = clock
   }
-  // @ts-expect-error
-  if (!metadata && !name) name = source.shortName
-  /** name field from sample config (from user) has highest priority */
-  if (metadata && name) {
+  if (!metadata && !name) {
+    /**
+     * When there is no metadata and name, assign source name as a fallback.
+     * This is very misleading behavior (sample unit is not a source unit)
+     * introduced a long time ago, so we keep it only for backward compatibility
+     * for cases which were covered at the time.
+     *
+     * Therefore, this name will not be used as a fallback for newer (23.4.0) cases
+     * (a.k.a. sample support for patronum debug traces)
+     * and metadata will not be created
+     */
+    name = (source as any).shortName
+  } else if (metadata && name) {
+    /** name field from sample config (from user) has highest priority */
     ;(metadata as any).name = name
+  } else if (!metadata && name) {
+    /**
+     * metadata comes from plugin, so when name is present and metadata is missing,
+     * we need to create fresh metadata with name
+     */
+    metadata = {name}
   }
   let filterType: 'none' | 'unit' | 'fn' = 'none'
   if (filterRequired || filter) {

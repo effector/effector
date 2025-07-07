@@ -200,9 +200,42 @@ describe('sample support', () => {
     const $source = createStore(0)
     const clock = createEvent()
     const target = createEvent()
-    ;({_: sample})._({source: $source, clock, target})
+    ;({_: sample}._({source: $source, clock, target}))
     debug({trace: true}, target)
     clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] ",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with name but without babel plugin', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    ;({_: sample}._({source: $source, clock, target, name: 'explicit name'}))
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] explicit name",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with name from source field without plugin (backward compatibility)', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    ;({_: sample}._({source: {foo: $source}, clock, target}))
+    debug({trace: true}, target)
+    clock()
+    // borrowed from source name is misleading, so it should not be used in traces
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         "[event] target",
