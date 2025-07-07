@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+# effector 23.4.1
+
+- Fix sample name support for cases without plugin
+
 ## effector 23.4.0
 
 ### Babel/SWC plugin
