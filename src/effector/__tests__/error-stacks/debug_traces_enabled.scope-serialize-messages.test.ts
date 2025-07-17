@@ -1,3 +1,5 @@
+import 'effector/enable_debug_traces'
+
 import {createEvent, fork, allSettled, serialize} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -49,7 +51,8 @@ describe('skipVoid error messages', () => {
       Array [
         "serialize: One or more stores dont have sids, their values are omitted",
         "store should have sid or \`serialize: ignore\`
-      __tests__/error-stacks/scope-serialize-messages.test.ts:43:21)
+      error-stacks/stub/sidless-store.ts:5:29)
+      ,__tests__/error-stacks/debug_traces_enabled.scope-serialize-messages.test.ts:7:1)
       ",
       ]
     `)
