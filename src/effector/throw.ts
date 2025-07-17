@@ -27,6 +27,10 @@ export const printErrorWithStack = (
   const error = Error(message)
   if (stack) {
     error.stack = stack
+  } else {
+    console.log(
+      'Add "import "effector/enable_debug_traces" to your code entry module to see full stack traces',
+    )
   }
   console.error(error)
 }
