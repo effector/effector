@@ -25,6 +25,8 @@ export const printErrorWithStack = (
   stack: string | undefined,
 ) => {
   const error = Error(message)
-  error.stack = stack
+  if (stack) {
+    error.stack = stack
+  }
   console.error(error)
 }
