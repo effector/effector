@@ -38,6 +38,7 @@ import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
 import {clearNode} from './clearNode'
+import {debugTracesEnabled} from './debug_traces'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -51,6 +52,8 @@ export const setUnitTrace = (unit: any, unitTrace: string) =>
   setMeta(unit, 'unitTrace', unitTrace)
 
 export const getUnitTrace = (caller: (...args: any[]) => void) => {
+  if (!debugTracesEnabled()) return '';
+
   const traceError = Error('unit trace')
   if (Error.captureStackTrace) {
     Error.captureStackTrace(traceError, caller)

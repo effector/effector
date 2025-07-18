@@ -130,6 +130,14 @@ export const learning: LSidebarGroup[] = [
         },
         link: "/advanced/work-with-scope",
       },
+      {
+        text: {
+          en: "Debug Traces mode",
+          ru: "Debug Traces mode",
+          uz: "Debug Traces mode",
+        },
+        link: "/api/effector/enable_debug_traces",
+      },
     ],
   },
 ];

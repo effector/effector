@@ -97,6 +97,7 @@ export default {
       },
       './compat': compatExport,
       './inspect': extensionlessExport('./inspect'),
+      './enable_debug_traces': extensionlessExport('./enable_debug_traces'),
       './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
       './babel-plugin-react': './babel-plugin-react.js',
