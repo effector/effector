@@ -53,7 +53,7 @@ describe('skipVoid error messages', () => {
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:53:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:52:5)
       ",
       ]
     `)
@@ -66,10 +66,10 @@ describe('skipVoid error messages', () => {
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "[store] unit 'baseStoreForSimpleDerived → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:67:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:65:5)
       ",
         "[store] unit 'simpleCombine': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:67:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:65:5)
       ",
       ]
     `)
@@ -82,10 +82,10 @@ describe('skipVoid error messages', () => {
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "[store] unit '$baseStore → *': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:85:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:81:5)
       ",
         "[store] unit 'combine($baseStore)': undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:85:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:81:5)
       ",
       ]
     `)
