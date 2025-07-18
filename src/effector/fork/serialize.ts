@@ -12,12 +12,15 @@ export function serialize(
   scope: Scope,
   config: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
 ) {
-  if (scope.warnSerializeTraces.size) {
+  if (scope.warnSerializeNodes.size) {
     console.error(
       'serialize: One or more stores dont have sids, their values are omitted',
     )
-    forEach(scope.warnSerializeTraces, stack => {
-      printErrorWithStack('store should have sid or `serialize: ignore`', stack)
+    forEach(scope.warnSerializeNodes, node => {
+      printErrorWithStack(
+        'store should have sid or `serialize: ignore`',
+        getMeta(node, 'unitTrace'),
+      )
     })
   }
   assert(!scope.hasSidDoubles, 'duplicate sid found in this scope')
