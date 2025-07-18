@@ -31,6 +31,12 @@
       "require": "./inspect.js",
       "default": "./inspect.mjs"
     },
+    "./enable_debug_traces": {
+      "types": "./enable_debug_traces.d.ts",
+      "import": "./enable_debug_traces.mjs",
+      "require": "./enable_debug_traces.js",
+      "default": "./enable_debug_traces.mjs"
+    },
     "./effector.umd": {
       "types": "./effector.umd.d.ts",
       "require": "./effector.umd.js",
