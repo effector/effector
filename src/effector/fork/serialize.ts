@@ -1,6 +1,6 @@
 import type {Scope, Store} from '../unit.h'
 import {forEach, forIn, includes} from '../collection'
-import {assert, deprecate, printErrorWithStack} from '../throw'
+import {assert, deprecate, printErrorWithNodeDetails} from '../throw'
 import {traverseStores} from './util'
 import {getGraph, getMeta} from '../getter'
 
@@ -17,9 +17,9 @@ export function serialize(
       'serialize: One or more stores dont have sids, their values are omitted',
     )
     forEach(scope.warnSerializeNodes, node => {
-      printErrorWithStack(
+      printErrorWithNodeDetails(
         'store should have sid or `serialize: ignore`',
-        getMeta(node, 'unitTrace'),
+        node,
       )
     })
   }
