@@ -32,14 +32,15 @@ npm install -ED @effector/swc-plugin
 Используйте опцию `--exact`/`--save-exact` в вашем менеджере пакетов, чтобы установить конкретные, совместимые версии. Это гарантирует, что обновления одной зависимости не сломают ваше приложение.
 :::
 
-| Версия `@swc/core` | Версия Next.js                           | Правильная версия плагина |
-| ------------------ | ---------------------------------------- | ------------------------- |
-| `>=1.4.0 <1.6.0`   | `>=14.2.0 <=14.2.15`                     | `@swc1.4.0`               |
-| `>=1.6.0 <1.7.0`   | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`               |
-| `>=1.7.0 <1.8.0`   | `>=15.0.0-canary.122 <=15.0.2`           | `@swc1.7.0`               |
-| `>=1.9.0 <1.10.0`  | `>=15.0.3 <=15.1.6`                      | `@swc1.9.0`               |
-| `>=1.10.0 <1.11.0` | `>=15.2.0 <15.2.1`                       | `@swc1.10.0`              |
-| `>=1.11.0`         | `>=15.2.1`                               | `@swc1.11.0`              |
+| `@swc/core` version | Next.js version                          | Correct plugin version |
+| ------------------- | ---------------------------------------- | ---------------------- |
+| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.15`                     | `@swc1.4.0`            |
+| `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`            |
+| `>=1.7.0 <1.8.0`    | `>=15.0.0-canary.122 <=15.0.2`           | `@swc1.7.0`            |
+| `>=1.9.0 <1.10.0`   | `>=15.0.3 <15.2.0`                       | `@swc1.9.0`            |
+| `>=1.10.0 <1.11.0`  | `>=15.2.0 <15.2.1`                       | `@swc1.10.0`           |
+| `>=1.11.0`          | `>=15.2.1 <15.4.0`                       | `@swc1.11.0`           |
+| `>=1.12.0`          | `>=15.4.0`                               | `@swc1.12.0`           |
 
 Для получения дополнительной информации о совместимости обратитесь к документации SWC по [Выбору версии SWC](https://swc.rs/docs/plugin/selecting-swc-core) и интерактивной [таблице совместимости](https://plugins.swc.rs) на сайте SWC.
 
@@ -54,7 +55,7 @@ npm install -ED @effector/swc-plugin
 ```js
 const nextConfig = {
   experimental: {
-    // даже если пусто, передайте объект опций `{}` в плагин
+    // даже если конфигурация не нужна, передайте объект опций `{}` в плагин
     swcPlugins: [["@effector/swc-plugin", {}]],
   },
 };
@@ -63,7 +64,7 @@ const nextConfig = {
 Вам также нужно установить официальные [`@effector/next`](https://github.com/effector/next) привязки, чтобы включить SSR/SSG.
 
 :::warning{title="Turbopack"}
-Обратите внимание, что некоторые функции могут не работать при использовании Turbopack с NextJS, особенно с [относительными `factories`](#configuration-factories). Используйте на свой страх и риск.
+Обратите внимание, что некоторые функции могут не работать при использовании Turbopack с Next.js, особенно с [относительными путями в `factories`](#configuration-factories). Используйте на свой страх и риск.
 :::
 
 ## .swcrc (#usage-swcrc)
@@ -85,10 +86,10 @@ const nextConfig = {
 
 ## `factories` (#configuration-factories)
 
-Укажите массив имен модулей или файлов, которые следует рассматривать как [пользовательские фабрики](/en/explanation/sids/#custom-factories). При использовании SSR фабрики необходимы для обеспечения уникальных [`SID`](/en/explanation/sids) по всему вашему приложению.
+Укажите массив имен модулей или файлов, которые следует рассматривать как [пользовательские фабрики](/ru/explanation/sids/#custom-factories). При использовании SSR фабрики необходимы для обеспечения уникальных [`SID`](/ru/explanation/sids) по всему вашему приложению.
 
 :::tip{title="Примечание"}
-Пакеты (`patronum`, `@farfetched/core`, `atomic-router` и [`@withease/factories`](https://github.com/withease/factories)) всегда включены в список фабрик, поэтому вам не нужно явно их перечислять.
+Пакеты ([`patronum`](https://patronum.effector.dev), [`@farfetched/core`](https://ff.effector.dev/), [`atomic-router`](https://atomic-router.github.io/), [`effector-action`](https://github.com/AlexeyDuybo/effector-action) и [`@withease/factories`](https://withease.effector.dev/factories/)) включены в список фабрик по умолчанию, поэтому вам не нужно явно их перечислять.
 :::
 
 ### Формула (#configuration-factories-formulae)
@@ -107,20 +108,17 @@ const nextConfig = {
 ### Примеры (#configuration-factories-examples)
 
 ```json
-// конфигурация
 ["@effector/swc-plugin", { "factories": ["./src/factory"] }]
 ```
 
-```ts
-// файл: /src/factory.ts
+```ts title="/src/factory.ts"
 import { createStore } from "effector";
 
 /* createBooleanStore — это фабрика */
 export const createBooleanStore = () => createStore(true);
 ```
 
-```ts
-// файл: /src/widget/user.ts
+```ts title="/src/widget/user.ts"
 import { createBooleanStore } from "../factory";
 
 const $boolean = createBooleanStore(); /* Рассматривается как фабрика! */
@@ -147,8 +145,8 @@ const $boolean = createBooleanStore(); /* Рассматривается как 
 
 Включите поддержку Hot Module Replacement (HMR) для очистки связей, подписок и побочных эффектов, управляемых Effector. Это предотвращает двойное срабатывание эффектов и наблюдателей.
 
-:::warning{title="Экспериментально"}
-Хотя опция и протестирована, она считается экспериментальной и может иметь неожиданные проблемы в разных сборщиках.
+:::warning{title="Взаимодействие с фабриками"}
+Hot Module Replacement работает лучше, когда все фабрики в проекте [правильно описаны](#configuration-factories). Правильная конфигурация фабрик помогает плагину понять, какие подписки нужно удалять при обновлении.
 :::
 
 ### Формула (#configuration-hmr-formulae)
@@ -157,14 +155,14 @@ const $boolean = createBooleanStore(); /* Рассматривается как 
 ["@effector/swc-plugin", { "hmr": "es" }]
 ```
 
-- Тип: `"es"` | `"cjs"` | `"none"`
-  - `"es"`: Использует API HMR `import.meta.hot` в сборщиках, соответствующих ESM, таких как Vite и Rollup
-  - `"cjs"`: Использует API HMR `module.hot` в сборщиках, использующих CommonJS модули, таких как Webpack и Next.js
-  - `"none"`: Отключает Hot Module Replacement.
-- По умолчанию: `none`
+- Тип: `"es"` | `"cjs"` | `false`
+  - `"es"`: Использует API HMR `import.meta.hot` в сборщиках, основанных на ESM, таких как Vite и Rollup
+  - `"cjs"`: Использует API HMR `module.hot` в сборщиках, использующих CommonJS модули, таких как Webpack, Next.js или Metro (React Native)
+  - `false`: Отключает Hot Module Replacement.
+- По умолчанию: `false`
 
 :::info{title="Обратите внимание"}
-При сборке для продакшена убедитесь, что установили опцию `hmr` в `"none"`, чтобы уменьшить размер бандла и улучшить производительность в runtime.
+При сборке для продакшена убедитесь, что установили опцию `hmr` в `false`, чтобы уменьшить размер бандла и улучшить производительность в runtime.
 :::
 
 ## `addNames` (#configuration-addNames)
@@ -187,7 +185,7 @@ const $boolean = createBooleanStore(); /* Рассматривается как 
 ### Формула (#configuration-addLoc-formulae)
 
 ```json
-["@effector/swc-plugin", { "addLoc": false }]
+["@effector/swc-plugin", { "addLoc": true }]
 ```
 
 - Тип: `boolean`
@@ -204,7 +202,12 @@ const $boolean = createBooleanStore(); /* Рассматривается как 
 ### Формула (#configuration-forceScope-formulae)
 
 ```json
-["@effector/swc-plugin", { "forceScope": false }]
+[
+  "@effector/swc-plugin",
+  {
+    "forceScope": { "hooks": true, "reflect": false }
+  }
+]
 ```
 
 - Тип: `boolean | { hooks: boolean, reflect: boolean }`
@@ -216,8 +219,8 @@ const $boolean = createBooleanStore(); /* Рассматривается как 
 
 #### `reflect` (#configuration-forceScope-formulae-reflect)
 
-:::info{title="с"}
-Поддерживается `@effector/reflect` начиная с 9.0.0
+:::info{title="Начиная с"}
+Поддерживается библиотекой `@effector/reflect` начиная с версии `9.0.0`
 :::
 
 Для пользователей [`@effector/reflect`](https://github.com/effector/reflect) принудительно заставляет все компоненты, созданные с помощью библиотеки `reflect`, использовать `Scope` в runtime.
@@ -235,7 +238,7 @@ const $boolean = createBooleanStore(); /* Рассматривается как 
 ### Формула (#configuration-transformLegacyDomainMethods-formulae)
 
 ```json
-["@effector/swc-plugin", { "transformLegacyDomainMethods": true }]
+["@effector/swc-plugin", { "transformLegacyDomainMethods": false }]
 ```
 
 - Тип: `boolean`
