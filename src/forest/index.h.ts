@@ -1,5 +1,5 @@
-import type {Store, Event, Filter} from 'effector'
-import type {Scope} from '../effector/unit.h'
+import type {Store, Event} from 'effector'
+import type {Scope, CommonUnit} from '../effector/unit.h'
 import type {StateRef, Node, Cmd} from '../effector/index.h'
 
 import type {
@@ -24,8 +24,8 @@ export type Template = {
   nameMap: Record<string, any>
   pages: Leaf[]
   childTemplates: Template[]
-  loader: Filter
-  upward: Filter
+  loader: Cmd
+  upward: Cmd
   parent: Template | null
 
   node: Node
@@ -41,6 +41,7 @@ export type Template = {
   deferredInit?: (() => void) | null
   isBlock: boolean
   handlers: TemplateHandlers
+  units: CommonUnit[]
 }
 
 export type ClassListMap = {[cssClass: string]: StoreOrData<boolean>}
@@ -200,7 +201,7 @@ export type LeafDataBlock = {
 }
 
 export type LeafDataBlockItem = {
-  type: 'block item'
+  type: 'blockItem'
   block: BlockItemBlock
 }
 
@@ -210,12 +211,12 @@ export type LeafDataRec = {
 }
 
 export type LeafDataRecItem = {
-  type: 'rec item'
+  type: 'recItem'
   block: RecItemBlock
 }
 
 export type LeafDataListItem = {
-  type: 'list item'
+  type: 'listItem'
   block: LF
   listDraft: ListType
 }
@@ -386,6 +387,6 @@ export type TemplateHandlers = {
     clockState: StateRef,
   ): void
   sampleTarget(template: Template, target: Node): void
-  sampleSourceLoader(template: Template): Filter
-  sampleSourceUpward(template: Template, isUpward: boolean): Filter | false
+  sampleSourceLoader(template: Template): Cmd
+  sampleSourceUpward(template: Template, isUpward: boolean): Cmd | false
 }
