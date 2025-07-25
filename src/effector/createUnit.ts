@@ -32,12 +32,13 @@ import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {readTemplate, readSidRoot, reportDeclaration} from './region'
 import {getStoreState, getGraph, getParent, setMeta, getMeta} from './getter'
-import {assert, deprecate, printErrorWithStack} from './throw'
+import {assert, deprecate, printErrorWithNodeDetails} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
 import {clearNode} from './clearNode'
+import {debugTracesEnabled} from './debug_traces'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -51,6 +52,8 @@ export const setUnitTrace = (unit: any, unitTrace: string) =>
   setMeta(unit, 'unitTrace', unitTrace)
 
 export const getUnitTrace = (caller: (...args: any[]) => void) => {
+  if (!debugTracesEnabled()) return ''
+
   const traceError = Error('unit trace')
   if (Error.captureStackTrace) {
     Error.captureStackTrace(traceError, caller)
@@ -386,9 +389,9 @@ export function createStore<State>(
         const isVoidUpdate = isVoid(upd)
 
         if (isVoidUpdate && !explicitSkipVoid) {
-          printErrorWithStack(
-            `${errorTitle}: ${requireExplicitSkipVoidMessage}`,
-            getMeta(store, 'unitTrace'),
+          printErrorWithNodeDetails(
+            `${requireExplicitSkipVoidMessage}`,
+            store.graphite,
           )
         }
 
