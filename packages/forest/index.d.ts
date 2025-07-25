@@ -9,7 +9,7 @@ export type StylePropertyMap = Partial<
   }
 >
 export type ClassListMap = {[cssClass: string]: StoreOrData<boolean>}
-export type ClassListArray = Array<Store<string | null> | string>
+export type ClassListArray = Array<Store<string | null> | Store<string> | string>
 
 export type HandlerMap =
   | Partial<{[K in keyof HTMLElementEventMap]: EventCallable<HTMLElementEventMap[K]>}>
