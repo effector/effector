@@ -1,9 +1,9 @@
 import type {NSType, BlockDraft, BlockItemDraft} from '../index.h'
 
-import {createTemplate, currentTemplate} from '../template'
+import {createTemplate, currentTemplate} from '../engine/createTemplate'
 import {assertClosure} from '../assert'
 import {mountFn} from '../mountFn'
-import {setInParentIndex} from '../mountChild'
+import {setInParentIndex} from '../engine/mountChild'
 
 export function block({
   fn,
@@ -43,7 +43,7 @@ export function block({
     }
     const {env, namespace} = currentTemplate
     const blockItemTemplate = createTemplate({
-      name: 'block item',
+      name: 'blockItem',
       isSvgRoot: false,
       namespace,
       env,
