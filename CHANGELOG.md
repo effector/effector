@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+# effector 23.4.2
+
+- Turn off debug traces by default, enable by designated api [PR](https://github.com/effector/effector/pull/1285), [Docs](https://effector.dev/en/api/effector/debug_traces/)
+
 # effector 23.4.1
 
 - Fix sample name support for cases without plugin
