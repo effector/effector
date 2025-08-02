@@ -52,7 +52,7 @@ describe('skipVoid error messages', () => {
     event()
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
-        "undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
+        "store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
       __tests__/error-stacks/skip-void-messages.test.ts:52:5)
       ",
       ]
