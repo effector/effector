@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://effector.dev" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://raw.githubusercontent.com/effector/effector/master/website/client/static/img/comet.svg" alt="Effector Comet Logo" />
+    <img width="150" src="https://raw.githubusercontent.com/effector/effector/master/documentation/public/favicon.svg" alt="Effector Comet Logo" />
   </a>
 </p>
 <br />
