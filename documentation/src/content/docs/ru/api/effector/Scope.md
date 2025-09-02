@@ -1,8 +1,6 @@
 ---
 title: Scope API
-redirectFrom:
-  - /api/effector/Scope
-  - /docs/api/effector/scope
+description: Scope API, его методы и особенности
 ---
 
 # Scope API (#scope)
