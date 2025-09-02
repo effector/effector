@@ -9,7 +9,7 @@ import SideBySide from "@components/SideBySide/SideBySide.astro";
 
 # Scope loss (#scope-loss)
 
-The execution of units in Effector always happens within a scope — either the global one or an isolated one created with [`fork()`](/en/api/effector/fork). In the global case, the context cannot be lost, since it’s used by default. With an isolated scope, things are trickier: if the scope is lost, operations will start executing in the global mode, and data changes won’t reach the intended scope, causing the client to end up with an inconsistent state.
+The execution of units in Effector always happens within a scope — either the global one or an isolated one created with [`fork()`](/en/api/effector/fork). In the global case, the context cannot be lost, since it’s used by default. With an isolated scope, things are trickier: if the scope is lost, operations will start executing in the global mode, and all data updates will **not** enter the scope in which the work was conducted. As a result, an inconsistent state will be sent to the client.
 
 Typical places where this happens:
 
