@@ -12,8 +12,6 @@ import SideBySide from "@components/SideBySide/SideBySide.astro";
 
 С помощью [скоупов](/ru/api/effector/Scope) вы можете создать изолированный экземпляр всего приложения, который содержит независимую копию всех юнитов (включая их связи), а также базовые методы для работы с ними:
 
-Хотите, я сделаю ещё короткий вариант для использования в **intro-блоке API**?
-
 ```ts "fork" "allSettled"
 import { fork, allSettled } from "effector";
 
