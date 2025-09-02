@@ -1,0 +1,175 @@
+---
+title: Scope loss
+description: What scope loss in Effector is, how it occurs, and how to fix it with scopeBind.
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
+
+# Scope loss (#scope-loss)
+
+The execution of units in Effector always happens within a scope — either the global one or an isolated one created with [`fork()`](/en/api/effector/fork). In the global case, the context cannot be lost, since it’s used by default. With an isolated scope, things are trickier: if the scope is lost, operations will start executing in the global mode, and data changes won’t reach the intended scope, causing the client to end up with an inconsistent state.
+
+Typical places where this happens:
+
+- `setTimeout` / `setInterval`
+- `addEventListener`
+- [`WebSocket`](/en/guides/websocket-integration)
+- [direct promise calls inside effects](/en/advanced/work-with-scope#scope-rules)
+- third-party libraries with async APIs or callbacks.
+
+## Example of the problem (#example-of-problem)
+
+We’ll create a simple timer in React, although the same behavior applies to any framework or runtime when scope loss occurs:
+
+<Tabs>
+
+<TabItem label='timer.tsx'>
+
+```tsx
+import React from "react";
+import { createEvent, createStore, createEffect, scopeBind } from "effector";
+import { useUnit } from "effector-react";
+
+const tick = createEvent();
+const $timer = createStore(0);
+
+$timer.on(tick, (s) => s + 1);
+
+export function Timer() {
+  const [timer, startTimer] = useUnit([$timer, startTimerFx]);
+
+  return (
+    <div className="App">
+      <div>Timer:{timer} sec</div>
+      <button onClick={startTimer}>Start timer</button>
+    </div>
+  );
+}
+```
+
+</TabItem>
+
+<TabItem label='app.tsx'>
+
+```tsx
+import { Provider } from "effector-react";
+import { fork } from "effector";
+import { Timer } from "./timer";
+
+export const scope = fork();
+
+export default function App() {
+  return (
+    <Provider value={scope}>
+      <Timer />
+    </Provider>
+  );
+}
+```
+
+</TabItem> 
+</Tabs>
+
+Now let’s add an effect that calls `tick` every second:
+
+```ts
+const startTimerFx = createEffect(() => {
+  setInterval(() => {
+    tick();
+  }, 1000);
+});
+```
+
+[Playground](https://codesandbox.io/p/sandbox/nrqw96).<br/>
+
+At first glance, the code looks fine, but if you start the timer, you’ll notice that the UI doesn’t update. This happens because timer changes occur in the global scope, while our app is running in the isolated scope we passed to [`<Provider>`](/en/api/effector-react/Provider). You can observe this in the console.
+
+## How to fix scope loss? (#how-to-fix-scope-loss)
+
+To fix scope loss, you need to use the [`scopeBind`](/en/api/effector/scopeBind) function. This method returns a function bound to the scope in which it was called, and can later be safely executed:
+
+```ts ins={2} "bindedTick"
+const startTimerFx = createEffect(() => {
+  const bindedTick = scopeBind(tick);
+
+  setInterval(() => {
+    bindedTick();
+  }, 1000);
+});
+```
+
+[Updated code example](https://codesandbox.io/p/devbox/scope-loss-forked-vx4r9x?workspaceId=ws_BJxLCP4FhfNzjg1qXth95S).
+
+Note that [`scopeBind`](/en/api/effector/scopeBind) automatically works with the currently used scope. However, if needed, you can pass the desired scope explicitly as the second argument:
+
+```ts
+scopeBind(tick, { scope });
+```
+
+:::tip{title="Clearing Intervals"}
+Don’t forget to clear `setInterval` after finishing work to avoid memory leaks. You can handle this with a separate effect, return the interval ID from the first effect and store it in a dedicated store.
+:::
+
+## Why does scope loss happen? (#why-scope-loss)
+
+Let’s illustrate how scope works in effector:
+
+```ts
+// our active scope
+let scope;
+
+function process() {
+  try {
+    scope = "effector";
+    asyncProcess();
+  } finally {
+    scope = undefined;
+    console.log("our scope is undefined now");
+  }
+}
+
+async function asyncProcess() {
+  console.log("we have scope", scope); // effector
+
+  await 1;
+
+  // here we already lost the context
+  console.log("but here scope is gone", scope); // undefined
+}
+
+process();
+
+// Output:
+// we have scope effector
+// our scope is undefined now
+// but here scope is gone undefined
+```
+
+You might be wondering **"Is this specifically an Effector problem?"**, but this is a general principle of working with asynchronicity in JavaScript. All technologies that face the need to preserve the context in which calls occur somehow work around this difficulty. The most characteristic example is [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js),
+which wraps all asynchronous global functions like `setTimeout` or `Promise.resolve` to preserve context. Other solutions to this problem include using generators or `ctx.schedule(() => asyncCall())`.
+
+:::info{title="Future solution"}
+JavaScript is preparing a proposal [Async Context](https://github.com/tc39/proposal-async-context), which aims to solve the context loss problem at the language level. This will allow:
+
+Automatically preserving context through all asynchronous calls
+Eliminating the need for explicit use of scopeBind
+Getting more predictable behavior of asynchronous code
+
+Once this proposal enters the language and receives wide support, Effector will be updated to use this native solution.
+:::
+
+## Related API and articles (#related-api-and-docs)
+
+- **API**
+  - [`Effect`](/en/api/effector/Effect) - Description of effects, their methods and properties
+  - [`Scope`](/en/api/effector/Scope) - Description of scopes and their methods
+  - [`scopeBind`](/en/api/effector/scopeBind) - Method for binding a unit to a scope
+  - [`fork`](/en/api/effector/fork) - Operator for creating a scope
+  - [`allSettled`](/en/api/effector/allSettled) - Method for calling a unit in a given scope and awaiting the full effect chain
+- **Articles**
+  - [Isolated scopes](/en/advanced/work-with-scope)
+  - [SSR guide](/en/guides/server-side-rendering)
+  - [Guide to testing](/en/guides/testing)
+  - [The importance of SIDs for store hydration](/en/explanation/sids)
