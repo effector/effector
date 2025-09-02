@@ -6,6 +6,7 @@ lang: en
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
 
 # Troubleshooting Effector (#troubleshooting)
 
@@ -117,82 +118,136 @@ How to fix: Instead of calling events in pure functions, use declarative operato
 
 ### `sample.fn` does not narrow the type passed from `sample.filter`
 
-A common type-related issue with `sample` occurs when a check is performed inside `filter`, but `fn` does not receive the expected narrowed type.
+A common type-related issue with `sample` occurs when a check is performed in `filter`, but `fn` does not receive the correctly narrowed type. To resolve this, you can add [type predicates](/en/essentials/typescript#typing-sample-filter-and-fn) or use the [`effector-action`](https://github.com/AlexeyDuybo/effector-action) library, which helps simplify conditional types:
 
-[Fixing this issue](/en/essentials/typescript#typing-sample-filter-and-fn).
+<SideBySide>
+<Fragment slot="left">
+
+```tsx wrap data-height="full"
+import { sample } from "effector";
+
+const messageSent = createEvent<Message>();
+const userText = createEvent<string>();
+
+sample({
+  clock: messageSent,
+  filter: (msg: Message): msg is UserMessage => msg.kind === "user",
+  fn: (msg) => msg.text,
+  target: userText,
+});
+```
+
+</Fragment>
+<Fragment slot="right">
+
+```tsx wrap data-height="full"
+import { createAction } from "effector-action";
+
+const userText = createEvent<string>();
+
+const messageSent = createAction({
+  target: userText,
+  fn: (userText, msg: Message) => {
+    if (msg.kind === "user") {
+      userText(msg.txt);
+    }
+  },
+});
+```
+
+</Fragment>
+</SideBySide>
 
 ### My state did not change (#my-state-not-changed)
 
-If your state does not update as expected, you are likely working with scopes and, at some point, the active scope was lost. As a result, your unit executed in the global scope instead.<br/>
-Find more details about this behavior [here](/en/advanced/work-with-scope).
+If your state does not update as expected, you are likely [working with scopes](/en/advanced/work-with-scope) and, at some point, [the active scope was lost](/en/guides/scope-loss). As a result, your unit executed in the global scope instead.<br/>
 
-This issue often occurs when passing units (events or effects) into external function callbacks such as:
+Typical places where this happens:
 
 - `setTimeout` / `setInterval`
 - `addEventListener`
-- `webSocket`, etc.
+- [`WebSocket`](/en/guides/websocket-integration)
+- [direct promise calls inside effects](/en/advanced/work-with-scope#scope-rules)
+- third-party libraries with async APIs or callbacks.
 
-Solution:
+**Solution**:
+[Bind your event or effect to the current scope using `scopeBind`](/en/guides/scope-loss#how-to-fix-scope-loss):
 
-Bind your event or effect to the current scope using [`scopeBind`](/en/api/effector/scopeBind):
+<SideBySide>
+<Fragment slot="left">
 
-```ts
+```tsx wrap data-border="good" data-height="full" ins={6} "scopedEvent"
+// ✅ correct way
+
 const event = createEvent();
 
-// ❌ - This will execute the event in the global scope
+const effectFx = createEffect(() => {
+  const scopedEvent = scopeBind(event);
+
+  setTimeout(() => {
+    scopedEvent();
+  }, 1000);
+});
+```
+
+</Fragment>
+<Fragment slot="right">
+
+```tsx wrap data-border="bad" data-height="full"
+// ❌ event will execute in the global scope
+
+const event = createEvent();
+
 const effectFx = createEffect(() => {
   setTimeout(() => {
     event();
   }, 1000);
 });
-
-// ✅ - This ensures the event executes in the correct scope
-const effectFx = createEffect(() => {
-  const scopeEvent = scopeBind(event);
-  setTimeout(() => {
-    scopeEvent();
-  }, 1000);
-});
 ```
+
+</Fragment>
+</SideBySide>
 
 #### Using units without `useUnit` (#using-units-without-use-unit)
 
-If you're using events or effects in a framework without `useUnit`, this may also lead to incorrect behavior related to scopes.<br/>
+If you're using events or effects in a framework without `useUnit`, this may also lead to [scope loss](/en/guides/scope-loss).<br/>
 To fix this, pass the unit to the `useUnit` hook and use the returned value:
 
-<Tabs>
-<TabItem label="❌ Incorrect">
+<SideBySide>
+<Fragment slot="left">
 
-```tsx
-import { event } from "./model.js";
+```tsx wrap data-border="good" data-height="full" ins={4,7} "onEvent"
+// ✅ hook used
 
-const Component = () => {
-  return <button onClick={() => event()}></button>;
-};
-```
-
-</TabItem>
-<TabItem label="✅ Correct">
-
-```tsx
 import { event } from "./model.js";
 import { useUnit } from "effector-react";
 
 const Component = () => {
   const onEvent = useUnit(event);
 
-  return <button onClick={() => onEvent()}></button>;
+  return <button onClick={() => onEvent()}>click me</button>;
 };
 ```
 
-</TabItem>
-</Tabs>
+</Fragment>
+<Fragment slot="right">
+
+```tsx wrap data-border="bad" data-height="full"
+// ❌ direct unit call
+
+import { event } from "./model.js";
+
+const Component = () => {
+  return <button onClick={() => event()}>click me</button>;
+};
+```
+
+</Fragment>
+</SideBySide>
 
 :::info{title="Best Practice"}
 [Using `useUnit` is the recommended approach](/en/guides/best-practices#use-unit) for working with units.
 :::
-
-[What is scope loss and why does it happen](/en/api/effector/Scope#scope-loss).
 
 ## No Answer to Your Question? (#community)
 

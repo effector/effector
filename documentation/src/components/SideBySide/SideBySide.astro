@@ -1,0 +1,48 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const {
+  class: className = '',
+} = Astro.props;
+---
+
+<section role="region" class={`sbs-grid ${className}`}>
+  <!-- left side -->
+  <section class={`sbs-card`} >
+    <div class={`sbs-body `}>
+      <slot name="left" />
+    </div>
+  </section>
+
+  <!-- right side -->
+  <section class={`sbs-card`}>
+    <div class="sbs-body">
+      <slot name="right" />
+    </div>
+  </section>
+</sect>
+
+<style>
+  .sbs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .sbs-body {
+	  height: 100%;
+  }
+
+  .sbs-body :global(.expressive-code),
+  .sbs-body :global(.expressive-code) :global(figure) {
+    height: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .sbs-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

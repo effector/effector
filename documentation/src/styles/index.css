@@ -544,6 +544,10 @@ h2.heading {
   @apply font-medium uppercase;
 }
 
+li > div.expressive-code {
+  margin-top: 0.75rem;
+}
+
 .admonition a {
   text-decoration: underline;
   color: var(--admonition-text);
