@@ -9,7 +9,7 @@ import SideBySide from "@components/SideBySide/SideBySide.astro";
 
 # Isolated scopes (#isolated-scopes)
 
-With [scopes](/en/api/effector/Scope) you can work with isolated contexts for the entire application:
+With [scopes](/en/api/effector/Scope) you can work with isolated instance for the entire application, which contains an independent clone of all units (including connections between them) and basic methods to access them:
 
 ```ts "fork" "allSettled"
 import { fork, allSettled } from "effector";
@@ -50,21 +50,26 @@ To ensure scopes work correctly, there are a few rules to prevent [scope loss](/
 
 ### Effect and promise calls (#effect-calls-rules)
 
-1. It’s safe to call effects inside other effects.
-2. Don’t mix effect calls with regular async functions.
+For effect handlers that call other effects, ensure to only call effects, not common asynchronous functions. Furthermore, effect calls should be awaited.
+
+Imperative calls of effects are safe because effector remembers the scope in which the imperative call of the effect began and restores it after the call, allowing for another call in sequence.
+
+You can call methods like `Promise.all([fx1(), fx2()])` and others from the standard JavaScript API because in these cases, the calls to effects still happen synchronously, and the scope is safely preserved.
 
 <SideBySide>
 
 <Fragment slot="left">
 
 ```ts wrap data-border="good" data-height="full"
-// ✅ correct
+// ✅ correct usage for an effect without inner effects
+const delayFx = createEffect(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 80));
+});
 
+// ✅ correct usage for an effect with inner effects
 const authFx = createEffect(async () => {
-  // you can call effects
   await loginFx();
 
-  // you can use Promise methods
   await Promise.all([loadProfileFx(), loadSettingsFx()]);
 });
 ```
@@ -74,22 +79,26 @@ const authFx = createEffect(async () => {
   <Fragment slot="right">
 
 ```ts wrap data-border="bad" data-height="full"
-// ❌ incorrect
+// ❌ incorrect usage for an effect with inner effects
 
-const authFx = createEffect(async () => {
-  await loginFx();
+const sendWithAuthFx = createEffect(async () => {
+  await authUserFx();
 
-  // this will cause scope loss
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  // incorrect! This should be wrapped in an effect.
+  await new Promise((resolve) => setTimeout(resolve, 80));
 
-  // this effect will now run in the global context
-  await loadProfileFx();
+  // scope is lost here.
+  await sendMessageFx();
 });
 ```
 
 </Fragment>
 
 </SideBySide>
+
+:::info{title="get attached"}
+For scenarios where an effect might call another effect or perform asynchronous computations, but not both, consider utilizing the [`attach`](/en/api/effector/attach) method instead for more succinct imperative calls.
+:::
 
 ### Using units with frameworks (#framework-rules)
 
