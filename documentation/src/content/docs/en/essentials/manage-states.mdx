@@ -5,6 +5,7 @@ description: How state works in effector and how to manage it
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
 
 # State Management (#state-management)
 
@@ -12,12 +13,14 @@ State in effector is managed through stores - special objects that hold values a
 
 :::info{title="Data immutability"}
 Store data in effector is immutable, which means you should not mutate arrays or objects directly, but create new instances when updating them.
-:::
 
-<Tabs>
-  <TabItem label="✅ Correct">
+<SideBySide>
 
-```ts
+<Fragment slot="left">
+
+```ts wrap data-border="good" data-height="full"
+// ✅ good
+
 // update array
 $users.on(userAdded, (users, newUser) => [...users, newUser]);
 
@@ -28,11 +31,13 @@ $user.on(nameChanged, (user, newName) => ({
 }));
 ```
 
-  </TabItem>
+</Fragment>
 
-  <TabItem label="❌ Incorrect">
+  <Fragment slot="right">
 
-```ts
+```ts wrap data-border="bad" data-height="full"
+// ❌ bad
+
 // update array
 $users.on(userAdded, (users, newUser) => {
   users.push(newUser); // mutation!
@@ -46,8 +51,10 @@ $user.on(nameChanged, (user, newName) => {
 });
 ```
 
-  </TabItem>
-</Tabs>
+</Fragment>
+
+</SideBySide>
+:::
 
 ## Store Creation (#store-creation)
 
@@ -341,10 +348,13 @@ In this example, we subscribe the `$filters` store to multiple events, and multi
 When you need to create multiple handlers for one store, instead of creating separate events and subscribing to them, you can use [`createApi`](/en/api/effector/createApi). This function creates a set of events for updating the store in one place.<br/>
 The following code examples are equivalent:
 
-<Tabs>
-  <TabItem label="With createApi">
+<SideBySide>
 
-```ts
+<Fragment slot="left">
+
+```ts wrap data-height="full"
+// with  createApi
+
 import { createStore, createApi } from "effector";
 
 const $counter = createStore(0);
@@ -360,10 +370,13 @@ increment(); // 1
 reset(); // 0
 ```
 
-  </TabItem>
-  <TabItem label="Common usage">
+</Fragment>
 
-```ts
+  <Fragment slot="right">
+
+```ts wrap data-height="full"
+// basic usage
+
 import { createStore, createEvent } from "effector";
 
 const $counter = createStore(0);
@@ -382,8 +395,9 @@ increment(); // 1
 reset(); // 0
 ```
 
-  </TabItem>
-</Tabs>
+  </Fragment>
+
+</SideBySide>
 
 ## Derived Stores (#derived-stores)
 

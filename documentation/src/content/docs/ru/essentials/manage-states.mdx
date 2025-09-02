@@ -6,6 +6,7 @@ lang: ru
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
 
 # Управление состоянием (#state-management)
 
@@ -13,12 +14,14 @@ import TabItem from "@components/Tabs/TabItem.astro";
 
 :::info{title="Иммутабельность данных"}
 Данные сторов в effector иммутабельные – это значит, что вы не должны мутировать массивы или объекты напрямую, а создавать новые инстансы при обновлениях.
-:::
 
-<Tabs>
-  <TabItem label="✅ Правильно">
+<SideBySide>
 
-```ts
+<Fragment slot="left">
+
+```ts wrap data-border="good" data-height="full"
+// ✅ Правильно
+
 // обновление массива данных
 $users.on(userAdded, (users, newUser) => [...users, newUser]);
 
@@ -29,26 +32,28 @@ $user.on(nameChanged, (user, newName) => ({
 }));
 ```
 
-  </TabItem>
+</Fragment>
 
-  <TabItem label="❌ Неправильно">
+  <Fragment slot="right">
 
-```ts
-// обновление массива данных
+```ts wrap data-border="bad" data-height="full"
+// ❌ Неправильно
+
 $users.on(userAdded, (users, newUser) => {
   users.push(newUser); // Мутация!
   return users;
 });
 
-//обновление объекта
 $user.on(nameChanged, (user, newName) => {
   user.name = newName; // Мутация!
   return user;
 });
 ```
 
-  </TabItem>
-</Tabs>
+</Fragment>
+
+</SideBySide>
+:::
 
 ## Создание стора (#store-creation)
 
@@ -342,10 +347,13 @@ $filters.reset(filtersReset);
 Когда вам нужно создать множество обработчиков для одного стора, вместо создания отдельных событий и подписки на них, вы можете использовать [`createApi`](/ru/api/effector/createApi). Эта функция создает набор событий для обновления стора в одном месте.<br/>
 Следующие примеры кода эквиваленты:
 
-<Tabs>
-  <TabItem label="С createApi">
+<SideBySide>
 
-```ts
+<Fragment slot="left">
+
+```ts wrap data-height="full"
+// createApi
+
 import { createStore, createApi } from "effector";
 
 const $counter = createStore(0);
@@ -361,10 +369,13 @@ increment(); // 1
 reset(); // 0
 ```
 
-  </TabItem>
-  <TabItem label="Обычное использование">
+</Fragment>
 
-```ts
+  <Fragment slot="right">
+
+```ts wrap data-height="full"
+// Обычное использование
+
 import { createStore, createEvent } from "effector";
 
 const $counter = createStore(0);
@@ -383,8 +394,9 @@ increment(); // 1
 reset(); // 0
 ```
 
-  </TabItem>
-</Tabs>
+  </Fragment>
+
+</SideBySide>
 
 ## Производные сторы (#derived-stores)
 
