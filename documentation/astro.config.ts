@@ -12,6 +12,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { remarkHeadingId } from "@effector/remark-heading-id";
 
 import { admonitions } from "./plugins/admonitions";
+import { dataAttributesPlugin } from "./plugins/expressive-code/data-attributes-plugin";
 
 import expressiveCode from "astro-expressive-code";
 
@@ -23,8 +24,10 @@ export default defineConfig({
     tailwind({ applyBaseStyles: false }),
     preact({ compat: true }),
     expressiveCode({
+      plugins: [dataAttributesPlugin()],
       themes: ["github-light-default", "plastic"],
       themeCssRoot: "html",
+      useDarkModeMediaQuery: false,
       styleOverrides: {
         borderColor: "var(--theme-divider);",
         frames: {

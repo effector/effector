@@ -124,9 +124,9 @@ export const learning: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Scope: Working with Isolated Contexts",
-          ru: "Scope: Работа с изолированными контекстами",
-          uz: "Scope: Isolatli kontekstlar bilan ishlash",
+          en: "Isolated scopes",
+          ru: "Изолированные контексты",
+          uz: "Izolatsiya qilingan kontekstlar",
         },
         link: "/advanced/work-with-scope",
       },
@@ -224,6 +224,14 @@ export const guidesAndRecipes: LSidebarGroup[] = [
           uz: "Typescript",
         },
         link: "/essentials/typescript",
+      },
+      {
+        text: {
+          en: "Scope loss",
+          ru: "Потеря скоупа",
+          uz: "Scope to'plamasi",
+        },
+        link: "/guides/scope-loss",
       },
       {
         text: {
