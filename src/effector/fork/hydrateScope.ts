@@ -13,19 +13,23 @@ type Values = Record<string, unknown>
 export function hydrateScope(config: {
   scope: Scope
   values: Values
-  planWatchersRun?: (cb: () => void) => void
+  scheduleWatchers?: (cb: () => void) => void
 }) {
-  const {scope, values, planWatchersRun = cb => cb()} = config
+  const {scope, values, scheduleWatchers} = config
   injectValues(scope, values)
-  const affectedWatcherLinks = updateScopeRefs(scope, values)
+  updateScopeRefs(scope, values)
 
   /**
    * Watchers run should be schedulable, as some envs (e.g. React)
    * will agro on us for updating state during render
    */
-  planWatchersRun(() => {
-    runScopeWatchers(scope as ScopeInternal, affectedWatcherLinks)
-  })
+  if (scheduleWatchers) {
+    scheduleWatchers(() => {
+      runScopeWatchers(scope as ScopeInternal)
+    })
+  } else {
+    runScopeWatchers(scope as ScopeInternal)
+  }
 }
 
 function injectValues(scope: Scope, values: Values) {
@@ -38,23 +42,12 @@ function injectValues(scope: Scope, values: Values) {
   ;(scope as any).fromSerialize = true
 }
 
-function updateScopeRefs(tscope: Scope, values: Values): string[] {
+function updateScopeRefs(tscope: Scope, values: Values) {
   const scope = tscope as ScopeInternal
-
-  const linksToRun: string[] = []
 
   for (const id in scope.reg) {
     if (Object.hasOwnProperty.call(scope.reg, id)) {
       const ref = scope.reg[id]
-
-      /**
-       * Schedule external watchers (useUnit, etc) re-run
-       */
-      const nodeId = ref?.meta?.id
-
-      if (nodeId && scope.additionalLinks[nodeId]) {
-        linksToRun.push(nodeId)
-      }
 
       if (!ref.meta || (!ref.meta?.named && ref.meta?.derived)) {
         /**
@@ -75,32 +68,32 @@ function updateScopeRefs(tscope: Scope, values: Values): string[] {
       }
     }
   }
-
-  return linksToRun
 }
 
-function runScopeWatchers(scope: ScopeInternal, linksToRun: string[]) {
+function runScopeWatchers(scope: ScopeInternal) {
   /**
-   * Run watchers (`useUnit`, etc) to push new values to them
-   *
-   * Manual lauch is required because top-down re-render stops at `memo`-ed components
+   * Run scope watchers (`useUnit`, etc) to push new values to them
    */
-  if (linksToRun.length) {
-    linksToRun.forEach(nodeId => {
-      const links = scope.additionalLinks[nodeId]
-
-      if (links) {
-        links.forEach(link => {
-          if (link.meta.watchOp === 'store') {
-            launch({
-              target: link,
-              /**
-               * `effector-react` internals will get current value internally
-               */
-              params: null,
-              scope,
-            })
-          }
+  for (const id in scope.additionalLinks) {
+    const links = scope.additionalLinks[id]
+    links.forEach(link => {
+      /**
+       * Scope watchers should be run only for store nodes, as it is store values that are updated
+       *
+       * At this point we have no way to differentiate, if store value is affected by hydration or not
+       * - e.g. if store is derived
+       *
+       * So we run all of the store node watchers
+       */
+      if (link.meta.watchOp === 'store') {
+        launch({
+          target: link,
+          /**
+           * `createWatch` pulls store values directly off the store node,
+           * so there is no need to pass any params
+           */
+          params: null,
+          scope,
         })
       }
     })
