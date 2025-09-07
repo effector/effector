@@ -7,6 +7,8 @@ import {
   launch,
   StateRef,
 } from 'effector'
+import { assert } from '../throw'
+import { isObject } from '../is'
 
 type Values = Record<string, unknown>
 
@@ -15,6 +17,8 @@ export function hydrateScope(config: {
   values: Values
   scheduleWatchers?: (cb: () => void) => void
 }) {
+  assert(config.scope && config.scope?.kind, 'valid scope is required')
+  assert(isObject(config.values), 'values property should be an object')
   const {scope, values, scheduleWatchers} = config
   injectValues(scope, values)
   updateScopeRefs(scope, values)
