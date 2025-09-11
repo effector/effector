@@ -153,6 +153,14 @@ export async function rollupEffector() {
       input: 'inspect',
       inputExtension: 'ts',
     }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/enable_debug_traces.js`),
+        es: dir(`npm/${name}/enable_debug_traces.mjs`),
+      },
+      input: 'enable_debug_traces',
+      inputExtension: 'ts',
+    }),
     createUmd(name, {
       external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),
