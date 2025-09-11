@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+# effector 23.4.4
+
+- Add `enable_debug_traces` compilation to debug files
+
 # effector 23.4.3
 
 - Make `effector/enable_debug_traces` actually built for production bundle
