@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+# effector 23.4.3
+
+- Make `effector/enable_debug_traces` actually built for production bundle
+
 # effector 23.4.2
 
 - Turn off debug traces by default, enable by designated api [PR](https://github.com/effector/effector/pull/1285), [Docs](https://effector.dev/en/api/effector/debug_traces/)
