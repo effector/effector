@@ -76,6 +76,14 @@ export const learning: LSidebarGroup[] = [
         },
         link: "/essentials/unit-composition",
       },
+      {
+        text: {
+          en: "Dynamic models",
+          ru: "Динамические модели",
+          uz: "Dinamik modellar",
+        },
+        link: "/essentials/dynamic-models",
+      },
     ],
   },
   {

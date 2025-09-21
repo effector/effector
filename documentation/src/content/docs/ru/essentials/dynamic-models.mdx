@@ -1,0 +1,148 @@
+---
+title: Динамические модели
+description: Динамические модели в Effector позволяют создавать и управлять состояниями и логикой на лету, что особенно полезно для приложений с динамическим контентом.
+lang: ru
+---
+
+# Динамические модели (#dynamic-models)
+
+:::warning{title="дисклеймер"}
+В данный момент динамические модели все еще находятся в стадии разработки и могут быть изменены в будущих версиях Effector. <br/>
+
+**НЕ РЕКОМЕНДУЕТСЯ ИСПОЛЬЗОВАТЬ В ПРОДАКШЕНЕ**.
+:::
+
+На данный момент effector не имеет возможности динамически создавать юниты. Если же это сделать то будет утечка памяти, потому что юниты навсегда останутся в графе, хотя это и можно обойти с помощью `withRegion`, `createNode` и `clearNode`, но это требует определенного навыка разработчика, потому что это низкоуровневые API и более того придется самому отслеживать жизненный цикл юнитов, что может быть головной болью.
+
+Поэтому для случаев когда нужно было иметь динамику использовались key-value сторы, которые хранили в себе объекты, где ключами были динамические идентификаторы, а значениями состояния, например:
+
+```ts
+// model.ts
+import { createStore, createEvent } from "effector";
+import { useStoreMap } from "effector-react";
+
+type Item = { id: string; count: number };
+const $items = createStore<Record<string, Item>>({});
+
+const upsertItem = createEvent<Item>();
+const removeItem = createEvent<string>();
+
+$items.on(upsertItem, (state, item) => ({
+  ...state,
+  [item.id]: item,
+}));
+
+$items.on(removeItem, (state, id) => {
+  const copy = { ...state };
+  delete copy[id];
+  return copy;
+});
+```
+
+При этом в UI подписывались с помощью `useStoreMap` только на ту часть, что соответствует `id` для получения данных:
+
+```tsx
+// counter.tsx
+import { $items, upsertItem, removeItem } from "./model";
+
+function Counter({ id }: { id: string }) {
+  const item = useStoreMap({
+    store: $items,
+    keys: [id],
+    fn: (state, [key]) => state[key],
+  });
+
+  const [onUpsertItem, onRemoveItem] = useUnit([upsertItem, removeItem]);
+
+  if (!item) return null;
+
+  return (
+    <div>
+      <span>{item.count}</span>
+      <button onClick={() => onUpsertItem({ id, count: item.count + 1 })}>+</button>
+      <button onClick={() => onRemoveItem(id)}>Удалить</button>
+    </div>
+  );
+}
+```
+
+Хотя такой подход работает, это не очень удобно, особенно если структура куда сложнее, чем в этом примере.
+
+Модели приносят новый способ работы с динамическими состояниями, позволяя создавать экземпляры моделей на лету, которые имеют свои собственные состояния и логику, а также ряд ряд новых API для удобной работы:
+
+- `keyval` – создаёт коллекцию экземпляров модели, где каждый элемент идентифицируется ключом. Именно через `keyval` происходит динамическое создание и удаление экземпляров модели.
+- `lens` – генерирует линзы для доступа к полям модели. По ключу сущности можно получить сущность или проверить наличие сущности, обратиться к вложенной коллекции и т.д.
+
+А также для интеграции с React:
+
+- `useEntityItem(keyval, key?)` – возвращает состояние конкретной сущности в коллекции `keyval`. Если `key` передан явно, ищет элемент по этому ключу; если ключ не передан, пытается получить его из ближайшего `EntityProvider`.
+- `useEntityList(keyval, View)` – итерирует по всем ключам коллекции и для каждого создаёт `EntityProvider`, передавая в него выбранный View. Проще говоря, это удобный способ отрисовать список элементов.
+- `useItemApi(keyval, key?)` – возвращает объект с функциями API для конкретной сущности.
+- `useEditItemField(keyval, key?)`– аналогичен `useItemApi`, но работает с API editField.
+- `useEditKeyval(keyval)` – возвращает объект `edit` коллекции. Этот объект содержит методы `add`, `update`, `remove`, `reset`.
+
+## Установка и работа с моделями (#setup-and-working-with-models)
+
+В данный момент модели реализованы в [отдельном репозитории](https://github.com/effector/model), а также доступны отдельным пакетом:
+
+```bash
+npm install @effector/model
+```
+
+и пакет для интеграции с React:
+
+```bash
+npm install @effector/model-react
+```
+
+Внутри [репозитория](https://github.com/effector/model) вы сможете найти директорию `apps` в корне репозитория, где есть несколько примеров использования моделей, один из них мы рассмотрим в этом гайде дальше.
+
+## Пример использования моделей (#example-of-using-models)
+
+Рассмотрим один из примеров [food-order](https://github.com/effector/model/tree/main/apps/food-order). Суть приложения простая - пользователь может выбрать ресторан, после чего выбрать блюда из меню и оформить заказ.
+
+Мы имеем несколько сущностей:
+
+- Ресторан, с названием, описанием и категориями, а также вложенная коллекция блюд со своими аттрибутами:
+
+```ts
+import { keyval } from "@effector/model";
+import type { Restaurant, Additive } from "../types";
+import { restaurants } from "../mocks";
+import { createStore } from "effector";
+
+export const restaurantsList = keyval(() => {
+  const $name = createStore("");
+  const $description = createStore("");
+  const $category = createStore<string[]>([]);
+  const dishesList = keyval(() => {
+    const $name = createStore("");
+    const $description = createStore("");
+    const $price = createStore(0);
+    const $additives = createStore<Additive[]>([]);
+    return {
+      key: "name",
+      state: {
+        name: $name,
+        description: $description,
+        price: $price,
+        additives: $additives,
+      },
+    };
+  });
+  return {
+    key: "name",
+    state: {
+      name: $name,
+      description: $description,
+      category: $category,
+      dishes: dishesList,
+    },
+  };
+});
+
+// нужно для инициализации списка ресторанов через моки
+restaurantsList.edit.replaceAll(restaurants);
+```
+
+Ключ нам нужен для идентификации сущности, `state` - это объект состояний, которые будут внутри каждой сущности.
