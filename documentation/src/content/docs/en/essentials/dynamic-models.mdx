@@ -1,0 +1,190 @@
+---
+title: Dynamic models
+description: Dynamic models and their API
+---
+
+# Dynamic models (#dynamic-models)
+
+:::warning{title="disclaimer"}
+At the moment dynamic models are still under development, their API may change over time. This article is for informational purposes only, and we strongly do not recommend using this functionality in production.<br/>
+
+**NOT RECOMMENDED FOR PRODUCTION USE**.
+:::
+
+Currently effector does not support creating units dynamically; [units must be defined statically at the module level](/en/resources/static-initialization). If units are created at runtime, a memory leak will occur because units will remain in the graph forever. Although you can try using `withRegion`, `createNode`, and `clearNode`, this requires developer expertise, since these are low-level APIs, and moreover you will have to track the unit lifecycle yourself, which can be a headache.
+
+Therefore, for cases where dynamics were needed, key-value stores were used, storing objects where keys were identifiers and values were states, for example:
+
+```ts
+// model.ts
+import { createStore, createEvent } from "effector";
+import { useStoreMap } from "effector-react";
+
+type Item = { id: string; count: number };
+const $items = createStore<Record<string, Item>>({});
+
+const addItem = createEvent<Item>();
+const removeItem = createEvent<string>();
+
+$items.on(addItem, (state, item) => ({
+  ...state,
+  [item.id]: item,
+}));
+
+$items.on(removeItem, (state, id) => {
+  const copy = { ...state };
+  delete copy[id];
+  return copy;
+});
+```
+
+In the UI, `useStoreMap` was used to subscribe only to the part that corresponds to `id` to get the data:
+
+```tsx
+// counter.tsx
+import { $items, addItem, removeItem } from "./model";
+import { useStoreMap, useUnit } from "effector-react";
+
+function Counter({ id }: { id: string }) {
+  const item = useStoreMap({
+    store: $items,
+    keys: [id],
+    fn: (state, [key]) => state[key],
+  });
+
+  const [onAddItem, onRemoveItem] = useUnit([addItem, removeItem]);
+
+  if (!item) return null;
+
+  return (
+    <div>
+      <span>{item.count}</span>
+      <button onClick={() => onAddItem({ id, count: item.count + 1 })}>+</button>
+      <button onClick={() => onRemoveItem(id)}>Delete</button>
+    </div>
+  );
+}
+```
+
+Although this approach works, it is not very convenient, especially if the structure is more complex than in this example.
+
+Models introduce a new way to work with dynamic states, allowing you to create model instances on the fly that have their own states and logic.
+
+## Setup and working with models (#setup-and-working-with-models)
+
+Currently models are implemented in a [separate repository](https://github.com/effector/model) and available as a separate package:
+
+```bash
+npm install @effector/model
+```
+
+and also a package for React integration:
+
+```bash
+npm install @effector/model-react
+```
+
+In the root of the [repository](https://github.com/effector/model) you can find the `apps` directory with examples of model usage in applications with near-real functionality. In this article we will just get familiar with the API and what dynamic models look like.
+
+## Model API (#api)
+
+Dynamic models introduce a set of new APIs:
+
+- `keyval` – an operator that creates a collection of model instances, where each element is identified by a key. Dynamic creation and deletion of model instances happens via `keyval`. It can also be used inside another `keyval` for nested structures. It expects a callback that returns an object with the following properties:
+
+  - `state` – the model state, an object containing stores or another `keyval` model. One of the properties must also serve as the model key
+  - `key` – the model key, i.e. its unique identifier
+  - `api` – an optional object with events or effects for working with the model
+  - `onMount` – an optional event or effect triggered when a model instance is created
+  - `optional` – an optional array of strings representing non-required fields of the model at creation
+
+Example:
+
+```ts
+export const restaurantsList = keyval(() => {
+  const $name = createStore("");
+  const $description = createStore("");
+  const $category = createStore<string[]>([]);
+
+  const dishesList = keyval(() => {
+    const $name = createStore("");
+    const $description = createStore("");
+    const $price = createStore(0);
+    const $additives = createStore<Additive[]>([]);
+
+    return {
+      key: "name",
+      state: {
+        name: $name,
+        description: $description,
+        price: $price,
+        additives: $additives,
+      },
+      optional: ["additives"],
+    };
+  });
+
+  return {
+    key: "name",
+    state: {
+      name: $name,
+      description: $description,
+      category: $category,
+      dishes: dishesList,
+    },
+    api: {
+      addDish: dishesList.edit.add,
+      removeDish: dishesList.edit.remove,
+    },
+    optional: ["category", "dishes"],
+  };
+});
+```
+
+Now using `restaurantsList` we can add, update, or remove model instances at runtime.
+
+```ts
+const addRestaurant = createEvent();
+
+sample({
+  clock: addRestaurant,
+  fn: () => ({
+    name: "Starbucks",
+    description: "American corporation and the largest coffeehouse chain in the world",
+  }),
+  target: restaurantsList.edit.add,
+});
+```
+
+- `lens` – lens is needed to dive inside a `keyval` for working with data. For example, with nested `keyval` we can access data or API from the very top to the very bottom:
+
+```ts
+const menuItemIdLens = lens(orderKeyval).item(orderId).menuItemId;
+const foodDescLens = lens(restaurantKeyval).item(restId).menu.item(menuItemIdLens).description;
+```
+
+:::info{title="lens api"}
+At the moment the lens API is still being refined and may differ from what is shown in the repository examples.
+:::
+
+In addition to the main effector package, there is also an API for effector-react to conveniently work with models in React:
+
+- `useEntityList(keyval, View)` – hook that takes `keyval` as the first argument and a component as the second. Iterates over all keys in the collection and for each creates an `EntityProvider`, passing `View` into it. Simply put, it’s a way to render a list and later work with other hooks without passing `id`.
+- `useEntityItem(keyval, key?)` – returns an entity by `id` in a `keyval` collection. If `key` is explicitly provided, it searches for the element by this key, if not provided, it tries to get it from the nearest `EntityProvider`.
+- `useItemApi(keyval, key?)` – returns the entity API object for working with it.
+- `useEditItemField(keyval, key?)` – returns an object with functions for updating each model field. If `key` is explicitly provided, it searches for the element by this key, if not provided, it tries to get it from the nearest `EntityProvider`.
+- `useEditKeyval(keyval)` – returns an object of methods for modifying the model, such as add, delete, or update.
+
+```ts
+const { add, map, remove, replaceAll, set, update } = useEditKeyval(ordersList);
+```
+
+## Related API and docs (#related-api-and-docs)
+
+- **API**
+
+  - [`clearNode`](/en/api/effector/clearNode) — Method for destroying units
+  - [`withRegion`](/en/api/effector/withRegion) — Method to set region for units
+
+- **Articles**
+  - [Unit initialization](/en/resources/static-initialization)
