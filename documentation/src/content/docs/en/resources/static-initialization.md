@@ -16,7 +16,7 @@ const $store = createStore(0);
 const $derivedStore = combine($store, (storeVal) => !!storeVal);
 ```
 
-When `$store` is created, we add a new node to the effector graph that holds a reference to the store. For the derived store, another node is created along with a link to the original store. Since references to unit objects are preserved in the graph, [GC](https://javascript.info/garbage-collection) in JavaScript is not able to remove them from memory. This means that if you create units or connections between them inside a React component, they will be recreated on every component mount, while the old units will continue to live and work.
+When creating a `$store`, a new node is added to Effector’s graph, which holds a reference to the store. For a derived store, a node is also created along with a connection to the source store. You can verify this by logging the source store to the console, expanding its `graphite.next` property (an array links to the next nodes), finding the node where `meta.op` is `combine`, and then expanding its `next` — that will be your derived store. Since references to unit objects are preserved in the graph, [GC](https://javascript.info/garbage-collection) in JavaScript is not able to remove them from memory. Therefore, for example, if you create units or connections between them inside a React component, they will be recreated on every component mount, while the old units will still remain alive and functioning.
 
 ## What about dynamics? (#whats-with-dynamic)
 
