@@ -557,6 +557,35 @@ describe('array cases', () => {
         "
       `)
     })
+
+    test('case name: match == cases, type: source != cases (should fail)', () => {
+      const source = createEvent<{a: string} | {b: number}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<void>()
+      const b = createEvent<number>()
+      split({
+        // @ts-expect-error
+        source,
+        match: $case,
+        cases: {
+          a,
+          // @ts-expect-error
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'EventCallable<{ a: string; } | { b: number; }>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type '{ a: string; } | { b: number; }' is not assignable to type 'number'.
+              Type '{ a: string; }' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<{ a: string; } | { b: number; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: string; } | { b: number; }'.
+        "
+      `)
+    })
+
     test('case name: match < cases, type: source == cases, arrays only (should fail)', () => {
       const source = createEvent<{foo: 1}>()
       const $case = createStore<'a'>('a')
@@ -1642,6 +1671,35 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         no errors
+        "
+      `)
+    })
+    test('identity function, case name: match == cases, type: source != cases (should fail)', () => {
+      const source = createEvent<'a' | 'b'>()
+      const a = createEvent<void>()
+      const b = createEvent<number>()
+
+      const identity = <T>(v: T): T => v
+      split({
+        // @ts-expect-error
+        source,
+        match: identity,
+        cases: {
+          a,
+          // @ts-expect-error
+          b,
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'EventCallable<\\"a\\" | \\"b\\">' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<\\"a\\" | \\"b\\">'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '\\"a\\" | \\"b\\"'.
         "
       `)
     })
