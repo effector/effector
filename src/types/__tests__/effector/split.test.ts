@@ -586,6 +586,31 @@ describe('array cases', () => {
       `)
     })
 
+    test('case name: match == cases, type: source != cases (should fail)', () => {
+      const source = createEvent<string>()
+      const $case = createStore<'a'>('a')
+      const a = createEvent<boolean>()
+      split({
+        //@ts-expect-error
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'EventCallable<string>' is not assignable to type 'Unit<boolean>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'boolean'.
+        Type 'EventCallable<boolean>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'boolean' is not assignable to type 'string'.
+        "
+      `)
+    })
+
     test('case name: match < cases, type: source == cases, arrays only (should fail)', () => {
       const source = createEvent<{foo: 1}>()
       const $case = createStore<'a'>('a')
