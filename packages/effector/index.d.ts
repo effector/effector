@@ -801,17 +801,17 @@ export function createStore<State, SerializedState extends Json = Json>(
 
 export function setStoreName<State>(store: Store<State>, name: string): void
 
-type UnionToIntersection<Union> = (
-  Union extends any ? (k: Union) => void : never
-  ) extends (k: infer intersection) => void
-  ? intersection
+type UnionToIntersection<U> = (
+  U extends any ? (k: U) => void : never
+  ) extends (k: infer Intersection) => void
+  ? Intersection
   : never;
 
-type GetUnionLast<Union> = UnionToIntersection<
-  Union extends any ? () => Union : never
+type GetUnionLast<U> = UnionToIntersection<
+  [U] extends [boolean] ? () => U : U extends any ? () => U : never
 > extends () => infer Last
   ? Last
-  : never;
+  : never
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
