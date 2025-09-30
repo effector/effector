@@ -1035,7 +1035,7 @@ type RebuildSource<Source, Cases> =
 
 type GetFirstUnassignableCase<SourceValue, Case> =
   Case extends UnitTargetable<infer CaseValue>
-    ? IfValidCaseValue<CaseValue, SourceValue, SourceValue, CaseValue>
+    ? IfValidCaseValue<CaseValue, SourceValue, never, CaseValue>
     : Case extends RoTuple<UnitTargetable<any>>
       ? GetFirstUnassignableLoop<Case, SourceValue>
       : never;
