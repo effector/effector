@@ -1,0 +1,191 @@
+---
+title: Динамические модели
+description: Описание динамических моделей и их API.
+lang: ru
+---
+
+# Динамические модели (#dynamic-models)
+
+:::warning{title="дисклеймер"}
+В данный момент динамические модели все еще находятся на стадии разработки, их API может меняться со временем. Данная статья носит исключительно ознакомительный характер мы настоятельно не рекомендуем использовать в продакшене этот функционал.<br/>
+
+**НЕ РЕКОМЕНДУЕТСЯ ИСПОЛЬЗОВАТЬ В ПРОДАКШЕНЕ**.
+:::
+
+На данный момент effector не имеет возможности динамически создавать юниты, юниты должны быть [инициализированы статически на уровне модуля](/ru/resources/static-initialization). Если же создавать юниты во время рантайма, то произойдет утечка памяти, потому что юниты навсегда останутся в графе. Хотя и можно попробовать использовать `withRegion`, `createNode` и `clearNode`, но это требует определенного навыка разработчика, поскольку это низкоуровневый API и более того придется самому отслеживать жизненный цикл юнитов, что может быть головной болью.
+
+Поэтому для случаев когда нужно было иметь динамику использовались key-value сторы, которые хранили в себе объекты, где ключами были идентификаторы, а значениями состояния, например:
+
+```ts
+// model.ts
+import { createStore, createEvent } from "effector";
+import { useStoreMap } from "effector-react";
+
+type Item = { id: string; count: number };
+const $items = createStore<Record<string, Item>>({});
+
+const addItem = createEvent<Item>();
+const removeItem = createEvent<string>();
+
+$items.on(addItem, (state, item) => ({
+  ...state,
+  [item.id]: item,
+}));
+
+$items.on(removeItem, (state, id) => {
+  const copy = { ...state };
+  delete copy[id];
+  return copy;
+});
+```
+
+При этом в UI подписывались с помощью `useStoreMap` только на ту часть, что соответствует `id` для получения данных:
+
+```tsx
+// counter.tsx
+import { $items, addItem, removeItem } from "./model";
+import { useStoreMap, useUnit } from "effector-react";
+
+function Counter({ id }: { id: string }) {
+  const item = useStoreMap({
+    store: $items,
+    keys: [id],
+    fn: (state, [key]) => state[key],
+  });
+
+  const [onAddItem, onRemoveItem] = useUnit([addItem, removeItem]);
+
+  if (!item) return null;
+
+  return (
+    <div>
+      <span>{item.count}</span>
+      <button onClick={() => onAddItem({ id, count: item.count + 1 })}>+</button>
+      <button onClick={() => onRemoveItem(id)}>Удалить</button>
+    </div>
+  );
+}
+```
+
+Хотя такой подход работает, это не очень удобно, особенно если структура куда сложнее, чем в этом примере.
+
+Модели приносят новый способ работы с динамическими состояниями, позволяя создавать экземпляры моделей на лету, которые имеют свои собственные состояния и логику.
+
+## Установка и работа с моделями (#setup-and-working-with-models)
+
+В данный момент модели реализованы в [отдельном репозитории](https://github.com/effector/model) и доступны отдельным пакетом:
+
+```bash
+npm install @effector/model
+```
+
+а также пакет для интеграции с React:
+
+```bash
+npm install @effector/model-react
+```
+
+В корне [репозитория](https://github.com/effector/model) вы сможете найти директорию `apps` , где есть примеры использования моделей в приложениях с около-реальным функционалом. В данной статье мы просто ознакомимся с API и что из себя будут представлять динамические модели.
+
+## API моделей (#api)
+
+Динамические модели приносят ряд новых API для работы:
+
+- `keyval` – оператор который создаёт коллекцию инстансов модели, где каждый элемент идентифицируется ключом. Именно через `keyval` происходит динамическое создание и удаление экземпляров модели. `keyval` также может использоваться внутри `keyval` для вложенных структур. В аргументе ожидает колбэк который вернет объект со свойствами:
+
+  - `state` – состояние модели, является объектом со сторами или `keyval` моделью . Одно из свойств также должно быть ключом модели
+  - `key` – ключ модели, иначе говоря ее уникальный идентификатор
+  - `api` – опциональный объект с событиями или эффектами для работы с моделью
+  - `onMount` – опциональное событие или эффект, которое вызывается при создании инстанса модели
+  - `optional` – опциональный массив строк с необязательными полями модели при создании
+
+Например:
+
+```ts
+export const restaurantsList = keyval(() => {
+  const $name = createStore("");
+  const $description = createStore("");
+  const $category = createStore<string[]>([]);
+
+  const dishesList = keyval(() => {
+    const $name = createStore("");
+    const $description = createStore("");
+    const $price = createStore(0);
+    const $additives = createStore<Additive[]>([]);
+
+    return {
+      key: "name",
+      state: {
+        name: $name,
+        description: $description,
+        price: $price,
+        additives: $additives,
+      },
+      optional: ["additives"],
+    };
+  });
+
+  return {
+    key: "name",
+    state: {
+      name: $name,
+      description: $description,
+      category: $category,
+      dishes: dishesList,
+    },
+    api: {
+      addDish: dishesList.edit.add,
+      removeDish: dishesList.edit.remove,
+    },
+    optional: ["category", "dishes"],
+  };
+});
+```
+
+Теперь используя `restaurantsList` мы можем в рантайме добавлять, изменять или удалять экземпляры модели. Все, что описано внутри `keyval` будет динамически создано для каждого инстанса.
+
+```ts
+const addRestaurant = createEvent();
+
+sample({
+  clock: addRestaurant,
+  fn: () => ({
+    name: "Starbucks",
+    description: "Американская корпорация и крупнейшая в мире сеть кофеен",
+  }),
+  target: restaurantsList.edit.add,
+});
+```
+
+- `lens` – линза необходима нам чтобы погрузиться внутрь `keyval` для работы с данными, например имея вложенные `keyval` мы можем достучаться с самого верха до самого низа и получить данные или апи для работы с ним:
+
+```ts
+const menuItemIdLens = lens(orderKeyval).item(orderId).menuItemId;
+const foodDescLens = lens(restaurantKeyval).item(restId).menu.item(menuItemIdLens).description;
+```
+
+:::info{title="lens api"}
+В данный момент API линзы дорабатывается и может отличаться от того, что есть в примерах репозитория.
+:::
+
+Помимо основного пакета effector также имеется API для effector-react, чтобы удобно работать с моделями в React:
+
+- `useEntityList(keyval, View)` – хук, который принимает `keyval` первым аругментом и компонент вторым. Итерирует по всем ключам коллекции и для каждого создаёт `EntityProvider`, передавая в него `View`. Проще говоря, это способ отрисовать список и в дальнейшем удобнее работать с остальными хуками без передачи `id`.
+- `useEntityItem(keyval, key?)` – возвращает сущность по `id` в коллекции `keyval`. Если `key` передан явно, ищет элемент по этому ключу, если ключ не передан, пытается получить его из ближайшего `EntityProvider`.
+- `useItemApi(keyval, key?)` – возвращает объект API сущности для работы с ней.
+- `useEditItemField(keyval, key?)`– возвращает объект с функциями для обновления каждого поля модели. Если `key` передан явно, ищет элемент по этому ключу, если ключ не передан, пытается получить его из ближайшего `EntityProvider`.
+- `useEditKeyval(keyval)` – возвращает объект методов для модификации модели, например добавить, удалить или обновить.
+
+```ts
+const { add, map, remove, replaceAll, set, update } = useEditKeyval(ordersList);
+```
+
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+
+  - [`clearNode`](/ru/api/effector/clearNode) — Метод для уничтожения ноды и ее связей
+  - [`withRegion`](/ru/api/effector/withRegion) — Метод установки региона для нод
+
+- **Articles**
+  - [Инициализация юнитов](/ru/resources/static-initialization)

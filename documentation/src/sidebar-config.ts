@@ -76,6 +76,14 @@ export const learning: LSidebarGroup[] = [
         },
         link: "/essentials/unit-composition",
       },
+      {
+        text: {
+          en: "Dynamic models",
+          ru: "Динамические модели",
+          uz: "Dinamik modellar",
+        },
+        link: "/essentials/dynamic-models",
+      },
     ],
   },
   {
@@ -281,15 +289,23 @@ export const guidesAndRecipes: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Static initialization",
+          ru: "Инициализация юнитов",
+          uz: "Hisoblash ustuvorligi",
+        },
+        link: "/resources/static-initialization",
+      },
+      {
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        link: "/introduction/ecosystem",
+      },
+      {
+        text: {
           en: "Computation Priority",
           ru: "Приоритет вычислений",
           uz: "Hisoblash ustuvorligi",
         },
         link: "/explanation/computation-priority",
-      },
-      {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
-        link: "/introduction/ecosystem",
       },
       {
         text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
