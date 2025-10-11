@@ -7,8 +7,8 @@ redirectFrom:
   - /conventions/naming
 ---
 
-import Tabs from "@components/Tabs/Tabs.astro";
-import TabItem from "@components/Tabs/TabItem.astro";
+import Tabs from '@components/Tabs/Tabs.astro';
+import TabItem from '@components/Tabs/TabItem.astro';
 
 # Best Practices in Effector (#best-practices)
 
@@ -63,8 +63,8 @@ Rules for atomic stores:
 If your store contains nested structures, you can use the beloved Immer for simplified updates:
 
 ```ts
-import { createStore } from "effector";
-import { produce } from "immer";
+import { createStore } from 'effector';
+import { produce } from 'immer';
 
 const $users = createStore<User[]>([]);
 
@@ -78,56 +78,13 @@ $users.on(userUpdated, (users, updatedUser) =>
 );
 ```
 
-## Explicit Application Start (#explicit-app-start)
+## Explicit app start (#explicit-app-start)
 
-We recommend using explicit application start through special events to initialize your application.
-
-Why it matters:
-
-1. Full control over application lifecycle
-2. Simplified testing
-3. Predictable application behavior
-4. Ability to control initialization order
+To gain better control over your application’s lifecycle, we recommend defining explicit [events](/en/api/effector/Event) such as `appStarted`. If you need more granular control, don’t hesitate to create additional [events](/en/api/effector/Event). You can find more details on the [Explicit app start](/en/resources/explicit-start) page.
 
 ```ts
 export const appStarted = createEvent();
 ```
-
-call event and subscribe on it:
-
-<Tabs>
-  <TabItem label="Without Scopes">
-
-```ts
-import { sample } from "effector";
-import { scope } from "./app.js";
-
-sample({
-  clock: appStarted,
-  target: initFx,
-});
-
-appStarted();
-```
-
-  </TabItem>
-  <TabItem label="With Scopes">
-
-```ts
-import { sample, allSettled } from "effector";
-import { scope } from "./app.js";
-
-sample({
-  clock: appStarted,
-  target: initFx,
-});
-
-allSettled(appStarted, { scope });
-```
-
-  </TabItem>
-
-</Tabs>
 
 ## Use `scope` (#use-scope)
 
@@ -161,11 +118,11 @@ If your code can throw an error or can end in success/failure - that's an excell
 We strongly recommend using the patronum library and the debug method.
 
 ```ts
-import { createStore, createEvent, createEffect } from "effector";
-import { debug } from "patronum/debug";
+import { createStore, createEvent, createEffect } from 'effector';
+import { debug } from 'patronum/debug';
 
 const event = createEvent();
-const effect = createEffect().use((payload) => Promise.resolve("result" + payload));
+const effect = createEffect().use((payload) => Promise.resolve('result' + payload));
 const $store = createStore(0)
   .on(event, (state, value) => state + value)
   .on(effect.done, (state) => state * 10);
@@ -173,7 +130,7 @@ const $store = createStore(0)
 debug($store, event, effect);
 
 event(5);
-effect("demo");
+effect('demo');
 
 // => [store] $store 1
 // => [event] event 5
@@ -220,7 +177,7 @@ Moreover, `effector-action` helps make your code more readable:
   <TabItem label="❌ Complex sample">
 
 ```ts
-import { sample } from "effector";
+import { sample } from 'effector';
 
 sample({
   clock: formSubmitted,
@@ -257,7 +214,7 @@ sample({
 <TabItem label="✅ With createAction">
 
 ```ts
-import { createAction } from "effector-action";
+import { createAction } from 'effector-action';
 
 const submitForm = createAction({
   source: {
@@ -312,11 +269,11 @@ const updateUserNameFx = createEffect(() => {});
 
 const userNameUpdated = createEvent();
 
-const $userName = createStore("JS");
+const $userName = createStore('JS');
 
 $userName.on(userNameUpdated, (_, newName) => newName);
 
-userNameUpdated("TS");
+userNameUpdated('TS');
 ```
 
 :::info{title="Naming Convention"}
@@ -335,7 +292,7 @@ watch should only be used for debugging. For logic, use sample, guard, or effect
 ```ts
 // logic in watch
 $user.watch((user) => {
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem('user', JSON.stringify(user));
   api.trackUserUpdate(user);
   someEvent(user.id);
 });
@@ -347,7 +304,7 @@ $user.watch((user) => {
 ```ts
 // separate effects for side effects
 const saveToStorageFx = createEffect((user: User) =>
-  localStorage.setItem("user", JSON.stringify(user)),
+  localStorage.setItem('user', JSON.stringify(user)),
 );
 
 const trackUpdateFx = createEffect((user: User) => api.trackUserUpdate(user));
@@ -421,8 +378,8 @@ const loginFx = createEffect(async (params) => {
 
   // imperative calls
   setUser(user);
-  redirectFx("/dashboard");
-  showNotification("Welcome!");
+  redirectFx('/dashboard');
+  showNotification('Welcome!');
 
   return user;
 });
