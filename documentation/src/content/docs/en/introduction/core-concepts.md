@@ -1,6 +1,6 @@
 ---
-title: Effector Core concepts
-description: Core concepts of effector - store, effect, event and how it works together
+title: Core concepts
+description: Core concepts - store, effect, event and how it works together
 redirectFrom:
   - /essentials/reactivity
   - /docs/introduction/core-concepts
@@ -13,19 +13,16 @@ redirectFrom:
 
 Effector is a modern state management library that enables developers to build scalable and predictable reactive applications.
 
-At its core, Effector is built around the concept of **units**—independent building blocks of an application. Each unit—whether a [store](/en/essentials/manage-states), an [event](/en/essentials/events), or an [effect](/en/essentials/work-with-async) — has a specific role.
+At its core, Effector is built around the concept of **units** — independent building blocks of an application. Each unit—whether a [store](/en/essentials/manage-states), an [event](/en/essentials/events), or an [effect](/en/essentials/work-with-async) — has a specific role.
 By combining these units, developers can construct complex yet intuitive data flows within their applications.
 
 Effector development is based on two key principles:
 
-- 📝 **Declarativity**: You define _what_ should happen, not _how_ it should work.
-- 🚀 **Reactivity**: Changes propagate automatically throughout the application.
+- **Declarativity**: You define _what_ should happen, not _how_ it should work.
+- **Reactivity**: Changes propagate automatically throughout the application.
+- [**Static initialization**](/en/resources/static-initialization) – all units and logic must be defined statically at the module level.
 
-Effector employs an intelligent dependency-tracking system that ensures only the necessary parts of the application update when data changes. This provides several benefits:
-
-- No need for manual subscription management
-- High performance even at scale
-- A predictable and clear data flow
+Effector employs an intelligent dependency-tracking system that ensures only the necessary parts of the application update when data changes.
 
 ## Units (#units)
 
@@ -146,7 +143,7 @@ fetchUserFx(1);
 
 As mentioned at the beginning, Effector is built on the principles of reactivity, where changes **automatically** propagate throughout the application. Instead of an imperative approach, where you explicitly define how and when to update data, Effector allows you to declaratively describe relationships between different parts of your application.
 
-### How Reactivity Works in Effector (#how-reactivity-works)
+### How Reactivity Works (#how-reactivity-works)
 
 Let's revisit the example from the **Stores** section, where we have a store containing an array of superhumans. Now, suppose we need to separate heroes and villains into distinct lists. This can be easily achieved using derived stores:
 
@@ -182,7 +179,7 @@ superAdded({
 });
 ```
 
-In this example, we created derived stores `$superHeroes` and `$superVillains`, which depend on the original `$supers` store. Whenever the original store updates, the derived stores automatically update as well — this is **reactivity** in action! 🚀
+In this example, we created derived stores `$superHeroes` and `$superVillains`, which depend on the original `$supers` store. Whenever the original store updates, the derived stores automatically update as well — this is **reactivity** in action!
 
 ## How it all works together? (#how-units-work-together)
 

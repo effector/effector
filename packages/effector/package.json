@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "23.4.2",
+  "version": "23.4.4",
   "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
@@ -69,7 +69,12 @@
     "inspect.d.ts",
     "babel-plugin.js",
     "babel-plugin.js.map",
-    "babel-plugin-react.js"
+    "babel-plugin-react.js",
+    "enable_debug_traces.js",
+    "enable_debug_traces.js.map",
+    "enable_debug_traces.mjs",
+    "enable_debug_traces.mjs.map",
+    "enable_debug_traces.d.ts"
   ],
   "keywords": [
     "business",
