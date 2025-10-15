@@ -258,6 +258,13 @@ export const guidesAndRecipes: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Events in UI-frameworks",
+          ru: "Обработка UI событий в модели",
+        },
+        link: "/guides/events-in-ui-frameworks",
+      },
+      {
+        text: {
           ru: "Использование с Websocket",
           en: "Websockets",
           uz: "Websocket bilan bog'lanish",
@@ -289,6 +296,13 @@ export const guidesAndRecipes: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Explicit app start",
+          ru: "Явный запуск приложения",
+        },
+        link: "/resources/explicit-start",
+      },
+      {
+        text: {
           en: "Static initialization",
           ru: "Инициализация юнитов",
           uz: "Hisoblash ustuvorligi",
@@ -296,7 +310,11 @@ export const guidesAndRecipes: LSidebarGroup[] = [
         link: "/resources/static-initialization",
       },
       {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        text: {
+          en: "Ecosystem",
+          ru: "Экосистема effector",
+          uz: "Effector ekosistemasi",
+        },
         link: "/introduction/ecosystem",
       },
       {
