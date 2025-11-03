@@ -19,10 +19,27 @@ import TabItem from "@components/Tabs/TabItem.astro";
 import { attach } from "effector";
 ```
 
-The `attach` method allows creating new attached [effects][effectApi] based on existing ones with the ability to access data from [stores][storeApi]. This method enables reusing effect logic with different parameters and automatically passing data from stores.
+The `attach` method allows creating new [effects][effectApi] based on existing ones with the ability to access data from [stores][storeApi]. This method enables reusing effect logic with different parameters and automatically passing data from stores.
 
-:::info{title="there are no derived effects!"}
-All attached effects are fully-fledged [effects][effectApi], just like regular ones created with [createEffect](/en/api/effector/createEffect).
+:::info{title="Properties of attached effects"}
+An attached effect is a full-fledged effect that has its own `.done`, `.fail`, and other properties. They trigger only when the attached effect is called, not the original one.
+
+```ts
+const originalFx = createEffect(async (x: number) => x * 2);
+const attachedFx = attach({ effect: originalFx });
+
+originalFx.done.watch(() => console.log("original done"));
+attachedFx.done.watch(() => console.log("attached done"));
+
+await attachedFx(5);
+// original done
+// attached done
+
+await originalFx(5);
+// original done
+// (attached done won't trigger)
+```
+
 :::
 
 ## Algorithm (#algorithm)
@@ -71,25 +88,40 @@ export function attach<FX extends Effect<any, any, any>>(config: {
 This allows creating a _local_ copy of an effect to react only to calls from the current _local_ code.
 
 ```ts
-const httpRequestFx = createEffect(async ({ url, options = {} }) => {
-  console.log(`Executing request: ${url}`);
-
-  const response = await fetch(url, {
-    ...options,
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP Error: ${response.status}`);
-  }
-
-  return response.json();
+// common effect for the entire application
+const sendAnalyticsFx = createEffect(async (event: { name: string; data: any }) => {
+  console.log("Analytics:", event.name);
 });
 
-const fetchUsersFx = attach({
-  effect: httpRequestFx,
+// in auth module - local copy
+const trackAuthFx = attach({
+  effect: sendAnalyticsFx,
+  name: "trackAuthFx",
 });
 
-fetchUsersFx({ url: "/api/users" });
+// handle only events from auth module
+trackAuthFx.done.watch(() => {
+  console.log("Auth event tracked");
+});
+
+// in cart module - another local copy
+const trackCartFx = attach({
+  effect: sendAnalyticsFx,
+  name: "trackCartFx",
+});
+
+// handle only events from cart module
+trackCartFx.done.watch(() => {
+  console.log("Cart event tracked");
+});
+
+trackAuthFx({ name: "login", data: {} });
+// Analytics: login
+// Auth event tracked
+
+trackCartFx({ name: "add_to_cart", data: {} });
+// Analytics: add_to_cart
+// Cart event tracked
 ```
 
 [Run example](https://share.effector.dev/7Uhk4XfW).
@@ -139,15 +171,15 @@ export function attach<
 Simple usage with one store and handler:<br/><br/>
 
 ```ts
-// Effect for loading data
+// effect for loading data
 const loadDataFx = createEffect(async (id: number) => {
   return fetch(`/api/data/${id}`).then((res) => res.json());
 });
 
-// Store with current id
+// store with current id
 const $currentId = createStore(1);
 
-// Effect with store binding
+// effect with store binding
 const loadCurrentDataFx = attach({
   source: $currentId,
   effect: async (id: number) => {
@@ -164,7 +196,7 @@ const loadCurrentDataFx = attach({
 ```ts
 import { createEffect, createStore, attach } from "effector";
 
-const requestPageFx = createEffect<{ page: number; size: number }, string[]>(
+const requestPageFx = createEffect<{ page: number; size: number }, number>(
   async ({ page, size }) => {
     console.log("Requested", page);
     return page * size;
@@ -196,12 +228,12 @@ Usage with array of stores:<br/><br/>
 const $lat = createStore(55.7558);
 const $lon = createStore(37.6173);
 
-// Weather fetching effect
+// weather fetching effect
 const fetchWeatherFx = createEffect(([lat, lon]: [number, number]) =>
   fetch(`/api/weather?lat=${lat}&lon=${lon}`).then((res) => res.json()),
 );
 
-// Combining array of stores
+// combining array of stores
 const loadWeatherFx = attach({
   source: combine([$lat, $lon]),
   effect: fetchWeatherFx,
@@ -249,7 +281,7 @@ export function attach<Params, FX extends Effect<any, any, any>>(config: {
   const attachedFx: Effect<void, Done, Fail> = attach({
   effect: originalFx,
   mapParams: (): A {
-    throw new AnyNonFailType(); // This might be incompatible with type `Fail`.
+    throw new AnyNonFailType(); // this might be incompatible with type `Fail`.
   },
   });
   ```

@@ -16,10 +16,27 @@ import TabItem from "@components/Tabs/TabItem.astro";
 import { attach } from "effector";
 ```
 
-Метод `attach` позволяет создавать новые прикрепленные [эффекты][effectApi] на основе существующих c возможностью доступа к данным из [стора][storeApi]. Этот метод позволяет переиспользовать логику эффектов с разными параметрами и автоматически передавать данные из сторов.
+Метод `attach` позволяет создавать новые [эффекты][effectApi] на основе существующих c возможностью доступа к данным из [стора][storeApi]. Этот метод позволяет переиспользовать логику эффектов с разными параметрами и автоматически передавать данные из сторов.
 
-:::info{title="производных эффектов не бывает!"}
-Все прикрепленные эффекты являются такими же полноценными [эффектами][effectApi], как и обычные, созданные через [createEffect](/ru/api/effector/createEffect).
+:::info{title="Свойства прикрепленных эффектов"}
+Прикрепленный эффект является таким же полноценным эффектом, который имеет собственные свойства `.done`, `.fail`, и др. Они срабатывают только при вызовах прикрепленного эффекта, а не оригинального.
+
+```ts
+const originalFx = createEffect(async (x: number) => x * 2);
+const attachedFx = attach({ effect: originalFx });
+
+originalFx.done.watch(() => console.log("original done"));
+attachedFx.done.watch(() => console.log("attached done"));
+
+await attachedFx(5);
+// original done
+// attached done
+
+await originalFx(5);
+// original done
+// (attached done не сработает)
+```
+
 :::
 
 ## Алгоритм работы (#algorithm)
@@ -30,7 +47,7 @@ import { attach } from "effector";
 4. Результат функции `mapParams` передаётся в оригинальный эффект `effect`.
 5. Возвращается результат выполнения оригинального эффекта.
 
-## Формы конфигураций `attach` (#attach-config-forms)
+## Виды конфигураций `attach` (#attach-config-forms)
 
 | <div style="width:220px">Форма</div>                                               | Описание                                                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -68,25 +85,40 @@ export function attach<FX extends Effect<any, any, any>>(config: {
 Это позволяет создать _локальную_ копию эффекта, чтобы реагировать только на вызовы из текущего _локального_ кода.
 
 ```ts
-const httpRequestFx = createEffect(async ({ url, options = {} }) => {
-  console.log(`Выполняется запрос: ${url}`);
-
-  const response = await fetch(url, {
-    ...options,
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP Error: ${response.status}`);
-  }
-
-  return response.json();
+// Общий эффект для всего приложения
+const sendAnalyticsFx = createEffect(async (event: { name: string; data: any }) => {
+  console.log("Analytics:", event.name);
 });
 
-const fetchUsersFx = attach({
-  effect: httpRequestFx,
+// В модуле авторизации - локальная копия
+const trackAuthFx = attach({
+  effect: sendAnalyticsFx,
+  name: "trackAuthFx",
 });
 
-fetchUsersFx({ url: "/api/users" });
+// Обрабатываем только события из модуля авторизации
+trackAuthFx.done.watch(() => {
+  console.log("Auth event tracked");
+});
+
+// В модуле корзины - другая локальная копия
+const trackCartFx = attach({
+  effect: sendAnalyticsFx,
+  name: "trackCartFx",
+});
+
+// Обрабатываем только события из модуля корзины
+trackCartFx.done.watch(() => {
+  console.log("Cart event tracked");
+});
+
+trackAuthFx({ name: "login", data: {} });
+// Analytics: login
+// Auth event tracked
+
+trackCartFx({ name: "add_to_cart", data: {} });
+// Analytics: add_to_cart
+// Cart event tracked
 ```
 
 [Запустить пример](https://share.effector.dev/7Uhk4XfW).
@@ -161,7 +193,7 @@ const loadCurrentDataFx = attach({
 ```ts
 import { createEffect, createStore, attach } from "effector";
 
-const requestPageFx = createEffect<{ page: number; size: number }, string[]>(
+const requestPageFx = createEffect<{ page: number; size: number }, number>(
   async ({ page, size }) => {
     console.log("Запрошено", page);
     return page * size;
