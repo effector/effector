@@ -66,14 +66,14 @@ createAction(sendButtonClicked, {
 });
 ```
 
+</Fragment>
+
+</SideBySide>
+
 Оба оператора срабатывают при вызове события `sendButtonClicked`, затем берут данные из `source`, а дальше:
 
 - В `sample` используются отдельные параметры: `filter` для проверки условий, `fn` для трансформации данных, и `target` для вызова юнитов.
 - В `createAction` вся логика находится в одной `fn`, где можно использовать обычные `if` для условий и явно вызывать нужные `target`.
-
-</Fragment>
-
-</SideBySide>
 
 :::info{title="action"}
 `createAction` является оператором из внешнего пакета [`effector-action`](https://github.com/AlexeyDuybo/effector-action), который в ближайшем мажоре переедет в кор пакет effector. Также в дополнение нужно установить пакет [patronum](https://patronum.effector.dev).

@@ -17,7 +17,7 @@ Conceptually, both operators perform the same work, however, they have a differe
 
 <Fragment slot="left">
 
-```ts wrap data-height="full"
+```ts data-height="full"
 // sample
 import { sample, createEvent } from "effector";
 
@@ -39,7 +39,7 @@ sample({
 
   <Fragment slot="right">
 
-```ts wrap data-height="full"
+```ts data-height="full"
 // createAction
 import { createAction } from "effector-action";
 import { createEvent } from "effector";
@@ -65,14 +65,14 @@ createAction(sendButtonClicked, {
 });
 ```
 
+</Fragment>
+
+</SideBySide>
+
 Both operators trigger when the `sendButtonClicked` event is called, then take data from `source`, and then:
 
 - In `sample`, separate parameters are used: `filter` for checking conditions, `fn` for data transformation, and `target` for calling units.
 - In `createAction`, all logic is in a single `fn`, where you can use regular `if` statements for conditions and explicitly call the needed `target`.
-
-</Fragment>
-
-</SideBySide>
 
 :::info{title="action"}
 `createAction` is an operator from the external package [`effector-action`](https://github.com/AlexeyDuybo/effector-action), which will move to the effector core package in the nearest major release. Additionally, you need to install the [patronum](https://patronum.effector.dev) package.
