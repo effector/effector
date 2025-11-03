@@ -69,10 +69,10 @@ createAction(sendButtonClicked, {
 
 </SideBySide>
 
-Both operators trigger when the `sendButtonClicked` event is called, then take data from `source`, and then:
+Both operators trigger when the `sendButtonClicked` [event](/en/api/effector/Event) is called, then take data from [`source`](/en/api/effector/sample#source-argument), and then:
 
-- In `sample`, separate parameters are used: `filter` for checking conditions, `fn` for data transformation, and `target` for calling units.
-- In `createAction`, all logic is in a single `fn`, where you can use regular `if` statements for conditions and explicitly call the needed `target`.
+- In [`sample`](/en/api/effector/sample), separate parameters are used: [`filter`](/en/api/effector/sample#filter-argument) for checking conditions, [`fn`](/en/api/effector/sample#fn-argument) for data transformation, and [`target`](/en/api/effector/sample#target-argument) for calling units.
+- In [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction), all logic is in a single `fn`, where you can use regular `if` statements for conditions and explicitly call the needed `target`.
 
 :::info{title="action"}
 `createAction` is an operator from the external package [`effector-action`](https://github.com/AlexeyDuybo/effector-action), which will move to the effector core package in the nearest major release. Additionally, you need to install the [patronum](https://patronum.effector.dev) package.
