@@ -611,8 +611,8 @@ describe('serialize: missing sids', () => {
     expect(argumentHistory(console.error as any)).toMatchInlineSnapshot(`
       Array [
         "serialize: One or more stores dont have sids, their values are omitted",
-        [Error: store should have sid or \`serialize: ignore\`],
-        [Error: store should have sid or \`serialize: ignore\`],
+        [Error: $store at /src/effector/__tests__/fork/serialize.test.ts: store should have sid or \`serialize: ignore\`],
+        [Error: $storeB at /src/effector/__tests__/fork/serialize.test.ts: store should have sid or \`serialize: ignore\`],
       ]
     `)
   })

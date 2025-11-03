@@ -1,4 +1,4 @@
-import type {Cmd, StateRef} from './index.h'
+import type {Cmd, Node, StateRef} from './index.h'
 import type {CommonUnit, DataCarrier, Store} from './unit.h'
 import {combine} from './combine'
 import {mov, userFnCall, read, calc} from './step'
@@ -14,11 +14,11 @@ import {
   isVoid,
   isFunction,
 } from './is'
-import {createStore} from './createUnit'
+import {createStore, getUnitTrace, setUnitTrace} from './createUnit'
 import {createEvent} from './createUnit'
 import {createNode} from './createNode'
 import {assert, deprecate} from './throw'
-import {forEach} from './collection'
+import {add, forEach} from './collection'
 import {STACK, VALUE} from './tag'
 import {applyTemplate} from './template'
 import {own} from './own'
@@ -124,8 +124,28 @@ export const createSampling = (
   if (sourceIsClock) {
     source = clock
   }
-  // @ts-expect-error
-  if (!metadata && !name) name = source.shortName
+  if (!metadata && !name) {
+    /**
+     * When there is no metadata and name, assign source name as a fallback.
+     * This is very misleading behavior (sample unit is not a source unit)
+     * introduced a long time ago, so we keep it only for backward compatibility
+     * for cases which were covered at the time.
+     *
+     * Therefore, this name will not be used as a fallback for newer (23.4.0) cases
+     * (a.k.a. sample support for patronum debug traces)
+     * and metadata will not be created
+     */
+    name = (source as any).shortName
+  } else if (metadata && name) {
+    /** name field from sample config (from user) has highest priority */
+    ;(metadata as any).name = name
+  } else if (!metadata && name) {
+    /**
+     * metadata comes from plugin, so when name is present and metadata is missing,
+     * we need to create fresh metadata with name
+     */
+    metadata = {name}
+  }
   let filterType: 'none' | 'unit' | 'fn' = 'none'
   if (filterRequired || filter) {
     if (is.unit(filter)) {
@@ -159,15 +179,18 @@ export const createSampling = (
   //   isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
   const clockState = createStateRef()
   let filterNodes: Cmd[] = []
+  const syncNodes: Node[] = []
   if (filterType === 'unit') {
-    const [filterRef, hasFilter, isFilterStore] = syncSourceState(
-      filter as DataCarrier,
-      target,
-      // @ts-expect-error
-      clock,
-      clockState,
-      method,
-    )
+    const [filterRef, hasFilter, isFilterStore, filterSyncNode] =
+      syncSourceState(
+        filter as DataCarrier,
+        target,
+        // @ts-expect-error
+        clock,
+        clockState,
+        method,
+      )
+    filterSyncNode && add(syncNodes, filterSyncNode)
     if (!isFilterStore) {
       filterNodes.push(...readAndFilter(hasFilter))
     }
@@ -176,21 +199,23 @@ export const createSampling = (
   const jointNodeSeq: Cmd[] = []
   if (sourceIsClock) {
     if (batch) {
-      jointNodeSeq.push(read(clockState, true, true))
+      add(jointNodeSeq, read(clockState, true, true))
     }
   } else {
-    const [sourceRef, hasSource, isSourceStore] = syncSourceState(
-      // @ts-expect-error
-      source,
-      target,
-      clock,
-      clockState,
-      method,
-    )
+    const [sourceRef, hasSource, isSourceStore, sourceSyncNode] =
+      syncSourceState(
+        // @ts-expect-error
+        source,
+        target,
+        clock,
+        clockState,
+        method,
+      )
+    sourceSyncNode && add(syncNodes, sourceSyncNode)
     if (!isSourceStore) {
       jointNodeSeq.push(...readAndFilter(hasSource))
     }
-    jointNodeSeq.push(read(sourceRef, true, batch))
+    add(jointNodeSeq, read(sourceRef, true, batch))
   }
   const jointNode = createLinkNode(
     // @ts-expect-error
@@ -211,7 +236,9 @@ export const createSampling = (
   )
   // @ts-expect-error
   own(source, [jointNode])
-  Object.assign(jointNode.meta, metadata, {joint: true})
+  own(jointNode, syncNodes)
+  Object.assign(jointNode.meta, metadata, {joint: true, stateRef: clockState})
+  setUnitTrace(jointNode, getUnitTrace(sample))
   return target
 }
 
@@ -230,8 +257,9 @@ const syncSourceState = (
   const isSourceStore = is.store(source)
   const sourceRef = isSourceStore ? getStoreState(source) : createStateRef()
   const hasSource = createStateRef(isSourceStore)
+  let syncNode: Node | undefined
   if (!isSourceStore) {
-    createNode({
+    syncNode = createNode({
       parent: source,
       node: [
         mov({from: STACK, target: sourceRef}),
@@ -246,5 +274,5 @@ const syncSourceState = (
     })
   }
   applyTemplate('sampleSource', hasSource, sourceRef, clockState)
-  return [sourceRef, hasSource, isSourceStore] as const
+  return [sourceRef, hasSource, isSourceStore, syncNode] as const
 }

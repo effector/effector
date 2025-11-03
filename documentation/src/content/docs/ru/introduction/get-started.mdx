@@ -65,6 +65,7 @@ pnpm install effector
 Теперь давайте создадим стор, который является состоянием вашего приложения.
 
 ```ts
+// counter.js
 import { createStore } from "effector";
 
 const $counter = createStore(0);
@@ -74,7 +75,8 @@ const $counter = createStore(0);
 
 Дальше давайте добавим события, при вызове которых, мы будем обновлять данные стора.
 
-```ts
+```ts ins={3-4}
+// counter.js
 import { createEvent } from "effector";
 
 const incremented = createEvent();
@@ -85,7 +87,7 @@ const decremented = createEvent();
 
 И свяжем событие вместе с стором.
 
-```ts
+```ts ins={9-10}
 // counter.js
 import { createEvent, createStore } from "effector";
 
@@ -99,7 +101,7 @@ $counter.on(decremented, (counter) => counter - 1);
 
 // и вызовите событие в вашем приложении
 incremented();
-// counter увеличиться на 1
+// counter увеличится на 1
 decremented();
 // counter уменьшится на -1
 decremented();

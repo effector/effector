@@ -1,5 +1,7 @@
 import {createEvent, createStore, createDomain, combine, sample} from 'effector'
+import {debug} from 'patronum'
 import {unitObjectName} from '../naming'
+import {argumentHistory} from 'effector/fixtures'
 
 const rootDomain = createDomain('')
 
@@ -116,5 +118,173 @@ describe('sample support', () => {
     const clock = createEvent()
     const sampled = sample({source, clock, name: 'foo'})
     expect(sampled.shortName).toBe('foo')
+  })
+})
+
+describe('sample support', () => {
+  let fn: jest.SpyInstance
+  let fnGroup: jest.SpyInstance
+  beforeEach(() => {
+    fn = jest.spyOn(console, 'info').mockImplementation(() => {})
+    fnGroup = jest.spyOn(console, 'groupCollapsed').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    fn.mockRestore()
+    fnGroup.mockRestore()
+  })
+  test('sample with new unit', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = sample({source: $source, clock})
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] target",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with target return', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    const targetReturn = sample({source: $source, clock, target})
+
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] targetReturn",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with target unit', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    sample({source: $source, clock, target})
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] /src/effector/__tests__/naming.test.ts:171:4",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with explicit name', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    sample({source: $source, clock, target, name: 'sample name'})
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] sample name",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with no name or loc', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    ;({_: sample}._({source: $source, clock, target}))
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] ",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with name but without babel plugin', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    ;({_: sample}._({source: $source, clock, target, name: 'explicit name'}))
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] explicit name",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with name from source field without plugin (backward compatibility)', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    ;({_: sample}._({source: {foo: $source}, clock, target}))
+    debug({trace: true}, target)
+    clock()
+    // borrowed from source name is misleading, so it should not be used in traces
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] ",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with explicit name and target unit', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const targetReturn = sample({
+      source: $source,
+      clock,
+      name: 'prioritized name',
+    })
+
+    debug({trace: true}, targetReturn)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] prioritized name",
+        "<- [event] prioritized name",
+        "<- [sample] prioritized name",
+        "<- [event] clock",
+      ]
+    `)
+  })
+  test('sample with explicit name and new unit', () => {
+    const $source = createStore(0)
+    const clock = createEvent()
+    const target = createEvent()
+    const targetReturn = sample({
+      source: $source,
+      clock,
+      target,
+      name: 'prioritized name',
+    })
+
+    debug({trace: true}, target)
+    clock()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "[event] target",
+        "<- [event] target",
+        "<- [sample] prioritized name",
+        "<- [event] clock",
+      ]
+    `)
   })
 })

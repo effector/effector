@@ -64,6 +64,7 @@ pnpm install effector
 Now, let’s create a store, which represents a state of your application:
 
 ```ts
+// counter.js
 import { createStore } from "effector";
 
 const $counter = createStore(0);
@@ -73,18 +74,21 @@ const $counter = createStore(0);
 
 Next, let’s create some events, that will update our store when triggered:
 
-```ts
-import { createEvent } from "effector";
+```ts ins={3-4}
+// counter.js
+import { createStore, createEvent } from "effector";
 
 const incremented = createEvent();
 const decremented = createEvent();
+
+const $counter = createStore(0);
 ```
 
 ### Connecting Events to Store (#connection-event-to-store)
 
 And link the events to the store:
 
-```ts
+```ts ins={9-10}
 // counter.js
 import { createEvent, createStore } from "effector";
 

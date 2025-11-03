@@ -4,7 +4,7 @@ description: Метод для создания событий
 lang: ru
 ---
 
-# createEvent (#create-event)
+# createEvent (#methods)
 
 ```ts
 import { createEvent } from "effector";
@@ -14,7 +14,7 @@ const event = createEvent();
 
 Метод для создания [событий][eventApi].
 
-## Формула (#formulae)
+## Формула (#methods-createEvent-name-formulae)
 
 ```ts
 createEvent<E = void>(eventName?: string): EventCallable<E>
@@ -38,7 +38,7 @@ createEvent<E = void>(config: {
 
 Возвращает новое вызываемое [событие][eventTypes].
 
-## Примеры (#examples)
+## Примеры (#methods-createEvent-name-formulae)
 
 Обновление состояния с помощью вызова события:
 
@@ -87,6 +87,13 @@ extractPartOfArray([1, 2, 3, 4, 5, 6]);
 ```
 
 [Запустить пример](https://share.effector.dev/4lWsZr2k)
+
+## Основные ошибки (#common-errors)
+
+Ниже приведён список возможных ошибок, с которыми вы можете столкнуться при работе с событиями:
+
+- [`call of derived event is not supported, use createEvent instead`](/ru/guides/troubleshooting/#call-of-derived-event-is-not-supported)
+- [`unit call from pure function is not supported, use operators like sample instead`](/ru/guides/troubleshooting/#unit-call-from-pure-not-supported)
 
 ## Связанные API и статьи (#related-api-and-docs-to-create-event)
 

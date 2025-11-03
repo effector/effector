@@ -499,6 +499,10 @@ sample({
 
 Don't put your logic in UI elements, this is the [main philosophy](/en/introduction/motivation) of effector and what effector tries to free you from, namely the dependency of logic on UI.
 
+### Creating units at runtime (#create-units-in-runtime)
+
+Never create units or logic via `sample` between them at runtime or in any other dynamic way. Correct [unit initialization](/en/resources/static-initialization) must be done statically at the module level.
+
 Brief summary of anti-patterns:
 
 1. Don't use `watch` for logic, only for debugging

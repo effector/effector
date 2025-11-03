@@ -89,7 +89,7 @@ export function createScope(unit?: Domain): Scope {
         const parent = stack.parent
         if (forkPage && parent) {
           if (isNotCombineNode(parent)) {
-            forkPage.warnSerializeTraces.add(getMeta(parent.node, 'storeTrace'))
+            forkPage.warnSerializeNodes.add(parent.node)
           }
         }
       }),
@@ -122,7 +122,7 @@ export function createScope(unit?: Domain): Scope {
     handlers: {sidMap: {}, unitMap: new Map()},
     fxCount: forkInFlightCounter,
     storeChange,
-    warnSerializeTraces: new Set(),
+    warnSerializeNodes: new Set(),
     warnSerializeNode,
   }
   return resultScope

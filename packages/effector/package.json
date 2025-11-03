@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "23.3.0",
+  "version": "23.4.4",
   "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
@@ -30,6 +30,12 @@
       "import": "./inspect.mjs",
       "require": "./inspect.js",
       "default": "./inspect.mjs"
+    },
+    "./enable_debug_traces": {
+      "types": "./enable_debug_traces.d.ts",
+      "import": "./enable_debug_traces.mjs",
+      "require": "./enable_debug_traces.js",
+      "default": "./enable_debug_traces.mjs"
     },
     "./effector.umd": {
       "types": "./effector.umd.d.ts",
@@ -62,7 +68,13 @@
     "inspect.mjs.map",
     "inspect.d.ts",
     "babel-plugin.js",
-    "babel-plugin-react.js"
+    "babel-plugin.js.map",
+    "babel-plugin-react.js",
+    "enable_debug_traces.js",
+    "enable_debug_traces.js.map",
+    "enable_debug_traces.mjs",
+    "enable_debug_traces.mjs.map",
+    "enable_debug_traces.d.ts"
   ],
   "keywords": [
     "business",

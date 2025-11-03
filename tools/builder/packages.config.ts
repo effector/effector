@@ -60,7 +60,7 @@ const keywords = [
 ]
 
 const version = {
-  effector: '23.3.0',
+  effector: '23.4.4',
   'effector-react': '23.3.0',
   'effector-vue': '23.1.1',
   'effector-solid': '0.23.0',
@@ -97,6 +97,7 @@ export default {
       },
       './compat': compatExport,
       './inspect': extensionlessExport('./inspect'),
+      './enable_debug_traces': extensionlessExport('./enable_debug_traces'),
       './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
       './babel-plugin-react': './babel-plugin-react.js',
@@ -107,8 +108,11 @@ export default {
       ...compiledFile('inspect'),
       ...esmFile('inspect'),
       'inspect.d.ts',
-      'babel-plugin.js',
+      ...compiledFile('babel-plugin'),
       'babel-plugin-react.js',
+      ...compiledFile('enable_debug_traces'),
+      ...esmFile('enable_debug_traces'),
+      'enable_debug_traces.d.ts',
     ],
     keywords,
     ...common,

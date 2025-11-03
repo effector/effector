@@ -1,141 +1,164 @@
 ---
-title: Isolated Contexts in Effector
-description: How to work with isolated states using Scope, their creation and usage in applications
+title: Isolated scopes
+description: Learn how to work with scopes in effector, why they’re needed, and how to use them with server-side rendering or testing.
 ---
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
 
-# Scope: Working with Isolated Contexts (#isolated-scopes)
+# Isolated scopes (#isolated-scopes)
 
-[Scope](/en/api/effector/Scope) is an isolated environment for state management in Effector. Scope allows creating independent copies of the entire application state, which is particularly useful for:
+With [scopes](/en/api/effector/Scope) you can work with isolated instance for the entire application, which contains an independent clone of all units (including connections between them) and basic methods to access them:
 
-- 🗄️ Server Side Rendering (SSR)
-- 🧪 Testing components and business logic
-- 🔒 Isolating state for different users/sessions
-- 🚀 Running multiple application instances in parallel
+```ts "fork" "allSettled"
+import { fork, allSettled } from "effector";
 
-Scope creates a separate "universe" for Effector units, where each store has its independent state, and events and effects work with this state in isolation from other scopes.
+// create a new scope
+const scope = fork();
 
-:::info{title="Creating a Scope"}
-You can create an application scope using the [fork](/en/api/effector/fork) method.
-Fork API is one of the most powerful features of Effector.
+const $counter = scope.createStore(0);
+const increment = scope.createEvent();
+
+$counter.on(increment, (state) => state + 1);
+
+// trigger the event and wait for the entire chain to complete
+await allSettled(increment, { scope });
+
+console.log(scope.getState($counter)); // 1
+console.log($counter.getState()); // 0 - the original store remains unchanged
+```
+
+Using [`fork`](/en/api/effector/fork), we create a new [scope](/en/api/effector/Scope), and with [`allSettled`](/en/api/effector/allSettled) we run a chain of events and effects inside the specified scope and wait for it to complete.
+
+:::info{title="Scope Independence"}
+There is no mechanism for sharing data between scopes; each instance is fully isolated and operates independently.
 :::
 
-And voila, now the `Counter` component works with its isolated state - this is exactly what we wanted. Let's look at other important applications of `Scope`.
+## Why do we need a scope? (#why-use-scope)
 
-:::tip{title="Automatic Scope Propagation"}
-You don't need to manually track that each operation is performed in the correct scope. Effector does this automatically; just call the event chain with a specific scope using the return value of `useUnit` in component or `allSettled`.
-:::
+In effector, all state is stored globally. In a client-side application (SPA), this is not a problem: each user gets their own instance of the code and works with their own state. But with server-side rendering (SSR) or parallel testing, global state becomes a problem: data from one request or test can “leak” into another. That’s why we need a [scope](/en/api/effector/Scope).
 
-## Rules for Working with Scope (#scope-rules)
+- **SSR** — the server runs as a single process and serves requests from many users. For each request, you can create a scope that isolates data from effector’s global scope and prevents one user’s state from leaking into another user’s request.
+- **Testing** — when running tests in parallel, data races and state collisions may occur. A scope allows each test to run with its own isolated state.
 
-When working with Scope, it's important to understand the rules for calling effects and events to avoid context loss. Let's look at the main usage patterns:
+We provide detailed guides on [working with server-side rendering (SSR)](/en/guides/server-side-rendering) and [testing](/en/guides/testing). Here, we’ll focus on the core principles of using scopes, their rules, and how to avoid common mistakes.
 
-### Rules for Effect Calls (#effect-calls-rules)
+## Rules for working with scopes (#scope-rules)
 
-1. Effects can be safely called inside other effects
-2. You can't mix effect calls with regular async functions
+To ensure scopes work correctly, there are a few rules to prevent [scope loss](/en/guides/scope-loss):
 
-<Tabs>
-  <TabItem label="✅ Correct">
+### Effect and promise calls (#effect-calls-rules)
 
-```ts
+For effect handlers that call other effects, ensure to only call effects, not common asynchronous functions. Furthermore, effect calls should be awaited.
+
+Imperative calls of effects are safe because effector remembers the scope in which the imperative call of the effect began and restores it after the call, allowing for another call in sequence.
+
+You can call methods like `Promise.all([fx1(), fx2()])` and others from the standard JavaScript API because in these cases, the calls to effects still happen synchronously, and the scope is safely preserved.
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts wrap data-border="good" data-height="full"
+// ✅ correct usage for an effect without inner effects
+const delayFx = createEffect(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 80));
+});
+
+// ✅ correct usage for an effect with inner effects
 const authFx = createEffect(async () => {
-  // Safe - calling an effect inside an effect
   await loginFx();
 
-  // Safe - Promise.all with effects
   await Promise.all([loadProfileFx(), loadSettingsFx()]);
 });
 ```
 
-  </TabItem>
-  <TabItem label="❌ Incorrect">
+</Fragment>
 
-```ts
-const authFx = createEffect(async () => {
-  await loginFx();
+  <Fragment slot="right">
 
-  // Scope loss! Can't mix with regular promises
-  await new Promise((resolve) => setTimeout(resolve, 100));
+```ts wrap data-border="bad" data-height="full"
+// ❌ incorrect usage for an effect with inner effects
 
-  // This call will be in the global scope
-  await loadProfileFx();
+const sendWithAuthFx = createEffect(async () => {
+  await authUserFx();
+
+  // incorrect! This should be wrapped in an effect.
+  await new Promise((resolve) => setTimeout(resolve, 80));
+
+  // scope is lost here.
+  await sendMessageFx();
 });
 ```
 
-  </TabItem>
-</Tabs>
+</Fragment>
 
-If you don't follow these rules, it could lead to [scope loss](#scope-loss)!
+</SideBySide>
 
-:::tip{title="✅ Better Declaratively!"}
-It's better to call effects declaratively using the `sample` method!
+:::info{title="get attached"}
+For scenarios where an effect might call another effect or perform asynchronous computations, but not both, consider utilizing the [`attach`](/en/api/effector/attach) method instead for more succinct imperative calls.
 :::
 
-## Working with Initial State (#initial-state)
+### Using units with frameworks (#framework-rules)
 
-When creating a scope, it's often necessary to set initial values for stores. This is especially important for SSR or testing, when you need to prepare a specific application state. You can do this by passing the `values` property in the first argument of the `fork` method.
+Always use the `useUnit` hook with frameworks so effector can invoke the unit in the correct scope:
 
-```ts
-const scope = fork({
-  values: [
-    [$store, "value"],
-    [$user, { id: 1, name: "Alice" }],
-  ],
-});
+```tsx wrap "useUnit"
+import { useUnit } from "effector-react";
+import { $counter, increased, sendToServerFx } from "./model";
+
+const Component = () => {
+  const [counter, increase, sendToServer] = useUnit([$counter, increased, sendToServerFx]);
+
+  return (
+    <div>
+      <button onClick={increase}>{counter}</button>
+      <button onClick={sendToServer}>send data to server</button>
+    </div>
+  );
+};
 ```
 
-:::info{title="What values accepts"}
-The `values` property accepts an array of pairs with the value `[$store, value]`.
-:::
+Alright, just show me how it works already.
 
-This is especially useful in cases of:
+## Using in SSR (#ssr-usage)
 
-- Server Side Rendering (SSR) - to hydrate the client with necessary data from the server
-- Testing components with different initial data
-- Saving and restoring application state
+Imagine a website with SSR, where the profile page shows a list of the user’s personal notifications. If we don’t use a scope, here’s what happens:
 
-:::info{title="State Isolation"}
-`Scope` creates a separate copy of the state. The original store remains unchanged!
-:::
+- User A makes a request → their notifications load into `$notifications` on the server.
+- Almost at the same time, User B makes a request → the store is overwritten with their data.
+- As a result, both users see User B’s notifications.
 
-## SSR Usage (#ssr-usage)
+Not what we want, right? This is a [race condition](https://en.wikipedia.org/wiki/Race_condition), which leads to a leak of private data.
 
-Scope is a **key** mechanism for implementing SSR in Effector.
-Imagine two users visiting your website and both sending requests to get a list of users. Since the store is in the global scope, a [race condition ](https://en.wikipedia.org/wiki/Race_condition) would occur here, and whichever request completes faster, **BOTH** users would receive that data, leading to data leaks between different users.
-
-:::warning{title="Serialization"}
-When serializing scope, stores with the flag `{serialize: 'ignore'}` are automatically ignored. Use this flag to prevent sensitive data leaks.
-:::
-
-When using scope, each request gets its own copy of the state:
+With a scope, we get an isolated context that only works for the current user:
+A request is made → a scope is created → we update state only inside this scope. This works for each request.
 
 <Tabs>
-  <TabItem label="🗄️ Server">
+  <TabItem label="Server">
 
-```jsx
+```tsx "fork" "allSettled" "serialize"
 // server.tsx
 import { renderToString } from "react-dom/server";
-import { fork, serialize } from "effector";
+import { fork, serialize, allSettled } from "effector";
 import { Provider } from "effector-react";
-import { $users, fetchUsersFx } from "./model";
+import { fetchNotificationsFx } from "./model";
 
 async function serverRender() {
   const scope = fork();
 
   // Load data on the server
-  await allSettled(fetchUsersFx, { scope });
+  await allSettled(fetchNotificationsFx, { scope });
 
-  // Render the application
+  // Render the app
   const html = renderToString(
     <Provider value={scope}>
       <App />
     </Provider>,
   );
 
-  // Serialize state for transfer to the client
+  // Serialize state to send to the client
   const data = serialize(scope);
 
   return `
@@ -150,13 +173,14 @@ async function serverRender() {
 ```
 
 </TabItem>
-<TabItem label="🧑‍💻 Client">
+<TabItem label="Client">
 
 ```tsx
 // client.tsx
 import { hydrateRoot } from "react-dom/client";
 import { fork } from "effector";
 
+// hydrate scope with initial values
 const scope = fork({
   values: window.INITIAL_DATA,
 });
@@ -172,329 +196,25 @@ hydrateRoot(
 </TabItem>
 </Tabs>
 
-:::info{title="About allSettled"}
-The [`allSettled`](/en/api/effector/allSettled) function accepts an `event`, `effect`, or `scope`, and waits for all side effects it spawns to complete. In this example, this ensures that all asynchronous operations complete before state serialization.
-:::
+Things to note in this example:
 
-In this example we:
+1. We serialized data using [`serialize`](/en/api/effector/serialize) to correctly transfer it to the client.
+2. On the client, we hydrated the stores [using the `values` config option in `fork`](/en/api/effector/fork#methods-fork-options).
 
-1. Create a scope on the server and run initial data preparation in it
-2. Serialize the scope state
-3. Restore state from serialized data on the client
+## Related APIs and Articles (#related-api-and-docs)
 
-Thanks to using Scope, we can easily:
+- **API**
 
-- Prepare initial state on the server
-- Serialize this state
-- Restore state on the client
-- Ensure hydration without losing reactivity
+  - [`Scope`](/en/api/effector/Scope) – Description of scope and its methods
+  - [`scopeBind`](/en/api/effector/scopeBind) – Method for binding a unit to a scope
+  - [`fork`](/en/api/effector/fork) – Operator for creating a scope
+  - [`allSettled`](/en/api/effector/allSettled) – Method for running a unit in a given scope and waiting for the entire chain of effects to complete
+  - [`serialize`](/en/api/effector/serialize) – Method for obtaining serialized store values
+  - [`hydrate`](/en/api/effector/hydrate) – Method for hydrating serialized data
 
-:::tip{title="Data Serialization"}
-The `serialize` method transforms state into serialized form that can be safely transferred from server to client. Only data is serialized, not functions or methods.
-:::
+- **Articles**
 
-Here we've shown you a small example of working with SSR. For a more detailed guide on [how to set up and work with SSR, you can read here](/en/guides/server-side-rendering).
-
-## Testing (#scope-for-testing)
-
-Scope is a powerful tool for testing as it allows:
-
-- Isolating tests from each other
-- Setting initial state for each test
-- Checking state changes after actions
-- Simulating different user scenarios
-
-Example of testing the authorization process:
-
-```ts
-describe("auth flow", () => {
-  it("should login user", async () => {
-    // Create isolated scope for test
-    const scope = fork();
-
-    // Execute login effect
-    await allSettled(loginFx, {
-      scope,
-      params: {
-        email: "test@example.com",
-        password: "123456",
-      },
-    });
-
-    // Check state specifically in this scope
-    expect(scope.getState($user)).toEqual({
-      id: 1,
-      email: "test@example.com",
-    });
-  });
-
-  it("should handle login error", async () => {
-    const scope = fork();
-
-    await allSettled(loginFx, {
-      scope,
-      params: {
-        email: "invalid",
-        password: "123",
-      },
-    });
-
-    expect(scope.getState($error)).toBe("Invalid credentials");
-    expect(scope.getState($user)).toBeNull();
-  });
-});
-```
-
-### Mocking effects (#mocking-effects)
-
-A similar pattern for initial values can be used for effects to implement mock data. For this, you need to pass `handlers` in the argument object:
-
-```ts
-// You can also pass mocks for effects:
-const scope = fork({
-  handlers: [
-    [effectA, async () => "true"],
-    [effectB, async () => ({ id: 1, data: "mock" })],
-  ],
-});
-```
-
-## Scope Loss and Binding (#scope-loss)
-
-When handling asynchronous operations, we might encounter scope "loss". This happens because asynchronous operations in JavaScript execute in a different event loop cycle, where the execution context is already lost. At the moment of creating an asynchronous operation, the scope exists, but by the time it executes, it's no longer accessible, as Effector cannot automatically preserve and restore context across asynchronous boundaries.
-This can happen when using APIs such as:
-
-- `setTimeout`/`setInterval`
-- `addEventListener`
-- `webSocket` и др.
-
-### How to Fix Scope Loss? (#how-to-fix-scope-loss)
-
-This is where the [`scopeBind`](/en/api/effector/scopeBind) method comes to help. It creates a function bound to the scope in which the method was called, allowing it to be safely called later.
-
-Let's look at an example where we have two timers on a page and each works independently. Each timer has the following events:
-
-- Stop timer - `timerStopped`
-- Start timer - `timerStarted`
-- Reset timer - `timerReset`
-
-```ts
-export const timerStopped = createEvent();
-export const timerReset = createEvent();
-export const timerStarted = createEvent();
-```
-
-We'll also have a `tick` event that our store will subscribe to for updating the counter.
-To store the result, we'll create a `$timerCount` store.
-
-```ts
-const tick = createEvent();
-
-export const $timerCount = createStore(0)
-  .on(tick, (seconds) => seconds + 1)
-  .reset(timerReset);
-```
-
-Don't forget about clearing the timer; for this, we'll also need to create a `$timerId` store to save the `intervalId`.
-We also need effects for:
-
-1. Starting the timer – `startFx`
-2. Clearing the timer – `stopFx`
-
-```ts
-const TIMEOUT = 1_000;
-
-const timerStopped = createEvent();
-const timerReset = createEvent();
-const timerStarted = createEvent();
-const tick = createEvent();
-
-// start timer
-const startFx = createEffect(() => {
-  const intervalId = setInterval(() => {
-    // here's the whole problem
-    tick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-
-// stop and clear timer
-const stopFx = createEffect((timerId: number) => {
-  clearInterval(timerId);
-});
-
-// timer id
-export const $timerId = createStore<null | number>(null)
-  .on(startFx.doneData, (_, timerId) => timerId)
-  .on(stopFx.finally, () => null);
-
-// start timer logic
-sample({
-  clock: timerStarted,
-  filter: $timerId.map((timerId) => !timerId),
-  target: startFx,
-});
-
-// stop timer logic
-sample({
-  clock: timerStopped,
-  source: $timerId,
-  filter: Boolean,
-  target: stopFx,
-});
-```
-
-Notice the tick call in `setInterval` - we're calling it directly. This is where the whole problem lies, as we mentioned above, by the time `tick` is called, the scope might have changed or been removed - in other words, "lost". However, thanks to `scopeBind`, we bind the `tick` event to the scope we need.
-
-<Tabs>
-<TabItem label="❌ Before">
-
-```ts
-const startFx = createEffect(() => {
-  const intervalId = setInterval(() => {
-    tick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-```
-
-</TabItem>
-<TabItem label="✅ After">
-
-```ts
-const startFx = createEffect(() => {
-  const bindedTick = scopeBind(tick);
-
-  const intervalId = setInterval(() => {
-    bindedTick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-```
-
-</TabItem>
-</Tabs>
-
-:::info{title="scopeBind without scope?"}
-You may have already noticed that we don't pass the scope itself to `scopeBind`; this is because the current scope is in a global variable, and the `scopeBind` function captures the needed scope in itself at the moment of calling. However, if you need to, you can pass the needed `scope` in the second argument object.
-:::
-
-So altogether we have:
-
-```ts
-import { createEffect, createEvent, createStore, sample, scopeBind } from "effector";
-
-const TIMEOUT = 1_000;
-
-const timerStopped = createEvent();
-const timerReset = createEvent();
-const timerStarted = createEvent();
-const tick = createEvent();
-
-// start timer
-const startFx = createEffect(() => {
-  // bind event to scope, so our data doesn't get lost
-  const bindedTick = scopeBind(tick);
-
-  const intervalId = setInterval(() => {
-    bindedTick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-
-// stop and clean timer
-const stopFx = createEffect((timerId: number) => {
-  clearInterval(timerId);
-});
-
-// timer count in seconds
-const $timerCount = createStore(0)
-  .on(tick, (seconds) => seconds + 1)
-  .reset(timerReset);
-
-// timer id
-const $timerId = createStore<null | number>(null)
-  .on(startFx.doneData, (_, timerId) => timerId)
-  .reset(stopFx.finally);
-
-// start timer logic
-sample({
-  clock: timerStarted,
-  filter: $timerId.map((timerId) => !timerId),
-  target: startFx,
-});
-
-// stop timer logic
-sample({
-  clock: timerStopped,
-  source: $timerId,
-  filter: Boolean,
-  target: stopFx,
-});
-```
-
-:::tip{title="Scope and frameworks"}
-If you are using effector with integrations like 📘 React, 📗 Vue etc. you can use hook `useUnit` for units (store, event and effect). This hook automatically binds the unit to the current scope.
-:::
-
-### Why Does Scope Loss Occur? (#why-scope-loss)
-
-Let's imagine how scope work under the hood:
-
-```ts
-// out current scope
-let scope;
-
-function process() {
-  try {
-    scope = "effector";
-    asyncProcess();
-  } finally {
-    scope = undefined;
-    console.log("scope is undefined");
-  }
-}
-
-async function asyncProcess() {
-  console.log("here is ok", scope); // effector
-
-  await 1;
-
-  // here we already lost context
-  console.log("but here is not ok ", scope); // undefined
-}
-
-process();
-
-// Output:
-// here is ok effector
-// scope is undefined
-// but here is not ok undefined
-```
-
-:::warning{title="Consequences of scope loss"}
-Scope loss can lead to:
-
-- Updates not reaching the correct scope
-- Client receiving inconsistent state
-- Changes not being reflected in the UI
-- Possible data leaks between different users during SSR
-
-:::
-
-You might be wondering **"Is this specifically an Effector problem?"**, but this is a general principle of working with asynchronicity in JavaScript. All technologies that face the need to preserve the context in which calls occur somehow work around this difficulty. The most characteristic example is [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js),
-which wraps all asynchronous global functions like `setTimeout` or `Promise.resolve` to preserve context. Other solutions to this problem include using generators or `ctx.schedule(() => asyncCall())`.
-
-:::info{title="Future solution"}
-JavaScript is preparing a proposal [Async Context](https://github.com/tc39/proposal-async-context), which aims to solve the context loss problem at the language level. This will allow:
-
-Automatically preserving context through all asynchronous calls
-Eliminating the need for explicit use of scopeBind
-Getting more predictable behavior of asynchronous code
-
-Once this proposal enters the language and receives wide support, Effector will be updated to use this native solution.
-:::
+  - [What is scope loss and how to fix it](/en/guides/scope-loss)
+  - [SSR guide](/en/guides/server-side-rendering)
+  - [Testing guide](/en/guides/testing)
+  - [The importance of SIDs for store hydration](/en/explanation/sids)

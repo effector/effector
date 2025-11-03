@@ -76,6 +76,14 @@ export const learning: LSidebarGroup[] = [
         },
         link: "/essentials/unit-composition",
       },
+      {
+        text: {
+          en: "Dynamic models",
+          ru: "Динамические модели",
+          uz: "Dinamik modellar",
+        },
+        link: "/essentials/dynamic-models",
+      },
     ],
   },
   {
@@ -124,11 +132,19 @@ export const learning: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Scope: Working with Isolated Contexts",
-          ru: "Scope: Работа с изолированными контекстами",
-          uz: "Scope: Isolatli kontekstlar bilan ishlash",
+          en: "Isolated scopes",
+          ru: "Изолированные контексты",
+          uz: "Izolatsiya qilingan kontekstlar",
         },
         link: "/advanced/work-with-scope",
+      },
+      {
+        text: {
+          en: "Debug Traces mode",
+          ru: "Debug Traces mode",
+          uz: "Debug Traces mode",
+        },
+        link: "/api/effector/enable_debug_traces",
       },
     ],
   },
@@ -219,6 +235,14 @@ export const guidesAndRecipes: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Scope loss",
+          ru: "Потеря скоупа",
+          uz: "Scope to'plamasi",
+        },
+        link: "/guides/scope-loss",
+      },
+      {
+        text: {
           en: "Testing",
           ru: "Тестирование",
           uz: "Testlash",
@@ -265,15 +289,23 @@ export const guidesAndRecipes: LSidebarGroup[] = [
       },
       {
         text: {
+          en: "Static initialization",
+          ru: "Инициализация юнитов",
+          uz: "Hisoblash ustuvorligi",
+        },
+        link: "/resources/static-initialization",
+      },
+      {
+        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
+        link: "/introduction/ecosystem",
+      },
+      {
+        text: {
           en: "Computation Priority",
           ru: "Приоритет вычислений",
           uz: "Hisoblash ustuvorligi",
         },
         link: "/explanation/computation-priority",
-      },
-      {
-        text: { en: "Ecosystem", ru: "Экосистема effector", uz: "Effector ekosistemasi" },
-        link: "/introduction/ecosystem",
       },
       {
         text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },

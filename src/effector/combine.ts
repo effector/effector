@@ -1,5 +1,10 @@
 import type {Store} from './unit.h'
-import {createStore, requireExplicitSkipVoidMessage} from './createUnit'
+import {
+  createStore,
+  getUnitTrace,
+  requireExplicitSkipVoidMessage,
+  setUnitTrace,
+} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
@@ -13,6 +18,8 @@ import {forIn} from './collection'
 import {MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
+import {createNode} from './createNode'
+import {own} from './own'
 
 export function combine(...args: any[]): Store<any> {
   let handler
@@ -85,6 +92,7 @@ export function combine(...args: any[]): Store<any> {
     Array.isArray(structStoreShape),
     !noArraySpread,
     structStoreShape,
+    getUnitTrace(combine),
     config,
     handler,
     extConfig,
@@ -95,6 +103,7 @@ const storeCombination = (
   isArray: boolean,
   needSpread: boolean,
   obj: any,
+  unitTrace: string,
   config?: Config,
   fn?: (upd: any) => any,
   extConfig?: false | {skipVoid?: boolean},
@@ -115,9 +124,18 @@ const storeCombination = (
     ...extConfig,
     and: config,
   })
+  setUnitTrace(store, unitTrace)
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
+  /**
+   * Easiest way to clean orphaned stateRefs which participate in initialization graph
+   * (has `addRefOp` calls).
+   * If you need to distinguish these nodes during graph analysis,
+   * note that they are not regional
+   * (because they belong explicitly to the unit) which is pretty uncommon
+   */
+  own(store, [createNode({meta: {stateRef: rawShape}})])
   const rawShapeReader = read(rawShape)
   /**
    * usual ref reading has very high priority, which leads to data races
@@ -193,6 +211,7 @@ const storeCombination = (
   })
 
   store.defaultShape = obj
+  setMeta(store, 'defaultShape', obj)
   addRefOp(storeStateRef, {
     type: MAP,
     from: rawShape,

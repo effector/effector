@@ -1,0 +1,176 @@
+---
+title: Потеря скоупа
+description: Что такое потеря скоупа в Effector, как она возникает и как её исправить с помощью scopeBind.
+lang: ru
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
+
+# Потеря скоупа (#scope-loss)
+
+Работа юнитов в effector всегда происходит внутри скоупа — глобального или изолированного, созданного через [`fork()`](/ru/api/effector/fork). В глобальном случае контекст потерять невозможно, так как он используется по умолчанию. С изолированным скоупом всё сложнее: при потере скоупа операции начнут выполняться в глобальном режиме, а все обновления данных **не попадут** в скоуп в котором велась работа, и как следствие, клиенту отправится неконсистентное состояние.
+
+Типичные места, где это проявляется:
+
+- `setTimeout` / `setInterval`
+- `addEventListener`
+- [`WebSocket`](/ru/guides/websocket-integration)
+- [прямой вызов промисов в эффектах](/ru/advanced/work-with-scope#scope-rules)
+- сторонние библиотеки с асинхронными API или колбэки.
+
+## Пример проблемы (#example-of-problem)
+
+Мы создадим простой таймер на React, хотя такая же модель поведения при потере скоупа будет соответствовать для любого фреймворка или среды:
+
+<Tabs>
+
+<TabItem label='timer.tsx'>
+
+```tsx
+import React from "react";
+import { createEvent, createStore, createEffect, scopeBind } from "effector";
+import { useUnit } from "effector-react";
+
+const tick = createEvent();
+const $timer = createStore(0);
+
+$timer.on(tick, (s) => s + 1);
+
+export function Timer() {
+  const [timer, startTimer] = useUnit([$timer, startTimerFx]);
+
+  return (
+    <div className="App">
+      <div>Timer:{timer} sec</div>
+      <button onClick={startTimer}>Start timer</button>
+    </div>
+  );
+}
+```
+
+</TabItem>
+<TabItem label='app.tsx'>
+
+```tsx
+import React from "react";
+import { Provider } from "effector-react";
+import { fork } from "effector";
+import { Timer } from "./timer";
+
+export const scope = fork();
+
+export default function App() {
+  return (
+    <Provider value={scope}>
+      <Timer />
+    </Provider>
+  );
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+Теперь добавим эффект, который каждую секунду вызывает `tick`:
+
+```ts
+const startTimerFx = createEffect(() => {
+  setInterval(() => {
+    tick();
+  }, 1000);
+});
+```
+
+[Вот здесь можно потыкать пример](https://codesandbox.io/p/sandbox/nrqw96).<br/>
+На первый взгляд мы написали вполне рабочий код, но если запустить таймер, то вы заметите, что UI не обновляется. Это из-за того, что изменения таймера происходят в глобальном скоупе, а наше приложение работает в изолированном, который мы передали в [`<Provider>`](/ru/api/effector-react/Provider), вы можете это заметить по логам в консоли.
+
+## Как исправить потерю скоупа ? (#how-to-fix-scope-loss)
+
+Чтобы исправить исправить потерю скоупа нужно использовать функцию [`scopeBind`](/ru/api/effector/scopeBind). Этот метод возвращает функцию, привязанную к скоупу в котором метод был вызван, которую в последствии можно безопасно вызывать:
+
+```ts ins={2} "bindedTick"
+const startTimerFx = createEffect(() => {
+  const bindedTick = scopeBind(tick);
+
+  setInterval(() => {
+    bindedTick();
+  }, 1000);
+});
+```
+
+[Обновленный пример кода](https://codesandbox.io/p/devbox/scope-loss-forked-vx4r9x?workspaceId=ws_BJxLCP4FhfNzjg1qXth95S).
+
+Заметьте, что метод [`scopeBind`](/ru/api/effector/scopeBind) сам умеет работать с текущим используемым скоупом. Однако, если вам нужно, то вы можете передать нужный скоуп в конфигурационный объект вторым аргументом.
+
+```ts
+scopeBind(tick, { scope });
+```
+
+:::tip{title="Очистка интервалов"}
+Не забывайте очищать `setInterval` после завершения работы во избежания утечек памяти. Очищать `setInterval` можно отдельным эффектом, предварительно вернув из первого эффекта его id и сохранив в отдельный стор.
+:::
+
+## Почему происходит потеря скоупа? (#why-scope-loss)
+
+Давайте представим, то как работает скоуп в effector:
+
+```ts
+// наш активный скоуп
+let scope;
+
+function process() {
+  try {
+    scope = "effector";
+    asyncProcess();
+  } finally {
+    scope = undefined;
+    console.log("наш скоуп undefined");
+  }
+}
+
+async function asyncProcess() {
+  console.log("у нас есть скоуп", scope); // effector
+
+  await 1;
+
+  // тут мы уже потеряли контекст
+  console.log("а здесь скоупа уже нет ", scope); // undefined
+}
+
+process();
+
+// Вывод:
+// у нас есть скоуп effector
+// наш скоуп undefined
+// а здесь скоупа уже нет undefined
+```
+
+Возможно вас интересует вопрос **"Это проблема именно эффектора?"**, однако это общий принцип работы с асинхронностью в JavaScript, все технологии, которые сталкиваются с необходимостью сохранения контекста в котором происходят вызовы так или иначе обходят это затруднение. Самый характерный пример это [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js),
+который для сохранения контекста оборачивает все асинхронные глобальные функции вроде `setTimeout` или `Promise.resolve`. Также способами решения этой проблемы бывает использование генераторов или `ctx.schedule(() => asyncCall())`.
+
+:::info{title="Будущее решение"}
+В JavaScript готовится proposal [Async Context](https://github.com/tc39/proposal-async-context), который призван решить проблему потери контекста на уровне языка. Это позволит:
+
+- Сохранять контекст автоматически через все асинхронные вызовы
+- Избавиться от необходимости явного использования scopeBind
+- Получить более предсказуемое поведение асинхронного кода
+
+Как только это предложение войдет в язык и получит широкую поддержку, effector будет обновлен для использования этого нативного решения.
+:::
+
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+  - [`Effect`](/ru/api/effector/Effect) - Описание эффекта, его методов и свойств
+  - [`Scope`](/ru/api/effector/Scope) - Описание скоупа и его методов
+  - [`scopeBind`](/ru/api/effector/scopeBind) - Метод для привязки юнита к скоупу
+  - [`fork`](/ru/api/effector/fork) - Оператор для создания скоупа
+  - [`allSettled`](/ru/api/effector/allSettled) - Метод для вызова юнита в предоставленном скоупе и ожидания завершения всей цепочки эффектов
+- **Статьи**
+  - [Изолированные контексты](/ru/advanced/work-with-scope)
+  - [Гайд по работе с SSR](/ru/guides/server-side-rendering)
+  - [Гайд по тестированию](/ru/guides/testing)
+  - [Важность SID для гидрации сторов](/ru/explanation/sids)

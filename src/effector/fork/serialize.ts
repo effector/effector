@@ -1,6 +1,6 @@
 import type {Scope, Store} from '../unit.h'
 import {forEach, forIn, includes} from '../collection'
-import {assert, deprecate, printErrorWithStack} from '../throw'
+import {assert, deprecate, printErrorWithNodeDetails} from '../throw'
 import {traverseStores} from './util'
 import {getGraph, getMeta} from '../getter'
 
@@ -12,12 +12,15 @@ export function serialize(
   scope: Scope,
   config: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
 ) {
-  if (scope.warnSerializeTraces.size) {
+  if (scope.warnSerializeNodes.size) {
     console.error(
       'serialize: One or more stores dont have sids, their values are omitted',
     )
-    forEach(scope.warnSerializeTraces, stack => {
-      printErrorWithStack('store should have sid or `serialize: ignore`', stack)
+    forEach(scope.warnSerializeNodes, node => {
+      printErrorWithNodeDetails(
+        'store should have sid or `serialize: ignore`',
+        node,
+      )
     })
   }
   assert(!scope.hasSidDoubles, 'duplicate sid found in this scope')

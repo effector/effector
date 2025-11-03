@@ -402,6 +402,7 @@ export class Domain implements Unit<any> {
             write: (state: State) => SerializedState
             read: (json: SerializedState) => State
           }
+      skipVoid?: boolean
     },
   ): StoreWritable<State>
   sid: string | null
@@ -420,7 +421,6 @@ export type ID = string
 export type StateRefOp =
   | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
   | {type: 'field'; from: StateRef; field: string}
-  | {type: 'closure'; of: StateRef}
 export type StateRef = {
   id: ID
   current: any
@@ -798,7 +798,20 @@ export function createStore<State, SerializedState extends Json = Json>(
     domain?: Domain;
   },
 ): StoreWritable<State>
+
 export function setStoreName<State>(store: Store<State>, name: string): void
+
+type UnionToIntersection<Union> = (
+  Union extends any ? (k: Union) => void : never
+  ) extends (k: infer intersection) => void
+  ? intersection
+  : never;
+
+type GetUnionLast<Union> = UnionToIntersection<
+  Union extends any ? () => Union : never
+> extends () => infer Last
+  ? Last
+  : never;
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
@@ -818,133 +831,217 @@ export function split<
     : Event<S>
 } & {__: Event<S>}>
 
-type SplitType<
-  Cases extends CaseRecord,
-  Match,
-  Config,
-  Source extends Unit<any>,
-> =
-  UnitValue<Source> extends CaseTypeReader<Cases, keyof Cases>
-    ?
-      Match extends Unit<any>
-      ? Exclude<keyof Cases, '__'> extends UnitValue<Match>
-        ? Config
-        : {
-          error: 'match unit should contain case names'
-          need: Exclude<keyof Cases, '__'>
-          got: UnitValue<Match>
-        }
+type MatchConstraint<Source> =
+  Unit<any>
+  | ((p: UnitValue<Source>) => void)
+  | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>;
 
-      : Match extends (p: UnitValue<Source>) => void
-        ? Exclude<keyof Cases, '__'> extends ReturnType<Match>
-          ? Config
-          : {
-            error: 'match function should return case names'
-            need: Exclude<keyof Cases, '__'>
-            got: ReturnType<Match>
-          }
-
-      : Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
-        ? Exclude<keyof Cases, '__'> extends keyof Match
-          ? MatcherInferenceValidator<Cases, Match> extends Match
-            ? Config
-            : {
-              error: 'case should extends type inferred by matcher function'
-              incorrectCases: Show<MatcherInferenceIncorrectCases<Cases, Match>>
-            }
-          : {
-            error: 'match object should contain case names'
-            need: Exclude<keyof Cases, '__'>
-            got: keyof Match
-          }
-
-      : {error: 'not implemented'}
-
-  : {
-    error: 'source type should extends cases'
-    sourceType: UnitValue<Source>
-    caseType: CaseTypeReader<Cases, keyof Cases>
-  }
+type CaseRecord<Keys extends PropertyKey = string> = Partial<Record<Keys | '__', UnitTargetable<any> | RoTuple<UnitTargetable<any>>>>;
 
 /**
  * Chooses one of cases by given conditions. It "splits" source unit into several targets, which fires when payload matches their conditions.
  * Works like pattern matching for payload values and external units
  */
 export function split<
-  Cases,
-  Source,
-  Match extends (
-    | Unit<any>
-    | ((p: UnitValue<Source>) => void)
-    | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
-  ),
-  Clock,
+  Clock extends Unit<any> | RoTuple<Unit<any>>,
+  Source extends Unit<any>,
+  Match extends MatchConstraint<Source>,
+  Cases extends CaseRecord<InferMatchKeys<Match>>,
 >(
-  config:
-    {source: Source; match: Match; cases: Cases; clock: Clock} extends infer Config
-    ?
-      Config extends {cases: CaseRecord; match: any; source: Unit<any>; clock: Unit<any> | Array<Unit<any>>}
-        ? Source extends Unit<any>
-          ? Cases extends CaseRecord
-            ? Clock extends Unit<any> | Array<Unit<any>>
-              ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases; clock: Clock}, Source>
-              : {error: 'clock should be a unit or array of units'; got: Clock}
-            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
-          : {error: 'source should be a unit'; got: Source}
+  config: SplitConfig<Clock, Source, Match, Cases>
+): void;
 
-      : Config extends {cases: CaseRecord; match: any; source: Unit<any>}
-        ? Source extends Unit<any>
-          ? Cases extends CaseRecord
-            ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases}, Source>
-            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
-          : {error: 'source should be a unit'; got: Source}
+type SplitConfig<
+  Clock,
+  Source,
+  Match extends MatchConstraint<Source>,
+  Cases extends CaseRecord<InferMatchKeys<Match>>
+> = Exclude<keyof Cases, '__'> extends InferMatchKeys<Match>
+  ? TypeOfMatch<Match> extends 'record'
+    ? SplitImpl<Clock, Source, Match, Cases>
+    : TypeOfMatch<Match> extends 'unit'
+      ? SplitImpl<Clock, Source, Match, Cases>
+      : TypeOfMatch<Match> extends 'fn'
+        ? SplitImpl<Clock, Source, Match, Cases>
+        : {clock?: Clock; source: Source; match: Match; cases: Cases}
+  : {
+    clock?: Clock;
+    source: Source;
+    match: RebuildMatch<Source, Match, Cases>;
+    cases: { [K in keyof Cases as K extends InferMatchKeys<Match> | '__' ? K : never]: Cases[K] };
+  };
 
-      : {error: 'config should be object with fields "source", "match" and "cases"'; got: Config}
+type InferMatchKeys<Match> = Match extends Unit<infer Keys>
+  ? Keys extends PropertyKey ? Keys : never
+  : Match extends (source: any) => infer Keys
+    ? Keys extends PropertyKey ? Keys : never
+    : Match extends Record<string, ((source: any) => boolean) | Store<boolean>>
+      ? keyof Match
+      : never;
 
-    : {error: 'cannot infer config object'}
-): void
+type TypeOfMatch<Match> =
+  Match extends Unit<any>
+    ? 'unit'
+    : Match extends (s: any) => void
+      ? 'fn'
+      : Match extends Record<string, ((p: any) => void) | Store<boolean>>
+        ? 'record'
+        : never;
 
-type CaseRecord = Record<string,  Unit<any> | Array<Unit<any>>>
+type RebuildMatch<
+  Source,
+  Match,
+  Cases,
+  Keys extends PropertyKey = Exclude<keyof Cases, '__'>
+> =
+  Match extends Unit<any>
+    ? Unit<Keys>
+    : Match extends (p: UnitValue<Source>) => void
+      ? (p: UnitValue<Source>) => Keys
+      : Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+        ? { [K in Keys]: K extends keyof Match ? Match[K] : (p: UnitValue<Source>) => boolean | Store<boolean> }
+        : never;
 
-type MatcherInferenceIncorrectCases<Cases, Match> = {
-  [K in Exclude<keyof Match, keyof MatcherInferenceValidator<Cases, Match>>]: {
-    caseType: CaseValue<Cases, Match, K>
-    inferredType: Match[K] extends (p: any) => p is infer R ? R : never
+type SplitImpl<
+  Clock,
+  Source,
+  Match,
+  Cases
+> = MatchCasesIsAssignable<Source, Match, Cases> extends infer AssignableDict
+  ? AssignableDict extends Record<string, 'yes'>
+    ? {
+      clock?: Clock;
+      source: Source;
+      match: Match;
+      cases: Cases
+    }
+    : MatchHasInference<Source, Match> extends 'yes'
+      ? {
+        clock?: Clock;
+        source: Source;
+        match: RebuildMatchInference<Source, Match, AssignableDict>;
+        cases: Show<RebuildCases<Source, Match, Cases>>;
+      }
+      : {
+        clock?: Clock;
+        source: RebuildSource<Source, Cases>;
+        match: Match;
+        cases: Show<RebuildCases<Source, Match, Cases>>;
+      }
+  : never;
+
+type MatchValueReader<Match, K, Source> =
+  K extends keyof Match
+    ? Match[K] extends (src: any) => src is infer R
+      ? UnitValue<Source> extends R
+        ? UnitValue<Source>
+        : R
+      : UnitValue<Source>
+    : UnitValue<Source>;
+
+type MatchHasInference<Source, Match> =
+  Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+    ? 'yes' extends {
+      [K in keyof Match]: UnitValue<Source> extends MatchValueReader<Match, K, Source> ? 'no' : 'yes'
+    }[keyof Match] ? 'yes' : 'no'
+    : 'no';
+
+type MatchCasesIsAssignable<
+  Source,
+  Match,
+  Cases
+> =
+  {
+    [K in keyof Cases]: IfCaseAssignableToValue<Cases[K], MatchValueReader<Match, K, Source>>
   }
+
+type IfValidCaseValue<CaseValue, MatchValue, Y, N> =
+  WhichType<CaseValue> extends 'void' | 'unknown'
+    ? Y
+    : IfAssignable<MatchValue, CaseValue, Y, N>;
+
+type IfCaseAssignableToValue<Case, Value> =
+  Case extends UnitTargetable<any>
+    ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', ['no', UnitValue<Case>]>
+    : Case extends RoTuple<UnitTargetable<any>>
+      ? IsCaseAssignableToValueLoop<Case, Value>
+      : never;
+
+type IsCaseAssignableToValueLoop<Cases extends RoTuple<Unit<any>>, Value> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', 'no'> extends 'yes'
+        ? IsCaseAssignableToValueLoop<Rest, Value>
+        : ['no', UnitValue<Case>]
+      : never
+    : 'yes';
+
+type RebuildMatchInference<
+  Source,
+  Match,
+  AssignableDict
+> = Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+  ? {
+    [K in keyof Match]: K extends keyof AssignableDict
+      ? AssignableDict[K] extends ['no', infer Value]
+        ? Value extends UnitValue<Source>
+          ? (source: UnitValue<Source>) => source is Value
+          : never
+        : Match[K]
+      : Match[K]
+  }
+  : never;
+
+type RebuildCases<Source, Match, Cases> = {
+  [K in keyof Cases]: K extends InferMatchKeys<Match> | '__'
+    ? RebuildCase<MatchValueReader<Match, K, Source>, Cases[K]>
+    : Cases[K];
 }
 
-type MatcherInferenceValidator<Cases, Match> = {
-  [
-    K in keyof Match as
-      Match[K] extends (p: any) => p is infer R
-      ? R extends CaseValue<Cases, Match, K>
-        ? K
+type RebuildCase<MatchValue, Case> = Case extends UnitTargetable<infer CaseValue>
+  ? IfValidCaseValue<CaseValue, MatchValue, Case, UnitTargetable<MatchValue>>
+  : Case extends RoTuple<UnitTargetable<any>>
+    ? RebuildCaseLoop<Case, MatchValue>
+    : never;
+
+type RebuildCaseLoop<Cases extends readonly any[], Value, Result extends readonly any[] = []> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? RebuildCaseLoop<
+        Rest,
+        Value,
+        [
+          ...Result,
+          IfValidCaseValue<UnitValue<Case>, Value, Case, UnitTargetable<Value>>
+        ]
+      >
+      : Result
+    : Result;
+
+type RebuildSource<Source, Cases> =
+  { [K in keyof Cases]: GetFirstUnassignableCase<UnitValue<Source>, Cases[K]> } extends infer Values
+    ? Values extends Record<string, never>
+      ? Source
+      : { [K in keyof Values as [Values[K]] extends [never] ? never : K]: Values[K] } extends infer InvalidValues
+        ? Unit<GetUnionLast<InvalidValues[keyof InvalidValues]>>
         : never
-      : K
-  ]: Match[K]
-}
+    : never;
 
-type CaseTypeReader<Cases, K extends keyof Cases> =
-  Cases[K] extends infer S
-  ? WhichType<
-    UnitValue<
-      S extends Array<any>
-      ? S[number]
-      : S
-    >
-  > extends 'void'
-    ? unknown
-    : UnitValue<
-      S extends Array<any>
-      ? S[number]
-      : S
-    >
-  : never
+type GetFirstUnassignableCase<SourceValue, Case> =
+  Case extends UnitTargetable<infer CaseValue>
+    ? IfValidCaseValue<CaseValue, SourceValue, SourceValue, CaseValue>
+    : Case extends RoTuple<UnitTargetable<any>>
+      ? GetFirstUnassignableLoop<Case, SourceValue>
+      : never;
 
-type CaseValue<Cases, Match, K extends keyof Match> =
-  K extends keyof Cases
-  ? CaseTypeReader<Cases, K>
-  : never
+type GetFirstUnassignableLoop<Cases extends RoTuple<Unit<any>>, Value> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', 'no'> extends 'yes'
+        ? GetFirstUnassignableLoop<Rest, Value>
+        : UnitValue<Case>
+      : never
+    : never;
 
 /**
  * Shorthand for creating events attached to store by providing object with reducers for them
@@ -1668,17 +1765,17 @@ type TargetFilterFnConfig<
   FilterFun,
   FN,
 > = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : never
 
 type TargetConfigCheck<
@@ -1774,17 +1871,17 @@ type SampleFilterTargetDef<
         ? TargetConfigCheck<
             Mode, Target, Source, Clock, FN,
             Mode extends 'clock | source | filter | fn | target'
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock | source | filter |    | target'
-            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter | fn | target'
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter |    | target'
-            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter | fn | target'
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    | target'
-            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : never,
             SomeFN
           >
@@ -1940,17 +2037,17 @@ type SampleFilterTargetDef<
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
           Mode extends 'clock | source |        | fn | target'
-          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock | source |        |    | target'
-          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source |        | fn | target'
-          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source |        |    | target'
-          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        |        | fn | target'
-          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        |        |    | target'
-          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : never,
           SomeFN
         >

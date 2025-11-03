@@ -2,6 +2,41 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+# effector 23.4.4
+
+- Add `enable_debug_traces` compilation to debug files
+
+# effector 23.4.3
+
+- Make `effector/enable_debug_traces` actually built for production bundle
+
+# effector 23.4.2
+
+- Turn off debug traces by default, enable by designated api [PR](https://github.com/effector/effector/pull/1285), [Docs](https://effector.dev/en/api/effector/debug_traces/)
+
+# effector 23.4.1
+
+- Fix sample name support for cases without plugin
+
+## effector 23.4.0
+
+### Babel/SWC plugin
+
+- Add support for [hmr](https://effector.dev/en/api/effector/babel-plugin/#configuration-hmr). Big thanks to [@movpushmov](https://github.com/movpushmov) and [@kireevmp](https://github.com/kireevmp)
+- Add support for [transformLegacyDomainMethods](https://effector.dev/en/api/effector/babel-plugin/#configuration-transformLegacyDomainMethods) option [PR #1059](https://github.com/effector/effector/pull/1059)
+- Add [forceScope](https://effector.dev/en/api/effector/babel-plugin/#configuration-forceScope) option ([PR #1002](https://github.com/effector/effector/pull/1002))
+- Add [effector-action](https://github.com/AlexeyDuybo/effector-action) to default factories
+- Add support for tagged template factories (like patronum [format](https://patronum.effector.dev/operators/format/))
+
+### Typings
+
+- Improve `split` typings ([PR #1253](https://github.com/effector/effector/pull/1253)), fixes issues [#622](https://github.com/effector/effector/issues/622) [#769](https://github.com/effector/effector/issues/769) and [#999](https://github.com/effector/effector/issues/999). Big thanks to [@den-churbanov](https://github.com/den-churbanov) for handling these insurmountable typings 💪
+- Add `skipVoid` to type of `domain.createStore` ([PR #1262](https://github.com/effector/effector/pull/1262))
+
+### Runtime
+
+- Add better support for `name` field in `sample` for improved `patronum.debug({trace: true})` logs ([issue #1268](https://github.com/effector/effector/issues/1268))
+
 ## effector 23.3.0
 
 - Improve error messages: now errors for `skipVoid` and `store without sid` will point to the line of store creation. This will help locate troublesome units easily
@@ -1354,7 +1389,11 @@ export default Vue.extend({
 
 ```html
 <template>
+
+
   <input v-model="$msg" />
+
+
 </template>
 ```
 
@@ -3452,18 +3491,34 @@ const {addMessage, cut} = createApi($text, {
 
 ```html
 <!DOCTYPE html>
+
+
 <html>
+
+
   <head>
+
+
     <script src="https://unpkg.com/effector@0.18.2/effector.umd.js"></script>
+
+
   </head>
+
+
   <body>
+
+
     <script>
       const header = document.createElement('h1')
       document.body.appendChild(header)
       const $text = effector.createStore('hello')
       $text.watch(str => (header.innerHTML = str))
     </script>
+
+
   </body>
+
+
 </html>
 ```
 

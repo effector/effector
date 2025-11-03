@@ -1,5 +1,5 @@
 import type {DataCarrier} from './unit.h'
-import type {Cmd, Stack} from './index.h'
+import type {Cmd, Stack, StateRef} from './index.h'
 import {is, isFunction, isObject, assertTarget} from './is'
 import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
@@ -10,7 +10,7 @@ import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
 import {assert} from './throw'
-import {createEvent} from './createUnit'
+import {createEvent, getUnitTrace, setUnitTrace} from './createUnit'
 import {applyTemplate} from './template'
 import {createSampling} from './sample'
 import {generateErrorTitle} from './naming'
@@ -82,6 +82,7 @@ export function split(...args: any[]) {
     matchIsUnit || matchIsFunction ? targets : match,
   )
   let splitterSeq: Array<Cmd | false>
+  let lastValuesRef: StateRef | void
   if (matchIsUnit || matchIsFunction) {
     if (matchIsUnit) owners.add(match)
     splitterSeq = [
@@ -102,7 +103,7 @@ export function split(...args: any[]) {
       }),
     ]
   } else if (matchIsShape) {
-    const lastValues = createStateRef({})
+    const lastValues = (lastValuesRef = createStateRef({}))
     lastValues.type = 'shape'
     const units = [] as string[]
     let needBarrier: boolean
@@ -148,7 +149,7 @@ export function split(...args: any[]) {
     assert(false, 'expect match to be unit, function or object')
   }
   const splitterNode = createNode({
-    meta: {op: METHOD},
+    meta: {op: METHOD, stateRef: lastValuesRef!},
     parent: clock ? [] : source,
     scope: targets,
     node: splitterSeq!,
@@ -171,5 +172,6 @@ export function split(...args: any[]) {
       false,
     )
   }
+  setUnitTrace(splitterNode, getUnitTrace(split))
   if (!configForm) return targets
 }

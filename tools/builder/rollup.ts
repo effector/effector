@@ -32,6 +32,7 @@ const compatTarget = {
 
 const extensions = ['.js', '.mjs', '.ts', '.tsx']
 const externals = [
+  'path',
   'effector',
   'effector/effector.mjs',
   'effector/compat',
@@ -152,6 +153,14 @@ export async function rollupEffector() {
       input: 'inspect',
       inputExtension: 'ts',
     }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/enable_debug_traces.js`),
+        es: dir(`npm/${name}/enable_debug_traces.mjs`),
+      },
+      input: 'enable_debug_traces',
+      inputExtension: 'ts',
+    }),
     createUmd(name, {
       external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),
@@ -160,6 +169,34 @@ export async function rollupEffector() {
       extension: 'ts',
     }),
     createCompat(name),
+    (async () => {
+      const plugins = getPlugins('babel-plugin')
+      const buildPlugin = await rollup({
+        onwarn,
+        input: dir('src/babel/babel-plugin.ts'),
+        external: externals,
+        plugins: [
+          plugins.resolve,
+          plugins.babel,
+          commonjs({
+            extensions,
+            ignoreDynamicRequires: true,
+            transformMixedEsModules: false,
+            ignore: id => /path/.test(id),
+          }),
+        ],
+      })
+      await buildPlugin.write({
+        file: dir('npm/effector/babel-plugin.js'),
+        format: 'cjs',
+        freeze: false,
+        name: 'babel-plugin',
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform('babel'),
+        interop: false,
+        exports: 'default',
+      })
+    })(),
   ])
 }
 export async function rollupEffectorDom({name}: {name: string}) {

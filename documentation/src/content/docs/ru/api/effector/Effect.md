@@ -14,7 +14,7 @@ lang: ru
 [eventTypes]: /ru/api/effector/Event#event-types
 [storeTypes]: /ru/essentials/typescript#store-types
 
-# Effect API (#effect-api)
+# Effect API (#methods)
 
 ```ts
 import { type Effect, createEffect } from "effector";
@@ -35,22 +35,22 @@ const effectFx = createEffect();
 Доступные методы и свойства событий:
 | <div style="width:170px">Метод/Свойство</div> | Описание |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [`use(handler)`](#use-method) | Заменяет обработчик эффекта на новую функцию `handler`. |
-| [`use.getCurrent()`](#use-getCurrent-method) | Возвращает текущий обработчик эффекта. |
-| [`watch(watcher)`](#watch-method) | Добавляет слушатель, вызывающий `watcher` при каждом вызове эффекта. |
-| [`map(fn)`](#map-method) | Создаёт новое [производное событие][eventTypes] с результатом вызова `fn` для параметров эффекта. |
-| [`prepend(fn)`](#prepend-method) | Создаёт новое [событие][eventTypes] , трансформирующее входные данные через `fn` перед вызовом эффекта. |
-| [`filterMap(fn)`](#filterMap-method) | Создаёт новое [производное событие][eventTypes], срабатывающее с результатом `fn`, если тот не вернул `undefined`. |
-| [`done`](#done-property) | [Производное событие][eventTypes] `Event<{Params, Done}>`, срабатывающее при успешном завершении эффекта. |
-| [`doneData`](#doneData-property) | [Производное событие][eventTypes] `Event<Done>` с результатом успешного выполнения эффекта. |
-| [`fail`](#fail-property) | [Производное событие][eventTypes] `Event<{Params, Fail}>`, срабатывающее при ошибке выполнения эффекта. |
-| [`failData`](#failData-property) | [Производное событие][eventTypes] `Event<Fail>` с данными ошибки эффекта. |
-| [`finally`](#finally-property) | [Производное событие][eventTypes] `Event<{Params, status, Done?, Fail?}>`, срабатывающее при любом завершении эффекта. |
-| [`pending`](#pending-property) | [Производный стор][storeTypes] `Store<boolean>` со статусом выполнения эффекта (`true` во время выполнения). |
-| [`inFlight`](#inFlight-property) | [Производный стор][storeTypes] `Store<number>` с количеством активных вызовов эффекта. |
-| [`sid`](#sid-property) | Уникальный идентификатор [юнита](/ru/explanation/glossary#common-unit). |
-| [`shortName`](#shortName-property) | Свойство типа `string`, содержащее имя переменной, в которой объявлен эффект. |
-| [`compositeName`](#compositeName-property) | Комплексное имя эффекта (включая домен и короткое имя) — удобно для логирования и трассировки. |
+| [`use(handler)`](#methods-use-handler) | Заменяет обработчик эффекта на новую функцию `handler`. |
+| [`use.getCurrent()`](#methods-use-getCurrent) | Возвращает текущий обработчик эффекта. |
+| [`watch(watcher)`](#methods-watch-watcher) | Добавляет слушатель, вызывающий `watcher` при каждом вызове эффекта. |
+| [`map(fn)`](#methods-map-fn) | Создаёт новое [производное событие][eventTypes], срабатывает при вызове эффекта с результатом вызова `fn` для параметров эффекта. |
+| [`prepend(fn)`](#methods-prepend-fn) | Создаёт новое [событие][eventTypes] , трансформирующее входные данные через `fn` перед вызовом эффекта. |
+| [`filterMap(fn)`](#methods-filterMap-fn) | Создаёт новое [производное событие][eventTypes], срабатывает при вызове эффекта с результатом `fn`, если тот не вернул `undefined`. |
+| [`done`](#properties-done) | [Производное событие][eventTypes] `Event<{Params, Done}>`, срабатывающее при успешном завершении эффекта. |
+| [`doneData`](#properties-doneData) | [Производное событие][eventTypes] `Event<Done>` с результатом успешного выполнения эффекта. |
+| [`fail`](#properties-fail) | [Производное событие][eventTypes] `Event<{Params, Fail}>`, срабатывающее при ошибке выполнения эффекта. |
+| [`failData`](#properties-failData) | [Производное событие][eventTypes] `Event<Fail>` с данными ошибки эффекта. |
+| [`finally`](#properties-finally) | [Производное событие][eventTypes] `Event<{Params, status, Done?, Fail?}>`, срабатывающее при любом завершении эффекта. |
+| [`pending`](#properties-pending) | [Производный стор][storeTypes] `Store<boolean>` со статусом выполнения эффекта (`true` во время выполнения). |
+| [`inFlight`](#properties-inFlight) | [Производный стор][storeTypes] `Store<number>` с количеством активных вызовов эффекта. |
+| [`sid`](#properties-sid) | Уникальный идентификатор [юнита](/ru/explanation/glossary#common-unit). |
+| [`shortName`](#properties-shortName) | Свойство типа `string`, содержащее имя переменной, в которой объявлен эффект. |
+| [`compositeName`](#properties-compositeName) | Комплексное имя эффекта (включая домен и короткое имя) — удобно для логирования и трассировки. |
 
 ## Особенности эффекта (#effect-peculiarities)
 
@@ -60,7 +60,7 @@ const effectFx = createEffect();
 
 ## Методы эффектов (#effect-methods)
 
-### `.use(handler)` (#use-method)
+### `.use(handler)` (#methods-use-handler)
 
 :::warning{title="use - это антипаттерн"}
 Если значение имплементации известно сразу, то оптимальнее использовать `createEffect(handler)`.
@@ -119,7 +119,7 @@ await fetchUserReposFx({ name: "zerobias" });
 
 ---
 
-### `.use.getCurrent()` (#use-getCurrent-method)
+### `.use.getCurrent()` (#methods-use-getCurrent)
 
 Метод для получения текущей имплементации эффекта. Используется для тестирования.
 
@@ -162,7 +162,7 @@ console.log(fx.use.getCurrent() === handlerB);
 
 ---
 
-### `.watch(watcher)` (#watch-method)
+### `.watch(watcher)` (#methods-watch-watcher)
 
 Вызывает дополнительную функцию с сайд-эффектами при каждом срабатывании эффекта. Не стоит использовать для логики, лучше заменить на [`sample`](/ru/api/effector/sample).
 
@@ -202,9 +202,9 @@ await fx(10);
 
 ---
 
-### `.map(fn)` (#map-method)
+### `.map(fn)` (#methods-map-fn)
 
-Создает [производное событие][eventTypes] на основе данных эффекта. Работает по аналогии с [`Event.map(fn)`](/ru/api/effector/Event#event-methods-map-fn).
+Метод `map` создает [производное событие][eventTypes]. Событие вызывается в момент выполнения эффекта, с теми же аргументами, что и у эффекта, и результатом, возвращаемым функцией `fn`. Работает по аналогии с [`Event.map(fn)`](/ru/api/effector/Event#event-methods-map-fn).
 
 - **Формула**
 
@@ -221,26 +221,32 @@ effect.map<T>(fn: (params: Params) => T): Event<T>
 
 - **Примеры**
 
-```js
+```ts
 import { createEffect } from "effector";
 
-const updateUserFx = createEffect(({ name, role }) => {
+interface User {
   // ...
+}
+
+const saveUserFx = createEffect(async ({ id, name, email }: User) => {
+  // ...
+  return response.json();
 });
 
-const userNameUpdate = updateUserFx.map(({ name }) => name);
-const userRoleUpdate = updateUserFx.map(({ role }) => role.toUpperCase());
-
-userNameUpdate.watch((name) => {
-  console.log(`Началось изменение имени пользователя на ${name}`);
-});
-userRoleUpdate.watch((role) => {
-  console.log(`Началось изменение роли пользователя на ${role}`);
+const userNameSaving = saveUserFx.map(({ name }) => {
+  console.log("Начинаем сохранение пользователя: ", name);
+  return name;
 });
 
-await updateUserFx({ name: "john", role: "admin" });
-// => Началось изменение имени пользователя на john
-// => Началось изменение роли пользователя на ADMIN
+const savingNotification = saveUserFx.map(({ name, email }) => {
+  console.log("Оповещение о сохранении");
+  return `Сохранение пользователя: ${name} (${email})`;
+});
+
+// При вызове эффекта сработают оба производных события
+await saveUserFx({ id: 1, name: "Иван", email: "ivan@example.com" });
+// => Начинаем сохранение пользователя: Иван
+// => Сохранение пользователя: Иван (ivan@example.com)
 ```
 
 [Запустить пример](https://share.effector.dev/4UFLTo5p)
@@ -251,7 +257,7 @@ await updateUserFx({ name: "john", role: "admin" });
 
 ---
 
-### `.prepend(fn)` (#prepend-method)
+### `.prepend(fn)` (#methods-prepend-fn)
 
 Создаёт новое событие для преобразования данных _перед_ запуском эффекта. По сравнению с [map](#effect-methods-map), работает в обратном направлении. Работает по аналогии с [`Event.prepend(fn)`](/ru/api/effector/Event#eventCallable-methods-prepend-fn).
 
@@ -294,9 +300,9 @@ saveForm({ name: "John", email: "john@example.com" });
 
 ---
 
-### `.filterMap(fn)` (#filterMap-method)
+### `.filterMap(fn)` (#methods-filterMap-fn)
 
-Создаёт [производное событие][eventTypes], срабатывающее с результатом `fn`, если тот не вернул `undefined`.
+Метод `filterMap` создаёт [производное событие][eventTypes]. Вычисление функции `fn` запускается одновременно с эффектом, однако если функция возвращает `undefined`, событие не срабатывает. Работает аналогично методу [`.map(fn)`](#map-method), но с фильтрацией по возвращаемому значению.
 
 - **Формула**
 
@@ -316,25 +322,37 @@ effect.filterMap<T>(fn: (payload: Params) => T | undefined): Event<T>
 ```js
 import { createEffect } from "effector";
 
-const fetchUserFx = createEffect(async (id) => {
-  const user = await api.getUser(id);
-  return user;
-});
-
-const adminUserFetched = fetchUserFx.filterMap((user) => {
-  if (user.role === "admin") {
-    return user;
+const validateAndSaveFx = createEffect(async (userData) => {
+  if (!userData.isValid) {
+    throw new Error("Invalid data");
   }
-  return undefined;
+
+  return await saveToDatabase(userData);
 });
 
-adminUserFetched.watch((admin) => {
-  console.log("Загружен администратор:", admin.name);
+// Создаем событие только для валидных данных
+const validDataProcessing = validateAndSaveFx.filterMap((userData) => {
+  if (userData.isValid && userData.priority === "high") {
+    return {
+      id: userData.id,
+      timestamp: Date.now(),
+    };
+  }
+  // Если данные не валидны или приоритет не высокий, событие не сработает
 });
 
-await fetchUserFx(1); // обычный пользователь - событие не сработает
-await fetchUserFx(2); // администратор
-// => Загружен администратор: John
+validDataProcessing.watch(({ id, timestamp }) => {
+  console.log(`Обработка высокоприоритетных данных ID: ${id} в ${timestamp}`);
+});
+
+// Примеры вызовов
+await validateAndSaveFx({
+  id: 1,
+  isValid: true,
+  priority: "high",
+  role: "user",
+});
+// => Обработка высокоприоритетных данных ID: 1 в 1703123456789
 ```
 
 - **Возвращаемое значение**
@@ -343,7 +361,7 @@ await fetchUserFx(2); // администратор
 
 ## Свойства эффектов (#effect-properties)
 
-### `.done` (#done-property)
+### `.done` (#properties-done)
 
 [Производное событие][eventTypes], которое срабатывает с результатом выполнения эффекта и аргументом, переданным при вызове.
 
@@ -374,7 +392,7 @@ await fx(2);
 
 ---
 
-### `.doneData` (#doneData-property)
+### `.doneData` (#properties-doneData)
 
 [Производное событие][eventTypes], которое срабатывает с результатом успешного выполнения эффекта.
 
@@ -405,7 +423,7 @@ await fx(2);
 
 ---
 
-### `.fail` (#fail-property)
+### `.fail` (#properties-fail)
 
 [Производное событие][eventTypes], которое срабатывает с ошибкой, возникшей при выполнении эффекта и аргументом, переданным при вызове.
 
@@ -423,7 +441,7 @@ interface Effect<Params, any, Fail> {
 import { createEffect } from "effector";
 
 const fx = createEffect(async (value) => {
-  throw Error(value - 1);
+  throw new Error(value - 1);
 });
 
 fx.fail.watch(({ params, error }) => {
@@ -438,7 +456,7 @@ fx(2);
 
 ---
 
-### `.failData` (#failData-property)
+### `.failData` (#properties-failData)
 
 [Производное событие][eventTypes], которое срабатывает с ошибкой, возникшей при выполнении эффекта.
 
@@ -456,7 +474,7 @@ interface Effect<any, any, Fail> {
 import { createEffect } from "effector";
 
 const fx = createEffect(async (value) => {
-  throw Error(value - 1);
+  throw new Error(value - 1);
 });
 
 fx.failData.watch((error) => {
@@ -471,7 +489,7 @@ fx(2);
 
 ---
 
-### `.finally` (#finally-property)
+### `.finally` (#properties-finally)
 
 [Производное событие][eventTypes], которое срабатывает как при успехе, так и в случае ошибки завершении эффекта с подробной информацией об аргументах, результатах и статусе выполнения.
 
@@ -531,7 +549,7 @@ fetchApiFx({ time: 100, ok: false });
 
 ---
 
-### `.pending` (#pending-property)
+### `.pending` (#properties-pending)
 
 [Производный стор][storeTypes], который показывает, что эффект находится в процессе выполнения.
 
@@ -582,7 +600,7 @@ fetchApiFx(1000);
 
 ---
 
-### `.inFlight` (#inFlight-property)
+### `.inFlight` (#properties-inFlight)
 
 [Производный стор][storeTypes], который показывает число запущенных эффектов, которые находятся в процессе выполнения. Может использоваться для ограничения числа одновременных запросов.
 
@@ -635,7 +653,7 @@ await Promise.all([req1, req2]);
 
 ---
 
-### `.sid` (#sid-property)
+### `.sid` (#properties-sid)
 
 Уникальный идентификатор юнита. Важно отметить, что SID не изменяется при каждом запуске приложения, он статически записывается в пакет вашего приложения для абсолютной идентификации юнитов. Задаётся автоматически через [Babel plugin](/ru/api/effector/babel-plugin).
 
@@ -649,7 +667,7 @@ interface Effect<any, any> {
 
 ---
 
-### `.shortName` (#shortName-property)
+### `.shortName` (#properties-shortName)
 
 Свойство типа `string`, содержащее имя переменной, в которой объявлен эффект. Имя эффекта. Задаётся либо явно, через поле `name` в [createEffect](/ru/api/effector/createEffect), либо автоматически через [babel plugin](/ru/api/effector/babel-plugin).
 
@@ -663,7 +681,7 @@ interface Effect<any, any> {
 
 ---
 
-### `.compositeName` (#compositeName-property)
+### `.compositeName` (#properties-compositeName)
 
 Комплексное имя эффекта (включая домен и короткое имя) — удобно для логирования и трассировки.
 

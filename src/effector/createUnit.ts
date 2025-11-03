@@ -32,12 +32,13 @@ import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {readTemplate, readSidRoot, reportDeclaration} from './region'
 import {getStoreState, getGraph, getParent, setMeta, getMeta} from './getter'
-import {assert, deprecate, printErrorWithStack} from './throw'
+import {assert, deprecate, printErrorWithNodeDetails} from './throw'
 import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
 import {clearNode} from './clearNode'
+import {debugTracesEnabled} from './debug_traces'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -47,7 +48,25 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
+export const setUnitTrace = (unit: any, unitTrace: string) =>
+  setMeta(unit, 'unitTrace', unitTrace)
+
+export const getUnitTrace = (caller: (...args: any[]) => void) => {
+  if (!debugTracesEnabled()) return ''
+
+  const traceError = Error('unit trace')
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(traceError, caller)
+  }
+  return traceError.stack!
+}
+
+export const initUnit = (
+  kind: Kind,
+  unit: any,
+  rawConfig: any,
+  unitTrace: string,
+) => {
   const config = flattenConfig(rawConfig)
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
@@ -63,6 +82,7 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
     serialize: config.serialize,
     derived: config.derived,
     config,
+    unitTrace,
   }
   unit.targetable = !config.derived
   unit.parent = parent
@@ -157,7 +177,12 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
-      meta: initUnit(config.actualOp || EVENT, event, config),
+      meta: initUnit(
+        config.actualOp || EVENT,
+        event,
+        config,
+        getUnitTrace(createEvent),
+      ),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -231,11 +256,6 @@ export function createStore<State>(
   const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
   const errorTitle = generateErrorTitle('store', config)
-  const traceError = Error()
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(traceError, createStore)
-  }
-  const storeTrace = traceError.stack
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
@@ -353,7 +373,7 @@ export function createStore<State>(
       )
     },
   } as unknown as Store<State>
-  const meta = initUnit(STORE, store, config)
+  const meta = initUnit(STORE, store, config, getUnitTrace(createStore))
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     scope: {state: plainState, fn: updateFilter},
@@ -369,9 +389,9 @@ export function createStore<State>(
         const isVoidUpdate = isVoid(upd)
 
         if (isVoidUpdate && !explicitSkipVoid) {
-          printErrorWithStack(
-            `${errorTitle}: ${requireExplicitSkipVoidMessage}`,
-            storeTrace,
+          printErrorWithNodeDetails(
+            `${requireExplicitSkipVoidMessage}`,
+            store.graphite,
           )
         }
 
@@ -387,7 +407,7 @@ export function createStore<State>(
     meta: {
       ...meta,
       defaultState,
-      storeTrace,
+      stateRef: plainState,
     },
     regional: true,
   })
