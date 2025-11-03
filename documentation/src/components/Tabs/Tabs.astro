@@ -52,11 +52,12 @@ const { content, tabs } = initTabs(html);
   li {
     cursor: pointer;
     list-style: none;
-    margin: -2px;
+    margin: 0px 0px -2px 0;
   }
 
   .tab > button[role="tab"] {
     border-radius: 2px;
+    background-color: transparent;
   }
 
   .tab:has(> [aria-selected="true"]) {
