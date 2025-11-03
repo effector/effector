@@ -28,6 +28,10 @@ sample({
   clock: sendButtonClicked,
   source: $formData,
   filter: (form) => form.username.length > 0 && form.age >= 18,
+  fn: (form) => ({
+    ...form,
+    timestamp: Date.now(),
+  }),
   target: [sendFormFx, formSubmitted],
 });
 ```
@@ -49,14 +53,23 @@ createAction(sendButtonClicked, {
     sendForm: sendFormFx,
     formSubmitted,
   },
-  fn: (target, formData) => {
-    if (formData.username.length > 0 && formData.age >= 18) {
-      target.sendForm(formData);
+  fn: (target, form) => {
+    if (form.username.length > 0 && form.age >= 18) {
+      const updatedForm = {
+        ...form,
+        timestamp: Date.now(),
+      };
+      target.sendForm(updatedForm);
       target.formSubmitted();
     }
   },
 });
 ```
+
+Оба оператора срабатывают при вызове события `sendButtonClicked`, затем берут данные из `source`, а дальше:
+
+- В `sample` используются отдельные параметры: `filter` для проверки условий, `fn` для трансформации данных, и `target` для вызова юнитов.
+- В `createAction` вся логика находится в одной `fn`, где можно использовать обычные `if` для условий и явно вызывать нужные `target`.
 
 </Fragment>
 

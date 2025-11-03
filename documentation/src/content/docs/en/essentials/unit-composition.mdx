@@ -27,6 +27,10 @@ sample({
   clock: sendButtonClicked,
   source: $formData,
   filter: (form) => form.username.length > 0 && form.age >= 18,
+  fn: (form) => ({
+    ...form,
+    timestamp: Date.now(),
+  }),
   target: [sendFormFx, formSubmitted],
 });
 ```
@@ -48,14 +52,23 @@ createAction(sendButtonClicked, {
     sendForm: sendFormFx,
     formSubmitted,
   },
-  fn: (target, formData) => {
-    if (formData.username.length > 0 && formData.age >= 18) {
-      target.sendForm(formData);
+  fn: (target, form) => {
+    if (form.username.length > 0 && form.age >= 18) {
+      const updatedForm = {
+        ...form,
+        timestamp: Date.now(),
+      };
+      target.sendForm(updatedForm);
       target.formSubmitted();
     }
   },
 });
 ```
+
+Both operators trigger when the `sendButtonClicked` event is called, then take data from `source`, and then:
+
+- In `sample`, separate parameters are used: `filter` for checking conditions, `fn` for data transformation, and `target` for calling units.
+- In `createAction`, all logic is in a single `fn`, where you can use regular `if` statements for conditions and explicitly call the needed `target`.
 
 </Fragment>
 
@@ -182,7 +195,7 @@ createAction(submitForm, {
 
 </Tabs>
 
-## Operator usage capabilities (#usage-of-operators)
+## Usage capabilities (#usage-of-operators)
 
 As mentioned, both operators are conceptually similar to each other, so you don't need to choose one over the other - you can use both in your application. However, there are some cases when [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) will be preferable over [`sample`](/en/api/effector/sample):
 
