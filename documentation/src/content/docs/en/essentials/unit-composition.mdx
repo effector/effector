@@ -1,0 +1,530 @@
+---
+title: Unit composition
+description: How to organize connections between units using sample or createAction
+---
+
+import SideBySide from "@components/SideBySide/SideBySide.astro";
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Unit composition (#unit-composition)
+
+If we consider each unit as a building block of our application, then for full functionality we need to somehow glue these blocks together. For example, when a form submission event occurs, validate the form data, if everything is correct, call an effect to send the data, and also update our store. In other words, build connections between units. To implement this, you need to use the [`sample`](/en/api/effector/sample) operator or [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction).
+
+Conceptually, both operators perform the same work, however, they have a difference: [`sample`](/en/api/effector/sample) is a declarative operator, while [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) is more imperative, allowing you to describe logic in a more familiar style.
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts wrap data-height="full"
+// sample
+import { sample, createEvent } from "effector";
+
+const sendButtonClicked = createEvent();
+
+sample({
+  clock: sendButtonClicked,
+  source: $formData,
+  filter: (form) => form.username.length > 0 && form.age >= 18,
+  target: [sendFormFx, formSubmitted],
+});
+```
+
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts wrap data-height="full"
+// createAction
+import { createAction } from "effector-action";
+import { createEvent } from "effector";
+
+const sendButtonClicked = createEvent();
+
+createAction(sendButtonClicked, {
+  source: $formData,
+  target: {
+    sendForm: sendFormFx,
+    formSubmitted,
+  },
+  fn: (target, formData) => {
+    if (formData.username.length > 0 && formData.age >= 18) {
+      target.sendForm(formData);
+      target.formSubmitted();
+    }
+  },
+});
+```
+
+</Fragment>
+
+</SideBySide>
+
+:::info{title="action"}
+`createAction` is an operator from the external package [`effector-action`](https://github.com/AlexeyDuybo/effector-action), which will move to the effector core package in the nearest major release. Additionally, you need to install the [patronum](https://patronum.effector.dev) package.
+
+<Tabs>
+  <TabItem label="npm">
+
+```bash
+npm install effector-action patronum
+```
+
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector-action patronum
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector-action patronum
+```
+
+  </TabItem>
+</Tabs>
+
+:::
+
+## Basic usage (#sample)
+
+Let's look at a basic example from the beginning of the article: we want to validate form data when a form submission event occurs, call an effect to send the data if everything is correct, and also update our store. Let's first look at what units we need:
+
+- We need an [event](/en/api/effector/Event) `submitForm` for form submission
+- Several [stores](/en/api/effector/Store) - `$formData` to store form data and `$formSubmitted` for the form submission status
+- And an [effect](/en/api/effector/Effect) `sendFormFx` to send data to the server
+
+:::tip{title="Why not call the effect directly from UI?"}
+On the [How to think in the effector paradigm](/en/resources/mindset/) page, we explain why you should create events rather than just calling effects directly from UI.
+:::
+
+```ts
+import { createEvent, createStore, sample, createEffect } from "effector";
+
+const submitForm = createEvent();
+
+const $formData = createStore({ username: "", age: 0 });
+const $formSubmitted = createStore(false);
+
+const sendFormFx = createEffect((formData: { username: string; age: number }) => {
+  // some logic to send data to the server
+});
+```
+
+In the UI, we will call the `submitForm` event when the user clicks the submit button. It remains to build connections between units:
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts ins={12-30}
+import { createEvent, createStore, sample, createEffect } from "effector";
+
+const submitForm = createEvent();
+
+const $formData = createStore({ username: "", age: 0 });
+const $formSubmitted = createStore(false);
+
+const sendFormFx = createEffect((formData: { username: string; age: number }) => {
+  // some logic to send data to the server
+});
+
+sample({
+  clock: submitForm,
+  source: $formData,
+  filter: (form) => form.age >= 18 && form.username.length > 0,
+  target: sendFormFx,
+});
+
+sample({
+  clock: submitForm,
+  fn: () => true,
+  target: $formSubmitted,
+});
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts ins={12-30}
+import { createEvent, createStore, sample, createEffect } from "effector";
+
+const submitForm = createEvent();
+
+const $formData = createStore({ username: "", age: 0 });
+const $formSubmitted = createStore(false);
+
+const sendFormFx = createEffect((formData: { username: string; age: number }) => {
+  // some logic to send data to the server
+});
+
+createAction(submitForm, {
+  source: $formData,
+  target: {
+    sendForm: sendFormFx,
+    formSubmitted: $formSubmitted,
+  },
+  fn: (target, form) => {
+    if (form.age >= 18 && form.username.length > 0) {
+      target.sendForm(form);
+    }
+
+    target.formSubmitted(true);
+  },
+});
+```
+
+</TabItem >
+
+</Tabs>
+
+## Operator usage capabilities (#usage-of-operators)
+
+As mentioned, both operators are conceptually similar to each other, so you don't need to choose one over the other - you can use both in your application. However, there are some cases when [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) will be preferable over [`sample`](/en/api/effector/sample):
+
+1. Conditional execution logic. When using [`sample`](/en/api/effector/sample), you may encounter [difficulty in narrowing types after `filter`](/en/guides/troubleshooting#sample-types-error), which is not the case when using [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) due to the use of native language constructs that TypeScript understands well - `if`.
+2. Grouping by trigger. It's also more convenient to use [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) when we have one common trigger, but different calculations are required for each `target`.
+
+Let's now look at the main operator usage capabilities:
+
+- You can update a [store](/en/api/effector/Store), as well as call an [effect](/en/api/effector/Effect) or [event](/en/api/effector/Event) by passing it to [`target`](/en/api/effector/sample#target-argument):
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+const $query = createStore("");
+
+const queryChanged = createEvent<string>();
+
+sample({
+  clock: queryChanged,
+  target: $query,
+});
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts
+import { createStore, createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const $query = createStore("");
+
+const queryChanged = createEvent<string>();
+
+createAction(queryChanged, {
+  target: $query,
+  fn: (target, query) => {
+    target(query);
+  },
+});
+```
+
+</TabItem >
+
+</Tabs>
+
+- You can control the `target` call by condition, read more about this [on the API page for sample](/en/api/effector/sample#filter-argument):
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+const $query = createStore("");
+const $shouldUpdate = createStore(false);
+
+const queryChanged = createEvent<string>();
+
+sample({
+  clock: queryChanged,
+  filter: $shouldUpdate,
+  target: $query,
+});
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts
+import { createStore, createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const $query = createStore("");
+const $shouldUpdate = createStore(false);
+
+const queryChanged = createEvent<string>();
+
+createAction(queryChanged, {
+  source: {
+    $shouldUpdate,
+  },
+  target: $query,
+  fn: (target, { shouldUpdate }, query) => {
+    if (shouldUpdate) {
+      target(query);
+    }
+  },
+});
+```
+
+</TabItem >
+
+</Tabs>
+
+- You can also perform calculations in the `fn` function, but keep in mind that it must be a pure function and synchronous.
+
+### Limitations of `createAction` (#create-action-restrictions)
+
+The `createAction` operator has an important restriction: when calling the same `target` multiple times, only the last one will be invoked:
+
+```ts
+import { createStore, createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const $counter = createStore(0);
+
+const increase = createEvent<number>();
+
+createAction(increase, {
+  target: $counter,
+  fn: (target, delta) => {
+    target(delta);
+    // only the last target call will be executed
+    target(delta + 5);
+  },
+});
+```
+
+## How to use these operators (#how-to-use)
+
+Using these operators involves building atomic connections instead of one large block of code. For example, let's consider another application scenario - a search form with parameters. Let's first look at how we would write this in vanilla JavaScript:
+Suppose we have some state in a UI framework:
+
+```ts
+const state = {
+  query: "",
+  category: "all",
+  results: [],
+  isLoading: false,
+  error: null,
+};
+```
+
+Functions to change state:
+
+```ts
+function handleQueryChanged(payload) {
+  // here can be any state change from React/Vue/Solid and other frameworks
+  state.query = payload;
+}
+
+function handleCategoryChanged(payload) {
+  // here can be any state change from React/Vue/Solid and other frameworks
+  state.category = payload;
+}
+```
+
+And the main function for requesting data:
+
+```ts
+async function handleSearchClick() {
+  state.error = null;
+  state.results = [];
+
+  state.isLoading = true;
+
+  try {
+    const currentQuery = state.query;
+    const currentCategory = state.category;
+    // some API call
+    const data = await apiCall(currentQuery, currentCategory);
+    state.results = data;
+  } catch (e) {
+    state.error = e.message;
+  } finally {
+    state.isLoading = false;
+  }
+}
+```
+
+All that's left is to call these functions in the UI at the right moment. With the `sample` or `createAction` operators, things work a bit differently - we will create atomic independent connections between units. First, let's rewrite the previous code using units:
+
+```ts del={1-7} ins={9-14}
+// model.ts
+const state = {
+  query: "",
+  category: "all",
+  results: [],
+  isLoading: false,
+  error: null,
+};
+
+const $query = createStore("");
+const $category = createStore("all");
+const $results = createStore([]);
+const $error = createStore(null);
+const $isLoading = createStore(false);
+```
+
+We need events to change stores and also add logic to change these stores:
+
+```ts del={1-7} ins={9-22}
+// model.ts
+function handleQueryChanged(payload) {
+  state.query = payload;
+}
+
+function handleCategoryChanged(payload) {
+  state.category = payload;
+}
+
+const queryChanged = createEvent<string>();
+const categoryChanged = createEvent<string>();
+
+sample({
+  clock: queryChanged,
+  target: $query,
+});
+
+sample({
+  clock: categoryChanged,
+  target: $category,
+});
+```
+
+And now we need to implement the main search logic:
+
+```ts del={1-19} ins={21-51}
+// model.ts
+async function handleSearchClick() {
+  state.error = null;
+  state.results = [];
+
+  state.isLoading = true;
+
+  try {
+    const currentQuery = state.query;
+    const currentCategory = state.category;
+    // some API call
+    const data = await apiCall(currentQuery, currentCategory);
+    state.results = data;
+  } catch (e) {
+    state.error = e.message;
+  } finally {
+    state.isLoading = false;
+  }
+}
+
+const searchClicked = createEvent();
+
+const searchFx = createEffect(async ({ query, category }) => {
+  const data = await apiCall(query, category);
+  return data;
+});
+
+sample({
+  clock: searchClicked,
+  source: {
+    query: $query,
+    category: $category,
+  },
+  target: searchFx,
+});
+
+sample({
+  clock: searchFx.$pending,
+  target: $isLoading,
+});
+
+sample({
+  clock: searchFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+
+sample({
+  clock: searchFx.doneData,
+  target: $results,
+});
+```
+
+In the final form, we will have the following data model:
+
+```ts
+// model.ts
+import { createStore, createEvent, createEffect, sample } from "effector";
+
+const $query = createStore("");
+const $category = createStore("all");
+const $results = createStore([]);
+const $error = createStore(null);
+const $isLoading = createStore(false);
+
+const queryChanged = createEvent<string>();
+const categoryChanged = createEvent<string>();
+const searchClicked = createEvent();
+
+const searchFx = createEffect(async ({ query, category }) => {
+  const data = await apiCall(query, category);
+  return data;
+});
+
+sample({
+  clock: queryChanged,
+  target: $query,
+});
+
+sample({
+  clock: categoryChanged,
+  target: $category,
+});
+
+sample({
+  clock: searchClicked,
+  source: {
+    query: $query,
+    category: $category,
+  },
+  target: searchFx,
+});
+
+sample({
+  clock: searchFx.$pending,
+  target: $isLoading,
+});
+
+sample({
+  clock: searchFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+
+sample({
+  clock: searchFx.doneData,
+  target: $results,
+});
+```
+
+## Related API and articles (#related-api-and-docs)
+
+- **API**
+  - [`sample`](/en/api/effector/sample) - Operator for building connections between units
+  - [`Event`](/en/api/effector/Event) - Description of event and its methods
+  - [`Store`](/en/api/effector/Store) - Description of store and its methods
+  - [`Effect`](/en/api/effector/Effect) - Description of effect and its methods
+- **Articles**
+  - [Guide on typing units and operators](/en/essentials/typescript)
+  - [Description of common errors, gotchas and way's for solving them](/en/guides/troubleshooting)
+  - [How to think in the effector paradigm](/en/resources/mindset)

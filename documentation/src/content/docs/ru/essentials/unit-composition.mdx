@@ -1,0 +1,531 @@
+---
+title: Композиция юнитов
+description: Как организовать связи между юнитами с помощью sample или createAction
+lang: ru
+---
+
+import SideBySide from "@components/SideBySide/SideBySide.astro";
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Композиция юнитов (#unit-composition)
+
+Если считать, что каждый юнит это кирпичик нашего приложения, тогда для полноценного функционирования нам необходимо как-то склеить эти кирпичики вместе, например при срабатывании события подтверждении формы, провалидировать данные формы, если все корректно вызвать эффект с отправкой данных, а также обновить наш стор, иначе говоря построить связи между юнитами. Чтобы такое реализовать необходимо использовать оператор [`sample`](/ru/api/effector/sample) или [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction).
+
+Концептуально оба оператора выполняют одинаковую работу, однако у них есть отличие: [`sample`](/ru/api/effector/sample) – декларативный оператор, в то время как [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) – более императивный, который позволяет в более привычном стиле описывать логику работу.
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts wrap data-height="full"
+// sample
+import { sample, createEvent } from "effector";
+
+const sendButtonClicked = createEvent();
+
+sample({
+  clock: sendButtonClicked,
+  source: $formData,
+  filter: (form) => form.username.length > 0 && form.age >= 18,
+  target: [sendFormFx, formSubmitted],
+});
+```
+
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts wrap data-height="full"
+// createAction
+import { createAction } from "effector-action";
+import { createEvent } from "effector";
+
+const sendButtonClicked = createEvent();
+
+createAction(sendButtonClicked, {
+  source: $formData,
+  target: {
+    sendForm: sendFormFx,
+    formSubmitted,
+  },
+  fn: (target, formData) => {
+    if (formData.username.length > 0 && formData.age >= 18) {
+      target.sendForm(formData);
+      target.formSubmitted();
+    }
+  },
+});
+```
+
+</Fragment>
+
+</SideBySide>
+
+:::info{title="action"}
+`createAction` является оператором из внешнего пакета [`effector-action`](https://github.com/AlexeyDuybo/effector-action), который в ближайшем мажоре переедет в кор пакет effector. Также в дополнение нужно установить пакет [patronum](https://patronum.effector.dev).
+
+<Tabs>
+  <TabItem label="npm">
+
+```bash
+npm install effector-action patronum
+```
+
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector-action patronum
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector-action patronum
+```
+
+  </TabItem>
+</Tabs>
+
+:::
+
+## Базовое использование (#sample)
+
+Давайте рассмотрим базовый пример на примере из начала статьи: мы хотим при срабатывании события подтверждении формы, провалидировать данные формы, если все корректно вызвать эффект с отправкой данных, а также обновить наш стор. Давай сначала рассмотрим какие юниты нам нужны:
+
+- Нам нужно [событие](/ru/api/effector/Event) `submitForm` для отправки формы
+- Несколько [сторов](/ru/api/effector/Store) – `$formData` для хранения данных формы и `$formSubmitted` для статуса отправки формы
+- И [эффект](/ru/api/effector/Effect) `sendFormFx` чтобы отправлять данные на сервер
+
+:::tip{title="Почему не вызывать эффект напрямую из UI?"}
+На странице [Как мыслить в парадигме effector](/ru/resources/mindset/) мы рассказываем почему стоит создавать события, а не просто вызывать эффекты напрямую из UI.
+:::
+
+```ts
+import { createEvent, createStore, sample, createEffect } from "effector";
+
+const submitForm = createEvent();
+
+const $formData = createStore({ username: "", age: 0 });
+const $formSubmitted = createStore(false);
+
+const sendFormFx = createEffect((formData: { username: string; age: number }) => {
+  // какая-то логика отправки данных на сервер
+});
+```
+
+В UI мы будем вызывать событие `submitForm`, когда пользователь нажмет на кнопку отправки формы. Осталось построить связи между юнитами:
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts ins={12-30}
+import { createEvent, createStore, sample, createEffect } from "effector";
+
+const submitForm = createEvent();
+
+const $formData = createStore({ username: "", age: 0 });
+const $formSubmitted = createStore(false);
+
+const sendFormFx = createEffect((formData: { username: string; age: number }) => {
+  // какая-то логика отправки данных на сервер
+});
+
+sample({
+  clock: submitForm,
+  source: $formData,
+  filter: (form) => form.age >= 18 && form.username.length > 0,
+  target: sendFormFx,
+});
+
+sample({
+  clock: submitForm,
+  fn: () => true,
+  target: $formSubmitted,
+});
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts ins={12-30}
+import { createEvent, createStore, sample, createEffect } from "effector";
+
+const submitForm = createEvent();
+
+const $formData = createStore({ username: "", age: 0 });
+const $formSubmitted = createStore(false);
+
+const sendFormFx = createEffect((formData: { username: string; age: number }) => {
+  // какая-то логика отправки данных на сервер
+});
+
+createAction(submitForm, {
+  source: $formData,
+  target: {
+    sendForm: sendFormFx,
+    formSubmitted: $formSubmitted,
+  },
+  fn: (target, form) => {
+    if (form.age >= 18 && form.username.length > 0) {
+      target.sendForm(form);
+    }
+
+    target.formSubmitted(true);
+  },
+});
+```
+
+</TabItem >
+
+</Tabs>
+
+## Возможности использования (#usage-of-operators)
+
+Как и говорилось оба оператора концептуально схожи друг с другом, поэтому вам не нужно делать выбор в пользу какого-либо из них, вы можете использовать в приложении и тот и другой, однако есть некоторые кейсы, когда [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) будет приоритетнее [`sample`](/ru/api/effector/sample):
+
+1. Условная логика выполнения. При использовании [`sample`](/ru/api/effector/sample) может возникнуть [сложность в сужении типов после `filter`](/ru/guides/troubleshooting#sample-types-error), чего нет при использовании [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) за счет использования нативной конструкция языка, которую TypeScript отлично понимает – `if`.
+2. Группировка по триггеру. Использовать [`createAction`](https://github.com/AlexeyDuybo/effector-action?tab=readme-ov-file#createaction) также удобнее, когда у нас имеется один общий триггер, но требуется разные вычисления для каждого из `target`
+
+Давайте теперь рассмотрим основные возможности использования операторов:
+
+- Вы можете обновлять [стор](/ru/api/effector/Store), а также вызывать [эффект](/ru/api/effector/Effect) или [событие](/ru/api/effector/Event) передав его в [`target`](/ru/api/effector/sample#target-argument):
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+const $query = createStore("");
+
+const queryChanged = createEvent<string>();
+
+sample({
+  clock: queryChanged,
+  target: $query,
+});
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts
+import { createStore, createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const $query = createStore("");
+
+const queryChanged = createEvent<string>();
+
+createAction(queryChanged, {
+  target: $query,
+  fn: (target, query) => {
+    target(query);
+  },
+});
+```
+
+</TabItem >
+
+</Tabs>
+
+- Вы можете контролировать вызов `target` по условию, подробнее об этом [на странице API для sample](/ru/api/effector/sample#filter-argument):
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+const $query = createStore("");
+const $shouldUpdate = createStore(false);
+
+const queryChanged = createEvent<string>();
+
+sample({
+  clock: queryChanged,
+  filter: $shouldUpdate,
+  target: $query,
+});
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts
+import { createStore, createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const $query = createStore("");
+const $shouldUpdate = createStore(false);
+
+const queryChanged = createEvent<string>();
+
+createAction(queryChanged, {
+  source: {
+    $shouldUpdate,
+  },
+  target: $query,
+  fn: (target, { shouldUpdate }, query) => {
+    if (shouldUpdate) {
+      target(query);
+    }
+  },
+});
+```
+
+</TabItem >
+
+</Tabs>
+
+- Вы также можете производить вычисления в `fn` функции, однако держите в голове, что это должно быть чистой функцией, а также синхронной.
+
+### Ограничения `createAction` (#create-action-restrictions)
+
+У оператора `createAction` есть важное ограничение: при вызове одного и того же `target` несколько раз, только последний будет вызван:
+
+```ts
+import { createStore, createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const $counter = createStore(0);
+
+const increase = createEvent<number>();
+
+createAction(increase, {
+  target: $counter,
+  fn: (target, delta) => {
+    target(delta);
+    // отработает только последний вызов target
+    target(delta + 5);
+  },
+});
+```
+
+## Как использовать эти операторы (#how-to-use)
+
+Использование этих операторов подразумевает построение атомарных связей вместо одного крупного блока кода. Для примера давайте рассмотрим еще один сценарий приложения – форма поиска с параметрами. Давайте в начале посмотрим как бы такое мы писали на ванильном js коде:
+Предположим у нас есть какой-то стейт в UI фреймворке:
+
+```ts
+const state = {
+  query: "",
+  category: "all",
+  results: [],
+  isLoading: false,
+  error: null,
+};
+```
+
+Функции для изменения стейта:
+
+```ts
+function handleQueryChanged(payload) {
+  // здесь может быть любое изменение стейта из React/Vue/Solid и других фреймворков
+  state.query = payload;
+}
+
+function handleCategoryChanged(payload) {
+  // здесь может быть любое изменение стейта из React/Vue/Solid и других фреймворков
+  state.category = payload;
+}
+```
+
+И основная функция для запроса данных:
+
+```ts
+async function handleSearchClick() {
+  state.error = null;
+  state.results = [];
+
+  state.isLoading = true;
+
+  try {
+    const currentQuery = state.query;
+    const currentCategory = state.category;
+    // какой-то вызов api
+    const data = await apiCall(currentQuery, currentCategory);
+    state.results = data;
+  } catch (e) {
+    state.error = e.message;
+  } finally {
+    state.isLoading = false;
+  }
+}
+```
+
+Осталось только в UI вызывать эти функции в нужный момент. С помощью операторов `sample` или `createAction` работа обстоит чуть иначе, мы будем создавать атомарные независимые связи между юнитами. Для начала перепишем предыдущий код на юниты:
+
+```ts del={1-7} ins={9-14}
+// model.ts
+const state = {
+  query: "",
+  category: "all",
+  results: [],
+  isLoading: false,
+  error: null,
+};
+
+const $query = createStore("");
+const $category = createStore("all");
+const $results = createStore([]);
+const $error = createStore(null);
+const $isLoading = createStore(false);
+```
+
+Нам нужны события для изменения сторов и также добавить логику изменения этих сторов:
+
+```ts del={1-7} ins={9-22}
+// model.ts
+function handleQueryChanged(payload) {
+  state.query = payload;
+}
+
+function handleCategoryChanged(payload) {
+  state.category = payload;
+}
+
+const queryChanged = createEvent<string>();
+const categoryChanged = createEvent<string>();
+
+sample({
+  clock: queryChanged,
+  target: $query,
+});
+
+sample({
+  clock: categoryChanged,
+  target: $category,
+});
+```
+
+И теперь нам нужно также реализовать основную логику поиска:
+
+```ts del={1-19} ins={21-51}
+// model.ts
+async function handleSearchClick() {
+  state.error = null;
+  state.results = [];
+
+  state.isLoading = true;
+
+  try {
+    const currentQuery = state.query;
+    const currentCategory = state.category;
+    // какой-то вызов api
+    const data = await apiCall(currentQuery, currentCategory);
+    state.results = data;
+  } catch (e) {
+    state.error = e.message;
+  } finally {
+    state.isLoading = false;
+  }
+}
+
+const searchClicked = createEvent();
+
+const searchFx = createEffect(async ({ query, category }) => {
+  const data = await apiCall(currentQuery, currentCategory);
+  return data;
+});
+
+sample({
+  clock: searchClicked,
+  source: {
+    query: $query,
+    category: $category,
+  },
+  target: searchFx,
+});
+
+sample({
+  clock: searchFx.$pending,
+  target: $isLoading,
+});
+
+sample({
+  clock: searchFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+
+sample({
+  clock: searchFx.doneData,
+  target: $results,
+});
+```
+
+В итоговом виде мы будем иметь такую модель данных:
+
+```ts
+// model.ts
+import { createStore, createEvent, createEffect, sample } from "effector";
+
+const $query = createStore("");
+const $category = createStore("all");
+const $results = createStore([]);
+const $error = createStore(null);
+const $isLoading = createStore(false);
+
+const queryChanged = createEvent<string>();
+const categoryChanged = createEvent<string>();
+const searchClicked = createEvent();
+
+const searchFx = createEffect(async ({ query, category }) => {
+  const data = await apiCall(query, category);
+  return data;
+});
+
+sample({
+  clock: queryChanged,
+  target: $query,
+});
+
+sample({
+  clock: categoryChanged,
+  target: $category,
+});
+
+sample({
+  clock: searchClicked,
+  source: {
+    query: $query,
+    category: $category,
+  },
+  target: searchFx,
+});
+
+sample({
+  clock: searchFx.$pending,
+  target: $isLoading,
+});
+
+sample({
+  clock: searchFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+
+sample({
+  clock: searchFx.doneData,
+  target: $results,
+});
+```
+
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+  - [`sample`](/ru/api/effector/sample) - Оператор для построения связей между юнитами
+  - [`Event`](/ru/api/effector/Event) - Описание события и его методов
+  - [`Store`](/ru/api/effector/Event) - Описание стора и его методов
+  - [`Effect`](/ru/api/effector/Event) - Описание эффекта и его методов
+- **Статьи**
+  - [Гайд по типизация юнитов и операторов](/ru/essentials/typescript)
+  - [Описание основных ошибок, частых проблем и методы их решения](/ru/guides/troubleshooting)
+  - [Как мыслить в парадигме effector](/ru/resources/mindset)
