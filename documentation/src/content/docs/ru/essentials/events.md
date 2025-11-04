@@ -111,8 +111,6 @@ sample({
   target: secondTriggered,
 });
 
-userClicked("value");
-
 const unwatch = createWatch({
   unit: [firstTriggered, secondTriggered],
   fn: (payload) => {
