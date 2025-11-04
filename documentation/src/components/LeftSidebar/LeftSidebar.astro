@@ -75,7 +75,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
                 <div class="nav-group">
                   <button
                     class="nav-group-title"
-                    aria-expanded="true"
+                    aria-expanded={`${!group.collapsed}`}
                     aria-controls={`group-${index}`}
                   >
                     {group.title}
@@ -118,10 +118,13 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
       const button = group.querySelector("button");
       const content = group.querySelector("ul");
       if (button && content) {
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        content.classList.toggle("collapsed", !expanded);
+        
         button.addEventListener("click", () => {
           const expanded = button.getAttribute("aria-expanded") === "true";
           button.setAttribute("aria-expanded", (!expanded).toString());
-
+          
           content.classList.toggle("collapsed", expanded);
           content.setAttribute("aria-hidden", expanded.toString());
           content.querySelectorAll("a").forEach((link) => {

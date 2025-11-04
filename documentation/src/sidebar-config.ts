@@ -111,9 +111,9 @@ export const learning: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Mindset in Effector",
+          en: "Mindset in effector",
           uz: "Effectordan foydalanish",
-          ru: "Как мыслить в парадигме Effector",
+          ru: "Как мыслить в парадигме effector",
         },
         link: "/resources/mindset",
       },
@@ -154,6 +154,7 @@ export const learning: LSidebarGroup[] = [
 // remove later when mobile navigation will finished
 export const recipeItems: LSidebarGroup[] = [
   {
+    collapsed: true,
     text: { en: "Common", uz: "Umumiy" },
     items: [
       {
@@ -163,6 +164,7 @@ export const recipeItems: LSidebarGroup[] = [
     ],
   },
   {
+    collapsed: true,
     text: { en: "React" },
     items: [
       {
@@ -203,6 +205,7 @@ export const recipeItems: LSidebarGroup[] = [
     ],
   },
   {
+    collapsed: true,
     text: { en: "React Native" },
     items: [
       {
