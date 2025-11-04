@@ -1,227 +1,519 @@
 ---
-title: combine
+title: combine API
+description: combine API - combining multiple stores into a single derived store with automatic updates. Examples, description and operational features.
+lang: en
 redirectFrom:
   - /api/effector/combine
   - /docs/api/effector/combine
 ---
 
-import LiveDemo from "../../../../../components/LiveDemo.jsx";
+[storeApi]: /en/api/effector/Store
 
-This method allows retrieving the state from each passed store and combining them into a single value, storing it in a new derived store.
-The resulting store will update every time any of the passed stores is updated.
-
-If several stores update simultaneously, the method will process them all at once, meaning that `combine` batches updates, which leads to more efficient operation without unnecessary computations.
-
-:::warning{title="Caution"}
-`combine` returns not just a common store. Instead, it returns [DerivedStore](/en/api/effector/Store#readonly), it cannot be modified by the events or used as `target` in [sample](/en/api/effector/sample).
-:::
-
-# Common formulae (#common-formulae)
+# `combine` API (#methods)
 
 ```ts
-declare const $a: Store<A>;
-declare const $b: Store<B>;
-
-// State transformation
-
-const $c: Store<C> = combine({ a: $a, b: $b }, (values: { a: A; b: B }) => C);
-
-const $c: Store<C> = combine([$a, $b], (values: [A, B]) => C);
-
-const $c: Store<C> = combine($a, $b, (a: A, b: B) => C);
-
-// State combination
-
-const $c: Store<{ a: A; b: B }> = combine({ a: $a, b: $b });
-
-const $c: Store<[A, B]> = combine([$a, $b]);
+import { combine } from "effector";
 ```
 
-# State transformation (#state-transformation-methods)
+The `combine` method allows retrieving the state from each passed [store][storeApi] and combining them into a single value, storing it in a new [derived store](/en/explanation/glossary#derived-store). The resulting store will update every time any of the passed stores is updated.
 
-When function is passed to `combine` it will act as state transformation funciton which will be called at every `combine` update.
-Result will be saved in created store. This function [must be **pure**](/en/explanation/glossary#purity).
+## Algorithm (#algorithm)
 
-`combine` function called synchronously during combine call, if this function will throw an error, application will crash. This will be fixed in [24 release](https://github.com/effector/effector/issues/1163)
+1. `combine` reads the current state from all passed stores.
+2. If a transformation function `fn` is provided, it calls `fn` with the values from stores.
+3. The result is saved to a new [derived store](/en/explanation/glossary#derived-store).
+4. The [derived store](/en/explanation/glossary#derived-store) updates whenever any of the source stores changes.
 
-## `combine(...stores, fn)` (#methods-combine-stores-fn)
+## Peculiarities (#peculiarities)
 
-### Formulae (#methods-combine-stores-fn-formulae)
+- **Batching updates**: When multiple stores update simultaneously (during one tick), `combine` processes them all at once, resulting in a single update of the derived store.
+- **Mixing stores with primitives**: You can pass not only stores but also primitives and objects to `combine`. Effector will not track mutations of these primitives and objects - they are treated as static values.
+- **Pure transformation functions**: All transformation functions passed to `combine` [must be pure](/en/explanation/glossary#purity).
+- **Strict equality check**: If a transformation function returns the same value as previous (by `!==` comparison), the derived store won't update.
+- **Error handling**: If a transformation function throws an error during execution, the application will crash. This will be fixed in [effector v24](https://github.com/effector/effector/issues/1163).
+
+## Configuration forms (#combine-config-forms)
+
+| <div style="width:280px">Form</div>                         | Description                                                             |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [`combine($a, fn)`](#methods-combine-store-fn)              | Transforms a single store's value via `fn`.                             |
+| [`combine(...$stores, fn?)`](#methods-combine-stores-fn)    | Combines multiple stores/values, optionally transforming via `fn`.      |
+| [`combine({ a: $a, b: $b }, fn?)`](#methods-combine-object) | Combines stores into an object store, optionally transforming via `fn`. |
+| [`combine([$a, $b], fn?)`](#methods-combine-array)          | Combines stores into an array store, optionally transforming via `fn`.  |
+
+## Configurations (#config)
+
+### `combine($store, fn)` (#methods-combine-store-fn)
+
+Creates a new [derived store](/en/explanation/glossary#derived-store) by transforming a single store's value. This is the **preferred method** for creating derived stores from a single source. It is an alternative way to [`Store.map()`](/en/api/effector/Store#methods-map-fn).
+
+- **Formula**
 
 ```ts
-const $a: Store<A>
-const $b: StoreWritable<B>
-const $c: Store<C> | StoreWritable<C>
-
-$result: Store<D> = combine(
-  $a, $b, $c, ...,
-  (a: A, b: B, c: C, ...) => result
-)
+const $result = combine($source, (value) => {
+  // transformation logic
+  return result;
+});
 ```
 
-- After call `combine`, state of each store is extracted and passed to function arguments, `result` of a function call will be state of store `$result`
-- Any number of stores can be passed to `combine`, but the latest argument always should be function-reducer that returns new state
-- If function returned the same `result` as previous, store `$result` will not be triggered
-- If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
-- Function [must be **pure**](/en/explanation/glossary#purity)
-
-### Returns (#methods-combine-stores-fn-returns)
-
-[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
-
-### Examples (#methods-combine-stores-fn-examples)
-
-import demo_combineStoresFn from "../../../../demo/combine/stores-fn.live.js?raw";
-
-<LiveDemo client:only="preact" demoFile={demo_combineStoresFn} />
-
-## `combine({ A, B, C }, fn)` (#methods-combine-object-fn)
-
-### Formulae (#methods-combine-object-fn-formulae)
+- **Type**
 
 ```ts
-const $a: Store<A>;
-const $b: StoreWritable<B>;
-const $c: Store<C> | StoreWritable<C>;
+export function combine<A, R>(
+  a: Store<A>,
+  fn: (a: A) => R,
+  config?: {
+    skipVoid?: boolean;
+  },
+): Store<R>;
+```
 
-$result: Store<D> = combine(
-  { a: $a, b: $b, c: $c },
-  ({ a, b, c }: { a: A; b: B; c: C }): D => result,
+- **Features**
+
+  - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+  - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+  - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+  - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
+
+- **Examples**
+
+```ts
+import { createStore, combine } from "effector";
+
+const $name = createStore("John");
+const $greeting = combine($name, (name) => `Hello, ${name}!`);
+
+$greeting.watch((greeting) => console.log(greeting));
+// => Hello, John!
+```
+
+```ts
+import { createStore, combine } from "effector";
+
+const $price = createStore(100);
+const $priceWithTax = combine($price, (price) => price * 1.2);
+
+$priceWithTax.watch((price) => console.log("Price with tax:", price));
+// => Price with tax: 120
+```
+
+- **Return value**
+
+Returns a new [derived store](/en/explanation/glossary#derived-store).
+
+---
+
+### `combine(...$stores, fn?)` (#methods-combine-stores-fn)
+
+Creates a new [derived store](/en/explanation/glossary#derived-store) that combines any number of stores and values. Accepts any number of arguments - stores, primitives, or objects. The last argument can optionally be a transformation function.
+
+Without `fn`, wraps all values into an array. With `fn`, transforms values using the function where stores are passed as separate arguments.
+
+- **Formula**
+
+```ts
+// without transformation function
+const $result = combine($a);
+const $result = combine($a, $b, $c);
+
+// with transformation function
+const $result = combine($a, (value) => {
+  // transformation logic
+  return result;
+});
+
+const $result = combine($a, $b, $c, (a, b, c) => {
+  // transformation logic
+  return result;
+});
+```
+
+- **Type**
+
+```ts
+export function combine<T extends any[]>(
+  ...stores: T
+): Store<{ [K in keyof T]: T[K] extends Store<infer U> ? U : T[K] }>;
+
+export function combine<A, B, R>(
+  a: Store<A>,
+  b: Store<B>,
+  fn: (a: A, b: B) => R,
+  config?: { skipVoid?: boolean },
+): Store<R>;
+
+// also supports any number of stores with optional fn as last argument
+```
+
+- **Features**
+
+  - Accepts any number of stores, primitives, or objects as arguments.
+  - Can mix stores with values such as primitives or objects.
+  - Without `fn`, returns an array store with values in the same order as arguments.
+  - When `fn` is provided:
+    - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+    - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+    - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+    - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
+
+- **Examples**
+
+Without transformation function - creates an array store:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+const $age = createStore(30);
+
+const $userData = combine($firstName, $lastName, $age);
+
+$userData.watch((data) => console.log(data));
+// => ["John", "Doe", 30]
+```
+
+With transformation function - transforms combined values:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+
+const $fullName = combine($firstName, $lastName, (first, last) => {
+  return `${first} ${last}`;
+});
+
+$fullName.watch((name) => console.log(name));
+// => "John Doe"
+```
+
+Combining multiple stores with transformation:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $price = createStore(100);
+const $quantity = createStore(2);
+const $discount = createStore(0.1);
+
+const $total = combine($price, $quantity, $discount, (price, qty, disc) => {
+  const subtotal = price * qty;
+  return subtotal - subtotal * disc;
+});
+
+$total.watch((total) => console.log(`Total: $${total}`));
+// => Total: $180
+```
+
+Mixing stores with primitives:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $userName = createStore("Alice");
+const API_URL = "https://api.example.com";
+
+const $userEndpoint = combine($userName, API_URL, (name, url) => {
+  return `${url}/users/${name}`;
+});
+
+$userEndpoint.watch((endpoint) => console.log(endpoint));
+// => https://api.example.com/users/Alice
+```
+
+- **Return value**
+
+Returns a new [derived store](/en/explanation/glossary#derived-store).
+
+---
+
+### `combine({ a: $a, b: $b }, fn?)` (#methods-combine-object)
+
+Creates a new [derived store](/en/explanation/glossary#derived-store) that combines an object of stores. Without `fn`, it creates an object store with values from the passed stores. With `fn`, it transforms the combined values using the function.
+
+- **Formula**
+
+```ts
+// without transformation function
+const $result = combine({
+  a: $a,
+  b: $b,
+  // ... more stores
+});
+
+// with transformation function
+const $result = combine({ a: $a, b: $b, c: $c }, ({ a, b, c }) => {
+  // transformation logic
+  return result;
+});
+```
+
+- **Type**
+
+```ts
+export function combine<State, R>(
+  shape: State,
+  fn?: (shape: { [K in keyof State]: State[K] extends Store<infer U> ? U : State[K] }) => R,
+  config?: {
+    skipVoid?: boolean;
+  },
+): Store<R>;
+```
+
+- **Features**
+
+  - Updates are batched when multiple stores change simultaneously.
+  - Can mix stores with values such as primitives or objects.
+  - if `fn` is provided:
+    - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+    - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+    - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+    - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
+
+- **Examples**
+
+Without transformation function - creates an object store:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+const $age = createStore(30);
+
+const $user = combine({
+  firstName: $firstName,
+  lastName: $lastName,
+  age: $age,
+});
+
+$user.watch((user) => console.log(user));
+// => { firstName: "John", lastName: "Doe", age: 30 }
+```
+
+With transformation function - transforms object values:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+const $age = createStore(30);
+
+const $userSummary = combine(
+  { firstName: $firstName, lastName: $lastName, age: $age },
+  ({ firstName, lastName, age }) => {
+    return `${firstName} ${lastName}, ${age} years old`;
+  },
+);
+
+$userSummary.watch((summary) => console.log(summary));
+// => "John Doe, 30 years old"
+```
+
+Practical example - form validation:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $email = createStore("");
+const $password = createStore("");
+const $confirmPassword = createStore("");
+
+const $formValidation = combine(
+  { email: $email, password: $password, confirmPassword: $confirmPassword },
+  ({ email, password, confirmPassword }) => {
+    const errors = [];
+
+    if (!email.includes("@")) {
+      errors.push("Invalid email");
+    }
+
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters");
+    }
+
+    if (password !== confirmPassword) {
+      errors.push("Passwords don't match");
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  },
 );
 ```
 
-- Read state from stores `$a`, `$b`, `$c` and assign it to properties `a`, `b`, `c` accordingly, calls function with that object
-- The `result` of the function call saved in `$result` store
-- If function returned the same `result` as previous, store `$result` will not be triggered
-- If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
-- Function [must be **pure**](/en/explanation/glossary#purity)
-
-### Returns (#methods-combine-object-fn-returns)
-
-[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
-
-### Examples (#methods-combine-object-fn-examples)
-
-import demo_combineObjectFn from "../../../../demo/combine/object-fn.live.js?raw";
-
-<LiveDemo client:only="preact" demoFile={demo_combineObjectFn} />
-
-## `combine([ A, B, C ], fn)` (#methods-combine-array-fn)
-
-### Formulae (#methods-combine-array-fn-formulae)
+Mixing stores with primitives and objects:
 
 ```ts
-const $a: Store<A>;
-const $b: StoreWritable<B>;
-const $c: Store<C> | StoreWritable<C>;
+import { createStore, combine } from "effector";
 
-$result: Store<D> = combine([$a, $b, $c], ([A, B, C]): D => result);
+const $userId = createStore(123);
+const $isActive = createStore(true);
+
+const $userData = combine({
+  id: $userId,
+  isActive: $isActive,
+  role: "user",
+  permissions: ["read", "write"],
+});
+
+$userData.watch((data) => console.log(data));
+// => { id: 123, isActive: true, role: "user", permissions: ["read", "write"] }
 ```
 
-- Read state from stores `$a`, `$b`, `$c` and assign it to array with the same order as passed stores, call function with that array
-- The `result` of the function call saved in `$result` store
-- If function returned the same `result` as previous, store `$result` will not be triggered
-- If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
-- Function [must be **pure**](/en/explanation/glossary#purity)
+- **Return value**
 
-### Returns (#methods-combine-array-fn-returns)
+Returns a new [derived store](/en/explanation/glossary#derived-store).
 
-[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
+---
 
-### Examples (#methods-combine-array-fn-examples)
+### `combine([$a, $b], fn?)` (#methods-combine-array)
 
-import demo_combineArrayFn from "../../../../demo/combine/array-fn.live.js?raw";
+Creates a new [derived store](/en/explanation/glossary#derived-store) that combines an array of stores. Without `fn`, it creates an array store with values from the passed stores in the same order. With `fn`, it transforms the combined values using the function.
 
-<LiveDemo client:only="preact" demoFile={demo_combineArrayFn} />
-
-# State combination
-
-When there is no function in `combine` it will act as state combinator, creating a store with array or object with fields from given stores
-
-## `combine({ A, B, C })` (#methods-combine-object)
-
-:::info
-Formerly known as `createStoreObject`
-:::
-
-### Formulae (#methods-combine-object-formulae)
+- **Formula**
 
 ```ts
-const $a: Store<A>;
-const $b: StoreWritable<B>;
-const $c: Store<C> | StoreWritable<C>;
+// without transformation function
+const $result = combine([$a, $b, $c]);
 
-$result: Store<{ a: A; b: B; c: C }> = combine({ a: $a, b: $b, c: $c });
+// with transformation function
+const $result = combine([$a, $b, $c], ([a, b, c]) => {
+  // transformation logic
+  return result;
+});
 ```
 
-- Read state from stores `$a`, `$b`, `$c` and assign it to properties `a`, `b`, `c` accordingly, that object will be saved to `$result` store
-- Store `$result` contain object `{a, b, c}` and will be updated on each update of passed stores
-- If several stores updated at the same time (during one tick) there will be single update of `$result` store
-
-### Returns (#methods-combine-object-returns)
-
-[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
-
-### Examples (#methods-combine-object-examples)
-
-import demo_combineObject from "../../../../demo/combine/object.live.js?raw";
-
-<LiveDemo client:only="preact" demoFile={demo_combineObject} />
-
-## `combine([ A, B, C ])` (#methods-combine-array)
-
-### Formulae (#methods-combine-array-formulae)
+- **Type**
 
 ```ts
-const $a: Store<A>;
-const $b: StoreWritable<B>;
-const $c: Store<C> | StoreWritable<C>;
+export function combine<State extends any[]>(
+  tuple: State,
+): Store<{ [K in keyof State]: State[K] extends Store<infer U> ? U : State[K] }>;
 
-$result: Store<[A, B, C]> = combine([$a, $b, $c]);
+export function combine<State extends any[], R>(
+  tuple: State,
+  fn: (tuple: { [K in keyof State]: State[K] extends Store<infer U> ? U : State[K] }) => R,
+  config?: { skipVoid?: boolean },
+): Store<R>;
 ```
 
-- Read state from stores `$a`, `$b`, `$c` and assign it to array with the same order as passed stores, that array will be saved to `$result` store
-- Store `$result` will be updated on each update of passed stores
-- If several stores updated at the same time (during one tick) there will be single update of `$result` store
+- **Features**
 
-### Returns (#methods-combine-array-returns)
+  - Array order matches the order of passed stores.
+  - Updates are batched when multiple stores change simultaneously.
+  - Can mix stores with non-store values such as primitives or objects.
+  - When `fn` is provided:
+    - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+    - Function receives an array where order matches the input array order.
+    - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+    - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+    - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
 
-[_DerivedStore_](/en/api/effector/Store#readonly): New derived store
+- **Examples**
 
-### Examples (#methods-combine-array-examples)
-
-import demo_combineArray from "../../../../demo/combine/array.live.js?raw";
-
-<LiveDemo client:only="preact" demoFile={demo_combineArray} />
-
-# `combine` with primitives and objects (#methods-combine-primitives-objects)
-
-Primitives and objects can be used in `combine`, and `combine` will not be triggered. Effector will not track mutations of objects and primitives.
-
-### Examples (#methods-combine-primitives-objects-examples)
-
-import demo_combineNonStoresFn from "../../../../demo/combine/non-stores-fn.live.js?raw";
-
-<LiveDemo client:only="preact" demoFile={demo_combineNonStoresFn} />
-
-# Parameters (#parameters)
-
-All overloads of `combine` with `fn` provided are also supporting optional configuration object as the last parameter.
-
-## `.skipVoid` (#parameters-skipVoid)
-
-Flag to control how specifically store should handle `undefined` value _(since `effector 23.0.0`)_. If set to `false` - store will use `undefined` as a value. If set to `true` (deprecated), store will read `undefined` as a "skip update" command and will do nothing
-
-### Formulae (#parameters-skipVoid-formulae)
+Without transformation function - creates an array store:
 
 ```ts
-combine($a, $b, callback, { skipVoid: true });
+import { createStore, combine } from "effector";
+
+const $x = createStore(10);
+const $y = createStore(20);
+const $z = createStore(30);
+
+const $coordinates = combine([$x, $y, $z]);
+
+$coordinates.watch((coords) => console.log(coords));
+// => [10, 20, 30]
 ```
 
-- Type: `boolean`
+With transformation function - transforms array values:
 
-### Examples (#parameters-skipVoid-examples)
+```ts
+import { createStore, combine } from "effector";
 
-```js
-const $withFn = combine($a, $b, (a, b) => a || b, { skipVoid: false });
+const $x = createStore(3);
+const $y = createStore(4);
+
+const $distance = combine([$x, $y], ([x, y]) => {
+  return Math.sqrt(x * x + y * y);
+});
+
+$distance.watch((dist) => console.log(`Distance: ${dist}`));
+// => Distance: 5
 ```
+
+Practical example - calculating totals from array:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $itemPrice1 = createStore(10);
+const $itemPrice2 = createStore(25);
+const $itemPrice3 = createStore(15);
+
+const $cartTotal = combine([$itemPrice1, $itemPrice2, $itemPrice3], (prices) => {
+  return prices.reduce((sum, price) => sum + price, 0);
+});
+
+$cartTotal.watch((total) => console.log(`Total: $${total}`));
+// => Total: $50
+```
+
+Array with different types:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $userName = createStore("Alice");
+const $score = createStore(100);
+const $isActive = createStore(true);
+
+const $playerInfo = combine([$userName, $score, $isActive], ([name, score, active]) => {
+  return `Player ${name}: ${score} points (${active ? "online" : "offline"})`;
+});
+
+$playerInfo.watch((info) => console.log(info));
+// => Player Alice: 100 points (online)
+```
+
+Mixing stores with primitives in array:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $currentPage = createStore(1);
+const MAX_PAGES = 10;
+
+const $pagination = combine([$currentPage, MAX_PAGES], ([current, max]) => {
+  return {
+    current,
+    max,
+    hasNext: current < max,
+    hasPrev: current > 1,
+  };
+});
+
+$pagination.watch((pagination) => console.log(pagination));
+// => { current: 1, max: 10, hasNext: true, hasPrev: false }
+```
+
+- **Return value**
+
+Returns a new [derived store](/en/explanation/glossary#derived-store).
+
+## Related API and Articles (#related-api-and-docs-to-combine)
+
+- **API**
+  - [`Store API`](/en/api/effector/Store) - Description of stores, their methods and properties
+  - [`createStore`](/en/api/effector/createStore) - Creating a new store
+  - [`sample`](/en/api/effector/sample) - Key operator for building connections between units
+  - [`createEvent`](/en/api/effector/createEvent) - Creating an event
+- **Articles**
+  - [Managing states in effector and how to use derived stores](/en/essentials/manage-states)
+  - [Typing `combine` and other methods](/en/essentials/typescript)

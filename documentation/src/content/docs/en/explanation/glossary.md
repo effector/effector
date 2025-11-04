@@ -23,6 +23,18 @@ There can be multiple stores.
 
 [Store](/en/api/effector/Store) in api documentation
 
+## Derived store (#derived-store)
+
+_Derived store_ is a read-only store that is created from other stores and automatically updates when source stores change. Derived stores are created using methods like [Store.map](/en/api/effector/Store#methods-map-fn), [combine](/en/api/effector/combine), or as properties of effects (e.g., [Effect.pending](/en/api/effector/Effect#properties-pending)).
+
+Key characteristics:
+- Cannot be modified directly by events
+- Cannot be used as `target` in [sample](/en/api/effector/sample)
+- Always depends on source stores
+- Updates automatically when source stores change
+
+[Store](/en/api/effector/Store) in api documentation
+
 ## Effect (#effect)
 
 _Effect_ is a container for (possibly async) side effects.

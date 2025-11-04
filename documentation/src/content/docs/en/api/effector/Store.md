@@ -17,7 +17,7 @@ import { type Store, type StoreWritable, createStore } from "effector";
 const $store = createStore();
 ```
 
-A _Store_ is an object that holds the state value. The store updates when the new value is not strictly equal (`!==`) to the current one and is not `undefined` (unless the store is configured with `skipVoid: false`). A store is a [Unit](/ru/explanation/glossary#common-unit). Some stores can be [derived](#store-derived).
+A _Store_ is an object that holds the state value. The store updates when the new value is not strictly equal (`!==`) to the current one and is not `undefined` (unless the store is configured with `skipVoid: false`). A store is a [Unit](/en/explanation/glossary#common-unit). Some stores can be [derived](/en/explanation/glossary#derived-store).
 
 :::tip{title="What is a store anyway?"}
 If you're not yet familiar with how to work with a store, feel free to start [here](/en/essentials/manage-states).
@@ -29,7 +29,7 @@ Available store methods and properties:
 
 | Method/Property                                       | Description                                                  |
 | ----------------------------------------------------- | ------------------------------------------------------------ |
-| [`map(fn)`](#methods-map-fn)                          | Creates a new derived store                                  |
+| [`map(fn)`](#methods-map-fn)                          | Creates a new [derived store](/en/explanation/glossary#derived-store)                                  |
 | [`on(trigger, reducer)`](#methods-on-trigger-reducer) | Updates state via a `reducer` when the `trigger` is fired    |
 | [`watch(watcher)`](#methods-watch-watcher)            | Calls the `watcher` function every time the store is updated |
 | [`reset(...triggers)`](#methods-reset-triggers)       | Resets the store to its initial state                        |
@@ -73,7 +73,11 @@ A store in effector should be as small as possible, responsible for a specific p
 
 ### `.map(fn)` (#methods-map-fn)
 
-Accepts a function `fn` and returns a derived store that automatically updates when the original store changes.
+Accepts a function `fn` and returns a [derived store](/en/explanation/glossary#derived-store) that automatically updates when the original store changes.
+
+:::tip{title="Recommendation"}
+For creating derived stores, prefer using [`combine($store, fn)`](/en/api/effector/combine#methods-combine-store-fn) over `.map()` for better composability and consistency with other combine forms.
+:::
 
 - **Formulae**
 
@@ -126,11 +130,11 @@ const $titleLength = $title.map((title) => title.length, { skipVoid: false });
 - **Detailed Description**
 
 The `map` method runs the function `fn` with the current store state as input every time the original store updates.
-The return value becomes the new state of the derived store.
+The return value becomes the new state of the [derived store](/en/explanation/glossary#derived-store).
 
 - **Returns**
 
-Returns a new [derived store](/en/api/effector/Store#readonly).
+Returns a new [derived store](/en/explanation/glossary#derived-store).
 
 ### `.on(trigger, reducer)` (#methods-on-trigger-reducer)
 
@@ -410,7 +414,7 @@ The current state of the store.
 ## Related APIs (#related-api)
 
 - [`createStore`](/en/api/effector/createStore) – Creates a new store
-- [`combine`](/en/api/effector/combine) – Combines multiple stores into a derived store
+- [`combine`](/en/api/effector/combine) – Combines multiple stores into a [derived store](/en/explanation/glossary#derived-store)
 - [`sample`](/en/api/effector/sample) – A core operator for connecting units
 - [`createEvent`](/en/api/effector/createEvent) – Creates an event
 - [`createEffect`](/en/api/effector/createEffect) – Creates an effect
