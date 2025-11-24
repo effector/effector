@@ -1,85 +1,117 @@
 ---
-title: How to Think in the Effector
-description: Understanding how to properly structure connections between units in Effector to keep logic clean, state predictable, and code easily extendable.
+title: How to think in the effector paradigm
+description: We explain how to write code more easily and build a scalable application with effector
 ---
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
 
-# How to Think in the Effector Paradigm (#how-to-think)
+# How to think in the effector paradigm (#how-to-think)
 
-Effector is not just a state manager — it's also a powerful tool for building application logic. Here, we'll go over best practices for writing code and how to approach thinking when using Effector.
+In fact, effector is not only about managing application state, but also about scalable building of your application logic. Effector does not limit you in how you write code, however, if you understand the following principles, it will be much easier to write code and think when you use effector:
 
-## How to approach development with Effector in the right way (#approach)
+- Events are the description of your application, the foundation of everything.
+- Business logic and UI are different things; you should strive to separate the responsibility between data and its display.
 
-To use Effector effectively, it's important to grasp a few key principles.
+## Events — the foundation of everything (#events-source-of-truth)
 
-### Events as the Source of Truth (#events-source-of-truth)
+Every user interaction with your application is an [event](/en/api/effector/Event). An event doesn't decide what should happen, it simply records the fact that something happened, for example: the user submitted a form - `formSubmitted`, the user clicked the refresh button - `refreshButtonClicked`, the user changed the search filter - `searchFilterChanged`, and so on.
+At the same time, events are not limited to user actions, they can also describe the logic of your model, for example: an [explicit start of your model's operation (micro-frontend or feature) - `start`](/en/resources/explicit-start/), an error occurred - `errorOccurred`, and so on.
 
-An application is a stream of changes. Every change is an event. It's crucial to understand that an event **does not decide what to do** — it simply records that something happened. This is a key point that helps avoid tight dependencies.
+Don't hesitate to create as many [events](/en/api/effector/Event) as needed to fully describe the application's actions, this makes it easier to see and track how your application works.
 
-- **An event is just a fact**: "something happened."
-- **Events contain no logic** — they only declare an occurrence but do not decide how to respond.
-- **One fact can lead to multiple consequences** — a single event can trigger several independent processes.
+When designing new functionality, it's easiest to start with events, since they are immediately visible in the interface.
 
-Example:
-
-```ts
-// Don't think about implementation yet — just declare the fact
-const searchInputChanged = createEvent();
-const buttonClicked = createEvent();
-```
-
-:::tip{title="Use Meaningful Names"}
-Give events meaningful names. For example, if you need to load data upon a certain action, the event should be tied to the action, not its implementation:
+:::tip{title="Use meaningful names"}
+Give [events](/en/api/effector/Event) meaningful names. For example, if you need to load data upon some action, the [event](/en/api/effector/Event) should be related to the action, not the implementation:
 
 ```ts
-❌ const fetchData = createEvent();
-✅ const appStarted = createEvent();
+❌ const fetchData = createEvent()
+✅ const appStarted = createEvent()
 ```
 
 :::
 
-### Business Logic and UI Are Separate (#business-logic-not-ui)
+## Separate business logic and UI (#business-logic-not-ui)
 
-A good architectural approach is to keep business logic separate from the user interface. Effector makes this easy, keeping the UI simple and the logic clean and reusable.
+Effector allows you to separate the display (UI) and the logic of your application (business logic). All the logic of your application's operation, as a rule, should be described separately from your UI, in a separate module, for example `model.ts`, and expose outward for the UI only what is needed for display or user interaction.
 
-- The UI only displays data.
-- Effector manages state and logic.
+For example, when the `formSubmitted` [event](/en/api/effector/Event) is triggered, you can call an [effect](/en/api/effector/Effect) to send data to the server, another [effect](/en/api/effector/Effect) to send analytics, and also [display a notification to the user when event triggered](/en/guides/events-in-ui-frameworks):
 
-## How Does This Look in a Real Application? (#real-world-examples)
+```ts
+const formSubmitted = createEvent();
 
-Let's take GitHub as an example, with buttons like "Watch," "Fork," and "Star." Every user action is an event:
+const sendFormDataFx = createEffect(() => {});
+const sendAnalyticsFx = createEffect(() => {});
+const showNotificationFx = createEffect(() => {});
 
-![GitHub repository action buttons](/images/github-repo-actions.png)
+sample({
+  clock: formSubmitted,
+  target: [sendFormDataFx, sendAnalyticsFx, showNotificationFx],
+});
+```
 
-- The user toggled a star - `repoStarToggled`
-- The search input in the repository changed - `repoFileSearchChanged`
-- The repository was forked - `repoForked`
+At some point, your logic might change, and you decide to send analytics only after a successful form submission, and show the notification not only on form submission but also on error:
 
-The logic is built around events and their reactions. The UI simply announces an action, while its handling is part of the business logic.
+```ts
+const formSubmitted = createEvent();
 
-A simplified example of the logic behind the star button:
+const sendFormDataFx = createEffect(() => {});
+const sendAnalyticsFx = createEffect(() => {});
+const showNotificationFx = createEffect(() => {});
 
-<Tabs>  
-<TabItem label="Business Logic">
+sample({
+  clock: formSubmitted,
+  target: [sendFormDataFx, showNotificationFx],
+});
+
+sample({
+  clock: sendFormDataFx.doneData,
+  target: sendAnalyticsFx,
+});
+
+sample({
+  clock: sendFormDataFx.failData,
+  target: showNotificationFx,
+});
+```
+
+Our application logic has changed, but the UI has not. Our UI doesn't need to know which [effects](/en/api/effector/Effect) we are sending or what is changing, all our UI knows is that the refresh button was clicked and it needs to trigger the `refreshButtonClicked` [event](/en/api/effector/Event). Otherwise, if we mix logic and UI, we will have to change the code in the UI as well when the logic changes.
+
+## How does this look in a real application? (#real-world-examples)
+
+Let's take GitHub and its repository functionality as an example. Every user action is an [event](/en/api/effector/Event):
+
+![repository action buttons in github](/images/github-repo-actions.png)
+
+- User starred/unstarred the repository - `repoStarToggled`
+- User changed the repository branch - `repoBranchChanged`
+- Repository file search string changed - `repoFileSearchChanged`
+- Repository was forked - `repoForked`
+
+It's much easier to build the entire application logic around [events](/en/api/effector/Event) and the reactions to them. The UI simply reports an action, and its processing is part of the business logic.
+
+A simplified example of the logic with the star button:
+
+<Tabs>
+<TabItem label="Business logic">
 
 ```ts
 // repo.model.ts
 
-// Event – fact of an action
+// event – the fact of an action
 const repoStarToggled = createEvent();
 
-// Effects as additional reactions to events
-// (assuming effects return updated values)
+// effects as an additional reaction to events
+// (let's assume the effects return the updated value)
 const starRepoFx = createEffect(() => {});
 const unstarRepoFx = createEffect(() => {});
 
-// Application state
+// application state
 const $isRepoStarred = createStore(false);
 const $repoStarsCount = createStore(0);
 
-// Toggle star logic
+// star toggle logic
 sample({
   clock: repoStarToggled,
   source: $isRepoStarred,
@@ -87,7 +119,7 @@ sample({
   target: $isRepoStarred,
 });
 
-// Send request to server when star is toggled
+// sending a request to the server when the star is toggled
 sample({
   clock: $isRepoStarred,
   filter: (isRepoStarred) => isRepoStarred,
@@ -100,14 +132,14 @@ sample({
   target: unstarRepoFx,
 });
 
-// Update the star count
+// update the counter
 sample({
   clock: [starRepoFx.doneData, unstarRepoFx.doneData],
   target: $repoStarsCount,
 });
 ```
 
-</TabItem>  
+</TabItem>
 <TabItem label="UI">
 
 ```tsx
@@ -129,7 +161,17 @@ const RepoStarButton = () => {
 };
 ```
 
-</TabItem>  
+</TabItem>
 </Tabs>
 
-At the same time, the UI doesn't need to know what's happening internally — it's only responsible for triggering events and displaying data.
+## Related API and articles (#related-api-and-docs)
+
+- **API**
+  - [`Event`](/en/api/effector/Event) - Description of an event and its methods
+  - [`Store`](/en/api/effector/Store) - Description of a store and its methods
+  - [`Effect`](/en/api/effector/Effect) - Description of an effect and its methods
+- **Articles**
+  - [Why you need an explicit start event for your application](/en/resources/explicit-start/)
+  - [How to manage state](/en/essentials/manage-states)
+  - [Working with events](/en/essentials/events)
+  - [How to react to events in the UI](/en/guides/events-in-ui-frameworks)

@@ -116,7 +116,7 @@ How to fix: Instead of calling events in pure functions, use declarative operato
 
 ## Gotchas (#gotchas)
 
-### `sample.fn` does not narrow the type passed from `sample.filter`
+### `sample.fn` does not narrow the type passed from `sample.filter` (#sample-types-error)
 
 A common type-related issue with `sample` occurs when a check is performed in `filter`, but `fn` does not receive the correctly narrowed type. To resolve this, you can add [type predicates](/en/essentials/typescript#typing-sample-filter-and-fn) or use the [`effector-action`](https://github.com/AlexeyDuybo/effector-action) library, which helps simplify conditional types:
 
