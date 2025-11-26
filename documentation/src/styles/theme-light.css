@@ -1,0 +1,129 @@
+:root {
+  /* ========================================
+     ACCENT COLORS
+     ======================================== */
+
+  --theme-accent-opacity: 0.15;
+  --theme-accent-color: var(--color-primary-500);
+  --theme-accent: hsl(var(--theme-accent-color));
+  --theme-text-accent: hsl(var(--color-primary-600));
+
+  /* ========================================
+     BACKGROUNDS
+     ======================================== */
+
+  --theme-bg: hsl(var(--color-gray-50));
+  --theme-bg-sidebar-tabs-bg: #fff;
+  --theme-secondary-bg: hsl(var(--color-gray-200), 0.8);
+  --theme-bg-code: #fff;
+  --theme-bg-hover: hsl(var(--color-gray-200));
+  --theme-bg-offset: hsl(var(--color-gray-100));
+  --theme-bg-accent: hsla(var(--color-primary-500), var(--theme-accent-opacity));
+  --theme-backdrop-color: rgba(255, 255, 255, 0.3);
+
+  /* ========================================
+     TEXT COLORS
+     ======================================== */
+
+  --theme-text: hsl(var(--color-gray-900));
+  --theme-text-light: hsl(var(--color-gray-800));
+  --theme-text-lighter: hsl(var(--color-gray-500));
+  --theme-text-dark: hsl(var(--color-gray-950));
+
+  /* ========================================
+     DIVIDERS AND BORDERS
+     ======================================== */
+
+  --theme-divider: hsl(var(--color-gray-200));
+  --theme-divider-light: hsla(var(--color-gray-200), 0.6);
+  --theme-divider-dark: hsla(var(--color-gray-300), 0.8);
+
+  /* ========================================
+     CARDS
+     ======================================== */
+
+  --theme-card: hsla(0, 0%, 100%, 1);
+  --theme-card-hover: hsl(var(--color-gray-50));
+  --theme-card-divider: hsla(var(--color-gray-200), 0.8);
+
+  /* ========================================
+     CODE
+     ======================================== */
+
+  --theme-code-inline-bg: hsl(var(--color-gray-200), 0.8);
+  --theme-code-inline-text: hsl(var(--color-gray-800));
+  --theme-code-bg: hsl(var(--color-gray-900));
+  --theme-code-text: hsl(var(--color-gray-100));
+
+  --theme-code-ins-bg: hsla(var(--color-green-400), 0.2);
+  --theme-code-ins-border: hsl(var(--color-green-400));
+
+  --theme-code-del-bg: hsla(var(--color-red-50), 0.9);
+  --theme-code-del-border: hsl(var(--color-red-300));
+
+  --theme-code-mark-bg: hsla(var(--color-blue-100), 0.7);
+  --theme-code-mark-border: hsl(var(--color-blue-300));
+  /* ========================================
+     NAVIGATION
+     ======================================== */
+  --theme-navbar-bg: rgba(255, 255, 255, 0.9);
+  --theme-navbar-height: 4rem;
+
+  /* ========================================
+     SELECTION
+     ======================================== */
+
+  --theme-selection-color: hsl(var(--color-blue-600));
+  --theme-selection-bg: hsla(var(--color-blue-200), 0.5);
+
+  /* ========================================
+     SIDEBAR
+     ======================================== */
+
+  --theme-left-sidebar-item-text: hsl(var(--color-gray-700));
+
+  /* ========================================
+     ADMONITIONS - TIP
+     ======================================== */
+
+  --theme-admonition-tip-bg: hsla(var(--color-green-100), 0.6);
+  --theme-admonition-tip-border: hsl(var(--color-green-500));
+  --theme-admonition-tip-text: hsl(var(--color-green-900));
+  --theme-admonition-tip-code-bg: hsla(var(--color-green-200), 0.8);
+
+  /* ========================================
+     ADMONITIONS - INFO
+     ======================================== */
+
+  --theme-admonition-info-bg: hsla(var(--color-blue-100), 0.6);
+  --theme-admonition-info-border: hsl(var(--color-blue-500));
+  --theme-admonition-info-text: hsl(var(--color-blue-900));
+  --theme-admonition-info-code-bg: hsla(var(--color-blue-200), 0.5);
+
+  /* ========================================
+     ADMONITIONS - WARNING
+     ======================================== */
+
+  --theme-admonition-warning-bg: hsla(var(--color-yellow-100), 0.6);
+  --theme-admonition-warning-border: hsl(var(--color-yellow-500));
+  --theme-admonition-warning-text: hsl(var(--color-yellow-900));
+  --theme-admonition-warning-code-bg: hsla(var(--color-yellow-200), 0.8);
+
+  /* ========================================
+     ADMONITIONS - DEPRECATED
+     ======================================== */
+
+  --theme-admonition-deprecated-bg: hsla(var(--color-red-100), 0.6);
+  --theme-admonition-deprecated-border: hsl(var(--color-red-500));
+  --theme-admonition-deprecated-text: hsl(var(--color-red-900));
+  --theme-admonition-deprecated-code-bg: hsla(var(--color-red-200), 0.8);
+
+  /* ========================================
+     STATUS BORDERS
+     ======================================== */
+
+  --theme-border-good: hsla(var(--color-green-500), 0.7);
+  --theme-border-bad: hsla(var(--color-red-500), 0.7);
+
+  color-scheme: light;
+}

@@ -51,7 +51,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
                     class="tab-panel-item"
                     aria-selected={id === activePanelIndex ? "true" : "false"}
                   >
-                    {Icon && <Icon size={18} />}
+                    {Icon && <Icon size={16} />}
                     <span>{text[lang as keyof typeof text] || text.en}</span>
                   </button>
                 </li>
@@ -155,15 +155,16 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     cursor: pointer;
   }
 
-  .frameworks-panel li:hover {
-    background-color: var(--theme-bg);
-  }
-
   .navigation-panel {
     width: 100%;
     border-radius: 16px;
     padding: 0.25rem;
-    background-color: var(--theme-bg-hover);
+    background-color: var(--theme-bg-sidebar-tabs-bg);
+    border: 1px solid var(--theme-bg-hover);
+  }
+
+  .navigation-panel button {
+    font-size: var(--text-sidebar-content);
   }
 
   .tabs {
@@ -186,11 +187,11 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     border-radius: 12px;
   }
   .navigation-panel li button:hover {
-    background-color: var(--theme-navbar-bg);
+    background-color: var(--theme-bg-hover);
   }
 
   .navigation-panel li button[aria-selected="true"] {
-    background-color: var(--theme-bg);
+    background-color: var(--theme-bg-hover);
     color: var(--theme-text);
   }
 
@@ -205,6 +206,10 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     padding-top: 32px;
     scrollbar-gutter: stable;
     width: 100%;
+  }
+
+  nav {
+    font-size: var(--text-sidebar-content) !important; 
   }
 
   nav > div {
@@ -249,8 +254,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     align-items: center;
     width: 100%;
     font-weight: bold;
-    font-size: 1rem;
-    /*text-transform: uppercase;*/
+    font-size: var(--text-sidebar-content);
     background: none;
     border: none;
     cursor: pointer;
@@ -299,7 +303,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   .nav-link a[data-fallback] span:after {
     content: "EN";
     font-weight: bold;
-    font-size: 0.75rem;
+    font-size: var(--text-sidebar-translation-slug);
     vertical-align: super;
     margin-left: 5px;
   }

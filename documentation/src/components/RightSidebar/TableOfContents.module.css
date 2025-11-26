@@ -33,6 +33,7 @@
 
 .link a {
   @apply flex overflow-clip whitespace-nowrap;
+  color: var(--theme-text-light);
 }
 
 .link a:hover {
@@ -49,8 +50,6 @@
 }
 
 .level1 a {
-  @apply font-bold;
-  color: var(--theme-text);
 }
 
 .level2 {
@@ -63,7 +62,6 @@
 
 .level2 a {
   @apply font-medium;
-  color: var(--theme-text);
 }
 
 .level3 {
@@ -72,7 +70,6 @@
 
 .level3 a {
   @apply font-normal;
-  color: var(--theme-text-light);
 }
 
 .expandDetails {

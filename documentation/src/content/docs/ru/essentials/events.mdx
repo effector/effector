@@ -1,0 +1,212 @@
+---
+title: События
+description: Рассказываем о сущности событий, как их использовать и работать с ними.
+lang: ru
+---
+
+- упомянуть про статику обязательно и добавить ссылку на эту страницу
+- вызов события осуществляется либо декларативно либо императивно (sample, onClick и тд тп)
+
+import SideBySide from "@components/SideBySide/SideBySide.astro";
+
+# События (#events)
+
+Хотя в effector есть три основные концепции - [события](/ru/api/effector/Event), [сторы](/ru/api/effector/Store) и [эффекты](/ru/api/effector/Effect), но именно [события](/ru/api/effector/Event) можно назвать основой для работы вашего приложения. Весь frontend построен поверх событийной модели, вы наверняка уже сталкивались с событиями при работе в JavaScript, например `addEventListener` или в React с `onClick` и другими обработчиками – это все события, на которые мы можем подписаться, так и в effector мы можем создать свое событие с помощью `createEvent` и подписаться на его вызов:
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts data-height="full"
+let counter = 10;
+
+document.addEventListener("click", () => {
+  counter = 13;
+});
+```
+
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts data-height="full"
+import { createEvent, createStore } from "effector";
+
+const $counter = createStore(10);
+
+const click = createEvent();
+
+sample({
+  clock: click,
+  fn: () => 13,
+  target: $counter,
+});
+```
+
+</Fragment>
+
+</SideBySide>
+
+:::info{title="TODO"}
+События effector не являются заменой событиям DOM, данный пример служит демонстрацией похожей концепции работы.
+:::
+
+## Зачем нужны события (#why-we-need-events)
+
+Весь код на effector строится поверх событий, например если вы передадите стор в параметр `clock` у метода `sample`, то такой `sample` будет вызываться при срабатывании события `updates` у переданного стора:
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts "clock: $someStore"
+// этот код эквивалентен
+import { createStore, sample } from "effector";
+
+const $someStore = createStore();
+sample({
+  clock: $someStore,
+  // ...
+});
+```
+
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts "clock: $someStore.updates"
+// этот код эквивалентен
+import { createStore, sample } from "effector";
+
+const $someStore = createStore();
+sample({
+  clock: $someStore.updates,
+  // ...
+});
+```
+
+</Fragment>
+
+</SideBySide>
+
+Событие само по себе просто означает факт какого-то действия, клик по кнопке, обновление данных, показ уведомления, и прочее. Все что они делают это передают информацию и сообщают их подписчикам, что его вызвали.
+
+Для более простого понимания – событиями является все, с чем пользователь может взаимодействовать, а также внутренняя работы вашей логики. То есть помимо UI ориентированных событий по типу `buttonClicked`, `inputChanged` и прочее, у вас также могут быть и события завязанные на обновлении данных: `valueUpdated` или `errorOccured`.
+
+Например у [эффектов](/ru/api/effector/Effect) имеются встроенные событие [`done`](/ru/api/effector/Effect#properties-done), которое срабатывает при успешном завершении работы эффекта, а также событие [`fail`](/ru/api/effector/Effect#properties-fail), если во время выполнения выбросилась ошибка. А [сторы](/ru/api/effector/Store) имеют событие [`updates`](/ru/api/effector/Store#properties-updates), которое вызывается при его обновлении.
+
+:::tip{title="Важность событий"}
+На странице [Как мыслить в парадигме effector](/ru/resources/mindset) мы подробно рассказываем о том, почему события важны, чем они еще полезны и какую пользу могут принести.
+:::
+
+### Как использовать события (#how-to-use-events)
+
+Создать события мы можем с помощью метода [`createEvent`](/ru/api/effector/createEvent), а далее подписываться на вызов этого события с помощью метода [`sample`](/ru/api/effector/sample):
+
+```ts
+import { sample, createEvent } from "effector";
+
+const event = createEvent();
+
+sample({
+  clock: event,
+  // ...
+});
+```
+
+:::tip{title="TODO"}
+Если вы не знакомы с методом [`sample`](/ru/api/effector/sample), то в примере с событиями он создает подписку на переданное событие в [`clock`](/ru/api/effector/sample#clock-argument), а когда событие вызывается запускает цепочку выполнения. Более подробно вы познакомиться с логикой его работы на странице [Композиция юнитов](/ru/essentials/unit-composition).
+:::
+
+С помощью событий мы можем как [обновлять сторы](/ru/essentials/manage-states#store-updates), так и вызывать [эффекты](/ru/api/effector/Effect) или другие события:
+
+```ts
+import { sample, createStore, createEvent } from "effector";
+
+const $clicksCount = createStore(0);
+
+const userClicked = createEvent<void>();
+
+// обновляем стор счетчик
+sample({
+  clock: userClicked,
+  source: $clicksCount,
+  fn: (clicksCount) => count + 1,
+  target: $clicksCount,
+});
+
+userClicked();
+```
+
+```ts
+import { createEvent, createEffect, sample } from "effector";
+
+const startFetch = createEvent<string>();
+const fetchFx = createEffect((url: string) => {
+  // ...
+});
+
+// вызываем эффект
+sample({
+  clock: startFetch,
+  target: fetchFx,
+});
+
+startFetch("/fake-api/users");
+```
+
+## Вызов события (#event-calling)
+
+Вызвать событие можно двумя путями: императивно и декларативно.
+
+Императивным способ вызова это наиболее привычный, когда мы вызываем событие как функцию `event()`, такой способ, скорее всего, вы будете использовать при вызове события в UI, когда передаете в `onClick` обработчик:
+
+```tsx
+import { createEvent } from "effector";
+
+const clickHappened = createEvent<void>();
+
+// view.tsx
+import { useUnit } from "effector-react";
+
+const Component = () => {
+  const click = useUnit(clickHappened);
+
+  return (
+    <div>
+      <button onClick={() => click()}>click</button>
+    </div>
+  );
+};
+```
+
+Декларативный вызов это, например, когда мы подписываемся событием на другое событие с помощью метода `sample` и аргумента `target`. Событие переданное в `target` у метода `sample` вызовется при срабатывании `clock`:
+
+```ts
+import { createEvent, sample } from "effector";
+
+const firstTriggered = createEvent<void>();
+const secondTriggered = createEvent<void>();
+
+sample({
+  clock: firstTriggered,
+  target: secondTriggered,
+});
+```
+
+{/* TODO добавить ссылки на createAction после мержа */}
+:::info{title="А можно ли вызывать императивно в sample?"}
+Декларативыный способ вызова события это единственный правильный способ при работе с `sample`. Однако вы можете вызывать императивно с помощью метода `createAction` или в теле эффекта.
+:::
+
+## Связанные API и статьи (#related-api-and-docs-to-attach)
+
+- **API**
+  - [`Event API`](/ru/api/effector/Event) - Описание событий, их методов и свойств
+  - [`createEvent`](/ru/api/effector/createEvent) - Создание нового события
+  - [`sample`](/ru/api/effector/sample) - Ключевой оператор для построения связей между юнитами
+  - [`Store API`](/ru/api/effector/Store) - Описание сторов, его методов и свойств
+- **Статьи**
+  - [Как мыслить в парадигме эффектор и почему события важны](/ru/resources/mindset)
+  - [Типизация событий, а также других юнитов](/ru/essentials/typescript)
+  - [Как связывать юниты вместе с помощью методов `sample` и `createAction`](/ru/essentials/unit-composition)

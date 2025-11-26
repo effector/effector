@@ -63,10 +63,20 @@ interface Props {
   }
 
   .hero :global(a.primary) {
-    background: linear-gradient(170deg, hsl(var(--color-primary-70)), hsl(var(--color-primary-50)));
+    background: hsl(var(--theme-accent-color));
     color: var(--theme-bg);
+    transition: all var(--transition-base);
 
-    @apply flex rounded-3xl py-2 pl-6 pr-4 text-base transition-shadow hover:shadow-md;
+    @apply flex rounded-3xl py-2 pl-6 pr-4 text-base;
+  }
+
+  .hero :global(a.primary:hover) {
+    background: hsl(var(--color-primary-600));
+    box-shadow: var(--shadow-md);
+  }
+
+  :root.theme-dark .hero :global(a.primary:hover) {
+    background: hsl(var(--color-primary-500));
   }
 
   /* Some shit happens with tailwind, and order of md/lg rules is changed */

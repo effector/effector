@@ -1,0 +1,257 @@
+:root {
+  /* ========================================
+     SPACING SCALE (8-point grid)
+     Base unit: 4px (0.25rem)
+     ======================================== */
+
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+  --space-20: 5rem; /* 80px */
+  --space-24: 6rem; /* 96px */
+  --space-32: 8rem; /* 128px */
+
+  /* ========================================
+     TYPOGRAPHY SCALE
+     Refined scale inspired by modern documentation
+     Base: 14px (0.875rem) for better readability
+     ======================================== */
+
+  --font-size-xxs: 0.5rem; /* 8px */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.8125rem; /* 13px */
+  --font-size-base: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.75rem; /* 28px */
+  --font-size-4xl: 2rem; /* 32px */
+  --font-size-5xl: 2.5rem; /* 40px */
+
+  /* ========================================
+     FONT WEIGHTS
+     ======================================== */
+
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ========================================
+     LINE HEIGHTS
+     ======================================== */
+
+  --line-height-tight: 1.25; /* 1.25 - headings */
+  --line-height-snug: 1.375; /* 1.375 - navigation */
+  --line-height-normal: 1.5; /* 1.5 - code, compact text */
+  --line-height-relaxed: 1.625; /* 1.625 - body paragraphs */
+  --line-height-loose: 1.75; /* 1.75 - loose text */
+  --line-height-extra-loose: 2; /* 2 - extra loose text */
+
+  /* ========================================
+     LETTER SPACING
+     ======================================== */
+
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+
+  /* ========================================
+     BORDER RADIUS
+     ======================================== */
+
+  --radius-none: 0;
+  --radius-sm: 0.25rem; /* 4px */
+  --radius-base: 0.375rem; /* 6px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-2xl: 1.5rem; /* 24px */
+  --radius-full: 9999px;
+
+  /* ========================================
+     TRANSITIONS
+     ======================================== */
+
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slower: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ========================================
+     SHADOWS
+     ======================================== */
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  /* ========================================
+     Z-INDEX SCALE
+     ======================================== */
+
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-tooltip: 1600;
+
+  /* ========================================
+     LAYOUT CONSTANTS
+     ======================================== */
+
+  --content-max-width: 56rem;
+  --sidebar-left-width: 20rem;
+  --sidebar-right-width: 18rem;
+  --navbar-height: 4rem;
+
+  /* ========================================
+     FONT FAMILIES
+     ======================================== */
+
+  --font-fallback: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji;
+  --font-family-sans: system-ui, var(--font-fallback);
+  --font-family-mono: "JetBrains Mono", "IBM Plex Mono", Consolas, "Andale Mono WT", "Andale Mono",
+    "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+    "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+
+  /* ========================================
+     PRIMITIVE COLOR TOKENS
+     Base hue and saturation values for HSL colors
+     Format: --color-base-{name}: {hue}, {saturation};
+     ======================================== */
+
+  /* Neutral colors */
+  --color-base-white: 0, 0%;
+  --color-base-black: 240, 100%;
+
+  /* Gray scale (unified) */
+  --color-base-gray: 220, 9%;
+
+  /* Brand colors */
+  --color-base-primary: 33, 100%;
+
+  /* Semantic colors */
+  --color-base-blue: 212, 100%;
+  --color-base-green: 158, 79%;
+  --color-base-yellow: 41, 100%;
+  --color-base-red: 351, 100%;
+  --color-base-purple: 269, 79%;
+
+  /* ========================================
+     COLOR PALETTES
+     Complete scales with lightness values
+     ======================================== */
+
+  /* Gray scale - unified neutral palette */
+  --color-gray-50: var(--color-base-gray), 98%;
+  --color-gray-100: var(--color-base-gray), 96%;
+  --color-gray-200: var(--color-base-gray), 93%;
+  --color-gray-300: var(--color-base-gray), 88%;
+  --color-gray-400: var(--color-base-gray), 73%;
+  --color-gray-500: var(--color-base-gray), 58%;
+  --color-gray-600: var(--color-base-gray), 45%;
+  --color-gray-700: var(--color-base-gray), 34%;
+  --color-gray-800: var(--color-base-gray), 22%;
+  --color-gray-900: var(--color-base-gray), 13%;
+  --color-gray-950: var(--color-base-gray), 9%;
+
+  /* Primary scale - Orange (brand color) */
+  --color-primary-50: var(--color-base-primary), 97%;
+  --color-primary-100: var(--color-base-primary), 92%;
+  --color-primary-200: var(--color-base-primary), 85%;
+  --color-primary-300: var(--color-base-primary), 72%;
+  --color-primary-400: var(--color-base-primary), 58%;
+  --color-primary-500: var(--color-base-primary), 50%; /* Main brand color */
+  --color-primary-600: var(--color-base-primary), 46%;
+  --color-primary-700: var(--color-base-primary), 39%;
+  --color-primary-800: var(--color-base-primary), 32%;
+  --color-primary-900: var(--color-base-primary), 27%;
+  --color-primary-950: var(--color-base-primary), 15%;
+
+  /* Blue scale */
+  --color-blue-50: var(--color-base-blue), 97%;
+  --color-blue-100: var(--color-base-blue), 94%;
+  --color-blue-200: var(--color-base-blue), 87%;
+  --color-blue-300: var(--color-base-blue), 78%;
+  --color-blue-400: var(--color-base-blue), 67%;
+  --color-blue-500: var(--color-base-blue), 56%;
+  --color-blue-600: var(--color-base-blue), 47%;
+  --color-blue-700: var(--color-base-blue), 39%;
+  --color-blue-800: var(--color-base-blue), 32%;
+  --color-blue-900: var(--color-base-blue), 28%;
+  --color-blue-950: var(--color-base-blue), 18%;
+
+  /* Green scale */
+  --color-green-50: var(--color-base-green), 96%;
+  --color-green-100: var(--color-base-green), 90%;
+  --color-green-200: var(--color-base-green), 80%;
+  --color-green-300: var(--color-base-green), 66%;
+  --color-green-400: var(--color-base-green), 52%;
+  --color-green-500: var(--color-base-green), 42%;
+  --color-green-600: var(--color-base-green), 36%;
+  --color-green-700: var(--color-base-green), 30%;
+  --color-green-800: var(--color-base-green), 25%;
+  --color-green-900: var(--color-base-green), 21%;
+  --color-green-950: var(--color-base-green), 12%;
+
+  /* Yellow scale */
+  --color-yellow-50: var(--color-base-yellow), 95%;
+  --color-yellow-100: var(--color-base-yellow), 90%;
+  --color-yellow-200: var(--color-base-yellow), 82%;
+  --color-yellow-300: var(--color-base-yellow), 70%;
+  --color-yellow-400: var(--color-base-yellow), 59%;
+  --color-yellow-500: var(--color-base-yellow), 50%;
+  --color-yellow-600: var(--color-base-yellow), 42%;
+  --color-yellow-700: var(--color-base-yellow), 32%;
+  --color-yellow-800: var(--color-base-yellow), 26%;
+  --color-yellow-900: var(--color-base-yellow), 22%;
+  --color-yellow-950: var(--color-base-yellow), 12%;
+
+  /* Red scale */
+  --color-red-50: var(--color-base-red), 96%;
+  --color-red-100: var(--color-base-red), 92%;
+  --color-red-200: var(--color-base-red), 86%;
+  --color-red-300: var(--color-base-red), 76%;
+  --color-red-400: var(--color-base-red), 64%;
+  --color-red-500: var(--color-base-red), 54%;
+  --color-red-600: var(--color-base-red), 47%;
+  --color-red-700: var(--color-base-red), 39%;
+  --color-red-800: var(--color-base-red), 33%;
+  --color-red-900: var(--color-base-red), 30%;
+  --color-red-950: var(--color-base-red), 16%;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (min-width: 768px) {
+  :root {
+    --sidebar-left-width: 20rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --sidebar-left-width: 22rem;
+    --sidebar-right-width: 20rem;
+  }
+}

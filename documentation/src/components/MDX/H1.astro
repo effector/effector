@@ -1,0 +1,12 @@
+---
+import PageActions from "../PageActions/PageActions.astro";
+
+interface Props {
+  [key: string]: any;
+}
+
+const props = Astro.props as Props;
+---
+
+<h1 {...props}><slot /></h1>
+<PageActions />

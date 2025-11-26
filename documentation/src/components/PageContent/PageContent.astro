@@ -3,8 +3,7 @@ import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
 import MoreMenu from "../RightSidebar/MoreMenu.astro";
 import TableOfContents from "../RightSidebar/TableOfContents";
-import { getLocalizedSidebar } from "src/navigation";
-import PageNavigation from "src/components/PageNavigation.astro";
+
 
 type Props = {
   title: string;
@@ -64,17 +63,6 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
           <meta itemprop="position" content={breadcrumbs.length.toString()} />
         </li>
       </ul>
-      {
-        translations.length ? (
-          <span class="translations" data-pagefind-ignore>
-            [
-            {translations.map((tr) => (
-              <a href={`/${tr.lang}/${tr.slug}`}>{tr.lang}</a>
-            ))}
-            ]
-          </span>
-        ) : null
-      }
     </nav>
     <nav class="block xl:hidden" data-pagefind-ignore>
       <TableOfContents

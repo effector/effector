@@ -62,19 +62,19 @@ export const learning: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Work with async",
-          ru: "Работа с асинхронностью",
-          uz: "Asinkronlik bilan ishlash",
-        },
-        link: "/essentials/work-with-async",
-      },
-      {
-        text: {
           en: "Unit composition",
           ru: "Композиция юнитов",
           uz: "Unit kompozitsiyasi",
         },
         link: "/essentials/unit-composition",
+      },
+      {
+        text: {
+          en: "Effects and async",
+          ru: "Сайд-эффекты и  асинхронность",
+          uz: "Asinkronlik bilan ishlash",
+        },
+        link: "/essentials/work-with-async",
       },
       {
         text: {

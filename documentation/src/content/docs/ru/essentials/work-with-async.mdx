@@ -1,5 +1,5 @@
 ---
-title: Асинхронность в effector
+title: Эффекты и асинхронность
 description: Как эффекты помогают работать с асинхронностью в effector
 lang: ru
 ---
@@ -101,9 +101,6 @@ $isLoading.watch((loading) => console.log("Is loading:", loading));
 
 :::info{title="Функция sample"}
 Функция `sample` является ключевым элементом для связывания юнитов. Она позволяет вам гибко и легко настроить реактивную логику вашего приложения.
-
-<!-- todo add link to page about sample -->
-
 :::
 
 ```ts
@@ -196,7 +193,5 @@ sample({
 setId(1); // Устанавливаем ID
 submit(); // Загружаем данные
 ```
-
-<!-- todo О том, как тестировать эффекты вы можете прочитать на странице [Тестирование](/ru/essentials/testing) -->
 
 [Ознакомиться с полным API для эффектов](/ru/api/effector/Effect)

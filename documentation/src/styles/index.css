@@ -1,3 +1,9 @@
+@import "./tokens.css";
+@import "./aliases.css";
+@import "./theme-light.css";
+@import "./theme-dark.css";
+@import "./expressive-code.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,8 +42,8 @@
   outline: none;
 }
 
-:root {
-  --user-font-scale: 1rem - 16px;
+.admonition-content .expressive-code pre {
+  border-radius: 10px;
 }
 
 body {
@@ -45,10 +51,12 @@ body {
   flex-direction: column;
   max-width: 100vw;
   min-height: 100vh;
-  font-size: 1rem;
-  font-size: clamp(0.9rem, 0.75rem + 0.375vw + var(--user-font-scale), 1rem);
-  line-height: 1.5;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
   font-family: var(--font-body);
+  font-weight: var(--weight-body);
+  background: var(--theme-bg);
+  color: var(--theme-text);
 }
 
 nav ul {
@@ -57,7 +65,15 @@ nav ul {
 }
 
 .content > section > * + * {
-  margin-top: 1.25rem;
+  margin-top: var(--spacing-content-gap);
+}
+
+.content > section {
+  line-height: var(--leading-content);
+}
+
+.content > section .admonition .admonition-content > * + * {
+  margin-top: var(--spacing-admonition-gap);
 }
 
 .content > section > :first-child {
@@ -73,49 +89,51 @@ h5,
 h6 {
   position: relative;
   outline: none;
-  font-weight: 600;
-  line-height: 1;
+  font-weight: var(--weight-heading);
+  line-height: var(--leading-heading);
   font-family: var(--font-mono);
 }
 
 .content section h1 {
-  border-bottom: 1px solid var(--theme-divider);
-  font-size: 2rem;
-  line-height: 1;
-  margin: 3rem 0 0;
-  padding-bottom: 3rem;
+  font-size: var(--text-h1);
+  line-height: var(--leading-heading);
+  margin: var(--space-12) 0 0 0;
+
+  letter-spacing: var(--tracking-heading);
 }
 
 .content section h2 {
-  font-size: 1.5rem;
-  line-height: 1.2;
-  margin: 4rem 0 1rem;
-  letter-spacing: -0.02em;
+  font-size: var(--text-h2);
+  line-height: var(--leading-heading);
+  margin: var(--space-12) 0 var(--space-4);
+  letter-spacing: var(--tracking-heading);
 }
 
 .content section h3 {
-  font-size: 1.17rem;
-  line-height: 1.2;
-  margin: 2.5rem 0 1rem;
-  letter-spacing: -0.02em;
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+  margin: var(--space-10) 0 var(--space-3);
+  letter-spacing: var(--tracking-heading);
 }
 
 .content section h4 {
-  font-size: 1rem;
-  line-height: 1.2;
-  letter-spacing: -0.05em;
+  font-size: var(--text-h4);
+  line-height: var(--leading-heading);
+  margin: var(--space-8) 0 var(--space-3); /* Added explicit margins */
+  letter-spacing: var(--tracking-heading);
 }
 
 .content section h5 {
-  font-size: 0.83rem;
-  line-height: 1.2;
+  font-size: var(--text-h5);
+  line-height: var(--leading-heading);
+  margin: var(--space-6) 0 var(--space-2); /* Added explicit margins */
 }
 
 .content section :is(h4, h5, h6):not(:first-child) {
-  margin-top: 2rem;
+  margin-top: var(--space-8);
 
   .href {
-    letter-spacing: 0.01em;
+    letter-spacing: var(--letter-spacing-normal);
   }
 }
 
@@ -130,7 +148,7 @@ h6 {
   cursor: pointer;
   opacity: 1;
   color: var(--theme-divider-dark);
-  letter-spacing: -0.1em;
+  letter-spacing: var(--letter-spacing-tighter);
 }
 
 @media (hover: hover) {
@@ -171,7 +189,11 @@ h6 {
 }
 
 p {
-  line-height: 1.65em;
+  margin: 0;
+}
+
+.content section p + p {
+  margin-top: var(--space-4); /* 16px between consecutive paragraphs */
 }
 
 /**
@@ -201,25 +223,24 @@ textarea {
   touch-action: manipulation;
 }
 
-.content ul {
-  line-height: 1.1em;
-}
-
 p,
-.content ul {
+ol,
+ul,
+ul::marker,
+ol::marker {
   color: var(--theme-text-light);
 }
 
 small,
 .text_small {
-  font-size: 0.833rem;
+  font-size: var(--text-body-sm);
 }
 
 a {
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   color: var(--theme-text-accent);
-  font-weight: 400;
+  font-weight: var(--weight-body);
   text-underline-offset: 0.08em;
 }
 
@@ -229,7 +250,6 @@ a:hover {
 
 .content ul {
   list-style: disc;
-  line-height: 2;
 }
 
 article > section nav :is(ul, ol) > * + * {
@@ -237,11 +257,19 @@ article > section nav :is(ul, ol) > * + * {
 }
 
 article > section li > :is(p, pre, blockquote):not(:first-child) {
-  margin-top: 1rem;
+  margin-top: var(--space-4); /* Increased from 12px to 16px */
 }
 
 article > section :is(ul, ol) {
-  padding-left: 1em;
+  padding-left: var(--space-6);
+  margin-top: var(--space-4); /* Add consistent top margin */
+  margin-bottom: var(--space-4); /* Add consistent bottom margin */
+}
+
+article > section ul :is(ul, ol) {
+  padding-left: var(--space-6);
+  margin-top: 0; /* Add consistent top margin */
+  margin-bottom: var(--space-4); /* Add consistent bottom margin */
 }
 
 article > section nav :is(ul, ol) {
@@ -249,13 +277,12 @@ article > section nav :is(ul, ol) {
 }
 
 article > section nav {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-8);
 }
 
 article > section ::marker {
-  color: var(--theme-text-light);
-  font-weight: bold;
+  font-weight: var(--font-weight-regular);
 }
 
 article > section iframe {
@@ -269,11 +296,14 @@ article > section ol {
 }
 
 article > section ol ::marker {
-  font-weight: 500;
+  font-weight: var(--weight-body);
 }
 
-article > section ol li {
-  line-height: 2;
+article > section ol:not(.breadcrumbs) li {
+  margin: var(--space-2) 0;
+}
+article > section ul:not(.breadcrumbs) li {
+  margin: var(--space-2) 0;
 }
 
 body a > code {
@@ -290,22 +320,20 @@ a:focus {
 
 strong {
   color: inherit;
-  font-weight: 600;
+  font-weight: var(--weight-strong);
 }
 
 /* Supporting Content */
 
 :not(pre) > code {
-  --border-radius: 3px;
-  --padding-block: 0.2rem;
-  --padding-inline: 0.33rem;
+  --padding-block: var(--space-1);
+  --padding-inline: var(--space-2);
   margin: calc(var(--padding-block) * -1) 0;
-  border-radius: var(--border-radius);
+  border-radius: var(--rounded-code);
   background-color: var(--theme-code-inline-bg);
-  padding: var(--padding-block) var(--padding-inline);
-  color: inherit;
-  font-size: 0.95em;
-
+  padding: var(--padding-block) var(--padding-block);
+  color: var(--theme-code-inline-text);
+  font-size: var(--text-code-inline);
   font-family: var(--font-mono);
   word-break: break-word;
 }
@@ -314,24 +342,21 @@ pre.astro-code > code {
   all: unset;
 }
 
-pre > code {
-  font-size: 1em;
-}
-
 table,
 pre {
-  --padding-block: 1rem;
-  --padding-inline: 2rem;
+  --padding-block: var(--space-4); /* 16px vertical padding */
+  --padding-inline: var(--space-5); /* 20px horizontal padding (reduced from 32px) */
   position: relative;
   margin-right: calc(var(--padding-inline) * -1);
   margin-left: calc(var(--padding-inline) * -1);
+  margin-top: var(--space-4); /* Add top margin for spacing */
+  margin-bottom: var(--space-4); /* Add bottom margin for spacing */
   padding: var(--padding-block) var(--padding-inline);
   padding-right: calc(var(--padding-inline) * 2);
   overflow-x: auto;
   overflow-y: hidden;
-  font-size: 0.85em;
-
-  line-height: 1.5;
+  font-size: var(--text-code);
+  line-height: var(--leading-code);
   font-family: var(--font-mono);
 }
 
@@ -353,8 +378,12 @@ th {
 }
 td,
 th {
-  padding: 6px;
+  padding: var(--space-2) var(--space-3);
   text-align: left;
+}
+
+.content code {
+  font-size: var(--text-code);
 }
 
 pre {
@@ -368,18 +397,21 @@ blockquote code {
 
 @media (min-width: 37.75em) {
   pre {
-    --padding-inline: 1.25rem;
+    --padding-inline: var(--space-5);
     margin-right: 0;
     margin-left: 0;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
   }
 }
 
 blockquote {
-  @apply my-8 rounded-md rounded-l-none border-l-4 px-5 py-4;
-  border-color: var(--theme-text-light);
+  margin: var(--space-6) 0; /* Reduced from 32px to 24px */
+  padding: var(--space-4) var(--space-5);
+  border-left: 4px solid var(--theme-text-light);
+  border-radius: var(--rounded-card);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   background-color: var(--theme-bg-offset);
-  line-height: 1.7;
 }
 
 blockquote p,
@@ -393,46 +425,43 @@ img {
 
 button {
   display: flex;
-  display: flex;
-  align-items: center;
   align-items: center;
   justify-items: center;
-  gap: 0.25em;
-  gap: 0.25em;
+  gap: var(--space-1);
   border: 0;
-  border-radius: 99em;
-  background: var(--theme-bg);
-  background-color: var(--theme-bg);
-  padding: 0.33em 0.67em;
+  border-radius: var(--radius-full);
+  background-color: var(--theme-secondary-bg);
+  padding: var(--space-2) var(--space-3);
   color: var(--theme-text);
-  font-size: 1rem;
+  font-size: var(--text-body);
+  font-weight: var(--weight-body);
 }
 
 h2.heading {
-  margin-bottom: 0.5rem;
-  padding: 0.1rem 1rem;
-  font-weight: 700;
-  font-size: 1rem;
+  margin-bottom: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+  font-weight: var(--weight-strong);
+  font-size: var(--text-body);
   text-transform: uppercase;
 }
 
 .header-link {
   transition:
-    border-inline-start-color 100ms ease-out,
-    background-color 200ms ease-out;
+    border-inline-start-color var(--transition-fast),
+    background-color var(--transition-base);
   border-left: 4px solid var(--theme-divider);
-  font-size: 0.9em;
+  font-size: var(--text-body-sm);
 }
 
 .header-link a {
   display: inline-flex;
-  gap: 0.5em;
-  padding: 0.4rem 0;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
   width: 100%;
   overflow: hidden;
   color: inherit;
   font: inherit;
-  line-height: 1.3;
+  line-height: var(--leading-nav);
   unicode-bidi: plaintext;
   text-decoration: none;
   text-overflow: ellipsis;
@@ -441,7 +470,7 @@ h2.heading {
 
 @media (min-width: 50em) {
   .header-link a {
-    padding: 0.275rem 0;
+    padding: var(--space-1) 0;
   }
 }
 
@@ -465,13 +494,13 @@ h2.heading {
 
 /* Add line and padding on the left side */
 .header-link {
-  padding-inline-start: 1rem;
+  padding-inline-start: var(--space-4);
 }
 .header-link.depth-3 {
-  padding-inline-start: 2rem;
+  padding-inline-start: var(--space-8);
 }
 .header-link.depth-4 {
-  padding-inline-start: 3rem;
+  padding-inline-start: var(--space-12);
 }
 
 /* Screenreader Only Text */
@@ -521,15 +550,17 @@ h2.heading {
 }
 
 .admonition {
-  @apply -mx-3 mb-2 box-border gap-2 p-4;
+  @apply -mx-3 mb-2 box-border p-4;
   /* Strange behavior: tw adds `items-center` when `flex` is applied */
   display: flex;
   flex-direction: column;
+  font-size: var(--text-admonition);
+  gap: var(--space-2);
 
   --admonition-bg: gray;
   --admonition-border: black;
   --admonition-text: white;
-  border-left: 0.8rem solid var(--admonition-border);
+  border-left: 0.4rem solid var(--admonition-border);
   background-color: var(--admonition-bg);
   color: var(--admonition-text);
 }
@@ -545,7 +576,7 @@ h2.heading {
 }
 
 li > div.expressive-code {
-  margin-top: 0.75rem;
+  margin-top: var(--space-3);
 }
 
 .admonition a {
@@ -554,7 +585,7 @@ li > div.expressive-code {
 }
 
 .admonition code {
-  background-color: var(--admonition-bg);
+  background-color: var(--admonition-code-bg);
   color: var(--admonition-text);
 }
 .admonition pre > code {
@@ -570,16 +601,26 @@ li > div.expressive-code {
   --admonition-bg: var(--theme-admonition-tip-bg);
   --admonition-border: var(--theme-admonition-tip-border);
   --admonition-text: var(--theme-admonition-tip-text);
+  --admonition-code-bg: var(--theme-admonition-tip-code-bg);
 }
 
 .admonition-warning {
   --admonition-bg: var(--theme-admonition-warning-bg);
   --admonition-border: var(--theme-admonition-warning-border);
   --admonition-text: var(--theme-admonition-warning-text);
+  --admonition-code-bg: var(--theme-admonition-warning-code-bg);
 }
 
 .admonition-info {
   --admonition-bg: var(--theme-admonition-info-bg);
   --admonition-border: var(--theme-admonition-info-border);
   --admonition-text: var(--theme-admonition-info-text);
+  --admonition-code-bg: var(--theme-admonition-info-code-bg);
+}
+
+.admonition-error {
+  --admonition-bg: var(--theme-admonition-deprecated-bg);
+  --admonition-border: var(--theme-admonition-deprecated-border);
+  --admonition-text: var(--theme-admonition-deprecated-text);
+  --admonition-code-bg: var(--theme-admonition-deprecated-code-bg);
 }
