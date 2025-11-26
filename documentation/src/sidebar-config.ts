@@ -70,7 +70,7 @@ export const learning: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Effects and async",
+          en: "Side effects and async",
           ru: "Сайд-эффекты и  асинхронность",
           uz: "Asinkronlik bilan ishlash",
         },
