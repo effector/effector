@@ -24,16 +24,20 @@ export const learning: LSidebarGroup[] = [
         link: "/introduction/core-concepts",
       },
       {
-        text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
-        link: "/introduction/installation",
-      },
-      {
         text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
         link: "/introduction/motivation",
       },
       {
         text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
         link: "/introduction/examples",
+      },
+      {
+        text: {
+          en: "Static initialization",
+          ru: "Инициализация юнитов",
+          uz: "Hisoblash ustuvorligi",
+        },
+        link: "/resources/static-initialization",
       },
     ],
   },
@@ -303,14 +307,6 @@ export const guidesAndRecipes: LSidebarGroup[] = [
           ru: "Явный запуск приложения",
         },
         link: "/resources/explicit-start",
-      },
-      {
-        text: {
-          en: "Static initialization",
-          ru: "Инициализация юнитов",
-          uz: "Hisoblash ustuvorligi",
-        },
-        link: "/resources/static-initialization",
       },
       {
         text: {
