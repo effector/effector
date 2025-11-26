@@ -1,6 +1,6 @@
 ---
-title: Events in effector
-description: How events works and how to use it
+title: Events
+description: We explain what event units are, how to use them, and how to work with them.
 redirectFrom:
   - /docs/essentials/events
   - /essentials/events
@@ -8,33 +8,197 @@ redirectFrom:
   - /explanation/events
 ---
 
+import SideBySide from "@components/SideBySide/SideBySide.astro";
+
 # Events (#events)
 
-The **Event** in effector represents a user action, a step in the application process, a command to execute, or an intention to make modifications, among other things. This unit is designed to be a carrier of information/intention/state within the application, not the holder of a state.
+Although effector has three main concepts — [events](/en/api/effector/Event), [stores](/en/api/effector/Store), and [effects](/en/api/effector/Effect) — it is [events](/en/api/effector/Event) that can be called the foundation for how your application works. The entire frontend is built atop an event-driven model, and you have most likely already worked with events in JavaScript, for example via `addEventListener` or React handlers like `onClick`. They are all events we can subscribe to, and effector lets us create our own event with [`createEvent`](/en/api/effector/createEvent) and subscribe to it:
 
-In most situations, it is recommended to create events directly within the module, rather than placing them within conditional statements or classes, in order to maintain simplicity and readability. An exception to this recommendation is the use of factory functions; however, these should also be invoked at the root level of the module.
+<SideBySide>
 
-:::info{title="important information!"}
-Event instances persist throughout the entire runtime of the application and inherently represent a portion of the business logic.
+<Fragment slot="left">
 
-Attempting to delete instances and clear memory for the purpose of saving resources is not advised, as it may adversely impact the functionality and performance of the application.
-:::
+```ts data-height="full"
+let counter = 10;
 
-## Calling the event (#event-calling)
-
-There are two ways to trigger event: imperative and declarative.
-
-The **imperative** method involves invoking the event as if it were a function:
-
-```ts
-import { createEvent } from "effector";
-
-const callHappened = createEvent<void>();
-
-callHappened(); // event triggered
+document.addEventListener("click", () => {
+  counter = 13;
+});
 ```
 
-The **declarative** approach utilizes the event as a target for operators, such as `sample`, or as an argument when passed into factory functions:
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts data-height="full"
+import { createEvent, createStore, sample } from "effector";
+
+const $counter = createStore(10);
+
+const click = createEvent();
+
+sample({
+  clock: click,
+  fn: () => 13,
+  target: $counter,
+});
+```
+
+</Fragment>
+
+</SideBySide>
+
+:::info{title="Effector events"}
+[Events](/en/api/effector/Event) in effector are not the same as DOM events; this example only demonstrates a similar concept.
+:::
+
+## Why we need events (#why-we-need-events)
+
+All effector code is built on top of [events](/en/api/effector/Event). For example, if you pass a store to the [`clock`](/en/api/effector/sample#clock-argument) argument of [`sample`](/en/api/effector/sample), that [`sample`](/en/api/effector/sample) will be triggered whenever the [`updates`](/en/api/effector/Store#properties-updates) event of the store fires:
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts "clock: $someStore"
+// this code is equivalent to the example on the right
+import { createStore, sample } from "effector";
+
+const $someStore = createStore();
+sample({
+  clock: $someStore,
+  // ...
+});
+```
+
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts "clock: $someStore.updates"
+// this code is equivalent to the example on the left
+import { createStore, sample } from "effector";
+
+const $someStore = createStore();
+sample({
+  clock: $someStore.updates,
+  // ...
+});
+```
+
+</Fragment>
+
+</SideBySide>
+
+An [event](/en/api/effector/Event) by itself simply states the fact that something has happened: a button click, data refresh, notification display, and so on. Events pass information along and notify their subscribers that they have been triggered.
+
+To make it easier to reason about your code, treat everything the user can interact with and the inner parts of your business logic as events. Besides UI-oriented events like `buttonClicked` or `inputChanged`, you can also have events tied to data updates `valueUpdated` or exceptional situations `errorOccurred`.
+
+For example, [effects](/en/api/effector/Effect) have built-in events [`done`](/en/api/effector/Effect#properties-done) and [`fail`](/en/api/effector/Effect#properties-fail) that run when an effect finishes successfully or throws an error. [Stores](/en/api/effector/Store) have the [`updates`](/en/api/effector/Store#properties-updates) event that is triggered whenever the store changes.
+
+Events also help you keep the code loosely coupled, which simplifies maintenance and testing.
+
+:::tip{title="Why events matter"}
+On the [How to think in the effector paradigm](/en/resources/mindset) page we dig deeper into why events are important and the benefits they bring.
+:::
+
+### How to use events (#how-to-use-events)
+
+You can create events with [`createEvent`](/en/api/effector/createEvent) and subscribe to them with [`sample`](/en/api/effector/sample):
+
+```ts
+import { sample, createEvent } from "effector";
+
+const event = createEvent();
+
+sample({
+  clock: event,
+  // ...
+});
+```
+
+:::tip{title="What is sample"}
+If you are not familiar with [`sample`](/en/api/effector/sample), in the examples above it subscribes to the event passed via [`clock`](/en/api/effector/sample#clock-argument) and runs the described chain of logic whenever the event triggers. You can learn more on the [Unit composition](/en/essentials/unit-composition) page.
+:::
+
+With events you can [update stores](/en/essentials/manage-states#store-updates), trigger [effects](/en/api/effector/Effect), or fire other events:
+
+```ts
+import { sample, createStore, createEvent } from "effector";
+
+const $clicksCount = createStore(0);
+
+const userClicked = createEvent<void>();
+
+// update the counter store
+sample({
+  clock: userClicked,
+  source: $clicksCount,
+  fn: (clicksCount) => clicksCount + 1,
+  target: $clicksCount,
+});
+
+userClicked();
+```
+
+```ts
+import { createEvent, createEffect, sample } from "effector";
+
+const startFetch = createEvent<string>();
+const fetchFx = createEffect((url: string) => {
+  // ...
+});
+
+// trigger an effect
+sample({
+  clock: startFetch,
+  target: fetchFx,
+});
+
+startFetch("/fake-api/users");
+```
+
+An important characteristic of events is that they can accept only one argument; additional arguments are ignored. Use an object if you need to pass multiple values:
+
+```ts
+const event = createEvent<{ a: number; b: string }>();
+
+event({
+  a: 1,
+  b: "string",
+});
+```
+
+## Event calling (#event-calling)
+
+You can trigger an event in two ways: imperatively or declaratively.
+
+The **imperative** approach is a familiar one, where you call an event as a function (`event()`). This is how you will typically fire events from the UI by passing a handler to `onClick`, `onChange`, and so on:
+
+```tsx "const click = useUnit(clickHappened);" "click()" "useUnit"
+import { createEvent } from "effector";
+// you can use any framework and its integration package
+import { useUnit } from "effector-react";
+
+const clickHappened = createEvent<void>();
+
+// view.tsx
+const Component = () => {
+  const click = useUnit(clickHappened);
+
+  return (
+    <div>
+      <button onClick={() => click()}>click</button>
+    </div>
+  );
+};
+```
+
+:::info{title="Events and frameworks"}
+To call an event in UI code that uses a framework you need to access it through the `useUnit` hook.
+:::
+
+A **declarative** call happens when you connect one event to another with [`sample`](/en/api/effector/sample) and the [`target`](/en/api/effector/sample#target-argument) argument. The event passed into [`target`](/en/api/effector/sample#target-argument) will run whenever the [`clock`](/en/api/effector/sample#clock-argument) event fires:
 
 ```ts
 import { createEvent, sample } from "effector";
@@ -48,249 +212,18 @@ sample({
 });
 ```
 
-When the `firstTriggered` event is invoked, the `secondTriggered` event will be subsequently called, creating a sequence of events.
-[Remember, dont call events in pure functions](/en/explanation/glossary#purity), it's not supported!
-
-:::tip{title="Good to know"}
-In Effector, any event supports only **a single argument**.
-It is not possible to call an event with two or more arguments, as in `someEvent(first, second)`.
+:::tip{title="Can I call sample imperatively?"}
+The declarative way is the only correct approach when you work with `sample`. However, you can still call events imperatively [through `createAction`](/en/essentials/unit-composition#usage-of-operators) or inside an effect body.
 :::
 
-All arguments beyond the first will be ignored.
-The core team has implemented this rule for specific reasons related to the design and functionality.
-This approach enables the argument to be accessed in any situation without adding types complexity.
-
-If multiple arguments need to be passed, encapsulate them within an object:
-
-```ts
-import { createEvent } from "effector";
-
-const requestReceived = createEvent<{ id: number; title: string }>();
-
-requestReceived({ id: 1, title: "example" });
-```
-
-This rule also contributes to the clarity of each argument's meaning, both at the call side and subscription side. It promotes clean and organized code, making it easier to understand and maintain.
-
-## Watching the event (#event-watch)
-
-To ascertain when an event is called, effector and its ecosystem offer various methods with distinct capabilities. Debugging is the primary use case for this purpose, and we highly recommend using [`patronum/debug`](https://patronum.effector.dev/operators/debug/) to display when an event is triggered and the argument it carries.
-
-```ts
-import { createEvent, sample } from "effector";
-import { debug } from "patronum";
-
-const firstTriggered = createEvent<void>();
-const secondTriggered = createEvent<void>();
-
-sample({
-  clock: firstTriggered,
-  target: secondTriggered,
-});
-
-debug(firstTriggered, secondTriggered);
-
-firstTriggered();
-// => [event] firstTriggered undefined
-// => [event] secondTriggered undefined
-```
-
-However, if your environment does not permit the addition of further dependencies, you may use the `createWatch` method, which accepts object in params with properties:
-
-- `unit` — unit or array of units, that you want to start watch
-- `fn` — function, that will be called when the unit is triggered. Accepts the unit’s payload as the first argument.
-- `scope` — [scope](/en/api/effector/Scope), instance of [fork](/en/api/effector/fork) to restrict watcher calls on particular scope
-
-```ts
-import { createEvent, sample, createWatch } from "effector";
-
-const firstTriggered = createEvent<void>();
-const secondTriggered = createEvent<void>();
-
-sample({
-  clock: firstTriggered,
-  target: secondTriggered,
-});
-
-const unwatch = createWatch({
-  unit: [firstTriggered, secondTriggered],
-  fn: (payload) => {
-    console.log("[event] triggered");
-  },
-});
-
-firstTriggered();
-// => [event] triggered
-// => [event] triggered
-```
-
-:::tip{title="Keep in mind"}
-The `createWatch` method neither handles nor reports exceptions, manages the completion of asynchronous operations, nor addresses data race issues.
-
-Its primary intended use is for short-term debugging and logging purposes, or for tests to ensure that some unit was triggered.
-:::
-
-## Working with TypeScript (#typescript)
-
-When an event is invoked, TypeScript will verify that the type of the argument passed matches the type defined in the event, ensuring consistency and type safety within the code.
-
-This is also works for operators like [`sample`](/en/essentials/unit-composition) or `split`:
-
-```ts
-import { sample, createEvent } from "effector";
-
-const someHappened = createEvent<number>();
-const anotherHappened = createEvent<string>();
-
-sample({
-  // @ts-expect-error error:
-  // "clock should extend target type";
-  // targets: { clockType: number; targetType: string; }
-  clock: someHappened,
-  target: anotherHappened,
-});
-```
-
-## Working with multiple events (#working-with-events)
-
-Events in effector can be combined in various ways to create more complex logic. Let's look at the main approaches:
-
-### Creating derived events (#derived-events)
-
-You can create a new event based on an existing one using the `map` method, which will be fired after original event:
-
-```ts mark={5}
-import { createEvent, createStore } from "effector";
-
-const userClicked = createEvent<{ id: number; name: string }>();
-// Creating an event that will trigger only with the user's name
-const userNameSelected = userClicked.map(({ name }) => name);
-const $userName = createStore("").on(userNameSelected, (_, newName) => newName);
-
-// Usage
-userClicked({ id: 1, name: "John" });
-// userNameSelected will get 'John'
-```
-
-:::info{title="Derived events"}
-You cannot call derived events directly, but you can still subscribe to them for state changes or triggering other units.
-:::
-
-### Filtering events (#filtering-events)
-
-If you wanna create a new event that triggers only when a certain condition is met, you can use `sample` method and `filter` param:
-
-```ts
-import { sample, createEvent } from "effector";
-
-type User = { id: number; role: "admin" | "user" };
-type Admin = { id: number; role: "admin" };
-
-const userClicked = createEvent<User>();
-
-// Event will trigger only for admins
-const adminClicked = sample({
-  clock: userClicked,
-  filter: ({ role }) => role === "admin",
-});
-
-// Creating type-safe event
-const typeSafeAdminClicked = sample({
-  clock: userClicked,
-  filter: (user): user is Admin => user.role === "admin",
-});
-```
-
-### Merging multiple events (#merging-events)
-
-You can use the `merge` method, which combines an array of units into a single event that will
-trigger when any of the array elements is called:
-
-```ts mark={6}
-const buttonClicked = createEvent();
-const linkClicked = createEvent();
-const iconClicked = createEvent();
-
-// Any of these events will trigger someActionHappened
-const anyClicked = merge([buttonClicked, linkClicked, iconClicked]);
-
-sample({
-  clock: anyClicked,
-  target: someActionHappened,
-});
-```
-
-Or you can use `sample` with array in `clock`, which under the hood use the same method `merge` for arrays.
-
-```ts mark={7}
-const buttonClicked = createEvent();
-const linkClicked = createEvent();
-const iconClicked = createEvent();
-
-// Any of these events will trigger someActionHappened
-sample({
-  clock: [buttonClicked, linkClicked, iconClicked],
-  target: someActionHappened,
-});
-```
-
-### Creating a pre-handler for an event (#create-prepend)
-
-`event.prepend` is a method that creates a new event which will trigger the original event with preliminary data transformation.
-
-Let's say your application encounters different errors with different structures, but the error handling should happen centrally:
-
-```ts wrap
-import { createEvent } from "effector";
-
-// Main error handling event
-const showError = createEvent<string>();
-
-// Subscribe to error displays
-sample({
-  clock: showError,
-  target: processErrorFx, // we'll skip the effect implementation
-});
-
-// Create special events for different types of errors
-const showNetworkError = showError.prepend((code: number) => `Network error: ${code}`);
-
-const showValidationError = showError.prepend(
-  (field: string) => `Field ${field} is filled incorrectly`,
-);
-
-// Usage
-showNetworkError(404); // 🔴 Error: Network error: 404
-showValidationError("email"); // 🔴 Error: Field email is filled incorrectly
-```
-
-In this example:
-
-1. We have a main showError event that accepts a string
-2. Using `prepend` we create two new events, each of which:
-
-- Accepts its own data type
-- Transforms this data into a string
-- Passes the result to the main showError event
-
-### Conditional event triggering (#conditional-event-triggering)
-
-The action chain when calling an event can trigger based on store states:
-
-```ts mark={7}
-const buttonClicked = createEvent<void>();
-const $isEnabled = createStore(true);
-
-// Event will trigger only if $isEnabled is true
-sample({
-  clock: buttonClicked,
-  filter: $isEnabled,
-  target: actionExecuted,
-});
-```
-
-:::tip{title="Tip"}
-Combining events through `sample` is preferred over directly calling events inside `watch` or other handlers, as it makes the data flow more explicit and predictable.
-:::
-
-[API reference for Event](/en/api/effector/Event).
+## Related API and docs (#related-api-and-docs-to-attach)
+
+- **API**
+  - [`Event API`](/en/api/effector/Event) — description of events, their methods, and properties
+  - [`createEvent`](/en/api/effector/createEvent) — create a new event
+  - [`sample`](/en/api/effector/sample) — the key operator for connecting units
+  - [`Store API`](/en/api/effector/Store) — description of stores, their methods, and properties
+- **Articles**
+  - [How to think in the effector paradigm and why events matter](/en/resources/mindset)
+  - [Typing events and other units](/en/essentials/typescript)
+  - [How to glue units together with `sample` and `createAction`](/en/essentials/unit-composition)
