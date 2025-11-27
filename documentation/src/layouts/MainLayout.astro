@@ -42,6 +42,8 @@ const entry = await getCurrentEntry(Astro.params.slug!)
 
 const { Content } = await entry!.render();
 
+Astro.locals.documentMeta = { documentId, lang };
+
 const components = {
 	h1: H1,
 };

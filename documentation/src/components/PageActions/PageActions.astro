@@ -3,29 +3,46 @@ import DropDownMenu from "../DropDownMenu.astro";
 import ChevronDown from "@icons/ChevronDown.astro";
 import IconCopy from "@icons/Copy.astro";
 import IconCheck from "@icons/Check.astro";
+import { getTextLocalized, translations } from "../../languages";
+
+interface Props {
+  documentId?: string;
+  lang?: string;
+}
+
+const { documentId } = Astro.props as Props;
 
 // Get current page URL for AI prompts
 const currentUrl = new URL(Astro.url.pathname, Astro.site).href;
 const prompt = `Read ${currentUrl}, I want to ask questions about it.`;
 const encodedPrompt = encodeURIComponent(prompt);
 
-// Extract slug from pathname
-// pathname format: /en/essentials/work-with-async/ or /en/essentials/work-with-async
+// Extract slug from the current document ID or fallback to the pathname
+const normalizedDocumentId = documentId
+  ? documentId.replace(/^\/*/, "").replace(/\.mdx?$/i, "")
+  : null;
+
 const pathname = Astro.url.pathname;
-const pathSegments = pathname.split('/').filter(Boolean);
-// First segment is language, rest is the slug
-const lang = pathSegments[0] || 'en';
-const slug = pathSegments.slice(1).join('/');
-const fullSlug = `${lang}/${slug}`;
+const pathSegments = pathname.split("/").filter(Boolean);
+const lang = pathSegments[0] || "en";
+const fallbackSlug = pathSegments.slice(1).join("/");
+const fallbackFullSlug = fallbackSlug ? `${lang}/${fallbackSlug}` : lang;
+const finalSlug = normalizedDocumentId ?? fallbackFullSlug;
+
+const copyMarkdownText = getTextLocalized(translations.PageActions.CopyMarkdown, lang);
+const copyingText = getTextLocalized(translations.PageActions.Copying, lang);
+const copiedText = getTextLocalized(translations.PageActions.Copied, lang);
+const errorText = getTextLocalized(translations.PageActions.Error, lang);
+const askAIText = getTextLocalized(translations.PageActions.AskAI, lang);
 
 // AI options with links
 const aiLinks = [
   {
-    text: { en: "ChatGPT", ru: "ChatGPT" },
+    text: { en: "ChatGPT", ru: "ChatGPT", uz: "ChatGPT" },
     link: `https://chatgpt.com/?hints=search&q=${encodedPrompt}`,
   },
   {
-    text: { en: "Claude", ru: "Claude" },
+    text: { en: "Claude", ru: "Claude", uz: "Claude" },
     link: `https://claude.ai/new?q=${encodedPrompt}`,
   },
 ];
@@ -36,7 +53,11 @@ const aiLinks = [
     class="page-action-button copy-markdown-button"
     type="button"
     data-action="copy-markdown"
-    data-slug={fullSlug}
+    data-slug={finalSlug}
+    data-text-default={copyMarkdownText}
+    data-text-copying={copyingText}
+    data-text-success={copiedText}
+    data-text-error={errorText}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -56,11 +77,11 @@ const aiLinks = [
     <span class="icon-check" style="display: none;">
       <IconCheck size={16} />
     </span>
-    <span class="button-text">Copy Markdown</span>
+    <span class="button-text">{copyMarkdownText}</span>
   </button>
 
   <DropDownMenu links={aiLinks} class="ask-ai-menu">
-    <span>Ask AI</span>
+    <span>{askAIText}</span>
   </DropDownMenu>
 </div>
 
@@ -72,7 +93,8 @@ const aiLinks = [
     if (!copyButton) return;
 
     copyButton.addEventListener('click', async () => {
-      const slug = copyButton.dataset.slug;
+      let slug = copyButton.dataset.slug ?? "";
+      slug = slug.replace(/^\/+|\/+$/g, "");
 
       if (!slug) {
         console.error('No slug found');
@@ -82,14 +104,25 @@ const aiLinks = [
       const iconCopy = copyButton.querySelector('.icon-copy') as SVGElement;
       const iconCheck = copyButton.querySelector('.icon-check') as HTMLElement;
       const buttonText = copyButton.querySelector('.button-text') as HTMLElement;
+      const fallbackText = buttonText?.textContent ?? '';
+      const textDefault = copyButton.dataset.textDefault ?? fallbackText;
+      const textCopying = copyButton.dataset.textCopying ?? fallbackText;
+      const textSuccess = copyButton.dataset.textSuccess ?? fallbackText;
+      const textError = copyButton.dataset.textError ?? fallbackText;
 
       try {
         // Disable button during fetch
         copyButton.disabled = true;
-        buttonText.textContent = 'Copying...';
+        if (buttonText) {
+          buttonText.textContent = textCopying;
+        }
 
-        // Fetch the markdown content
-        const response = await fetch(`/raw/ru/essentials/manage-states.mdx`);
+        // Fetch the markdown content for the current page
+        const searchParams = new URLSearchParams({
+          stripFrontmatter: "1",
+          removeImports: "1",
+        });
+        const response = await fetch(`/raw/${slug}?${searchParams.toString()}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch markdown: ${response.statusText}`);
@@ -104,14 +137,18 @@ const aiLinks = [
         copyButton.classList.add('success');
         iconCopy.style.display = 'none';
         iconCheck.style.display = 'inline-block';
-        buttonText.textContent = 'Copied!';
+        if (buttonText) {
+          buttonText.textContent = textSuccess;
+        }
 
         // Reset after 2 seconds
         setTimeout(() => {
           copyButton.classList.remove('success');
           iconCopy.style.display = 'inline-block';
           iconCheck.style.display = 'none';
-          buttonText.textContent = 'Copy Markdown';
+          if (buttonText) {
+            buttonText.textContent = textDefault;
+          }
           copyButton.disabled = false;
         }, 2000);
 
@@ -120,12 +157,16 @@ const aiLinks = [
 
         // Show error state
         copyButton.classList.add('error');
-        buttonText.textContent = 'Error!';
+        if (buttonText) {
+          buttonText.textContent = textError;
+        }
 
         // Reset after 2 seconds
         setTimeout(() => {
           copyButton.classList.remove('error');
-          buttonText.textContent = 'Copy Markdown';
+          if (buttonText) {
+            buttonText.textContent = textDefault;
+          }
           copyButton.disabled = false;
         }, 2000);
       }

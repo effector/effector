@@ -6,7 +6,11 @@ interface Props {
 }
 
 const props = Astro.props as Props;
+const documentMeta = (Astro.locals.documentMeta ?? {}) as {
+  documentId?: string;
+  lang?: string;
+};
 ---
 
 <h1 {...props}><slot /></h1>
-<PageActions />
+<PageActions documentId={documentMeta.documentId} lang={documentMeta.lang} />

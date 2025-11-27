@@ -8,16 +8,21 @@ const CONTENT_ROOT = path.resolve("src/content/docs");
 export async function getStaticPaths() {
   const entries = await getCollection("docs");
   return entries.map((e) => {
-    // e.id: 'ru/essentials/manage-states.mdx'
-    const noExt = e.id.replace(/\.mdx?$/i, ""); // 'ru/essentials/manage-states'
-    return { params: { path: noExt.split("/") } }; // важно: массив!
+    const noExt = e.id.replace(/\.mdx?$/i, "");
+    return { params: { path: noExt } };
   });
 }
 
 export async function GET({ params, url }: { params: any; url: URL }) {
-  const parts: string[] = Array.isArray(params.path) ? params.path : [params.path].filter(Boolean);
+  let rel = "";
+  if (Array.isArray(params.path)) {
+    rel = params.path.join("/");
+  } else if (typeof params.path === "string") {
+    rel = params.path;
+  }
 
-  const rel = parts.join("/");
+  if (!rel) return new Response("Not found", { status: 404 });
+
   const base = path.resolve(CONTENT_ROOT, rel);
   const candidates = [base, base + ".mdx", base + ".md"];
 

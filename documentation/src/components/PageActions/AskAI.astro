@@ -1,6 +1,9 @@
 ---
 import DropDownMenu from "../DropDownMenu.astro";
 import ChevronDown from "@icons/ChevronDown.astro";
+import { getPathParamsFromId, getTextLocalized as t, translations } from "../../languages";
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
 
 // Get current page URL for AI prompts
 const currentUrl = new URL(Astro.url.pathname, Astro.site).href;
@@ -10,18 +13,18 @@ const encodedPrompt = encodeURIComponent(prompt);
 // AI options with links
 const aiLinks = [
   {
-    text: { en: "ChatGPT", ru: "ChatGPT" },
+    text: { en: "ChatGPT", ru: "ChatGPT", uz: "ChatGPT" },
     link: `https://chatgpt.com/?hints=search&q=${encodedPrompt}`,
   },
   {
-    text: { en: "Claude", ru: "Claude" },
+    text: { en: "Claude", ru: "Claude", uz: "Claude" },
     link: `https://claude.ai/new?q=${encodedPrompt}`,
   },
 ];
 ---
 
 <DropDownMenu links={aiLinks} class="ask-ai-dropdown">
-  <span class="ask-ai-text">Ask AI</span>
+  <span class="ask-ai-text">{t(translations.PageActions.AskAI, lang)}</span>
 </DropDownMenu>
 
 <!-- <style>
