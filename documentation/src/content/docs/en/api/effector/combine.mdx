@@ -135,10 +135,9 @@ export function combine<T extends any[]>(
   ...stores: T
 ): Store<{ [K in keyof T]: T[K] extends Store<infer U> ? U : T[K] }>;
 
-export function combine<A, B, R>(
-  a: Store<A>,
-  b: Store<B>,
-  fn: (a: A, b: B) => R,
+export function combine<T extends any[], R extends any>(
+  ...stores: T,
+  fn: (...stores: { [K in keyof T]: T[K] extends Store<infer U> ? U : T[K] }) => R,
   config?: { skipVoid?: boolean },
 ): Store<R>;
 
@@ -516,4 +515,3 @@ Returns a new [derived store](/en/explanation/glossary#derived-store).
   - [`createEvent`](/en/api/effector/createEvent) - Creating an event
 - **Articles**
   - [Managing states in effector and how to use derived stores](/en/essentials/manage-states)
-  - [Typing `combine` and other methods](/en/essentials/typescript)

@@ -132,10 +132,9 @@ export function combine<T extends any[]>(
   ...stores: T
 ): Store<{ [K in keyof T]: T[K] extends Store<infer U> ? U : T[K] }>;
 
-export function combine<A, B, R>(
-  a: Store<A>,
-  b: Store<B>,
-  fn: (a: A, b: B) => R,
+export function combine<T extends any[], R extends any>(
+  ...stores: T,
+  fn: (...stores: [K in keyof T]: T[K] extends Store<infer U> ? U : T[K]) => R,
   config?: { skipVoid?: boolean },
 ): Store<R>;
 
@@ -513,4 +512,3 @@ $pagination.watch((pagination) => console.log(pagination));
   - [`createEvent`](/ru/api/effector/createEvent) - Создание события
 - **Статьи**
   - [Управление состояниями в effector и как использовать производные сторы](/ru/essentials/manage-states)
-  - [Типизация `combine` и других методов](/ru/essentials/typescript)
