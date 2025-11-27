@@ -128,14 +128,6 @@ export const learning: LSidebarGroup[] = [
     items: [
       {
         text: {
-          en: "Flow splitting",
-          ru: "Разделение потока данных",
-          uz: "Flow to'plamasi",
-        },
-        link: "/essentials/flow-split",
-      },
-      {
-        text: {
           en: "Isolated scopes",
           ru: "Изолированные контексты",
           uz: "Izolatsiya qilingan kontekstlar",
@@ -144,11 +136,11 @@ export const learning: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Debug Traces mode",
-          ru: "Debug Traces mode",
-          uz: "Debug Traces mode",
+          en: "Flow splitting",
+          ru: "Разделение потока данных",
+          uz: "Flow to'plamasi",
         },
-        link: "/api/effector/enable_debug_traces",
+        link: "/essentials/flow-split",
       },
     ],
   },
@@ -291,6 +283,14 @@ export const guidesAndRecipes: LSidebarGroup[] = [
           ru: "Миграция с Redux",
         },
         link: "https://withease.effector.dev/magazine/migration_from_redux.html",
+      },
+      {
+        text: {
+          en: "Debug Traces mode",
+          ru: "Режим дебага",
+          uz: "Debug Traces mode",
+        },
+        link: "/api/effector/debug_traces",
       },
     ],
   },
@@ -436,7 +436,7 @@ export const effectorReact: LSidebarGroup[] = [
     items: [
       {
         text: { en: "effector-react/compat" },
-        link: "/api/effector-react/module/сompat",
+        link: "/api/effector-react/module/compat",
       },
       {
         text: { en: "effector-react/scope" },
@@ -847,7 +847,7 @@ export const effector: LSidebarGroup[] = [
     items: [
       {
         text: { en: "effector/compat" },
-        link: "/api/effector/module/сompat",
+        link: "/api/effector/module/compat",
       },
       {
         text: { en: "effector/inspect" },
