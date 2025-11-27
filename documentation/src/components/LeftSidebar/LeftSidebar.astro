@@ -70,34 +70,43 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
           role="tabpanel"
         >
           <ul class="nav-groups">
-            {sidebarItems.map((group, index) => (
-              <li>
-                <div class="nav-group">
-                  <button
-                    class="nav-group-title"
-                    aria-expanded={`${!group.collapsed}`}
-                    aria-controls={`group-${index}`}
-                  >
-                    {group.title}
-                    <ChevronRight class="arrow" />
-                  </button>
-                  <ul id={`group-${index}`}>
-                    {group.items.map((item) => (
-                      <li class="nav-link">
-                        <a
-                          href={item.link}
-                          aria-current={currentPageMatch === item.link ? "page" : false}
-                          target={item.link.startsWith("/") ? undefined : "_blank"}
-                          data-fallback={item.isFallback}
-                        >
-                          <span> {item.title}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            ))}
+            {sidebarItems.map((group, index) => {
+              const isCollapsed = Boolean(group.collapsed);
+              return (
+                <li>
+                  <div class="nav-group">
+                    <button
+                      class="nav-group-title"
+                      class:list={{ collapsed: isCollapsed }}
+                      aria-expanded={`${!isCollapsed}`}
+                      aria-controls={`group-${index}`}
+                    >
+                      {group.title}
+                      <ChevronRight class="arrow" />
+                    </button>
+                    <ul
+                      id={`group-${index}`}
+                      class:list={{ collapsed: isCollapsed }}
+                      aria-hidden={isCollapsed ? "true" : "false"}
+                    >
+                      {group.items.map((item) => (
+                        <li class="nav-link">
+                          <a
+                            href={item.link}
+                            aria-current={currentPageMatch === item.link ? "page" : false}
+                            target={item.link.startsWith("/") ? undefined : "_blank"}
+                            data-fallback={item.isFallback}
+                            tabindex={isCollapsed ? "-1" : undefined}
+                          >
+                            <span> {item.title}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ))
@@ -117,22 +126,25 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     navGroups.forEach((group) => {
       const button = group.querySelector("button");
       const content = group.querySelector("ul");
-      if (button && content) {
-        const expanded = button.getAttribute("aria-expanded") === "true";
+      if (!button || !content) return;
+
+      const updateState = (expanded:boolean) => {
+        button.setAttribute("aria-expanded", expanded.toString());
+        button.classList.toggle("collapsed", !expanded);
         content.classList.toggle("collapsed", !expanded);
-        
-        button.addEventListener("click", () => {
-          const expanded = button.getAttribute("aria-expanded") === "true";
-          button.setAttribute("aria-expanded", (!expanded).toString());
-          
-          content.classList.toggle("collapsed", expanded);
-          content.setAttribute("aria-hidden", expanded.toString());
-          content.querySelectorAll("a").forEach((link) => {
-            link.setAttribute("tabindex", expanded ? "-1" : "0");
-          });
-          button.classList.toggle("collapsed", expanded);
+        content.setAttribute("aria-hidden", (!expanded).toString());
+        content.querySelectorAll("a").forEach((link) => {
+          link.setAttribute("tabindex", expanded ? "0" : "-1");
         });
-      }
+      };
+
+      const initialExpanded = button.getAttribute("aria-expanded") === "true";
+      updateState(initialExpanded);
+
+      button.addEventListener("click", () => {
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        updateState(!expanded);
+      });
     });
   }
 
