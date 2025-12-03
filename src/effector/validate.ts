@@ -5,8 +5,13 @@ import {isObject, isFunction} from './is'
 import {getMeta} from './getter'
 import { UnitTargetable } from 'effector'
 
+const validKinds: readonly string[] = [STORE, EVENT, EFFECT, DOMAIN, SCOPE]
+
 export const unit = (obj: unknown): obj is Unit<any> =>
-  (isFunction(obj) || isObject(obj)) && 'kind' in obj
+  (isFunction(obj) || isObject(obj)) &&
+  'kind' in obj &&
+  'graphite' in obj &&
+  validKinds.includes((obj as any).kind)
 
 const is = (type: Kind) => (obj: unknown) => unit(obj) && obj.kind === type
 

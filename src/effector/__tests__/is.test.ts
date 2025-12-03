@@ -63,3 +63,30 @@ test('is.targetable', () => {
   expect(is.targetable(domain)).toBe(false)
   expect(is.targetable(scope)).toBe(false)
 })
+
+// https://github.com/effector/effector/issues/1292
+describe('is.unit should not match plain objects with "kind" field', () => {
+  test('plain object with "kind" field is not a unit', () => {
+    const objWithKind = {kind: 'store'}
+    const objWithInvalidKind = {kind: 'foo'}
+    const objWithKindStore = {kind: createStore(0)}
+
+    expect(is.unit(objWithKind)).toBe(false)
+    expect(is.unit(objWithInvalidKind)).toBe(false)
+    expect(is.unit(objWithKindStore)).toBe(false)
+  })
+
+  test('real units are still recognized', () => {
+    const event = createEvent()
+    const $store = createStore(0)
+    const fx = createEffect()
+    const domain = createDomain()
+    const scope = fork()
+
+    expect(is.unit(event)).toBe(true)
+    expect(is.unit($store)).toBe(true)
+    expect(is.unit(fx)).toBe(true)
+    expect(is.unit(domain)).toBe(true)
+    expect(is.unit(scope)).toBe(true)
+  })
+})

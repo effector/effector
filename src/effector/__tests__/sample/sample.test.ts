@@ -854,3 +854,45 @@ describe('greedy deprecation', () => {
     )
   })
 })
+
+// https://github.com/effector/effector/issues/1292
+describe('source object with reserved field names', () => {
+  test('object source with "kind" field should work correctly', () => {
+    const fn = jest.fn()
+    const buttonClicked = createEvent()
+    const $kind = createStore(42)
+
+    const target = createEffect((params: {kind: number}) => {
+      fn(params)
+    })
+
+    sample({
+      clock: buttonClicked,
+      source: {kind: $kind},
+      target,
+    })
+
+    buttonClicked()
+    expect(argumentHistory(fn)).toEqual([{kind: 42}])
+  })
+
+  test('object source with multiple fields including "kind" should work correctly', () => {
+    const fn = jest.fn()
+    const buttonClicked = createEvent()
+    const $kind = createStore('test-kind')
+    const $value = createStore(100)
+
+    const target = createEffect((params: {kind: string; value: number}) => {
+      fn(params)
+    })
+
+    sample({
+      clock: buttonClicked,
+      source: {kind: $kind, value: $value},
+      target,
+    })
+
+    buttonClicked()
+    expect(argumentHistory(fn)).toEqual([{kind: 'test-kind', value: 100}])
+  })
+})
