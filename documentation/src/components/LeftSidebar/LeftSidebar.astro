@@ -220,6 +220,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   .navigation {
     overflow-x: visible;
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding-top: 32px;
     scrollbar-gutter: stable;
     width: 100%;
@@ -255,7 +256,6 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   .nav-groups > :last-child {
-    margin-bottom: var(--theme-navbar-height);
     padding-bottom: 2rem;
   }
 
