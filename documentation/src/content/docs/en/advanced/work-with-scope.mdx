@@ -12,13 +12,13 @@ import SideBySide from "@components/SideBySide/SideBySide.astro";
 With [scopes](/en/api/effector/Scope) you can work with isolated instance for the entire application, which contains an independent clone of all units (including connections between them) and basic methods to access them:
 
 ```ts "fork" "allSettled"
-import { fork, allSettled } from "effector";
+import { fork, allSettled, createStore, createEvent } from "effector";
 
 // create a new scope
 const scope = fork();
 
-const $counter = scope.createStore(0);
-const increment = scope.createEvent();
+const $counter = createStore(0);
+const increment = createEvent();
 
 $counter.on(increment, (state) => state + 1);
 
