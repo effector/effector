@@ -210,10 +210,13 @@ export function isSidebarGroup(item: LSidebarGroup | LSidebarItem): item is LSid
 
 export type ItemTag = "useful";
 
+export type ItemStatus = "new" | "deprecated";
+
 export type LSidebarItem = {
   text: LText;
   link: string;
   tags?: ItemTag[];
+  status?: ItemStatus;
 };
 
 type LSidebarIconItem = LSidebarItem & { icon?: (opts: { size?: number }) => any };
@@ -258,6 +261,7 @@ export async function getLocalizedPanelSidebar(slug: string, lang: string) {
             return {
               title: itemTitle,
               link: item.link,
+              status: item.status,
             };
           }
 
@@ -268,6 +272,7 @@ export async function getLocalizedPanelSidebar(slug: string, lang: string) {
             return {
               title: itemTitle,
               link,
+              status: item.status,
             };
           }
 
@@ -278,6 +283,7 @@ export async function getLocalizedPanelSidebar(slug: string, lang: string) {
               title: `${itemTitle}`,
               link,
               isFallback: true,
+              status: item.status,
             };
           }
 
@@ -285,6 +291,7 @@ export async function getLocalizedPanelSidebar(slug: string, lang: string) {
           return {
             title: `${itemTitle} (404)`,
             link: item.link,
+            status: item.status,
           };
         }),
       };

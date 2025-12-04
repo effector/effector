@@ -97,9 +97,10 @@ h6 {
 .content section h1 {
   font-size: var(--text-h1);
   line-height: var(--leading-heading);
-  margin: var(--space-12) 0 0 0;
-
+  margin: 0;
   letter-spacing: var(--tracking-heading);
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--theme-bg-hover);
 }
 
 .content section h2 {

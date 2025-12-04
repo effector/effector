@@ -1,6 +1,6 @@
 --- 
 import type { MarkdownHeading } from 'astro';
-import { getEntry, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 
 import CommonLayout from './CommonLayout.astro';
 
@@ -9,7 +9,7 @@ import Contributors from '@components/PageContent/Contributors.astro';
 import LeftSidebar from '@components/LeftSidebar/LeftSidebar.astro';
 import RightSidebar from '@components/RightSidebar/RightSidebar.astro';
 import PageNavigation from '@components/Pagination/PageNavigation.astro';
-import H1 from '@components/MDX/H1.astro';
+
 
 export type Props = CollectionEntry<'docs'>['data'] & {
 	headings: MarkdownHeading[];
@@ -33,21 +33,6 @@ const {
 	...data
 } = Astro.props;
 
-const getCurrentEntry=async (slug:string)=>{
-	const entry = await getEntry('docs', `${lang}/${slug?.toLocaleLowerCase()}`);
-	return entry
-}
-
-const entry = await getCurrentEntry(Astro.params.slug!)
-
-const { Content } = await entry!.render();
-
-Astro.locals.documentMeta = { documentId, lang };
-
-const components = {
-	h1: H1,
-};
-
 const currentPage = Astro.url.pathname;
 ---
 
@@ -66,7 +51,7 @@ const currentPage = Astro.url.pathname;
 				pagefindWeight={pagefindWeight}
 				indexing={indexing}
 			>
-				<Content components={components} />
+				<slot/>
 				<PageNavigation />
 			</PageContent>
 			<Contributors documentId={documentId} />

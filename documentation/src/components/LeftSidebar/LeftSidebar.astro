@@ -3,6 +3,8 @@ import type { MarkdownHeading } from "astro";
 import { getPathParamsFromId } from "../../languages";
 import { getActiveTabSidebar, getLocalizedPanelSidebar } from "../../navigation";
 import ChevronRight from "src/icons/ChevronRight.astro";
+import StatusNew from "src/icons/StatusNew.astro";
+import StatusDeprecated from "src/icons/StatusDeprecated.astro";
 import { trimTrailingSlash } from "src/libs/path";
 import { PANEL_ITEMS } from "src/sidebar-config";
 import { PANEL_FRAMEWORK_ITEMS } from "src/sidebar-config";
@@ -96,9 +98,12 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
                             aria-current={currentPageMatch === item.link ? "page" : false}
                             target={item.link.startsWith("/") ? undefined : "_blank"}
                             data-fallback={item.isFallback}
+                            data-status={item.status}
                             tabindex={isCollapsed ? "-1" : undefined}
                           >
                             <span> {item.title}</span>
+                            {item.status === "new" && <StatusNew class="status-badge" size={20} />}
+                            {item.status === "deprecated" && <StatusDeprecated size={20} class="status-badge" />}
                           </a>
                         </li>
                       ))}
@@ -225,7 +230,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   nav > div {
-    padding-right: 12px;
+    padding-right: 0.75rem;
   }
 
   .nav-groups {
@@ -259,8 +264,10 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   .nav-group-title {
-    @apply rounded-md px-4 py-1;
+    @apply rounded-md py-1;
     margin: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -306,10 +313,14 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   .nav-link a {
-    @apply flex items-center rounded-md px-7 py-1 text-base;
+    @apply flex items-center rounded-md py-1 text-base;
+    padding-left: 1.75rem;
+    padding-right: 1rem;
     color: var(--theme-left-sidebar-item-text);
     font: inherit;
     text-decoration: none;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
   .nav-link a[data-fallback] span:after {
@@ -348,6 +359,36 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     :global(.theme-dark) .nav-link a[href^="https://"]::after
   {
     filter: invert();
+  }
+
+  /* ========================================
+     STATUS BADGES
+     ======================================== */
+
+  .nav-link a :global(.status-badge) {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 0.5rem;
+    opacity: 0.6;
+    transition: opacity 200ms ease;
+  }
+
+  .nav-link a[data-status="new"] :global(.status-badge) {
+    color: var(--theme-status-new);
+  }
+
+  .nav-link a[data-status="deprecated"] :global(.status-badge) {
+    color: var(--theme-status-deprecated);
+  }
+
+  .nav-link a:hover :global(.status-badge),
+  .nav-link a:focus :global(.status-badge) {
+    opacity: 0.8;
+  }
+
+  .nav-link a[aria-current="page"] :global(.status-badge) {
+    opacity: 1;
+    color: inherit;
   }
 
   @media (min-width: 50em) {

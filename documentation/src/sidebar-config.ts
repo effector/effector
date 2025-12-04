@@ -63,6 +63,7 @@ export const learning: LSidebarGroup[] = [
           uz: "O'zgaruvchilar",
         },
         link: "/essentials/events",
+        status: "new",
       },
       {
         text: {
@@ -79,6 +80,7 @@ export const learning: LSidebarGroup[] = [
           uz: "Asinkronlik bilan ishlash",
         },
         link: "/essentials/work-with-async",
+        status: "new",
       },
       {
         text: {
@@ -345,6 +347,10 @@ export const guidesAndRecipes: LSidebarGroup[] = [
         link: "/resources/releases",
       },
       {
+        text: { en: "StackBlitz Examples", ru: "Примеры в StackBlitz", uz: "StackBlitz misollari" },
+        link: "/resources/stackblitz-examples",
+      },
+      {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
       },
@@ -393,12 +399,14 @@ export const effectorReact: LSidebarGroup[] = [
         tags: ["useful"],
       },
       {
-        text: { en: "useStore ⚠️", ru: "useStore ⚠️", uz: "useStore ⚠️" },
+        text: { en: "useStore", ru: "useStore", uz: "useStore" },
         link: "/api/effector-react/useStore",
+        status: "deprecated",
       },
       {
-        text: { en: "useEvent ⚠️", ru: "useEvent ⚠️", uz: "useEvent ⚠️" },
+        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
         link: "/api/effector-react/useEvent",
+        status: "deprecated",
       },
     ],
   },
@@ -736,11 +744,13 @@ export const effector: LSidebarGroup[] = [
         text: { en: "combine" },
         link: "/api/effector/combine",
         tags: ["useful"],
+        status: "new",
       },
       {
         text: { en: "attach" },
         link: "/api/effector/attach",
         tags: ["useful"],
+        status: "new",
       },
       {
         text: { en: "merge" },
@@ -763,23 +773,26 @@ export const effector: LSidebarGroup[] = [
         tags: ["useful"],
       },
       {
-        text: { en: "forward ⚠️" },
+        text: { en: "forward" },
         link: "/api/effector/forward",
+        status: "deprecated",
       },
       {
-        text: { en: "guard ⚠️" },
+        text: { en: "guard" },
         link: "/api/effector/guard",
+        status: "deprecated",
       },
     ],
   },
   {
     text: { en: "Fork API" },
-    collapsed: true,
+    collapsed: false,
     items: [
       {
         text: { en: "fork" },
         link: "/api/effector/fork",
         tags: ["useful"],
+        status: "new",
       },
       {
         text: { en: "serialize" },
@@ -799,6 +812,36 @@ export const effector: LSidebarGroup[] = [
       {
         text: { en: "hydrate" },
         link: "/api/effector/hydrate",
+      },
+    ],
+  },
+  {
+    text: { en: "Import map", ru: "Подпакеты" },
+    items: [
+      {
+        text: { en: "effector/compat" },
+        link: "/api/effector/module/compat",
+      },
+      {
+        text: { en: "effector/inspect" },
+        link: "/api/effector/module/inspect",
+      },
+      {
+        text: { en: "effector/babel-plugin" },
+        link: "/api/effector/module/babel-plugin",
+      },
+    ],
+  },
+  {
+    text: { en: "Compiler Plugins", ru: "Плагины для сборки" },
+    items: [
+      {
+        text: { en: "Babel plugin" },
+        link: "/api/effector/babel-plugin",
+      },
+      {
+        text: { en: "SWC plugin" },
+        link: "/api/effector/swc-plugin",
       },
     ],
   },
@@ -839,36 +882,6 @@ export const effector: LSidebarGroup[] = [
       {
         text: { en: "inspect" },
         link: "/api/effector/inspect",
-      },
-    ],
-  },
-  {
-    text: { en: "Import map", ru: "Подпакеты" },
-    items: [
-      {
-        text: { en: "effector/compat" },
-        link: "/api/effector/module/compat",
-      },
-      {
-        text: { en: "effector/inspect" },
-        link: "/api/effector/module/inspect",
-      },
-      {
-        text: { en: "effector/babel-plugin" },
-        link: "/api/effector/module/babel-plugin",
-      },
-    ],
-  },
-  {
-    text: { en: "Compiler Plugins", ru: "Плагины для сборки" },
-    items: [
-      {
-        text: { en: "Babel plugin" },
-        link: "/api/effector/babel-plugin",
-      },
-      {
-        text: { en: "SWC plugin" },
-        link: "/api/effector/swc-plugin",
       },
     ],
   },
