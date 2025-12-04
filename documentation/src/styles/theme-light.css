@@ -125,5 +125,8 @@
   --theme-border-good: hsla(var(--color-green-500), 0.7);
   --theme-border-bad: hsla(var(--color-red-500), 0.7);
 
+  --theme-status-new: hsl(var(--color-blue-600));
+  --theme-status-deprecated: hsl(var(--color-primary-600));
+
   color-scheme: light;
 }

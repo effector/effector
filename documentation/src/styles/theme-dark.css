@@ -129,6 +129,9 @@
   --theme-border-good: hsla(var(--color-green-600), 0.6);
   --theme-border-bad: hsla(var(--color-red-600), 0.6);
 
+  --theme-status-new: hsl(var(--color-blue-400));
+  --theme-status-deprecated: hsl(var(--color-yellow-500));
+
   /* ========================================
      COLOR SCHEME
      ======================================== */

@@ -192,7 +192,7 @@ const fetchInitialData = createEffect(async () => {
 });
 ```
 
-If you [work with scopes](/en/advanced/work-with-scope), this pattern may lead to [scope loss](/en/guides/scope-loss). In that case wrap the event with [`scopeBind`](/en/api/effector/scopeBind) in root of effect and use returned value as working event. No extra work is required outside of scoped environments.
+If you [work with scopes](/en/advanced/work-with-scope), this pattern may lead to [scope loss](/en/guides/scope-loss). In that case wrap the handler with [`scopeBind`](/en/api/effector/scopeBind). No extra work is required outside of scoped environments.
 
 ## Update a store when the effect completes (#update-store-when-effect-completes)
 
