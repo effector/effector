@@ -63,13 +63,15 @@ const currentPage = Astro.url.pathname;
 </CommonLayout>
 
 <style>
+	
 	:root {
 		--gutter: 0.5rem;
 		--content-max-width: 56rem;
 	}
 
 	main {
-		margin-top: var(--theme-navbar-height);
+		margin-top: 0;
+		padding: var(--space-4);
 	}
 
 	.layout {
@@ -84,14 +86,15 @@ const currentPage = Astro.url.pathname;
 
 	#grid-left {
 		display: none;
-		position: fixed;
-		z-index: 10;
-		background-color: var(--theme-bg);
+		top: var(--space-4);
 		height: 100%;
 		position: sticky;
-		top: var(--theme-navbar-height, 0);
 		padding: 0;
-		height: calc(100vh - var(--theme-navbar-height, 0));
+		height: calc(100vh - 2 * var(--space-4))
+	}
+
+	#grid-right {
+		display: none;
 	}
 
 	#grid-main {
@@ -99,13 +102,11 @@ const currentPage = Astro.url.pathname;
 		grid-column: 2;
 		flex-direction: column;
 		padding-block: var(--doc-padding);
-		padding-inline: 0.2rem;
+		padding-left: 1rem;
 		height: 100%;
 	}
 
-	#grid-right {
-		display: none;
-	}
+	
 
 	@media (min-width: 768px) {
 		:root {
@@ -122,11 +123,6 @@ const currentPage = Astro.url.pathname;
 			display: flex;
 			position: sticky;
 			grid-column: 1;
-			padding-left: 1.5rem;
-		}
-
-		#grid-main {
-			padding-right: 2rem;
 		}
 	}
 
@@ -144,13 +140,14 @@ const currentPage = Astro.url.pathname;
 				);
 			margin-right: auto;
 			margin-left: auto;
-			padding-right: 0;
-			padding-left: 0;
 		}
 
 		#grid-right {
 			display: flex;
 			grid-column: 3;
+			position: sticky;
+			top: var(--space-4);
+			height: calc(100vh - 2 * var(--space-4));
 		}
 	}
 

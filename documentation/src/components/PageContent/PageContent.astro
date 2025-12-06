@@ -34,11 +34,11 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   data-weight={pagefindWeight}
 >
   <section class="main-section">
-    <nav class="block xl:hidden" data-pagefind-ignore>
+    <nav class="mobile-toc block" data-pagefind-ignore>
       <TableOfContents
+        client:media="(max-width: 50em)"
         lang={lang}
         collapsed
-        client:media="(max-width: 1280px)"
         client:only="preact"
         headings={headings}
       />
@@ -46,8 +46,8 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     <slot />
   </section>
 
-  <nav class="mb-8 block xl:hidden" data-pagefind-ignore>
-    <MoreMenu documentId={documentId} />
+  <nav class="mobile-toc mb-8 block" data-pagefind-ignore>
+    <MoreMenu client:media="(max-width: 50em)" documentId={documentId} />
   </nav>
 </article>
 
@@ -58,6 +58,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     padding: 0;
     height: 100%;
     width: 100%;
+  }
+
+  /* Hide mobile TOC when right sidebar is visible */
+  @media (min-width: 1280px) {
+    .mobile-toc {
+      display: none;
+    }
   }
 
   .content > section {

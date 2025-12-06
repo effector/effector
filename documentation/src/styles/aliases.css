@@ -49,8 +49,8 @@
      LINE HEIGHT SEMANTIC TOKENS
      ======================================== */
 
-  --leading-body: var(--line-height-normal);
-  --leading-content: var(--line-height-extra-loose);
+  --leading-body: var(--line-height-snug);
+  --leading-content: var(--line-height-relaxed);
   --leading-heading: var(--line-height-tight); /* 1.25 - headings */
   --leading-code: var(--line-height-normal); /* 1.5 - code */
   --leading-nav: var(--line-height-snug); /* 1.375 - navigation */

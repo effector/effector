@@ -175,16 +175,12 @@ const pagefindTranslations = Object.fromEntries(
   button[data-open-modal] {
     @apply m-0 box-border flex cursor-pointer gap-2 rounded-2xl px-2 py-1 outline-0;
 
-    transition-property: border-color, color, background-color;
-    transition-duration: 0.2s;
-    transition-timing-function: ease-out;
-
     background-color: var(--theme-secondary-bg);
-    color: var(--theme-text);
+    color: var(--theme-left-sidebar-item-text);
     overflow: visible;
 
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: var(--font-size-base);
     font-weight: 500;
     line-height: inherit;
     -webkit-font-smoothing: antialiased;
@@ -201,6 +197,7 @@ const pagefindTranslations = Object.fromEntries(
 
   kbd {
     font-family: var(--font-fallback);
+    margin-left: auto !important;
   }
 
   dialog {

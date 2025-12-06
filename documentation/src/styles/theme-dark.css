@@ -1,5 +1,28 @@
 :root.theme-dark {
   /* ========================================
+     DOCUMENTATION DESIGN TOKENS
+     ======================================== */
+
+  --doc-bg-page: rgba(29, 29, 31, 0.7);
+  --doc-bg-page-solid: rgb(29, 29, 31);
+
+  --doc-bg-sidebar: rgba(18, 18, 19, 0.7);
+  --doc-bg-sidebar-surface: rgba(18, 18, 19, 0.7);
+  --doc-bg-surface-subtle: rgba(29, 29, 31, 0.7);
+
+  /* Бордеры и делители */
+  --doc-border-subtle: rgba(255, 255, 255, 0.14);
+  --doc-border-strong: rgba(255, 255, 255, 0.24);
+
+  /* Текст */
+  --doc-fg-primary: #fafafa;
+  --doc-fg-secondary: #a3a3b0;
+  --doc-fg-muted: #6b6b76;
+
+  /* Иконки по умолчанию */
+  --doc-icon-muted: #8a8a96;
+
+  /* ========================================
      ACCENT COLORS
      ======================================== */
 
@@ -12,12 +35,15 @@
      BACKGROUNDS
      ======================================== */
 
-  --theme-bg: hsl(var(--color-gray-950));
-  --theme-bg-sidebar-tabs-bg: hsl(var(--color-gray-900), 1);
-  --theme-secondary-bg: hsl(var(--color-gray-950), 1);
-  --theme-bg-code: hsl(var(--color-gray-900));
-  --theme-bg-hover: hsl(var(--color-gray-800));
-  --theme-bg-offset: hsl(var(--color-gray-900));
+  --theme-bg: var(--doc-bg-page);
+  --theme-bg-sidebar-tabs-bg: var(--doc-bg-sidebar);
+  --theme-bg-sidebar-main-tabs: var(--doc-bg-sidebar-surface);
+  --theme-bg-sidebar-main-tabs-active: var(--doc-bg-surface-subtle);
+  --theme-secondary-bg: var(--doc-bg-surface-subtle);
+  --theme-dropdown-bg: #1d1d1f;
+  --theme-bg-code: var(--theme-code-bg);
+  --theme-bg-hover: var(--doc-bg-surface-raised);
+  --theme-bg-offset: var(--doc-bg-surface-subtle);
   --theme-bg-accent: hsla(var(--color-primary-500), var(--theme-accent-opacity));
   --theme-backdrop-color: rgba(0, 0, 0, 0.5);
 
@@ -25,26 +51,26 @@
      TEXT COLORS
      ======================================== */
 
-  --theme-text: hsl(var(--color-gray-100));
-  --theme-text-light: hsl(var(--color-gray-400));
-  --theme-text-lighter: hsl(var(--color-gray-500));
-  --theme-text-dark: hsl(var(--color-gray-50));
+  --theme-text: var(--doc-fg-primary);
+  --theme-text-light: var(--doc-fg-secondary);
+  --theme-text-lighter: var(--doc-fg-muted);
+  --theme-text-dark: var(--doc-fg-primary);
 
   /* ========================================
      DIVIDERS AND BORDERS
      ======================================== */
 
-  --theme-divider: hsl(var(--color-gray-800));
-  --theme-divider-light: hsla(var(--color-gray-700), 0.6);
-  --theme-divider-dark: hsla(var(--color-gray-600), 0.8);
+  --theme-divider: var(--doc-border-subtle);
+  --theme-divider-light: rgba(255, 255, 255, 0.04);
+  --theme-divider-dark: var(--doc-border-strong);
 
   /* ========================================
      CARDS
      ======================================== */
 
-  --theme-card: hsl(var(--color-gray-900));
-  --theme-card-hover: hsl(var(--color-gray-800));
-  --theme-card-divider: hsla(var(--color-gray-700), 0.8);
+  --theme-card: var(--doc-bg-surface-subtle);
+  --theme-card-hover: var(--doc-bg-surface-raised);
+  --theme-card-divider: var(--doc-border-subtle);
 
   /* ========================================
      CODE
@@ -69,9 +95,9 @@
      Three-level hierarchy for better depth
      ======================================== */
 
-  --theme-navbar-bg: hsla(var(--color-gray-800), 0.5);
-  --theme-nav-panel-bg: hsla(var(--color-gray-800), 0.5);
-  --theme-nav-panel-active: hsla(var(--color-gray-700), 0.7);
+  --theme-navbar-bg: var(--doc-bg-sidebar-surface);
+  --theme-nav-panel-bg: var(--doc-bg-sidebar-surface);
+  --theme-nav-panel-active: var(--doc-bg-surface-raised);
 
   /* ========================================
      SELECTION
@@ -84,7 +110,12 @@
      SIDEBAR
      ======================================== */
 
-  --theme-left-sidebar-item-text: hsl(var(--color-gray-400));
+  --theme-left-sidebar-item-text: #8a8a96;
+  --theme-sidebar-active-bg: hsla(var(--color-primary-950), 0.5);
+  --theme-sidebar-active-text: hsl(var(--color-primary-300));
+  --theme-sidebar-border: rgba(255, 255, 255, 0.15);
+  --theme-sidebar-surface-border: var(--theme-sidebar-border);
+  --theme-sidebar-tab-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
 
   /* ========================================
      ADMONITIONS - TIP

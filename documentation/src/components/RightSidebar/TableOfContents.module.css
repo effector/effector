@@ -1,11 +1,13 @@
 .title {
   @apply m-0 mb-2 border-0 p-0 uppercase;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   font-family:
     Lexend Deca,
     sans-serif;
+  color: var(--doc-fg-muted);
+  letter-spacing: 0.05em;
 }
 
 .contents {
@@ -28,16 +30,15 @@
 .link::before {
   content: "";
   @apply absolute bottom-0 right-0 top-0 w-8;
-  background: linear-gradient(90deg, transparent, var(--theme-bg, white));
 }
 
 .link a {
   @apply flex overflow-clip whitespace-nowrap;
-  color: var(--theme-text-light);
+  color: var(--doc-fg-secondary);
 }
 
 .link a:hover {
-  color: var(--theme-text-dark);
+  color: var(--doc-fg-primary);
   text-decoration: underline;
 }
 

@@ -1,5 +1,12 @@
 :root {
   /* ========================================
+     DOCUMENTATION DESIGN TOKENS
+     ======================================== */
+
+  --doc-bg-page: #fff;
+  --doc-bg-page-solid: #fff;
+
+  /* ========================================
      ACCENT COLORS
      ======================================== */
 
@@ -12,10 +19,13 @@
      BACKGROUNDS
      ======================================== */
 
-  --theme-bg: hsl(var(--color-gray-50));
-  --theme-bg-sidebar-tabs-bg: #fff;
+  --theme-bg: #fff;
+  --theme-bg-sidebar-tabs-bg: hsl(var(--color-gray-50));
+  --theme-bg-sidebar-main-tabs: hsl(var(--color-base-gray), 97%);
+  --theme-bg-sidebar-main-tabs-active: #fff;
   --theme-secondary-bg: hsl(var(--color-gray-200), 0.8);
-  --theme-bg-code: #fff;
+  --theme-dropdown-bg: #fff;
+  --theme-bg-code: hsl(var(--color-gray-50));
   --theme-bg-hover: hsl(var(--color-gray-200));
   --theme-bg-offset: hsl(var(--color-gray-100));
   --theme-bg-accent: hsla(var(--color-primary-500), var(--theme-accent-opacity));
@@ -52,8 +62,8 @@
 
   --theme-code-inline-bg: hsl(var(--color-gray-200), 0.8);
   --theme-code-inline-text: hsl(var(--color-gray-800));
-  --theme-code-bg: hsl(var(--color-gray-900));
-  --theme-code-text: hsl(var(--color-gray-100));
+  --theme-code-bg: hsl(var(--color-gray-100));
+  --theme-code-text: hsl(var(--color-gray-900));
 
   --theme-code-ins-bg: hsla(var(--color-green-400), 0.2);
   --theme-code-ins-border: hsl(var(--color-green-400));
@@ -80,7 +90,13 @@
      SIDEBAR
      ======================================== */
 
-  --theme-left-sidebar-item-text: hsl(var(--color-gray-700));
+  --theme-left-sidebar-item-text: hsl(var(--color-gray-600));
+  --theme-sidebar-active-bg: hsla(var(--color-primary-100), 0.45);
+  --theme-sidebar-active-text: hsl(var(--color-primary-600));
+  --theme-sidebar-border: #fff;
+  --theme-sidebar-surface-border: hsla(var(--color-gray-300), 0.8);
+  --theme-sidebar-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+  --theme-sidebar-tab-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
 
   /* ========================================
      ADMONITIONS - TIP

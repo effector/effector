@@ -68,6 +68,10 @@ nav ul {
   margin-top: var(--spacing-content-gap);
 }
 
+.content > section > :where(p, ul, ol, blockquote, pre, table) + :where(p, ul, ol, blockquote, pre, table) {
+  margin-top: var(--spacing-text-gap);
+}
+
 .content > section {
   line-height: var(--leading-content);
 }
@@ -258,19 +262,19 @@ article > section nav :is(ul, ol) > * + * {
 }
 
 article > section li > :is(p, pre, blockquote):not(:first-child) {
-  margin-top: var(--space-4); /* Increased from 12px to 16px */
+  margin-top: var(--spacing-text-gap);
 }
 
 article > section :is(ul, ol) {
   padding-left: var(--space-6);
-  margin-top: var(--space-4); /* Add consistent top margin */
-  margin-bottom: var(--space-4); /* Add consistent bottom margin */
+  margin-top: var(--spacing-text-gap);
+  margin-bottom: var(--spacing-text-gap);
 }
 
 article > section ul :is(ul, ol) {
   padding-left: var(--space-6);
-  margin-top: 0; /* Add consistent top margin */
-  margin-bottom: var(--space-4); /* Add consistent bottom margin */
+  margin-top: 0; /* Keep nested lists close to their parent item */
+  margin-bottom: var(--spacing-text-gap);
 }
 
 article > section nav :is(ul, ol) {
@@ -301,10 +305,10 @@ article > section ol ::marker {
 }
 
 article > section ol:not(.breadcrumbs) li {
-  margin: var(--space-2) 0;
+  margin: var(--space-1) 0;
 }
 article > section ul:not(.breadcrumbs) li {
-  margin: var(--space-2) 0;
+  margin: var(--space-1) 0;
 }
 
 body a > code {
@@ -366,16 +370,23 @@ table {
   border-collapse: collapse;
   padding: var(--padding-block) 0;
   width: 100%;
+  background-color: transparent;
+  color: var(--theme-text-light);
 }
 
-/* Zebra striping */
-tr:nth-of-type(odd) {
-  background: var(--theme-bg-hover);
-}
-th {
-  background: var(--color-black);
-  color: var(--theme-color);
+table thead th {
+  color: var(--theme-text);
   font-weight: bold;
+  border-bottom: 1px solid var(--theme-divider-dark);
+  background: transparent;
+}
+
+table tbody :is(td, th) {
+  border-bottom: 1px solid var(--theme-divider);
+}
+
+table tbody tr:last-child :is(td, th) {
+  border-bottom: none;
 }
 td,
 th {

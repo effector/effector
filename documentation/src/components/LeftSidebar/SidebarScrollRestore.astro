@@ -4,25 +4,32 @@
 
 <sidebar-scroll-restore> </sidebar-scroll-restore>
 
-<!-- we need inline derective to avoid quick flick on page load because sidebar scroll is resetting when new page opens -->
+<!-- we need inline directive to avoid quick flick on page load because sidebar scroll is resetting when new page opens -->
 <script is:inline>
   class SidebarScrollRestore extends HTMLElement {}
 
-  const sidebar = document.querySelector("#sidebar");
+  const navContent = document.querySelector(".nav-content");
   const scrollState = sessionStorage.getItem("sidebar-scroll") || "0";
-  if (scrollState && sidebar) {
-    sidebar.scrollTop = parseInt(scrollState);
+  if (scrollState && navContent) {
+    navContent.scrollTop = parseInt(scrollState);
   }
 
   customElements.define("sidebar-scroll-restore", SidebarScrollRestore);
 </script>
 
 <script>
-  const sidebar = document.querySelector("#sidebar");
+  function saveScrollPosition() {
+    const navContent = document.querySelector(".nav-content");
+    sessionStorage.setItem("sidebar-scroll", `${Math.round(navContent?.scrollTop || 0)}`);
+  }
 
+  // Save scroll when tab becomes hidden
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
-      sessionStorage.setItem("sidebar-scroll", `${Math.round(sidebar?.scrollTop || 0)}`);
+      saveScrollPosition();
     }
   });
+
+  // Save scroll before Astro page transition
+  document.addEventListener("astro:before-swap", saveScrollPosition);
 </script>

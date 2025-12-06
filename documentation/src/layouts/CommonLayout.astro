@@ -26,16 +26,17 @@ const currentPage = Astro.url.pathname;
 		</title>
 		<style>
 			body {
-				--doc-padding: var(--space-12);
+				--doc-padding: var(--space-8);
 				display: grid;
 				grid-template-rows: 1fr auto;
 				width: 100%;
+				position: relative;
 			}
+
 		</style>
 	</head>
 
 	<body>
-		<Header currentPage={currentPage} />
 		<slot />
 		<!-- <Footer /> -->
 	</body>

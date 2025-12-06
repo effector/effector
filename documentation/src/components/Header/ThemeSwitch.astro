@@ -2,30 +2,14 @@
 import ThemeAuto from "@icons/ThemeAuto.astro";
 import ThemeDark from "@icons/ThemeDark.astro";
 import ThemeLight from "@icons/ThemeLight.astro";
-
-const themes = [
-  { id: "light", Icon: ThemeLight },
-  { id: "auto", Icon: ThemeAuto },
-  { id: "dark", Icon: ThemeDark },
-];
 ---
 
 <theme-switch class="theme-switch relative">
-  {
-    themes.map((theme) => (
-      <label for={`theme-switch-${theme.id}`}>
-        <input
-          id={`theme-switch-${theme.id}`}
-          type="radio"
-          name="theme-switch"
-          disabled
-          value={theme.id}
-        />
-        <theme.Icon class="icon" />
-      </label>
-    ))
-  }
-  <button class="mobile-toggle md:hidden"></button>
+  <button type="button" class="toggle-button">
+    <ThemeLight class="icon icon-light" />
+    <ThemeAuto class="icon icon-auto" />
+    <ThemeDark class="icon icon-dark" />
+  </button>
 </theme-switch>
 
 <script>
@@ -44,7 +28,6 @@ const themes = [
   }
 
   class ThemeSwitch extends HTMLElement {
-    changeThemeClicked = createEvent<Theme>();
     toggleThemePressed = createEvent();
 
     systemDarkTheme = watchMedia("(prefers-color-scheme: dark)");
@@ -55,17 +38,18 @@ const themes = [
     });
 
     connectedCallback() {
-      this.setupButtons();
       this.setupToggle();
 
-      this.$theme.on(this.changeThemeClicked, (_, theme) => theme);
       this.$theme.on(this.toggleThemePressed, (theme) => {
         const themeIndex = allowedThemeValues.indexOf(theme);
         const nextTheme = allowedThemeValues[(themeIndex + 1) % allowedThemeValues.length];
         return nextTheme as Theme;
       });
 
-      this.$theme.watch((theme) => saveTheme(theme));
+      this.$theme.watch((theme) => {
+        saveTheme(theme);
+        this.updateIcon(theme);
+      });
 
       this.$isDark.watch((dark) => {
         if (dark) document.documentElement.classList.add("theme-dark");
@@ -73,30 +57,21 @@ const themes = [
       });
     }
 
-    setupButtons() {
-      const radioButtons = Array.from(this.querySelectorAll("input"));
-
-      radioButtons.forEach((radioButton) => {
-        this.$theme.watch((theme) => {
-          radioButton.checked = theme === radioButton.value;
-        });
-
-        // Handle clicks
-        radioButton.addEventListener("change", (event) => {
-          const target = event.currentTarget as HTMLInputElement;
-          console.log("clicked", target.id);
-          if (allowedThemeValues.includes(target.value)) {
-            this.changeThemeClicked(target.value as Theme);
-          }
-        });
-
-        radioButton.disabled = false;
-      });
+    setupToggle() {
+      const toggle = this.querySelector(".toggle-button") as HTMLButtonElement;
+      toggle.addEventListener("click", () => this.toggleThemePressed());
+      this.updateIcon(this.$theme.getState());
     }
 
-    setupToggle() {
-      const toggle = this.querySelector(".mobile-toggle") as HTMLButtonElement;
-      toggle.addEventListener("click", () => this.toggleThemePressed());
+    updateIcon(theme: Theme) {
+      const icons = this.querySelectorAll(".icon");
+      icons.forEach((icon) => {
+        icon.classList.add("hidden");
+      });
+      const activeIcon = this.querySelector(`.icon-${theme}`);
+      if (activeIcon) {
+        activeIcon.classList.remove("hidden");
+      }
     }
   }
 
@@ -129,51 +104,31 @@ const themes = [
 
 <style>
   .theme-switch {
-    @apply flex min-h-8 min-w-10 items-center rounded-full px-2 py-1 md:gap-1;
+    @apply flex min-h-8 min-w-10 items-center justify-center rounded-full;
     background-color: var(--theme-secondary-bg);
   }
 
-  .theme-switch > label:focus-within {
-    outline: none;
+  .toggle-button {
+    @apply flex cursor-pointer items-center justify-center p-2;
     color: var(--theme-accent);
+    background: transparent;
+    border: none;
+  }
+
+  .toggle-button:hover {
+    opacity: 0.8;
+  }
+
+  .toggle-button:focus {
+    outline: none;
     @apply ring-1 ring-current ring-offset-2;
   }
 
-  .theme-switch > label {
-    @apply relative flex cursor-pointer items-center justify-center rounded-full opacity-50;
-    color: var(--theme-code-inline-text);
+  .icon {
+    display: block;
   }
 
-  .theme-switch .checked {
-    opacity: 1;
-    color: var(--theme-accent);
-  }
-
-  input[name="theme-switch"] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: 0;
-    z-index: -1;
-  }
-
-  input[type="radio"]:not(:checked) ~ .icon {
-    @apply hidden md:block;
-  }
-
-  input[type="radio"]:checked ~ .icon {
-    opacity: 1;
-    color: var(--theme-accent);
-  }
-
-  .mobile-toggle {
-    background-color: rgba(0, 0, 0, 0);
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  .icon.hidden {
+    display: none;
   }
 </style>
