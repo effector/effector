@@ -16,8 +16,9 @@ const { kind, emoji, title } = Astro.props;
 
 <style>
   article {
-    @apply z-10 flex flex-col gap-3 rounded-2xl p-3 text-center shadow-lg transition-shadow duration-500 hover:shadow-xl sm:gap-4 sm:rounded-3xl sm:p-4;
+    @apply z-10 flex flex-col gap-3 rounded-2xl p-3 text-center sm:gap-4 sm:rounded-3xl sm:p-4;
     background-color: var(--theme-card);
+    border: 1px solid var(--theme-divider);
   }
 
   article .emoji {

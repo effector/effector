@@ -8,14 +8,16 @@ import Companies from "@components/Landing/Companies.astro";
 
 import Landing from "../layouts/Landing.astro";
 import { SITE } from "../consts";
+import { DESKTOP_NAVIGATION } from "../navigation";
+import { getPathParamsFromId, getTextLocalized } from "../languages";
 
 const features = [
   {
     emoji: "☄️",
     kind: "major",
-    title: "Effector Spacewatch",
+    title: "Effector Atlas",
     description:
-      "`Effector`ning v23.0 kuchidan bahramand bo'ling, yaxshilangan tipizatsiyasi va universal xuklar qollanilishi bilan.",
+      "`Effector`ning v23.4 kuchidan bahramand bo'ling, yaxshilangan tipizatsiyasi va universal xuklar qollanilishi bilan.",
   },
   {
     emoji: "🛡️",
@@ -54,6 +56,8 @@ const features = [
       "Do'stona jamiyat har doim javob berishga yordam beradi. Testlarni yozish oson. Server renderini osongina oshiring",
   },
 ] as { emoji: string; kind?: "minor" | "major"; title: string; description: string }[];
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
 ---
 
 <Landing lang="uz" title="Ustunligi" dir="ltr" description={SITE.description}>
@@ -61,7 +65,9 @@ const features = [
     Typescript yordamida yangi standartlarda zamonaviy dasturlashni boshlang.
     <br />
     Freymvorklardan mustaqil, reaktiv va xavfsiz
-    <a slot="links" class="primary" href="/uz/introduction/get-started">
+
+    <div slot="links" class="started-links">
+      <a class="primary" href={`/${lang}/introduction/get-started`}>
       <span>O`rganishni boshlash</span>
       <IconChevron />
     </a>

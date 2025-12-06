@@ -16,9 +16,9 @@ const features = [
   {
     emoji: "☄️",
     kind: "major",
-    title: "Effector Spacewatch",
+    title: "Effector Atlas",
     description:
-      "Experience the power of effector v23.0, featuring refined typings, universal hooks support.",
+      "Experience the power of effector v23.4, featuring refined typings, universal hooks support.",
   },
   {
     emoji: "🛡️",
@@ -79,15 +79,17 @@ const apiLabel = apiNavigation ? getTextLocalized(apiNavigation, lang) : "API";
     <br />
     Type safe, reactive, framework agnostic.
 
-    <a slot="links" class="primary" href={`/${lang}/introduction/get-started`}>
+    <div slot="links" class="started-links">
+      <a class="primary" href={`/${lang}/introduction/get-started`}>
       <span>Getting started</span>
       <IconChevron />
     </a>
-    {
-      <DropDownMenu class="api-dropdown" links={apiMenuLinks}>
+    <span>or check the api</span>
+          <DropDownMenu class="api-dropdown" links={apiMenuLinks}>
         <span>{apiLabel}</span>
       </DropDownMenu>
-    }
+    </div>
+
   </Hero>
   <FeaturesGrid>
     {
@@ -98,11 +100,18 @@ const apiLabel = apiNavigation ? getTextLocalized(apiNavigation, lang) : "API";
       ))
     }
   </FeaturesGrid>
-  <Stats />
+  <!-- <Stats /> -->
   <Companies />
 </Landing>
 
 <style>
+  .started-links{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
   :global(.hero .links) {
     gap: var(--space-3);
     flex-wrap: wrap;
