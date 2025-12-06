@@ -91,11 +91,37 @@ const TableOfContents: FunctionalComponent<{
     };
   }, [toc.current]);
 
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  // Close popover when clicking outside
+  useEffect(() => {
+    if (!collapsed) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (detailsRef.current && !detailsRef.current.contains(e.target as Node)) {
+        detailsRef.current.open = false;
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [collapsed]);
+
   const onLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     setCurrentID(e.currentTarget.getAttribute("href")?.replace("#", "")!);
+    // Close popover when link is clicked (for collapsed mode)
+    if (detailsRef.current) {
+      detailsRef.current.open = false;
+    }
   };
 
   if (headings.length === 0) return null;
+
+  // Find current active heading text for display
+  const currentHeading = headings.find((h) => h.slug === currentID);
+  const currentHeadingText = currentHeading
+    ? unescape(currentHeading.text)
+    : getTextLocalized(translations.OnThisPage, lang);
 
   const items = (
     <ul ref={toc} className={styles.contents}>
@@ -120,9 +146,9 @@ const TableOfContents: FunctionalComponent<{
   // When component setup as collapsed by default
   if (collapsed) {
     return (
-      <details className={styles.expandDetails}>
+      <details ref={detailsRef} className={styles.expandDetails}>
         <summary id={onThisPageID}>
-          <span>{getTextLocalized(translations.OnThisPage, lang)}</span>
+          <span>{currentHeadingText}</span>
         </summary>
         <div className={styles.expandContent}>{items}</div>
       </details>

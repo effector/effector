@@ -60,6 +60,12 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     width: 100%;
   }
 
+  .mobile-toc {
+    position: sticky;
+    top: var(--space-4);
+    z-index: 100;
+  }
+
   /* Hide mobile TOC when right sidebar is visible */
   @media (min-width: 1280px) {
     .mobile-toc {
