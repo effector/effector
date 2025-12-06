@@ -142,43 +142,6 @@ export const translations = {
       uz: "Chatga kirish",
     },
   },
-  PageActions: {
-    CopyMarkdown: {
-      text: {
-        en: "Copy Markdown",
-        ru: "Скопировать Markdown",
-        uz: "Markdown nusxalash",
-      },
-    },
-    Copying: {
-      text: {
-        en: "Copying...",
-        ru: "Копирование...",
-        uz: "Nusxalanmoqda...",
-      },
-    },
-    Copied: {
-      text: {
-        en: "Copied!",
-        ru: "Скопировано!",
-        uz: "Nusxalandi!",
-      },
-    },
-    Error: {
-      text: {
-        en: "Error!",
-        ru: "Ошибка!",
-        uz: "Xatolik!",
-      },
-    },
-    AskAI: {
-      text: {
-        en: "Ask AI",
-        ru: "Спросить ИИ",
-        uz: "AI dan so'rash",
-      },
-    },
-  },
   More: {
     text: {
       en: "More",

@@ -5,9 +5,12 @@ import FeaturesGrid from "@components/Landing/FeaturesGrid.astro";
 import Feature from "@components/Landing/Feature.astro";
 import Stats from "@components/Landing/Stats.astro";
 import Companies from "@components/Landing/Companies.astro";
+import DropDownMenu from "@components/DropDownMenu.astro";
 
 import Landing from "../layouts/Landing.astro";
 import { SITE } from "../consts";
+import { DESKTOP_NAVIGATION } from "../navigation";
+import { getPathParamsFromId, getTextLocalized } from "../languages";
 
 const features = [
   {
@@ -54,18 +57,37 @@ const features = [
       "Simple API surface with helpful community. Easy to write tests. Easy to setup server rendering.",
   },
 ] as { emoji: string; kind?: "minor" | "major"; title: string; description: string }[];
+
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+const apiNavigation = DESKTOP_NAVIGATION.find((item) => item.text.en === "API");
+const apiLinks = apiNavigation && "items" in apiNavigation ? apiNavigation.items ?? [] : [];
+const apiMenuLinks =
+  apiLinks.length > 0
+    ? apiLinks
+    : [
+        {
+          text: { en: "API", ru: "API", uz: "API" },
+          link: "/api",
+        },
+      ];
+const apiLabel = apiNavigation ? getTextLocalized(apiNavigation, lang) : "API";
 ---
 
-<Landing title="Welcome" lang={SITE.defaultLanguage} dir="ltr" description={SITE.description}>
+<Landing title="Welcome" lang={lang} dir="ltr" description={SITE.description}>
   <Hero subtitle="Write business logic with ease">
     Meet the new standard for modern TypeScript development.
     <br />
     Type safe, reactive, framework agnostic.
 
-    <a slot="links" class="primary" href="/en/introduction/get-started">
+    <a slot="links" class="primary" href={`/${lang}/introduction/get-started`}>
       <span>Getting started</span>
       <IconChevron />
     </a>
+    {
+      <DropDownMenu class="api-dropdown" links={apiMenuLinks}>
+        <span>{apiLabel}</span>
+      </DropDownMenu>
+    }
   </Hero>
   <FeaturesGrid>
     {
@@ -79,3 +101,29 @@ const features = [
   <Stats />
   <Companies />
 </Landing>
+
+<style>
+  :global(.hero .links) {
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  :global(.api-dropdown .menu-button) {
+    border-radius: 9999px;
+    padding: 0.4rem 0.75rem;
+    background: var(--theme-bg-sidebar-main-tabs);
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+    box-shadow: var(--theme-sidebar-tab-shadow, var(--shadow-sm));
+  }
+
+  :global(.api-dropdown .menu-button:hover) {
+    background: var(--theme-bg-sidebar-main-tabs-active);
+  }
+
+  :global(.api-dropdown .button-title) {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+</style>
