@@ -157,20 +157,41 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 <style>
   :root {
     --logos-bg: hsla(var(--color-stone-10), 1);
-    /* --logos-bg: hsl(217.46deg 77.24% 85.16%); */
-    /* --logos-bg: #e3d0b3; */
     --logos-text: hsla(var(--color-gray-10), 1);
     --logos-text-light: hsla(var(--color-gray-30), 1);
   }
 
   .companies {
-    @apply px-5 pb-20 pt-8;
+    @apply px-3 pb-12 pt-6;
     background-color: var(--theme-landing-logos-bg);
-    --container-max-width: 90vw;
-    --logo-card-size: 130px;
+    --container-max-width: 95vw;
+    --logo-card-size: 80px;
   }
 
-  @media screen and (max-width: 966px) {
+  @media (min-width: 480px) {
+    .companies {
+      @apply px-4 pb-16 pt-8;
+      --container-max-width: 90vw;
+      --logo-card-size: 100px;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .companies {
+      @apply px-5;
+      --logo-card-size: 120px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .companies {
+      @apply pb-20;
+      --container-max-width: 90vw;
+      --logo-card-size: 130px;
+    }
+  }
+
+  @media (min-width: 966px) {
     .companies {
       --container-max-width: 80vw;
       --logo-card-size: 150px;
@@ -178,7 +199,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .companies h3 {
-    @apply mb-10 text-4xl lg:mb-6;
+    @apply mb-6 text-2xl;
     -webkit-box-decoration-break: clone;
     -webkit-text-fill-color: transparent;
     background: linear-gradient(to right bottom, var(--logos-text-light) 30%, var(--logos-text));
@@ -187,11 +208,41 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     text-align: center;
   }
 
+  @media (min-width: 480px) {
+    .companies h3 {
+      @apply mb-8 text-3xl;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .companies h3 {
+      @apply mb-10 text-4xl;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .companies h3 {
+      @apply mb-6;
+    }
+  }
+
   .companies-list {
-    @apply mx-auto grid items-center justify-center gap-4;
+    @apply mx-auto grid items-center justify-center gap-2;
     max-width: var(--container-max-width);
     grid-template-columns: repeat(auto-fill, minmax(var(--logo-card-size), 1fr));
     justify-items: center;
+  }
+
+  @media (min-width: 480px) {
+    .companies-list {
+      @apply gap-3;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .companies-list {
+      @apply gap-4;
+    }
   }
 
   .companies-item > img,
@@ -212,7 +263,13 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .companies-add-yours {
-    @apply mx-auto flex max-w-6xl justify-end gap-1 p-3 text-xs italic;
+    @apply mx-auto flex max-w-6xl flex-col items-center gap-1 p-2 text-xs italic;
+  }
+
+  @media (min-width: 480px) {
+    .companies-add-yours {
+      @apply flex-row justify-end p-3;
+    }
   }
 
   .companies-add-yours > span {

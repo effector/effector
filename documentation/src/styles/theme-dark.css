@@ -42,7 +42,7 @@
   --theme-secondary-bg: var(--doc-bg-surface-subtle);
   --theme-dropdown-bg: #1d1d1f;
   --theme-bg-code: var(--theme-code-bg);
-  --theme-bg-hover: var(--doc-bg-surface-raised);
+  --theme-bg-hover: rgba(255, 255, 255, 0.08);
   --theme-bg-offset: var(--doc-bg-surface-subtle);
   --theme-bg-accent: hsla(var(--color-primary-500), var(--theme-accent-opacity));
   --theme-backdrop-color: rgba(0, 0, 0, 0.5);

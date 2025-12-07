@@ -36,7 +36,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   <section class="main-section">
     <nav class="mobile-toc block" data-pagefind-ignore>
       <TableOfContents
-        client:media="(max-width: 50em)"
+        client:media="(min-width: 48em) and (max-width: 80em)"
         lang={lang}
         collapsed
         client:only="preact"
@@ -64,6 +64,12 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     position: sticky;
     top: var(--space-4);
     z-index: 100;
+  }
+
+  @media (max-width: 767px) {
+    .main-section > .mobile-toc {
+      display: none;
+    }
   }
 
   /* Hide mobile TOC when right sidebar is visible */

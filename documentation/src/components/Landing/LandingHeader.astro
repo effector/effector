@@ -2,6 +2,8 @@
 import ThemeSwitch from "../Header/ThemeSwitch.astro";
 import Search from "../Header/Search.astro";
 import DropDownMenu from "../DropDownMenu.astro";
+import MobileHeader from "../Header/MobileHeader.astro";
+import MobileNavigation from "../MobileNavigation.astro";
 import Github from "@icons/Github.astro";
 import Telegram from "@icons/Telegram.astro";
 import { LINKS } from "../../consts";
@@ -22,19 +24,25 @@ const apiMenuLinks =
     ? apiLinks
     : [{ text: { en: "API", ru: "API", uz: "API" }, link: "/api" }];
 const apiLabel = apiNavigation ? getTextLocalized(apiNavigation, lang) : "API";
+const guidesLink = `/${lang}/guides/server-side-rendering`;
 
 const learnLabel = { en: "Learn", ru: "Изучение", uz: "O'rganish" };
 const guidesLabel = { en: "Guides", ru: "Гайды", uz: "Qo'llanmalar" };
 const ecosystemLabel = { en: "Ecosystem", ru: "Экосистема", uz: "Ekotizim" };
 ---
 
+<!-- Mobile Header -->
+<MobileHeader lang={lang} />
+<MobileNavigation />
+
+<!-- Desktop Header -->
 <header class="landing-header">
   <div class="header-left">
     <nav class="header-nav">
       <a href={`/${lang}/introduction/get-started`} class="nav-link">
         {getTextLocalized({ text: learnLabel }, lang)}
       </a>
-      <a href={`/${lang}/guides`} class="nav-link">
+      <a href={guidesLink} class="nav-link">
         {getTextLocalized({ text: guidesLabel }, lang)}
       </a>
       <DropDownMenu class="nav-dropdown api-dropdown" links={apiMenuLinks}>
@@ -60,8 +68,9 @@ const ecosystemLabel = { en: "Ecosystem", ru: "Экосистема", uz: "Ekoti
 </header>
 
 <style>
+  /* Desktop Header */
   .landing-header {
-    display: flex;
+    display: none;
     justify-content: space-between;
     align-items: center;
     padding: var(--space-2) var(--space-3);
@@ -70,10 +79,18 @@ const ecosystemLabel = { en: "Ecosystem", ru: "Экосистема", uz: "Ekoti
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
     border-radius: 9999px;
-    margin: var(--space-4) var(--space-8);
+    margin: var(--space-4) var(--space-4);
     position: sticky;
     top: var(--space-4);
     z-index: 100;
+  }
+
+  /* Show desktop header on md+ */
+  @media (min-width: 768px) {
+    .landing-header {
+      display: flex;
+      margin: var(--space-4) var(--space-8);
+    }
   }
 
   .header-left {

@@ -24,5 +24,13 @@ const { title, lang, description, dir = "ltr" } = Astro.props;
     --header-max-width: 98rem;
   }
 
-  
+  .landing {
+    padding-top: var(--theme-navbar-height);
+  }
+
+  @media (min-width: 768px) {
+    .landing {
+      padding-top: 0;
+    }
+  }
 </style>

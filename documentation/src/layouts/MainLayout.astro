@@ -1,4 +1,4 @@
---- 
+---
 import type { MarkdownHeading } from 'astro';
 import { type CollectionEntry } from 'astro:content';
 
@@ -9,6 +9,9 @@ import Contributors from '@components/PageContent/Contributors.astro';
 import LeftSidebar from '@components/LeftSidebar/LeftSidebar.astro';
 import RightSidebar from '@components/RightSidebar/RightSidebar.astro';
 import PageNavigation from '@components/Pagination/PageNavigation.astro';
+import MobileHeader from '@components/Header/MobileHeader.astro';
+import MobileTOC from '@components/Header/MobileTOC.astro';
+import MobileNavigation from '@components/MobileNavigation.astro';
 
 
 export type Props = CollectionEntry<'docs'>['data'] & {
@@ -37,6 +40,9 @@ const currentPage = Astro.url.pathname;
 ---
 
 	<CommonLayout lang={lang} {...data}>
+	<MobileHeader lang={lang} />
+	<MobileTOC headings={headings} lang={lang} />
+	<MobileNavigation />
 	<main class='layout'>
 		<aside id='grid-left' title='Site Navigation' data-pagefind-ignore='all'>
 			<LeftSidebar currentPage={currentPage} headings={headings} />
@@ -67,11 +73,19 @@ const currentPage = Astro.url.pathname;
 	:root {
 		--gutter: 0.5rem;
 		--content-max-width: 56rem;
+		--mobile-toc-height: 52px;
 	}
 
 	main {
-		margin-top: 0;
-		padding: var(--space-4);
+		margin-top: calc(var(--theme-navbar-height) + var(--mobile-toc-height));
+		padding: var(--space-1);
+	}
+
+	/* Remove TOC margin when left sidebar is visible (≥768px) */
+	@media (min-width: 768px) {
+		main {
+			margin-top: 0;
+		}
 	}
 
 	.layout {
@@ -103,9 +117,23 @@ const currentPage = Astro.url.pathname;
 		flex-direction: column;
 		padding-block: var(--doc-padding);
 		padding-top: 0;
-		padding-left: 2rem;
-		padding-right: 1rem;
+		padding-left: var(--space-1);
+		padding-right: var(--space-1);
 		height: 100%;
+	}
+
+	@media (min-width: 640px) {
+		#grid-main {
+			padding-left: var(--space-4);
+			padding-right: var(--space-4);
+		}
+	}
+
+	@media (min-width: 768px) {
+		#grid-main {
+			padding-left: 2rem;
+			padding-right: 1rem;
+		}
 	}
 
 	

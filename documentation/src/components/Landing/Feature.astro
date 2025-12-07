@@ -16,27 +16,74 @@ const { kind, emoji, title } = Astro.props;
 
 <style>
   article {
-    @apply z-10 flex flex-col gap-3 rounded-2xl p-3 text-center sm:gap-4 sm:rounded-3xl sm:p-4;
+    @apply z-10 flex flex-col gap-2 rounded-xl p-3 text-center;
     background-color: var(--theme-card);
     border: 1px solid var(--theme-divider);
   }
 
   article .emoji {
-    @apply flex h-16 w-16 items-center justify-center self-center text-4xl;
+    @apply flex h-10 w-10 items-center justify-center self-center text-2xl;
   }
 
   article .title {
-    @apply text-xl sm:text-2xl;
+    @apply text-base font-semibold;
   }
 
   article p {
-    @apply text-sm sm:text-base;
+    @apply text-xs;
     color: var(--theme-text);
   }
 
+  /* Mobile landscape / small tablet */
+  @media (min-width: 480px) {
+    article {
+      @apply gap-3 rounded-2xl p-3;
+    }
+
+    article .emoji {
+      @apply h-12 w-12 text-3xl;
+    }
+
+    article .title {
+      @apply text-lg;
+    }
+
+    article p {
+      @apply text-sm;
+    }
+  }
+
+  /* Tablet */
+  @media (min-width: 640px) {
+    article {
+      @apply gap-4 rounded-3xl p-4;
+    }
+
+    article .emoji {
+      @apply h-16 w-16 text-4xl;
+    }
+
+    article .title {
+      @apply text-xl;
+    }
+
+    article p {
+      @apply text-sm;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 768px) {
+    article .title {
+      @apply text-2xl;
+    }
+
+    article p {
+      @apply text-base;
+    }
+  }
+
   article.major {
-    @apply row-span-2;
-    /* background-image: linear-gradient(var(--theme-text-accent), var(--theme-bg)); */
     background-image: radial-gradient(
       circle at 50% 30%,
       hsla(var(--color-primary-50), 0.4),
@@ -44,16 +91,51 @@ const { kind, emoji, title } = Astro.props;
       var(--theme-bg) 90%
     );
   }
-  article.major .emoji {
-    @apply h-[50%] w-full text-8xl md:h-[60%];
-  }
-  article.major .title {
-    @apply text-2xl md:text-3xl;
+
+  @media (min-width: 480px) {
+    article.major {
+      @apply row-span-2;
+    }
   }
 
-  article.minor {
-    @apply md:col-span-2;
+  article.major .emoji {
+    @apply h-auto w-full text-5xl;
   }
+
+  @media (min-width: 480px) {
+    article.major .emoji {
+      @apply h-[50%] text-6xl;
+    }
+  }
+
+  @media (min-width: 768px) {
+    article.major .emoji {
+      @apply h-[60%] text-8xl;
+    }
+  }
+
+  article.major .title {
+    @apply text-xl;
+  }
+
+  @media (min-width: 640px) {
+    article.major .title {
+      @apply text-2xl;
+    }
+  }
+
+  @media (min-width: 768px) {
+    article.major .title {
+      @apply text-3xl;
+    }
+  }
+
+  @media (min-width: 768px) {
+    article.minor {
+      @apply col-span-2;
+    }
+  }
+
   article.minor p {
     @apply mx-auto max-w-[50ch];
   }

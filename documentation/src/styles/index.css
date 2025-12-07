@@ -107,6 +107,12 @@ h6 {
   border-bottom: 1px solid var(--theme-bg-hover);
 }
 
+@media (max-width: 767px) {
+  .content section h1 {
+    margin-top: var(--space-8);
+  }
+}
+
 .content section h2 {
   font-size: var(--text-h2);
   line-height: var(--leading-heading);

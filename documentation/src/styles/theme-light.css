@@ -95,8 +95,8 @@
   --theme-sidebar-active-text: hsl(var(--color-primary-600));
   --theme-sidebar-border: #fff;
   --theme-sidebar-surface-border: hsla(var(--color-gray-300), 0.8);
-  --theme-sidebar-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
-  --theme-sidebar-tab-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --theme-sidebar-shadow: 6px 20px 44px -18px rgba(15, 23, 42, 0.17);
+  --theme-sidebar-tab-shadow: 0 6px 18px rgba(15, 23, 42, 0.045);
 
   /* ========================================
      ADMONITIONS - TIP
