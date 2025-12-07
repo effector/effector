@@ -1,12 +1,22 @@
 ---
 import type { MarkdownHeading } from "astro";
-import { getPathParamsFromId } from "../../languages";
+import { getPathParamsFromId, createChangeLangLinks, getTextLocalized } from "../../languages";
 import { getActiveTabSidebar, getLocalizedPanelSidebar } from "../../navigation";
-import ChevronRight from "src/icons/ChevronRight.astro";
+import { DOCS_VERSIONS } from "../../navigation";
 import { trimTrailingSlash } from "src/libs/path";
 import { PANEL_ITEMS } from "src/sidebar-config";
 import { PANEL_FRAMEWORK_ITEMS } from "src/sidebar-config";
 import SidebarScrollRestore from "./SidebarScrollRestore.astro";
+
+import EffectorLogo from "../Header/EffectorLogo.astro";
+import Search from "../Header/Search.astro";
+import ThemeSwitch from "../Header/ThemeSwitch.astro";
+import DropDownMenu from "../DropDownMenu.astro";
+
+import ChevronRight from "src/icons/ChevronRight.astro";
+import StatusNew from "src/icons/StatusNew.astro";
+import StatusDeprecated from "src/icons/StatusDeprecated.astro";
+import IconLanguage from "@icons/Language.astro";
 
 type Props = {
   currentPage: string;
@@ -19,11 +29,22 @@ const currentPageMatch = trimTrailingSlash(currentPage);
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 const activePanelIndex = getActiveTabSidebar(slug);
 const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
+const languageLinks = createChangeLangLinks({ slug });
 ---
 
 <tabbed-sidebar id="sidebar" class="navigation">
-  <nav aria-labelledby="grid-left">
-    <div>
+  <nav aria-labelledby="grid-left" class="sidebar-container">
+    <div class="sidebar-header">
+      <a class="logo-link" href={lang === "en" ? "/" : `/${lang}`}>
+        <EffectorLogo size={32} />
+        <span class="logo-text">effector</span>
+      </a>
+    </div>
+    <div class="sidebar-search">
+      <Search />
+    </div>
+    <div class="nav-content">
+      <div class="main-tabs">
       <ul class="tabs navigation-panel">
         {
           PANEL_ITEMS.map(({ text, id }, i) => (
@@ -48,10 +69,9 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
                     class="tab-panel-item"
                     data-icon={id}
                     data-active={i === 0 ? "true" : "false"}
-                    class="tab-panel-item"
                     aria-selected={id === activePanelIndex ? "true" : "false"}
                   >
-                    {Icon && <Icon size={18} />}
+                    {Icon && <Icon size={16} />}
                     <span>{text[lang as keyof typeof text] || text.en}</span>
                   </button>
                 </li>
@@ -61,47 +81,70 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
         </li>
       </ul>
     </div>
-
-    {
-      localizedSidebar.map(({ sidebarItems, panelId }) => (
-        <div
-          hidden={panelId !== activePanelIndex}
-          data-initial={panelId === activePanelIndex ? "true" : "false"}
-          role="tabpanel"
-        >
-          <ul class="nav-groups">
-            {sidebarItems.map((group, index) => (
-              <li>
-                <div class="nav-group">
-                  <button
-                    class="nav-group-title"
-                    aria-expanded={`${!group.collapsed}`}
-                    aria-controls={`group-${index}`}
-                  >
-                    {group.title}
-                    <ChevronRight class="arrow" />
-                  </button>
-                  <ul id={`group-${index}`}>
-                    {group.items.map((item) => (
-                      <li class="nav-link">
-                        <a
-                          href={item.link}
-                          aria-current={currentPageMatch === item.link ? "page" : false}
-                          target={item.link.startsWith("/") ? undefined : "_blank"}
-                          data-fallback={item.isFallback}
-                        >
-                          <span> {item.title}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))
-    }
+    <div class="tab-content">
+      {
+        localizedSidebar.map(({ sidebarItems, panelId }) => (
+          <div
+            hidden={panelId !== activePanelIndex}
+            data-initial={panelId === activePanelIndex ? "true" : "false"}
+            role="tabpanel"
+          >
+            <ul class="nav-groups">
+              {sidebarItems.map((group, index) => {
+                const isCollapsed = Boolean(group.collapsed);
+                return (
+                  <li>
+                    <div class="nav-group">
+                      <button
+                        class="nav-group-title"
+                        class:list={{ collapsed: isCollapsed }}
+                        aria-expanded={`${!isCollapsed}`}
+                        aria-controls={`group-${index}`}
+                      >
+                        {group.title}
+                        <ChevronRight class="arrow" />
+                      </button>
+                      <ul
+                        id={`group-${index}`}
+                        class:list={{ collapsed: isCollapsed }}
+                        aria-hidden={isCollapsed ? "true" : "false"}
+                      >
+                        {group.items.map((item) => (
+                          <li class="nav-link">
+                            <a
+                              href={item.link}
+                              aria-current={currentPageMatch === item.link ? "page" : false}
+                              target={item.link.startsWith("/") ? undefined : "_blank"}
+                              data-fallback={item.isFallback}
+                              data-status={item.status}
+                              tabindex={isCollapsed ? "-1" : undefined}
+                            >
+                              <span> {item.title}</span>
+                              {item.status === "new" && <StatusNew class="status-badge" size={20} />}
+                              {item.status === "deprecated" && <StatusDeprecated size={20} class="status-badge" />}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="footer-group">
+        <DropDownMenu links={DOCS_VERSIONS}>v23.x</DropDownMenu>
+        <DropDownMenu links={languageLinks}>
+          <IconLanguage />
+        </DropDownMenu>
+      </div>
+      <ThemeSwitch />
+    </div>
   </nav>
   <SidebarScrollRestore />
 </tabbed-sidebar>
@@ -117,22 +160,25 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     navGroups.forEach((group) => {
       const button = group.querySelector("button");
       const content = group.querySelector("ul");
-      if (button && content) {
-        const expanded = button.getAttribute("aria-expanded") === "true";
+      if (!button || !content) return;
+
+      const updateState = (expanded:boolean) => {
+        button.setAttribute("aria-expanded", expanded.toString());
+        button.classList.toggle("collapsed", !expanded);
         content.classList.toggle("collapsed", !expanded);
-        
-        button.addEventListener("click", () => {
-          const expanded = button.getAttribute("aria-expanded") === "true";
-          button.setAttribute("aria-expanded", (!expanded).toString());
-          
-          content.classList.toggle("collapsed", expanded);
-          content.setAttribute("aria-hidden", expanded.toString());
-          content.querySelectorAll("a").forEach((link) => {
-            link.setAttribute("tabindex", expanded ? "-1" : "0");
-          });
-          button.classList.toggle("collapsed", expanded);
+        content.setAttribute("aria-hidden", (!expanded).toString());
+        content.querySelectorAll("a").forEach((link) => {
+          link.setAttribute("tabindex", expanded ? "0" : "-1");
         });
-      }
+      };
+
+      const initialExpanded = button.getAttribute("aria-expanded") === "true";
+      updateState(initialExpanded);
+
+      button.addEventListener("click", () => {
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        updateState(!expanded);
+      });
     });
   }
 
@@ -141,11 +187,118 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
 </script>
 
 <style>
+  .footer-group{
+    display: flex;
+    gap:var(--space-2)
+  }
+
+  .tab-content{
+    margin-top: var(--space-4);
+  }
+
+  #sidebar{
+    border-radius: var(--radius-2xl);
+    position: relative;
+    background-color: var(--theme-bg-sidebar-tabs-bg);
+    box-shadow: var(--theme-sidebar-shadow, none);
+  }
+
+  #sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 40%;
+    background: radial-gradient(
+      ellipse at top right,
+      hsla(var(--color-primary-500), 0.1) 0%,
+      hsla(var(--color-primary-500), 0.04) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+    border-radius: var(--radius-2xl);
+  }
+
+  #sidebar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-2xl);
+    padding: 1px;
+    background: radial-gradient(
+      ellipse at top right,
+      hsla(var(--color-primary-500), 0.3) 0%,
+      hsla(var(--color-primary-500), 0.15) 30%,
+      var(--theme-sidebar-border) 60%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sidebar-container{
+    padding: var(--space-2);
+    position: relative;
+    z-index: 2;
+  }
+
+  .navigation {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-size: var(--text-sidebar-content) !important;
+  }
+
+  .sidebar-header {
+    padding: var(--space);
+    flex-shrink: 0;
+  }
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .logo-link:hover {
+    opacity: 0.8;
+  }
+
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--theme-text);
+  }
+
+  .main-tabs {
+    flex-shrink: 0;
+  }
+
   .frameworks-panel {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     gap: 0.25rem;
+  }
+
+  .frameworks-panel :global(svg) {
+    width: 14px;
+    height: 14px;
   }
 
   .frameworks-panel li {
@@ -155,15 +308,16 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     cursor: pointer;
   }
 
-  .frameworks-panel li:hover {
-    background-color: var(--theme-bg);
-  }
-
   .navigation-panel {
     width: 100%;
     border-radius: 16px;
     padding: 0.25rem;
-    background-color: var(--theme-bg-hover);
+    background-color: var(--theme-bg-sidebar-main-tabs);
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+  }
+
+  .navigation-panel button {
+    font-size: var(--text-sidebar-content);
   }
 
   .tabs {
@@ -180,18 +334,19 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
 
   .navigation-panel li button {
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: var(--space-2) var(--space-3);
     background-color: transparent;
     color: var(--theme-left-sidebar-item-text);
     border-radius: 12px;
   }
   .navigation-panel li button:hover {
-    background-color: var(--theme-navbar-bg);
+    background-color: var(--theme-bg-sidebar-main-tabs-active);
   }
 
   .navigation-panel li button[aria-selected="true"] {
-    background-color: var(--theme-bg);
+    background-color: var(--theme-bg-sidebar-main-tabs-active);
     color: var(--theme-text);
+    box-shadow: var(--theme-sidebar-tab-shadow, none);
   }
 
   .tab-panel-item {
@@ -199,42 +354,39 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     @apply flex font-bold;
   }
 
-  .navigation {
-    overflow-x: visible;
-    overflow-y: auto;
-    padding-top: 32px;
-    scrollbar-gutter: stable;
-    width: 100%;
+  
+  .sidebar-search {
+    margin-top: var(--space-4);
+    flex-shrink: 0;
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+    border-radius: var(--radius-2xl);
+    margin-bottom: var(--space-4);
+    background-color: var(--theme-bg-sidebar-main-tabs);
   }
 
-  nav > div {
-    padding-right: 12px;
+  .sidebar-search :global(button[data-open-modal]) {
+    width: 100%;
+    justify-content: flex-start;
+    background-color: transparent;
+    border: none;
+  }
+
+  .nav-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: visible;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    padding-bottom: var(--space-4);
   }
 
   .nav-groups {
     --fast-ease: cubic-bezier(0, 0.18, 0.25, 1);
-    position: sticky;
-    top: calc(var(--theme-navbar-height) + 2rem);
-    padding: 2rem 0;
-    height: 100%;
-    max-height: 100vh;
+    padding: 0;
   }
 
   .nav-groups > li + li {
-    margin-top: 1rem;
-  }
-
-  .nav-groups > :first-child {
-    padding-top: var(--doc-padding);
-  }
-
-  .nav-groups > :first-child h2 {
-    margin-top: 0;
-  }
-
-  .nav-groups > :last-child {
-    margin-bottom: var(--theme-navbar-height);
-    padding-bottom: 2rem;
+    margin-top: var(--space-2);
   }
 
   .nav-group {
@@ -242,15 +394,16 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   .nav-group-title {
-    @apply rounded-md px-4 py-1;
+    @apply rounded-md py-1;
     margin: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    font-weight: bold;
-    font-size: 1rem;
-    /*text-transform: uppercase;*/
+    font-weight: normal;
+    font-size: var(--text-sidebar-content);
     background: none;
     border: none;
     cursor: pointer;
@@ -259,7 +412,7 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
 
   .nav-group-title:hover,
   .nav-group-title:focus-visible {
-    background-color: var(--theme-bg-hover);
+    background-color: var(--theme-bg-sidebar-main-tabs-active);
   }
 
   .nav-group-title .arrow {
@@ -290,28 +443,32 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
   }
 
   .nav-link a {
-    @apply flex items-center rounded-md px-7 py-1 text-base;
+    @apply flex items-center rounded-md py-1 text-base;
+    padding-left: 1.75rem;
+    padding-right: 1rem;
     color: var(--theme-left-sidebar-item-text);
     font: inherit;
     text-decoration: none;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
   .nav-link a[data-fallback] span:after {
     content: "EN";
     font-weight: bold;
-    font-size: 0.75rem;
+    font-size: var(--text-sidebar-translation-slug);
     vertical-align: super;
     margin-left: 5px;
   }
 
   .nav-link a:hover,
   .nav-link a:focus {
-    background-color: var(--theme-bg-hover);
+    background-color: var(--theme-bg-sidebar-main-tabs-active);
   }
 
   .nav-link a[aria-current="page"] {
-    background-color: var(--theme-accent);
-    color: var(--theme-bg);
+    background-color: var(--theme-sidebar-active-bg);
+    color: var(--theme-sidebar-active-text);
     font-weight: 600;
   }
 
@@ -334,15 +491,70 @@ const localizedSidebar = await getLocalizedPanelSidebar(slug, lang);
     filter: invert();
   }
 
-  @media (min-width: 50em) {
-    .nav-groups {
-      padding: 0;
-    }
-  }
-</style>
+  /* ========================================
+     STATUS BADGES
+     ======================================== */
 
-<style is:global>
-  :root.theme-dark .nav-link a[aria-current="page"] {
-    color: var(--theme-text);
+  .nav-link a :global(.status-badge) {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 0.5rem;
+    opacity: 0.6;
+    transition: opacity 200ms ease;
+  }
+
+  .nav-link a[data-status="new"] :global(.status-badge) {
+    color: var(--theme-status-new);
+  }
+
+  .nav-link a[data-status="deprecated"] :global(.status-badge) {
+    color: var(--theme-status-deprecated);
+  }
+
+  .nav-link a:hover :global(.status-badge),
+  .nav-link a:focus :global(.status-badge) {
+    opacity: 0.8;
+  }
+
+  .nav-link a[aria-current="page"] :global(.status-badge) {
+    opacity: 1;
+    color: inherit;
+  }
+
+  .sidebar-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top:var(--space-2);
+    border-top: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer :global(button) {
+    width: 100%;
+    height: 30px;
+    min-height: 30px;
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+    border-radius: 9999px;
+    font-size: var(--font-size-sm) !important;
+  }
+
+  .sidebar-footer :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .sidebar-footer :global(.theme-switch) {
+    min-height: 30px;
+    min-width: 30px;
+  }
+
+  .sidebar-footer :global(.theme-switch .toggle-button) {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+  }
+
+  .sidebar-footer :global(.menu-button) {
+    padding: 0.125rem 0.375rem;
   }
 </style>

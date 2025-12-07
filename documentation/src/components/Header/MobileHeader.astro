@@ -1,0 +1,87 @@
+---
+import ThemeSwitch from "./ThemeSwitch.astro";
+import MobileMenuButton from "./MobileMenuButton.astro";
+import EffectorLogo from "./EffectorLogo.astro";
+import { SITE } from "../../consts";
+
+interface Props {
+  lang?: "en" | "ru" | "uz";
+}
+
+const { lang = "en" } = Astro.props;
+const homeLink = lang === "en" ? "/" : `/${lang}`;
+---
+
+<header class="mobile-header">
+  <a class="logo" href={homeLink}>
+    <EffectorLogo size={32} />
+    <span>{SITE.title}</span>
+  </a>
+  <div class="mobile-header-right">
+    <ThemeSwitch />
+    <MobileMenuButton />
+  </div>
+</header>
+
+<style>
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--theme-navbar-bg);
+    backdrop-filter: saturate(50%) blur(12px);
+    -webkit-backdrop-filter: saturate(50%) blur(12px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--theme-navbar-height);
+    z-index: 110;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .mobile-header .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--theme-text);
+    text-decoration: none;
+    font-family: "Lexend Deca", sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  .mobile-header .logo:hover {
+    opacity: 0.75;
+  }
+
+  .mobile-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .mobile-header-right :global(.theme-switch) {
+    min-height: 36px;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+    background-color: var(--theme-bg-sidebar-main-tabs);
+    border-radius: var(--radius-md);
+  }
+
+  .mobile-header-right :global(.theme-switch .toggle-button) {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+  }
+
+  /* Hide on tablet and desktop */
+  @media (min-width: 768px) {
+    .mobile-header {
+      display: none;
+    }
+  }
+</style>

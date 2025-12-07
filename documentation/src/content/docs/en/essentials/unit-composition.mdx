@@ -134,7 +134,7 @@ In the UI, we will call the `submitForm` event when the user clicks the submit b
 <TabItem label="sample">
 
 ```ts ins={12-30}
-import { createEvent, createStore, sample, createEffect } from "effector";
+import { createEvent, createStore, createEffect, sample } from "effector";
 
 const submitForm = createEvent();
 
@@ -164,7 +164,8 @@ sample({
 <TabItem label="createAction">
 
 ```ts ins={12-30}
-import { createEvent, createStore, sample, createEffect } from "effector";
+import { createEvent, createStore, createEffect } from "effector";
+import { createAction } from "effector-action";
 
 const submitForm = createEvent();
 
@@ -204,7 +205,7 @@ As mentioned, both operators are conceptually similar to each other, so you don'
 
 Let's now look at the main operator usage capabilities:
 
-- You can update a [store](/en/api/effector/Store), as well as call an [effect](/en/api/effector/Effect) or [event](/en/api/effector/Event) by passing it to [`target`](/en/api/effector/sample#target-argument):
+- You can update a [store](/en/api/effector/Store) by passing it to `target`, the old value will be fully replaced with the new one:
 
 <Tabs syncId="preferred-operator">
 <TabItem label="sample">
@@ -240,6 +241,50 @@ createAction(queryChanged, {
     target(query);
   },
 });
+```
+
+</TabItem >
+
+</Tabs>
+
+- You can also trigger an [effect](/en/api/effector/Effect) or [event](/en/api/effector/Event) by passing it to [`target`](/en/api/effector/sample#target-argument); the arguments will be forwarded declaratively to the `target`:
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts
+import { createEvent, sample } from "effector";
+
+const updateQuery = createEvent<string>();
+const queryChanged = createEvent<string>();
+
+sample({
+  clock: updateQuery,
+  target: queryChanged,
+});
+
+updateQuery("new query");
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts
+import { createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const updateQuery = createEvent<string>();
+const queryChanged = createEvent<string>();
+
+createAction(updateQuery, {
+  target: queryChanged,
+  fn: (target, query) => {
+    target(query);
+  },
+});
+
+updateQuery("new query");
 ```
 
 </TabItem >

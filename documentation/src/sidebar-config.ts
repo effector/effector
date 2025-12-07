@@ -24,16 +24,20 @@ export const learning: LSidebarGroup[] = [
         link: "/introduction/core-concepts",
       },
       {
-        text: { en: "Installation", ru: "Установка", uz: "O'rnatma" },
-        link: "/introduction/installation",
-      },
-      {
         text: { en: "Motivation", ru: "Мотивация", uz: "Motivatsiya" },
         link: "/introduction/motivation",
       },
       {
         text: { en: "Examples", ru: "Примеры", uz: "Namunalar" },
         link: "/introduction/examples",
+      },
+      {
+        text: {
+          en: "Static initialization",
+          ru: "Инициализация юнитов",
+          uz: "Hisoblash ustuvorligi",
+        },
+        link: "/resources/static-initialization",
       },
     ],
   },
@@ -59,14 +63,7 @@ export const learning: LSidebarGroup[] = [
           uz: "O'zgaruvchilar",
         },
         link: "/essentials/events",
-      },
-      {
-        text: {
-          en: "Work with async",
-          ru: "Работа с асинхронностью",
-          uz: "Asinkronlik bilan ishlash",
-        },
-        link: "/essentials/work-with-async",
+        status: "new",
       },
       {
         text: {
@@ -75,6 +72,15 @@ export const learning: LSidebarGroup[] = [
           uz: "Unit kompozitsiyasi",
         },
         link: "/essentials/unit-composition",
+      },
+      {
+        text: {
+          en: "Side effects and async",
+          ru: "Сайд-эффекты и  асинхронность",
+          uz: "Asinkronlik bilan ishlash",
+        },
+        link: "/essentials/work-with-async",
+        status: "new",
       },
       {
         text: {
@@ -124,14 +130,6 @@ export const learning: LSidebarGroup[] = [
     items: [
       {
         text: {
-          en: "Flow splitting",
-          ru: "Разделение потока данных",
-          uz: "Flow to'plamasi",
-        },
-        link: "/essentials/flow-split",
-      },
-      {
-        text: {
           en: "Isolated scopes",
           ru: "Изолированные контексты",
           uz: "Izolatsiya qilingan kontekstlar",
@@ -140,11 +138,11 @@ export const learning: LSidebarGroup[] = [
       },
       {
         text: {
-          en: "Debug Traces mode",
-          ru: "Debug Traces mode",
-          uz: "Debug Traces mode",
+          en: "Flow splitting",
+          ru: "Разделение потока данных",
+          uz: "Flow to'plamasi",
         },
-        link: "/api/effector/enable_debug_traces",
+        link: "/essentials/flow-split",
       },
     ],
   },
@@ -288,6 +286,14 @@ export const guidesAndRecipes: LSidebarGroup[] = [
         },
         link: "https://withease.effector.dev/magazine/migration_from_redux.html",
       },
+      {
+        text: {
+          en: "Debug Traces mode",
+          ru: "Режим дебага",
+          uz: "Debug Traces mode",
+        },
+        link: "/api/effector/debug_traces",
+      },
     ],
   },
   {
@@ -303,14 +309,6 @@ export const guidesAndRecipes: LSidebarGroup[] = [
           ru: "Явный запуск приложения",
         },
         link: "/resources/explicit-start",
-      },
-      {
-        text: {
-          en: "Static initialization",
-          ru: "Инициализация юнитов",
-          uz: "Hisoblash ustuvorligi",
-        },
-        link: "/resources/static-initialization",
       },
       {
         text: {
@@ -348,6 +346,10 @@ export const guidesAndRecipes: LSidebarGroup[] = [
         text: { en: "Releases policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
         link: "/resources/releases",
       },
+      // {
+      //   text: { en: "StackBlitz Examples", ru: "Примеры в StackBlitz", uz: "StackBlitz misollari" },
+      //   link: "/resources/stackblitz-examples",
+      // },
       {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",
@@ -397,12 +399,14 @@ export const effectorReact: LSidebarGroup[] = [
         tags: ["useful"],
       },
       {
-        text: { en: "useStore ⚠️", ru: "useStore ⚠️", uz: "useStore ⚠️" },
+        text: { en: "useStore", ru: "useStore", uz: "useStore" },
         link: "/api/effector-react/useStore",
+        status: "deprecated",
       },
       {
-        text: { en: "useEvent ⚠️", ru: "useEvent ⚠️", uz: "useEvent ⚠️" },
+        text: { en: "useEvent", ru: "useEvent", uz: "useEvent" },
         link: "/api/effector-react/useEvent",
+        status: "deprecated",
       },
     ],
   },
@@ -440,7 +444,7 @@ export const effectorReact: LSidebarGroup[] = [
     items: [
       {
         text: { en: "effector-react/compat" },
-        link: "/api/effector-react/module/сompat",
+        link: "/api/effector-react/module/compat",
       },
       {
         text: { en: "effector-react/scope" },
@@ -740,11 +744,13 @@ export const effector: LSidebarGroup[] = [
         text: { en: "combine" },
         link: "/api/effector/combine",
         tags: ["useful"],
+        status: "new",
       },
       {
         text: { en: "attach" },
         link: "/api/effector/attach",
         tags: ["useful"],
+        status: "new",
       },
       {
         text: { en: "merge" },
@@ -767,23 +773,26 @@ export const effector: LSidebarGroup[] = [
         tags: ["useful"],
       },
       {
-        text: { en: "forward ⚠️" },
+        text: { en: "forward" },
         link: "/api/effector/forward",
+        status: "deprecated",
       },
       {
-        text: { en: "guard ⚠️" },
+        text: { en: "guard" },
         link: "/api/effector/guard",
+        status: "deprecated",
       },
     ],
   },
   {
     text: { en: "Fork API" },
-    collapsed: true,
+    collapsed: false,
     items: [
       {
         text: { en: "fork" },
         link: "/api/effector/fork",
         tags: ["useful"],
+        status: "new",
       },
       {
         text: { en: "serialize" },
@@ -803,6 +812,36 @@ export const effector: LSidebarGroup[] = [
       {
         text: { en: "hydrate" },
         link: "/api/effector/hydrate",
+      },
+    ],
+  },
+  {
+    text: { en: "Import map", ru: "Подпакеты" },
+    items: [
+      {
+        text: { en: "effector/compat" },
+        link: "/api/effector/module/compat",
+      },
+      {
+        text: { en: "effector/inspect" },
+        link: "/api/effector/module/inspect",
+      },
+      {
+        text: { en: "effector/babel-plugin" },
+        link: "/api/effector/module/babel-plugin",
+      },
+    ],
+  },
+  {
+    text: { en: "Compiler Plugins", ru: "Плагины для сборки" },
+    items: [
+      {
+        text: { en: "Babel plugin" },
+        link: "/api/effector/babel-plugin",
+      },
+      {
+        text: { en: "SWC plugin" },
+        link: "/api/effector/swc-plugin",
       },
     ],
   },
@@ -843,36 +882,6 @@ export const effector: LSidebarGroup[] = [
       {
         text: { en: "inspect" },
         link: "/api/effector/inspect",
-      },
-    ],
-  },
-  {
-    text: { en: "Import map", ru: "Подпакеты" },
-    items: [
-      {
-        text: { en: "effector/compat" },
-        link: "/api/effector/module/сompat",
-      },
-      {
-        text: { en: "effector/inspect" },
-        link: "/api/effector/module/inspect",
-      },
-      {
-        text: { en: "effector/babel-plugin" },
-        link: "/api/effector/module/babel-plugin",
-      },
-    ],
-  },
-  {
-    text: { en: "Compiler Plugins", ru: "Плагины для сборки" },
-    items: [
-      {
-        text: { en: "Babel plugin" },
-        link: "/api/effector/babel-plugin",
-      },
-      {
-        text: { en: "SWC plugin" },
-        link: "/api/effector/swc-plugin",
       },
     ],
   },

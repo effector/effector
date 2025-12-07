@@ -30,6 +30,18 @@ export default defineConfig({
       useDarkModeMediaQuery: false,
       styleOverrides: {
         borderColor: "var(--theme-divider);",
+        borderRadius: "var(--radius-lg)",
+        codeFontSize: "13px",
+        codeBackground: "var(--theme-bg-code);",
+        borderWidth: "1px",
+        textMarkers: {
+          insBorderColor: "var(--theme-code-ins-border)",
+          insBackground: "var(--theme-code-ins-bg)",
+          markBorderColor: "var(--theme-code-mark-border)",
+          markBackground: "var(--theme-code-mark-bg)",
+          delBorderColor: "var(--theme-code-del-border)",
+          delBackground: "var(--theme-code-del-bg)",
+        },
         frames: {
           shadowColor: "transparent",
           tooltipSuccessBackground: "var(--theme-admonition-tip-border)",

@@ -63,8 +63,8 @@ const { prevPage, nextPage } = getPrevNext(sidebar, pagePath);
   }
 
   .pagination-link:hover {
-    background-color: var(--theme-text-accent);
-    color: var(--theme-card);
+    border-color: var(--theme-text-accent);
+    color: var(--theme-text-accent);
   }
 
   .pagination-link:focus,
@@ -82,21 +82,13 @@ const { prevPage, nextPage } = getPrevNext(sidebar, pagePath);
   }
 
   .pagination-link-icon {
-    color: var(--theme-text);
+    color: currentColor;
     width: 1.5em;
     height: 1.5em;
   }
 
-  .pagination-link:hover .pagination-link-icon {
-    color: var(--theme-card);
-  }
-
   .pagination-link-title {
     font-weight: bold;
-    color: var(--theme-text);
-  }
-
-  .pagination-link:hover .pagination-link-title {
-    color: var(--theme-card);
+    color: currentColor;
   }
 </style>

@@ -1,0 +1,320 @@
+---
+title: Side effects and async operations
+description: How effects help handle asynchrony and why this concept is essential in effector
+redirectFrom:
+  - /docs/essentials/work-with-async
+  - /essentials/work-with-async
+---
+
+# Side effects and async operations (#async-operation-with-effects)
+
+To work with side effects and any asynchronous logic, effector provides [effects](/en/api/effector/Effect). A side effect is anything that can impact the purity of your function, for example:
+
+- HTTP requests to a server
+- Changing or touching global variables
+- Browser APIs such as `addEventListener`, `setTimeout`, and so on
+- Working with `localStorage`, `IndexedDB`, or other storage APIs
+- Any code that may throw or take noticeable time to complete
+
+```ts
+import { createEffect, sample, createStore } from "effector";
+
+const $user = createStore(null);
+
+const fetchUserFx = createEffect(async (userId: string) => {
+  const response = await fetch(`/api/users/${userId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch user");
+  }
+  return response.json();
+});
+
+// when the effect succeeds we update the store with returned value
+sample({
+  clock: fetchUserFx.doneData,
+  target: $user,
+});
+```
+
+But why do we need [effects](/en/api/effector/Effect) at all? In effector most helpers such as [`store.on`](/en/api/effector/Store#methods-on-trigger-reducer), [`sample.fn`](/en/api/effector/sample#fn-argument), and so on are [pure](/en/explanation/glossary#purity) — they work only with the arguments they receive. These functions **must not** be asynchronous or contain side effects because that would break predictability and reactivity.
+
+## Advantages of effects (#main-effect-states)
+
+An [effect](/en/api/effector/Effect) is a container for side effects or asynchronous functions that may throw or take an unknown amount of time. To connect effects to the reactive system they expose convenient properties. A few important ones:
+
+- [`pending`](/en/api/effector/Effect#properties-pending) — a [store](/en/api/effector/Store) that shows whether the effect is running. Perfect for displaying a loader in UI.
+- [`doneData`](/en/api/effector/Effect#properties-doneData) — an [event](/en/api/effector/Event) fired when the effect completes successfully.
+- [`failData`](/en/api/effector/Effect#properties-failData) — another [event](/en/api/effector/Event) triggered when the effect throws; it carries the thrown error.
+
+:::warning{title="Derived units"}
+Every effect property is triggered by effector’s core. You must not try to call them manually.
+:::
+
+Because effects have their own events, working with them is similar to [regular events](/en/essentials/events). Let’s look at a simple example:
+
+```ts
+// model.ts
+import { createEffect, createEvent, createStore, sample } from "effector";
+
+export const $error = createStore<string | null>(null);
+
+export const submit = createEvent();
+
+// simple form submission wrapped into an effect
+const sendFormFx = createEffect(async ({ name, email }: { name: string; email: string }) => {
+  try {
+    await fetch("/api/user-data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email }),
+    });
+  } catch {
+    throw new Error("Failed to send form");
+  }
+});
+
+export const $isLoading = sendFormFx.pending;
+
+sample({
+  clock: sendFormFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+
+sample({
+  clock: submit,
+  target: sendFormFx,
+});
+```
+
+:::info{title="One argument"}
+Effects, just like events, accept only one argument. Use an object (e.g. `{ name, email }`) if you need to pass multiple values.
+:::
+
+In UI we trigger the `submit` event, show a loader while the request is running, and display the error if there is one:
+
+```tsx "{isLoading && <div>Loading...</div>}" "{error && <div>{error}</div>}" "onSubmit"
+// view.tsx
+import { useUnit } from "effector-react";
+import { $error, $isLoading, submit } from "./model.ts";
+
+const Form = () => {
+  const { isLoading, error } = useUnit({
+    isLoading: $isLoading,
+    error: $error,
+  });
+  const onSubmit = useUnit(submit);
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input name="name" />
+      <input name="email" />
+      <button type="submit">Submit</button>
+      {isLoading && <div>Loading...</div>}
+      {error && <div>{error}</div>}
+    </form>
+  );
+};
+```
+
+Let’s highlight the reactive connections in the model. First we connect the [`failData`](/en/api/effector/Effect#properties-failData) event to the `$error` store so that the error message is saved whenever the effect fails:
+
+```ts
+sample({
+  clock: sendFormFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+```
+
+When the `submit` event fires we just put the effect into [`target`](/en/api/effector/sample#target-argument):
+
+```ts
+sample({
+  clock: submit,
+  target: sendFormFx,
+});
+```
+
+## Calling effects (#how-to-call-effects)
+
+Effect calls are [identical to event calls](/en/essentials/events#event-calling). You can grab an effect inside a component with `useUnit` and call it as a function:
+
+```ts
+const fetchUser = useUnit(fetchUserFx);
+```
+
+However, it is better not to expose our UI layer to too much business logic. A common alternative is to export an event from the model, use it in the view, and bind that event to the effect with [`sample`](/en/api/effector/sample). The arguments passed to the event will be forwarded to the effect:
+
+```ts
+import { createEvent, sample } from "effector";
+
+export const updateProfileButtonPressed = createEvent<string>();
+
+sample({
+  clock: updateProfileButtonPressed,
+  target: fetchUserFx,
+});
+```
+
+:::tip{title="Why do I need an event for an effect call?"}
+On the [How to think in the effector paradigm](/en/resources/mindset#business-logic-not-ui) page we explain [why UI and business logic should stay separate](/en/resources/mindset#business-logic-not-ui).
+:::
+
+You can also call effects inside other effects:
+
+```ts
+import { createEffect } from "effector";
+
+const fetchInitialData = createEffect(async (userId: string) => {
+  const userData = await getUserByIdFx(userId);
+
+  const friends = await getUserByIds(userData.friends);
+
+  return userData.name;
+});
+```
+
+### Calling events inside an effect (#calling-events-in-effect)
+
+It is also possible to trigger events inside an effect — handy when you need to emit something on a timer:
+
+```ts
+import { createEffect, createEvent } from "effector";
+
+const tick = createEvent();
+
+const fetchInitialData = createEffect(async () => {
+  // remember to clean up the id later!
+  const id = setInterval(() => {
+    tick();
+  }, 1000);
+});
+```
+
+If you [work with scopes](/en/advanced/work-with-scope), this pattern may lead to [scope loss](/en/guides/scope-loss). In that case wrap the handler with [`scopeBind`](/en/api/effector/scopeBind). No extra work is required outside of scoped environments.
+
+## Update a store when the effect completes (#update-store-when-effect-completes)
+
+A classic scenario is updating a store once the effect finishes. The logic is the same as with events: subscribe to [`doneData`](/en/api/effector/Effect#properties-doneData) and point the [`target`](/en/api/effector/sample#target-argument) to the desired store:
+
+```ts
+import { createStore, createEffect } from "effector";
+
+const fetchUserNameFx = createEffect(async (userId: string) => {
+  const userData = await fetch(`/api/users/${userId}`);
+
+  return userData.name;
+});
+
+const $error = createStore<string | null>(null);
+const $userName = createStore("");
+const $isLoading = fetchUserNameFx.pending;
+
+sample({
+  clock: fetchUserNameFx.doneData,
+  target: $userName,
+});
+
+sample({
+  clock: fetchUserNameFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+```
+
+## Error handling (#error-handing-in-effects)
+
+An effect knows when an error occurs during execution and forwards it to the [`failData`](/en/api/effector/Effect#properties-failData) event. Sometimes we want to throw our own error instead of a plain `Error` instance:
+
+```ts
+import { createEffect } from "effector";
+
+class CustomError extends Error {
+  // implementation
+}
+
+const effect = createEffect(async () => {
+  const response = await fetch(`/api/users/${userId}`);
+
+  if (!response.ok) {
+    // You can throw errors that will be caught by the .failData handler
+    throw new CustomError(`Failed to fetch user: ${response.statusText}`);
+  }
+
+  return response.json();
+});
+```
+
+The code above runs just fine, but if we subscribe to [`failData`](/en/api/effector/Effect#properties-failData) we will still see the type as `Error` rather than our `CustomError`:
+
+```ts
+sample({
+  clock: effect.failData,
+  // error is typed as Error, not CustomError
+  fn: (error) => error.message,
+  target: $error,
+});
+```
+
+This happens because of typing: by default an effect assumes it will throw `Error` and has no way of knowing that we plan to throw `CustomError`. The solution is to pass the full type signature to the [`createEffect`](/en/api/effector/createEffect) generic, including params, done type, and the error type:
+
+```ts ins="<Params, Done, CustomError>"
+import { createEffect } from "effector";
+
+class CustomError extends Error {
+  // implementation
+}
+
+const effect = createEffect<Params, Done, CustomError>(async () => {
+  const response = await fetch(`/api/users/${userId}`);
+
+  if (!response.ok) {
+    throw new CustomError(`Failed to fetch user: ${response.statusText}`);
+  }
+
+  return response.json();
+});
+```
+
+Read more about typing effects and other units on the [TypeScript page](/en/essentials/typescript#typing-effects).
+
+## Reusing effects (#attached-effects)
+
+A common case is having a shared effect such as `fetchShopCardsFx` that you reuse on multiple screens while still wanting to subscribe to events like [`doneData`](/en/api/effector/Effect#properties-doneData) or [`failData`](/en/api/effector/Effect#properties-failData). If you subscribe directly to the shared effect, its listeners fire everywhere because [effector units are declared statically at module level](/en/resources/static-initialization). The solution is [`attach`](/en/api/effector/attach), which creates a copy of the effect. You can then listen to that copy locally:
+
+```ts "attach"
+import { createEffect, attach, createEvent } from "effector";
+
+const showNotification = createEvent();
+
+// somewhere in shared code
+const fetchShopCardsFx = createEffect(async () => {
+  const response = await fetch("/api/shop-cards");
+  return response.json();
+});
+
+// local copy that we can safely subscribe to
+const fetchShopCardsAttachedFx = attach({
+  effect: fetchShopCardsFx,
+});
+
+sample({
+  clock: fetchShopCardsAttachedFx.failData,
+  target: showNotification,
+});
+```
+
+When an attached effect created via [`attach`](/en/api/effector/attach) runs, the original effect provided in [`effect`](/en/api/effector/attach#methods-attach-effect) runs as well.
+
+## Related API and docs (#related-api-and-docs)
+
+- **API**
+  - [`Effect`](/en/api/effector/Effect) — description of effects and their methods
+  - [`createEffect`](/en/api/effector/createEffect) — helper for creating effects
+  - [`attach`](/en/api/effector/attach) — create new effects based on existing ones
+- **Articles**
+  - [Typing effects and other units](/en/essentials/typescript)
+  - [Why units must be declared statically at module level](/en/resources/static-initialization)
+  - [Connecting units with `sample` or `createAction`](/en/essentials/unit-composition)
+  - [Isolated scopes, when to use them, and the scope-loss problem](/en/advanced/work-with-scope)

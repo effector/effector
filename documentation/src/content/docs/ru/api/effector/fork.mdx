@@ -1,0 +1,237 @@
+---
+title: fork API
+description: Fork API — создание изолированных скоупов для SSR, тестирования и локальной изоляции состояния. Конфигурации, примеры, особенности handlers и values.
+lang: ru
+---
+
+[scopeApi]: /ru/api/effector/Scope
+[domainApi]: /ru/api/effector/Domain
+[serializeApi]: /ru/api/effector/serialize
+[allSettledApi]: /ru/api/effector/allSettled
+[hydrateApi]: /ru/api/effector/hydrate
+[sampleApi]: /ru/api/effector/sample
+[storeApi]: /ru/api/effector/Store
+[effectApi]: /ru/api/effector/Effect
+
+# `fork` API (#methods)
+
+```ts
+import { fork, type Scope } from "effector";
+```
+
+Метод `fork` создает изолированный [скоуп][scopeApi] приложения. Он нужен для SSR, тестирования и локальной изоляции состояния — вы запускаете вычисления в копии без влияния на глобальные юниты.
+
+## Алгоритм работы (#algorithm)
+
+1. Вы вызываете `fork`, получая новый [скоуп][scopeApi].
+2. Если переданы `values` или `handlers`, они применяются при создании этого [скоупа][scopeApi].
+3. Юниты, вызванные с этим [скоупом][scopeApi], работают с изолированными значениями и обработчиками.
+4. Состояние читается через `scope.getState(store)` или сериализуется через [`serialize`][serializeApi].
+
+## Виды конфигураций `fork` (#fork-config-forms)
+
+| <div style="width:220px">Форма</div>                    | Описание                                                                                                                    |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [`fork()`](#methods-fork)                               | Создает новый чистый [скоуп][scopeApi] без предзаполненных данных и переопределений обработчиков.                           |
+| [`fork({ values?, handlers? })`](#methods-fork-options) | Создает [скоуп][scopeApi] с начальными значениями сторов и пользовательскими обработчиками эффектов.                        |
+| [`fork(domain, options?)`](#methods-fork-domain)        | Устаревшая форма, требующая `domain`. Используйте `fork({ values?, handlers? })`, если нет зависимости от старой сигнатуры. |
+
+## Конфигурации (#config)
+
+### `fork()` (#methods-fork)
+
+Создает новый прикладной [скоуп][scopeApi] без дополнительных настроек.
+
+- **Формула**
+
+```ts
+fork(): Scope
+```
+
+- **Тип**
+
+```ts
+type SerializedState = Record<string, unknown>;
+type StorePair<T = unknown> = [StoreWritable<T>, T];
+
+export function fork(config?: {
+  values?: StorePair<any>[] | SerializedState;
+  handlers?: Array<[Effect<any, any, any>, Function]>;
+}): Scope;
+```
+
+- **Особенности**
+
+  - Возвращает новый [скоуп][scopeApi] без предзаполненных сторов и без замены обработчиков.
+  - Подходит, когда данные и побочные эффекты должны остаться неизменными (например, первый рендер на сервере).
+
+- **Примеры**
+
+```ts
+import { createStore, createEvent, fork, allSettled } from "effector";
+
+const inc = createEvent();
+const dec = createEvent();
+const $counter = createStore(0);
+
+$counter.on(inc, (value) => value + 1);
+$counter.on(dec, (value) => value - 1);
+
+const scopeA = fork();
+const scopeB = fork();
+
+await allSettled(inc, { scope: scopeA });
+await allSettled(dec, { scope: scopeB });
+
+console.log($counter.getState()); // => 0
+console.log(scopeA.getState($counter)); // => 1
+console.log(scopeB.getState($counter)); // => -1
+```
+
+- **Возвращаемое значение**
+
+Новый [скоуп][scopeApi].
+
+### `fork({ values?, handlers? })` (#methods-fork-options)
+
+Позволяет задать начальные значения для сторов и переопределить обработчики эффектов внутри [скоупа][scopeApi].
+
+- **Формула**
+
+```ts
+fork({
+  values?,      // например [[$store, value], ...] или сериализованный объект
+  handlers?,    // например [[effect, handler], ...]
+}): Scope
+```
+
+- **Тип**
+
+```ts
+type SerializedState = Record<string, unknown>;
+type StorePair<T = unknown> = [StoreWritable<T>, T];
+
+export function fork(config?: {
+  values?: StorePair<any>[] | SerializedState;
+  handlers?: Array<[Effect<any, any, any>, Function]>;
+}): Scope;
+```
+
+- **Особенности**
+
+  - `values` может быть массивом кортежей `[$store, value]` или объектом сериализованного состояния (обычно результат [`serialize`][serializeApi]); предпочтителен массив кортежей.
+  - `handlers` принимает только массив кортежей, замены работают только в пределах созданного [скоупа][scopeApi].
+  - Значения и обработчики применяются один раз при создании [скоупа][scopeApi] и не обновляются автоматически.
+
+- **Примеры**
+
+Задание начального состояния и подмена обработчика в тесте:
+
+```ts
+import { createEffect, createStore, fork, allSettled } from "effector";
+
+const fetchFriendsFx = createEffect<{ limit: number }, string[]>(async ({ limit }) => {
+  return [];
+});
+const $user = createStore("guest");
+const $friends = createStore<string[]>([]);
+
+$friends.on(fetchFriendsFx.doneData, (_, result) => result);
+
+const testScope = fork({
+  values: [[$user, "alice"]],
+  handlers: [[fetchFriendsFx, () => ["bob", "carol"]]],
+});
+
+await allSettled(fetchFriendsFx, {
+  scope: testScope,
+  params: { limit: 10 },
+});
+
+console.log(testScope.getState($friends));
+// => ['bob', 'carol']
+```
+
+Создание [скоупа][scopeApi] с сериализованным состоянием:
+
+```ts
+import { fork } from "effector";
+
+const serialized = {
+  userSid: "alice",
+  ageSid: 21,
+};
+
+const scope = fork({ values: serialized });
+```
+
+- **Возвращаемое значение**
+
+Новый [скоуп][scopeApi] с примененными `values` и `handlers`.
+
+### `fork(domain, options?)` (#methods-fork-domain)
+
+Устаревшая форма, требующая [domain][domainApi]; актуальна только для совместимости со старым кодом.
+
+:::error{title="Устарело"}
+Используйте `fork({ values?, handlers? })`, так как `fork` отслеживает юниты автоматически без передачи `domain`.
+:::
+
+- **Формула**
+
+```ts
+fork(domain, {
+  values?,      // например [[$store, value], ...] или сериализованный объект
+  handlers?,    // например [[effect, handler], ...]
+}): Scope
+```
+
+- **Тип**
+
+```ts
+type SerializedState = Record<string, unknown>;
+
+export function fork(
+  domain: Domain,
+  config?: {
+    values?: SerializedState | Array<[StoreWritable<any>, any]>;
+    handlers?: Array<[Effect<any, any, any>, Function]>;
+  },
+): Scope;
+```
+
+- **Особенности**
+
+  - Передача `domain` нужна только в проектах, где код еще зависит от старой сигнатуры.
+  - Допустимые форматы `values` и `handlers` совпадают с конфигурацией без `domain`.
+
+- **Пример**
+
+```ts
+import { createDomain, createStore, fork } from "effector";
+
+const app = createDomain();
+const $flag = app.createStore(false);
+
+const scope = fork(app, {
+  values: [[$flag, true]],
+});
+
+console.log(scope.getState($flag)); // => true
+```
+
+- **Возвращаемое значение**
+
+Новый [скоуп][scopeApi], привязанный к указанному [domain][domainApi].
+
+## Связанные API и статьи (#related-api-and-docs-to-fork)
+
+- **API**
+  - [`Scope`](/ru/api/effector/Scope) — структура изолированного состояния
+  - [`allSettled`](/ru/api/effector/allSettled) — выполнение эффекта внутри [скоупа][scopeApi] с ожиданием завершения
+  - [`serialize`](/ru/api/effector/serialize) — сериализация состояния [скоупа][scopeApi]
+  - [`hydrate`](/ru/api/effector/hydrate) — восстановление состояния в [скоупе][scopeApi]
+- **Статьи**
+  - [SSR и работа со скоупом](/ru/guides/server-side-rendering)
+  - [Тестирование с isolated скоупом](/ru/guides/testing)
+  - [Работа со скоупом и потеря контекста](/ru/guides/scope-loss)

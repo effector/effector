@@ -13,13 +13,13 @@ import SideBySide from "@components/SideBySide/SideBySide.astro";
 С помощью [скоупов](/ru/api/effector/Scope) вы можете создать изолированный экземпляр всего приложения, который содержит независимую копию всех юнитов (включая их связи), а также базовые методы для работы с ними:
 
 ```ts "fork" "allSettled"
-import { fork, allSettled } from "effector";
+import { fork, allSettled, createStore, createEvent } from "effector";
 
 // Создаем новый скоуп
 const scope = fork();
 
-const $counter = scope.createStore(0);
-const increment = scope.createEvent();
+const $counter = createStore(0);
+const increment = createEvent();
 
 $counter.on(increment, (state) => state + 1);
 

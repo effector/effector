@@ -20,7 +20,16 @@ const TableOfContents: FunctionalComponent<{
   const toc = useRef<HTMLUListElement>(null);
   const onThisPageID = "on-this-page-heading";
   const itemOffsets = useRef<ItemOffsets[]>([]);
-  const [currentID, setCurrentID] = useState("overview");
+
+  // Initialize with hash from URL or first heading
+  const getInitialID = () => {
+    const hash = typeof window !== "undefined" ? window.location.hash.slice(1) : "";
+    if (hash) return hash;
+    const firstHeading = headings.find(({ depth }) => depth > 0 && depth < 4);
+    return firstHeading?.slug ?? "";
+  };
+
+  const [currentID, setCurrentID] = useState(getInitialID);
   useEffect(() => {
     const getItemOffsets = () => {
       const titles = document.querySelectorAll("article :is(h1, h2, h3, h4)");
@@ -41,6 +50,8 @@ const TableOfContents: FunctionalComponent<{
   useEffect(() => {
     if (!toc.current) return;
 
+    const firstHeading = headings.find(({ depth }) => depth > 0 && depth < 4);
+
     const setCurrent: IntersectionObserverCallback = (entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
@@ -49,6 +60,13 @@ const TableOfContents: FunctionalComponent<{
           setCurrentID(entry.target.id);
           break;
         }
+      }
+    };
+
+    // When scrolled to top, activate first heading
+    const handleScroll = () => {
+      if (window.scrollY < 100 && firstHeading) {
+        setCurrentID(firstHeading.slug);
       }
     };
 
@@ -64,15 +82,46 @@ const TableOfContents: FunctionalComponent<{
     // Observe all the headings in the main page content.
     document.querySelectorAll("article :is(h1,h2,h3)").forEach((h) => headingsObserver.observe(h));
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     // Stop observing when the component is unmounted.
-    return () => headingsObserver.disconnect();
+    return () => {
+      headingsObserver.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [toc.current]);
+
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+
+  // Close popover when clicking outside
+  useEffect(() => {
+    if (!collapsed) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (detailsRef.current && !detailsRef.current.contains(e.target as Node)) {
+        detailsRef.current.open = false;
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [collapsed]);
 
   const onLinkClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     setCurrentID(e.currentTarget.getAttribute("href")?.replace("#", "")!);
+    // Close popover when link is clicked (for collapsed mode)
+    if (detailsRef.current) {
+      detailsRef.current.open = false;
+    }
   };
 
   if (headings.length === 0) return null;
+
+  // Find current active heading text for display
+  const currentHeading = headings.find((h) => h.slug === currentID);
+  const currentHeadingText = currentHeading
+    ? unescape(currentHeading.text)
+    : getTextLocalized(translations.OnThisPage, lang);
 
   const items = (
     <ul ref={toc} className={styles.contents}>
@@ -97,9 +146,9 @@ const TableOfContents: FunctionalComponent<{
   // When component setup as collapsed by default
   if (collapsed) {
     return (
-      <details className={styles.expandDetails}>
+      <details ref={detailsRef} className={styles.expandDetails}>
         <summary id={onThisPageID}>
-          <span>{getTextLocalized(translations.OnThisPage, lang)}</span>
+          <span>{currentHeadingText}</span>
         </summary>
         <div className={styles.expandContent}>{items}</div>
       </details>

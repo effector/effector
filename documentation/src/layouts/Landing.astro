@@ -1,5 +1,6 @@
 ---
 import CommonLayout from "../layouts/CommonLayout.astro";
+import LandingHeader from "../components/Landing/LandingHeader.astro";
 
 interface Props {
   title: string;
@@ -13,6 +14,7 @@ const { title, lang, description, dir = "ltr" } = Astro.props;
 
 <CommonLayout lang={lang} title={title} dir={dir} description={description}>
   <div class="landing">
+    <LandingHeader lang={lang} />
     <slot />
   </div>
 </CommonLayout>
@@ -23,6 +25,12 @@ const { title, lang, description, dir = "ltr" } = Astro.props;
   }
 
   .landing {
-    margin-top: var(--theme-navbar-height);
+    padding-top: var(--theme-navbar-height);
+  }
+
+  @media (min-width: 768px) {
+    .landing {
+      padding-top: 0;
+    }
   }
 </style>

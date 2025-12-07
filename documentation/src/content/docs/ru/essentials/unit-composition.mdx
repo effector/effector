@@ -18,7 +18,7 @@ import TabItem from "@components/Tabs/TabItem.astro";
 
 <Fragment slot="left">
 
-```ts wrap data-height="full"
+```ts data-height="full"
 // sample
 import { sample, createEvent } from "effector";
 
@@ -40,7 +40,7 @@ sample({
 
   <Fragment slot="right">
 
-```ts wrap data-height="full"
+```ts data-height="full"
 // createAction
 import { createAction } from "effector-action";
 import { createEvent } from "effector";
@@ -205,7 +205,7 @@ createAction(submitForm, {
 
 Давайте теперь рассмотрим основные возможности использования операторов:
 
-- Вы можете обновлять [стор](/ru/api/effector/Store), а также вызывать [эффект](/ru/api/effector/Effect) или [событие](/ru/api/effector/Event) передав его в [`target`](/ru/api/effector/sample#target-argument):
+- Вы можете обновлять [стор](/ru/api/effector/Store) передав его в `target`, старое значение будет полностью заменено новым:
 
 <Tabs syncId="preferred-operator">
 <TabItem label="sample">
@@ -241,6 +241,50 @@ createAction(queryChanged, {
     target(query);
   },
 });
+```
+
+</TabItem >
+
+</Tabs>
+
+- Также можете вызывать [эффект](/ru/api/effector/Effect) или [событие](/ru/api/effector/Event) передав его в [`target`](/ru/api/effector/sample#target-argument), при этом аргументы будут декларативно переданы в `target`:
+
+<Tabs syncId="preferred-operator">
+<TabItem label="sample">
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+
+const updateQuery = createEvent<string>();
+const queryChanged = createEvent<string>();
+
+sample({
+  clock: updateQuery,
+  target: queryChanged,
+});
+
+updateQuery("new query");
+```
+
+</TabItem >
+
+<TabItem label="createAction">
+
+```ts
+import { createStore, createEvent } from "effector";
+import { createAction } from "effector-action";
+
+const updateQuery = createEvent<string>();
+const queryChanged = createEvent<string>();
+
+createAction(updateQuery, {
+  target: queryChanged,
+  fn: (target, query) => {
+    target(query);
+  },
+});
+
+updateQuery("new query");
 ```
 
 </TabItem >

@@ -84,6 +84,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   }
 
   .menu .flyout {
+    z-index: 1000;
     position: absolute;
     top: 130%;
     right: 0rem;
@@ -95,6 +96,16 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
       transform 0.25s;
   }
 
+  .menu.flyout-top .flyout {
+    top: auto;
+    bottom: 130%;
+  }
+
+  .menu.flyout-left .flyout {
+    right: auto;
+    left: 0rem;
+  }
+
   .menu:hover .flyout {
     transform: translateY(0);
     visibility: visible;
@@ -104,7 +115,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   .items {
     @apply rounded-xl p-3 shadow-xl;
     border: 1px solid var(--theme-divider);
-    background-color: var(--theme-bg);
+    background-color: var(--theme-dropdown-bg);
     min-width: 10rem;
     overflow-y: auto;
   }
@@ -124,3 +135,42 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
     text-wrap: nowrap;
   }
 </style>
+
+<script>
+  function initDropdownMenus() {
+    const menus = document.querySelectorAll<HTMLElement>('.menu');
+
+    menus.forEach((menu) => {
+      const flyout = menu.querySelector<HTMLElement>('.flyout');
+      if (!flyout) return;
+
+      const updatePosition = () => {
+        menu.classList.remove('flyout-top', 'flyout-left');
+
+        const menuRect = menu.getBoundingClientRect();
+        const flyoutRect = flyout.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+
+        const flyoutHeight = flyoutRect.height || 200;
+        const flyoutWidth = flyoutRect.width || 160;
+
+        const spaceBelow = viewportHeight - menuRect.bottom;
+        if (spaceBelow < flyoutHeight + 20 && menuRect.top > flyoutHeight + 20) {
+          menu.classList.add('flyout-top');
+        }
+
+        const spaceRight = viewportWidth - menuRect.right;
+        if (spaceRight < flyoutWidth + 20 && menuRect.left > flyoutWidth + 20) {
+        } else if (menuRect.left < flyoutWidth + 20 && spaceRight > flyoutWidth + 20) {
+          menu.classList.add('flyout-left');
+        }
+      };
+
+      menu.addEventListener('mouseenter', updatePosition);
+    });
+  }
+
+  initDropdownMenus();
+  document.addEventListener('astro:after-swap', initDropdownMenus);
+</script>

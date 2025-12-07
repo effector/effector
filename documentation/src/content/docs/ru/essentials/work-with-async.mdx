@@ -1,0 +1,322 @@
+---
+title: Сайд-эффекты и  асинхронность
+description: Как эффекты помогают работать с асинхронностью и почему это необходимая концепция в effector
+lang: ru
+---
+
+# Сайд-эффекты и асинхронность (#async-operation-with-effects)
+
+Для работы с сайд-эффектами и любой асинхронностью effector предоставляет [эффекты](/ru/api/effector/Effect). Сайд-эффектами является все, что может повлиять на чистоту вашей функции, например:
+
+- HTTP запрос на сервер
+- Изменение или работа с глобальными переменными
+- Взаимодействие с браузерным API (`addEventListener`, `setTimeout` и тд)
+- Работа с `localStorage`, `IndexedDB` и другими хранилищами
+- Любой код, который может выбросить ошибку, или выполняться какое-то время
+
+```ts
+import { createEffect, sample, createStore } from "effector";
+
+const $user = createStore(null);
+
+const fetchUserFx = createEffect(async (userId: string) => {
+  const response = await fetch(`/api/users/${userId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch user");
+  }
+  return response.json();
+});
+
+// при успешном выполнении эффекта $user будет обновлен возвращаемым значением
+sample({
+  clock: fetchUserFx.doneData,
+  target: $user,
+});
+```
+
+Однако зачем нам вообще [эффекты](/ru/api/effector/Effect)? В effector большинство функций, например [`store.on`](/ru/api/effector/Store#methods-on-trigger-reducer), [`sample.fn`](/ru/api/effector/sample#fn-argument) и другие являются [чистыми](/ru/explanation/glossary#purity), то есть работают только с данными полученными через аргументы. Такие функции **не могут быть** асинхронными или иметь сайд-эффектов, так как это нарушит предсказуемость и реактивность.
+
+## Преимущества эффектов (#main-effect-states)
+
+[Эффект](/ru/api/effector/Effect) является контейнером для сайд-эффектов или асинхронных функций, которые могут либо выкинуть ошибку во время выполнения, либо же выполняться неопределенное время, и чтобы связать эффекты с реактивной системой у них есть удобные свойства.
+Вот несколько из них:
+
+- [`pending`](/ru/api/effector/Effect#properties-pending) — [стор](/ru/api/effector/Store), который указывает выполняется ли эффект, удобно чтобы показывать лоадер в UI.
+- [`doneData`](/ru/api/effector/Effect#properties-doneData) — [событие](/ru/api/effector/Event), срабатывает когда эффект завершился без ошибок.
+- [`failData`](/ru/api/effector/Effect#properties-failData) — еще одно [событие](/ru/api/effector/Event), которое сработает если во время выполнения эффекта выбросилась ошибка с результатом ошибки.
+
+:::warning{title="Производные юниты"}
+Любое из свойств эффектов вызывается само ядром effector, это значит, что вам не нужно самим пытаться вызвать их вручную.
+:::
+
+Поскольку у эффектов есть свои события, то работа с ними происходит также, как и [при работе с обычными событиями](/ru/essentials/events), однако давайте посмотрим на простой пример использования эффектов:
+
+```ts
+// model.ts
+import { createEffect, createEvent, createStore, sample } from "effector";
+
+export const $error = createStore<string | null>(null);
+
+export const submit = createEvent();
+
+// простая отправка формы, но обертнутая в эффект
+const sendFormFx = createEffect(async ({ name, email }: { name: string; email: string }) => {
+  try {
+    await fetch("/api/user-data", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email }),
+    });
+  } catch {
+    throw new Error("Failed to send form");
+  }
+});
+
+export const $isLoading = sendFormFx.pending;
+
+sample({
+  clock: sendFormFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+
+sample({
+  clock: submit,
+  target: sendFormFx,
+});
+```
+
+:::info{title="один аргумент"}
+Эффекты, как и события, способны принимать только один аргумент. Если вам необходимо передать несколько аргументов, то используйте объект, как в примере выше `{ name, email }`
+:::
+
+В UI мы просто будем вызывать `submit` событие, отображать лоадер во время загрузки и показывать ошибку, если таковая будет:
+
+```tsx "{isLoading && <div>Loading...</div>}" "{error && <div>{error}</div>}" "onSubmit"
+// view.tsx
+import { useUnit } from "effector-react";
+import { $error, $isLoading, submit } from "./model.ts";
+
+const Form = () => {
+  const { isLoading, error } = useUnit({
+    isLoading: $isLoading,
+    error: $error,
+  });
+  const onSubmit = useUnit(submit);
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input name="name" />
+      <input name="email" />
+      <button type="submit">Submit</button>
+      {isLoading && <div>Loading...</div>}
+      {error && <div>{error}</div>}
+    </form>
+  );
+};
+```
+
+Рассмотрим чуть подробнее пример модели, в примере ниже мы связываем событие [`failData`](/ru/api/effector/Effect#properties-failData) эффекта и стора `$error`, событие [`failData`](/ru/api/effector/Effect#properties-failData) передаст значение ошибки в стор `$error`:
+
+```ts
+sample({
+  clock: sendFormFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+```
+
+А при вызове события `submit` просто вызвать эффект положив его в [`target`](/ru/api/effector/sample#target-argument):
+
+```ts
+sample({
+  clock: submit,
+  target: sendFormFx,
+});
+```
+
+## Вызовы эффектов (#how-to-call-effects)
+
+Вызовы эффектов [аналогичны вызову событий](/ru/essentials/events#event-calling), вы можете вызывать его внутри компонента, обернув его перед этим в хук `useUnit` и использовав возвращаемое значение как функцию:
+
+```ts
+const fetchUser = useUnit(fetchUserFx);
+```
+
+Однако такой способ не рекомендуется, чтобы наш UI слой не знал много о бизнес-логике. Альтернатива это создать событие, которое мы будем экспортировать, для запуске этого эффекта в модели и связать их с помощью [`sample`](/ru/api/effector/sample), при этом аргументы с которыми было вызвано событие будут переданы в эффект:
+
+```ts
+import { createEvent, sample } from "effector";
+
+export const updateProfileButtonPressed = createEvent<string>();
+
+sample({
+  clock: updateProfileButtonPressed,
+  target: fetchUserFx,
+});
+```
+
+:::tip{title="Зачем мне событие для вызова эффекта?"}
+На странице [Как мыслить в парадигме effector](/ru/resources/mindset#business-logic-not-ui) мы рассказали, [почему нужно разделять бизнес-логику и UI](/ru/resources/mindset#business-logic-not-ui).
+:::
+
+Вы также можете вызывать эффекты внутри самих эффектов:
+
+```ts
+import { createEffect } from "effector";
+
+const fetchInitialData = createEffect(async (userId: string) => {
+  const userData = await getUserByIdFx(userId);
+
+  const friends = await getUserByIds(userData.friends);
+
+  return userData.name;
+});
+```
+
+### Вызов событий в эффекте (#calling-events-in-effect)
+
+Вы можете вызывать события внутри эффекта, например это может быть полезно когда мы хотим запустить событие по таймеру:
+
+```ts
+import { createEffect, createEvent } from "effector";
+
+const tick = createEvent();
+
+const fetchInitialData = createEffect(async () => {
+  //не забудьте в будущем очистить id!
+  const id = setInterval(() => {
+    tick();
+  }, 1000);
+});
+```
+
+Однако здесь может возникнуть [Потеря скоупа](/ru/guides/scope-loss) если вы [работаете со скоупом](/ru/advanced/work-with-scope), в этом случае вам нужно использовать [`scopeBind`](/ru/api/effector/scopeBind). Если вы не используете скоуп, то ничего оборачивать не нужно.
+
+## Обновить стор с помощью эффекта (#update-store-when-effect-completes)
+
+Классический пример использования эффектов – мы хотим обновить стор по его завершению. Логика работы здесь такая же, как и при работе с событиями, просто подписываемся на [`doneData`](/ru/api/effector/Effect#properties-doneData) и передаем нужный стор в [`target`](/ru/api/effector/sample#target-argument):
+
+```ts
+import { createStore, createEffect } from "effector";
+
+const fetchUserNameFx = createEffect(async (userId: string) => {
+  const userData = await fetch(`/api/users/${userId}`);
+
+  return userData.name;
+});
+
+const $error = createStore<string | null>(null);
+const $userName = createStore("");
+const $isLoading = fetchUserNameFx.pending;
+
+sample({
+  clock: fetchUserNameFx.doneData,
+  target: $userName,
+});
+
+sample({
+  clock: fetchUserNameFx.failData,
+  fn: (error) => error.message,
+  target: $error,
+});
+```
+
+## Обработка ошибок (#error-handing-in-effects)
+
+Эффект способен отловить, когда во время его выполнения происходит ошибка и передать ее в событие [`failData`](/ru/api/effector/Effect#properties-failData). И порой мы хотим выкинуть свою ошибку, а не обычный `Error`:
+
+```ts
+import { createEffect } from "effector";
+
+class CustomError extends Error {
+  // реализация
+}
+
+const effect = createEffect(async () => {
+  const response = await fetch(`/api/users/${userId}`);
+
+  if (!response.ok) {
+    // Вы можете выбрасывать ошибки, которые будут перехвачены обработчиком .failData
+    throw new CustomError(`Не удалось загрузить пользователя: ${response.statusText}`);
+  }
+
+  return response.json();
+});
+```
+
+Код выше абсолютно вылидный и отработает как надо, однако если мы перехватим ошибку с помощью события [`failData`](/ru/api/effector/Effect#properties-failData), то заметим тип `Error` вместо нашей кастомной ошибки `CustomError`:
+
+```ts
+sample({
+  clock: effect.failData,
+  // error будет типа Error, а не CustomError
+  fn: (error) => error.message,
+  target: $error,
+});
+```
+
+Вся проблема кроется в типах, по умолчанию эффект ожидает, что выкинет тип ошибки `Error` и конечно не может знать, что у нас в теле функции выкидывается `CustomError`. Решение проблемы простое, нужно передать нужный тип в дженерик [`createEffect`](/ru/api/effector/createEffect), однако также придется и прокинуть тип принимаемых параметров и возвращаемое значение:
+
+```ts ins="<Params, Done, CustomError>"
+import { createEffect } from "effector";
+
+class CustomError extends Error {
+  // реализация
+}
+
+const effect = createEffect<Params, Done, CustomError>(async () => {
+  const response = await fetch(`/api/users/${userId}`);
+
+  if (!response.ok) {
+    // Вы можете выбрасывать ошибки, которые будут перехвачены обработчиком .failData
+    throw new CustomError(`Не удалось загрузить пользователя: ${response.statusText}`);
+  }
+
+  return response.json();
+});
+```
+
+Более подробнее о типизации эффектов и других юнитов можно прочитать на странице [Типизация](/ru/essentials/typescript#typing-effects).
+
+## Переиспользование эффектов (#attached-effects)
+
+Нередкий кейс, это когда у нас имеется общий эффект, например `fetchShopCardsFx`, который мы можем переиспользовать в нескольких местах приложения и при этом мы все также хотим подписаться на его события [`doneData`](/ru/api/effector/Effect#properties-doneData), [`failData`](/ru/api/effector/Effect#properties-failData) или любое другое, однако если мы это сделаем, то столкнемся с проблемным поведением, когда на одной странице будет вызываться этот эффект, а его подписчики будут тригириться везде, потому что мы использовали один и тот же общий эффект. И это нормальное поведение, потому что [юниты эффектора должны объявляться статически на уровне модуля](/ru/resources/static-initialization), но все же не то, которое бы мы хотели. Решением проблемы будет использовать оператор [`attach`](/ru/api/effector/attach), который создаст копию прикрепленного эффекта, а с этой копией мы можем уже работать только на нашей странице:
+
+```ts "attach"
+import { createEffect, attach, createEvent } from "effector";
+
+const showNotification = createEvent();
+
+// где-то в общем переипользуемом месте
+const fetchShopCardsFx = createEffect(async () => {
+  const response = await fetch("/api/shop-cards");
+  return response.json();
+});
+
+// наша локальная копия, на которую можем смело подписаться
+const fetchShopCardsAttachedFx = attach({
+  effect: fetchShopCards,
+});
+
+sample({
+  clock: fetchShopCardsAttachedFx.failData,
+  target: showNotification,
+});
+```
+
+При вызове прикрепленного эффекта, созданного с помощью [`attach`](/ru/api/effector/attach),также будет вызываться и оригинальный эффект, переданный в [`effect`](/ru/api/effector/attach#methods-attach-effect).
+
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+  - [`Effect`](/ru/api/effector/Effect) - Описание эффекта и его методов
+  - [`createEffect`](/ru/api/effector/createEffect) - Метод для создания эффектов
+  - [`attach`](/ru/api/effector/attach) - Метод, который позволяет создавать новые эффекты на основе существующих
+- **Статьи**
+  - [Типизация эффектов и других юнитов](/ru/essentials/typescript)
+  - [Почему юниты должны объявляться статически на уровне модуля](/ru/resources/static-initialization)
+  - [Связывание юнитов с помощью `sample` или `createAction`](/ru/essentials/unit-composition)
+  - [Рассказываем об изолированных скоупах, когда их нужно использовать и зачем, а также раскрываем проблему потери скоупа](/ru/advanced/work-with-scope)

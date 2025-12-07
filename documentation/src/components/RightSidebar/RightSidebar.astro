@@ -21,17 +21,15 @@ const { headings, documentId, lang } = Astro.props;
 
 <style>
   .sidebar-nav {
-    position: sticky;
-    top: var(--theme-navbar-height);
     width: 100%;
     height: 100%;
-    max-height: calc(100vh - var(--theme-navbar-height));
   }
 
   .sidebar-nav-inner {
-    padding: 0;
-    padding-top: var(--doc-padding);
+    padding: var(--doc-padding);
+    padding-left: 0;
     height: 100%;
     overflow: auto;
+    color: var(--doc-fg-secondary);
   }
 </style>
