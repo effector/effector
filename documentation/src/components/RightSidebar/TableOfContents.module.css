@@ -42,18 +42,22 @@
   color: var(--doc-fg-secondary);
   transition:
     background-color 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    opacity 0.15s ease;
+  opacity: 0.78;
 }
 
 .link a:hover {
   color: var(--doc-fg-primary);
   background-color: var(--theme-bg-sidebar-main-tabs-active);
   text-decoration: none;
+  opacity: 1;
 }
 
 .link.active a {
   color: var(--theme-text-accent);
   font-weight: 600;
+  opacity: 1;
 }
 
 .level1:not(:first-child) a {

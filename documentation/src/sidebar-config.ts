@@ -346,10 +346,10 @@ export const guidesAndRecipes: LSidebarGroup[] = [
         text: { en: "Releases policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
         link: "/resources/releases",
       },
-      {
-        text: { en: "StackBlitz Examples", ru: "Примеры в StackBlitz", uz: "StackBlitz misollari" },
-        link: "/resources/stackblitz-examples",
-      },
+      // {
+      //   text: { en: "StackBlitz Examples", ru: "Примеры в StackBlitz", uz: "StackBlitz misollari" },
+      //   link: "/resources/stackblitz-examples",
+      // },
       {
         text: { en: "FAQ", ru: "Частые вопросы", uz: "Tezt-tez soraladigan savollar" },
         link: "/FAQ",

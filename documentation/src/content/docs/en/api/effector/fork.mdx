@@ -1,42 +1,75 @@
 ---
-title: fork
+title: fork API
+description: Fork API — create isolated scopes for SSR, testing, and local state isolation. Configuration, examples, and notes on values/handlers.
 redirectFrom:
   - /api/effector/fork
   - /docs/api/effector/fork
 ---
 
+[scopeApi]: /en/api/effector/Scope
+[domainApi]: /en/api/effector/Domain
+[serializeApi]: /en/api/effector/serialize
+[allSettledApi]: /en/api/effector/allSettled
+[hydrateApi]: /en/api/effector/hydrate
+[sampleApi]: /en/api/effector/sample
+[storeApi]: /en/api/effector/Store
+[effectApi]: /en/api/effector/Effect
+
+# `fork` API (#methods)
+
 ```ts
 import { fork, type Scope } from "effector";
 ```
 
-# Methods (#methods)
+`fork` creates an isolated [scope][scopeApi] of your app. Use it for SSR, testing, or any case where you need to run logic in a safe copy without touching global units.
 
-## `fork()` (#methods-fork)
+## How it works (#algorithm)
 
-:::info{title="since"}
+1. Call `fork` to get a new [scope][scopeApi].
+2. If `values` or `handlers` are provided, they are applied when the [scope][scopeApi] is created.
+3. Units run in that [scope][scopeApi] operate on isolated state and overridden handlers.
+4. Read state via `scope.getState(store)` or serialize it with [`serialize`][serializeApi].
 
-introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+## `fork` configuration forms (#fork-config-forms)
 
-:::
+| <div style="width:220px">Form</div>                     | Description                                                                                                            |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| [`fork()`](#methods-fork)                               | Creates a fresh [scope][scopeApi] with no prefilled data or handler overrides.                                         |
+| [`fork({ values?, handlers? })`](#methods-fork-options) | Creates a [scope][scopeApi] with initial store values and custom effect handlers.                                      |
+| [`fork(domain, options?)`](#methods-fork-domain)        | Legacy form that requires `domain`. Prefer `fork({ values?, handlers? })` unless you need old signature compatibility. |
 
-Creates an isolated instance of application.
-Primary purposes of this method are SSR and testing.
+## Configurations (#config)
 
-### Formulae (#methods-fork-formulae)
+### `fork()` (#methods-fork)
+
+Creates a new application [scope][scopeApi] with default behavior.
+
+- **Formula**
 
 ```ts
 fork(): Scope
 ```
 
-### Returns (#methods-fork-returns)
+- **Type**
 
-[_Scope_](/en/api/effector/Scope): New fresh scope
+```ts
+type SerializedState = Record<string, unknown>;
+type StorePair<T = unknown> = [StoreWritable<T>, T];
 
-### Examples (#methods-fork-examples)
+export function fork(config?: {
+  values?: StorePair<any>[] | SerializedState;
+  handlers?: Array<[Effect<any, any, any>, Function]>;
+}): Scope;
+```
 
-#### Create two instances with independent counter state (#methods-fork-examples-create-two-instances)
+- **Notes**
 
-```js
+  - Returns a fresh [scope][scopeApi] without prefilled stores or handler overrides.
+  - Use when you need a clean state (e.g., first render on the server).
+
+- **Example**
+
+```ts
 import { createStore, createEvent, fork, allSettled } from "effector";
 
 const inc = createEvent();
@@ -57,133 +90,53 @@ console.log(scopeA.getState($counter)); // => 1
 console.log(scopeB.getState($counter)); // => -1
 ```
 
-[Try it](https://share.effector.dev/dBSC59h8)
+- **Returns**
 
-## `fork(options)` (#methods-fork-options)
+A new [scope][scopeApi].
 
-Allows to set values for stores in scope and replace handlers for effects.
+### `fork({ values?, handlers? })` (#methods-fork-options)
 
-:::info{title="since"}
+Adds initial store values and overrides effect handlers inside the [scope][scopeApi].
 
-support for array of tuples in `values` and `handlers` introduced in [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
-
-:::
-
-### Formulae (#methods-fork-options-formulae)
-
-```ts
-fork(options: { values?, handlers? }): Scope
-```
-
-### Arguments (#methods-fork-options-arguments)
-
-1. `options: { values?, handlers? }` — Object with optional values and handlers
-
-#### `values` (#methods-fork-options-arguments-values)
-
-Option to provide initial states for stores.
-
-Can be used in three ways:
-
-1.  Array of tuples with stores and values:
+- **Formula**
 
 ```ts
 fork({
-  values: [
-    [$user, "alice"],
-    [$age, 21],
-  ],
-});
+  values?,      // e.g. [[$store, value], ...] or serialized object
+  handlers?,    // e.g. [[effect, handler], ...]
+}): Scope
 ```
 
-2.  Map with stores and values:
+- **Type**
 
 ```ts
-fork({
-  values: new Map().set($user, "alice").set($age, 21),
-});
+type SerializedState = Record<string, unknown>;
+type StorePair<T = unknown> = [StoreWritable<T>, T];
+
+export function fork(config?: {
+  values?: StorePair<any>[] | SerializedState;
+  handlers?: Array<[Effect<any, any, any>, Function]>;
+}): Scope;
 ```
 
-3.  Plain object: `{[sid: string]: value}`
+- **Notes**
 
-```ts
-fork({
-  values: {
-    [$user.sid]: "alice",
-    [$age.sid]: 21,
-  },
-});
-```
+  - `values` can be an array of tuples `[$store, value]` or a serialized state object (usually from [`serialize`][serializeApi]); tuples are preferred.
+  - `handlers` accepts only an array of tuples to override effect handlers; overrides apply only within the created [scope][scopeApi].
+  - Values and handlers are applied once at [scope][scopeApi] creation and are not updated automatically.
 
-<br />
+- **Examples**
 
-:::info{title="Explanation"}
-Such objects are created by [serialize](/en/api/effector/serialize), in application code **array of tuples is preferred**
-:::
-
-#### `handlers` (#methods-fork-options-arguments-handlers)
-
-Option to provide handlers for effects.
-
-Can be used in different ways:
-
-1.  Array of tuples with effects and handlers:
-
-```ts
-fork({
-  handlers: [
-    [getMessageFx, (params) => ({ id: 0, text: "message" })],
-    [getUserFx, async (params) => ({ name: "alice", age: 21 })],
-  ],
-});
-```
-
-2.  Map with effects and handlers:
-
-```ts
-fork({
-  handlers: new Map()
-    .set(getMessageFx, (params) => ({ id: 0, text: "message" }))
-    .set(getUserFx, async (params) => ({ name: "alice", age: 21 })),
-});
-```
-
-3.  Plain object: `{[sid: string]: handler}`
-
-```ts
-fork({
-  handlers: {
-    [getMessageFx.sid]: (params) => ({ id: 0, text: "message" }),
-    [getUserFx.sid]: async (params) => ({ name: "alice", age: 21 }),
-  },
-});
-```
-
-<br />
-
-:::warning{title="deprecation"}
-Such objects are deprecated since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) and will be removed in future versions. Array of tuples is preferred.
-:::
-
-### Returns (#methods-fork-options-returns)
-
-[_Scope_](/en/api/effector/Scope): New fresh scope
-
-### Examples (#methods-fork-options-examples)
-
-#### Set initial state for store and change handler for effect (#methods-fork-examples-set-initial-state-and-change-handler)
-
-This is an example of test, which ensures that after a request to the server, the value of `$friends` is filled.
+Set initial state and replace a handler in a test:
 
 ```ts
 import { createEffect, createStore, fork, allSettled } from "effector";
 
 const fetchFriendsFx = createEffect<{ limit: number }, string[]>(async ({ limit }) => {
-  /* some client-side data fetching */
   return [];
 });
 const $user = createStore("guest");
-const $friends = createStore([]);
+const $friends = createStore<string[]>([]);
 
 $friends.on(fetchFriendsFx.doneData, (_, result) => result);
 
@@ -192,50 +145,95 @@ const testScope = fork({
   handlers: [[fetchFriendsFx, () => ["bob", "carol"]]],
 });
 
-/* trigger computations in scope and await all called effects */
 await allSettled(fetchFriendsFx, {
   scope: testScope,
   params: { limit: 10 },
 });
 
-/* check value of store in scope */
 console.log(testScope.getState($friends));
 // => ['bob', 'carol']
 ```
 
-[Try it](https://share.effector.dev/gnNbGZuu)
-
-## `fork(domain, options?)` (#methods-fork-domain)
-
-:::info{title="since"}
-
-Introduced in [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
-
-:::
-
-:::warning{title="Deprecated"}
-
-Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
-
-`fork` no longer requires `domain` as an argument, because it can automatically track all units starting from [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0).
-
-:::
-
-### Formulae (#methods-fork-domain-formulae)
+Create a [scope][scopeApi] from serialized state:
 
 ```ts
-fork(domain: Domain, options?: { values?, handlers? }): Scope
+import { fork } from "effector";
+
+const serialized = {
+  userSid: "alice",
+  ageSid: 21,
+};
+
+const scope = fork({ values: serialized });
 ```
 
-### Arguments (#methods-fork-domain-arguments)
+- **Returns**
 
-1. `domain` ([_Domain_](/en/api/effector/Domain)): Optional domain to fork.
-2. `options: { values?, handlers? }` — Object with optional [values](#methods-fork-options-arguments-values) and [handlers](#methods-fork-options-arguments-handlers)
+A new [scope][scopeApi] with applied `values` and `handlers`.
 
-### Returns (#methods-fork-domain-returns)
+### `fork(domain, options?)` (#methods-fork-domain)
 
-[_Scope_](/en/api/effector/Scope): New fresh scope
+Legacy form that requires a [domain][domainApi]; keep only for compatibility with older code.
 
-### Examples (#methods-fork-domain-examples)
+:::error{title="Deprecated"}
+Use `fork({ values?, handlers? })` because `fork` tracks units automatically without a `domain`.
+:::
 
-TBD
+- **Formula**
+
+```ts
+fork(domain, {
+  values?,      // e.g. [[$store, value], ...] or serialized object
+  handlers?,    // e.g. [[effect, handler], ...]
+}): Scope
+```
+
+- **Type**
+
+```ts
+type SerializedState = Record<string, unknown>;
+
+export function fork(
+  domain: Domain,
+  config?: {
+    values?: SerializedState | Array<[StoreWritable<any>, any]>;
+    handlers?: Array<[Effect<any, any, any>, Function]>;
+  },
+): Scope;
+```
+
+- **Notes**
+
+  - Pass `domain` only if your project still depends on the old signature.
+  - Allowed `values` and `handlers` formats match the configuration without `domain`.
+
+- **Example**
+
+```ts
+import { createDomain, createStore, fork } from "effector";
+
+const app = createDomain();
+const $flag = app.createStore(false);
+
+const scope = fork(app, {
+  values: [[$flag, true]],
+});
+
+console.log(scope.getState($flag)); // => true
+```
+
+- **Returns**
+
+A new [scope][scopeApi] attached to the provided [domain][domainApi].
+
+## Related API and articles (#related-api-and-docs-to-fork)
+
+- **API**
+  - [`Scope`](/en/api/effector/Scope) — structure of isolated state
+  - [`allSettled`](/en/api/effector/allSettled) — run an effect inside a [scope][scopeApi] and await completion
+  - [`serialize`](/en/api/effector/serialize) — serialize [scope][scopeApi] state
+  - [`hydrate`](/en/api/effector/hydrate) — restore state into a [scope][scopeApi]
+- **Articles**
+  - [SSR and working with scope](/en/guides/server-side-rendering)
+  - [Testing with an isolated scope](/en/guides/testing)
+  - [Scope context loss and recovery](/en/guides/scope-loss)

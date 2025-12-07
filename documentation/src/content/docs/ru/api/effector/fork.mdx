@@ -1,40 +1,76 @@
 ---
-title: fork
+title: fork API
+description: Fork API — создание изолированных скоупов для SSR, тестирования и локальной изоляции состояния. Конфигурации, примеры, особенности handlers и values.
 lang: ru
+redirectFrom:
+  - /api/effector/fork
+  - /docs/api/effector/fork
 ---
+
+[scopeApi]: /ru/api/effector/Scope
+[domainApi]: /ru/api/effector/Domain
+[serializeApi]: /ru/api/effector/serialize
+[allSettledApi]: /ru/api/effector/allSettled
+[hydrateApi]: /ru/api/effector/hydrate
+[sampleApi]: /ru/api/effector/sample
+[storeApi]: /ru/api/effector/Store
+[effectApi]: /ru/api/effector/Effect
+
+# `fork` API (#methods)
 
 ```ts
 import { fork, type Scope } from "effector";
 ```
 
-# Методы (#methods)
+Метод `fork` создает изолированный [скоуп][scopeApi] приложения. Он нужен для SSR, тестирования и локальной изоляции состояния — вы запускаете вычисления в копии без влияния на глобальные юниты.
 
-## `fork()` (#methods-fork)
+## Алгоритм работы (#algorithm)
 
-:::info{title="Время добавления"}
+1. Вы вызываете `fork`, получая новый [скоуп][scopeApi].
+2. Если переданы `values` или `handlers`, они применяются при создании этого [скоупа][scopeApi].
+3. Юниты, вызванные с этим [скоупом][scopeApi], работают с изолированными значениями и обработчиками.
+4. Состояние читается через `scope.getState(store)` или сериализуется через [`serialize`][serializeApi].
 
-введен в [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
+## Виды конфигураций `fork` (#fork-config-forms)
 
-:::
+| <div style="width:220px">Форма</div>                    | Описание                                                                                                                    |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| [`fork()`](#methods-fork)                               | Создает новый чистый [скоуп][scopeApi] без предзаполненных данных и переопределений обработчиков.                           |
+| [`fork({ values?, handlers? })`](#methods-fork-options) | Создает [скоуп][scopeApi] с начальными значениями сторов и пользовательскими обработчиками эффектов.                        |
+| [`fork(domain, options?)`](#methods-fork-domain)        | Устаревшая форма, требующая `domain`. Используйте `fork({ values?, handlers? })`, если нет зависимости от старой сигнатуры. |
 
-Создает изолированный экземпляр приложения.
-Основные цели этого метода — SSR и тестирование.
+## Конфигурации (#config)
 
-### Формула (#methods-fork-formulae)
+### `fork()` (#methods-fork)
+
+Создает новый прикладной [скоуп][scopeApi] без дополнительных настроек.
+
+- **Формула**
 
 ```ts
 fork(): Scope
 ```
 
-### Возвращает (#methods-fork-returns)
+- **Тип**
 
-[_Scope_](/en/api/effector/Scope): Новый чистый scope
+```ts
+type SerializedState = Record<string, unknown>;
+type StorePair<T = unknown> = [StoreWritable<T>, T];
 
-### Примеры (#methods-fork-examples)
+export function fork(config?: {
+  values?: StorePair<any>[] | SerializedState;
+  handlers?: Array<[Effect<any, any, any>, Function]>;
+}): Scope;
+```
 
-#### Создание двух экземпляров с независимым состоянием счетчика (#methods-fork-examples-create-two-instances)
+- **Особенности**
 
-```js
+  - Возвращает новый [скоуп][scopeApi] без предзаполненных сторов и без замены обработчиков.
+  - Подходит, когда данные и побочные эффекты должны остаться неизменными (например, первый рендер на сервере).
+
+- **Примеры**
+
+```ts
 import { createStore, createEvent, fork, allSettled } from "effector";
 
 const inc = createEvent();
@@ -55,133 +91,53 @@ console.log(scopeA.getState($counter)); // => 1
 console.log(scopeB.getState($counter)); // => -1
 ```
 
-[Попробовать](https://share.effector.dev/dBSC59h8)
+- **Возвращаемое значение**
 
-## `fork(options)` (#methods-fork-options)
+Новый [скоуп][scopeApi].
 
-Позволяет задать значения для сторов в scope и заменить обработчики для effects.
+### `fork({ values?, handlers? })` (#methods-fork-options)
 
-:::info{title="Время добавления"}
+Позволяет задать начальные значения для сторов и переопределить обработчики эффектов внутри [скоупа][scopeApi].
 
-поддержка массива кортежей в `values` и `handlers` введена в [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0)
-
-:::
-
-### Формула (#methods-fork-options-formulae)
-
-```ts
-fork(options: { values?, handlers? }): Scope
-```
-
-### Аргументы (#methods-fork-options-arguments)
-
-1. `options: { values?, handlers? }` — Объект с необязательными значениями и обработчиками
-
-#### `values` (#methods-fork-options-arguments-values)
-
-Опция для предоставления начальных состояний для сторов.
-
-Может использоваться тремя способами:
-
-1.  Массив кортежей со сторами и значениями:
+- **Формула**
 
 ```ts
 fork({
-  values: [
-    [$user, "alice"],
-    [$age, 21],
-  ],
-});
+  values?,      // например [[$store, value], ...] или сериализованный объект
+  handlers?,    // например [[effect, handler], ...]
+}): Scope
 ```
 
-2.  Map со сторами и значениями:
+- **Тип**
 
 ```ts
-fork({
-  values: new Map().set($user, "alice").set($age, 21),
-});
+type SerializedState = Record<string, unknown>;
+type StorePair<T = unknown> = [StoreWritable<T>, T];
+
+export function fork(config?: {
+  values?: StorePair<any>[] | SerializedState;
+  handlers?: Array<[Effect<any, any, any>, Function]>;
+}): Scope;
 ```
 
-3.  Обычный объект: `{[sid: string]: value}`
+- **Особенности**
 
-```ts
-fork({
-  values: {
-    [$user.sid]: "alice",
-    [$age.sid]: 21,
-  },
-});
-```
+  - `values` может быть массивом кортежей `[$store, value]` или объектом сериализованного состояния (обычно результат [`serialize`][serializeApi]); предпочтителен массив кортежей.
+  - `handlers` принимает только массив кортежей, замены работают только в пределах созданного [скоупа][scopeApi].
+  - Значения и обработчики применяются один раз при создании [скоупа][scopeApi] и не обновляются автоматически.
 
-<br />
+- **Примеры**
 
-:::info{title="Примечание"}
-Такие объекты создаются с помощью [serialize](/en/api/effector/serialize), в коде приложения **предпочтителен массив кортежей**
-:::
-
-#### `handlers` (#methods-fork-options-arguments-handlers)
-
-Опция для предоставления обработчиков для effects.
-
-Может использоваться по-разному:
-
-1.  Массив кортежей с effects и обработчиками:
-
-```ts
-fork({
-  handlers: [
-    [getMessageFx, (params) => ({ id: 0, text: "message" })],
-    [getUserFx, async (params) => ({ name: "alice", age: 21 })],
-  ],
-});
-```
-
-2.  Map с effects и обработчиками:
-
-```ts
-fork({
-  handlers: new Map()
-    .set(getMessageFx, (params) => ({ id: 0, text: "message" }))
-    .set(getUserFx, async (params) => ({ name: "alice", age: 21 })),
-});
-```
-
-3.  Обычный объект: `{[sid: string]: handler}`
-
-```ts
-fork({
-  handlers: {
-    [getMessageFx.sid]: (params) => ({ id: 0, text: "message" }),
-    [getUserFx.sid]: async (params) => ({ name: "alice", age: 21 }),
-  },
-});
-```
-
-<br />
-
-:::warning{title="Устарело"}
-Такие объекты устарели с [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) и будут удалены в будущих версиях. Предпочтителен массив кортежей.
-:::
-
-### Возвращает (#methods-fork-options-returns)
-
-[_Scope_](/en/api/effector/Scope): Новый чистый scope
-
-### Примеры (#methods-fork-options-examples)
-
-#### Задание начального состояния для стора и изменение обработчика для effect (#methods-fork-examples-set-initial-state-and-change-handler)
-
-Это пример теста, который проверяет, что после запроса к серверу значение `$friends` заполняется.
+Задание начального состояния и подмена обработчика в тесте:
 
 ```ts
 import { createEffect, createStore, fork, allSettled } from "effector";
 
 const fetchFriendsFx = createEffect<{ limit: number }, string[]>(async ({ limit }) => {
-  /* получение данных на стороне клиента */
   return [];
 });
 const $user = createStore("guest");
-const $friends = createStore([]);
+const $friends = createStore<string[]>([]);
 
 $friends.on(fetchFriendsFx.doneData, (_, result) => result);
 
@@ -190,50 +146,95 @@ const testScope = fork({
   handlers: [[fetchFriendsFx, () => ["bob", "carol"]]],
 });
 
-/* запускаем вычисления в scope и ожидаем завершения всех вызванных effects */
 await allSettled(fetchFriendsFx, {
   scope: testScope,
   params: { limit: 10 },
 });
 
-/* проверяем значение стора в scope */
 console.log(testScope.getState($friends));
 // => ['bob', 'carol']
 ```
 
-[Попробовать](https://share.effector.dev/gnNbGZuu)
-
-## `fork(domain, options?)` (#methods-fork-domain)
-
-:::info{title="Время добавления"}
-
-Введен в [effector 21.0.0](https://changelog.effector.dev/#effector-21-0-0)
-
-:::
-
-:::warning{title="Устарело"}
-
-С [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0).
-
-`fork` больше не требует `domain` в качестве аргумента, так как с [effector 22.0.0](https://changelog.effector.dev/#effector-22-0-0) он может автоматически отслеживать все юниты.
-
-:::
-
-### Формула (#methods-fork-domain-formulae)
+Создание [скоупа][scopeApi] с сериализованным состоянием:
 
 ```ts
-fork(domain: Domain, options?: { values?, handlers? }): Scope
+import { fork } from "effector";
+
+const serialized = {
+  userSid: "alice",
+  ageSid: 21,
+};
+
+const scope = fork({ values: serialized });
 ```
 
-### Аргументы (#methods-fork-domain-arguments)
+- **Возвращаемое значение**
 
-1. `domain` ([_Domain_](/en/api/effector/Domain)): Необязательный domain для fork.
-2. `options: { values?, handlers? }` — Объект с необязательными [values](#methods-fork-options-arguments-values) и [handlers](#methods-fork-options-arguments-handlers)
+Новый [скоуп][scopeApi] с примененными `values` и `handlers`.
 
-### Возвращает (#methods-fork-domain-returns)
+### `fork(domain, options?)` (#methods-fork-domain)
 
-[_Scope_](/en/api/effector/Scope): Новый чистый scope
+Устаревшая форма, требующая [domain][domainApi]; актуальна только для совместимости со старым кодом.
 
-### Примеры (#methods-fork-domain-examples)
+:::error{title="Устарело"}
+Используйте `fork({ values?, handlers? })`, так как `fork` отслеживает юниты автоматически без передачи `domain`.
+:::
 
-TBD
+- **Формула**
+
+```ts
+fork(domain, {
+  values?,      // например [[$store, value], ...] или сериализованный объект
+  handlers?,    // например [[effect, handler], ...]
+}): Scope
+```
+
+- **Тип**
+
+```ts
+type SerializedState = Record<string, unknown>;
+
+export function fork(
+  domain: Domain,
+  config?: {
+    values?: SerializedState | Array<[StoreWritable<any>, any]>;
+    handlers?: Array<[Effect<any, any, any>, Function]>;
+  },
+): Scope;
+```
+
+- **Особенности**
+
+  - Передача `domain` нужна только в проектах, где код еще зависит от старой сигнатуры.
+  - Допустимые форматы `values` и `handlers` совпадают с конфигурацией без `domain`.
+
+- **Пример**
+
+```ts
+import { createDomain, createStore, fork } from "effector";
+
+const app = createDomain();
+const $flag = app.createStore(false);
+
+const scope = fork(app, {
+  values: [[$flag, true]],
+});
+
+console.log(scope.getState($flag)); // => true
+```
+
+- **Возвращаемое значение**
+
+Новый [скоуп][scopeApi], привязанный к указанному [domain][domainApi].
+
+## Связанные API и статьи (#related-api-and-docs-to-fork)
+
+- **API**
+  - [`Scope`](/ru/api/effector/Scope) — структура изолированного состояния
+  - [`allSettled`](/ru/api/effector/allSettled) — выполнение эффекта внутри [скоупа][scopeApi] с ожиданием завершения
+  - [`serialize`](/ru/api/effector/serialize) — сериализация состояния [скоупа][scopeApi]
+  - [`hydrate`](/ru/api/effector/hydrate) — восстановление состояния в [скоупе][scopeApi]
+- **Статьи**
+  - [SSR и работа со скоупом](/ru/guides/server-side-rendering)
+  - [Тестирование с isolated скоупом](/ru/guides/testing)
+  - [Работа со скоупом и потеря контекста](/ru/guides/scope-loss)
