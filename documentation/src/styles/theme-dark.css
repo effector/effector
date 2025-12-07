@@ -31,6 +31,9 @@
   --theme-accent: hsl(var(--theme-accent-color));
   --theme-text-accent: hsl(var(--color-primary-400));
 
+  /* Желтый в темной теме (#FFD600) и вся палитра, завязанная на него */
+  --color-base-yellow: 50.35, 100%;
+
   /* ========================================
      BACKGROUNDS
      ======================================== */
