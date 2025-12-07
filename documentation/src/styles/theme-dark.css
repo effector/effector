@@ -27,12 +27,26 @@
      ======================================== */
 
   --theme-accent-opacity: 0.2;
-  --theme-accent-color: var(--color-primary-600);
+  --theme-accent-color: var(--color-primary-500);
   --theme-accent: hsl(var(--theme-accent-color));
   --theme-text-accent: hsl(var(--color-primary-400));
 
   /* Желтый в темной теме (#FFD600) и вся палитра, завязанная на него */
   --color-base-yellow: 50.35, 100%;
+
+  /* Оранжевый (Apple style) в темной теме (#FF9220) */
+  --color-base-primary: 28.4, 100%;
+  --color-primary-50: var(--color-base-primary), 98%;
+  --color-primary-100: var(--color-base-primary), 94%;
+  --color-primary-200: var(--color-base-primary), 88%;
+  --color-primary-300: var(--color-base-primary), 76%;
+  --color-primary-400: var(--color-base-primary), 68%;
+  --color-primary-500: var(--color-base-primary), 59.4%;
+  --color-primary-600: var(--color-base-primary), 55%;
+  --color-primary-700: var(--color-base-primary), 47%;
+  --color-primary-800: var(--color-base-primary), 39%;
+  --color-primary-900: var(--color-base-primary), 33%;
+  --color-primary-950: var(--color-base-primary), 21%;
 
   /* ========================================
      BACKGROUNDS

@@ -146,7 +146,7 @@
   --color-base-gray: 220, 9%;
 
   /* Brand colors */
-  --color-base-primary: 33, 100%;
+  --color-base-primary: 28.2, 100%;
 
   /* Semantic colors */
   --color-base-blue: 212, 100%;
@@ -174,17 +174,17 @@
   --color-gray-950: var(--color-base-gray), 9%;
 
   /* Primary scale - Orange (brand color) */
-  --color-primary-50: var(--color-base-primary), 97%;
-  --color-primary-100: var(--color-base-primary), 92%;
-  --color-primary-200: var(--color-base-primary), 85%;
-  --color-primary-300: var(--color-base-primary), 72%;
-  --color-primary-400: var(--color-base-primary), 58%;
-  --color-primary-500: var(--color-base-primary), 50%; /* Main brand color */
-  --color-primary-600: var(--color-base-primary), 46%;
-  --color-primary-700: var(--color-base-primary), 39%;
-  --color-primary-800: var(--color-base-primary), 32%;
-  --color-primary-900: var(--color-base-primary), 27%;
-  --color-primary-950: var(--color-base-primary), 15%;
+  --color-primary-50: var(--color-base-primary), 98%;
+  --color-primary-100: var(--color-base-primary), 94%;
+  --color-primary-200: var(--color-base-primary), 88%;
+  --color-primary-300: var(--color-base-primary), 76%;
+  --color-primary-400: var(--color-base-primary), 66%;
+  --color-primary-500: var(--color-base-primary), 57.8%; /* Main brand color */
+  --color-primary-600: var(--color-base-primary), 54%;
+  --color-primary-700: var(--color-base-primary), 46%;
+  --color-primary-800: var(--color-base-primary), 38%;
+  --color-primary-900: var(--color-base-primary), 32%;
+  --color-primary-950: var(--color-base-primary), 20%;
 
   /* Blue scale */
   --color-blue-50: var(--color-base-blue), 97%;
