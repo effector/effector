@@ -53,6 +53,7 @@
      ======================================== */
 
   --theme-bg: var(--doc-bg-page);
+  --theme-bg-mobile-menu: var(--doc-bg-page-solid);
   --theme-bg-sidebar-tabs-bg: var(--doc-bg-sidebar);
   --theme-bg-sidebar-main-tabs: var(--doc-bg-sidebar-surface);
   --theme-bg-sidebar-main-tabs-active: var(--doc-bg-surface-subtle);

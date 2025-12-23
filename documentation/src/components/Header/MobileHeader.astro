@@ -1,5 +1,5 @@
 ---
-import ThemeSwitch from "./ThemeSwitch.astro";
+import Search from "./Search.astro";
 import MobileMenuButton from "./MobileMenuButton.astro";
 import EffectorLogo from "./EffectorLogo.astro";
 import { SITE } from "../../consts";
@@ -18,7 +18,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     <span>{SITE.title}</span>
   </a>
   <div class="mobile-header-right">
-    <ThemeSwitch />
+    <Search />
     <MobileMenuButton />
   </div>
 </header>
@@ -62,20 +62,35 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     gap: var(--space-2);
   }
 
-  .mobile-header-right :global(.theme-switch) {
+  .mobile-header-right :global(button[data-open-modal]) {
+    min-height: 36px;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    padding: 6px !important;
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+    background-color: var(--theme-bg-sidebar-main-tabs);
+    border-radius: var(--radius-full);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-header-right :global(button[data-open-modal] span),
+  .mobile-header-right :global(button[data-open-modal] kbd) {
+    display: none;
+  }
+
+  .mobile-header-right :global(#mobile-menu) {
     min-height: 36px;
     min-width: 36px;
     width: 36px;
     height: 36px;
     border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
     background-color: var(--theme-bg-sidebar-main-tabs);
-    border-radius: var(--radius-md);
-  }
-
-  .mobile-header-right :global(.theme-switch .toggle-button) {
-    width: 36px;
-    height: 36px;
-    padding: 0;
+    border-radius: var(--radius-full);
+    box-sizing: border-box;
   }
 
   /* Hide on tablet and desktop */

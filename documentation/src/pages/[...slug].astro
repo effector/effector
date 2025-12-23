@@ -1,4 +1,24 @@
 ---
+// ============================================================================
+// LEGACY REDIRECT HANDLER
+// ============================================================================
+// Генерирует статические HTML страницы с редиректами для URL, определенных
+// в поле `redirectFrom` frontmatter markdown файлов.
+//
+// PRODUCTION (Netlify):
+//   - Основные редиректы обрабатываются через /public/_redirects (HTTP 301)
+//   - Этот файл обеспечивает backward compatibility для специфичных redirectFrom
+//   - Также обрабатывает редиректы со старых URL с изменением регистра
+//     (например: /docs/api/effector/store → /en/api/effector/Store)
+//
+// DEVELOPMENT:
+//   - Предоставляет рабочие редиректы, так как Netlify _redirects не работает локально
+//   - Использует HTML meta refresh теги
+//
+// ПРИМЕЧАНИЕ: В продакшене Netlify _redirects перехватит большинство запросов
+// до того, как они достигнут этих страниц.
+// ============================================================================
+
 import { type CollectionEntry, getCollection } from "astro:content";
 import type { InferGetStaticPropsType, InferGetStaticParamsType } from "astro";
 import MainLayout from "src/layouts/MainLayout.astro";
