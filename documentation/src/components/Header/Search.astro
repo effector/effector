@@ -7,12 +7,16 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 const pagefindTranslations = Object.fromEntries(
   Object.entries(translations.Pagefind).map(([key, value]) => [key, t(value, lang)]),
 );
+
+// Generate unique ID for this search component instance
+const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)}`;
 ---
 
 <site-search
   data-translations={JSON.stringify(pagefindTranslations)}
   data-strip-trailing-slash={true}
   data-lang={lang}
+  data-search-id={searchId}
 >
   <button
     data-open-modal
@@ -30,23 +34,23 @@ const pagefindTranslations = Object.fromEntries(
   <dialog
     style="padding:0"
     aria-label={t(translations.Search.label, lang)}
-    <div
-    class="dialog-frame sl-flex"
   >
-    <button data-close-modal class="sl-flex md:sl-hidden">
-      {t(translations.Search.cancelLabel, lang)}
-    </button>
-    {
-      import.meta.env.DEV && !import.meta.env.PUBLIC_SEARCH ? (
-        <div style="margin: auto; text-align: center; white-space: pre-line;" dir="ltr">
-          <p>{t(translations.Search.devWarning, lang)}</p>
-        </div>
-      ) : (
-        <div class="search-container">
-          <div id="effector__search" />
-        </div>
-      )
-    }
+    <div class="dialog-frame sl-flex">
+      <button data-close-modal class="sl-flex md:sl-hidden">
+        {t(translations.Search.cancelLabel, lang)}
+      </button>
+      {
+        import.meta.env.DEV && !import.meta.env.PUBLIC_SEARCH ? (
+          <div style="margin: auto; text-align: center; white-space: pre-line;" dir="ltr">
+            <p>{t(translations.Search.devWarning, lang)}</p>
+          </div>
+        ) : (
+          <div class="search-container">
+            <div id={searchId} class="effector-search" />
+          </div>
+        )
+      }
+    </div>
   </dialog>
 </site-search>
 
@@ -78,6 +82,7 @@ const pagefindTranslations = Object.fromEntries(
   class SiteSearch extends HTMLElement {
     constructor() {
       super();
+      const searchId = this.dataset.searchId!;
       const openBtn = this.querySelector<HTMLButtonElement>("button[data-open-modal]")!;
       const closeBtn = this.querySelector<HTMLButtonElement>("button[data-close-modal]")!;
       const dialog = this.querySelector("dialog")!;
@@ -148,7 +153,7 @@ const pagefindTranslations = Object.fromEntries(
         onIdle(async () => {
           const { PagefindUI } = await import("@pagefind/default-ui");
           new PagefindUI({
-            element: "#effector__search",
+            element: `#${searchId}`,
             baseUrl: import.meta.env.BASE_URL,
             bundlePath: import.meta.env.BASE_URL.replace(/\/$/, "") + "/_pagefind/",
             showImages: false,
@@ -255,7 +260,7 @@ const pagefindTranslations = Object.fromEntries(
     @apply p-4;
   }
 
-  #effector__search {
+  .effector-search {
     --pagefind-ui-primary: var(--theme-divider);
     --pagefind-ui-text: var(--theme-text-light);
     --pagefind-ui-font: var(--font-body);
@@ -267,7 +272,7 @@ const pagefindTranslations = Object.fromEntries(
   }
 
   @media (min-width: 50rem) {
-    #effector__search {
+    .effector-search {
       --epf-search-cancel-space: 0px;
     }
 
@@ -292,7 +297,7 @@ const pagefindTranslations = Object.fromEntries(
     overflow: hidden;
   }
 
-  #effector__search {
+  .effector-search {
     --epf-search-result-spacing: calc(1.25rem * var(--pagefind-ui-scale));
     --epf-search-result-pad-inline-start: calc(3.75rem * var(--pagefind-ui-scale));
     --epf-search-result-pad-inline-end: calc(1.25rem * var(--pagefind-ui-scale));
@@ -309,22 +314,22 @@ const pagefindTranslations = Object.fromEntries(
     );
   }
 
-  #effector__search .pagefind-ui__form::before {
+  .effector-search .pagefind-ui__form::before {
     --pagefind-ui-text: var(--epf-color-gray-1);
     opacity: 1;
   }
 
-  #effector__search .pagefind-ui__search-input {
+  .effector-search .pagefind-ui__search-input {
     color: var(--epf-color-white);
     font-weight: 400;
     width: calc(100% - var(--epf-search-cancel-space));
   }
 
-  #effector__search input:focus {
+  .effector-search input:focus {
     --pagefind-ui-border: var(--epf-color-accent);
   }
 
-  #effector__search .pagefind-ui__search-clear {
+  .effector-search .pagefind-ui__search-clear {
     inset-inline-end: var(--epf-search-cancel-space);
     width: calc(60px * var(--pagefind-ui-scale));
     padding: 0;
@@ -332,11 +337,11 @@ const pagefindTranslations = Object.fromEntries(
     overflow: hidden;
   }
 
-  #effector__search .pagefind-ui__search-clear:focus {
+  .effector-search .pagefind-ui__search-clear:focus {
     outline: 1px solid var(--theme-accent);
   }
 
-  #effector__search .pagefind-ui__search-clear::before {
+  .effector-search .pagefind-ui__search-clear::before {
     content: "";
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m13.41 12 6.3-6.29a1 1 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1 1 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 .33 1.64 1 1 0 0 0 1.09-.22l6.29-6.3 6.29 6.3a1 1 0 0 0 1.64-.33 1 1 0 0 0-.22-1.09L13.41 12Z'/%3E%3C/svg%3E")
       center / 50% no-repeat;
@@ -348,58 +353,58 @@ const pagefindTranslations = Object.fromEntries(
     height: 100%;
   }
 
-  #effector__search .pagefind-ui__results > * + * {
+  .effector-search .pagefind-ui__results > * + * {
     margin-top: var(--epf-search-result-spacing);
   }
-  #effector__search .pagefind-ui__result {
+  .effector-search .pagefind-ui__result {
     border: 0;
     padding: 0;
   }
 
-  #effector__search .pagefind-ui__result-nested {
+  .effector-search .pagefind-ui__result-nested {
     position: relative;
     padding: var(--epf-search-result-nested-pad-block) var(--epf-search-result-pad-inline-end);
     padding-inline-start: var(--epf-search-result-pad-inline-start);
   }
 
-  #effector__search .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)),
-  #effector__search .pagefind-ui__result-nested {
+  .effector-search .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)),
+  .effector-search .pagefind-ui__result-nested {
     position: relative;
     background-color: var(--theme-divider-light);
   }
 
-  #effector__search .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):hover,
-  #effector__search
+  .effector-search .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):hover,
+  .effector-search
     .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):focus-within,
-  #effector__search .pagefind-ui__result-nested:hover,
-  #effector__search .pagefind-ui__result-nested:focus-within {
+  .effector-search .pagefind-ui__result-nested:hover,
+  .effector-search .pagefind-ui__result-nested:focus-within {
     outline: 1px solid var(--theme-accent);
   }
 
-  #effector__search
+  .effector-search
     .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):focus-within,
-  #effector__search .pagefind-ui__result-nested:focus-within {
+  .effector-search .pagefind-ui__result-nested:focus-within {
     background-color: var(--theme-text-accent);
   }
 
-  #effector__search .pagefind-ui__result-thumb,
-  #effector__search .pagefind-ui__result-inner {
+  .effector-search .pagefind-ui__result-thumb,
+  .effector-search .pagefind-ui__result-inner {
     margin-top: 0;
   }
 
-  #effector__search .pagefind-ui__result-inner > :first-child {
+  .effector-search .pagefind-ui__result-inner > :first-child {
     border-radius: var(--epf-search-corners) var(--epf-search-corners) 0 0;
   }
-  #effector__search .pagefind-ui__result-inner > :last-child {
+  .effector-search .pagefind-ui__result-inner > :last-child {
     border-radius: 0 0 var(--epf-search-corners) var(--epf-search-corners);
   }
 
-  #effector__search .pagefind-ui__result-inner > .pagefind-ui__result-title {
+  .effector-search .pagefind-ui__result-inner > .pagefind-ui__result-title {
     padding: var(--epf-search-result-pad-block) var(--epf-search-result-pad-inline-end);
     padding-inline-start: var(--epf-search-result-pad-inline-start);
   }
 
-  #effector__search .pagefind-ui__result-inner > .pagefind-ui__result-title::before {
+  .effector-search .pagefind-ui__result-inner > .pagefind-ui__result-title::before {
     content: "";
     position: absolute;
     inset-block: 0;
@@ -412,26 +417,26 @@ const pagefindTranslations = Object.fromEntries(
       center no-repeat;
   }
 
-  #effector__search .pagefind-ui__result-inner {
+  .effector-search .pagefind-ui__result-inner {
     align-items: stretch;
     gap: 1px;
   }
 
-  #effector__search .pagefind-ui__result-link {
+  .effector-search .pagefind-ui__result-link {
     position: unset;
     --pagefind-ui-text: var(--theme-text-ligher);
     font-weight: 600;
   }
 
-  #effector__search .pagefind-ui__result-link:hover {
+  .effector-search .pagefind-ui__result-link:hover {
     text-decoration: none;
   }
 
-  #effector__search .pagefind-ui__result-nested .pagefind-ui__result-link::before {
+  .effector-search .pagefind-ui__result-nested .pagefind-ui__result-link::before {
     content: unset;
   }
 
-  #effector__search .pagefind-ui__result-nested::before {
+  .effector-search .pagefind-ui__result-nested::before {
     content: "";
     position: absolute;
     inset-block: 0;
@@ -443,7 +448,7 @@ const pagefindTranslations = Object.fromEntries(
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-linecap='round' viewBox='0 0 16 1000' preserveAspectRatio='xMinYMin slice'%3E%3Cpath d='M8 0v1000m6-988H8'/%3E%3C/svg%3E")
       0% 0% / 100% no-repeat;
   }
-  #effector__search .pagefind-ui__result-nested:last-child::before {
+  .effector-search .pagefind-ui__result-nested:last-child::before {
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 16 16'%3E%3Cpath d='M8 0v12m6 0H8'/%3E%3C/svg%3E");
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 16 16'%3E%3Cpath d='M8 0v12m6 0H8'/%3E%3C/svg%3E");
   }
@@ -454,24 +459,24 @@ const pagefindTranslations = Object.fromEntries(
     transform: matrix(-1, 0, 0, 1, 0, 0);
   }
 
-  #effector__search .pagefind-ui__result-link::after {
+  .effector-search .pagefind-ui__result-link::after {
     content: "";
     position: absolute;
     inset: 0;
   }
 
-  #effector__search .pagefind-ui__result-excerpt {
+  .effector-search .pagefind-ui__result-excerpt {
     font-size: calc(1rem * var(--pagefind-ui-scale));
     overflow-wrap: anywhere;
   }
 
-  #effector__search mark {
+  .effector-search mark {
     color: var(--theme-text-accent);
     background-color: transparent;
     font-weight: 600;
   }
 
-  #effector__search .pagefind-ui__button {
+  .effector-search .pagefind-ui__button {
     background-color: var(--theme-divider);
     color: var(--theme-text-light);
     border-color: var(--theme-divider-dark);
