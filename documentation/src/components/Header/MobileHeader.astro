@@ -82,17 +82,6 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     display: none;
   }
 
-  .mobile-header-right :global(#mobile-menu) {
-    min-height: 36px;
-    min-width: 36px;
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
-    background-color: var(--theme-bg-sidebar-main-tabs);
-    border-radius: var(--radius-full);
-    box-sizing: border-box;
-  }
-
   /* Hide on tablet and desktop */
   @media (min-width: 768px) {
     .mobile-header {
