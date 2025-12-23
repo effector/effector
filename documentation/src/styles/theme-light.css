@@ -20,6 +20,7 @@
      ======================================== */
 
   --theme-bg: #fff;
+  --theme-bg-mobile-menu: #fff;
   --theme-bg-sidebar-tabs-bg: hsl(var(--color-gray-50));
   --theme-bg-sidebar-main-tabs: hsl(var(--color-base-gray), 97%);
   --theme-bg-sidebar-main-tabs-active: #fff;

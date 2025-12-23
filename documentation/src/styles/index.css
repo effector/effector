@@ -59,6 +59,10 @@ body {
   color: var(--theme-text);
 }
 
+body.mobile-menu-opened {
+  overflow: hidden;
+}
+
 nav ul {
   padding: 0;
   list-style: none;
