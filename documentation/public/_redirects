@@ -2,6 +2,26 @@
 # дока: https://docs.netlify.com/routing/redirects/
 
 
+/assets/*                         /assets/*                         200
+/_pagefind/*                      /_pagefind/*                      200
+/favicon.*                        /favicon.*                        200
+/robots.txt                       /robots.txt                       200
+/banner.png                       /banner.png                       200
+/external.svg                     /external.svg                     200
+/fonts/*                          /fonts/*                          200
+/images/*                         /images/*                         200
+/logo/*                           /logo/*                           200
+/make-scrollable-code-focusable.js /make-scrollable-code-focusable.js 200
+/*.js                             /*.js                             200
+/*.css                            /*.css                            200
+/.nojekyll                        /.nojekyll                        200
+
+
+/en/*                             /en/*                             200
+/ru/*                             /ru/*                             200
+/uz/*                             /uz/*                             200
+
+
 /docs/*                           /en/:splat  301!
 
 # ============================================
