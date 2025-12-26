@@ -5,6 +5,7 @@ import {readRef} from './stateRef'
 import {getForkPage, getGraph, getValue} from './getter'
 import type {Scope} from './unit.h'
 import {add, forEach} from './collection'
+import {getFinalMessage, printErrorWithNodeDetails} from './throw'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'read' | 'barrier' | 'sampler' | 'effect'
@@ -537,6 +538,16 @@ const tryRun = (local: Local, fn: Function, stack: Stack) => {
   try {
     return fn(getValue(stack), local.scope, stack)
   } catch (err) {
+    console.dir(stack.node.meta, {depth: Infinity})
+    // printErrorWithNodeDetails('error in function', stack.node)
+    const [message, errStack] = getFinalMessage(
+      'This error happened in function from this unit:',
+      stack.node,
+    )
+    console.error(message)
+    if (errStack) {
+      console.error(errStack)
+    }
     console.error(err)
     local.fail = true
     local.failReason = err
