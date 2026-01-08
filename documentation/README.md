@@ -42,3 +42,19 @@ By default search disabled on the local machine due to index requirements. But y
 3. Start astro with env parameter `PUBLIC_SEARCH=true pnpm dev`
 
 `COMPRESS=false` disables compressing, to speed up build.
+
+## List all articles
+
+To list all unique documentation articles (without duplicates across languages), run:
+
+```shell
+npx tsx list-articles.ts
+```
+
+This script will output:
+- Unique semantic ID for each article (path without language prefix)
+- General path without language
+- Title from frontmatter
+- Description/summary from frontmatter
+
+Each article is identified by its path structure, with duplicates across languages (en, ru) automatically removed.
