@@ -247,7 +247,7 @@ const effect = createEffect(async () => {
 });
 ```
 
-Код выше абсолютно вылидный и отработает как надо, однако если мы перехватим ошибку с помощью события [`failData`](/ru/api/effector/Effect#properties-failData), то заметим тип `Error` вместо нашей кастомной ошибки `CustomError`:
+Код выше абсолютно валидный и отработает как надо, однако если мы перехватим ошибку с помощью события [`failData`](/ru/api/effector/Effect#properties-failData), то заметим тип `Error` вместо нашей кастомной ошибки `CustomError`:
 
 ```ts
 sample({
