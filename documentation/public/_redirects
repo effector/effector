@@ -17,10 +17,10 @@
 /.nojekyll                        /.nojekyll                        200
 
 
+/docs/llms.txt                     /docs/llms.txt                     200
 /en/*                             /en/*                             200
 /ru/*                             /ru/*                             200
 /uz/*                             /uz/*                             200
-/docs/llms.txt                     /docs/llms.txt                     200
 
 
 /docs/*                           /en/:splat  301!
