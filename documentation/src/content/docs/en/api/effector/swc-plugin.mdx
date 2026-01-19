@@ -6,50 +6,83 @@ redirectFrom:
   - /docs/api/effector/swc-plugin
 ---
 
-An official SWC plugin can be used for SSR and easier debugging experience in SWC-powered projects, like [Next.js](https://nextjs.org) or Vite with [vite-react-swc plugin](https://github.com/vitejs/vite-plugin-react-swc).
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
 
-The plugin has the same functionality as the built-in [`babel-plugin`](/en/api/effector/babel-plugin).
-It provides all [Units](/en/explanation/glossary#unit) with unique `SID`s ([Stable Identifier](/en/explanation/sids)) and name, as well as other debug information.
+An official SWC plugin for SSR and improved debugging in SWC-powered projects like [Next.js](https://nextjs.org) or Vite with the [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react-swc).
 
-:::warning{title="Unstable"}
-This SWC plugin, along with all other SWC plugins, is currently considered experimental and unstable.
+This plugin provides the same functionality as the built-in [`babel-plugin`](/en/api/effector/babel-plugin). It assigns unique `SID`s ([Stable Identifiers](/en/explanation/sids)) and names to all [Units](/en/explanation/glossary#unit), along with additional debug information.
 
-SWC and Next.js might not follow semver when it comes to plugin compatibility.
-:::
+<br />
 
 # Installation (#installation)
 
-Install @effector/swc-plugin using your preferred package manager.
+Install `@effector/swc-plugin` using your preferred package manager.
+
+<Tabs>
+  <TabItem label="npm">
 
 ```bash
-npm install -ED @effector/swc-plugin
+npm install --save-dev @effector/swc-plugin
 ```
+
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn add --dev @effector/swc-plugin
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install --save-dev @effector/swc-plugin
+```
+
+  </TabItem>
+</Tabs>
 
 ## Versioning (#installation-versioning)
 
-To avoid compatibility issues caused by breaking changes in SWC or Next.js, this plugin publishes different ['labels'](https://semver.org/#spec-item-9) for different underlying `@swc/core`. Refer to the table below to choose the correct plugin version for your setup.
+Starting with `@swc/core@>=1.15.0` and `next@>=16.1.0`, the Plugin ABI is stable and [backward-compatible](https://blog.swc.rs/2025-11-4-wasm-backward-compatibility). Install the latest plugin version using the instructions above.
+
+<details>
+<summary>Legacy Versioning</summary>
+
+If you're using legacy host runtimes (`@swc/core@<1.15.0` or `next@<16.1.0`), install version-specific ['labels'](https://semver.org/#spec-item-9) published for different `@swc/core` versions. These are available as `npm` tags – refer to the table below to select the correct plugin version for your setup.
+
+<br />
 
 :::tip
-For better stability, we recommend pinning both your runtime (like Next.js or `@swc/core`) and the `@effector/swc-plugin` version.
+For better stability, pin both your runtime (Next.js or `@swc/core`) and `@effector/swc-plugin` to specific and exact versions.
 
-Use the `--exact`/`--save-exact` option in your package manager to install specific, compatible versions. This ensures updates to one dependency don't break your application.
+Use the `--exact`/`--save-exact` option in your package manager to install compatible versions, which ensures that an update of one dependency doesn't break your application.
 :::
 
-| `@swc/core` version | Next.js version                          | Correct plugin version |
-| ------------------- | ---------------------------------------- | ---------------------- |
-| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.15`                     | `@swc1.4.0`            |
-| `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`            |
-| `>=1.7.0 <1.8.0`    | `>=15.0.0-canary.122 <=15.0.2`           | `@swc1.7.0`            |
-| `>=1.9.0 <1.10.0`   | `>=15.0.3 <15.2.0`                       | `@swc1.9.0`            |
-| `>=1.10.0 <1.11.0`  | `>=15.2.0 <15.2.1`                       | `@swc1.10.0`           |
-| `>=1.11.0`          | `>=15.2.1 <15.4.0`                       | `@swc1.11.0`           |
-| `>=1.12.0`          | `>=15.4.0`                               | `@swc1.12.0`           |
+<br />
 
-For more information on compatibility, refer to the SWC documentation on [Selecting the SWC Version](https://swc.rs/docs/plugin/selecting-swc-core) and interactive [compatibility table](https://plugins.swc.rs) on SWC website.
+| `@swc/core` version | Next.js version                          | Plugin version (`npm` tag) |
+| ------------------- | ---------------------------------------- | -------------------------- |
+| `>=1.4.0 <1.6.0`    | `>=14.2.0 <=14.2.15`                     | `@swc1.4.0`                |
+| `>=1.6.0 <1.7.0`    | `>=15.0.0-canary.37 <=15.0.0-canary.116` | `@swc1.6.0`                |
+| `>=1.7.0 <1.8.0`    | `>=15.0.0-canary.122 <=15.0.2`           | `@swc1.7.0`                |
+| `>=1.9.0 <1.10.0`   | `>=15.0.3 <15.2.0`                       | `@swc1.9.0`                |
+| `>=1.10.0 <1.11.0`  | `>=15.2.0 <15.2.1`                       | `@swc1.10.0`               |
+| `>=1.11.0`          | `>=15.2.1 <15.4.0`                       | `@swc1.11.0`               |
+| `>=1.12.0`          | `>=15.4.0`                               | `@swc1.12.0`               |
+
+<br />
+
+For more information, see the SWC documentation on [Selecting the SWC Version](https://swc.rs/docs/plugin/selecting-swc-core) and an interactive [compatibility table](https://plugins.swc.rs).
+
+</details>
+
+<br />
 
 # Usage (#usage)
 
-To use the plugin, simply add it to your tool's configuration.
+Add the plugin to your build tool's configuration file.
 
 ## Next.js (#usage-nextjs)
 
