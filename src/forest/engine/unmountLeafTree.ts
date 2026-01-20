@@ -1,6 +1,6 @@
-import type {Leaf} from './index.h'
+import type {Leaf} from '../index.h'
 
-import {pushOpToQueue} from './plan'
+import {pushOpToQueue} from '../plan'
 import {iterateChildLeafs} from './iterateChildLeafs'
 
 function unmountChildLeafsNoEvent(leaf: Leaf) {
@@ -35,20 +35,17 @@ export function unmountLeafTree(leaf: Leaf) {
       break
     }
     case 'list': {
-      const records = data.records
-      for (let i = 0; i < records.length; i++) {
-        const item = records[i]
-
+      data.records.forEach(item => {
         if (item.instance) {
           unmountLeafTree(item.instance)
         }
         item.active = false
-      }
+      })
       leaf.root.activeSpawns.delete(leaf.fullID)
       unmountOwnSpawn(leaf)
       break
     }
-    case 'list item': {
+    case 'listItem': {
       const listItemBlock = data.block
       removeItem(listItemBlock, listItemBlock.parent.child)
       const leftBlock = listItemBlock.left
@@ -81,9 +78,9 @@ export function unmountLeafTree(leaf: Leaf) {
       unmountOwnSpawn(leaf)
       break
     case 'block':
-    case 'block item':
+    case 'blockItem':
     case 'rec':
-    case 'rec item':
+    case 'recItem':
       unmountChildLeafsNoEvent(leaf)
       break
     case 'using':

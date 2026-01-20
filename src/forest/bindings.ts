@@ -31,10 +31,9 @@ export function applyStaticOps(
   element: DOMElement,
   defs: StaticOperationDef[],
 ) {
-  for (let i = 0; i < defs.length; i++) {
-    const {type, field, value} = defs[i]
+  defs.forEach(({type, field, value}) => {
     defMap[type](element, field, value)
-  }
+  })
 }
 
 export function isFalse(val: any) {

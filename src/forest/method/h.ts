@@ -44,18 +44,18 @@ import {
   applyStaticOps,
   applyClassList,
 } from '../bindings'
-import {createTemplate, currentTemplate} from '../template'
+import {createTemplate, currentTemplate} from '../engine/createTemplate'
 import {
   findParentDOMElement,
   findPreviousVisibleSibling,
   findPreviousVisibleSiblingBlock,
-} from '../search'
+} from '../engine/search'
 import {
   appendChild,
   onMount as onMountSync,
   mountChildTemplates,
   setInParentIndex,
-} from '../mountChild'
+} from '../engine/mountChild'
 import {assertClosure} from '../assert'
 import {mutualSample} from '../mutualSample'
 import {forIn} from '../forIn'
