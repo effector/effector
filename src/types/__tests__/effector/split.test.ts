@@ -557,6 +557,60 @@ describe('array cases', () => {
         "
       `)
     })
+
+    test('case name: match == cases, type: source != cases (should fail)', () => {
+      const source = createEvent<{a: string} | {b: number}>()
+      const $case = createStore<'a' | 'b'>('a')
+      const a = createEvent<void>()
+      const b = createEvent<number>()
+      split({
+        // @ts-expect-error
+        source,
+        match: $case,
+        cases: {
+          a,
+          // @ts-expect-error
+          b,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'EventCallable<{ a: string; } | { b: number; }>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type '{ a: string; } | { b: number; }' is not assignable to type 'number'.
+              Type '{ a: string; }' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<{ a: string; } | { b: number; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: string; } | { b: number; }'.
+        "
+      `)
+    })
+
+    test('case name: match == cases, type: source != cases (should fail)', () => {
+      const source = createEvent<string>()
+      const $case = createStore<'a'>('a')
+      const a = createEvent<boolean>()
+      split({
+        //@ts-expect-error
+        source,
+        match: $case,
+        cases: {
+          //@ts-expect-error
+          a,
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'EventCallable<string>' is not assignable to type 'Unit<boolean>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'boolean'.
+        Type 'EventCallable<boolean>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'boolean' is not assignable to type 'string'.
+        "
+      `)
+    })
+
     test('case name: match < cases, type: source == cases, arrays only (should fail)', () => {
       const source = createEvent<{foo: 1}>()
       const $case = createStore<'a'>('a')
@@ -1601,6 +1655,121 @@ describe('array cases', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; b: EventCallable<{ foo: 2; }>; }'.
+        "
+      `)
+    })
+
+    test('identity function, case name: match == cases, type: source == cases (should pass)', () => {
+      const source = createEvent<'a' | 'b'>()
+      const a = createEvent<void>()
+      const b = createEvent<void>()
+
+      const identity = <T>(v: T): T => v
+      split({
+        source,
+        match: identity,
+        cases: {
+          a: [a],
+          b,
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('identity function, case name: match > cases, type: source == cases (should pass)', () => {
+      const source = createEvent<'a' | 'b'>()
+      const a = createEvent<void>()
+
+      const identity = <T>(v: T): T => v
+      split({
+        source,
+        match: identity,
+        cases: {
+          a,
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        no errors
+        "
+      `)
+    })
+    test('identity function, case name: match == cases, type: source != cases (should fail)', () => {
+      const source = createEvent<'a' | 'b'>()
+      const a = createEvent<void>()
+      const b = createEvent<number>()
+
+      const identity = <T>(v: T): T => v
+      split({
+        // @ts-expect-error
+        source,
+        match: identity,
+        cases: {
+          a,
+          // @ts-expect-error
+          b,
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Type 'EventCallable<\\"a\\" | \\"b\\">' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+              Type 'string' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<\\"a\\" | \\"b\\">'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '\\"a\\" | \\"b\\"'.
+        "
+      `)
+    })
+    test('identity function, case name: match < cases, type: source == cases (should fail)', () => {
+      const source = createEvent<'a'>()
+      const a = createEvent<void>()
+      const b = createEvent<void>()
+
+      const identity = <T>(v: T): T => v
+      split({
+        source,
+        match: identity,
+        cases: {
+          a,
+          //@ts-expect-error
+          b,
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: EventCallable<void>; }'.
+        "
+      `)
+    })
+
+    test('identity function, case name: match < cases, type: source == cases (should fail)', () => {
+      const source = createEvent<'a'>()
+      const a = createEvent<void>()
+      const b = createEvent<void>()
+
+      const identity = <T>(v: T): T => v
+      split({
+        source,
+        match: identity,
+        cases: {
+          a,
+          //@ts-expect-error
+          b,
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: EventCallable<void>; }'.
         "
       `)
     })
