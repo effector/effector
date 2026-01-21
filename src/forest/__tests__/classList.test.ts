@@ -156,6 +156,33 @@ it('supports setting dynamic array class', async () => {
       "
     `)
 })
+it('supports setting dynamic array class without restore', async () => {
+  const [s1, s2] = await exec(async () => {
+    const setClass = createEvent<string>()
+    const $class = createStore("example").on(setClass, (_, value) => value)
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        attr: {class: 'foreign'},
+        classList: [$class],
+      })
+    })
+    await act()
+    await act(() => {
+      setClass('updated')
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div class='foreign example'>content</div>
+      "
+    `)
+  expect(s2).toMatchInlineSnapshot(`
+      "
+      <div class='foreign updated'>content</div>
+      "
+    `)
+})
 it('supports setting dynamic object class without class property', async () => {
   const [s1, s2] = await exec(async () => {
     const setClass = createEvent<boolean>()
@@ -241,6 +268,36 @@ it('supports merging static classList h with spec', async () => {
   expect(s1).toMatchInlineSnapshot(`
       "
       <div class='second first'>content</div>
+      "
+    `)
+})
+
+it('supports setting dynamic array class with spec without restore', async () => {
+  const [s1, s2] = await exec(async () => {
+    const setClass = createEvent<string>()
+    const $class = createStore('example').on(setClass, (_, value) => value)
+    using(el, () => {
+      h('div', {
+        text: 'content',
+        attr: {class: 'foreign'},
+        fn() {
+          spec({classList: [$class]})
+        },
+      })
+    })
+    await act()
+    await act(() => {
+      setClass('updated')
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+      "
+      <div class='foreign example'>content</div>
+      "
+    `)
+  expect(s2).toMatchInlineSnapshot(`
+      "
+      <div class='foreign updated'>content</div>
       "
     `)
 })
