@@ -42,7 +42,7 @@ const formSubmitted = createEvent<{
 В effector для событий может быть несколько типов, где `T` - тип хранимого значения:
 
 1. `EventCallable<T>` - событие, которое может вызвать.
-2. `Event<T>` - производное событие, которое нельзя вызвать в ручную.
+2. `Event<T>` - производное событие, которое нельзя вызвать вручную.
 
 ### Типизация методов событий (#typing-event-methods)
 
@@ -183,7 +183,7 @@ const fetchUserFx = createEffect<string, User, ApiError>(async (userId) => {
 
 #### Типизация `filter` (#typing-sample-filter)
 
-Если вам необходимо получить конкретный тип, то для этого вам нужно в ручную указать ожидаемый тип, сделать это можно при помощи [типов придикатов](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates):
+Если вам необходимо получить конкретный тип, то для этого вам нужно вручную указать ожидаемый тип, сделать это можно при помощи [типов придикатов](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates):
 
 ```ts
 type UserMessage = { kind: "user"; text: string };
@@ -231,7 +231,7 @@ sample({
 #### Типизация `filter` и `fn` (#typing-sample-filter-and-fn)
 
 Как упоминалось выше, если использовать предикаты типов в `filter`, то все отработает корректно и в `target` попадет нужный тип.<br/>
-Однако, такая механика не отработает как нужно при использовании `filter` и `fn` вместе. В таком случае вам потребуется в ручную указать тип данных параметров `filter`, а также добавить [предикаты типов](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates). Это происходит из-за того, что TypeScript не может корректно вывести тип в `fn` после `filter`, если тип не указан явно. Это ограничение системы типов TypeScript.
+Однако, такая механика не отработает как нужно при использовании `filter` и `fn` вместе. В таком случае вам потребуется вручную указать тип данных параметров `filter`, а также добавить [предикаты типов](https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates). Это происходит из-за того, что TypeScript не может корректно вывести тип в `fn` после `filter`, если тип не указан явно. Это ограничение системы типов TypeScript.
 
 ```ts
 type UserMessage = { kind: "user"; text: string };
