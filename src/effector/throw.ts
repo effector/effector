@@ -23,13 +23,15 @@ export const deprecate = (
     }`,
   )
 
-export const printErrorWithNodeDetails = (message: string, node: Node) => {
-  const stack = getMeta(node, 'unitTrace')
+export const getFinalMessage = (
+  message: string,
+  node: Node,
+): [message: string, stack: string | undefined] => {
+  const stack = getMeta(node, 'unitTrace') as string | undefined
   const config = getMeta(node, 'config')
-  const locString = config?.loc
-    ? ` at ${config.loc.file}`
-    : null
-  const name = config?.name
+  const locString = config?.loc ? ` at ${config.loc.file}` : null
+  const op = getMeta(node, 'op') as string | undefined
+  const name = config?.name || op
 
   let finalMessage = message
   if (name) {
@@ -39,16 +41,21 @@ export const printErrorWithNodeDetails = (message: string, node: Node) => {
     finalMessage = `${name}${locString}: ${message}`
   }
 
-  const error = Error(finalMessage)
-
-  if (stack) {
-    error.stack = stack
-  }
-
   if (!stack && !name && !locString) {
     console.log(
       `Add effector's Babel or SWC plugin to your config for more detailed debug information or "import "effector/enable_debug_traces" to your code entry module to see full stack traces`,
     )
+  }
+  return [finalMessage, stack]
+}
+
+export const printErrorWithNodeDetails = (message: string, node: Node) => {
+  const [finalMessage, stack] = getFinalMessage(message, node)
+
+  const error = Error(finalMessage)
+
+  if (stack) {
+    error.stack = stack
   }
   console.error(error)
 }

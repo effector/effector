@@ -204,6 +204,7 @@ const storeCombination = (
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
     const linkNode = createLinkNode(child, store, node, 'combine', fn)
+    setUnitTrace(linkNode, getUnitTrace(combine))
     linkNode.scope.key = key
     const childRef = getStoreState(child)
     addRefOp(rawShape, {type: 'field', field: key, from: childRef})
