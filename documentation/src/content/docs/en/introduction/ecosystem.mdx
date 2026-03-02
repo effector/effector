@@ -53,6 +53,22 @@ Stage 0. ⛔️ — Abandoned/Needs maintainer, may be broken; it must be migrat
 - [efform](https://github.com/tehSLy/efform) ⛔ — Form manager based on a state manager, designed for high-quality DX.
 - [effector-reform](https://github.com/movpushmov/effector-reform) ☢️ — Form manager implementing the concept of composite forms.
 
+
+## Migration from Redux
+
+If you're moving an existing Redux codebase to Effector, these resources are a practical starting point:
+
+- [@withease/redux](https://withease.effector.dev/redux/) — compatibility helpers for incremental migration.
+- [connect API](https://effector.dev/en/api/effector-react/connect/) — bridge class-based React components while migrating.
+- [Redux DevTools adapter](https://github.com/effector/redux-devtools-adapter) — keep familiar debugging workflows during transition.
+
+A common migration path is:
+
+1. Keep Redux reducers in place and introduce Effector for new features first.
+2. Replace shared selectors with stores and derived units module-by-module.
+3. Move side effects to `createEffect` and domain-specific models.
+4. Remove Redux slices once equivalent Effector flows are production-proven.
+
 ## Templates
 
 - [ViteJS+React Template](https://github.com/effector/vite-react-template) 💚 — Try effector with React and TypeScript in seconds!
