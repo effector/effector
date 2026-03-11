@@ -99,7 +99,7 @@ export function combine(...args: any[]): Store<any> {
   )
 }
 
-export const combineSource = (shape: any, batch: boolean) => {
+export const combineSource = (shape: unknown, batch: boolean) => {
   const errorTitle = generateErrorTitle('combine')
   assert(isObject(shape), `${errorTitle}: shape should be an object`)
   return storeCombination(
@@ -125,7 +125,7 @@ const storeCombination = (
   const errorTitle = generateErrorTitle('combine', config)
   const {batch = true, ...storeConfig} = (extConfig || {}) as {
     batch?: boolean
-    [key: string]: any
+    [key: string]: unknown
   }
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
