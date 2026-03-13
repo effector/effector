@@ -45,96 +45,104 @@ const languageLinks = createChangeLangLinks({ slug });
     </div>
     <div class="nav-content">
       <div class="main-tabs">
-      <ul class="tabs navigation-panel">
+        <ul class="tabs navigation-panel">
+          {
+            PANEL_ITEMS.map(({ text, id }, i) => (
+              <li role="presentation">
+                <button
+                  role="tab"
+                  class="tab-panel-item"
+                  aria-selected={id === activePanelIndex ? "true" : "false"}
+                >
+                  {text[lang as keyof typeof text] || text.en}
+                </button>
+              </li>
+            ))
+          }
+          <li role="presentation">
+            <ul class="frameworks-panel">
+              {
+                PANEL_FRAMEWORK_ITEMS.map(({ text, id, Icon }, i) => (
+                  <li role="presentation">
+                    <button
+                      role="tab"
+                      class="tab-panel-item"
+                      data-icon={id}
+                      data-active={i === 0 ? "true" : "false"}
+                      aria-selected={id === activePanelIndex ? "true" : "false"}
+                    >
+                      {Icon && <Icon size={16} />}
+                      <span>{text[lang as keyof typeof text] || text.en}</span>
+                    </button>
+                  </li>
+                ))
+              }
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content">
         {
-          PANEL_ITEMS.map(({ text, id }, i) => (
-            <li role="presentation">
-              <button
-                role="tab"
-                class="tab-panel-item"
-                aria-selected={id === activePanelIndex ? "true" : "false"}
-              >
-                {text[lang as keyof typeof text] || text.en}
-              </button>
-            </li>
+          localizedSidebar.map(({ sidebarItems, panelId }) => (
+            <div
+              hidden={panelId !== activePanelIndex}
+              data-initial={panelId === activePanelIndex ? "true" : "false"}
+              role="tabpanel"
+            >
+              <ul class="nav-groups">
+                {sidebarItems.map((group, index) => {
+                  const isCollapsed = Boolean(group.collapsed);
+                  return (
+                    <li>
+                      <div class="nav-group">
+                        <button
+                          class="nav-group-title"
+                          class:list={{ collapsed: isCollapsed }}
+                          aria-expanded={`${!isCollapsed}`}
+                          aria-controls={`group-${index}`}
+                        >
+                          {group.title}
+                          <ChevronRight class="arrow" />
+                        </button>
+                        <ul
+                          id={`group-${index}`}
+                          class:list={{ collapsed: isCollapsed }}
+                          aria-hidden={isCollapsed ? "true" : "false"}
+                        >
+                          {group.items.map((item) => (
+                            <li class="nav-link">
+                              <a
+                                href={item.link}
+                                aria-current={currentPageMatch === item.link ? "page" : false}
+                                target={item.link.startsWith("/") ? undefined : "_blank"}
+                                data-fallback={item.isFallback}
+                                data-status={item.status}
+                                tabindex={isCollapsed ? "-1" : undefined}
+                              >
+                                <span> {item.title}</span>
+                                {item.status === "new" && (
+                                  <span title="Recently updated">
+                                    <StatusNew class="status-badge" size={20} />
+                                  </span>
+                                )}
+                                {item.status === "deprecated" && (
+                                  <span title="Deprecated">
+                                    <StatusDeprecated size={20} class="status-badge" />
+                                  </span>
+                                )}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           ))
         }
-        <li role="presentation">
-          <ul class="frameworks-panel">
-            {
-              PANEL_FRAMEWORK_ITEMS.map(({ text, id, Icon }, i) => (
-                <li role="presentation">
-                  <button
-                    role="tab"
-                    class="tab-panel-item"
-                    data-icon={id}
-                    data-active={i === 0 ? "true" : "false"}
-                    aria-selected={id === activePanelIndex ? "true" : "false"}
-                  >
-                    {Icon && <Icon size={16} />}
-                    <span>{text[lang as keyof typeof text] || text.en}</span>
-                  </button>
-                </li>
-              ))
-            }
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="tab-content">
-      {
-        localizedSidebar.map(({ sidebarItems, panelId }) => (
-          <div
-            hidden={panelId !== activePanelIndex}
-            data-initial={panelId === activePanelIndex ? "true" : "false"}
-            role="tabpanel"
-          >
-            <ul class="nav-groups">
-              {sidebarItems.map((group, index) => {
-                const isCollapsed = Boolean(group.collapsed);
-                return (
-                  <li>
-                    <div class="nav-group">
-                      <button
-                        class="nav-group-title"
-                        class:list={{ collapsed: isCollapsed }}
-                        aria-expanded={`${!isCollapsed}`}
-                        aria-controls={`group-${index}`}
-                      >
-                        {group.title}
-                        <ChevronRight class="arrow" />
-                      </button>
-                      <ul
-                        id={`group-${index}`}
-                        class:list={{ collapsed: isCollapsed }}
-                        aria-hidden={isCollapsed ? "true" : "false"}
-                      >
-                        {group.items.map((item) => (
-                          <li class="nav-link">
-                            <a
-                              href={item.link}
-                              aria-current={currentPageMatch === item.link ? "page" : false}
-                              target={item.link.startsWith("/") ? undefined : "_blank"}
-                              data-fallback={item.isFallback}
-                              data-status={item.status}
-                              tabindex={isCollapsed ? "-1" : undefined}
-                            >
-                              <span> {item.title}</span>
-                              {item.status === "new" && <StatusNew class="status-badge" size={20} />}
-                              {item.status === "deprecated" && <StatusDeprecated size={20} class="status-badge" />}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
+      </div>
     </div>
     <div class="sidebar-footer">
       <div class="footer-group">
@@ -162,7 +170,7 @@ const languageLinks = createChangeLangLinks({ slug });
       const content = group.querySelector("ul");
       if (!button || !content) return;
 
-      const updateState = (expanded:boolean) => {
+      const updateState = (expanded: boolean) => {
         button.setAttribute("aria-expanded", expanded.toString());
         button.classList.toggle("collapsed", !expanded);
         content.classList.toggle("collapsed", !expanded);
@@ -187,16 +195,16 @@ const languageLinks = createChangeLangLinks({ slug });
 </script>
 
 <style>
-  .footer-group{
+  .footer-group {
     display: flex;
-    gap:var(--space-2)
+    gap: var(--space-2);
   }
 
-  .tab-content{
+  .tab-content {
     margin-top: var(--space-4);
   }
 
-  #sidebar{
+  #sidebar {
     border-radius: var(--radius-2xl);
     position: relative;
     background-color: var(--theme-bg-sidebar-tabs-bg);
@@ -204,7 +212,7 @@ const languageLinks = createChangeLangLinks({ slug });
   }
 
   #sidebar::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
@@ -222,7 +230,7 @@ const languageLinks = createChangeLangLinks({ slug });
   }
 
   #sidebar::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: var(--radius-2xl);
@@ -242,7 +250,7 @@ const languageLinks = createChangeLangLinks({ slug });
     z-index: 0;
   }
 
-  .sidebar-container{
+  .sidebar-container {
     padding: var(--space-2);
     position: relative;
     z-index: 2;
@@ -354,7 +362,6 @@ const languageLinks = createChangeLangLinks({ slug });
     @apply flex font-bold;
   }
 
-  
   .sidebar-search {
     margin-top: var(--space-4);
     flex-shrink: 0;
@@ -524,7 +531,7 @@ const languageLinks = createChangeLangLinks({ slug });
   .sidebar-footer {
     display: flex;
     justify-content: space-between;
-    padding-top:var(--space-2);
+    padding-top: var(--space-2);
     border-top: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
     flex-shrink: 0;
   }

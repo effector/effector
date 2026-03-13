@@ -31,10 +31,7 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
     </kbd>
   </button>
 
-  <dialog
-    style="padding:0"
-    aria-label={t(translations.Search.label, lang)}
-  >
+  <dialog style="padding:0" aria-label={t(translations.Search.label, lang)}>
     <div class="dialog-frame sl-flex">
       <button data-close-modal class="sl-flex md:sl-hidden">
         {t(translations.Search.cancelLabel, lang)}
@@ -128,10 +125,13 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
       });
 
       // Close dialog when clicked outside
-      dialog.addEventListener('click', (event) => {
+      dialog.addEventListener("click", (event) => {
         const rect = dialog.getBoundingClientRect();
-        const isInDialog = (rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
-          rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+        const isInDialog =
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width;
         if (!isInDialog) {
           dialog.close();
         }
@@ -160,6 +160,10 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
             translations,
             filters: { lang },
             showSubResults: true,
+            ranking: {
+              pageLength: 0.5,
+              termFrequency: 0.4,
+            },
             processResult: (result: { url: string; sub_results: Array<{ url: string }> }) => {
               result.url = formatURL(result.url);
               result.sub_results = result.sub_results.map((sub_result) => {
@@ -210,13 +214,13 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
 
   dialog {
     margin: 0;
-    background-color: var(--theme-card);
-    border: 1px solid var(--theme-divider);
+    background-color: var(--theme-bg-sidebar-tabs-bg, var(--theme-card));
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
     width: 100%;
     max-width: 100%;
     height: 100%;
     max-height: 100%;
-    @apply shadow-2xl;
+    box-shadow: var(--theme-sidebar-shadow, 0 25px 50px -12px rgb(0 0 0 / 0.25));
   }
 
   dialog[open] {
@@ -256,17 +260,12 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
     }
   }
 
-  dialog .search-container {
-    @apply p-4;
-  }
-
   .effector-search {
-    --pagefind-ui-primary: var(--theme-divider);
-    --pagefind-ui-text: var(--theme-text-light);
+    --pagefind-ui-primary: var(--theme-sidebar-border);
+    --pagefind-ui-text: var(--theme-left-sidebar-item-text);
     --pagefind-ui-font: var(--font-body);
-    --pagefind-ui-background: var(--theme-divider);
-    --pagefind-ui-border: var(--theme-text);
-
+    --pagefind-ui-background: var(--theme-bg-sidebar-main-tabs);
+    --pagefind-ui-border: var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
     --pagefind-ui-border-width: 1px;
     --epf-search-cancel-space: 6rem;
   }
@@ -278,7 +277,7 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
 
     dialog {
       margin: 4rem auto auto;
-      border-radius: 0.5rem;
+      border-radius: 12px;
       width: 90%;
       max-width: 40rem;
       height: max-content;
@@ -287,8 +286,12 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
     }
 
     .dialog-frame {
-      padding: 1.5rem;
+      padding: var(--space-4);
     }
+  }
+
+  dialog .search-container {
+    padding: var(--space-3) var(--space-4);
   }
 </style>
 
@@ -298,35 +301,39 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
   }
 
   .effector-search {
-    --epf-search-result-spacing: calc(1.25rem * var(--pagefind-ui-scale));
-    --epf-search-result-pad-inline-start: calc(3.75rem * var(--pagefind-ui-scale));
-    --epf-search-result-pad-inline-end: calc(1.25rem * var(--pagefind-ui-scale));
-    --epf-search-result-pad-block: calc(0.9375rem * var(--pagefind-ui-scale));
-    --epf-search-result-nested-pad-block: calc(0.625rem * var(--pagefind-ui-scale));
-    --epf-search-corners: calc(0.3125rem * var(--pagefind-ui-scale));
-    --epf-search-page-icon-size: calc(1.875rem * var(--pagefind-ui-scale));
+    --epf-search-result-spacing: var(--space-4);
+    --epf-search-result-pad-inline-start: 3rem;
+    --epf-search-result-pad-inline-end: var(--space-3);
+    --epf-search-result-pad-block: var(--space-2);
+    --epf-search-result-nested-pad-block: var(--space-2);
+    --epf-search-corners: 12px;
+    --epf-search-page-icon-size: 1.5rem;
     --epf-search-page-icon-inline-start: calc(
       (var(--epf-search-result-pad-inline-start) - var(--epf-search-page-icon-size)) / 2
     );
-    --epf-search-tree-diagram-size: calc(2.5rem * var(--pagefind-ui-scale));
+    --epf-search-tree-diagram-size: 1.5rem;
     --epf-search-tree-diagram-inline-start: calc(
       (var(--epf-search-result-pad-inline-start) - var(--epf-search-tree-diagram-size)) / 2
     );
   }
 
+  .effector-search .pagefind-ui__results {
+    padding-block: var(--space-2);
+  }
+
   .effector-search .pagefind-ui__form::before {
-    --pagefind-ui-text: var(--epf-color-gray-1);
+    --pagefind-ui-text: var(--theme-left-sidebar-item-text);
     opacity: 1;
   }
 
   .effector-search .pagefind-ui__search-input {
-    color: var(--epf-color-white);
+    color: var(--theme-text);
     font-weight: 400;
     width: calc(100% - var(--epf-search-cancel-space));
   }
 
   .effector-search input:focus {
-    --pagefind-ui-border: var(--epf-color-accent);
+    --pagefind-ui-border: var(--theme-sidebar-active-bg);
   }
 
   .effector-search .pagefind-ui__search-clear {
@@ -338,7 +345,7 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
   }
 
   .effector-search .pagefind-ui__search-clear:focus {
-    outline: 1px solid var(--theme-accent);
+    outline: 1px solid var(--theme-sidebar-active-bg);
   }
 
   .effector-search .pagefind-ui__search-clear::before {
@@ -347,7 +354,7 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
       center / 50% no-repeat;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m13.41 12 6.3-6.29a1 1 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1 1 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 .33 1.64 1 1 0 0 0 1.09-.22l6.29-6.3 6.29 6.3a1 1 0 0 0 1.64-.33 1 1 0 0 0-.22-1.09L13.41 12Z'/%3E%3C/svg%3E")
       center / 50% no-repeat;
-    background-color: var(--theme-accent);
+    background-color: var(--theme-sidebar-active-bg);
     display: block;
     width: 100%;
     height: 100%;
@@ -363,28 +370,51 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
 
   .effector-search .pagefind-ui__result-nested {
     position: relative;
-    padding: var(--epf-search-result-nested-pad-block) var(--epf-search-result-pad-inline-end);
-    padding-inline-start: var(--epf-search-result-pad-inline-start);
+    padding: var(--space-2) var(--space-3);
+    padding-inline-start: 1.75rem;
+    margin-top: 1px;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .effector-search .pagefind-ui__result-nested:first-of-type {
+    border-radius: 0;
+  }
+
+  .effector-search .pagefind-ui__result-inner .pagefind-ui__result-nested:last-of-type {
+    border-radius: 0 0 12px 12px;
   }
 
   .effector-search .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)),
   .effector-search .pagefind-ui__result-nested {
     position: relative;
-    background-color: var(--theme-divider-light);
+    background-color: var(--theme-bg-sidebar-main-tabs);
   }
 
   .effector-search .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):hover,
   .effector-search
-    .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):focus-within,
-  .effector-search .pagefind-ui__result-nested:hover,
-  .effector-search .pagefind-ui__result-nested:focus-within {
-    outline: 1px solid var(--theme-accent);
+    .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):focus-within {
+    outline: 1px solid var(--theme-sidebar-surface-border);
+  }
+
+  .effector-search .pagefind-ui__result-nested:hover {
+    background-color: var(--theme-bg-sidebar-main-tabs-active);
+    outline: 1px solid var(--theme-sidebar-surface-border);
   }
 
   .effector-search
     .pagefind-ui__result-title:not(:where(.pagefind-ui__result-nested *)):focus-within,
   .effector-search .pagefind-ui__result-nested:focus-within {
-    background-color: var(--theme-text-accent);
+    background-color: var(--theme-bg-sidebar-main-tabs-active);
+  }
+
+  .effector-search .pagefind-ui__result-nested:focus-within {
+    background-color: var(--theme-sidebar-active-bg);
+    color: var(--theme-sidebar-active-text);
+  }
+
+  .effector-search .pagefind-ui__result-nested:focus-within .pagefind-ui__result-link,
+  .effector-search .pagefind-ui__result-nested:focus-within .pagefind-ui__result-excerpt {
+    color: var(--theme-sidebar-active-text);
   }
 
   .effector-search .pagefind-ui__result-thumb,
@@ -400,8 +430,11 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
   }
 
   .effector-search .pagefind-ui__result-inner > .pagefind-ui__result-title {
-    padding: var(--epf-search-result-pad-block) var(--epf-search-result-pad-inline-end);
+    padding: var(--space-2) var(--space-3);
     padding-inline-start: var(--epf-search-result-pad-inline-start);
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    color: var(--theme-text);
   }
 
   .effector-search .pagefind-ui__result-inner > .pagefind-ui__result-title::before {
@@ -410,7 +443,7 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
     inset-block: 0;
     inset-inline-start: var(--epf-search-page-icon-inline-start);
     width: var(--epf-search-page-icon-size);
-    background: var(--theme-text-lighter);
+    background: var(--theme-sidebar-border);
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M9 10h1a1 1 0 1 0 0-2H9a1 1 0 0 0 0 2Zm0 2a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9Zm11-3V8l-6-6a1 1 0 0 0-1 0H7a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V9Zm-6-4 3 3h-2a1 1 0 0 1-1-1V5Zm4 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5v3a3 3 0 0 0 3 3h3v9Zm-3-3H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2Z'/%3E%3C/svg%3E")
       center no-repeat;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='currentColor' viewBox='0 0 24 24'%3E%3Cpath d='M9 10h1a1 1 0 1 0 0-2H9a1 1 0 0 0 0 2Zm0 2a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H9Zm11-3V8l-6-6a1 1 0 0 0-1 0H7a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V9Zm-6-4 3 3h-2a1 1 0 0 1-1-1V5Zm4 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5v3a3 3 0 0 0 3 3h3v9Zm-3-3H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2Z'/%3E%3C/svg%3E")
@@ -419,13 +452,13 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
 
   .effector-search .pagefind-ui__result-inner {
     align-items: stretch;
-    gap: 1px;
+    gap: 0;
   }
 
   .effector-search .pagefind-ui__result-link {
     position: unset;
-    --pagefind-ui-text: var(--theme-text-ligher);
-    font-weight: 600;
+    color: var(--theme-left-sidebar-item-text);
+    font-weight: 500;
   }
 
   .effector-search .pagefind-ui__result-link:hover {
@@ -442,7 +475,7 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
     inset-block: 0;
     inset-inline-start: var(--epf-search-tree-diagram-inline-start);
     width: var(--epf-search-tree-diagram-size);
-    background: var(--theme-divider);
+    background: var(--theme-sidebar-border);
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-linecap='round' viewBox='0 0 16 1000' preserveAspectRatio='xMinYMin slice'%3E%3Cpath d='M8 0v1000m6-988H8'/%3E%3C/svg%3E")
       0% 0% / 100% no-repeat;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='currentColor' stroke-linecap='round' viewBox='0 0 16 1000' preserveAspectRatio='xMinYMin slice'%3E%3Cpath d='M8 0v1000m6-988H8'/%3E%3C/svg%3E")
@@ -466,19 +499,22 @@ const searchId = `effector__search-${Math.random().toString(36).substring(2, 11)
   }
 
   .effector-search .pagefind-ui__result-excerpt {
-    font-size: calc(1rem * var(--pagefind-ui-scale));
+    font-size: var(--font-size-sm);
+    line-height: 1.45;
+    color: var(--theme-text-light);
     overflow-wrap: anywhere;
+    margin-top: 0.25rem;
   }
 
   .effector-search mark {
-    color: var(--theme-text-accent);
+    color: var(--theme-sidebar-active-text);
     background-color: transparent;
     font-weight: 600;
   }
 
   .effector-search .pagefind-ui__button {
-    background-color: var(--theme-divider);
-    color: var(--theme-text-light);
-    border-color: var(--theme-divider-dark);
+    background-color: var(--theme-bg-sidebar-main-tabs);
+    color: var(--theme-left-sidebar-item-text);
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
   }
 </style>

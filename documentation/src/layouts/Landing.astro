@@ -14,7 +14,9 @@ const { title, lang, description, dir = "ltr" } = Astro.props;
 
 <CommonLayout lang={lang} title={title} dir={dir} description={description}>
   <div class="landing">
-    <LandingHeader lang={lang} />
+    <div data-pagefind-ignore="all">
+      <LandingHeader lang={lang} />
+    </div>
     <slot />
   </div>
 </CommonLayout>

@@ -4,7 +4,6 @@ import { getPathParamsFromId } from "../../languages";
 import MoreMenu from "../RightSidebar/MoreMenu.astro";
 import TableOfContents from "../RightSidebar/TableOfContents";
 
-
 type Props = {
   title: string;
   headings: MarkdownHeading[];
@@ -31,7 +30,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   id="article"
   class="content"
   {...indexing ? { "data-pagefind-body": "" } : {}}
-  data-weight={pagefindWeight}
+  data-pagefind-weight={pagefindWeight}
 >
   <section class="main-section">
     <nav class="mobile-toc block" data-pagefind-ignore>
