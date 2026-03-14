@@ -3,7 +3,8 @@
      DOCUMENTATION DESIGN TOKENS
      ======================================== */
 
-  --doc-bg-page: rgba(29, 29, 31, 0.7);
+  --doc-bg-page-color: 29, 29, 31;
+  --doc-bg-page: hsl(var(--doc-bg-page-color), 0.7);
   --doc-bg-page-solid: rgb(29, 29, 31);
 
   --doc-bg-sidebar: rgba(18, 18, 19, 0.7);
@@ -53,6 +54,7 @@
      ======================================== */
 
   --theme-bg: var(--doc-bg-page);
+  --theme-bg-color: var(--doc-bg-page-color);
   --theme-bg-mobile-menu: var(--doc-bg-page-solid);
   --theme-bg-sidebar-tabs-bg: var(--doc-bg-sidebar);
   --theme-bg-sidebar-main-tabs: var(--doc-bg-sidebar-surface);
@@ -89,6 +91,7 @@
   --theme-card: var(--doc-bg-surface-subtle);
   --theme-card-hover: var(--doc-bg-surface-raised);
   --theme-card-divider: var(--doc-border-subtle);
+  --theme-search-card-bg: rgba(255, 255, 255, 0.06);
 
   /* ========================================
      CODE

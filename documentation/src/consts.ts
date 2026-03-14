@@ -66,7 +66,7 @@ export const COMMUNITY_INVITE_URL = LINKS.discord;
 export const ALGOLIA = {
   indexName: "effector-beta",
   appId: "ARB8LV9Z4L",
-  apiKey: import.meta.env.ALGOLIA_API_KEY!,
+  // apiKey: import.meta.env.ALGOLIA_API_KEY!,
 };
 
 export const ANNOUNCEMENT: Announcement | null = {

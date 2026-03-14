@@ -20,6 +20,7 @@
      ======================================== */
 
   --theme-bg: #fff;
+  --theme-bg-color: 0, 0%, 100%;
   --theme-bg-mobile-menu: #fff;
   --theme-bg-sidebar-tabs-bg: hsl(var(--color-gray-50));
   --theme-bg-sidebar-main-tabs: hsl(var(--color-base-gray), 97%);
@@ -56,6 +57,7 @@
   --theme-card: hsla(0, 0%, 100%, 1);
   --theme-card-hover: hsl(var(--color-gray-50));
   --theme-card-divider: hsla(var(--color-gray-200), 0.8);
+  --theme-search-card-bg: hsla(var(--color-gray-300), 0.35);
 
   /* ========================================
      CODE
