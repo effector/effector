@@ -722,9 +722,9 @@ Your support allows us to improve the developer experience 🧡.
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/falkomerr>
-            <img src=https://avatars.githubusercontent.com/u/105551615?v=4 width="100;"  alt=Roman Paravaev/>
+            <img src=https://avatars.githubusercontent.com/u/105551615?v=4 width="100;"  alt=falkomerr/>
             <br />
-            <sub style="font-size:14px"><b>Roman Paravaev</b></sub>
+            <sub style="font-size:14px"><b>falkomerr</b></sub>
         </a>
     </td>
 </tr>
