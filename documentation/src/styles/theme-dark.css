@@ -91,7 +91,7 @@
   --theme-card: var(--doc-bg-surface-subtle);
   --theme-card-hover: var(--doc-bg-surface-raised);
   --theme-card-divider: var(--doc-border-subtle);
-  --theme-search-card-bg: rgba(255, 255, 255, 0.06);
+  --theme-search-card-bg: rgba(255, 255, 255, 0.09);
 
   /* ========================================
      CODE
