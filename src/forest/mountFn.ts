@@ -12,7 +12,7 @@ import type {
   LeafDataListItem,
 } from './index.h'
 
-import {mountChild, mountChildTemplates} from './mountChild'
+import {mountChild, mountChildTemplates} from './engine/mountChild'
 
 export const mountFn = {
   using(leaf: Leaf) {
