@@ -3300,6 +3300,23 @@ export function fork(
 ): Scope
 
 /**
+ * Intended for library developers and framework integrations (e.g. @effector/next)
+ * 
+ * Hydrate scope with given values and run scope subscribers (e.g. useUnit)
+ * 
+ * @param config
+ * @param config.scope - scope to hydrate
+ * @param config.values - values to hydrate
+ * @param config.scheduleWatchers - function to schedule update to scope subscribers (e.g. useUnit), optional, update is done immediately if not provided
+ * @returns void
+ */
+export function hydrateScope(config: {
+  scope: Scope;
+  values: SerializedState;
+  scheduleWatchers?: (cb: () => void) => void;
+}): void;
+
+/**
  * Run effect in scope and wait for all triggered effects to settle. This method never throw an error
  * @param unit effect to run
  * @returns promise with status object for given effect, will resolve when there will be no pending effects in given scope
