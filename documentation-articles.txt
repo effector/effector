@@ -1,0 +1,124 @@
+docs:advanced/work-with-scope | /advanced/work-with-scope | Изолированный контекст | Узнайте, как работать со скоупами в Effector, зачем они нужны и как использовать их с серверным рендерингом или тестированием.
+docs:api | /api | Справочник API | Обзор самых полезных API и пакетов effector.
+docs:api/effector | /api/effector | effector | Перечень основных методов API, по группам
+docs:api/effector-react | /api/effector-react | Справочник по API | Перечень основных методов API, по группам
+docs:api/effector-react/connect | /api/effector-react/connect | connect | Описание (EN): Consider using [hooks api](/en/api/effector-react#hooks) in modern projects.
+docs:api/effector-react/createComponent | /api/effector-react/createComponent | createComponent | Описание (EN): Creates a store-based React component
+docs:api/effector-react/createGate | /api/effector-react/createGate | createGate | Описание (EN): Creates a gate to consume data from view
+docs:api/effector-react/createStoreConsumer | /api/effector-react/createStoreConsumer | createStoreConsumer | Описание (EN): Creates store-based component with render-props
+docs:api/effector-react/Gate | /api/effector-react/Gate | Effector React Gate | Описание (EN): This enables the creation of a feedback loop by sending props back to a _Store_.
+docs:api/effector-react/module/compat | /api/effector-react/module/compat | effector-react/compat | Описание (EN): Separate module of effector-react with compatibility up to IE11 and Chrome 47 (browser for Smart TV devices)
+docs:api/effector-react/module/scope | /api/effector-react/module/scope | effector-react/scope | Описание (EN): Deprecated separate module of effector-react that enforces library to use Scope
+docs:api/effector-react/Provider | /api/effector-react/Provider | Provider | Описание (EN): Effector React
+docs:api/effector-react/useEvent | /api/effector-react/useEvent | useEvent | Рекомендуется использовать хук [`useUnit`](/ru/api/effector-react/useUnit).
+docs:api/effector-react/useGate | /api/effector-react/useGate | useGate | Описание (EN): Hook for passing data to Gate
+docs:api/effector-react/useList | /api/effector-react/useList | useList | Реакт-хук для эффективного рендера массивов из стора без ручного управления ключами.
+docs:api/effector-react/useProvidedScope | /api/effector-react/useProvidedScope | useProvidedScope | Низкоуровневый хук, возвращающий текущий Scope из Provider effector-react.
+docs:api/effector-react/useStore | /api/effector-react/useStore | useStore | Реакт-хук для подписки компонента на стор
+docs:api/effector-react/useStoreMap | /api/effector-react/useStoreMap | useStoreMap | Реакт-хук, который подписывается на стор и выбирает вычисленные значения через селектор.
+docs:api/effector-react/useUnit | /api/effector-react/useUnit | useUnit | Реакт-хук, который возвращает значения сторов и привязывает события и эффекты к текущему скоупу.
+docs:api/effector-solid | /api/effector-solid | effector-solid | Описание (EN): Effector bindings for SolidJS.
+docs:api/effector-solid/createGate | /api/effector-solid/createGate | createGate | Описание (EN): Creates a gate to consume data from view
+docs:api/effector-solid/Gate | /api/effector-solid/Gate | Effector Solid Gate | Описание (EN): Effector Solid
+docs:api/effector-solid/module/scope | /api/effector-solid/module/scope | effector-solid/scope | Описание (EN): Deprecated separate module of effector-solid that enforces library to use Scope
+docs:api/effector-solid/useGate | /api/effector-solid/useGate | useGate | Описание (EN): Function for passing data to Gate
+docs:api/effector-solid/useStoreMap | /api/effector-solid/useStoreMap | useStoreMap | Описание (EN): Function, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change.
+docs:api/effector-solid/useUnit | /api/effector-solid/useUnit | useUnit | Описание (EN): Effector Solid
+docs:api/effector-vue | /api/effector-vue | effector-vue | Описание (EN): Effector binginds for Vue.
+docs:api/effector-vue/ComponentOptions | /api/effector-vue/ComponentOptions | ComponentOptions | Описание (EN): (_`Function | Object | Store`_): `Store` or object of `Store`'s, or function which will be called with the Component instance as `this`.
+docs:api/effector-vue/createComponent | /api/effector-vue/createComponent | createComponent | Описание (EN): 1. `options` (_Object_): component options (hooks, methods, computed properties) 2. `store` (_Object_): Store object from effector
+docs:api/effector-vue/createGate | /api/effector-vue/createGate | createGate | Описание (EN): Creates a gate to consume data from view. Designed for vue 3
+docs:api/effector-vue/EffectorScopePlugin | /api/effector-vue/EffectorScopePlugin | EffectorScopePlugin | Описание (EN): The Plugin provides a general scope which needs for read and update effector's stores, call effector's events. Required for SSR.
+docs:api/effector-vue/Gate | /api/effector-vue/Gate | Effector Vue Gate | Описание (EN): Effector Vue
+docs:api/effector-vue/module/composition | /api/effector-vue/module/composition | effector-vue/composition | Описание (EN): Separate module of effector-vue that provides additional API for composition API
+docs:api/effector-vue/module/ssr | /api/effector-vue/module/ssr | effector-vue/ssr | Описание (EN): Deprecated separate module of effector-vue that enforces library to use Scope
+docs:api/effector-vue/useEvent | /api/effector-vue/useEvent | useEvent | Описание (EN): Bind event to current fork instance to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing
+docs:api/effector-vue/useGate | /api/effector-vue/useGate | useGate | Описание (EN): Using a gate to consume data from view. Designed for vue 3
+docs:api/effector-vue/useStore | /api/effector-vue/useStore | useStore | Описание (EN): Hook function, which subscribes to watcher, that observes changes in store. Designed for vue 3
+docs:api/effector-vue/useStoreMap | /api/effector-vue/useStoreMap | useStoreMap | Описание (EN): Function, which subscribes to [store](/en/api/effector/Store) and transforms its value with a given function. Signal will update only when the selector function result will change
+docs:api/effector-vue/useUnit | /api/effector-vue/useUnit | useUnit | Описание (EN): TDB
+docs:api/effector-vue/useVModel | /api/effector-vue/useVModel | useVModel | Описание (EN): hook function, which subscribes to watcher, that observes changes in the current store. Designed for vue 3
+docs:api/effector-vue/VueEffector | /api/effector-vue/VueEffector | VueEffector | Описание (EN): effector-vue plugin for vue 3
+docs:api/effector-vue/VueEffectorVue2 | /api/effector-vue/VueEffectorVue2 | VueEffector | Описание (EN): effector-vue plugin for vue 2
+docs:api/effector-vue/VueSSRPlugin | /api/effector-vue/VueSSRPlugin | VueSSRPlugin | Описание (EN): The Plugin provides a general scope which needs for read and update effector's stores, call effector's events. Required for SSR.
+docs:api/effector/allSettled | /api/effector/allSettled | allSettled | Вызывает предоставленный юнит в скоупе и ожидает завершения всех запущенных юнитов
+docs:api/effector/attach | /api/effector/attach | attach API | attach API - переиспользование логики эффектов, создание новых эффектов на основе существующих с автоматической передачей данных из сторов. Примеры, описание и особенности работы.
+docs:api/effector/babel-plugin | /api/effector/babel-plugin | Babel плагин | Babel-плагин, который добавляет имена юнитов и стабильные sid для улучшения SSR и отладки.
+docs:api/effector/clearNode | /api/effector/clearNode | clearNode | Низкоуровневый метод для уничтожения юнитов и их связей
+docs:api/effector/combine | /api/effector/combine | combine API | combine API - объединение нескольких сторов в один производный стор с автоматическими обновлениями. Примеры, описание и особенности работы.
+docs:api/effector/createApi | /api/effector/createApi | createApi | Способ массового создания событий-команд для обновления стора
+docs:api/effector/createDomain | /api/effector/createDomain | createDomain | createDomain это метод для создания домена
+docs:api/effector/createEffect | /api/effector/createEffect | createEffect | Метод для создания эффекта
+docs:api/effector/createEvent | /api/effector/createEvent | createEvent | Метод для создания событий
+docs:api/effector/createStore | /api/effector/createStore | createStore | Метод для создания стора
+docs:api/effector/createWatch | /api/effector/createWatch | createWatch | Создает подписку на юнит (store, событие или эффект).
+docs:api/effector/debug_traces | /api/effector/debug_traces | debug traces | Описание (EN): A special import that enables detailed traces for difficult-to-debug errors, such as a Store missing a proper SID during Scope serialization.
+docs:api/effector/Domain | /api/effector/Domain | Domain | Domain, его методы и свойства
+docs:api/effector/Effect | /api/effector/Effect | Effect API | Эффект API, методы, свойства и их описание
+docs:api/effector/Event | /api/effector/Event | Event | Event API, его методы, свойства и примеры использования
+docs:api/effector/fork | /api/effector/fork | fork API | Fork API — создание изолированных скоупов для SSR, тестирования и локальной изоляции состояния. Конфигурации, примеры, особенности handlers и values.
+docs:api/effector/forward | /api/effector/forward | forward | Метод для создания связи между юнитами в декларативной форме. Отправляет обновления из одного набора юнитов в другой
+docs:api/effector/fromObservable | /api/effector/fromObservable | fromObservable | Создает событие, транслирующее элементы из переданного observable.
+docs:api/effector/guard | /api/effector/guard | guard | Метод для запуска юнитов по условию, условием может быть функция-предикат или отдельный стор. Позволяет описывать бизнес-правила независимо от других сущностей
+docs:api/effector/hydrate | /api/effector/hydrate | hydrate | Гидрирует сохранённые значения сторов в домен или скоуп после сериализации.
+docs:api/effector/inspect | /api/effector/inspect | inspect | Специальные методы API, предназначенные для обработки сценариев отладки и мониторинга, не предоставляя слишком много доступа к внутренностям вашего приложения.
+docs:api/effector/is | /api/effector/is | is | Пространство имён с валидаторами для проверки юнитов effector.
+docs:api/effector/launch | /api/effector/launch | launch | Низкоуровневый помощник для ручного запуска вычислений юнитов effector.
+docs:api/effector/merge | /api/effector/merge | merge | метод для объединения апдейтов массива юнитов в новое событие, которое будет срабатывать при запуске любой из переданных сущностей
+docs:api/effector/module/babel-plugin | /api/effector/module/babel-plugin | effector/babel-plugin | Отдельный модуль Effector с плагином для Babel, который улучшает опыт разработчика (DX) при работе с библиотекой
+docs:api/effector/module/compat | /api/effector/module/compat | effector/compat | Отдельный модуль Effector с поддержкой совместимости до IE11 и Chrome 47 (браузер для устройств Smart TV)
+docs:api/effector/module/inspect | /api/effector/module/inspect | effector/inspect | Отдельный модуль Effector с Inspect API
+docs:api/effector/restore | /api/effector/restore | restore | Создает стор из события или эффекта, используя значение по умолчанию.
+docs:api/effector/sample | /api/effector/sample | sample API | API reference для метода sample - композиция юнитов. Полная и короткая форма, формула использования, типы TypeScript, возвращаемые значения.
+docs:api/effector/Scope | /api/effector/Scope | Scope API | Scope API, его методы и особенности
+docs:api/effector/scopeBind | /api/effector/scopeBind | scopeBind | Метод для привязки юнитов и функций к скоупу
+docs:api/effector/serialize | /api/effector/serialize | serialize | Метод для сериализации состояний приложения в пределах scope
+docs:api/effector/split | /api/effector/split | split | Выберите один из кейсов по заданным условиям. Эта функция "разделяет" исходный юнит на несколько событий, которые срабатывают, когда полезная нагрузка соответствует их условиям. Работает как сопоставление с образцом для значений полезной нагрузки и внешних сторов.
+docs:api/effector/Store | /api/effector/Store | Store API | Store, его методы и свойства
+docs:api/effector/swc-plugin | /api/effector/swc-plugin | SWC плагин | SWC-плагин, который добавляет имена юнитов и SID для улучшения SSR и отладки в проектах на SWC.
+docs:api/effector/withRegion | /api/effector/withRegion | withRegion | Метод основан на идее управления памятью на основе регионов (см. [Region-based memory management](https://en.wikipedia.org/wiki/Region-based_memory_management) для справки).
+docs:ecosystem-development/unit-shape-protocol | /ecosystem-development/unit-shape-protocol | Протокол @@unitShape | Повторное использование привязок UI-библиотек для ваших собственных библиотек на основе effector
+docs:essentials/dynamic-models | /essentials/dynamic-models | Динамические модели | Описание динамических моделей и их API.
+docs:essentials/events | /essentials/events | События | Рассказываем о сущности событий, как их использовать и работать с ними.
+docs:essentials/flow-split | /essentials/flow-split | Разделение потоков данных с помощью split | Как разделять потоки данных на несколько направлений с помощью split
+docs:essentials/manage-states | /essentials/manage-states | Управление состоянием | Гайд по работе с состоянием, как читать значения стора, способы обновления стора с помощью sample и .on, когда использовать производные сторы и значения undefined.
+docs:essentials/typescript | /essentials/typescript | TypeScript | Использование TypeScript с effector и примеры типизации
+docs:essentials/unit-composition | /essentials/unit-composition | Композиция юнитов | Как организовать связи между юнитами с помощью sample или createAction
+docs:essentials/work-with-async | /essentials/work-with-async | Сайд-эффекты и  асинхронность | Как эффекты помогают работать с асинхронностью и почему это необходимая концепция в effector
+docs:explanation/computation-priority | /explanation/computation-priority | Приоритет вычислений | Как effector вычисляет юниты
+docs:explanation/glossary | /explanation/glossary | Глоссарий | Словарь основных понятий
+docs:explanation/prior-art | /explanation/prior-art | Prior Art | Подборка статей, книг и библиотек, повлиявших на дизайн Effector.
+docs:explanation/sids | /explanation/sids | Sids | Стабильные идентификаторы
+docs:FAQ | /FAQ | FAQ | Часто задаваемые вопросы про Effector
+docs:guides/best-practices | /guides/best-practices | Лучшие практики и рекомендации | Лучшие практики и рекомендации по эффективной работе с Effector, включая общие паттерны, типизацию, оптимизацию и популярные библиотеки экосистемы
+docs:guides/events-in-ui-frameworks | /guides/events-in-ui-frameworks | Как реагировать на события модели в UI | Рассказываем как в UI реагировать на вызов событий модели данных
+docs:guides/migration-guide-v23 | /guides/migration-guide-v23 | Руководство по миграции | Как перейти на effector 23, какие изменения устарели и как их заменить.
+docs:guides/scope-loss | /guides/scope-loss | Потеря скоупа | Что такое потеря скоупа в Effector, как она возникает и как её исправить с помощью scopeBind.
+docs:guides/server-side-rendering | /guides/server-side-rendering | Рендеринг на стороне сервера (SSR) | Гайд по использованию с SSR и SSG
+docs:guides/testing | /guides/testing | Тестирование | Как писать тесты для проверки логики в effector
+docs:guides/troubleshooting | /guides/troubleshooting | Исправление ошибок | Исправление ошибок
+docs:guides/websocket-integration | /guides/websocket-integration | Настройка работы WebSocket | Подробное руководство по созданию надёжного и масштабируемого WebSocket-клиента с использованием Effector.
+docs:introduction/community | /introduction/community | Сообщество | Статьи и команда, стоящая за проектом
+docs:introduction/core-concepts | /introduction/core-concepts | Основные концепции | Основные концепции - стор, эффект, событие и как все это работает вместе
+docs:introduction/ecosystem | /introduction/ecosystem | Экосистема | Пакеты и шаблоны экосистемы эффектора
+docs:introduction/examples | /introduction/examples | Примеры | Подборка небольших примеров для базовых сценариев и демонстраций.
+docs:introduction/get-started | /introduction/get-started | Начало работы | Как установить effector и начать с ним работу
+docs:introduction/motivation | /introduction/motivation | Мотивация | Почему effector помогает справляться со сложностью фронтенда, отделяя бизнес-логику от интерфейса.
+docs:recipes/common/countdown | /recipes/common/countdown | Countdown timer on setTimeout | Описание (EN): Sometimes we need a simple countdown. The next example allows us to handle each tick and abort the timer.
+docs:recipes/nextjs/integrate | /recipes/nextjs/integrate | Integrate Next.js | Описание (EN): There is the official Next.js bindings package - [`@effector/next`](https://github.com/effector/next). Follow its documentation to find out, how to integrate Next.js with effector.
+docs:recipes/nextjs/router | /recipes/nextjs/router | Integrate with Next.js router | Описание (EN): This is a simplified example of integration with the Next.js router. We create a similar model for storing the router instance:
+docs:recipes/nextjs/scope-bind | /recipes/nextjs/scope-bind | Use scopeBind in Next.js | Описание (EN): There are situations when we need to get values from external libraries through callbacks. If we directly bind [events](/en/api/effector/createEvent), then we will face the loss of the scope. To solve this problem, we can use [scopeBind](/en/api/effector/scopeBind).
+docs:recipes/react-native/asyncstorage-counter | /recipes/react-native/asyncstorage-counter | AsyncStorage Counter on React Native | Описание (EN): The following example is a React Native counter that stores data to AsyncStorage. It uses store, events and effects.
+docs:recipes/react/counter | /recipes/react/counter | React Counter | Краткая справка по странице «React Counter».
+docs:recipes/react/dynamic-form-schema | /recipes/react/dynamic-form-schema | Dynamic form schema | Краткая справка по странице «Dynamic form schema».
+docs:recipes/react/effects | /recipes/react/effects | Effects with React | Краткая справка по странице «Effects with React».
+docs:recipes/react/forms | /recipes/react/forms | Forms | Описание (EN): Let's break down the code above.
+docs:recipes/react/gate | /recipes/react/gate | Gate | Описание (EN): Gate – a bridge between props and store
+docs:recipes/react/slots | /recipes/react/slots | Slots | Описание (EN): A slot is a place in a component where you can insert any unknown component. It's a well-known abstraction used by frameworks such as Vue.js and Svelte.
+docs:recipes/react/todo-creator | /recipes/react/todo-creator | ToDo creator | Краткая справка по странице «ToDo creator».
+docs:recipes/react/todo-with-validation | /recipes/react/todo-with-validation | TODO list with input validation | Краткая справка по странице «TODO list with input validation».
+docs:resources/explicit-start | /resources/explicit-start | Явный запуск приложения | Рассказываем почему важно иметь явное событие для старта вашего приложения и как это помогает контролировать жизненный цикл приложения.
+docs:resources/mindset | /resources/mindset | Как мыслить в парадигме effector | Рассказываем,как легче писать код и построить масштабируемое приложение c effector
+docs:resources/releases | /resources/releases | Политика релизов | Обзор политик и принципов релизов effector, направленных на улучшение опыта разработчиков
+docs:resources/static-initialization | /resources/static-initialization | Инициализация юнитов | Рассказываем почему необходимо описывать юниты на уровне модуля статически, а не создавать их в рантайме.
+docs:typescript/usage-with-effector-react | /typescript/usage-with-effector-react | Использование с пакетом effector-react | Как использовать effector с React на примере простого чат-приложения.
