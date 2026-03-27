@@ -284,7 +284,7 @@ export const guidesAndRecipes: LSidebarGroup[] = [
           en: "Migrating from Redux",
           ru: "Миграция с Redux",
         },
-        link: "https://withease.effector.dev/magazine/migration_from_redux.html",
+        link: "/guides/migrating-from-redux",
       },
       {
         text: {
