@@ -4,6 +4,7 @@ description: A conceptual guide for Redux developers transitioning to Effector, 
 redirectFrom:
   - /en/guides/migrating-from-redux
   - /guides/redux-migration
+  - /en/recipes/migrating-to-effector/from-redux
 pagefindWeight: 5
 ---
 
@@ -90,13 +91,13 @@ const fetchUser = (id) => async (dispatch) => {
 };
 
 // Effector: declarative connections
-const pageOpened = createEvent();
-const fetchUserFx = createEffect((id) => api.getUser(id));
+const pageOpened = createEvent<number>(); // carries user id
+const fetchUserFx = createEffect((id: number) => api.getUser(id));
 const $user = createStore(null).on(fetchUserFx.doneData, (_, user) => user);
 const $loading = fetchUserFx.pending; // built-in!
 
 sample({
-  clock: pageOpened,
+  clock: pageOpened, // id comes from the event payload
   target: fetchUserFx,
 });
 ```
@@ -194,8 +195,9 @@ const $completedTodos = $todos.map((todos) =>
 const $completedCount = $completedTodos.map((todos) => todos.length);
 
 // Or combine multiple stores
-const $summary = combine($todos, $filter, (todos, filter) =>
-  todos.filter((t) => t.status === filter)
+const $filter = createStore("all"); // e.g., "all" | "active" | "completed"
+const $filteredTodos = combine($todos, $filter, (todos, filter) =>
+  filter === "all" ? todos : todos.filter((t) => t.status === filter)
 );
 ```
 
@@ -209,13 +211,14 @@ const conditionalFetch = (id) => (dispatch, getState) => {
 };
 
 // Effector: sample with filter
-const itemRequested = createEvent();
-const fetchItemFx = createEffect((id) => api.getItem(id));
+const itemRequested = createEvent<string>(); // carries item id
+const fetchItemFx = createEffect((id: string) => api.getItem(id));
+const $cache = createStore<Record<string, Item>>({});
 
 sample({
   clock: itemRequested,
   source: $cache,
-  filter: (cache, id) => !cache[id],
+  filter: (cache, id) => !cache[id], // skip if already cached
   fn: (_, id) => id,
   target: fetchItemFx,
 });
