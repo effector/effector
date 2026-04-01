@@ -69,9 +69,9 @@ describe('useStore', () => {
     const fn = jest.fn()
     const storeA = createStore('A')
     const storeB = createStore('B')
-    // dont do this in prod!
+    // don't do this in prod!
     const changeCurrentStore = createEvent<Store<string>>()
-    // dont do this in prod!
+    // don't do this in prod!
     const currentStore = createStore<Store<string>>(storeA).on(
       changeCurrentStore,
       (_, store) => store,
@@ -807,7 +807,7 @@ describe('useStoreMap', () => {
     `)
     expect(fn).toBeCalledTimes(3)
   })
-  test('re-render by external reason shoud not trigger `fn` computation if it is unaffected', async () => {
+  test('re-render by external reason should not trigger `fn` computation if it is unaffected', async () => {
     const trigger = createEvent<any>()
     const $trigger = restore(trigger, null)
 
