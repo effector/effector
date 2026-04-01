@@ -159,7 +159,7 @@ fetchUserReposFx.done.watch(({ params, result }) => {
 
 fetchUserReposFx.fail.watch(({ params, error }) => {
   console.error(params); // {name: 'zerobias'}
-  console.error(error); //  отклоненное значение, ошибка
+  console.error(error); // отклоненное значение, ошибка
 });
 
 fetchUserReposFx.finally.watch(({ params, status, result, error }) => {
