@@ -427,7 +427,7 @@ describe('branching', () => {
       "
     `)
   })
-  test('case safety (cases executed only when they are choosen)', () => {
+  test('case safety (cases executed only when they are chosen)', () => {
     const suite = suiteGenerator(() => {
       const source = union(['a', 'b'])
       const fn = computeVariant({
