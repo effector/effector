@@ -68,7 +68,7 @@ and run type tests. Inline snapshot will be filled with type errors (if any) for
 Please open an issue with a proposal for a new feature or refactoring before starting on the work.
 We don't want you to waste your efforts on a pull request that we won't want to accept.
 
-Before opening a feature request, please read the [exists ideas discussions](https://github.com/effector/effector/discussions/categories/ideas) to make sure your feature hasn't already requested.
+Before opening a feature request, please read the [existing ideas discussions](https://github.com/effector/effector/discussions/categories/ideas) to make sure your feature hasn't already been requested.
 
 ### Publishing
 
