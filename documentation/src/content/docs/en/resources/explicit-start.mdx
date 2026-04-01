@@ -28,7 +28,7 @@ await allSettled(appStarted, { scope });
 
 2. Create [isolated scope](/en/advanced/work-with-scope)
 
-Fork API allows you to create [scope](/en/api/effector/Scope) which will be used across the app. It helps you to prevent using global stateand avoid unexpected behavior.
+Fork API allows you to create [scope](/en/api/effector/Scope) which will be used across the app. It helps you to prevent using global state and avoid unexpected behavior.
 
 ```ts ins={5}
 import { createEvent, fork, allSettled } from 'effector';
@@ -40,7 +40,7 @@ const scope = fork();
 await allSettled(appStarted, { scope });
 ```
 
-3. Trigger `appStarted` [event](/en/api/effector/Event) on the patricular [scope](/en/api/effector/Scope).
+3. Trigger `appStarted` [event](/en/api/effector/Event) on the particular [scope](/en/api/effector/Scope).
 
 [`allSettled`](/en/api/effector/allSettled) function allows you to start an event on particular scope and wait until all computations will be finished.
 
