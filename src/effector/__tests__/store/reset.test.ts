@@ -79,7 +79,7 @@ describe('reset before computation', () => {
     `)
   })
 
-  it("doesnt depend on methods' ordering", () => {
+  it("doesn't depend on methods' ordering", () => {
     const fn = jest.fn()
     const A = createEvent<string>()
     const B = A.map(d => `${d}->B`)
@@ -134,7 +134,7 @@ describe('computation before reset', () => {
     `)
   })
 
-  it("doesnt depend on methods' ordering", () => {
+  it("doesn't depend on methods' ordering", () => {
     const fn = jest.fn()
     const A = createEvent<string>()
     const B = A.map(d => `${d}->B`)
