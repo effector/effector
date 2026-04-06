@@ -8,7 +8,7 @@ export type ID = string
 export type Kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 
 export type StateRefOp =
-  | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
+  | {type: 'map'; from?: StateRef; fn?: (value: any) => any; lastValue?: any}
   | {type: 'field'; from: StateRef; field: string}
   | {type: 'closure'; of: StateRef}
 

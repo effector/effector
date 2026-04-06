@@ -18,7 +18,6 @@
   },
   "author": "Zero Bias",
   "license": "MIT",
-  "dependencies": {},
   "maintainers": [
     {
       "name": "Zero Bias",
@@ -89,6 +88,7 @@
     "execa": "^1.0.0",
     "fs-extra": "^9.1.0",
     "jest": "^27.4.5",
+    "jest-html-reporters": "^3.1.7",
     "js-yaml": "^3.14.0",
     "jsdom": "^16.5.2",
     "most": "^1.9.0",

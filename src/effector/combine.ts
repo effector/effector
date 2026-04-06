@@ -191,6 +191,7 @@ const storeCombination = (
     type: MAP,
     from: rawShape,
     fn,
+    lastValue: stateNew,
   })
   if (!readTemplate()) {
     if (fn) {

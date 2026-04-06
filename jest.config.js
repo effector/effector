@@ -1,4 +1,4 @@
-const { resolve: resolvePath } = require('path')
+const {resolve: resolvePath} = require('path')
 
 const watchPathIgnorePatterns = [
   '<rootDir>/.effector/',
@@ -25,8 +25,8 @@ const transform = {
 }
 
 const solidTransform = {
-  '^.+\\.jsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
-  '^.+\\.tsx?$': ['babel-jest', { cwd: resolvePath(__dirname, 'src/solid') }],
+  '^.+\\.jsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
+  '^.+\\.tsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
 }
 
 const createDefaultConfig = () => ({
@@ -119,6 +119,18 @@ const compatBrowsers = [
 ]
 
 module.exports = {
+  reporters: process.env.HTML_REPORT
+    ? [
+        'default',
+        [
+          'jest-html-reporters',
+          {
+            publicPath: './html-report',
+            filename: 'report.html',
+          },
+        ],
+      ]
+    : undefined,
   collectCoverage: boolean(process.env.COVERAGE, false),
   collectCoverageFrom: [
     '<rootDir>/src/effector/**/*.ts',
@@ -195,7 +207,9 @@ module.exports = {
               testMatch: [`<rootDir>/src/solid/**/*.test.tsx`],
               resolver: resolvePath(__dirname, 'src/solid/resolver.js'),
               transform: solidTransform,
-              setupFilesAfterEnv: ['<rootDir>/src/solid/__tests__/setupTests.ts']
+              setupFilesAfterEnv: [
+                '<rootDir>/src/solid/__tests__/setupTests.ts',
+              ],
             },
             vue: {
               testEnvironment: 'jsdom',

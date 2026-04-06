@@ -428,6 +428,8 @@ describe('fn retriggers', () => {
       return a
     })
 
+    $comb.watch(() => {})
+
     const scope = fork({values: [[$a, 10]]})
     scope.getState($comb)
     await allSettled(inc, {scope})

@@ -395,37 +395,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
         case 'compute':
           const data = step.data
           if (data.fn) {
-            // const stats = getStats(forkPage)
-
             isWatch = getMeta(node, 'op') === 'watch'
             isPure = data.pure
-            // const lazyInfo = node.lazy
-            // if (lazyInfo) {
-            //   let active: boolean
-            //   if (lazyInfo.alwaysActive) {
-            //     active = true
-            //   } else {
-            //     let usedBy = lazyInfo.usedBy.length
-            //     if (forkPage && forkPage.lazy[node.id]) {
-            //       usedBy += forkPage.lazy[node.id].usedBy.length
-            //     }
-            //     active = usedBy > 0
-            //   }
-            //   if (data.safe) {
-            //     if (active) stats.safeActive += 1
-            //     else stats.safeInactive += 1
-            //   } else {
-            //     if (active) stats.unsafeActive += 1
-            //     else stats.unsafeInactive += 1
-            //   }
-            // } else {
-            //   if (data.safe) {
-            //     console.log(node)
-            //     stats.safeNoInfo += 1
-            //   } else {
-            //     stats.unsafeNoInfo += 1
-            //   }
-            // }
+
             const computationResult = data.safe
               ? (0 as any, data.fn)(getValue(stack), local.scope, stack)
               : tryRun(local, data.fn, stack)
@@ -515,14 +487,29 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
 
 const noopParser = (x: any) => x
 
-/**
- * very ineffective implementation
- * as it lack verification that ref is already active
- * moreover, there should be a logic for checking
- * that ref is inactive but has actual state
- * (for case when dependencies was not changed,
- * but store recieved .getState calls once or even more times)
- **/
+function isEqual(a: any, b: any) {
+  if (a === b) return true
+  if (typeof a !== typeof b) return false
+  if (typeof a === 'object' && a && b) {
+    const aKeys = Object.keys(a)
+    const bKeys = Object.keys(b)
+    if (aKeys.length !== bKeys.length) return false
+    for (let i = 0; i < aKeys.length; i++) {
+      const key = aKeys[i]
+      if (!isEqual(a[key], b[key])) return false
+    }
+    return true
+  }
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) return false
+    for (let i = 0; i < a.length; i++) {
+      if (!isEqual(a[i], b[i])) return false
+    }
+    return true
+  }
+  return false
+}
+
 export function initRefAfterActivation(ref: StateRef) {
   if (!ref.before) return
   let isFresh = false
@@ -533,7 +520,9 @@ export function initRefAfterActivation(ref: StateRef) {
         if (from || cmd.fn) {
           if (from) initRefAfterActivation(from)
           const value = from && from.current
+          if (isEqual(cmd.lastValue, value)) return
           ref.current = cmd.fn ? cmd.fn(value) : value
+          cmd.lastValue = ref.current
         }
         break
       }

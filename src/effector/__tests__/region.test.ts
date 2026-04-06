@@ -57,6 +57,9 @@ it('binds units to region lifetime', () => {
       fn(x)
       return x.toString()
     })
+
+    // disable lazy mode
+    countText.watch(() => {})
     // => 0 (initial value)
   })
 

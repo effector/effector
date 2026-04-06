@@ -672,6 +672,8 @@ describe('real use cases', () => {
       },
     })
 
+    end.watch(() => {})
+
     const timeLog = jest.fn()
     let time = 0
     let tracking = false

@@ -8,6 +8,7 @@
 .vscode
 *.*~
 *.swp
+html-report/
 
 src/types/type-report.json
 lib/**

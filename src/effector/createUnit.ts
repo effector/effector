@@ -339,6 +339,7 @@ export function createStore<State>(
         type: MAP,
         fn,
         from: plainState,
+        lastValue: storeState,
       })
       getStoreState(innerStore).noInit = true
       innerStore.graphite.lazy!.alwaysActive = false
@@ -396,6 +397,7 @@ export function createStore<State>(
     },
     regional: true,
   })
+  addActivator(updates, [store], true)
   setMeta(store, 'id', store.graphite.id)
   setMeta(store, 'rootStateRefId', plainStateId)
   const serializeMeta = getMeta(store, 'serialize')

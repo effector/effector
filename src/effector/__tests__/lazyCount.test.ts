@@ -654,7 +654,7 @@ describe('split support', () => {
     expect(isActiveGlobal($isCaseADerived)).toBe(false)
 
     expect(argumentHistory(fnA)).toEqual([0])
-    expect(argumentHistory(fnA)).toEqual([1])
+    expect(argumentHistory(fnB)).toEqual([1])
   })
   test('without cases', () => {
     const $sourceA = createStore(0)

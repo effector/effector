@@ -153,7 +153,7 @@ export function split(...args: any[]) {
     family: {owners: ownersArray},
     regional: true,
   })
-  const targetsArray = Object.values(targets)
+  const targetsArray = Object.values(targets).flat()
   const incomingUnits = ownersArray.filter(unit => !targetsArray.includes(unit))
   addActivator(targetsArray, [...incomingUnits, splitterNode], true)
   if (clock) {
