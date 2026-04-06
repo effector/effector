@@ -52,8 +52,7 @@
     "inspect.mjs.map",
     "inspect.d.ts",
     "babel-plugin.js",
-    "babel-plugin.js.map",
-    "babel-plugin-react.js"
+    "babel-plugin.js.map"
   ],
   "keywords": [
     "business",

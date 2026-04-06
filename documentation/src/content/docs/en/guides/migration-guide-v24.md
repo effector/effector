@@ -3,6 +3,8 @@ title: Migration guide
 redirectFrom:
   - /guides/migration-guide
   - /en/guides/migration-guide
+  - /guides/migration-guide-v24
+pagefindWeight: 5
 ---
 
 Effector 24 is a major release that introduces couple of breaking changes. This guide will help you to migrate your codebase to the new version.
