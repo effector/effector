@@ -5,6 +5,7 @@ import {readRef} from './stateRef'
 import {getForkPage, getGraph, getValue} from './getter'
 import type {Scope} from './unit.h'
 import {add, forEach} from './collection'
+import {MAP} from './tag'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'read' | 'barrier' | 'sampler' | 'effect'
