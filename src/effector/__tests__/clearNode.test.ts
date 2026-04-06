@@ -944,6 +944,8 @@ describe('supports sample in withRegion', () => {
     const $source = createStore(0)
     const target = createEvent<number>()
 
+    target.watch(() => {})
+
     addFnCallStep(trigger, fnTrigger)
     addFnCallStep($source, fnSource)
     addFnCallStep(target, fnTarget)
@@ -1029,6 +1031,8 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
             fn: upd => sampleFn(upd),
             target: regionalTarget,
           })
+
+          regionalTarget.watch(() => {})
         })
         externalTrigger(0)
         clearNode(region)
@@ -1050,6 +1054,8 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
             fn: upd => sampleFn(upd),
             target: [regionalTarget],
           })
+
+          regionalTarget.watch(() => {})
         })
         externalTrigger(0)
         clearNode(region)

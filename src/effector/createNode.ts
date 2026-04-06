@@ -5,6 +5,7 @@ import {CROSSLINK} from './tag'
 import {regionStack} from './region'
 import {own} from './own'
 import {add, forEach} from './collection'
+import {traverseIncrementActivations} from './lazy'
 
 export const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
@@ -70,7 +71,25 @@ export function createNode({
   }
   forEach(links, link => add(getOwners(link), result))
   forEach(owners, owner => add(getLinks(owner), result))
-  forEach(sources, source => add(source.next, result))
+  forEach(sources, source => {
+    add(source.next, result)
+    if (
+      meta.op === 'watch' &&
+      !result.lazy &&
+      source.lazy &&
+      !source.lazy.alwaysActive
+    ) {
+      if (!result.lazy) {
+        result.lazy = {
+          alwaysActive: true,
+          usedBy: [],
+          activate: [],
+        }
+      }
+      result.lazy.activate.push(source)
+      traverseIncrementActivations(source, result)
+    }
+  })
   if (regional && regionStack) {
     own(getValue(regionStack), [result])
   }

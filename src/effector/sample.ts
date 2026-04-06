@@ -112,6 +112,7 @@ export const createSampling = (
     fieldErrorMessage(errorTitle, 'either source or clock'),
   )
   let sourceIsClock = false
+  let clockItems: DataCarrier[] | undefined
   if (isVoid(source)) {
     sourceIsClock = true
   } else if (!is.unit(source)) {
@@ -123,6 +124,7 @@ export const createSampling = (
   } else {
     assertNodeSet(clock, errorTitle, 'clock')
     if (Array.isArray(clock)) {
+      clockItems = clock as DataCarrier[]
       clock = createLinkNode(clock as CommonUnit[], [], [], method)
     }
   }
@@ -188,7 +190,7 @@ export const createSampling = (
   let activateSources = (scope?: Scope) => {}
   let deactivateSources = (scope?: Scope) => {}
   if (filterType === 'unit') {
-    const toActivate = [source, clock]
+    const toActivate = [source, ...(clockItems || [clock])]
       .filter(Boolean)
       .map(unit => getGraph(unit!))
     activateSources = (scope?: Scope) => {
@@ -282,10 +284,11 @@ export const createSampling = (
     activateSources()
     needToAddUsedBy = false
   }
+  const clockActivators = clockItems || [clock]
   if (filterType === 'unit') {
     addActivator(jointNode, [filter], needToAddUsedBy)
   } else {
-    addActivator(jointNode, [source, clock, filter], true)
+    addActivator(jointNode, [source, ...clockActivators, filter], true)
   }
   return target
 }

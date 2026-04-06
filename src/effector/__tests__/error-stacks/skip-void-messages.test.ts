@@ -3,8 +3,12 @@ import {argumentHistory} from 'effector/fixtures'
 
 import {simpleStore} from './stub/simple-store'
 import {sidlessStore} from './stub/sidless-store'
-import {baseStoreForSimpleDerived} from './stub/simple-derived'
-import {$baseStore} from './stub/sidless-derived'
+import {
+  baseStoreForSimpleDerived,
+  simpleCombine,
+  simpleDerived,
+} from './stub/simple-derived'
+import {$baseStore, $sidlessCombine, $sidlessMap} from './stub/sidless-derived'
 
 const mapStackTrace = (stacktrace: string) => {
   return stacktrace.split('\n').map(line => {
@@ -40,7 +44,7 @@ describe('skipVoid error messages', () => {
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "simpleStore at /src/effector/__tests__/error-stacks/stub/simple-store.ts: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:39:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:43:5)
       ",
       ]
     `)
@@ -53,7 +57,7 @@ describe('skipVoid error messages', () => {
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:52:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:56:5)
       ",
       ]
     `)
@@ -61,15 +65,17 @@ describe('skipVoid error messages', () => {
 
   test('Simple derived', () => {
     const event = createEvent()
+    simpleCombine.watch(() => {})
+    simpleDerived.watch(() => {})
     baseStoreForSimpleDerived.on(event, () => {})
     event()
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "baseStoreForSimpleDerived → *: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:65:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:71:5)
       ",
         "simpleCombine at /src/effector/__tests__/error-stacks/stub/simple-derived.ts: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:65:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:71:5)
       ",
       ]
     `)
@@ -77,15 +83,17 @@ describe('skipVoid error messages', () => {
 
   test('Sidless derived', () => {
     const event = createEvent()
+    $sidlessCombine.watch(() => {})
+    $sidlessMap.watch(() => {})
     $baseStore.on(event, () => {})
     event()
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "$baseStore → *: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:81:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:89:5)
       ",
         "combine($baseStore): undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
-      __tests__/error-stacks/skip-void-messages.test.ts:81:5)
+      __tests__/error-stacks/skip-void-messages.test.ts:89:5)
       ",
       ]
     `)
