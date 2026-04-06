@@ -1,5 +1,5 @@
-import {fork, serialize} from 'effector'
-import {createField, createFieldset} from './factory'
+import {allSettled, createEvent, createStore, fork, serialize} from 'effector'
+import {createField, createFieldset, topLevelFactory} from './factory'
 
 test('factory support', async () => {
   const username = createField('username', 'guest')
@@ -12,8 +12,8 @@ test('factory support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-iajnln|-77rc2s": 21,
-      "8iua16|-77rc2s": "alice",
+      "-iajnln|-77rc2s|2": 21,
+      "8iua16|-77rc2s|2": "alice",
     }
   `)
 })
@@ -31,8 +31,43 @@ test('nested factory support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-fjbluz|1104zu|-77rc2s": "alice",
-      "-fjbluz|11jxl7|-77rc2s": 21,
+      "-fjbluz|-fjbluz|1104zu|1|2|-77rc2s|2": "alice",
+      "-fjbluz|-fjbluz|11jxl7|3|4|-77rc2s|2": 21,
+    }
+  `)
+})
+
+test('derived sids support', async () => {
+  const pushUpdate = createEvent()
+  const inlineFactory = (initial: number) => {
+    const $interalStore = createStore(initial, {
+      // not-unique sid
+      sid: '$interalStore',
+    }).on(pushUpdate, state => state + 1)
+
+    return {
+      $interalStore,
+    }
+  }
+
+  topLevelFactory(() => {
+    inlineFactory(1)
+    inlineFactory(2)
+
+    topLevelFactory(() => {
+      inlineFactory(3)
+    })
+  })
+
+  const scope = fork()
+
+  await allSettled(pushUpdate, {scope})
+
+  expect(serialize(scope)).toMatchInlineSnapshot(`
+    Object {
+      "ot2oxd|$interalStore|1": 2,
+      "ot2oxd|$interalStore|4": 3,
+      "ot2oxd|ot2oxd|ov9vcj|6|7|$interalStore|1": 4,
     }
   `)
 })

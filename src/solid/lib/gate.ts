@@ -1,15 +1,11 @@
 import {Gate} from '../index.h'
 import {createEvent, createStore, Domain, launch, Scope} from 'effector'
-import {onCleanup, onMount, createEffect, createMemo, Accessor} from 'solid-js'
+import {onCleanup, onMount, createEffect, createMemo} from 'solid-js'
 import {flattenConfig, processArgsToConfig} from '../../effector/config'
-import {isObject} from '../../effector/is'
-import {useUnit} from "../scope";
-import {useUnitBase} from "./base";
+import {isObject} from '../../effector/validate'
+import {useUnitBase} from './base'
 
-function useGate<Props>(
-  GateComponent: Gate<Props>,
-  props: Props = {} as any,
-) {
+function useGate<Props>(GateComponent: Gate<Props>, props: Props = {} as any) {
   onMount(() => {
     GateComponent.open(props)
 
@@ -29,11 +25,10 @@ export function useGateBase<Props>(
   props: Props = {} as any,
   scope?: Scope,
 ) {
-  const events = useUnitBase([
-    GateComponent.open,
-    GateComponent.close,
-    GateComponent.set,
-  ], scope)
+  const events = useUnitBase(
+    [GateComponent.open, GateComponent.close, GateComponent.set],
+    scope,
+  )
 
   const ForkedGate = createMemo(() => {
     const [open, close, set] = events

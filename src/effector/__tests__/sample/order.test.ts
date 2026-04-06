@@ -3,7 +3,6 @@ import {
   createStore,
   createEvent,
   combine,
-  guard,
   createEffect,
   restore,
   is,
@@ -12,8 +11,6 @@ import {
   Effect,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-muteErrors('guard')
 
 test('store update will always performs before sampling', () => {
   const fn = jest.fn()
@@ -47,136 +44,6 @@ test('store combination will always updates before sampling', () => {
 })
 
 describe('clock should use the last update', () => {
-  describe('with guard', () => {
-    test('reference case', async () => {
-      const fn = jest.fn()
-      const fetchCities = createEffect(async () => ['msk', 'spb'])
-
-      const $selectedCities = restore(fetchCities, [])
-      const $areCitiesSelected = $selectedCities.map(c => c.length > 0)
-
-      const $filterValues = createStore<string | null>(null).on(
-        $selectedCities,
-        (_, cities) => {
-          if (cities.length) {
-            return 'result'
-          }
-        },
-      )
-
-      const $requestData = combine({
-        city: $selectedCities,
-        filter: $filterValues,
-      })
-
-      const bugHere = guard({
-        source: $requestData,
-        filter: $areCitiesSelected,
-      })
-
-      const noBugHere = guard({
-        clock: $requestData,
-        filter: $areCitiesSelected,
-      })
-
-      watchAll(fn, [
-        fetchCities,
-        $selectedCities,
-        $areCitiesSelected,
-        $filterValues,
-        $requestData,
-        bugHere,
-        noBugHere,
-      ])
-
-      fn(`## init complete`)
-
-      await fetchCities()
-
-      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-        Array [
-          "$selectedCities: []",
-          "$selectedCities → *: false",
-          "$filterValues: null",
-          "$requestData: {city:[],filter:null}",
-          "## init complete",
-          "fetchCities: void",
-          "fetchCities.done: [msk,spb]",
-          "$selectedCities: [msk,spb]",
-          "$selectedCities → *: true",
-          "$filterValues: result",
-          "$requestData: {city:[msk,spb],filter:result}",
-          "bugHere: {city:[msk,spb],filter:result}",
-          "noBugHere: {city:[msk,spb],filter:result}",
-        ]
-      `)
-    })
-    test('guard case', async () => {
-      const fn = jest.fn()
-      const fetchCities = createEffect(async () => ['msk', 'spb'])
-
-      const $selectedCities = restore(fetchCities, [])
-      const $areCitiesSelected = $selectedCities.map(c => c.length > 0)
-
-      const $filterValues = createStore<string | null>(null)
-
-      sample({
-        source: guard({
-          source: $selectedCities,
-          filter: $areCitiesSelected,
-        }),
-        fn: () => 'result',
-        target: $filterValues,
-      })
-
-      const $requestData = combine({
-        city: $selectedCities,
-        filter: $filterValues,
-      })
-
-      const bugHere = guard({
-        source: $requestData,
-        filter: $areCitiesSelected,
-      })
-
-      const noBugHere = guard({
-        clock: $requestData,
-        filter: $areCitiesSelected,
-      })
-
-      watchAll(fn, [
-        fetchCities,
-        $selectedCities,
-        $areCitiesSelected,
-        $filterValues,
-        $requestData,
-        bugHere,
-        noBugHere,
-      ])
-
-      fn(`## init complete`)
-
-      await fetchCities()
-
-      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-        Array [
-          "$selectedCities: []",
-          "$selectedCities → *: false",
-          "$filterValues: null",
-          "$requestData: {city:[],filter:null}",
-          "## init complete",
-          "fetchCities: void",
-          "fetchCities.done: [msk,spb]",
-          "$selectedCities: [msk,spb]",
-          "$selectedCities → *: true",
-          "$filterValues: result",
-          "$requestData: {city:[msk,spb],filter:result}",
-          "bugHere: {city:[msk,spb],filter:result}",
-          "noBugHere: {city:[msk,spb],filter:result}",
-        ]
-      `)
-    })
-  })
   describe('with sample', () => {
     test('reference case', async () => {
       const fn = jest.fn()

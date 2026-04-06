@@ -1,11 +1,10 @@
 import {createStore} from './createUnit'
-import {is} from './is'
+import {is, assert} from './validate'
 import {forIn} from './collection'
 import {getParent} from './getter'
-import {createLinkNode} from './forward'
-import {addActivator} from './lazy'
-import {assert} from './throw'
+import {createLinkNode} from './createNode'
 import {generateErrorTitle} from './naming'
+import {addActivator} from './lazy'
 
 export function restore(obj: any, defaultState: any, config?: any) {
   const errorTitle = generateErrorTitle('restore', config)

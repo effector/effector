@@ -1,7 +1,7 @@
 //@flow
 
 import * as React from "react";
-import {createComponent} from "effector-react";
+import {useUnit} from "effector-react";
 
 import {formInput} from "../store";
 
@@ -9,9 +9,10 @@ import {formInput} from "../store";
  * Takes text from formInput store
  * And addTodo event from react props
  */
-export const AddTodo = createComponent(
-  formInput,
-  ({addTodo}, text) => (
+export const AddTodo = ({addTodo}) => {
+  const {text} = useUnit(formInput);
+
+  return (
     <input
       type="button"
       value="add todo"
@@ -19,5 +20,5 @@ export const AddTodo = createComponent(
       onClick={() => addTodo(text)}
       className="add"
     />
-  )
-);
+  );
+};

@@ -2,9 +2,11 @@ import {Accessor} from 'solid-js'
 import {Store} from 'effector'
 
 import {useStoreMapBase, useUnitBase} from './lib/base'
-import {getScope} from './lib/get-scope'
-import { Gate } from './index.h'
-import {useGateBase} from "./lib/gate";
+import {getScope, ScopeContext} from './lib/get-scope'
+import {Gate} from './index.h'
+import {useGateBase} from './lib/gate'
+
+export const {Provider} = ScopeContext
 
 export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>(
   configOrStore:

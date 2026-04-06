@@ -17,29 +17,12 @@
       "import": "./effector-react.mjs",
       "default": "./effector-react.mjs"
     },
-    "./scope.mjs": {
-      "types": "./scope.d.ts",
-      "import": "./scope.mjs",
-      "default": "./scope.mjs"
-    },
-    "./scope": {
-      "types": "./scope.d.ts",
-      "import": "./scope.mjs",
-      "require": "./scope.js",
-      "default": "./scope.mjs"
-    },
     "./compat": {
       "types": "./compat.d.ts",
       "require": "./compat.js",
       "default": "./compat.js"
-    },
-    "./effector-react.umd": {
-      "types": "./effector-react.umd.d.ts",
-      "require": "./effector-react.umd.js",
-      "default": "./effector-react.umd.js"
     }
   },
-  "umd:main": "effector-react.umd.js",
   "jsnext:main": "effector-react.mjs",
   "typings": "index.d.ts",
   "dependencies": {
@@ -57,19 +40,11 @@
     "effector-react.mjs.map",
     "effector-react.cjs.js",
     "effector-react.cjs.js.map",
-    "effector-react.umd.js",
-    "effector-react.umd.js.map",
     "compat.js",
     "compat.js.map",
     "effector-react.cjs.d.ts",
     "effector-react.mjs.d.ts",
-    "effector-react.umd.d.ts",
-    "compat.d.ts",
-    "scope.js",
-    "scope.js.map",
-    "scope.mjs",
-    "scope.mjs.map",
-    "scope.d.ts"
+    "compat.d.ts"
   ],
   "keywords": [
     "react",
@@ -102,7 +77,7 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/effector/effector",
-  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-react,effector-react%2Fscope",
+  "bugs": "https://github.com/effector/effector/issues?q=is:issue+label:effector-react",
   "homepage": "https://effector.dev",
   "engines": {
     "node": ">=11.0.0"

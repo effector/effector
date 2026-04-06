@@ -1,6 +1,5 @@
 import type {Domain} from './unit.h'
-import {own} from './own'
-import {createNode} from './createNode'
+import {createNode, createLinkNode, own} from './createNode'
 import type {Config, NodeUnit} from './index.h'
 import {
   createEvent,
@@ -10,7 +9,6 @@ import {
   initUnit,
 } from './createUnit'
 import {createEffect} from './createEffect'
-import {createLinkNode} from './forward'
 import {add, forEach, forIn} from './collection'
 import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
