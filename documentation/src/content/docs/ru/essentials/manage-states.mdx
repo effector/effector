@@ -1,83 +1,120 @@
 ---
-title: Управление состоянием в effector
-description: Как работает состояние в effector и как им управлять
+title: Управление состоянием
+description: Гайд по работе с  состоянием, как читать значения стора, способы обновления стора с помощью sample и .on, когда использовать производные сторы и значения undefined.
 lang: ru
+pagefindWeight: 5
 ---
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
 
 # Управление состоянием (#state-management)
 
-Состояние в effector управляется через сторы ([Store](/ru/api/effector/Store)) - специальные объекты, которые хранят значения и обновляют их при получении событий. Сторы создаются с помощью функции [createStore](/ru/api/effector/createStore).
-
-:::info{title="Иммутабельность данных"}
-Данные сторов в effector иммутабельные – это значит, что вы не должны мутировать массивы или объекты напрямую, а создавать новые инстансы при обновлениях.
-:::
-
-<Tabs>
-  <TabItem label="✅ Правильно">
+Вся работа с состоянием происходит с помощью [сторов](/ru/api/effector/Store), и ключевая особенность, что у сторов нету привычного `setState`. Стор обновляется реактивно при срабатывании [события](/ru/api/effector/Event), на которое он подписывается, например:
 
 ```ts
-// обновление массива данных
-$users.on(userAdded, (users, newUser) => [...users, newUser]);
+import { createStore, createEvent } from "effector";
 
-//обновление объекта
-$user.on(nameChanged, (user, newName) => ({
-  ...user,
-  name: newName,
-}));
+const $counter = createStore(0);
+
+const incremented = createEvent();
+
+// при каждом вызове incremented отработает переданный колбэк
+$counter.on(incremented, (counterValue) => counterValue + 1);
+
+incremented(); // $counter = 1
+incremented(); // $counter = 2
 ```
 
-  </TabItem>
+Если вы не знакомы с событиями, то пока воспринимайте их просто как триггер для обновления стора. Подробнее о событиях можно узнать на [странице события](/ru/essentials/events), а также [как думать в парадигме effector, и почему события важны](/ru/resources/mindset).
 
-  <TabItem label="❌ Неправильно">
+:::info{title="Иммутабельность данных"}
+Если вы храните в сторе [ссылочный тип данных](https://learn.javascript.ru/reference-type), например массив или объект, то для обновления такого стора вы можете [использовать immer](/ru/guides/best-practices#immer) или сначала создать новый инстанс этого типа:
 
-```ts
-// обновление массива данных
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts wrap data-border="good" data-height="full" "const updatedUsers = [...users];" "const updatedUser = { ...user };"
+// ✅ Все круто
+
+// обновление массива
 $users.on(userAdded, (users, newUser) => {
-  users.push(newUser); // Мутация!
+  const updatedUsers = [...users];
+  updatedUsers.push(newUser);
+  return updatedUsers;
+});
+
+// обновление объекта
+$user.on(nameChanged, (user, newName) => {
+  const updatedUser = { ...user };
+  updatedUser.name = newName;
+  return updatedUser;
+});
+```
+
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts wrap data-border="bad" data-height="full"
+// ❌ А тут все плохо
+
+$users.on(userAdded, (users, newUser) => {
+  users.push(newUser); // мутируем массив
   return users;
 });
 
-//обновление объекта
 $user.on(nameChanged, (user, newName) => {
-  user.name = newName; // Мутация!
+  user.name = newName; // мутируем объект
   return user;
 });
 ```
 
-  </TabItem>
-</Tabs>
+</Fragment>
+
+</SideBySide>
+
+:::
 
 ## Создание стора (#store-creation)
 
-Создать новый стор можно при помощи метода [`createStore`](/ru/api/effector/createStore):
+Создание стора происходит при помощи метода [`createStore`](/ru/api/effector/createStore):
 
 ```ts
 import { createStore } from "effector";
 
-// Создание стора с начальным значением
+// создание стора с начальным значением
 const $counter = createStore(0);
-// с явной типизацией
+// и с явной типизацией
 const $user = createStore<{ name: "Bob"; age: 25 } | null>(null);
 const $posts = createStore<Post[]>([]);
 ```
 
 :::tip{title="Наименование сторов"}
-В effector принято использовать префикс `$` для сторов. Это улучшает ориентацию в коде и опыт поиска в вашей IDE.
+[Команда effector предлагает использовать префикс `$` для сторов](/ru/guides/best-practices#naming), поскольку это улучшает ориентацию в коде и автокомплит в IDE.
 :::
 
 ## Чтение значений (#read-store-value)
 
-Получить текущее значение стора можно несколькими способами:
+Как вы уже знаете effector это реактивный стейт менеджер, а [стор](/ru/api/effector/Store) – реактивный юнит и реактивность создается не магическим образом. Если вы попробуете просто использовать стор, например:
 
-1. При помощи интеграцией фреймворков и хука `useUnit` ([📘&nbsp;React](/ru/api/effector-react/useUnit), [📗&nbsp;Vue](/ru/api/effector-vue/useUnit), [📘&nbsp;Solid](/ru/api/effector-solid/useUnit)):
+```ts
+import { createStore } from "effector";
+
+const $counter = createStore(0);
+console.log($counter);
+```
+
+Вы увидите непонятный объект с кучей свойств, который необходим effector для корректной работы, но не текущее значение. Чтобы получить текущее значение стора, есть несколько способов:
+
+1. Скорее всего вы также используете какой-нибудь фреймворк [React](https://react.dev/), [Vue](https://vuejs.org/) или [Solid](https://docs.solidjs.com/) и тогда вам нужен адаптер под этот фреймворк [effector-react](/ru/api/effector-react), [effector-vue](/ru/api/effector-vue) или [effector-solid](/ru/api/effector-solid). Каждый из этих пакетов предоставляет хук `useUnit` для получения данных из стора, а также подписки на его изменения. При работе с UI это единственный верный способ для чтения данных:
 
 <Tabs>
   <TabItem label="React">
 
-```ts
+```ts "useUnit"
 import { useUnit } from 'effector-react'
 import { $counter } from './model.js'
 
@@ -91,10 +128,11 @@ const Counter = () => {
   </TabItem>
   <TabItem label="Vue">
 
-```html
+```html "useUnit"
 <script setup>
   import { useUnit } from "effector-vue/composition";
   import { $counter } from "./model.js";
+
   const counter = useUnit($counter);
 </script>
 ```
@@ -102,7 +140,7 @@ const Counter = () => {
   </TabItem>
   <TabItem label="Solid">
 
-```ts
+```ts "useUnit"
 import { useUnit } from 'effector-solid'
 import { $counter } from './model.js'
 
@@ -116,7 +154,29 @@ const Counter = () => {
   </TabItem>
 </Tabs>
 
-2. Подписка на изменения через `watch` - только для дебага или интеграций
+2. Поскольку для построения вашей логики вне UI вам также может понадобится данные стора, вы можете использовать метод [`sample`](/ru/api/effector/sample) и передать стор в `source`, например:
+
+```ts
+import { createStore, createEvent, sample } from "effector";
+
+const $counter = createStore(0);
+
+const incremented = createEvent();
+
+sample({
+  clock: incremented,
+  source: $counter,
+  fn: (counter) => {
+    console.log("Counter value:", counter);
+  },
+});
+
+incremented();
+```
+
+Мы чуть попозже еще [обсудим метод `sample` и как можно с ним работать](/ru/essentials/manage-states#store-updates) используя сторы.
+
+3. Можно подписаться на изменения стора через [`watch`](/ru/api/effector/Store#methods-watch-watcher), однако это используется скорее для дебага либо каких-то самописных интеграций:
 
 ```ts
 $counter.watch((counter) => {
@@ -124,195 +184,111 @@ $counter.watch((counter) => {
 });
 ```
 
-3. Метод `getState()` - только для интеграций
+4. Метод [`getState()`](/ru/api/effector/Store#utility-methods-getState), используется, как правило, только для работы с низкоуровневым API или интеграций. Старайтесь не использовать его в вашем коде, потому что может привести к гонке данных:
 
 ```ts
 console.log($counter.getState()); // 0
 ```
 
+:::warning{title="Почему не использовать getState?"}
+Чтобы effector корректно работал с реактивностью ему необходимо построить связи между юнитами, чтобы всегда были актуальные данные. В случае [`.getState()`](/ru/api/effector/Store#utility-methods-getState) мы как бы ломаем эту систему и берем данные извне.
+:::
+
 ## Обновление состояния (#store-updates)
 
-В effector обновление состояния происходит через [события](/ru/essentials/events). Вы можете изменить состояние подписавшись на событие через `.on` или при помощи метода [`sample`](/ru/essentials/unit-composition).
+Как говорилось ранее, обновление состояния происходит при помощи [событий](/ru/api/effector/Event). Можно подписаться стором на события с помощью метода [`.on`](/ru/api/effector/Store#methods-on-trigger-reducer) – хорош для примитивных реакций, или оператора [`sample`](/ru/api/effector/sample) – позволяет обновить стор в зависимости от другого стора, или фильтровать обновления.
 
-:::info{title="Оптимизация обновлений"}
-Состояние стора обновляется когда получает значение, которое не равно (!==) текущему, а также не равно `undefined`.
-:::
-
-### Обновление через события (#update-store-via-events)
-
-Самый простой и верный способ обновить стор - это привязать его к событию:
+:::info{title="что такое sample?"}
+Метод [`sample`](/ru/api/effector/sample) это оператор для связи между [юнитами](/ru/introduction/core-concepts#units), с его помощью можно вызывать [события](/ru/api/effector/Event) или [эффекты](/ru/api/effector/Effect), а также записывать в [сторы](/ru/api/effector/Store) новые значения. Алгоритм его работы простой:
 
 ```ts
-import { createStore, createEvent } from "effector";
+const trigger = createEvent();
+const log = createEvent<string>();
 
-const incremented = createEvent();
-const decremented = createEvent();
-const resetCounter = createEvent();
-
-const $counter = createStore(0)
-  // Увеличиваем значение на 1 при каждом вызове события
-  .on(incremented, (counterValue) => counterValue + 1)
-  // Уменьшаем значение на 1 при каждом вызове события
-  .on(decremented, (counterValue) => counterValue - 1)
-  // Сбрасываем значение в 0
-  .reset(resetCounter);
-
-$counter.watch((counterValue) => console.log(counterValue));
-
-// Использование
-incremented();
-incremented();
-decremented();
-
-resetCounter();
-
-// Вывод в консоль
-// 0 - вывод при инициализации
-// 1
-// 2
-// 1
-// 0 - сбросили состояние
-```
-
-:::info{title="Что такое события?"}
-Если вы не знакомы с `createEvent` и событиями, то вы узнаете как работать с ними на [следующей странице](/ru/essentials/events).
-:::
-
-### Обновление с параметрами (#update-stores-with-params)
-
-Обновить стор можно и с помощью параметров события, достаточно лишь передать данные в событие, как у обычной функции, и использовать в обработчике:
-
-```ts
-import { createStore, createEvent } from "effector";
-
-const userUpdated = createEvent<{ name: string }>();
-
-const $user = createStore({ name: "Bob" });
-
-$user.on(userUpdated, (user, changedUser) => ({
-  ...user,
-  ...changedUser,
-}));
-
-userUpdated({ name: "Alice" });
-```
-
-### Сложная логика обновления (#update-stores-with-sample)
-
-При помощи метода `on` мы можем обновить состояние стора для простых случаев, при срабатывании какого-то события, передав данные из события либо обновить на основе предыдущего значения.
-
-Однако это не всегда покрывает все нужды. Для более сложной логики обновления состояния мы можем воспользоваться методом [`sample`](/ru/api/effector/sample), который помогает нам в случае когда:
-
-- Нужно контролировать обновление стора при помощи события
-- Требуется обновить стор на основе значений других сторов
-- Нужна трансформация данных перед обновлением стора с доступом к актуальным значениям других сторов
-
-Например:
-
-```ts
-import { createEvent, createStore, sample } from "effector";
-
-const updateItems = createEvent();
-
-const $items = createStore([1, 2, 3]);
-const $filteredItems = createStore([]);
-const $filter = createStore("even");
-
-// sample автоматически предоставляет доступ к актуальным значениям
-// всех связанных сторов в момент срабатывания события
 sample({
-  clock: updateItems,
-  source: { items: $items, filter: $filter },
-  fn: ({ items, filter }) => {
-    if (filter === "even") {
-      return items.filter((n) => n % 2 === 0);
-    }
-
-    return items.filter((n) => n % 2 === 1);
-  },
-  target: $filteredItems,
+  clock: trigger, // 1. когда trigger сработает
+  source: $counter, // 2. возьми значение из $counter
+  filter: (counter) => counter % 2 === 0, // 3. если значение четное
+  fn: (counter) => "Counter is even: " + counter, // 4. преобразуй его
+  target: log, // 5. вызови и передай в log
 });
 ```
 
-:::info{title="Что такое sample?"}
-О том, что такое `sample`, как использовать этот метод и подробное его описание вы можете познакомиться [здесь](/ru/essentials/unit-composition#sample).
 :::
 
-Преимущества `sample` для обновления состояния:
+### С помощью `.on` (#update-store-via-on)
 
-1. Доступ к актуальным значениям всех сторов
-2. Атомарность обновлений нескольких сторов
-3. Контроль момента обновления через `clock`
-4. Возможность фильтрации обновлений через `filter`
-5. Удобная трансформация данных через функцию `fn`
-
-### Создание стора при помощи метода `restore` (#create-store-via-restore)
-
-Если у вас работа со стором подразумевает замену старого состояние на новое при вызове события, то вы можете использовать метод [`restore`](/ru/api/effector/restore):
-
-```ts
-import { restore, createEvent } from "effector";
-
-const nameChanged = createEvent<string>();
-
-const $counter = restore(nameChanged, "");
-```
-
-Код выше эквивалентен коду ниже:
+С помощью [`.on`](/ru/api/effector/Store#methods-on-trigger-reducer) мы можем обновить стор примитивным способом: вызвалось событие -> вызови колбэк -> обнови стор возвращаемым значением:
 
 ```ts
 import { createStore, createEvent } from "effector";
 
-const nameChanged = createEvent<string>();
+const $counter = createStore(0);
 
-const $counter = createStore("").on(nameChanged, (_, newName) => newName);
+const incrementedBy = createEvent<number>();
+const decrementedBy = createEvent<number>();
+
+$counter.on(incrementedBy, (counterValue, delta) => counterValue + delta);
+$counter.on(decrementedBy, (counterValue, delta) => counterValue - delta);
+
+incrementedBy(11); // 0+11=11
+incrementedBy(39); // 11+39=50
+decrementedBy(25); // 50-25=25
 ```
 
-Также метод `restore` можно использовать и с эффектом, в таком случае в стор попадут данные из события эффекта [`doneData`](/ru/api/effector/Effect#doneData), а дефолтное значение стора должно соответствовать возвращаемому значению:
+### С помощью `sample` (#update-store-via-sample)
 
-:::info{title="Что такое эффекты?"}
-Если вы не знакомы с `createEffect` и эффектами, то вы узнаете как работать с ними на [этой странице](/ru/essentials/work-with-async).
-:::
+С методом [`sample`](/ru/api/effector/sample) мы можем как примитивно обновить стор:
 
 ```ts
-import { restore, createEffect } from "effector";
+import { sample } from "effector";
 
-// упустим реализацию типов
-const createUserFx = createEffect<string, User>((id) => {
-  return {
-    id: 4,
-    name: "Bob",
-    age: 18,
-  };
+sample({
+  clock: incrementedBy, // когда сработает incrementedBy
+  source: $counter, // возьми данные из $counter
+  fn: (counter, delta) => counter + delta, // вызови колбэк fn
+  target: $counter, // обнови $counter возвращаемым значением из fn
 });
 
-const $newUser = restore(createUserFx, {
-  id: 0,
-  name: "",
-  age: -1,
+sample({
+  clock: decrementedBy, // когда сработает decrementedBy
+  source: $counter, // возьми данные из $counter
+  fn: (counter, delta) => counter - delta, // вызови колбэк fn
+  target: $counter, // обнови $counter возвращаемым значением из fn
 });
-
-createUserFx();
-
-// После успешного завершения работы эффекта
-// $newUser будет:
-//   {
-// 		id: 4,
-// 		name: "Bob",
-// 		age: 18,
-//   }
 ```
 
-### Множественные обновления (#multiple-store-updates)
-
-Стор не ограничен одной подпиской на событие, вы можете подписаться на столько событий, сколько вам нужно, а также подписываться на одно и то же событие разными сторами:
+так и имеем более гибкие способы, например обновить стор только когда **другой стор** имеет нужное значение, к примеру искать только когда `$isSearchEnabled` имеет значение `true`:
 
 ```ts
+import { createStore, createEvent, sample } from "effector";
+
+const $isSearchEnabled = createStore(false);
+const $searchQuery = createStore("");
+const $searchResults = createStore<string[]>([]);
+
+const searchTriggered = createEvent();
+
+sample({
+  clock: searchTriggered, // когда сработает searchTriggered
+  source: $searchQuery, // возьми данные из $searchQuery
+  filter: $isSearchEnabled, // если поиск активен то продолжаем
+  fn: (query) => {
+    // имитируем поиск
+    return ["result1", "result2"].filter((item) => item.includes(query));
+  },
+  target: $searchResults, // обнови $searchResults возвращаемым значением из fn
+});
+```
+
+Заметьте, что при передаче стора в `target` его предыдущее значение будет полностью заменено на возвращаемое значение из `fn`.
+
+### Обновление от нескольких событий (#multiple-store-updates)
+
+Стор не ограничен одной подпиской на событие, можно подписаться на сколько угодно событий, а также подписываться на одно и то же событие разными сторами:
+
+```ts "categoryChanged"
 import { createEvent, createStore } from "effector";
-
-const categoryChanged = createEvent<string>();
-const searchQueryChanged = createEvent<string>();
-const filtersReset = createEvent();
 
 const $lastUsedFilter = createStore<string | null>(null);
 const $filters = createStore({
@@ -320,178 +296,140 @@ const $filters = createStore({
   searchQuery: "",
 });
 
+const categoryChanged = createEvent<string>();
+const searchQueryChanged = createEvent<string>();
+
 // подписываемся двумя разными сторами на одно и то же событие
-$lastUsedFilter.on(categoryChanged, (_, categoty) => category);
-$filters.on(categoryChanged, (filters, category) => ({
-  ...filters,
-  category,
-}));
+$lastUsedFilter.on(categoryChanged, (_, category) => category);
 
-$filters.on(searchQueryChanged, (filters, searchQuery) => ({
-  ...filters,
-  searchQuery,
-}));
-
-$filters.reset(filtersReset);
-```
-
-В этом примере мы подписываемся стором `$filters` на несколько событий, а также двумя сторами `$filters` и `$lastUsedFilter` на одно и то же событие `categoryChanged`.
-
-### Упрощение обновлений с `createApi` (#simplified-updates-with-createapi)
-
-Когда вам нужно создать множество обработчиков для одного стора, вместо создания отдельных событий и подписки на них, вы можете использовать [`createApi`](/ru/api/effector/createApi). Эта функция создает набор событий для обновления стора в одном месте.<br/>
-Следующие примеры кода эквиваленты:
-
-<Tabs>
-  <TabItem label="С createApi">
-
-```ts
-import { createStore, createApi } from "effector";
-
-const $counter = createStore(0);
-
-const { increment, decrement, reset } = createApi($counter, {
-  increment: (state) => state + 1,
-  decrement: (state) => state - 1,
-  reset: () => 0,
+sample({
+  clock: categoryChanged,
+  source: $filters,
+  fn: (filters, category) => ({
+    // придерживаемся принципа иммутабельности
+    ...filters,
+    category,
+  }),
+  // результат fn заменит предыдущее значение в $filters
+  target: $filters,
 });
 
-// Использование
-increment(); // 1
-reset(); // 0
+// а также подписываемся стором на два события searchQueryChanged и categoryChanged
+sample({
+  clock: searchQueryChanged,
+  source: $filters,
+  fn: (filters, searchQuery) => ({
+    // придерживаемся принципа иммутабельности
+    ...filters,
+    searchQuery,
+  }),
+  // результат fn заменит предыдущее значение в $filters
+  target: $filters,
+});
 ```
 
-  </TabItem>
-  <TabItem label="Обычное использование">
-
-```ts
-import { createStore, createEvent } from "effector";
-
-const $counter = createStore(0);
-
-const incrementClicked = createEvent();
-const decrementClicked = createEvent();
-const resetClicked = createEvent();
-
-$counter
-  .on(incrementClicked, (state) => state + 1)
-  .on(decrementClicked, (state) => state - 1)
-  .reset(resetClicked);
-
-// Использование
-increment(); // 1
-reset(); // 0
-```
-
-  </TabItem>
-</Tabs>
+Мы подписались двумя сторами на одно и то же событие `categoryChanged`, а также стором `$filters` на еще одно событие `searchQueryChanged`.
 
 ## Производные сторы (#derived-stores)
 
-Часто нужно создать стор, значение которого зависит от других состояний. Для этого используется метод [`map`](/ru/api/effector/Store#map):
+Производный стор вычисляется **на основе других сторов** и **автоматически обновляется** при изменении этих сторов, представьте, что мы имеем вот такой стор:
 
 ```ts
+import { createStore } from "effector";
+
+const $author = createStore({
+  name: "Hanz Zimmer",
+  songs: [
+    { title: "Time", likes: 123 },
+    { title: "Cornfield Chase", likes: 97 },
+    { title: "Dream is Collapsing", likes: 33 },
+  ],
+});
+```
+
+И мы хотим отобразить общее количество лайков, а также количество музыки для этого автора. Конечно мы могли бы просто в UI использовать этот стор с помощью хука `useUnit` и там уже высчитать эти значения, но это не очень правильно, поскольку мы будем описывать логику в компоненте и размазываем ее по всему приложению, это усложнит поддержку кода в будущем, а если мы захотим использовать эти данные в другом месте, то и вовсе придется дублировать код. <br/>
+
+При такой логике правильным подходом будет создать производные сторы на основе `$author` используя метод [`combine`](/ru/api/effector/combine):
+
+```ts ins={13,15-17} "combine"
 import { createStore, combine } from "effector";
 
-const $currentUser = createStore({
-  id: 1,
-  name: "Winnie Pooh",
+const $author = createStore({
+  name: "Hanz Zimmer",
+  songs: [
+    { title: "Time", likes: 123 },
+    { title: "Cornfield Chase", likes: 97 },
+    { title: "Dream is Collapsing", likes: 33 },
+  ],
 });
-const $users = createStore<User[]>([]);
 
-// Отфильтрованный список
-const $activeUsers = $users.map((users) => users.filter((user) => user.active));
-
-// Вычисляемое значение
-const $totalUsersCount = $users.map((users) => users.length);
-const $activeUsersCount = $activeUsers.map((users) => users.length);
-
-// Комбинация нескольких сторов
-const $friendsList = combine($users, $currentUser, (users, currentUser) =>
-  users.filter((user) => user.friendIds.includes(currentUser.id)),
+// общее количество песен
+const $totalSongsCount = combine($author, (author) => author.songs.length);
+// общее количество лайков
+const $totalLikesCount = combine($author, (author) =>
+  author.songs.reduce((acc, song) => acc + song.likes, 0),
 );
 ```
 
-Мы также использовали здесь метод [`combine`](/ru/api/effector/combine), который позволяет нам объединить значение нескольких сторов в одно.<br/>
-Также можно комбинировать сторы в объект:
+Каждый из производных сторов будет автоматически обновляться при изменении исходного стора `$author`.
 
-```ts
-import { combine } from "effector";
-
-const $form = combine({
-  name: $name,
-  age: $age,
-  city: $city,
-});
-
-// или с дополнительной трансформацией
-const $formValidation = combine($name, $age, (name, age) => ({
-  isValid: name.length > 0 && age >= 18,
-  errors: {
-    name: name.length === 0 ? "Required" : null,
-    age: age < 18 ? "Must be 18+" : null,
-  },
-}));
-```
-
-:::warning{title="Важно про производные состояния"}
-Производные сторы обновляются автоматически при изменении исходных сторов. **Не нужно** вручную синхронизировать их значения.
+:::warning{title="Важно про производные сторы!"}
+Производные сторы обновляются автоматически при изменении исходных сторов, их нельзя передать в `target` у `sample` или подписаться на событие через `.on`.
 :::
 
-## Сброс состояния (#resetting-store-state)
+При этом исходных сторов может быть сколько угодно, что позволяет, например, вычислить текущее состояния приложения:
 
-Вы можете сбросить состояние стора до исходного при помощи метода `reset`:
+```ts "$isLoading, $isSuccess, $error"
+import { combine, createStore } from "effector";
 
-```ts
-const formSubmitted = createEvent();
-const formReset = createEvent();
+const $isLoading = createStore(false);
+const $isSuccess = createStore(false);
+const $error = createStore<string | null>(null);
 
-const $form = createStore({ email: "", password: "" })
-  // очищаем форму при сабмите и явном сбросе
-  .reset(formReset, formSubmitted);
-  // или
-  .reset([formReset, formSubmitted]);
+const $isAppReady = combine($isLoading, $isSuccess, $error, (isLoading, isSuccess, error) => {
+  return !isLoading && isSuccess && !error;
+});
 ```
 
 ## Значения `undefined` (#void-values)
 
-По умолчанию effector пропускает обновления со значением `undefined`. Это сделано для того, чтобы можно было ничего не возвращать из редьюсеров, если обновление стора не требуется:
+Если вы попробуете использовать значение стора как `undefined` или положите в стор это значение:
 
-```ts
+```ts "return undefined;"
 const $store = createStore(0).on(event, (_, newValue) => {
   if (newValue % 2 === 0) {
-    return;
+    return undefined;
   }
 
   return newValue;
 });
 ```
 
-:::warning{title="Внимание!"}
-Это поведение будет отключено в будущем!
-Как показала практика, будет лучше просто возвращать предыдущее значение стора.
-:::
+то столкнетесь с ошибкой в консоли:
 
-Если вам нужно использовать `undefined` как валидное значение, необходимо явно указать с помощью `skipVoid: false` при создании стора:
-
-```ts
-import { createStore, createEvent } from "effector";
-
-const setVoidValue = createEvent<number>();
-
-// ❌ undefined будут пропущены
-const $store = createStore(13).on(setVoidValue, (_, voidValue) => voidValue);
-
-// ✅ undefined разрешены как значения
-const $store = createStore(13, {
-  skipVoid: false,
-}).on(setVoidValue, (_, voidValue) => voidValue);
-
-setVoidValue(null);
+```console
+store: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option
 ```
 
-:::tip{title="null вместо undefined"}
-Вы можете использовать `null` вместо `undefined` для отсутствующих значений.
+По умолчанию возвращение `undefined` служит как команда "ничего не произошло, пропусти это обновление". Если вам действительно нужно использовать `undefined` как валидное значение, тогда необходимо явно указать это с помощью параметра `skipVoid: false` при создании стора:
+
+```ts "skipVoid: false"
+import { createStore } from "effector";
+
+const $store = createStore(0, {
+  skipVoid: false,
+});
+```
+
+:::info{title="Будущее undefined"}
+В ближайших версиях это поведение будет изменено, как показала практика, лучше просто вернуть предыдущее значение для стора, чтобы его не обновлять.
 :::
 
-[Познакомиться с полным API для сторов тут](/ru/api/effector/Store)
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+  - [`createStore`](/ru/api/effector/createStore) - Метод для создания стора
+  - [`Store`](/ru/api/effector/Store) - Описание стора и его методов
+- **Статьи**
+  - [Основные концепции](/ru/introduction/core-concepts)
+  - [Работа с событиями](/ru/essentials/events)

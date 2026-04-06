@@ -1,28 +1,42 @@
 ---
-title: Getting Started with Effector
-description: Learn how to install and start using Effector
+title: Getting started
+description: How to install effector and take the first steps
+redirectFrom:
+  - /en/introduction/installation
+  - /introduction/installation
+pagefindWeight: 4
 ---
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
 
-# Quick start with Effector (#quick-start-with-effector)
+# Quick start with effector (#quick-start-with-effector)
 
-Effector is a powerful state manager that offers a fundamentally new approach to data management in applications. Unlike traditional solutions where state is changed directly through actions, Effector uses a reactive and declarative approach.
+Effector is a powerful state manager that offers a different perspective on handling application data. Instead of mutating state directly in actions, effector relies on a reactive, declarative model that keeps data flow explicit and predictable.
 
-## Effector Features (#effector-features)
+## How to use the documentation (#how-to-use-documentation)
 
-- Effector is reactive 🚀: Effector automatically tracks dependencies and updates all related parts of the application, eliminating the need to manually manage updates.
-- Declarative code 📝: You describe the relationships between data and their transformations, while Effector takes care of how and when to perform these transformations.
-- Predictable testing ✅: Isolated contexts make testing business logic simple and reliable.
-- Flexible architecture 🏗️: Effector works equally well for both small applications and large enterprise systems.
-- Versatility 🔄: While Effector integrates perfectly with popular frameworks, it can be used in any JavaScript environment.
+Before diving in, note that we provide `llms.txt` so AI assistants such as [ChatGPT](https://chatgpt.com/), [Claude](https://claude.ai/), [Gemini](https://gemini.google.com), and others can read the docs. Share a link in chat or upload the docs into an IDE like [Cursor](https://www.cursor.com/en). Right now you can use:
 
-More about effector core concepts you can read [here](/en/introduction/core-concepts)
+- https://effector.dev/ru/llms-full.txt
+- https://effector.dev/docs/llms.txt
+- https://effector.dev/docs/llms-full.txt
+
+We also maintain a [ChatGPT effector assistant](https://chatgpt.com/g/g-thabaCJlt-effector-assistant), keep a [DeepWiki](https://deepwiki.com/effector/effector), and have the docs uploaded to [Context7](https://context7.com/effector/effector) for quick AI references.
+
+## Effector features (#effector-features)
+
+- **Reactive:** effector tracks dependencies automatically and updates every connected piece for you.
+- **Declarative:** describe how data relates and transforms; effector decides when to run the logic.
+- **SSR and tests out of the box:** scopes make server rendering and testing straightforward.
+- **Flexible architecture:** scales from tiny widgets to enterprise systems.
+- **Universal:** integrates with popular frameworks but can run in any JavaScript environment.
+
+Read more about the key ideas [here](/en/introduction/core-concepts).
 
 ## Install effector (#install-effector)
 
-To get started, install Effector using your favorite package manager:
+Install effector via your preferred package manager:
 
 <Tabs>
   <TabItem label="npm">
@@ -48,32 +62,34 @@ pnpm install effector
   </TabItem>
 </Tabs>
 
-### Creating Your First Store (#first-store)
+### Create your first store (#first-store)
 
-Now, let’s create a store, which represents a state of your application:
+A store represents part of your application state:
 
 ```ts
+// counter.js
 import { createStore } from "effector";
 
 const $counter = createStore(0);
 ```
 
-### Adding events (#adding-events)
+### Add events (#adding-events)
 
-Next, let’s create some events, that will update our store when triggered:
+Next, add events that will update the store when they fire:
 
-```ts
+```ts ins={4-5}
+// counter.js
 import { createEvent } from "effector";
 
 const incremented = createEvent();
 const decremented = createEvent();
 ```
 
-### Connecting Events to Store (#connection-event-to-store)
+### Connect events to the store (#connection-event-to-store)
 
-And link the events to the store:
+Link the events and the store together:
 
-```ts
+```ts ins={9-10}
 // counter.js
 import { createEvent, createStore } from "effector";
 
@@ -85,20 +101,20 @@ const decremented = createEvent();
 $counter.on(incremented, (counter) => counter + 1);
 $counter.on(decremented, (counter) => counter - 1);
 
-// and call it somewhere in your app
+// call the events anywhere in your app
 incremented();
-// counter will increase by 1
+// counter is increased by 1
 decremented();
-// counter will decrease by -1
+// counter is decreased by 1
 decremented();
-// counter will decrease by -1
+// counter is decreased by 1
 ```
 
-## Framework Integration (#effector-framework-integration)
+## Framework integration (#effector-framework-integration)
 
 ### Installation (#effector-framework-installation)
 
-If you want to use Effector with a specific framework, you’ll need to install an additional package:
+To use effector with a framework install the matching integration:
 
 <Tabs syncId="framework-choice">
   <TabItem label="React">
@@ -126,7 +142,7 @@ npm install effector effector-solid
 
 ### Usage examples (#effector-framework-usage-examples)
 
-And use it like this:
+And wire everything up:
 
 <Tabs syncId="framework-choice">
   <TabItem label="React">
@@ -212,6 +228,57 @@ export default Counter;
   </TabItem>
 </Tabs>
 
-:::info{title="What about Svelte ?"}
-No additional packages are required to use Effector with Svelte. It works seamlessly with the base Effector package.
+:::info{title="Where is Svelte?"}
+Svelte works with the base effector package, so no additional integration is required.
 :::
+
+## Additional installation options (#effector-additional-installation)
+
+### Older browsers (#old-browsers)
+
+For legacy browsers down to IE11 or Chrome 47 (often shipped with Smart TVs) import from the `compat` builds: `effector/compat`, `effector-react/compat`, and `effector-vue/compat`.
+
+You can update imports manually:
+
+```ts ins={2} del={1}
+import { createStore } from "effector";
+import { createStore } from "effector/compat";
+```
+
+Or use [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver). Example `.babelrc` configuration:
+
+```json
+{
+  "plugins": [
+    [
+      "babel-plugin-module-resolver",
+      {
+        "alias": {
+          "^effector$": "effector/compat",
+          "^effector-react$": "effector-react/compat"
+        }
+      }
+    ]
+  ]
+}
+```
+
+### Other runtimes (#environments)
+
+You can also run effector in environments like `deno`. Import `effector.mjs` directly from a CDN:
+
+```ts
+import { createStore } from "https://cdn.jsdelivr.net/npm/effector/effector.mjs";
+```
+
+CDN references:
+
+- https://www.jsdelivr.com/package/npm/effector
+- https://cdn.jsdelivr.net/npm/effector/effector.cjs.js
+- https://cdn.jsdelivr.net/npm/effector/effector.mjs
+- https://cdn.jsdelivr.net/npm/effector-react/effector-react.cjs.js
+- https://cdn.jsdelivr.net/npm/effector-vue/effector-vue.cjs.js
+
+## Playgrounds (#playgrounds)
+
+All examples in this documentation run inside [our online playground](https://share.effector.dev). It lets you prototype, test, and share ideas for free, with React and TypeScript support ready to go. The project lives in [this repository](https://github.com/effector/repl). For TypeScript-specific experiments, feel free to [try the official TS playground](https://www.typescriptlang.org/play/?#code/JYWwDg9gTgLgBAbwMZQKYEMaoMo2qgGhQywFEAzc1JGAXznKghDgHJVLq8pWAofoA).

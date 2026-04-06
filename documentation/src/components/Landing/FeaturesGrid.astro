@@ -9,6 +9,27 @@
   }
 
   .features .wrapper {
-    @apply mx-auto grid min-h-[680px] w-full max-w-6xl grid-cols-2 gap-3 p-3 sm:gap-6 sm:p-6 md:grid-cols-3 md:grid-rows-3;
+    @apply mx-auto grid min-h-[480px] w-full max-w-6xl grid-cols-1 gap-2 p-2;
+  }
+
+  @media (min-width: 480px) {
+    .features .wrapper {
+      @apply grid-cols-2 gap-3 p-3;
+      min-height: 580px;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .features .wrapper {
+      @apply gap-4 p-4;
+      min-height: 620px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .features .wrapper {
+      @apply grid-cols-3 grid-rows-3 gap-6 p-6;
+      min-height: 680px;
+    }
   }
 </style>

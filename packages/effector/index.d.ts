@@ -402,6 +402,7 @@ export class Domain implements Unit<any> {
             write: (state: State) => SerializedState
             read: (json: SerializedState) => State
           }
+      skipVoid?: boolean
     },
   ): StoreWritable<State>
   sid: string | null
@@ -420,7 +421,6 @@ export type ID = string
 export type StateRefOp =
   | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
   | {type: 'field'; from: StateRef; field: string}
-  | {type: 'closure'; of: StateRef}
 export type StateRef = {
   id: ID
   current: any
@@ -542,6 +542,102 @@ export const step: {
     priority?: BarrierPriorityTag | false
   }): Mov
 }
+
+/* `forward` types */
+type ForwardTarget = UnitTargetable<unknown> | ReadonlyArray<UnitTargetable<unknown>>
+
+type CleanSingleTarget<
+  Target extends UnitTargetable<unknown>,
+  Clock,
+> = Target extends UnitTargetable<infer T>
+  ? T extends void
+    ? UnitTargetable<unknown>
+    : T extends Clock
+    ? UnitTargetable<T>
+    // Needed to force typecheck
+    : UnitTargetable<Clock>
+  : never
+
+  type CleanTarget<
+    Target extends ForwardTarget,
+    From,
+  > = Target extends UnitTargetable<any>
+    ? CleanSingleTarget<Target, From>
+    : {
+        [K in keyof Target]: Target[K] extends UnitTargetable<unknown>
+          ? CleanSingleTarget<Target[K], From>
+          : never
+      }
+
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
+ */
+export function forward<From, T extends ForwardTarget>(opts: {
+  /**
+   * By default TS picks "best common type" `T` between `from` and `to` arguments.
+   * This lets us forward from `string | number` to `string` for instance, and
+   * this is wrong.
+   *
+   * Fortunately we have a way to disable such behavior. By adding `& {}` to some
+   * generic type we tell TS "do not try to infer this generic type from
+   * corresponding argument type".
+   *
+   * Generic `T` won't be inferred from `from` any more. Forwarding from "less
+   * strict" to "more strict" will produce an error as expected.
+   *
+   * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
+   */
+  from: Unit<From & {}>
+  to: CleanTarget<T, From>
+}): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
+ */
+export function forward(opts: {
+  from: Unit<any>
+  to: ReadonlyArray<UnitTargetable<void>>
+}): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
+ */
+export function forward(opts: {
+  from: ReadonlyArray<Unit<any>>
+  to: ReadonlyArray<UnitTargetable<void>>
+}): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
+ */
+export function forward(opts: {
+  from: ReadonlyArray<Unit<any>>
+  to: UnitTargetable<void>
+}): Subscription
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
+ */
+export function forward<To, From extends To>(opts: {
+  from: ReadonlyArray<Unit<From>>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
+}): Subscription
+// Allow `* -> void` forwarding (e.g. `string -> void`).
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
+ */
+export function forward(opts: {from: Unit<any>; to: UnitTargetable<void>}): Subscription
+// Do not remove the signature below to avoid breaking change!
+/**
+ * Method to create connection between units in a declarative way. Sends updates from one set of units to another
+ * @deprecated use `sample({clock, target})` instead
+ */
+export function forward<To, From extends To>(opts: {
+  from: Unit<From>
+  to: UnitTargetable<To> | ReadonlyArray<UnitTargetable<To>>
+}): Subscription
 
 /**
  * Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
@@ -703,6 +799,20 @@ export function createStore<State, SerializedState extends Json = Json>(
   },
 ): StoreWritable<State>
 
+export function setStoreName<State>(store: Store<State>, name: string): void
+
+type UnionToIntersection<Union> = (
+  Union extends any ? (k: Union) => void : never
+  ) extends (k: infer intersection) => void
+  ? intersection
+  : never;
+
+type GetUnionLast<Union> = UnionToIntersection<
+  Union extends any ? () => Union : never
+> extends () => infer Last
+  ? Last
+  : never;
+
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
  * Works like pattern matching for payload values and external stores
@@ -721,133 +831,217 @@ export function split<
     : Event<S>
 } & {__: Event<S>}>
 
-type SplitType<
-  Cases extends CaseRecord,
-  Match,
-  Config,
-  Source extends Unit<any>,
-> =
-  UnitValue<Source> extends CaseTypeReader<Cases, keyof Cases>
-    ?
-      Match extends Unit<any>
-      ? Exclude<keyof Cases, '__'> extends UnitValue<Match>
-        ? Config
-        : {
-          error: 'match unit should contain case names'
-          need: Exclude<keyof Cases, '__'>
-          got: UnitValue<Match>
-        }
+type MatchConstraint<Source> =
+  Unit<any>
+  | ((p: UnitValue<Source>) => void)
+  | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>;
 
-      : Match extends (p: UnitValue<Source>) => void
-        ? Exclude<keyof Cases, '__'> extends ReturnType<Match>
-          ? Config
-          : {
-            error: 'match function should return case names'
-            need: Exclude<keyof Cases, '__'>
-            got: ReturnType<Match>
-          }
-
-      : Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
-        ? Exclude<keyof Cases, '__'> extends keyof Match
-          ? MatcherInferenceValidator<Cases, Match> extends Match
-            ? Config
-            : {
-              error: 'case should extends type inferred by matcher function'
-              incorrectCases: Show<MatcherInferenceIncorrectCases<Cases, Match>>
-            }
-          : {
-            error: 'match object should contain case names'
-            need: Exclude<keyof Cases, '__'>
-            got: keyof Match
-          }
-
-      : {error: 'not implemented'}
-
-  : {
-    error: 'source type should extends cases'
-    sourceType: UnitValue<Source>
-    caseType: CaseTypeReader<Cases, keyof Cases>
-  }
+type CaseRecord<Keys extends PropertyKey = string> = Partial<Record<Keys | '__', UnitTargetable<any> | RoTuple<UnitTargetable<any>>>>;
 
 /**
  * Chooses one of cases by given conditions. It "splits" source unit into several targets, which fires when payload matches their conditions.
  * Works like pattern matching for payload values and external units
  */
 export function split<
-  Cases,
-  Source,
-  Match extends (
-    | Unit<any>
-    | ((p: UnitValue<Source>) => void)
-    | Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
-  ),
-  Clock,
+  Clock extends Unit<any> | RoTuple<Unit<any>>,
+  Source extends Unit<any>,
+  Match extends MatchConstraint<Source>,
+  Cases extends CaseRecord<InferMatchKeys<Match>>,
 >(
-  config:
-    {source: Source; match: Match; cases: Cases; clock: Clock} extends infer Config
-    ?
-      Config extends {cases: CaseRecord; match: any; source: Unit<any>; clock: Unit<any> | Array<Unit<any>>}
-        ? Source extends Unit<any>
-          ? Cases extends CaseRecord
-            ? Clock extends Unit<any> | Array<Unit<any>>
-              ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases; clock: Clock}, Source>
-              : {error: 'clock should be a unit or array of units'; got: Clock}
-            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
-          : {error: 'source should be a unit'; got: Source}
+  config: SplitConfig<Clock, Source, Match, Cases>
+): void;
 
-      : Config extends {cases: CaseRecord; match: any; source: Unit<any>}
-        ? Source extends Unit<any>
-          ? Cases extends CaseRecord
-            ? SplitType<Cases, Match, {source: Source; match: Match; cases: Cases}, Source>
-            : {error: 'cases should be an object with units or arrays of units'; got: Cases}
-          : {error: 'source should be a unit'; got: Source}
+type SplitConfig<
+  Clock,
+  Source,
+  Match extends MatchConstraint<Source>,
+  Cases extends CaseRecord<InferMatchKeys<Match>>
+> = Exclude<keyof Cases, '__'> extends InferMatchKeys<Match>
+  ? TypeOfMatch<Match> extends 'record'
+    ? SplitImpl<Clock, Source, Match, Cases>
+    : TypeOfMatch<Match> extends 'unit'
+      ? SplitImpl<Clock, Source, Match, Cases>
+      : TypeOfMatch<Match> extends 'fn'
+        ? SplitImpl<Clock, Source, Match, Cases>
+        : {clock?: Clock; source: Source; match: Match; cases: Cases}
+  : {
+    clock?: Clock;
+    source: Source;
+    match: RebuildMatch<Source, Match, Cases>;
+    cases: { [K in keyof Cases as K extends InferMatchKeys<Match> | '__' ? K : never]: Cases[K] };
+  };
 
-      : {error: 'config should be object with fields "source", "match" and "cases"'; got: Config}
+type InferMatchKeys<Match> = Match extends Unit<infer Keys>
+  ? Keys extends PropertyKey ? Keys : never
+  : Match extends (source: any) => infer Keys
+    ? Keys extends PropertyKey ? Keys : never
+    : Match extends Record<string, ((source: any) => boolean) | Store<boolean>>
+      ? keyof Match
+      : never;
 
-    : {error: 'cannot infer config object'}
-): void
+type TypeOfMatch<Match> =
+  Match extends Unit<any>
+    ? 'unit'
+    : Match extends (s: any) => void
+      ? 'fn'
+      : Match extends Record<string, ((p: any) => void) | Store<boolean>>
+        ? 'record'
+        : never;
 
-type CaseRecord = Record<string,  Unit<any> | Array<Unit<any>>>
+type RebuildMatch<
+  Source,
+  Match,
+  Cases,
+  Keys extends PropertyKey = Exclude<keyof Cases, '__'>
+> =
+  Match extends Unit<any>
+    ? Unit<Keys>
+    : Match extends (p: UnitValue<Source>) => void
+      ? (p: UnitValue<Source>) => Keys
+      : Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+        ? { [K in Keys]: K extends keyof Match ? Match[K] : (p: UnitValue<Source>) => boolean | Store<boolean> }
+        : never;
 
-type MatcherInferenceIncorrectCases<Cases, Match> = {
-  [K in Exclude<keyof Match, keyof MatcherInferenceValidator<Cases, Match>>]: {
-    caseType: CaseValue<Cases, Match, K>
-    inferredType: Match[K] extends (p: any) => p is infer R ? R : never
+type SplitImpl<
+  Clock,
+  Source,
+  Match,
+  Cases
+> = MatchCasesIsAssignable<Source, Match, Cases> extends infer AssignableDict
+  ? AssignableDict extends Record<string, 'yes'>
+    ? {
+      clock?: Clock;
+      source: Source;
+      match: Match;
+      cases: Cases
+    }
+    : MatchHasInference<Source, Match> extends 'yes'
+      ? {
+        clock?: Clock;
+        source: Source;
+        match: RebuildMatchInference<Source, Match, AssignableDict>;
+        cases: Show<RebuildCases<Source, Match, Cases>>;
+      }
+      : {
+        clock?: Clock;
+        source: RebuildSource<Source, Cases>;
+        match: Match;
+        cases: Show<RebuildCases<Source, Match, Cases>>;
+      }
+  : never;
+
+type MatchValueReader<Match, K, Source> =
+  K extends keyof Match
+    ? Match[K] extends (src: any) => src is infer R
+      ? UnitValue<Source> extends R
+        ? UnitValue<Source>
+        : R
+      : UnitValue<Source>
+    : UnitValue<Source>;
+
+type MatchHasInference<Source, Match> =
+  Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+    ? 'yes' extends {
+      [K in keyof Match]: UnitValue<Source> extends MatchValueReader<Match, K, Source> ? 'no' : 'yes'
+    }[keyof Match] ? 'yes' : 'no'
+    : 'no';
+
+type MatchCasesIsAssignable<
+  Source,
+  Match,
+  Cases
+> =
+  {
+    [K in keyof Cases]: IfCaseAssignableToValue<Cases[K], MatchValueReader<Match, K, Source>>
   }
+
+type IfValidCaseValue<CaseValue, MatchValue, Y, N> =
+  WhichType<CaseValue> extends 'void' | 'unknown'
+    ? Y
+    : IfAssignable<MatchValue, CaseValue, Y, N>;
+
+type IfCaseAssignableToValue<Case, Value> =
+  Case extends UnitTargetable<any>
+    ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', ['no', UnitValue<Case>]>
+    : Case extends RoTuple<UnitTargetable<any>>
+      ? IsCaseAssignableToValueLoop<Case, Value>
+      : never;
+
+type IsCaseAssignableToValueLoop<Cases extends RoTuple<Unit<any>>, Value> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', 'no'> extends 'yes'
+        ? IsCaseAssignableToValueLoop<Rest, Value>
+        : ['no', UnitValue<Case>]
+      : never
+    : 'yes';
+
+type RebuildMatchInference<
+  Source,
+  Match,
+  AssignableDict
+> = Match extends Record<string, ((p: UnitValue<Source>) => boolean) | Store<boolean>>
+  ? {
+    [K in keyof Match]: K extends keyof AssignableDict
+      ? AssignableDict[K] extends ['no', infer Value]
+        ? Value extends UnitValue<Source>
+          ? (source: UnitValue<Source>) => source is Value
+          : never
+        : Match[K]
+      : Match[K]
+  }
+  : never;
+
+type RebuildCases<Source, Match, Cases> = {
+  [K in keyof Cases]: K extends InferMatchKeys<Match> | '__'
+    ? RebuildCase<MatchValueReader<Match, K, Source>, Cases[K]>
+    : Cases[K];
 }
 
-type MatcherInferenceValidator<Cases, Match> = {
-  [
-    K in keyof Match as
-      Match[K] extends (p: any) => p is infer R
-      ? R extends CaseValue<Cases, Match, K>
-        ? K
+type RebuildCase<MatchValue, Case> = Case extends UnitTargetable<infer CaseValue>
+  ? IfValidCaseValue<CaseValue, MatchValue, Case, UnitTargetable<MatchValue>>
+  : Case extends RoTuple<UnitTargetable<any>>
+    ? RebuildCaseLoop<Case, MatchValue>
+    : never;
+
+type RebuildCaseLoop<Cases extends readonly any[], Value, Result extends readonly any[] = []> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? RebuildCaseLoop<
+        Rest,
+        Value,
+        [
+          ...Result,
+          IfValidCaseValue<UnitValue<Case>, Value, Case, UnitTargetable<Value>>
+        ]
+      >
+      : Result
+    : Result;
+
+type RebuildSource<Source, Cases> =
+  { [K in keyof Cases]: GetFirstUnassignableCase<UnitValue<Source>, Cases[K]> } extends infer Values
+    ? Values extends Record<string, never>
+      ? Source
+      : { [K in keyof Values as [Values[K]] extends [never] ? never : K]: Values[K] } extends infer InvalidValues
+        ? Unit<GetUnionLast<InvalidValues[keyof InvalidValues]>>
         : never
-      : K
-  ]: Match[K]
-}
+    : never;
 
-type CaseTypeReader<Cases, K extends keyof Cases> =
-  Cases[K] extends infer S
-  ? WhichType<
-    UnitValue<
-      S extends Array<any>
-      ? S[number]
-      : S
-    >
-  > extends 'void'
-    ? unknown
-    : UnitValue<
-      S extends Array<any>
-      ? S[number]
-      : S
-    >
-  : never
+type GetFirstUnassignableCase<SourceValue, Case> =
+  Case extends UnitTargetable<infer CaseValue>
+    ? IfValidCaseValue<CaseValue, SourceValue, SourceValue, CaseValue>
+    : Case extends RoTuple<UnitTargetable<any>>
+      ? GetFirstUnassignableLoop<Case, SourceValue>
+      : never;
 
-type CaseValue<Cases, Match, K extends keyof Match> =
-  K extends keyof Cases
-  ? CaseTypeReader<Cases, K>
-  : never
+type GetFirstUnassignableLoop<Cases extends RoTuple<Unit<any>>, Value> =
+  Cases extends readonly [infer Case, ...infer Rest]
+    ? Rest extends readonly any[]
+      ? IfValidCaseValue<UnitValue<Case>, Value, 'yes', 'no'> extends 'yes'
+        ? GetFirstUnassignableLoop<Rest, Value>
+        : UnitValue<Case>
+      : never
+    : never;
 
 /**
  * Shorthand for creating events attached to store by providing object with reducers for them
@@ -1571,17 +1765,17 @@ type TargetFilterFnConfig<
   FilterFun,
   FN,
 > = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source: Source; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source: Source; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {source: Source; clock?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {source: Source; clock?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source?: never; filter?: FilterFun; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean}
+  ? {clock: Clock; source?: never; filter: FilterFun; target: Target; greedy?: boolean; batch?: boolean; name?: string}
   : never
 
 type TargetConfigCheck<
@@ -1677,17 +1871,17 @@ type SampleFilterTargetDef<
         ? TargetConfigCheck<
             Mode, Target, Source, Clock, FN,
             Mode extends 'clock | source | filter | fn | target'
-            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source: Source; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock | source | filter |    | target'
-            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source: Source; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter | fn | target'
-            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {source: Source; clock?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends '      | source | filter |    | target'
-            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {source: Source; clock?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter | fn | target'
-            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source?: never; filter?: FLUnit; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : Mode extends 'clock |        | filter |    | target'
-            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean}
+            ? {clock: Clock; source?: never; filter: FLUnit; target: Target; greedy?: boolean; batch?: boolean; name?: string}
             : never,
             SomeFN
           >
@@ -1843,17 +2037,17 @@ type SampleFilterTargetDef<
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
           Mode extends 'clock | source |        | fn | target'
-          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock | source |        |    | target'
-          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source |        | fn | target'
-          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends '      | source |        |    | target'
-          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        |        | fn | target'
-          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : Mode extends 'clock |        |        |    | target'
-          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean}
+          ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
           : never,
           SomeFN
         >
@@ -2141,7 +2335,517 @@ type Units = Unit<any> | Tuple<Unit<any>>
 type UnitsTarget = UnitTargetable<any> | Tuple<UnitTargetable<any>>
 type InvalidUnitsTarget = Unit<any> | Tuple<Unit<any>> | ReadonlyArray<Unit<any>>
 
+/* guard types */
+
 type NonFalsy<T> = T extends null | undefined | false | 0 | 0n | "" ? never : T;
+
+type GuardFilterSC<S, C> =
+  | ((source: GetSource<S>, clock: GetClock<C>) => boolean)
+  | Store<boolean>
+type GuardFilterS<S> =
+  | ((source: GetSource<S>) => boolean)
+  | Store<boolean>
+type GuardFilterC<C> =
+  | ((clock: GetClock<C>) => boolean)
+  | Store<boolean>
+
+type GuardResult<Value> = EventAsReturnType<Value>
+
+type GetGuardSource<S, F> = F extends BooleanConstructor
+  ? NonFalsy<GetSource<S>>
+  : GetSource<S>
+type GetGuardClock<C, F> = F extends BooleanConstructor
+  ? NonFalsy<GetClock<C>>
+  : GetClock<C>
+
+// ---------------------------------------
+/* user-defined typeguard: with target */
+// SСT
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter, target})` instead
+ */
+export function guard<A, X extends GetSource<S>, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  T extends Target = Target
+>(config: {
+  source: S,
+  clock: C,
+  filter: (source: GetSource<S>, clock: GetClock<C>) => source is X,
+  target: MultiTarget<T, X>,
+  name?: string,
+  greedy?: boolean
+}): T
+// ST
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter, target})` instead
+ */
+export function guard<A, X extends GetSource<S>,
+  S extends Source<A> = Source<A>,
+  T extends Target = Target
+>(config: {
+  source: S,
+  filter: (source: GetSource<S>) => source is X,
+  target: MultiTarget<T, X>,
+  name?: string,
+  greedy?: boolean
+}): T
+// СT
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, filter, target})` instead
+ */
+export function guard<B, X extends GetClock<C>,
+  C extends Clock<B> = Clock<B>,
+  T extends Target = Target
+>(config: {
+  clock: C,
+  filter: (clock: GetClock<C>) => clock is X,
+  target: MultiTarget<T, X>,
+  name?: string,
+  greedy?: boolean
+}): T
+
+/* user-defined typeguard: without target */
+// SC
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A, X extends GetSource<S>, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>
+>(config: {
+  source: S,
+  clock: C,
+  filter: (source: GetSource<S>, clock: GetClock<C>) => source is X,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<X>
+// S
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A, X extends GetSource<S>,
+  S extends Source<A> = Source<A>
+>(config: {
+  source: S,
+  filter: (source: GetSource<S>) => source is X,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<X>
+// C
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, filter})` instead
+ */
+export function guard<B, X extends GetClock<C>,
+  C extends Clock<B> = Clock<B>
+>(config: {
+  clock: C,
+  filter: (clock: GetClock<C>) => clock is X,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<X>
+
+// ---------------------------------------
+/* boolean fn or store: with target */
+// SСT
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter, target})` instead
+ */
+export function guard<A = any, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  F extends GuardFilterSC<S, C> = GuardFilterSC<S, C>,
+  T extends Target = Target
+>(config: {
+  source: S,
+  clock: C,
+  filter: F,
+  target: MultiTarget<T, GetGuardSource<S, F>>,
+  name?: string,
+  greedy?: boolean
+}): T
+// ST
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter, target})` instead
+ */
+export function guard<A = any,
+  S extends Source<A> = Source<A>,
+  F extends GuardFilterS<S> = GuardFilterS<S>,
+  T extends Target = Target
+>(config: {
+  source: S,
+  filter: F,
+  target: MultiTarget<T, GetGuardSource<S, F>>,
+  name?: string,
+  greedy?: boolean
+}): T
+// СT
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, filter, target})` instead
+ */
+export function guard<B = any,
+  C extends Clock<B> = Clock<B>,
+  F extends GuardFilterC<C> = GuardFilterC<C>,
+  T extends Target = Target
+>(config: {
+  clock: C,
+  filter: F,
+  target: MultiTarget<T, GetGuardClock<C, F>>,
+  name?: string,
+  greedy?: boolean
+}): T
+
+/* boolean fn or store: without target */
+// SC (units: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A = any, B = any>(config: {
+  source: Unit<A>,
+  clock: Unit<B>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// SC (units: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A = any, B = any>(config: {
+  source: Unit<A>,
+  clock: Unit<B>,
+  filter: ((source: A, clock: B) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
+// SC
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A = any, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  F extends GuardFilterSC<S, C> = GuardFilterSC<S, C>,
+>(config: {
+  source: S,
+  clock: C,
+  filter: F,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<GetGuardSource<S, F>>
+// S (unit: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A = any>(config: {
+  source: Unit<A>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// S (unit - boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A = any>(config: {
+  source: Unit<A>,
+  filter: ((source: A) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
+// S
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A = any,
+  S extends Source<A> = Source<A>,
+  F extends GuardFilterS<S> = GuardFilterS<S>,
+>(config: {
+  source: S,
+  filter: F,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<GetGuardSource<S, F>>
+// C (unit: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, filter})` instead
+ */
+export function guard<B = any>(config: {
+  clock: Unit<B>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<B>>
+// C (unit: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, filter})` instead
+ */
+export function guard<B = any>(config: {
+  clock: Unit<B>,
+  filter: ((clock: B) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<B>
+// C
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, filter})` instead
+ */
+export function guard<B = any,
+  C extends Clock<B> = Clock<B>,
+  F extends GuardFilterC<C> = GuardFilterC<C>,
+>(config: {
+  clock: C,
+  filter: F,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<GetGuardClock<C, F>>
+
+// ---------------------------------------
+// guard with source param
+// ---------------------------------------
+
+/* user-defined typeguard: with target */
+// SСT
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter, target})` instead
+ */
+export function guard<A, X extends GetSource<S>, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  T extends Target = Target
+>(source: S, config: {
+  clock: C,
+  filter: (source: GetSource<S>, clock: GetClock<C>) => source is X,
+  target: MultiTarget<T, X>,
+  name?: string,
+  greedy?: boolean
+}): T
+// ST
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter, target})` instead
+ */
+export function guard<A, X extends GetSource<S>,
+  S extends Source<A> = Source<A>,
+  T extends Target = Target
+>(source: S, config: {
+  filter: (source: GetSource<S>) => source is X,
+  target: MultiTarget<T, X>,
+  name?: string,
+  greedy?: boolean
+}): T
+
+/* user-defined typeguard: without target */
+// SC
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A, X extends GetSource<S>, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>
+>(source: S, config: {
+  clock: C,
+  filter: (source: GetSource<S>, clock: GetClock<C>) => source is X,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<X>
+// S
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A, X extends GetSource<S>,
+  S extends Source<A> = Source<A>
+>(source: S, config: {
+  filter: (source: GetSource<S>) => source is X,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<X>
+
+// ---------------------------------------
+/* boolean fn or store: with target */
+// SСT
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter, target})` instead
+ */
+export function guard<A = any, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  F extends GuardFilterSC<S, C> = GuardFilterSC<S, C>,
+  T extends Target = Target
+>(source: S, config: {
+  clock: C,
+  filter: F,
+  target: MultiTarget<T, GetGuardSource<S, F>>,
+  name?: string,
+  greedy?: boolean
+}): T
+// ST
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter, target})` instead
+ */
+export function guard<A = any,
+  S extends Source<A> = Source<A>,
+  F extends GuardFilterS<S> = GuardFilterS<S>,
+  T extends Target = Target
+>(source: S, config: {
+  filter: F,
+  target: MultiTarget<T, GetGuardSource<S, F>>,
+  name?: string,
+  greedy?: boolean
+}): T
+
+/* boolean fn or store: without target */
+// SC (units: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A = any, B = any>(source: Unit<A>, config: {
+  clock: Unit<B>,
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// SC (units: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A = any, B = any>(source: Unit<A>, config: {
+  clock: Unit<B>,
+  filter: ((source: A, clock: B) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
+// SC
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter})` instead
+ */
+export function guard<A = any, B = any,
+  S extends Source<A> = Source<A>,
+  C extends Clock<B> = Clock<B>,
+  F extends GuardFilterSC<S, C> = GuardFilterSC<S, C>,
+>(source: S, config: {
+  clock: C,
+  filter: F,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<GetGuardSource<S, F>>
+// S (unit: BooleanConstructor)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A = any>(source: Unit<A>, config: {
+  filter: BooleanConstructor,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<NonFalsy<A>>
+// S (unit: boolean fn or store)
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A = any>(source: Unit<A>, config: {
+  filter: ((source: A) => boolean) | Store<boolean>,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<A>
+// S
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({source, filter})` instead
+ */
+export function guard<A = any,
+  S extends Source<A> = Source<A>,
+  F extends GuardFilterS<S> = GuardFilterS<S>,
+>(source: S, config: {
+  filter: F,
+  name?: string,
+  greedy?: boolean
+}): GuardResult<GetGuardSource<S, F>>
+
+// guard's last overload for `guard(source, config)`
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter, target})` instead
+ */
+export function guard<
+  S extends Source<unknown>,
+  C extends Clock<unknown>,
+  F extends IfUnknown<UnitValue<S>,
+    Store<boolean> | ((clock: GetClock<C>) => boolean),
+    IfUnknown<UnitValue<C>,
+      Store<boolean> | ((source: GetSource<S>) => boolean),
+      Store<boolean> | ((source: GetSource<S>, clock: GetClock<C>) => boolean)
+      >
+    >,
+  T extends Target
+>(source: S, config: {
+  clock?: C,
+  filter: F,
+  target: F extends (value: any, ...args: any) => value is infer X
+    ? MultiTarget<T, X>
+    : MultiTarget<T, GetGuardSource<S, F>>,
+  name?: string,
+  greedy?: boolean
+}): T
+
+// guard's last overload for `guard(config)`
+/**
+ * Method for conditional event routing.
+ * @deprecated use `sample({clock, source, filter, target})` instead
+ */
+export function guard<
+  S extends Source<unknown>,
+  C extends Clock<unknown>,
+  F extends IfUnknown<UnitValue<S>,
+    Store<boolean> | ((clock: GetClock<C>) => boolean),
+    IfUnknown<UnitValue<C>,
+      Store<boolean> | ((source: GetSource<S>) => boolean),
+      Store<boolean> | ((source: GetSource<S>, clock: GetClock<C>) => boolean)
+      >
+    >,
+  T extends Target
+>(config: {
+  source?: S,
+  clock?: C,
+  filter: F,
+  target: F extends (value: any, ...args: any) => value is infer X
+    ? MultiTarget<T, X>
+    : MultiTarget<T,
+        IfUnknown<UnitValue<S>,
+          GetGuardClock<C, F>,
+          GetGuardSource<S, F>
+        >
+    >,
+  name?: string,
+  greedy?: boolean
+}): T
 
 /* attach types */
 
@@ -2517,12 +3221,19 @@ export interface Scope extends Unit<any> {
 export type ValueMap = Map<StoreWritable<any>, any> | Array<[StoreWritable<any>, any]> | {[sid: string]: any}
 
 /**
+ * Fill stores with given values in provided scope or domain
+ * 
+ * @deprecated use `fork({values})` instead
+ */
+export function hydrate(domainOrScope: Domain | Scope, config: {values: ValueMap}): void
+
+/**
  * Serialize store values from given scope
  * @returns object with saved values
  */
 export function serialize(
   scope: Scope,
-  options?: {ignore?: Array<Store<any>> },
+  options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
 ): {[sid: string]: any}
 
 /**
@@ -2566,6 +3277,25 @@ export function fork(
   config?: {
     values?: StorePair<any>[] | SerializedState | LegacyMap,
     handlers?: Handlers
+  },
+): Scope
+
+
+// legacy overloads
+/**
+ * Creates isolated instance of application. Primary purposes of this method are SSR and testing.
+ * 
+ * @deprecated use `fork({values, handlers})` instead
+ * 
+ * @param domain optional root domain
+ * @param config optional configuration object with initial store values and effect handlers
+ * @returns new scope
+ */
+export function fork(
+  domain: Domain,
+  config?: {
+    values?: SerializedState | LegacyMap | Array<[StoreWritable<any>, any]>,
+    handlers?: Handlers;
   },
 ): Scope
 

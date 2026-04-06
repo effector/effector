@@ -268,6 +268,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -278,6 +279,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -288,6 +290,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -298,6 +301,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -319,6 +323,7 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -331,6 +336,9 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
+        Type '[number, number, number]' is not assignable to type '[string, string, string]'.
+          Type at position 0 in source is not compatible with type at position 0 in target.
+            Type 'number' is not assignable to type 'string'.
       "
     `)
   })

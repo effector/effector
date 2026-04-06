@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "23.3.0",
+  "version": "23.4.4",
   "description": "Business logic with ease",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
@@ -51,7 +51,9 @@
     "inspect.mjs",
     "inspect.mjs.map",
     "inspect.d.ts",
-    "babel-plugin.js"
+    "babel-plugin.js",
+    "babel-plugin.js.map",
+    "babel-plugin-react.js"
   ],
   "keywords": [
     "business",

@@ -1,6 +1,7 @@
 ---
 import { markActiveNavigation, MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
 import { createChangeLangLinks, getPathParamsFromId, getTextLocalized } from "../languages";
+import ThemeSwitch from "./Header/ThemeSwitch.astro";
 
 import NestedLinks from "./NestedLinks.astro";
 
@@ -28,17 +29,20 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
         })
       }
     </div>
-    <select class="language-switch" id="language-switch">
-      {
-        languageLinks.map((link) => {
-          return (
-            <option selected={link.link === Astro.url.pathname} value={link.link}>
-              {getTextLocalized(link, lang)}
-            </option>
-          );
-        })
-      }
-    </select>
+    <div class="footer-right">
+      <ThemeSwitch />
+      <select class="language-switch" id="language-switch">
+        {
+          languageLinks.map((link) => {
+            return (
+              <option selected={link.link === Astro.url.pathname} value={link.link}>
+                {getTextLocalized(link, lang)}
+              </option>
+            );
+          })
+        }
+      </select>
+    </div>
   </footer>
 </div>
 
@@ -57,7 +61,7 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
     will-change: transform, opacity;
     contain: layout style;
     backface-visibility: hidden;
-    background-color: var(--theme-bg);
+    background-color: var(--theme-bg-mobile-menu);
   }
 
   nav {
@@ -76,7 +80,7 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
     padding-right: max(env(safe-area-inset-right), 1rem);
 
     box-shadow: 0 -4px 6px -4px rgb(0 0 0 / 0.1);
-    background-color: var(--theme-bg);
+    background-color: var(--theme-bg-mobile-menu);
   }
 
   .socials {
@@ -94,6 +98,27 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
 
   .language-switch {
     @apply box-content flex items-center justify-center rounded p-2 text-base;
+  }
+
+  .footer-right {
+    @apply flex gap-2 items-center;
+  }
+
+  footer :global(.theme-switch) {
+    min-height: 36px;
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--theme-sidebar-surface-border, var(--theme-sidebar-border));
+    background-color: var(--theme-bg-sidebar-main-tabs);
+    border-radius: var(--radius-full);
+    box-sizing: border-box;
+  }
+
+  footer :global(.theme-switch .toggle-button) {
+    width: 36px;
+    height: 36px;
+    padding: 0;
   }
 </style>
 

@@ -1,6 +1,6 @@
 import * as ts from 'typescript'
 import {promises as fs} from 'fs'
-import {resolve, relative} from 'path'
+import {resolve, relative, sep} from 'path'
 
 function createCompilerHost({
   options,
@@ -19,9 +19,15 @@ function createCompilerHost({
   }>
 }): ts.CompilerHost {
   const testFileNames = testFiles.map(({name}) => name)
-  const testFileNamesRelative = testFileNames.map(name =>
-    name.replace('../__tests__/', '').replace(/\.(j|t)sx?$/gi, ''),
-  )
+  const testFileNamesRelative = testFileNames.map(name => {
+    return name
+      .replace(`..${sep}__tests__${sep}`, '')
+      .replace(/\.(j|t)sx?$/gi, '')
+      .replaceAll(/\\/gi, '')
+      .replaceAll(/\t/gi, 't')
+      .replaceAll(/\r/gi, 'r')
+      .replaceAll(/\f/gi, 'f')
+  })
   const tests = testFiles.map(({code}) => code)
   const declNames = declarations.map(({name}) => name)
   const declFileNames = declarations.map(({fileName}) => fileName)
@@ -30,10 +36,15 @@ function createCompilerHost({
     fileName: string,
     {virtual, real}: {virtual: (code: string) => T; real: () => T},
   ) {
+    const path = fileName.split('/').join(sep)
     if (testFileNames.includes(fileName))
       return virtual(tests[testFileNames.indexOf(fileName)])
+    if (testFileNames.includes(path))
+      return virtual(tests[testFileNames.indexOf(path)])
     if (declFileNames.includes(fileName))
       return virtual(decls[declFileNames.indexOf(fileName)])
+    if (declFileNames.includes(path))
+      return virtual(decls[declFileNames.indexOf(path)])
     return real()
   }
   const resolutionHost: ts.ModuleResolutionHost = {
@@ -71,8 +82,15 @@ function createCompilerHost({
     getNewLine: () => ts.sys.newLine,
     useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
     resolveModuleNames(moduleNames, containingFile) {
+      const consistentModuleNames = moduleNames.map(name =>
+        name
+          .replaceAll(/\\/gi, '')
+          .replaceAll(/\t/gi, 't')
+          .replaceAll(/\r/gi, 'r')
+          .replaceAll(/\f/gi, 'f'),
+      )
       const resolvedModules: ts.ResolvedModule[] = []
-      for (const moduleName of moduleNames) {
+      for (const moduleName of consistentModuleNames) {
         if (declNames.includes(moduleName)) {
           resolvedModules.push({
             resolvedFileName: declFileNames[declNames.indexOf(moduleName)],
@@ -119,7 +137,7 @@ export async function compile({
   const [declarations, filesContents] = await Promise.all([
     Promise.all(
       Object.entries(paths).map(async ([name, path]) => {
-        const fileName = resolve(__dirname, ...path.split(/\//gi))
+        const fileName = resolve(__dirname, ...path.split(sep))
         return {
           name,
           fileName,

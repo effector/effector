@@ -26,8 +26,13 @@ export default {
         ],
         'package.json',
         'inspect.d.ts',
+        'enable_debug_traces.d.ts',
       ]),
-    () => massCopy('src/babel', 'npm/effector', ['babel-plugin.js']),
+    () =>
+      massCopy('src/babel', 'npm/effector', [
+        'babel-plugin.js',
+        'babel-plugin-react.js',
+      ]),
     rollupEffector,
     publishScript('effector'),
   ],

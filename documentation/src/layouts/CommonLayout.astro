@@ -8,7 +8,7 @@ import { SITE } from "../consts";
 
 type DocsEntry = CollectionEntry<"docs">["data"];
 export interface Props extends DocsEntry {
-  redirectTo?: string;
+	redirectTo?: string;
 }
 
 const { redirectTo, ...data } = Astro.props;
@@ -16,27 +16,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const currentPage = Astro.url.pathname;
 ---
 
-<html dir={data.dir} lang={data.lang} class="initial">
-  <head>
-    <HeadCommon />
-    <HeadSEO {...data} canonicalUrl={canonicalURL} />
-    {redirectTo ? <meta http-equiv="refresh" content={`0;URL=${redirectTo}`} /> : null}
-    <title>
-      {`${data.title} | ${SITE.title}`}
-    </title>
-    <style>
-      body {
-        --doc-padding: 2rem;
-        display: grid;
-        grid-template-rows: 1fr auto;
-        width: 100%;
-      }
-    </style>
-  </head>
+<html dir={data.dir} lang={data.lang} class='initial'>
+	<head>
+		<HeadCommon />
+		<HeadSEO {...data} canonicalUrl={canonicalURL} />
+		{redirectTo ? <meta http-equiv='refresh' content={`0;URL=${redirectTo}`} /> : null}
+		<title>
+			{`${data.title} | ${SITE.title}`}
+		</title>
+		<style>
+			body {
+				--doc-padding: var(--space-8);
+				display: grid;
+				grid-template-rows: 1fr auto;
+				width: 100%;
+				position: relative;
+			}
 
-  <body>
-    <Header currentPage={currentPage} />
-    <slot />
-    <Footer />
-  </body>
+		</style>
+	</head>
+
+	<body>
+		<slot />
+		<!-- <Footer /> -->
+	</body>
 </html>

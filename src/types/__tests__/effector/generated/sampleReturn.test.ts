@@ -953,37 +953,69 @@ describe('tuple target', () => {
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })
@@ -1038,49 +1070,93 @@ describe('tuple target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })
@@ -1135,49 +1211,93 @@ describe('tuple target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })
@@ -1232,49 +1352,93 @@ describe('tuple target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })
@@ -1298,16 +1462,27 @@ describe('tuple target, typed fn', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })
@@ -1340,27 +1515,49 @@ describe('tuple target, typed fn', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })
@@ -1393,27 +1590,49 @@ describe('tuple target, typed fn', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })
@@ -1446,27 +1665,49 @@ describe('tuple target, typed fn', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
+        Target requires 2 element(s) but source may have fewer.
       "
     `)
   })

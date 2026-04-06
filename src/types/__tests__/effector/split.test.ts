@@ -2,6 +2,7 @@
 import {
   createEvent,
   createStore,
+  createEffect,
   Event,
   split,
   attach,
@@ -78,18 +79,23 @@ test('case store case mismatch (should fail)', () => {
   const secondTarget: EventCallable<number> = createEvent()
   const defaultarget: EventCallable<number> = createEvent()
   split({
-    //@ts-expect-error
     source,
+    //@ts-expect-error
     match: caseStore,
     cases: {
       a: firstTarget,
+      //@ts-expect-error
       b: secondTarget,
       __: defaultarget,
     },
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+    Type 'StoreWritable<\\"a\\" | \\"c\\">' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
+      Types of property '__' are incompatible.
+        Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+          Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+    Object literal may only specify known properties, and 'b' does not exist in type '{ a: EventCallable<number>; __: EventCallable<number>; }'.
     "
   `)
 })
@@ -121,18 +127,21 @@ test('case function case mismatch (should fail)', () => {
   const secondTarget: EventCallable<number> = createEvent()
   const defaultarget: EventCallable<number> = createEvent()
   split({
-    //@ts-expect-error
     source,
+    //@ts-expect-error
     match: x => (x > 0 ? 'a' : 'c'),
     cases: {
       a: firstTarget,
+      //@ts-expect-error
       b: secondTarget,
       __: defaultarget,
     },
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+    Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+      Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+    Object literal may only specify known properties, and 'b' does not exist in type '{ a: EventCallable<number>; __: EventCallable<number>; }'.
     "
   `)
 })
@@ -222,12 +231,18 @@ describe('any to void', () => {
       source,
       match: $case,
       cases: {
+        //@ts-expect-error
         a: [aNonVoid, aVoid],
       },
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: number; caseType: string | void; }'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -361,13 +376,14 @@ describe('matcher function with inference', () => {
     const defTrigger = createEvent<{tag: 'a'} | B>()
     const $cFlag = createStore(false)
     split({
-      //@ts-expect-error
       source,
       match: {
+        //@ts-expect-error
         a: (src): src is B => src.tag === 'b',
         c: $cFlag,
       },
       cases: {
+        //@ts-expect-error
         a: [aFull, aPart],
         c,
         __: defTrigger,
@@ -375,7 +391,67 @@ describe('matcher function with inference', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"case should extends type inferred by matcher function\\"; incorrectCases: { a: { caseType: A | { value: 0; }; inferredType: B; }; }; }'.
+      Type '(src: A | B) => src is B' is not assignable to type '(source: A | B) => source is A'.
+        Type predicate 'src is B' is not assignable to 'source is A'.
+          Type 'B' is not assignable to type 'A'.
+            Types of property 'tag' are incompatible.
+              Type '\\"b\\"' is not assignable to type '\\"a\\"'.
+      Type 'EventCallable<A>' is not assignable to type 'UnitTargetable<B>'.
+        The types of '__.tag' are incompatible between these types.
+          Type '\\"a\\"' is not assignable to type '\\"b\\"'.
+      Type 'EventCallable<{ value: 0; }>' is not assignable to type 'UnitTargetable<B>'.
+        Types of property '__' are incompatible.
+          Property 'tag' is missing in type '{ value: 0; }' but required in type 'B'.
+      "
+    `)
+  })
+  test('wrong inference (should fail)', () => {
+    type A = {tag: 'a'; value: 0}
+    type B = {tag: 'b'; value: 'b'}
+    const source = createEvent<A | B>()
+    const aFull = createEvent<A>()
+    const c = createEvent<A | B>()
+
+    split({
+      source,
+      match: {
+        // @ts-expect-error
+        a: (src): src is B => src.tag === 'b',
+      },
+      cases: {
+        // @ts-expect-error
+        a: [aFull, c],
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type '(src: A | B) => src is B' is not assignable to type '(source: A | B) => source is A'.
+        Type predicate 'src is B' is not assignable to 'source is A'.
+          Type 'B' is not assignable to type 'A'.
+            Types of property 'tag' are incompatible.
+              Type '\\"b\\"' is not assignable to type '\\"a\\"'.
+      Type 'EventCallable<A>' is not assignable to type 'UnitTargetable<B>'.
+        The types of '__.tag' are incompatible between these types.
+          Type '\\"a\\"' is not assignable to type '\\"b\\"'.
+      "
+    `)
+  })
+  test('nullable source + type guard in case (should pass)', () => {
+    const $src = createStore<string | null>(null)
+    const a = createEvent<string>()
+
+    split({
+      source: $src,
+      match: {
+        a: (str): str is string => str !== null,
+      },
+      cases: {
+        a,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
       "
     `)
   })
@@ -473,17 +549,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -535,18 +611,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -595,17 +671,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -657,18 +733,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -691,7 +767,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -709,7 +787,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: number; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: number; }'.
         "
       `)
     })
@@ -719,17 +799,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
         "
       `)
     })
@@ -752,7 +832,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -772,7 +854,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -783,18 +867,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1; bar: string}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; b: EventCallable<{ foo: 1; bar: string; }>; }'.
         "
       `)
     })
@@ -811,13 +895,23 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -830,12 +924,18 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
+          //@ts-expect-error
           a: [a],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -845,17 +945,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; }'.
         "
       `)
     })
@@ -872,13 +972,23 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -892,13 +1002,23 @@ describe('array cases', () => {
         source,
         match: $case,
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -909,18 +1029,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 2}>()
       const c = createEvent<{foo: 2}>()
       split({
-        //@ts-expect-error
         source,
         match: $case,
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; b: EventCallable<{ foo: 2; }>; }'.
         "
       `)
     })
@@ -967,17 +1087,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1026,18 +1146,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1083,17 +1203,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1142,18 +1262,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1167,7 +1287,6 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1176,8 +1295,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -1187,7 +1307,6 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1195,8 +1314,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: number; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: number; }'.
         "
       `)
     })
@@ -1205,19 +1325,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
-        //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
         "
       `)
     })
@@ -1236,7 +1354,6 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           write: src => src.a !== null && src.b !== null,
         },
         cases,
@@ -1244,8 +1361,10 @@ describe('array cases', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { a: number | null; b: number | null; }; caseType: { a: number; b: number; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'Event<{ a: number | null; b: number | null; }>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'number | null' is not assignable to type 'number'.
+              Type 'null' is not assignable to type 'number'.
         "
       `)
     })
@@ -1259,7 +1378,6 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
@@ -1268,8 +1386,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -1280,7 +1399,6 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' | 'c' => 'a',
         cases: {
           a: [a],
@@ -1289,8 +1407,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -1300,18 +1419,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1; bar: string}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; b: EventCallable<{ foo: 1; bar: string; }>; }'.
         "
       `)
     })
@@ -1325,17 +1444,25 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -1345,16 +1472,20 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
+          //@ts-expect-error
           a: [a],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -1363,19 +1494,17 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
-        //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' => 'a',
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; }'.
         "
       `)
     })
@@ -1389,17 +1518,25 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -1410,17 +1547,25 @@ describe('array cases', () => {
       split({
         //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' | 'c' => 'a',
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -1430,20 +1575,18 @@ describe('array cases', () => {
       const b = createEvent<{foo: 2}>()
       const c = createEvent<{foo: 2}>()
       split({
-        //@ts-expect-error
         source,
-        //@ts-expect-error src is any
         match: (src): 'a' | 'b' => 'a',
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; b: EventCallable<{ foo: 2; }>; }'.
         "
       `)
     })
@@ -1496,19 +1639,21 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
           a: src => true,
         },
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Property 'b' is missing in type '{ a: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1564,8 +1709,8 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
           a: src => true,
           b: src => true,
@@ -1573,12 +1718,14 @@ describe('array cases', () => {
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Property 'c' is missing in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; c: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1630,19 +1777,21 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1}>()
       const b = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
           a: src => true,
         },
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\"; }'.
+        Property 'b' is missing in type '{ a: (src: { foo: 1; bar: number; }) => true; }' but required in type '{ a: (src: { foo: 1; bar: number; }) => true; b: (p: { foo: 1; bar: number; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; }'.
         "
       `)
     })
@@ -1698,8 +1847,8 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
           a: src => true,
           b: src => true,
@@ -1707,12 +1856,14 @@ describe('array cases', () => {
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Property 'c' is missing in type '{ a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; }' but required in type '{ a: (src: { foo: 1; bar: number; }) => true; b: (src: { foo: 1; bar: number; }) => true; c: (p: { foo: 1; bar: number; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; }>]; b: EventCallable<{ foo: 1; }>; }'.
         "
       `)
     })
@@ -1727,9 +1878,7 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1739,9 +1888,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -1752,9 +1901,7 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1763,9 +1910,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: number; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: number; }'.
         "
       `)
     })
@@ -1774,21 +1921,21 @@ describe('array cases', () => {
       const a = createEvent<{foo: 1; bar: number}>()
       const b = createEvent<{foo: 1; bar: string}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
-          //@ts-expect-error src is any
           a: src => true,
         },
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Property 'b' is missing in type '{ a: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; }'.
         "
       `)
     })
@@ -1803,9 +1950,7 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
@@ -1815,9 +1960,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -1829,11 +1974,8 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
-          //@ts-expect-error src is any
           c: src => true,
         },
         cases: {
@@ -1843,10 +1985,9 @@ describe('array cases', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 1; bar: number; } | { foo: 1; bar: string; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 1; bar: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'bar' is missing in type '{ foo: 1; }' but required in type '{ foo: 1; bar: string; }'.
         "
       `)
     })
@@ -1856,8 +1997,8 @@ describe('array cases', () => {
       const b = createEvent<{foo: 1; bar: string}>()
       const c = createEvent<{foo: 1}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
           a: src => true,
           b: src => true,
@@ -1865,12 +2006,14 @@ describe('array cases', () => {
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\" | \\"c\\"; got: \\"a\\" | \\"b\\"; }'.
+        Property 'c' is missing in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; c: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 1; bar: number; }>]; b: EventCallable<{ foo: 1; bar: string; }>; }'.
         "
       `)
     })
@@ -1885,21 +2028,27 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -1910,20 +2059,22 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
+          //@ts-expect-error
           a: [a],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -1932,21 +2083,21 @@ describe('array cases', () => {
       const a = createEvent<{foo: 2}>()
       const b = createEvent<{foo: 2}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
-          //@ts-expect-error src is any
           a: src => true,
         },
         cases: {
           a: [a],
+          //@ts-expect-error
           b: [b],
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
+        Property 'b' is missing in type '{ a: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; }'.
         "
       `)
     })
@@ -1961,21 +2112,27 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -1987,24 +2144,28 @@ describe('array cases', () => {
         //@ts-expect-error
         source,
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
-          //@ts-expect-error src is any
           c: src => true,
         },
         cases: {
+          //@ts-expect-error
           a: [a],
+          //@ts-expect-error
           b,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Type 'EventCallable<{ foo: 1; }>' is not assignable to type 'Unit<{ foo: 2; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '1' is not assignable to type '2'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
+        Type 'EventCallable<{ foo: 2; }>' is not assignable to type 'UnitTargetable<{ foo: 1; }>'.
+          The types of '__.foo' are incompatible between these types.
+            Type '2' is not assignable to type '1'.
         "
       `)
     })
@@ -2014,25 +2175,23 @@ describe('array cases', () => {
       const b = createEvent<{foo: 2}>()
       const c = createEvent<{foo: 2}>()
       split({
-        //@ts-expect-error
         source,
+        //@ts-expect-error
         match: {
-          //@ts-expect-error src is any
           a: src => true,
-          //@ts-expect-error src is any
           b: src => true,
         },
         cases: {
           a: [a],
           b,
+          //@ts-expect-error
           c,
         },
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source type should extends cases\\"; sourceType: { foo: 1; }; caseType: { foo: 2; } | { foo: 2; } | { foo: 2; }; }'.
-        Parameter 'src' implicitly has an 'any' type.
-        Parameter 'src' implicitly has an 'any' type.
+        Property 'c' is missing in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; }' but required in type '{ a: (src: { foo: 1; }) => true; b: (src: { foo: 1; }) => true; c: (p: { foo: 1; }) => boolean | Store<boolean>; }'.
+        Object literal may only specify known properties, and 'c' does not exist in type '{ a: [EventCallable<{ foo: 2; }>]; b: EventCallable<{ foo: 2; }>; }'.
         "
       `)
     })
@@ -2044,18 +2203,23 @@ describe('array cases', () => {
     const secondTarget: EventCallable<number> = createEvent()
     const defaultarget: EventCallable<number> = createEvent()
     split({
-      //@ts-expect-error
       source,
+      //@ts-expect-error
       match: caseStore,
       cases: {
         a: [firstTarget],
+        //@ts-expect-error
         b: [secondTarget],
         __: [defaultarget],
       },
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match unit should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Type 'StoreWritable<\\"a\\" | \\"c\\">' is not assignable to type 'Unit<\\"a\\" | \\"b\\">'.
+        Types of property '__' are incompatible.
+          Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+            Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+      Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
       "
     `)
   })
@@ -2065,18 +2229,21 @@ describe('array cases', () => {
     const secondTarget: EventCallable<number> = createEvent()
     const defaultarget: EventCallable<number> = createEvent()
     split({
-      //@ts-expect-error
       source,
+      //@ts-expect-error
       match: (src): 'a' | 'c' => 'a',
       cases: {
         a: [firstTarget],
+        //@ts-expect-error
         b: [secondTarget],
         __: [defaultarget],
       },
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match function should return case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Type '\\"a\\" | \\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+        Type '\\"c\\"' is not assignable to type '\\"a\\" | \\"b\\"'.
+      Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
       "
     `)
   })
@@ -2086,27 +2253,85 @@ describe('array cases', () => {
     const secondTarget: EventCallable<number> = createEvent()
     const defaultarget: EventCallable<number> = createEvent()
     split({
-      //@ts-expect-error
       source,
       match: {
         a: src => true,
+        //@ts-expect-error
         c: src => true,
       },
       cases: {
         a: [firstTarget],
+        //@ts-expect-error
         b: [secondTarget],
         __: [defaultarget],
       },
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"match object should contain case names\\"; need: \\"a\\" | \\"b\\"; got: \\"a\\" | \\"c\\"; }'.
+      Object literal may only specify known properties, and 'c' does not exist in type '{ a: (src: number) => true; b: (p: number) => boolean | Store<boolean>; }'.
+      Object literal may only specify known properties, and 'b' does not exist in type '{ a: [EventCallable<number>]; __: [EventCallable<number>]; }'.
+      "
+    `)
+  })
+
+  test('non-inline array in case (should fail)', () => {
+    type A = {tag: 'a'; value: 0}
+    type B = {tag: 'b'; value: 'b'}
+    const source = createEvent<A | B>()
+
+    const $aMatch = createStore(true)
+    const aCase = createEvent<A>()
+    const bCase = createEvent<B>()
+
+    // this works with "as const" modifier, but also should work without it
+    const arrayCase = [aCase, bCase]
+
+    split({
+      // @ts-expect-error
+      source,
+      match: {
+        a: $aMatch,
+      },
+      cases: {
+        // @ts-expect-error
+        a: arrayCase,
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
       "
     `)
   })
 })
 
-test('split + attach', () => {
+test('attach in default case (should fail)', () => {
+  const $number = createStore<number>(0)
+  split({
+    //@ts-expect-error
+    source: $number,
+    match: {},
+    cases: {
+      //@ts-expect-error
+      __: attach({
+        source: createStore<any>(null),
+        effect: (_, param: string) => {},
+      }),
+    },
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type 'StoreWritable<number>' is not assignable to type 'Unit<string>'.
+      Types of property '__' are incompatible.
+        Type 'number' is not assignable to type 'string'.
+    Type 'Effect<string, void, Error>' is not assignable to type 'UnitTargetable<number>'.
+      Types of property '__' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    "
+  `)
+})
+
+test('attach in default case (should pass)', () => {
   const $number = createStore<number>(0)
   split({
     source: $number,
@@ -2120,7 +2345,25 @@ test('split + attach', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"config should be object with fields \\\\\\"source\\\\\\", \\\\\\"match\\\\\\" and \\\\\\"cases\\\\\\"\\"; got: { source: StoreWritable<number>; match: {}; cases: unknown; clock: unknown; }; }'.
+    no errors
+    "
+  `)
+})
+
+test('inline prepend call in cases (should pass)', () => {
+  const fooFx = createEffect(() => {})
+  const errorSettled = createEvent<'ok'>()
+
+  split({
+    source: fooFx.failData,
+    match: res => 'ok',
+    cases: {
+      __: errorSettled.prepend(() => 'ok'),
+    },
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
     "
   `)
 })

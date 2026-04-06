@@ -1,123 +1,155 @@
 ---
-title: Изолированные контексты в effector
-description: Как работать с изолированными состояниями через Scope, их создание и использование в приложении
+title: Изолированный контекст
+description: Узнайте, как работать со скоупами в Effector, зачем они нужны и как использовать их с серверным рендерингом или тестированием.
 lang: ru
+pagefindWeight: 4
 ---
 
 import Tabs from "@components/Tabs/Tabs.astro";
 import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
 
-# Scope: Работа с изолированными контекстами (#isolated-scopes)
+# Изолированный контекст (#isolated-scopes)
 
-[Scope](/ru/api/effector/Scope) - это изолированное окружение для работы с состоянием в effector. Scope позволяет создавать независимые копии состояния всего приложения, что особенно полезно для:
+С помощью [скоупов](/ru/api/effector/Scope) вы можете создать изолированный экземпляр всего приложения, который содержит независимую копию всех юнитов (включая их связи), а также базовые методы для работы с ними:
 
-- 🗄️ Server Side Rendering (SSR)
-- 🧪 Тестирования компонентов и бизнес-логики
-- 🔒 Изоляции состояния для разных пользователей/сессий
-- 🚀 Параллельного запуска нескольких инстансов приложения
+```ts "fork" "allSettled"
+import { fork, allSettled, createStore, createEvent } from "effector";
 
-Scope создает отдельную "вселенную" для юнитов effector, где каждый стор имеет свое независимое состояние, а события и эффекты работают с этим состоянием изолированно от других scope.
+// Создаем новый скоуп
+const scope = fork();
 
-:::info{title="Создание Scope"}
-Создать scope приложения можно через метод [fork](/ru/api/effector/fork).
-Fork API - это одна из самых мощных особенностей effector.
+const $counter = createStore(0);
+const increment = createEvent();
+
+$counter.on(increment, (state) => state + 1);
+
+// Запускаем событие и дожидаемся всей цепочки выполнения
+await allSettled(increment, { scope });
+
+console.log(scope.getState($counter)); // 1
+console.log($counter.getState()); // 0 - оригинальный стор остается без изменений
+```
+
+С помощью [`fork`](/ru/api/effector/fork) мы создаем новый [скоуп](/ru/api/effector/Scope), а с помощью [`allSettled`](/ru/api/effector/allSettled) — запускаем цепочку событий внутри указанного скоупа и дожидаемся ее завершения.
+
+:::info{title="Независимость скоупов"}
+Не существует механизма для обмена данными между скоупами; каждый экземпляр полностью изолирован и работает самостоятельно.
 :::
+
+## Зачем нужен cкоуп? (#why-use-scope)
+
+В effector все состояние хранится глобально. В клиентском приложении (SPA) это не проблема: каждый пользователь получает собственный экземпляр кода и работает со своим состоянием. Но при серверном рендеринге (SSR) или параллельном тестировании глобальное состояние становится проблемой: данные одного запроса или теста могут “протечь” в другой. Поэтому нам необходим [скоуп](/ru/api/effector/Scope).
+
+- **SSR** — сервер работает как единый процесс и обслуживает запросы множества пользователей. Для каждого запроса можно создать скоуп, который изолирует данные от глобального контекста Effector и предотвращает утечку состояния одного пользователя в запрос другого.
+- **Тестирование** — при параллельном запуске тестов возможны гонки данных и коллизии состояний. Скоуп позволяет каждому тесту выполняться со своим собственным изолированным состоянием.
+
+У нас есть подробные гайды по [работе с серверным рендерингом (SSR)](/ru/guides/server-side-rendering) и [тестировании](/ru/guides/testing), а здесь мы сосредоточимся на основных принципах работы со скоупом, его правилах и способах избежать распространенных ошибок.
 
 ## Правила работы со скоупом (#scope-rules)
 
-При работе со Scope важно понимать правила вызова эффектов и событий, чтобы избежать потери контекста. Рассмотрим основные паттерны использования:
+Для корректной работы со скоупом имеется ряд правил, чтобы избежать [потери скоупа](/ru/guides/scope-loss):
 
-### Правила вызова эффектов (#effect-calls-rules)
+### Вызов эффектов и промисов (#effect-calls-rules)
 
-1. Эффекты можно безопасно вызывать внутри других эффектов
-2. Нельзя смешивать вызовы эффектов с обычными асинхронными функциями
+Для обработчиков эффектов, которые вызывают другие эффекты, убедитесь, что вы вызываете только эффекты, а не обычные асинхронные функции. Кроме того, вызовы эффектов должны быть ожидаемыми (`awaited`).
 
-<Tabs>
-  <TabItem label="✅ Правильно">
+Императивные вызовы эффектов в этом плане безопасны, потому что effector запоминает скоуп в котором начинался императивный вызов эффекта и при завершении вызова восстанавливает его обратно, что позволяет сделать ещё один вызов подряд.
 
-```ts
+Можно вызывать методы `Promise.all([fx1(), fx2()])` и прочие из стандартного api javascript, потому что в этих случаях вызовы эффектов по прежнему происходят синхронно и скоуп безопасно сохраняется.
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts wrap data-border="good" data-height="full"
+// ✅ правильное использование эффекта без вложенных эффектов
+const delayFx = createEffect(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 80));
+});
+
+// ✅ правильное использование эффекта с вложенными эффектами
 const authFx = createEffect(async () => {
-  // Безопасно - вызов эффекта внутри эффекта
   await loginFx();
 
-  // Безопасно - Promise.all с эффектами
   await Promise.all([loadProfileFx(), loadSettingsFx()]);
 });
 ```
 
-  </TabItem>
-  <TabItem label="❌ Неправильно">
+</Fragment>
 
-```ts
-const authFx = createEffect(async () => {
-  await loginFx();
+  <Fragment slot="right">
 
-  // Потеря scope! Нельзя смешивать с обычными промисами
-  await new Promise((resolve) => setTimeout(resolve, 100));
+```ts wrap data-border="bad" data-height="full"
+// ❌ неправильное использование эффекта с вложенными эффектами
 
-  // Этот вызов будет в глобальном scope
-  await loadProfileFx();
+const sendWithAuthFx = createEffect(async () => {
+  await authUserFx();
+
+  //неправильно! Это должно быть обернуто в эффект.
+  await new Promise((resolve) => setTimeout(resolve, 80));
+
+  // здесь скоуп теряется.
+  await sendMessageFx();
 });
 ```
 
-  </TabItem>
-</Tabs>
+</Fragment>
 
-Если **не** придерживаться этих правил, то это грозит [потерей скоупа](#scope-loss)!
+</SideBySide>
 
-:::tip{title="✅ Лучше декларативно!"}
-Лучше вызывать эффекты декларативно, при помощи метода `sample`!
+:::info{title="attach в деле"}
+Для сценариев, когда эффект может вызывать другой эффект или выполнять асинхронные вычисления, но не то и другое одновременно, рассмотрите использование метода [`attach`](/ru/api/effector/attach) для более лаконичных императивных вызовов.
 :::
 
-## Работа с начальным состоянием (#initial-state)
+### Использование юнитов с фреймворками (#framework-rules)
 
-При создании scope часто требуется задать начальные значения для сторов. Это особенно важно при SSR или тестировании, когда нужно подготовить определенное состояние приложения, сделать это можно при помощи передачи свойства `values` в первые аргумент метода `fork`.
+Всегда используйте хук `useUnit` в связке с фреймворками, чтобы effector сам вызвал юнит в нужном ему скоупе:
 
-```ts
-const scope = fork({
-  values: [
-    [$store, "value"],
-    [$user, { id: 1, name: "Alice" }],
-  ],
-});
+```tsx wrap "useUnit"
+import { useUnit } from "effector-react";
+import { $counter, increased, sendToServerFx } from "./model";
+
+const Component = () => {
+  const [counter, increase, sendToServer] = useUnit([$counter, increased, sendToServerFx]);
+
+  return (
+    <div>
+      <button onClick={increase}>{counter}</button>
+      <button onClick={sendToServer}>send data to server</button>
+    </div>
+  );
+};
 ```
 
-:::info{title="Что принимает values"}
-Свойство `values` принимает в себя массив пар со значением `[$store, value]`.
-:::
-
-Это особенно полезно в случаях:
-
-- Серверного рендеринга (SSR) - чтобы гидрировать клиент нужными данными с сервера
-- Тестирования компонентов с разными начальными данными
-- Сохранения и восстановления состояния приложения
+Ну все, хватит слов, давайте посмотри на то как это работает.
 
 ## Использование в SSR (#ssr-usage)
 
-`Scope` является **ключевым** механизмом для реализации SSR в effector.
-Представим, что два пользователя зашли к вам на сайт и оба отправили запрос о получение списка пользователей, а так как стор у нас в глобальной области, то здесь бы началось [состояние гонки](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5_%D0%B3%D0%BE%D0%BD%D0%BA%D0%B8), и чей бы запрос отработал быстрее, те бы данные получили **ОБА** пользователя, что привело бы к утечки данных между разными пользователями.
+Представим ситуацию: у нас есть сайт с SSR, где на странице профиля показывается список личных уведомлений пользователя. Если мы не будем использовать скоуп, то получится следующее:
 
-:::warning{title="Сериализация"}
-При сериализации scope автоматически игнорирует сторы с флагом `{serialize: 'ignore'}`. Используйте этот флаг для предотвращения утечки чувствительных данных.
-:::
+- Пользователь А делает запрос → на сервере в `$notifications` загружаются его уведомления.
+- Почти одновременно Пользователь B делает запрос → стор перезаписывается его данными.
+- В результате оба получат список уведомлений Пользователя B.
 
-При использовани `scope` каждый запрос получает свою копию состояния:
+Получилось явно не то, что мы хотели, да ? Это и есть [состояние гонки](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5_%D0%B3%D0%BE%D0%BD%D0%BA%D0%B8), ведущее к утечке приватных данных.
+В этой ситуации скоуп обеспечит нам изолированный контекст, который будет работать только для текущего пользователя: Пользователь сделал запрос -> создался скоуп и теперь мы меняем состояние только в нашем скоупе, так будет работать для каждого запроса.
 
 <Tabs>
-  <TabItem label="🗄️ Сервер">
+  <TabItem label="Сервер">
 
-```jsx
+```tsx "fork" "allSettled" "serialize"
 // server.tsx
 import { renderToString } from "react-dom/server";
-import { fork, serialize } from "effector";
+import { fork, serialize, allSettled } from "effector";
 import { Provider } from "effector-react";
-import { $users, fetchUsersFx } from "./model";
+import { fetchNotificationsFx } from "./model";
 
 async function serverRender() {
   const scope = fork();
 
   // Загружаем данные на сервере
-  await allSettled(fetchUsersFx, { scope });
+  await allSettled(fetchNotificationsFx, { scope });
 
   // Рендерим приложение
   const html = renderToString(
@@ -141,13 +173,14 @@ async function serverRender() {
 ```
 
 </TabItem>
-<TabItem label="🧑‍💻 Клиент">
+<TabItem label="Клиент">
 
 ```tsx
 // client.tsx
 import { hydrateRoot } from "react-dom/client";
 import { fork } from "effector";
 
+// гидрируем скоуп начальными значениями
 const scope = fork({
   values: window.INITIAL_DATA,
 });
@@ -163,337 +196,22 @@ hydrateRoot(
 </TabItem>
 </Tabs>
 
-:::info{title="Про allSettled"}
-Функция [`allSettled`](/ru/api/effector/allSettled) принимает в себя событие, эффект или scope, ждет завершения всех порожденных им сайд-эффектов. В данном примере это гарантирует, что все асинхронные операции завершатся до сериализации состояния.
-:::
-
-В этом примере мы:
-
-1. На сервере создаем scope и запускаем в нем начальную подготовку данных
-2. Сериализуем состояние scope
-3. На клиенте восстанавливаем состояние из сериализованных данных
-
-Благодаря использованию Scope мы очень легко можем:
-
-- Подготовить начальное состояние на сервере
-- Сериализовать это состояние
-- Восстановить состояние на клиенте
-- Обеспечить гидратацию без потери реактивности
-
-:::tip{title="Сериализация данных"}
-Метод [`serialize`](/ru/api/effector/serialize) преобразует состояние в сериализованное состояние, которая может быть безопасно передано с сервера на клиент. При этом сериализуются только данные, а не функции или методы.
-:::
-
-Здесь мы показали вам маленький пример работы с SSR, с более подробным гайдом, [как настроить и работать с SSR вы можете прочитать тут](/ru/guides/server-side-rendering).
-
-## Тестирование (#scope-for-testing)
-
-Scope является мощным инструментом для тестирования, так как позволяет:
-
-- Изолировать тесты друг от друга
-- Устанавливать начальное состояние для каждого теста
-- Проверять изменения состояния после действий
-- Имитировать разные сценарии пользователя
-
-:::info{title="Изоляция состояния"}
-`Scope` создает отдельную копию состояния. При этом исходный стор остается неизменным!
-:::
-
-Пример тестирования процесса авторизации:
-
-```ts
-describe("auth flow", () => {
-  it("should login user", async () => {
-    // Создаем изолированный scope для теста
-    const scope = fork();
-
-    // Выполняем эффект логина
-    await allSettled(loginFx, {
-      scope,
-      params: {
-        email: "test@example.com",
-        password: "123456",
-      },
-    });
-
-    // Проверяем состояние конкретно в этом scope
-    expect(scope.getState($user)).toEqual({
-      id: 1,
-      email: "test@example.com",
-    });
-  });
-
-  it("should handle login error", async () => {
-    const scope = fork();
-
-    await allSettled(loginFx, {
-      scope,
-      params: {
-        email: "invalid",
-        password: "123",
-      },
-    });
-
-    expect(scope.getState($error)).toBe("Invalid credentials");
-    expect(scope.getState($user)).toBeNull();
-  });
-});
-```
-
-### Моки эффектов (#mocking-effects)
-
-Похожий паттерн для начальных значений может быть использован и для эффектов, чтобы реализовать мок данных, для этого нужно передать `handlers` в объект аргумента:
-
-```ts
-// Можно также передавать моки для эффектов:
-const scope = fork({
-  handlers: [
-    [effectA, async () => "true"],
-    [effectB, async () => ({ id: 1, data: "mock" })],
-  ],
-});
-```
-
-## Потеря и сохранение `scope` (#scope-loss)
-
-При обработке асинхронных операций мы можем столкнуться с "потерей" scope. Это происходит потому, что асинхронные операции в JavaScript выполняются в другом цикле событий (event loop), где контекст выполнения уже потерян. В момент создания асинхронной операции scope существует, но к моменту её выполнения он уже недоступен, так как effector не может автоматически сохранить и восстановить контекст через асинхронные границы.
-Это может происходить при использовании таких API:
-
-- `setTimeout`/`setInterval`
-- `addEventListener`
-- `webSocket` и др.
-
-### Как исправить потерю scope ? (#how-to-fix-scope-loss)
-
-Здесь нам на помощь приходит метод [`scopeBind`](/ru/api/effector/scopeBind). Он создаёт функцию, привязанную к скоупу в котором метод был вызван, позволяя безопасно вызывать её в дальнейшем.
-
-Рассмотрим пример, где у нас есть два таймера на странице и каждый из них независимо работает, у каждого таймера есть следующие события:
-
-- Остановить таймер - `timerStopped`
-- Продолжить таймер - `timerStarted`
-- Сбросить таймер - `timerReset`
-
-```ts
-export const timerStopped = createEvent();
-export const timerReset = createEvent();
-export const timerStarted = createEvent();
-```
-
-Также у нас будет событие `tick`, на которое мы подпишемся стором для обновления счетчика.
-Для сохранения результата мы создадим стор `$timerCount`.
-
-```ts
-const tick = createEvent();
-
-export const $timerCount = createStore(0)
-  .on(tick, (seconds) => seconds + 1)
-  .reset(timerReset);
-```
-
-Не стоит также и забыть об очистке таймера, для этого нам понадобится также создать стор `$timerId`, чтобы сохранять `intervalId`.
-А также нам нужны эффекты:
-
-1. Для запуска таймера – `startFx`
-2. Для очистки таймера – `stopFx`
-
-```ts
-const TIMEOUT = 1_000;
-
-const timerStopped = createEvent();
-const timerReset = createEvent();
-const timerStarted = createEvent();
-const tick = createEvent();
-
-// запуск таймера
-const startFx = createEffect(() => {
-  const intervalId = setInterval(() => {
-    // здесь вся проблема
-    tick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-
-// остановка таймера
-const stopFx = createEffect((timerId: number) => {
-  clearInterval(timerId);
-});
-
-// id таймера для очистки
-const $timerId = createStore<null | number>(null)
-  .on(startFx.doneData, (_, timerId) => timerId)
-  .on(stopFx.finally, () => null);
-
-const $timerCount = createStore(0)
-  .on(tick, (seconds) => seconds + 1)
-  .reset(timerReset);
-
-// логика запуска таймера
-sample({
-  clock: timerStarted,
-  filter: $timerId.map((timerId) => !timerId),
-  target: startFx,
-});
-
-// логика остановки таймера
-sample({
-  clock: timerStopped,
-  source: $timerId,
-  filter: Boolean,
-  target: stopFx,
-});
-```
-
-Обратите внимание на вызов `tick` в `setInterval`, мы вызываем его напрямую. Здесь и кроется вся проблема, как мы писали выше, к моменту вызова `tick` скоуп уже мог измениться, либо удалиться - проще говоря "потеряться". Однако благодаря `scopeBind` мы связываем событие `tick` c нужным нам скоупом.
-
-<Tabs>
-<TabItem label="❌ До">
-
-```ts
-const startFx = createEffect(() => {
-  const intervalId = setInterval(() => {
-    tick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-```
-
-</TabItem>
-<TabItem label="✅ После">
-
-```ts
-const startFx = createEffect(() => {
-  const bindedTick = scopeBind(tick);
-
-  const intervalId = setInterval(() => {
-    bindedTick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-```
-
-</TabItem>
-</Tabs>
-
-:::info{title="scopeBind без scope?"}
-Возможно вы уже заметили, что мы не передаем в `scopeBind` сам `scope`, это связано с тем, что текущий скоуп находится в глобальной переменной, и функция `scopeBind` замыкает нужный скоуп в себе в момент вызова. Однако, если вам нужно, то вы можете передать нужный `scope` в объекта второго аргумента.
-:::
-
-И того мы имеем:
-
-```ts
-import { createEffect, createEvent, createStore, sample, scopeBind } from "effector";
-
-const TIMEOUT = 1_000;
-
-const timerStopped = createEvent();
-const timerReset = createEvent();
-const timerStarted = createEvent();
-const tick = createEvent();
-
-// запуск таймера
-const startFx = createEffect(() => {
-  // привязываем событие к текущему активному скоупу
-  const bindedTick = scopeBind(tick);
-
-  const intervalId = setInterval(() => {
-    bindedTick();
-  }, TIMEOUT);
-
-  return intervalId;
-});
-
-// остановка и очистка таймера
-const stopFx = createEffect((timerId: number) => {
-  clearInterval(timerId);
-});
-
-// счетчик времени в секундах
-const $timerCount = createStore(0)
-  .on(tick, (seconds) => seconds + 1)
-  .reset(timerReset);
-
-// id таймера
-const $timerId = createStore<null | number>(null)
-  .on(startFx.doneData, (_, timerId) => timerId)
-  .reset(stopFx.finally);
-
-// логика запуска таймера
-sample({
-  clock: timerStarted,
-  filter: $timerId.map((timerId) => !timerId),
-  target: startFx,
-});
-
-// логика остановки таймера
-sample({
-  clock: timerStopped,
-  source: $timerId,
-  filter: Boolean,
-  target: stopFx,
-});
-```
-
-:::tip{title="Scope и фреймворки"}
-Если вы используете effector в связке с фреймворками (React, Vue и др.), то вы можете просто использовать хук `useUnit` для юнитов (store, event и effect), он сам свяжет их с текущим активным скоупом.
-:::
-
-### Почему происходит потеря scope? (#why-scope-loss)
-
-Давайте представим, то как работает скоуп в effector:
-
-```ts
-// наш активный скоуп
-let scope;
-
-function process() {
-  try {
-    scope = "effector";
-    asyncProcess();
-  } finally {
-    scope = undefined;
-    console.log("наш скоуп undefined");
-  }
-}
-
-async function asyncProcess() {
-  console.log("у нас есть скоуп", scope); // effector
-
-  await 1;
-
-  // тут мы уже потеряли контекст
-  console.log("а здесь скоупа уже нет ", scope); // undefined
-}
-
-process();
-
-// Вывод:
-// у нас есть скоуп effector
-// наш скоуп undefined
-// а здесь скоупа уже нет undefined
-```
-
-:::warning{title="Последствия потери scope"}
-Потеря scope может привести к тому, что:
-
-- Обновления данных не попадут в нужный скоуп
-- Клиент получит неконсистентное состояние
-- Изменения не будут отражены в UI
-- Возможны утечки данных между разными пользователями при SSR
-
-:::
-
-Возможно вас интересует вопрос **"Это проблема именно эффектора?"**, однако это общий принцип работы с асинхронностью в JavaScript, все технологии, которые сталкиваются с необходимостью сохранения контекста в котором происходят вызовы так или иначе обходят это затруднение. Самый характерный пример это [zone.js](https://github.com/angular/angular/tree/main/packages/zone.js),
-который для сохранения контекста оборачивает все асинхронные глобальные функции вроде `setTimeout` или `Promise.resolve`. Также способами решения этой проблемы бывает использование генераторов или `ctx.schedule(() => asyncCall())`.
-
-:::info{title="Будущее решение"}
-В JavaScript готовится proposal [Async Context](https://github.com/tc39/proposal-async-context), который призван решить проблему потери контекста на уровне языка. Это позволит:
-
-- Сохранять контекст автоматически через все асинхронные вызовы
-- Избавиться от необходимости явного использования scopeBind
-- Получить более предсказуемое поведение асинхронного кода
-
-Как только это предложение войдет в язык и получит широкую поддержку, effector будет обновлен для использования этого нативного решения.
-:::
+Что стоит отметить в этом примере:
+
+1. Мы сериализовали данные с помощью метода [`serialize`](/ru/api/effector/serialize), чтобы корректно передать их на клиент.
+2. На клиенте мы гидрировали сторы [с помощью аргумента конфигурации `values` у `fork`](/ru/api/effector/fork#methods-fork-options).
+
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+  - [`Scope`](/ru/api/effector/Scope) - Описание скоупа и его методов
+  - [`scopeBind`](/ru/api/effector/scopeBind) - Метод для привязки юнита к скоупу
+  - [`fork`](/ru/api/effector/fork) - Оператор для создания скоупа
+  - [`allSettled`](/ru/api/effector/allSettled) - Метод для вызова юнита в предоставленном скоупе и ожидания завершения всей цепочки эффектов
+  - [`serialize`](/ru/api/effector/serialize) - Метод для получения сериализованного значения сторов
+  - [`hydrate`](/ru/api/effector/hydrate) - Метод для гидрации сериализованных данных
+- **Статьи**
+  - [Что такое потеря скоупа и как исправить эту проблему](/ru/guides/scope-loss)
+  - [Гайд по работе с SSR](/ru/guides/server-side-rendering)
+  - [Гайд по тестированию](/ru/guides/testing)
+  - [Важность SID для гидрации сторов](/ru/explanation/sids)

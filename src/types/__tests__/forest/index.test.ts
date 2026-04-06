@@ -146,6 +146,7 @@ describe('remap', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Store<string>' is not assignable to type 'Store<number>'.
+          Type 'string' is not assignable to type 'number'.
         Type 'Store<number>' is not assignable to type 'Store<string>'.
           Type 'number' is not assignable to type 'string'.
         "

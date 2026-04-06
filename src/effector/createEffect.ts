@@ -3,8 +3,19 @@ import type {Effect} from './unit.h'
 import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {createNode, own} from './createNode'
-import {launch, setForkPage, forkPage, isWatch, type QueueInstance} from './kernel'
-import {createStore, createEvent} from './createUnit'
+import {
+  launch,
+  setForkPage,
+  forkPage,
+  isWatch,
+  type QueueInstance,
+} from './kernel'
+import {
+  createStore,
+  createEvent,
+  setUnitTrace,
+  getUnitTrace,
+} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction, assert} from './validate'
 import {EFFECT} from './tag'
@@ -36,6 +47,7 @@ export function createEffect<Params, Done, Fail = Error>(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     {...maybeConfig, actualOp: EFFECT},
   ) as unknown as Effect<Params, Done, Fail>
+  setUnitTrace(instance, getUnitTrace(createEffect))
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))
   //@ts-expect-error

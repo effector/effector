@@ -59,7 +59,7 @@ const keywords = [
 ]
 
 const version = {
-  effector: '23.3.0',
+  effector: '23.4.4',
   'effector-react': '23.3.0',
   'effector-vue': '23.1.1',
   'effector-solid': '0.23.0',
@@ -103,7 +103,8 @@ export default {
       ...compiledFile('inspect'),
       ...esmFile('inspect'),
       'inspect.d.ts',
-      'babel-plugin.js',
+      ...compiledFile('babel-plugin'),
+      'babel-plugin-react.js',
     ],
     keywords,
     ...common,

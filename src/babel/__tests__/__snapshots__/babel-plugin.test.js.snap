@@ -57,7 +57,6 @@ const foo2 = attach({
     sid: '-5raqzc',
   },
 })
-
 const f = () =>
   attach({
     and: {
@@ -74,20 +73,16 @@ const f = () =>
       sid: 'he4rvf',
     },
   })
-
 {
   const incorrect = attach(config)
-
   function attach() {}
 }
 {
   const attach = () => {}
-
   const incorrect = attach(config)
 }
 {
   const attach = () => {}
-
   if (true) {
     const incorrect = attach(config)
   }
@@ -213,7 +208,6 @@ combine({
     sid: '6d0wwi',
   },
 })
-
 const f = a =>
   combine({
     and: [
@@ -232,17 +226,14 @@ const f = a =>
       sid: '-l6wxyg',
     },
   })
-
 {
   const incorrect = combine({
     foo,
   })
-
   function combine() {}
 }
 {
   const combine = () => {}
-
   if (true) {
     const incorrect = combine({
       foo,
@@ -320,12 +311,10 @@ createDomain({
 })
 {
   const incorrect = createDomain()
-
   function createDomain() {}
 }
 {
   const createDomain = () => {}
-
   if (true) {
     const incorrect = createDomain()
   }
@@ -450,7 +439,6 @@ const a = domain.effect({
   name: 'a',
   sid: '-yrcjkp',
 })
-
 const f = () =>
   domain.effect({
     loc: {
@@ -461,7 +449,6 @@ const f = () =>
     name: 'f',
     sid: 'jhjhqd',
   })
-
 const b = domain.effect('hello', {
   loc: {
     file: _effectorFileName,
@@ -471,7 +458,6 @@ const b = domain.effect('hello', {
   name: 'b',
   sid: 'xrlmjq',
 })
-
 const g = () =>
   domain.effect('baz', {
     loc: {
@@ -482,7 +468,6 @@ const g = () =>
     name: 'g',
     sid: 'gzdlvo',
   })
-
 const aAlias = domain.createEffect({
   loc: {
     file: _effectorFileName,
@@ -492,7 +477,6 @@ const aAlias = domain.createEffect({
   name: 'aAlias',
   sid: 'lkzafg',
 })
-
 const fAlias = () =>
   domain.createEffect({
     loc: {
@@ -503,7 +487,6 @@ const fAlias = () =>
     name: 'fAlias',
     sid: '-ywgdjk',
   })
-
 const bAlias = domain.createEffect('helloAlias', {
   loc: {
     file: _effectorFileName,
@@ -513,7 +496,6 @@ const bAlias = domain.createEffect('helloAlias', {
   name: 'bAlias',
   sid: '-i4te7u',
 })
-
 const gAlias = () =>
   domain.createEffect('bazAlias', {
     loc: {
@@ -524,7 +506,6 @@ const gAlias = () =>
     name: 'gAlias',
     sid: 'x03ktr',
   })
-
 const {sid} = domain.createEffect({
   loc: {
     file: _effectorFileName,
@@ -594,7 +575,6 @@ const a = domain.event({
   name: 'a',
   sid: '-hh3210',
 })
-
 const f = () =>
   domain.event({
     loc: {
@@ -605,7 +585,6 @@ const f = () =>
     name: 'f',
     sid: '-ofjjww',
   })
-
 const b = domain.event('asm', {
   loc: {
     file: _effectorFileName,
@@ -615,7 +594,6 @@ const b = domain.event('asm', {
   name: 'b',
   sid: 'olrsnt',
 })
-
 const g = () =>
   domain.event('tasm', {
     loc: {
@@ -626,7 +604,6 @@ const g = () =>
     name: 'g',
     sid: 'hnbarx',
   })
-
 const aAlias = domain.createEvent({
   loc: {
     file: _effectorFileName,
@@ -636,7 +613,6 @@ const aAlias = domain.createEvent({
   name: 'aAlias',
   sid: 'p4m37p',
 })
-
 const fAlias = () =>
   domain.createEvent({
     loc: {
@@ -647,7 +623,6 @@ const fAlias = () =>
     name: 'fAlias',
     sid: 's9mo4t',
   })
-
 const bAlias = domain.createEvent('asmAlias', {
   loc: {
     file: _effectorFileName,
@@ -657,7 +632,6 @@ const bAlias = domain.createEvent('asmAlias', {
   name: 'bAlias',
   sid: '-2t87zp',
 })
-
 const gAlias = () =>
   domain.createEvent('tasmAlias', {
     loc: {
@@ -668,7 +642,6 @@ const gAlias = () =>
     name: 'gAlias',
     sid: '1l50ei',
   })
-
 const {sid} = domain.createEvent({
   loc: {
     file: _effectorFileName,
@@ -722,6 +695,43 @@ domain.createEvent('foo', {
   },
   sid: '-uwss53',
 })
+"
+`;
+
+exports[`babel-plugin should create domain no legacy methods with options 1`] = `
+"import {createDomain} from 'effector'
+import {importedDomain} from './local-file'
+const created = createDomain('created', {
+  name: 'created',
+  sid: '-g42wg',
+})
+const event = created.createEvent()
+const eventShort = created.event()
+const eventImported = importedDomain.event('name')
+const effect = created.createEffect(() => 0)
+const effectShort = created.effect({
+  handler: () => 0,
+})
+const effectImported = importedDomain.effect(() => 0, {
+  name: 'name',
+})
+const store = created.createStore(0)
+const storeShort = created.store(0, {
+  name: 'short',
+})
+const storeImported = importedDomain.store('value')
+const domain = created.createDomain()
+const domainShort = created.domain('name')
+const domainImported = importedDomain.domain()
+createDomain(
+  {
+    name: 'second',
+    domain: created,
+  },
+  {
+    sid: '8ugyqx',
+  },
+)
 "
 `;
 
@@ -954,7 +964,6 @@ const quux = createEffect('nice', {
   name: 'quux',
   sid: '-fu1zix',
 })
-
 const f = () =>
   createEffect({
     loc: {
@@ -965,7 +974,6 @@ const f = () =>
     name: 'f',
     sid: 'x9z3su',
   })
-
 const {sid} = createEffect({
   loc: {
     file: _effectorFileName,
@@ -1013,12 +1021,10 @@ createEffect({
 })
 {
   const incorrect = createEffect()
-
   function createEffect() {}
 }
 {
   const createEffect = () => {}
-
   if (true) {
     const incorrect = createEffect()
   }
@@ -1061,7 +1067,6 @@ const baz = createEvent(
     sid: 'zb55dr',
   },
 )
-
 const f = () =>
   createEvent({
     loc: {
@@ -1072,7 +1077,6 @@ const f = () =>
     name: 'f',
     sid: 'ujzd7p',
   })
-
 const {sid} = createEvent({
   loc: {
     file: _effectorFileName,
@@ -1120,12 +1124,10 @@ createEvent({
 })
 {
   const incorrect = createEvent()
-
   function createEvent() {}
 }
 {
   const createEvent = () => {}
-
   if (true) {
     const incorrect = createEvent()
   }
@@ -1393,7 +1395,6 @@ const dod = createStore(null, {
   name: 'dod',
   sid: '441vf7',
 })
-
 const f = a =>
   createStore(a, {
     loc: {
@@ -1404,7 +1405,6 @@ const f = a =>
     name: 'f',
     sid: '34ig6u',
   })
-
 const {sid} = createStore(null, {
   loc: {
     file: _effectorFileName,
@@ -1442,12 +1442,10 @@ createStore(null, {
 })
 {
   const incorrect = createStore(null)
-
   function createStore() {}
 }
 {
   const createStore = () => {}
-
   if (true) {
     const incorrect = createStore(null)
   }
@@ -1525,7 +1523,6 @@ const baz4 = createApi({
     sid: '-m0rrok',
   },
 })
-
 const f = () =>
   createApi({
     and: [
@@ -1543,15 +1540,12 @@ const f = () =>
       sid: '-l2oitl',
     },
   })
-
 {
   const incorrect = createApi(foo, {})
-
   function createApi() {}
 }
 {
   const createApi = () => {}
-
   if (true) {
     const incorrect = createApi(foo, {})
   }
@@ -1806,13 +1800,11 @@ exports[`babel-plugin should debug sids with options 1`] = `
     name: 'quux',
     sid: '-o01o3h:/src/babel/__tests__/fixtures/debug-sids.js:quux',
   })
-
   const fa = () =>
     createEffect({
       name: 'fa',
       sid: '-f4wwm2:/src/babel/__tests__/fixtures/debug-sids.js:fa',
     })
-
   const {sid} = createEffect({
     sid: '-18yher:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1861,13 +1853,11 @@ exports[`babel-plugin should debug sids with options 1`] = `
     name: 'dod',
     sid: 'ts6uvl:/src/babel/__tests__/fixtures/debug-sids.js:dod',
   })
-
   const f = a =>
     createStore(a, {
       name: 'f',
       sid: 'h940v3:/src/babel/__tests__/fixtures/debug-sids.js:f',
     })
-
   const {sid} = createStore(null, {
     sid: 's3u31b:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1902,13 +1892,11 @@ exports[`babel-plugin should debug sids with options 1`] = `
       sid: '-g40i96:/src/babel/__tests__/fixtures/debug-sids.js:baz',
     },
   )
-
   const f = () =>
     createEvent({
       name: 'f',
       sid: '-r9h70a:/src/babel/__tests__/fixtures/debug-sids.js:f',
     })
-
   const {sid} = createEvent({
     sid: '-qcp750:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1957,13 +1945,11 @@ exports[`babel-plugin should debug sids with options 1`] = `
     name: 'dod',
     sid: '-vclm8o:/src/babel/__tests__/fixtures/debug-sids.js:dod',
   })
-
   const f = a =>
     restore(foo, null, {
       name: 'f',
       sid: '-m02imo:/src/babel/__tests__/fixtures/debug-sids.js:f',
     })
-
   const {sid} = restore(foo, null, {
     sid: '-m6nww7:/src/babel/__tests__/fixtures/debug-sids.js:undefined',
   })
@@ -1989,7 +1975,6 @@ import {withFactory as _withFactory} from 'effector'
 import {createQuery} from '@farfetched/core'
 import {debounce} from 'patronum'
 import {delay} from 'patronum/delay'
-
 const q = _withFactory({
   sid: '-8gjzqm',
   fn: () =>
@@ -2004,7 +1989,6 @@ const q = _withFactory({
     column: 10,
   },
 })
-
 _withFactory({
   sid: '-d76u2e',
   fn: () =>
@@ -2021,7 +2005,6 @@ _withFactory({
     column: 0,
   },
 })
-
 _withFactory({
   sid: 'e9kkk1',
   fn: () =>
@@ -2056,7 +2039,6 @@ import {g1} from '../g.ts'
 import {g2} from './g.ts'
 const withFactory = 1
 const _withFactory = 2
-
 const a_val = _withFactory2({
   sid: 'f933k3',
   fn: () => a(0),
@@ -2068,9 +2050,7 @@ const a_val = _withFactory2({
     column: 14,
   },
 })
-
 const a1_val = a1(0)
-
 const b_val = _withFactory2({
   sid: 'qmj9c2',
   fn: () => b(0),
@@ -2082,7 +2062,6 @@ const b_val = _withFactory2({
     column: 14,
   },
 })
-
 const c_val = _withFactory2({
   sid: '-xi699a',
   fn: () => c(0),
@@ -2094,7 +2073,6 @@ const c_val = _withFactory2({
     column: 14,
   },
 })
-
 const e_val = _withFactory2({
   sid: '-c6esvx',
   fn: () => e(0),
@@ -2106,7 +2084,6 @@ const e_val = _withFactory2({
     column: 14,
   },
 })
-
 const f_val = _withFactory2({
   sid: '8nxsry',
   fn: () => f(0),
@@ -2118,7 +2095,6 @@ const f_val = _withFactory2({
     column: 14,
   },
 })
-
 const f1_val = _withFactory2({
   sid: 'zg3bgx',
   fn: () => f1(0),
@@ -2130,7 +2106,6 @@ const f1_val = _withFactory2({
     column: 15,
   },
 })
-
 const g_val = _withFactory2({
   sid: 'k1dyjx',
   fn: () => g(0),
@@ -2142,7 +2117,6 @@ const g_val = _withFactory2({
     column: 14,
   },
 })
-
 const g1_val = _withFactory2({
   sid: '4gqp0u',
   fn: () => g1(0),
@@ -2154,9 +2128,7 @@ const g1_val = _withFactory2({
     column: 15,
   },
 })
-
 const g2_val = g2(0)
-
 const {foo, bar} = _withFactory2({
   sid: '-bpn650',
   fn: () => a(0),
@@ -2176,14 +2148,12 @@ exports[`babel-plugin should factories only with name with options 1`] = `
 import {itIsALongName, Randomizing} from 'c/d'
 import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
-
 const longer = _withFactory({
   sid: 'sxdi9p',
   fn: () => itIsALongName(0),
   name: 'longer',
   method: 'itIsALongName',
 })
-
 const arcade = _withFactory({
   sid: '-rwb2il',
   fn: () =>
@@ -2202,7 +2172,6 @@ const arcade = _withFactory({
   name: 'arcade',
   method: 'default',
 })
-
 _withFactory({
   sid: '-dr78v0',
   fn: () =>
@@ -2212,7 +2181,6 @@ _withFactory({
   name: 'none',
   method: 'Randomizing',
 })
-
 const result = _withFactory({
   sid: '-fbu55p',
   fn: () =>
@@ -2231,12 +2199,10 @@ exports[`babel-plugin should factories without name with options 1`] = `
 import {itIsALongName, Randomizing} from 'c/d'
 import Defaulting, {AnotherImport} from '@/f'
 import {splitMap} from 'patronum/split-map'
-
 const longer = _withFactory({
   sid: 'mn9l4u',
   fn: () => itIsALongName(0),
 })
-
 const arcade = _withFactory({
   sid: 'xpbz5w',
   fn: () =>
@@ -2251,7 +2217,6 @@ const arcade = _withFactory({
       }),
     }),
 })
-
 _withFactory({
   sid: '-yfq3bv',
   fn: () =>
@@ -2259,7 +2224,6 @@ _withFactory({
       arcade,
     }),
 })
-
 const result = _withFactory({
   sid: 'lwwnia',
   fn: () =>
@@ -2271,281 +2235,1540 @@ const result = _withFactory({
 "
 `;
 
-exports[`babel-plugin should hmr 1`] = `
-"var _effectorFileName = '/src/babel/__tests__/fixtures/hmr.js'
-import {withFactory as _withFactory} from 'effector'
-import {createEvent, createStore, sample, createEffect, attach} from 'effector'
-import {createFactory, invoke} from '@withease/factories'
+exports[`babel-plugin should forceScope shouldAdd with options 1`] = `
+"import {
+  useEvent,
+  useGate,
+  useList,
+  useStore,
+  useStoreMap,
+  useUnit,
+} from 'effector-react'
+import {
+  useEvent as useCompatEvent,
+  useGate as useCompatGate,
+  useList as useCompatList,
+  useStore as useCompatStore,
+  useStoreMap as useCompatStoreMap,
+  useUnit as useCompatUnit,
+} from 'effector-react/compat'
 
-function incorrect() {
-  const $si = createStore(0, {
-    loc: {
-      file: _effectorFileName,
-      line: 5,
-      column: 14,
+// ## useEvent
+const event = useEvent(some, {
+  forceScope: true,
+})
+useEvent(another, {
+  forceScope: true,
+})
+useEvent(some, {
+  forceScope: true,
+})
+const event1 = useCompatEvent(some, {
+  forceScope: true,
+})
+useCompatEvent(another, {
+  forceScope: true,
+})
+useCompatEvent(some, {
+  forceScope: true,
+})
+
+// ## useStore
+const value1 = useStore($store, {
+  forceScope: true,
+})
+useStore($store, {
+  forceScope: true,
+})
+useStore($store, {
+  forceScope: true,
+})
+const value2 = useCompatStore($store, {
+  forceScope: true,
+})
+useCompatStore($store, {
+  forceScope: true,
+})
+useCompatStore($store, {
+  forceScope: true,
+})
+
+// ## useUnit
+const value4 = useUnit(
+  {},
+  {
+    forceScope: true,
+  },
+)
+const value5 = useUnit(
+  {
+    a: $foo,
+  },
+  {
+    forceScope: true,
+  },
+)
+const value6 = useUnit([], {
+  forceScope: true,
+})
+const value7 = useUnit([$foo], {
+  forceScope: true,
+})
+const value8 = useUnit([$foo], {
+  forceScope: true,
+})
+useUnit([$foo], {
+  forceScope: true,
+})
+const value9 = useUnit(some, {
+  forceScope: true,
+})
+const value10 = useUnit($another, {
+  forceScope: true,
+})
+const value11 = useCompatUnit(
+  {},
+  {
+    forceScope: true,
+  },
+)
+const value12 = useCompatUnit(
+  {
+    a: $foo,
+  },
+  {
+    forceScope: true,
+  },
+)
+const value13 = useCompatUnit([], {
+  forceScope: true,
+})
+const value14 = useCompatUnit([$foo], {
+  forceScope: true,
+})
+const value15 = useCompatUnit([$foo], {
+  forceScope: true,
+})
+useCompatUnit([$foo], {
+  forceScope: true,
+})
+const value16 = useCompatUnit(some, {
+  forceScope: true,
+})
+const value17 = useCompatUnit($another, {
+  forceScope: true,
+})
+
+// ## useList
+const items25 = useList($store, fn, {
+  forceScope: true,
+})
+const items26 = useList($store, a => 1, {
+  forceScope: true,
+})
+const items27 = useList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items28 = useList(
+  $store,
+  {
+    fn() {
+      return 1
     },
-    name: '$si',
-    sid: 'b1wwb8',
-  })
-  const ei = createEvent({
+  },
+  {
+    forceScope: true,
+  },
+)
+const items29 = useList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+)
+const items30 = useList($store, a => 1, {
+  forceScope: true,
+})
+const items31 = useList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items32 = useList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+)
+const items33 = useCompatList($store, a => 1, {
+  forceScope: true,
+})
+const items34 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items35 = useCompatList(
+  $store,
+  {
+    fn() {
+      return 1
+    },
+  },
+  {
+    forceScope: true,
+  },
+)
+const items36 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+)
+const items37 = useCompatList($store, a => 1, {
+  forceScope: true,
+})
+const items38 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+const items39 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    forceScope: true,
+  },
+)
+
+// ## useStoreMap
+useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  forceScope: true,
+})
+useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn,
+  forceScope: true,
+})
+const value71 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  forceScope: true,
+})
+const value72 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  forceScope: true,
+})
+const value73 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: true,
+})
+const value74 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: (a, k) => 1,
+  forceScope: true,
+})
+const value75 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: (a, [b, c]) => 1,
+  forceScope: true,
+})
+const value76 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  forceScope: true,
+})
+const value77 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn(a, [b, c]) {
+    return 1
+  },
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn,
+  forceScope: true,
+})
+const value81 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  forceScope: true,
+})
+const value82 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  forceScope: true,
+})
+const value83 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: true,
+})
+const value84 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: (a, k) => 1,
+  forceScope: true,
+})
+const value85 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: (a, [b, c]) => 1,
+  forceScope: true,
+})
+const value86 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  forceScope: true,
+})
+const value87 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn(a, [b, c]) {
+    return 1
+  },
+  forceScope: true,
+})
+
+// Should convert to object with forceScope: true
+useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value91 = useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value92 = useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value93 = useStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value94 = useStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value95 = useStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value96 = useStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value100 = useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value101 = useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value102 = useCompatStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value103 = useCompatStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value104 = useCompatStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value105 = useCompatStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+
+// ## useGate
+useGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useGate(Gate, 1, {
+  forceScope: true,
+})
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+useGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(Gate, 1, {
+  forceScope: true,
+})
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {},
+  {
+    forceScope: true,
+  },
+)
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: true,
+  },
+)
+"
+`;
+
+exports[`babel-plugin should forceScope shouldConvertAndAdd with options 1`] = `
+"import {useStoreMap} from 'effector-react'
+import {useStoreMap as useCompatStoreMap} from 'effector-react/compat'
+
+// ## useStoreMap
+
+useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value91 = useStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value92 = useStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value93 = useStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value94 = useStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value95 = useStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value96 = useStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value100 = useCompatStoreMap({
+  store: $store,
+  fn: fn,
+  keys: [],
+  forceScope: true,
+})
+const value101 = useCompatStoreMap({
+  store: $store,
+  fn: a => 1,
+  keys: [],
+  forceScope: true,
+})
+const value102 = useCompatStoreMap({
+  store: $store,
+  fn: (a, b) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value103 = useCompatStoreMap({
+  store: $store,
+  fn: (a, [b, c]) => 1,
+  keys: [],
+  forceScope: true,
+})
+const value104 = useCompatStoreMap({
+  store: $store,
+  fn: function (a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+const value105 = useCompatStoreMap({
+  store: $store,
+  fn: function demo(a, [b, c]) {
+    return 1
+  },
+  keys: [],
+  forceScope: true,
+})
+"
+`;
+
+exports[`babel-plugin should forceScope shouldNotAdd with options 1`] = `
+"import {
+  useEvent,
+  useGate,
+  useList,
+  useStore,
+  useStoreMap,
+  useUnit,
+} from 'effector-react'
+import {
+  useEvent as useScopedEvent,
+  useGate as useScopedGate,
+  useList as useScopedList,
+  useStore as useScopedStore,
+  useStoreMap as useScopedStoreMap,
+  useUnit as useScopedUnit,
+} from 'effector-react/scope'
+import {
+  useEvent as useCompatEvent,
+  useGate as useCompatGate,
+  useList as useCompatList,
+  useStore as useCompatStore,
+  useStoreMap as useCompatStoreMap,
+  useUnit as useCompatUnit,
+} from 'effector-react/compat'
+
+// ## useEvent
+
+useEvent(some, {})
+useEvent(some, {
+  very: true,
+})
+useEvent(some, {
+  forceScope: false,
+})
+useEvent(some, null)
+const event2 = useScopedEvent(some)
+useScopedEvent(another)
+useScopedEvent(some)
+useScopedEvent(some, {})
+useScopedEvent(some, {
+  very: true,
+})
+useScopedEvent(some, {
+  forceScope: false,
+})
+useScopedEvent(some, null)
+useCompatEvent(some, {})
+useCompatEvent(some, {
+  very: true,
+})
+useCompatEvent(some, {
+  forceScope: false,
+})
+useCompatEvent(some, null)
+
+// ## useStore
+
+useStore(some, {})
+useStore(some, {
+  very: true,
+})
+useStore(some, {
+  forceScope: false,
+})
+useStore(some, null)
+const value3 = useScopedStore($store)
+useScopedStore($store)
+useScopedStore($store)
+useScopedStore(some, {})
+useScopedStore(some, {
+  very: true,
+})
+useScopedStore(some, {
+  forceScope: false,
+})
+useScopedStore(some, null)
+useCompatStore(some, {})
+useCompatStore(some, {
+  very: true,
+})
+useCompatStore(some, {
+  forceScope: false,
+})
+useCompatStore(some, null)
+
+// ## useUnit
+
+useUnit($foo, {})
+useUnit({}, {})
+useUnit([], {})
+useUnit(
+  {
+    a: $b,
+  },
+  {},
+)
+useUnit([$b], {})
+useUnit([$b, $a], {})
+useUnit($foo, {})
+useUnit({}, null)
+useUnit([], undefined)
+useUnit(
+  {
+    a: $b,
+  },
+  {
+    forceScope: false,
+  },
+)
+const value18 = useScopedUnit({})
+const value19 = useScopedUnit({
+  a: $foo,
+})
+const value20 = useScopedUnit([])
+const value21 = useScopedUnit([$foo])
+const value22 = useScopedUnit([$foo])
+useScopedUnit([$foo])
+const value23 = useScopedUnit(some)
+const value24 = useScopedUnit($another)
+useScopedUnit($foo, {})
+useScopedUnit({}, {})
+useScopedUnit([], {})
+useScopedUnit(
+  {
+    a: $b,
+  },
+  {},
+)
+useScopedUnit([$b], {})
+useScopedUnit([$b, $a], {})
+useScopedUnit($foo, {})
+useScopedUnit({}, null)
+useScopedUnit([], undefined)
+useScopedUnit(
+  {
+    a: $b,
+  },
+  {
+    forceScope: false,
+  },
+)
+useCompatUnit($foo, {})
+useCompatUnit({}, {})
+useCompatUnit([], {})
+useCompatUnit(
+  {
+    a: $b,
+  },
+  {},
+)
+useCompatUnit([$b], {})
+useCompatUnit([$b, $a], {})
+useCompatUnit($foo, {})
+useCompatUnit({}, null)
+useCompatUnit([], undefined)
+useCompatUnit(
+  {
+    a: $b,
+  },
+  {
+    forceScope: false,
+  },
+)
+
+// ## useList
+
+const items40 = useList($store, fn, {})
+const items41 = useList($store, a => 1, {})
+const items42 = useList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: false,
+  },
+)
+const items43 = useList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    another: true,
+  },
+)
+const items44 = useList($store, a => 1, null)
+const items45 = useList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  undefined,
+)
+const items46 = useList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {},
+)
+const items47 = useScopedList($store, a => 1)
+const items48 = useScopedList($store, {
+  fn: () => 1,
+})
+const items49 = useScopedList($store, {
+  fn() {
+    return 1
+  },
+})
+const items50 = useScopedList($store, {
+  fn: () => 1,
+  keys: [],
+})
+const items51 = useScopedList($store, a => 1)
+const items52 = useScopedList($store, {
+  fn: () => 1,
+})
+const items53 = useScopedList($store, {
+  fn: () => 1,
+  keys: [],
+})
+const items54 = useScopedList($store, a => 1, {})
+const items55 = useScopedList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: false,
+  },
+)
+const items56 = useScopedList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    another: true,
+  },
+)
+const items57 = useScopedList($store, a => 1, null)
+const items58 = useScopedList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  undefined,
+)
+const items59 = useScopedList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {},
+)
+const items61 = useCompatList($store, a => 1, {})
+const items62 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  {
+    forceScope: false,
+  },
+)
+const items63 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {
+    another: true,
+  },
+)
+const items64 = useCompatList($store, a => 1, null)
+const items65 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+  },
+  undefined,
+)
+const items66 = useCompatList(
+  $store,
+  {
+    fn: () => 1,
+    keys: [],
+  },
+  {},
+)
+
+// ## useStoreMap
+
+useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value110 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value112 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value113 = useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  forceScope: false,
+})
+useStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+})
+useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn,
+})
+const value114 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+})
+const value115 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+})
+const value116 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+})
+const value117 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: (a, k) => 1,
+})
+const value118 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: (a, [b, c]) => 1,
+})
+const value119 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: function (a, [b, c]) {
+    return 1
+  },
+})
+const value120 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn(a, [b, c]) {
+    return 1
+  },
+})
+useScopedStoreMap($store, a => 1)
+useScopedStoreMap($store, fn)
+const value121 = useScopedStoreMap($store, fn)
+const value122 = useScopedStoreMap($store, a => 1)
+const value123 = useScopedStoreMap($store, (a, b) => 1)
+const value124 = useScopedStoreMap($store, (a, [b, c]) => 1)
+const value125 = useScopedStoreMap($store, function (a, [b, c]) {
+  return 1
+})
+const value126 = useScopedStoreMap($store, function demo(a, [b, c]) {
+  return 1
+})
+useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value127 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value128 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value129 = useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  forceScope: false,
+})
+useScopedStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value130 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value131 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  defaultValue: 0,
+  forceScope: false,
+})
+const value132 = useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn: a => 1,
+  forceScope: false,
+})
+useCompatStoreMap({
+  store: $store,
+  keys: [b, c],
+  fn,
+  updateFilter: (u, c) => false,
+  defaultValue: 0,
+  forceScope: false,
+})
+
+// ## useGate
+
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  1,
+)
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {},
+)
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  null,
+)
+useGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: false,
+  },
+)
+useScopedGate(Gate)
+useScopedGate(Gate, {})
+useScopedGate(Gate, 1)
+useScopedGate(Gate, {
+  a: 1,
+})
+useScopedGate(Gate)
+useScopedGate(Gate, {
+  a: 1,
+})
+useScopedGate(
+  Gate,
+  {
+    a: 1,
+  },
+  1,
+)
+useScopedGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {},
+)
+useScopedGate(
+  Gate,
+  {
+    a: 1,
+  },
+  null,
+)
+useScopedGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: false,
+  },
+)
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  1,
+)
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {},
+)
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  null,
+)
+useCompatGate(
+  Gate,
+  {
+    a: 1,
+  },
+  {
+    forceScope: false,
+  },
+)
+"
+`;
+
+exports[`babel-plugin should forward 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/forward.js'
+import {createStore, createEvent, forward} from 'effector'
+const foo = createStore('foo', {
+  loc: {
+    file: _effectorFileName,
+    line: 3,
+    column: 12,
+  },
+  name: 'foo',
+  sid: 'b2bfdg',
+})
+const bar = createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 12,
+  },
+  name: 'bar',
+  sid: '-tj0e4a',
+})
+const baz1 = forward({
+  and: {
+    from: foo,
+    to: bar,
+  },
+  or: {
     loc: {
       file: _effectorFileName,
       line: 6,
       column: 13,
     },
-    name: 'ei',
-    sid: '-rn78ie',
-  })
-  const iFx = createEffect(() => {}, {
-    loc: {
-      file: _effectorFileName,
-      line: 7,
-      column: 14,
-    },
-    name: 'iFx',
-    sid: '-2nwobz',
-  })
-  return {
-    $si,
-    ei,
-    iFx,
-  }
-}
-
-const incorrectArrow = () =>
-  createStore(0, {
-    loc: {
-      file: _effectorFileName,
-      line: 12,
-      column: 29,
-    },
-    name: 'incorrectArrow',
-    sid: 'ig6de0',
-  })
-
-const correct = _withFactory({
-  sid: '-vaa8eq',
-  fn: () =>
-    createFactory(() => {
-      const $si = createStore(0, {
-        loc: {
-          file: _effectorFileName,
-          line: 15,
-          column: 14,
-        },
-        name: '$si',
-        sid: '48znmn',
-      })
-      const ei = createEvent({
-        loc: {
-          file: _effectorFileName,
-          line: 16,
-          column: 13,
-        },
-        name: 'ei',
-        sid: '-2207ef',
-      })
-      const iFx = createEffect(() => {}, {
-        loc: {
-          file: _effectorFileName,
-          line: 17,
-          column: 14,
-        },
-        name: 'iFx',
-        sid: '-n7i45e',
-      })
-      return {
-        $si,
-        ei,
-        iFx,
-      }
-    }),
-  name: 'correct',
-  method: 'createFactory',
-  loc: {
-    file: _effectorFileName,
-    line: 14,
-    column: 16,
+    name: 'baz1',
+    sid: '-jxxvds',
   },
 })
-
-const fx = createEffect(() => {}, {
-  loc: {
-    file: _effectorFileName,
-    line: 22,
-    column: 11,
-  },
-  name: 'fx',
-  sid: 'ihds5a',
-})
-const attachedFx = attach({
+const baz2 = forward({
   and: {
-    effect: fx,
+    from: foo,
+    to: bar,
   },
   or: {
     loc: {
       file: _effectorFileName,
-      line: 23,
-      column: 19,
+      line: 7,
+      column: 13,
     },
-    name: 'attachedFx',
-    sid: '-6t8lif',
+    name: 'baz2',
+    sid: '-ng3uxu',
   },
 })
-const $count = createStore(0, {
-  loc: {
-    file: _effectorFileName,
-    line: 25,
-    column: 15,
+forward({
+  and: {
+    from: foo,
+    to: bar,
   },
-  name: '$count',
-  sid: 'rphre8',
-})
-const increment = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 26,
-    column: 18,
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 12,
+      column: 0,
+    },
+    sid: '-dp41tl',
   },
-  name: 'increment',
-  sid: '-ct7axc',
 })
-const decrement = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 27,
-    column: 18,
+forward({
+  and: {
+    from: foo,
+    to: bar,
   },
-  name: 'decrement',
-  sid: '76wskz',
-})
-export const exportedConst = createStore('', {
-  loc: {
-    file: _effectorFileName,
-    line: 29,
-    column: 29,
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 13,
+      column: 0,
+    },
+    sid: '-dok988',
   },
-  name: 'exportedConst',
-  sid: 'ajite6',
 })
-export let exportedLet = createStore('', {
-  loc: {
-    file: _effectorFileName,
-    line: 30,
-    column: 25,
+const config = {
+  from: foo,
+  to: bar,
+}
+const baz5 = forward({
+  and: config,
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 23,
+      column: 13,
+    },
+    name: 'baz5',
+    sid: '-u8jxfp',
   },
-  name: 'exportedLet',
-  sid: '-gtjyj0',
 })
+const f = () =>
+  forward({
+    and: {
+      from: foo,
+      to: bar,
+    },
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 26,
+        column: 2,
+      },
+      name: 'f',
+      sid: '798vsy',
+    },
+  })
+{
+  const incorrect = forward({
+    from: foo,
+    to: bar,
+  })
+  function forward() {}
+}
+{
+  const forward = () => {}
+  if (true) {
+    const incorrect = forward({
+      from: foo,
+      to: bar,
+    })
+  }
+}
+"
+`;
 
-const model = _withFactory({
-  sid: '6t3o8j',
-  fn: () => invoke(correct),
-  name: 'model',
-  method: 'invoke',
+exports[`babel-plugin should guard 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/guard.js'
+import {createStore, createEvent, guard} from 'effector'
+const foo = createStore(true, {
   loc: {
     file: _effectorFileName,
-    line: 32,
-    column: 14,
+    line: 3,
+    column: 12,
   },
+  name: 'foo',
+  sid: 'lecs4',
 })
-
-const incorrectModel = incorrect()
-const incorrectArrowModel = incorrectArrow()
-$count.on(increment, count => count + 1)
-$count.watch(console.log)
-const $store = sample({
+const bar = createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 12,
+  },
+  name: 'bar',
+  sid: '-45cu8q',
+})
+const baz1 = guard({
   and: [
+    bar,
     {
-      clock: $count,
+      filter: foo,
     },
   ],
   or: {
     loc: {
       file: _effectorFileName,
-      line: 39,
-      column: 15,
+      line: 6,
+      column: 13,
     },
-    name: '$store',
-    sid: '-sr1fk1',
+    name: 'baz1',
+    sid: 'ajzcsg',
   },
 })
-
-if (true) {
-  sample({
+const baz2 = guard({
+  and: [
+    {
+      source: bar,
+      filter: foo,
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 7,
+      column: 13,
+    },
+    name: 'baz2',
+    sid: 'r2agou',
+  },
+})
+guard({
+  and: [
+    bar,
+    {
+      filter: foo,
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 12,
+      column: 0,
+    },
+    sid: '-ajy521',
+  },
+})
+guard({
+  and: [
+    {
+      source: bar,
+      filter: foo,
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 13,
+      column: 0,
+    },
+    sid: '-ajecgo',
+  },
+})
+const spread = [
+  bar,
+  {
+    filter: foo,
+  },
+]
+const baz4 = guard({
+  and: [...spread],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 19,
+      column: 13,
+    },
+    name: 'baz4',
+    sid: '-ocyuy5',
+  },
+})
+const config = {
+  source: bar,
+  filter: foo,
+}
+const baz5 = guard({
+  and: [config],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 26,
+      column: 13,
+    },
+    name: 'baz5',
+    sid: '-b8br2g',
+  },
+})
+const f = () =>
+  guard({
     and: [
       {
-        clock: increment,
-        source: $count,
-        fn: count => count + 1,
-        target: $count,
+        source: bar,
+        filter: foo,
       },
     ],
     or: {
       loc: {
         file: _effectorFileName,
-        line: 42,
+        line: 29,
         column: 2,
       },
-      sid: 'cs9di2',
+      name: 'f',
+      sid: '-83rmcb',
     },
   })
-}
-
-sample({
-  and: [
-    {
-      clock: decrement,
-      source: $count,
-      fn: count => count - 1,
-      target: $count,
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 50,
-      column: 0,
-    },
-    sid: 'd87ent',
-  },
-})
-sample({
-  and: [
-    {
-      clock: decrement,
-      target: increment.prepend(() => -1),
-    },
-  ],
-  or: {
-    loc: {
-      file: _effectorFileName,
-      line: 57,
-      column: 0,
-    },
-    sid: 'dc1ytc',
-  },
-})
-
-class Class {
-  event = createEvent({
-    loc: {
-      file: _effectorFileName,
-      line: 63,
-      column: 10,
-    },
-    sid: '-rk7k',
+{
+  const incorrect = guard(bar, {
+    filter: foo,
   })
+  function guard() {}
 }
-
-export default createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 66,
-    column: 15,
-  },
-  sid: '1edb3c',
-})
+{
+  const guard = () => {}
+  if (true) {
+    const incorrect = guard(bar, {
+      filter: foo,
+    })
+  }
+}
 "
 `;
 
@@ -2571,13 +3794,16 @@ import {
   createEffect as createEffectEffector,
   createNode as createNodeEffector,
   createEvent as createEventEffector,
+  forward as forwardEffector,
   fromObservable as fromObservableEffector,
+  guard as guardEffector,
   launch as launchEffector,
   merge as mergeEffector,
   restore as restoreEffector,
   sample as sampleEffector,
   split as splitEffector,
   withRegion as withRegionEffector,
+  hydrate as hydrateEffector,
   serialize as serializeEffector,
   scopeBind as scopeBindEffector,
   fork as forkEffector,
@@ -2588,47 +3814,47 @@ import {createStore} from 'redux'
   const domain = createDomainEffector({
     loc: {
       file: _effectorFileName,
-      line: 26,
+      line: 29,
       column: 17,
     },
     name: 'domain',
-    sid: 'gi53b',
+    sid: '1vn09w',
   })
   const event = createEventEffector({
     loc: {
       file: _effectorFileName,
-      line: 27,
+      line: 30,
       column: 16,
     },
     name: 'event',
-    sid: '-xig4ir',
+    sid: '-m5d723',
   })
   const store = createStoreEffector(0, {
     loc: {
       file: _effectorFileName,
-      line: 28,
+      line: 31,
       column: 16,
     },
     name: 'store',
-    sid: '-9h4q0t',
+    sid: '1vy7fv',
   })
   const effect = createEffectEffector({
     loc: {
       file: _effectorFileName,
-      line: 29,
+      line: 32,
       column: 17,
     },
     name: 'effect',
-    sid: '-tv3s5r',
+    sid: '-ii0up3',
   })
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 30,
+      line: 33,
       column: 22,
     },
     name: 'domainEvent',
-    sid: 'ta2rxi',
+    sid: 'up7n43',
   })
   const scope = forkEffector(domain)
   const node = createNodeEffector()
@@ -2639,11 +3865,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 34,
+        line: 37,
         column: 12,
       },
       name: 'a',
-      sid: '-40tuyc',
+      sid: '-2lozrr',
     },
   })
   const b = clearNodeEffector(node)
@@ -2656,11 +3882,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 36,
+        line: 39,
         column: 12,
       },
       name: 'c',
-      sid: 'yelsr0',
+      sid: '-z7de1j',
     },
   })
   const d = createApiEffector({
@@ -2668,30 +3894,62 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 37,
+        line: 40,
         column: 12,
       },
-      sid: 'qc0c7c',
+      sid: '-xc0sb4',
+    },
+  })
+  const j = forwardEffector({
+    and: {
+      from: event,
+      to: store,
+    },
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 41,
+        column: 12,
+      },
+      name: 'j',
+      sid: '-z6uqpz',
+    },
+  })
+  const l = guardEffector({
+    and: [
+      {
+        source: event,
+        filter: Boolean,
+      },
+    ],
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 42,
+        column: 12,
+      },
+      name: 'l',
+      sid: '2rjal6',
     },
   })
   const m = launchEffector(event, null)
   const n = mergeEffector([event], {
     loc: {
       file: _effectorFileName,
-      line: 39,
+      line: 44,
       column: 12,
     },
     name: 'n',
-    sid: 'svss1g',
+    sid: '-tu53om',
   })
   const o = restoreEffector(event, null, {
     loc: {
       file: _effectorFileName,
-      line: 40,
+      line: 45,
       column: 12,
     },
     name: 'o',
-    sid: '-czndsx',
+    sid: '-amf9ty',
   })
   const p = sampleEffector({
     and: [
@@ -2703,11 +3961,11 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 41,
+        line: 46,
         column: 12,
       },
       name: 'p',
-      sid: '682g1r',
+      sid: '8lak0q',
     },
   })
   const q = splitEffector({
@@ -2715,20 +3973,22 @@ import {createStore} from 'redux'
     or: {
       loc: {
         file: _effectorFileName,
-        line: 42,
+        line: 47,
         column: 12,
       },
-      sid: '-wdxjiq',
+      sid: '-u0pfjr',
     },
   })
   const r = withRegionEffector(node, () => {})
+  const s = hydrateEffector(scope, {
+    values: {},
+  })
   const t = serializeEffector(scope)
   const u = scopeBindEffector(domainEvent)
   const w = allSettledEffector(domainEvent, {
     scope,
   })
 }
-
 function nameClashCheck() {
   const domain = createDomain()
   const event = createEvent()
@@ -2737,13 +3997,13 @@ function nameClashCheck() {
   const domainEvent = domain.createEvent({
     loc: {
       file: _effectorFileName,
-      line: 54,
+      line: 60,
       column: 22,
     },
     name: 'domainEvent',
-    sid: '-ai280s',
+    sid: '2a5kmh',
   })
-  const scope = fork()
+  const scope = fork(domain)
   const node = createNode()
   const a = attach({
     effect,
@@ -2753,6 +4013,14 @@ function nameClashCheck() {
     store,
   })
   const d = createApi(store, {})
+  const j = forward({
+    from: event,
+    to: store,
+  })
+  const l = guard({
+    source: event,
+    filter: Boolean,
+  })
   const m = launch(event, null)
   const n = merge([event])
   const o = restore(event, null)
@@ -2762,13 +4030,15 @@ function nameClashCheck() {
   })
   const q = split(event, {})
   const r = withRegion(node, () => {})
+  const s = hydrate(scope, {
+    values: {},
+  })
   const t = serialize(scope)
   const u = scopeBind(domainEvent)
   const w = allSettled(domainEvent, {
     scope,
   })
 }
-
 const reduxStore = createStore(() => 0)
 import {
   createStore as attach,
@@ -2779,13 +4049,16 @@ import {
   createStore as createEffect,
   createStore as createNode,
   createStore as createEvent,
+  createStore as forward,
   createStore as fromObservable,
+  createStore as guard,
   createStore as launch,
   createStore as merge,
   createStore as restore,
   createStore as sample,
   createStore as split,
   createStore as withRegion,
+  createStore as hydrate,
   createStore as serialize,
   createStore as scopeBind,
   createStore as fork,
@@ -2841,7 +4114,7 @@ const domainEvent = domain.createEvent({
   name: 'domainEvent',
   sid: 't0scbd',
 })
-const scope = fork()
+const scope = fork(domain)
 const node = createNode()
 const a = attach({
   and: {
@@ -2885,24 +4158,56 @@ const d = createApi({
     sid: '6v1ads',
   },
 })
+const e = forward({
+  and: {
+    from: event,
+    to: store,
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 13,
+      column: 10,
+    },
+    name: 'e',
+    sid: '-llhht8',
+  },
+})
+const f = guard({
+  and: [
+    {
+      source: event,
+      filter: Boolean,
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 14,
+      column: 10,
+    },
+    name: 'f',
+    sid: '-ghj024',
+  },
+})
 const g = launch(event, null)
 const h = merge([event], {
   loc: {
     file: _effectorFileName,
-    line: 14,
+    line: 16,
     column: 10,
   },
   name: 'h',
-  sid: '-77p9ca',
+  sid: '-69m0jw',
 })
 const i = restore(event, null, {
   loc: {
     file: _effectorFileName,
-    line: 15,
+    line: 17,
     column: 10,
   },
   name: 'i',
-  sid: '-23qrl6',
+  sid: '-15niss',
 })
 const j = sample({
   and: [
@@ -2914,11 +4219,11 @@ const j = sample({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 16,
+      line: 18,
       column: 10,
     },
     name: 'j',
-    sid: '307q5y',
+    sid: '3yayyc',
   },
 })
 const k = split({
@@ -2926,13 +4231,16 @@ const k = split({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 19,
       column: 10,
     },
-    sid: '989ecr',
+    sid: 'a6cn55',
   },
 })
 const l = withRegion(node, () => {})
+const n = hydrate(scope, {
+  values: {},
+})
 const o = serialize(scope)
 const p = scopeBind(domainEvent)
 const q = allSettled(domainEvent, {
@@ -2944,11 +4252,9 @@ const q = allSettled(domainEvent, {
 exports[`babel-plugin should localVariables 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/localVariables.js'
 import {createEvent} from 'effector'
-
 function A() {
   const createEvent = 123
 }
-
 function B() {
   return createEvent({
     loc: {
@@ -3021,12 +4327,10 @@ const c = merge(...args, {
 })
 {
   const incorrect = merge([foo])
-
   function merge() {}
 }
 {
   const merge = () => {}
-
   if (true) {
     const incorrect = merge([foo])
   }
@@ -3036,7 +4340,6 @@ const c = merge(...args, {
 
 exports[`babel-plugin should references 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/references.js'
-
 function outerScope() {
   const createDomain = bar
   const createEvent = bar
@@ -3048,16 +4351,18 @@ function outerScope() {
   const clearNode = foo
   const combine = foo
   const createApi = foo
+  const forward = foo
+  const guard = foo
   const launch = foo
   const merge = foo
   const restore = foo
   const sample = foo
   const split = foo
   const withRegion = foo
+  const hydrate = foo
   const serialize = foo
   const scopeBind = foo
   const allSettled = foo
-
   function nameClashCheck() {
     const domain = createDomain()
     const event = createEvent()
@@ -3066,13 +4371,13 @@ function outerScope() {
     const domainEvent = domain.createEvent({
       loc: {
         file: _effectorFileName,
-        line: 26,
+        line: 29,
         column: 24,
       },
       name: 'domainEvent',
-      sid: 'o78kmz',
+      sid: 'pmdftk',
     })
-    const scope = fork()
+    const scope = fork(domain)
     const node = createNode()
     const a = attach({
       effect,
@@ -3082,6 +4387,14 @@ function outerScope() {
       store,
     })
     const d = createApi(store, {})
+    const e = forward({
+      from: event,
+      to: store,
+    })
+    const f = guard({
+      source: event,
+      filter: Boolean,
+    })
     const g = launch(event, null)
     const h = merge([event])
     const i = restore(event, null)
@@ -3091,6 +4404,9 @@ function outerScope() {
     })
     const k = split(event, {})
     const l = withRegion(node, () => {})
+    const n = hydrate(scope, {
+      values: {},
+    })
     const o = serialize(scope)
     const p = scopeBind(domainEvent)
     const q = allSettled(domainEvent, {
@@ -3098,9 +4414,7 @@ function outerScope() {
     })
   }
 }
-
 function foo() {}
-
 const bar = () => {}
 "
 `;
@@ -3159,7 +4473,6 @@ const dod = restore(foo, null, {
   name: 'dod',
   sid: '-juogjx',
 })
-
 const f = a =>
   restore(foo, null, {
     loc: {
@@ -3170,7 +4483,6 @@ const f = a =>
     name: 'f',
     sid: 'sesimo',
   })
-
 const {sid} = restore(foo, null, {
   loc: {
     file: _effectorFileName,
@@ -3208,12 +4520,10 @@ restore(foo, null, {
 })
 {
   const incorrect = restore(foo, null)
-
   function restore() {}
 }
 {
   const restore = () => {}
-
   if (true) {
     const incorrect = restore(foo, null)
   }
@@ -3327,7 +4637,6 @@ const baz5 = sample({
     sid: '40inll',
   },
 })
-
 const f = () =>
   sample({
     and: [
@@ -3346,15 +4655,12 @@ const f = () =>
       sid: 'hnsza4',
     },
   })
-
 {
   const incorrect = sample(config)
-
   function sample() {}
 }
 {
   const sample = () => {}
-
   if (true) {
     const incorrect = sample(config)
   }
@@ -3494,7 +4800,6 @@ const baz5 = split({
     sid: '-anhjzk',
   },
 })
-
 const f = () =>
   split({
     and: [
@@ -3512,7 +4817,6 @@ const f = () =>
       sid: '8jr5i',
     },
   })
-
 {
   const incorrect = split({
     source: foo,
@@ -3523,12 +4827,10 @@ const f = () =>
       nonEmpty: bar,
     },
   })
-
   function split() {}
 }
 {
   const split = () => {}
-
   if (true) {
     const incorrect = split({
       source: foo,
@@ -3653,12 +4955,10 @@ exports[`babel-plugin should units without name with options 1`] = `
     },
     sid: '-26njv2',
   })
-
   const fa = () =>
     createEffect({
       sid: 'nsvob9',
     })
-
   const {sid} = createEffect({
     sid: 'ixqzbg',
   })
@@ -3702,12 +5002,10 @@ exports[`babel-plugin should units without name with options 1`] = `
     and: config,
     sid: 'sja6dc',
   })
-
   const f = a =>
     createStore(a, {
       sid: '-sen25u',
     })
-
   const {sid} = createStore(null, {
     sid: '-mqki7m',
   })
@@ -3739,12 +5037,10 @@ exports[`babel-plugin should units without name with options 1`] = `
       sid: 'f82vt1',
     },
   )
-
   const f = () =>
     createEvent({
       sid: '-1w4823',
     })
-
   const {sid} = createEvent({
     sid: '-65zqet',
   })
@@ -3788,12 +5084,10 @@ exports[`babel-plugin should units without name with options 1`] = `
     and: config,
     sid: '10dc0p',
   })
-
   const f = a =>
     restore(foo, null, {
       sid: '-gu50wv',
     })
-
   const {sid} = restore(foo, null, {
     sid: 'zcd1uy',
   })
@@ -3824,6 +5118,8 @@ import {
   createEvent,
   createStore,
   createApi,
+  forward,
+  guard,
   merge,
   restore,
   sample,
@@ -3837,21 +5133,21 @@ const korben = attach({
     or: {
       loc: {
         file: _effectorFileName,
-        line: 15,
+        line: 17,
         column: 15,
       },
       name: 'korben',
-      sid: '-6bgllu',
+      sid: '-5ddctg',
     },
   },
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 15,
+      line: 17,
       column: 15,
     },
     name: 'korben',
-    sid: '-6bgllu',
+    sid: '-5ddctg',
   },
 })
 const dallas = combine({
@@ -3861,101 +5157,101 @@ const dallas = combine({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 16,
+          line: 18,
           column: 15,
         },
         name: 'dallas',
-        sid: '-3uwksx',
+        sid: '-2wtc0j',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 16,
+      line: 18,
       column: 15,
     },
     name: 'dallas',
-    sid: '-3uwksx',
+    sid: '-2wtc0j',
   },
 })
 const c = createDomain(
   {
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 19,
       column: 10,
     },
     name: 'c',
-    sid: '-4uzrt',
+    sid: 't890l',
   },
   {
     loc: {
       file: _effectorFileName2,
-      line: 17,
+      line: 19,
       column: 10,
     },
     name: 'c',
-    sid: '-4uzrt',
+    sid: 't890l',
   },
 )
 const d = createEffect(
   {
     loc: {
       file: _effectorFileName,
-      line: 18,
+      line: 20,
       column: 10,
     },
     name: 'd',
-    sid: '-vi88e1',
+    sid: '-km6xbk',
   },
   {
     loc: {
       file: _effectorFileName2,
-      line: 18,
+      line: 20,
       column: 10,
     },
     name: 'd',
-    sid: '-vi88e1',
+    sid: '-km6xbk',
   },
 )
 const e = createEvent(
   {
     loc: {
       file: _effectorFileName,
-      line: 19,
+      line: 21,
       column: 10,
     },
     name: 'e',
-    sid: '85ikyv',
+    sid: 'j1jw1c',
   },
   {
     loc: {
       file: _effectorFileName2,
-      line: 19,
+      line: 21,
       column: 10,
     },
     name: 'e',
-    sid: '85ikyv',
+    sid: 'j1jw1c',
   },
 )
 const f = createStore(null, {
   and: {
     loc: {
       file: _effectorFileName,
-      line: 20,
+      line: 22,
       column: 10,
     },
     name: 'f',
-    sid: '-d9wlda',
+    sid: '-cbtckw',
   },
   loc: {
     file: _effectorFileName2,
-    line: 20,
+    line: 22,
     column: 10,
   },
   name: 'f',
-  sid: '-d9wlda',
+  sid: '-cbtckw',
 })
 const g = createApi({
   and: [
@@ -3964,57 +5260,113 @@ const g = createApi({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 21,
+          line: 23,
           column: 10,
         },
-        sid: '-w1xmnp',
+        sid: '-v3udvb',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 21,
+      line: 23,
       column: 10,
     },
-    sid: '-w1xmnp',
+    sid: '-v3udvb',
+  },
+})
+const h = forward({
+  and: {
+    and: {
+      from: d,
+      to: e,
+    },
+    or: {
+      loc: {
+        file: _effectorFileName,
+        line: 24,
+        column: 10,
+      },
+      name: 'h',
+      sid: '-41fru8',
+    },
+  },
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 24,
+      column: 10,
+    },
+    name: 'h',
+    sid: '-41fru8',
+  },
+})
+const i = guard({
+  and: [
+    {
+      and: [
+        e,
+        {
+          filter: Boolean,
+        },
+      ],
+      or: {
+        loc: {
+          file: _effectorFileName,
+          line: 25,
+          column: 10,
+        },
+        name: 'i',
+        sid: '-zet0gg',
+      },
+    },
+  ],
+  or: {
+    loc: {
+      file: _effectorFileName2,
+      line: 25,
+      column: 10,
+    },
+    name: 'i',
+    sid: '-zet0gg',
   },
 })
 const j = merge([e], {
   and: {
     loc: {
       file: _effectorFileName,
-      line: 22,
+      line: 26,
       column: 10,
     },
     name: 'j',
-    sid: '2crbbo',
+    sid: '48xswg',
   },
   loc: {
     file: _effectorFileName2,
-    line: 22,
+    line: 26,
     column: 10,
   },
   name: 'j',
-  sid: '2crbbo',
+  sid: '48xswg',
 })
 const k = restore(d, null, {
   and: {
     loc: {
       file: _effectorFileName,
-      line: 23,
+      line: 27,
       column: 10,
     },
     name: 'k',
-    sid: '-t0lxak',
+    sid: '-r4ffps',
   },
   loc: {
     file: _effectorFileName2,
-    line: 23,
+    line: 27,
     column: 10,
   },
   name: 'k',
-  sid: '-t0lxak',
+  sid: '-r4ffps',
 })
 const m = sample({
   and: [
@@ -4028,22 +5380,22 @@ const m = sample({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 24,
+          line: 28,
           column: 10,
         },
         name: 'm',
-        sid: '-l79yy3',
+        sid: '-jb3hdb',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 24,
+      line: 28,
       column: 10,
     },
     name: 'm',
-    sid: '-l79yy3',
+    sid: '-jb3hdb',
   },
 })
 const n = split({
@@ -4053,20 +5405,20 @@ const n = split({
       or: {
         loc: {
           file: _effectorFileName,
-          line: 25,
+          line: 29,
           column: 10,
         },
-        sid: '-u5r52x',
+        sid: '-s9kni5',
       },
     },
   ],
   or: {
     loc: {
       file: _effectorFileName2,
-      line: 25,
+      line: 29,
       column: 10,
     },
-    sid: '-u5r52x',
+    sid: '-s9kni5',
   },
 })
 "

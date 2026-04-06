@@ -12,7 +12,9 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { remarkHeadingId } from "@effector/remark-heading-id";
 
 import { admonitions } from "./plugins/admonitions";
-import { remarkFallbackLang } from "./plugins/remark-fallback-lang";
+import { dataAttributesPlugin } from "./plugins/expressive-code/data-attributes-plugin";
+
+import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,6 +23,40 @@ export default defineConfig({
   integrations: [
     tailwind({ applyBaseStyles: false }),
     preact({ compat: true }),
+    expressiveCode({
+      plugins: [dataAttributesPlugin()],
+      themes: ["github-light-default", "plastic"],
+      themeCssRoot: "html",
+      useDarkModeMediaQuery: false,
+      styleOverrides: {
+        borderColor: "var(--theme-divider);",
+        borderRadius: "var(--radius-lg)",
+        codeFontSize: "13px",
+        codeBackground: "var(--theme-bg-code);",
+        borderWidth: "1px",
+        textMarkers: {
+          insBorderColor: "var(--theme-code-ins-border)",
+          insBackground: "var(--theme-code-ins-bg)",
+          markBorderColor: "var(--theme-code-mark-border)",
+          markBackground: "var(--theme-code-mark-bg)",
+          delBorderColor: "var(--theme-code-del-border)",
+          delBackground: "var(--theme-code-del-bg)",
+        },
+        frames: {
+          shadowColor: "transparent",
+          tooltipSuccessBackground: "var(--theme-admonition-tip-border)",
+        },
+      },
+      themeCssSelector: (theme) => {
+        if (theme.name === "plastic") return ".theme-dark";
+        if (theme.name === "github-light-default") return "";
+        return false;
+      },
+      removeUnusedThemes: true,
+      shiki: {
+        bundledLangs: ["js", "ts", "tsx"],
+      },
+    }),
     mdx({ extendMarkdownConfig: true }),
   ],
   prefetch: true,
