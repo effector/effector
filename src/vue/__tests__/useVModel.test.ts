@@ -1,20 +1,18 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {useVModel} from 'effector-vue/composition'
 import {createEvent, createStore, restore} from 'effector'
-import {shallowMount} from 'vue-test-utils-next'
+import {shallowMount, flushPromises} from 'vue-test-utils-next'
+import {effectScope} from 'vue-next'
 
 jest.mock('vue', () => require('vue-next'))
 
 it('updated value of input if store changed from outside', async () => {
   const updated = createEvent()
   const $user = createStore({
-    skills: [
-      {name: 'HTML', points: 10}
-    ]
+    skills: [{name: 'HTML', points: 10}],
   })
 
-  $user
-    .on(updated, (state) => ({...state, skills: [{name: 'HTML', points: 20}]}))
+  $user.on(updated, state => ({...state, skills: [{name: 'HTML', points: 20}]}))
 
   const wrapper = shallowMount({
     template: `
@@ -24,13 +22,12 @@ it('updated value of input if store changed from outside', async () => {
     `,
     setup() {
       const user = useVModel($user)
-      user.value.skills
       return {user}
-    }
+    },
   })
   await wrapper.find('[data-test="skills.points"]').setValue(15)
   expect($user.getState()).toEqual({
-    skills: [{name: 'HTML', points: '15'}]
+    skills: [{name: 'HTML', points: '15'}],
   })
   updated()
 
@@ -48,7 +45,7 @@ it('[v-model] works correct with scalar values', async () => {
     setup() {
       const username = useVModel($username)
       return {username}
-    }
+    },
   })
   await wrapper.find('[data-test="field"]').setValue('John Doe')
   expect($username.getState()).toBe('John Doe')
@@ -70,7 +67,7 @@ it('[v-model] works correct with objects', async () => {
     setup() {
       const user = useVModel($user)
       return {user}
-    }
+    },
   })
 
   await wrapper.find('[data-test="name"]').setValue('John')
@@ -99,7 +96,7 @@ it('reset useVModel', async () => {
     setup() {
       const user = useVModel($user)
       return {user}
-    }
+    },
   })
 
   await wrapper.find('[data-test="name"]').setValue('John')
@@ -121,7 +118,7 @@ it('[v-model] works correct with checkboxes (like vue-3 way)', async () => {
     setup() {
       const skills = useVModel($skills)
       return {skills}
-    }
+    },
   })
 
   await wrapper.findAll('[data-test="skills"]')[0].setValue()
@@ -141,7 +138,7 @@ it('[v-model] works correct with radio (like vue-3 way)', async () => {
     setup() {
       const gender = useVModel($gender)
       return {gender}
-    }
+    },
   })
 
   await wrapper.find('[data-test="gender"]').setValue()
@@ -165,7 +162,7 @@ it('[v-model] default values rendered correct when passing object with Store val
       const user = useVModel($user)
 
       return {user}
-    }
+    },
   })
 
   const nameInput = wrapper.find('[data-test="name"]').element as any
@@ -178,16 +175,13 @@ it('[v-model] default values rendered correct when passing object with Store val
 it('[v-model] changed deep value', async () => {
   const updated = createEvent()
   const $user = createStore({
-    skills: [
-      {name: 'HTML', points: 10}
-    ]
+    skills: [{name: 'HTML', points: 10}],
   })
 
-  $user
-    .on(updated, (state) => ({...state, skills: [{name: 'HTML', points: 20}]}))
+  $user.on(updated, state => ({...state, skills: [{name: 'HTML', points: 20}]}))
 
   const userForm = {
-    base: $user
+    base: $user,
   }
 
   const wrapper = shallowMount({
@@ -200,12 +194,12 @@ it('[v-model] changed deep value', async () => {
       const user = useVModel(userForm)
 
       return {user}
-    }
+    },
   })
   await wrapper.find('[data-test="skills.points"]').setValue(15)
 
   expect($user.getState()).toEqual({
-    skills: [{name: 'HTML', points: '15'}]
+    skills: [{name: 'HTML', points: '15'}],
   })
 
   updated()
@@ -238,7 +232,7 @@ it('[v-model] change each store value separately', async () => {
       const user = useVModel($user)
 
       return {user}
-    }
+    },
   })
 
   const nameInput = wrapper.find('[data-test="name"]').element as any
@@ -260,4 +254,87 @@ it('[v-model] change each store value separately', async () => {
 
   expect(nameInput.value).toBe('John')
   expect(surnameInput.value).toBe('Doe')
+})
+
+it('[v-model] works correct with composable with shape', async () => {
+  const nameChanged = createEvent<string>()
+  const $name = createStore('John')
+  $name.on(nameChanged, (_, value) => value)
+
+  const $user = {
+    name: $name,
+  }
+
+  const user = useVModel($user)
+
+  user.name = 'Alan'
+  await flushPromises()
+  expect(user.name).toEqual('Alan')
+  expect($name.getState()).toEqual('Alan')
+
+  nameChanged('John')
+  await flushPromises()
+  expect($name.getState()).toEqual('John')
+  expect(user.name).toEqual('John')
+})
+
+it('[v-model] works correct with composable with $store', async () => {
+  const nameChanged = createEvent<string>()
+  const $name = createStore('John')
+  $name.on(nameChanged, (_, value) => value)
+
+  const name = useVModel($name)
+  name.value = 'Alan'
+  await flushPromises()
+  expect(name.value).toEqual('Alan')
+  expect($name.getState()).toEqual('Alan')
+
+  nameChanged('John')
+  await flushPromises()
+  expect($name.getState()).toEqual('John')
+  expect(name.value).toEqual('John')
+})
+
+it('[v-model] two-way binding has been cleared with shape', async () => {
+  const nameChanged = createEvent<string>()
+  const $name = createStore('Alan')
+  $name.on(nameChanged, (_, value) => value)
+
+  const $user = {
+    name: $name,
+  }
+
+  const scope = effectScope()
+  const user = useVModel($user, scope)
+  scope.stop()
+
+  nameChanged('John')
+  await flushPromises()
+  expect(user.name).toEqual('Alan')
+  expect($name.getState()).toEqual('John')
+
+  user.name = 'Alice'
+  await flushPromises()
+  expect(user.name).toEqual('Alice')
+  expect($name.getState()).toEqual('John')
+})
+
+it('[v-model] two-way binding has been cleared with $store', async () => {
+  const nameChanged = createEvent<string>()
+  const $name = createStore('Alan')
+  $name.on(nameChanged, (_, value) => value)
+
+  const scope = effectScope()
+  const name = useVModel($name, scope)
+  scope.stop()
+
+  nameChanged('John')
+  await flushPromises()
+  expect(name.value).toEqual('Alan')
+  expect($name.getState()).toEqual('John')
+
+  name.value = 'Alice'
+  await flushPromises()
+  expect(name.value).toEqual('Alice')
+  expect($name.getState()).toEqual('John')
 })

@@ -1,11 +1,16 @@
 import type {Unit, Stack} from './index.h'
-import type {Effect, Scope} from './unit.h'
+import type {Effect} from './unit.h'
 import {calc, run} from './step'
 import {getForkPage, getGraph, getMeta, getParent, setMeta} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch, setForkPage, forkPage, isWatch} from './kernel'
-import {createStore, createEvent} from './createUnit'
+import {
+  createStore,
+  createEvent,
+  setUnitTrace,
+  getUnitTrace,
+} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {assert} from './throw'
@@ -13,6 +18,7 @@ import {EFFECT} from './tag'
 import {add} from './collection'
 import {flattenConfig} from './config'
 import {nextEffectID} from './id'
+import {generateErrorTitle} from './naming'
 
 type RunnerData<Params, Done, Fail> = {
   params: Params
@@ -32,15 +38,17 @@ export function createEffect<Params, Done, Fail = Error>(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     maybeConfig,
   )
+  const errorTitle = generateErrorTitle('effect', config)
   const instance = createEvent(
     isFunction(nameOrConfig) ? {handler: nameOrConfig} : nameOrConfig,
     {...maybeConfig, actualOp: EFFECT},
   ) as unknown as Effect<Params, Done, Fail>
+  setUnitTrace(instance, getUnitTrace(createEffect))
   const node = getGraph(instance)
   setMeta(node, 'op', (instance.kind = EFFECT))
   //@ts-expect-error
   instance.use = (fn: Function) => {
-    assert(isFunction(fn), '.use argument should be a function')
+    assert(isFunction(fn), '.use argument should be a function', errorTitle)
     runner.scope.handler = fn
     return instance
   }
@@ -145,6 +153,7 @@ export function createEffect<Params, Done, Fail = Error>(
       ),
     ],
     meta: {op: 'fx', fx: 'runner'},
+    regional: true,
   })
   node.scope.runner = runner
   add(

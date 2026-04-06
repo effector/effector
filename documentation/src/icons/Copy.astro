@@ -1,0 +1,26 @@
+---
+type Props = { size?: number };
+const { size = 24 } = Astro.props;
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="none" viewBox="0 0 20 20">
+  <g
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.25"
+    clip-path="url(#a)"
+  >
+    <path
+      d="M15 6.667H8.333c-.92 0-1.666.746-1.666 1.666V15c0 .92.746 1.667 1.666 1.667H15c.92 0 1.667-.747 1.667-1.667V8.333c0-.92-.746-1.666-1.667-1.666Z"
+    ></path>
+    <path
+      d="M13.333 6.667V5a1.667 1.667 0 0 0-1.666-1.667H5A1.667 1.667 0 0 0 3.333 5v6.667A1.667 1.667 0 0 0 5 13.333h1.667"
+    ></path>
+  </g>
+  <defs>
+    <clipPath id="a">
+      <path fill="#fff" d="M0 0h20v20H0z"></path>
+    </clipPath>
+  </defs>
+</svg>

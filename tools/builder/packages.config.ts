@@ -60,10 +60,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '23.0.0-rc.4',
-  'effector-react': '23.0.0-rc.4',
-  'effector-vue': '23.0.0-rc.4',
-  'effector-solid': '0.23.0-rc.4',
+  effector: '23.4.4',
+  'effector-react': '23.3.0',
+  'effector-vue': '23.1.1',
+  'effector-solid': '0.23.0',
   forest: '0.21.2',
 }
 
@@ -97,6 +97,7 @@ export default {
       },
       './compat': compatExport,
       './inspect': extensionlessExport('./inspect'),
+      './enable_debug_traces': extensionlessExport('./enable_debug_traces'),
       './effector.umd': umdExport('./effector'),
       './babel-plugin': './babel-plugin.js',
       './babel-plugin-react': './babel-plugin-react.js',
@@ -107,8 +108,11 @@ export default {
       ...compiledFile('inspect'),
       ...esmFile('inspect'),
       'inspect.d.ts',
-      'babel-plugin.js',
+      ...compiledFile('babel-plugin'),
       'babel-plugin-react.js',
+      ...compiledFile('enable_debug_traces'),
+      ...esmFile('enable_debug_traces'),
+      'enable_debug_traces.d.ts',
     ],
     keywords,
     ...common,
@@ -143,8 +147,8 @@ export default {
       'use-sync-external-store': '^1.0.0',
     },
     peerDependencies: {
-      react: '>=16.8.0 <19.0.0',
-      effector: '^22.0.2',
+      react: '>=16.8.0 <20.0.0',
+      effector: '^23.0.0',
     },
     files: [
       ...getFiles('effector-react'),
@@ -183,7 +187,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       'solid-js': '>= 1.3.0',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
     },
     files: [
       ...getFiles('effector-solid'),
@@ -209,6 +213,12 @@ export default {
         require: './composition.cjs.js',
         default: './composition.mjs',
       },
+      './options-vue3': {
+        types: './options-vue3.d.ts',
+        import: './options-vue3.mjs',
+        require: './options-vue3.cjs.js',
+        default: './options-vue3.mjs',
+      },
       './ssr': {
         types: './ssr.d.ts',
         import: './ssr.mjs',
@@ -225,6 +235,11 @@ export default {
         import: './composition.mjs',
         default: './composition.mjs',
       },
+      './options-vue3.mjs': {
+        types: './options-vue3.mjs.d.ts',
+        import: './options-vue3.mjs',
+        default: './options-vue3.mjs',
+      },
       './ssr.mjs': {
         types: './ssr.mjs.d.ts',
         import: './ssr.mjs',
@@ -238,7 +253,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       vue: '*',
-      effector: '^22.0.2',
+      effector: '^23.0.0',
       '@vue/reactivity': '^3.0.2',
       '@vue/runtime-core': '^3.0.2',
     },
@@ -246,14 +261,19 @@ export default {
       ...getFiles('effector-vue'),
       ...compiledFile('composition.cjs'),
       ...compiledFile('ssr.cjs'),
+      ...compiledFile('options-vue3.cjs'),
       ...esmFile('composition'),
       ...esmFile('ssr'),
+      ...esmFile('options-vue3'),
       'composition.d.ts',
       'composition.mjs.d.ts',
       'composition.cjs.d.ts',
       'ssr.d.ts',
       'ssr.mjs.d.ts',
       'ssr.cjs.d.ts',
+      'options-vue3.d.ts',
+      'options-vue3.mjs.d.ts',
+      'options-vue3.cjs.d.ts',
     ],
     keywords: ['vue', 'composition api', ...keywords],
     ...common,

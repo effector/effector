@@ -45,6 +45,8 @@ const inspectSubs = new Set<{
 
 setInspector((stack: Stack, local: {fail: boolean; failReason?: unknown}) => {
   const {scope} = stack
+  const nodeMeta = getNodeMeta(stack)
+  let trace: Message[]
   inspectSubs.forEach(config => {
     if (
       !(
@@ -62,13 +64,23 @@ setInspector((stack: Stack, local: {fail: boolean; failReason?: unknown}) => {
       return
     }
 
+    if (config.trace && !trace) {
+      trace = collectMessageTrace(stack)
+    }
+
     config.fn({
       type: local.fail ? 'error' : 'update',
       value: stack.value,
       error: local.fail ? local.failReason : undefined,
       stack: stack.meta || {},
-      trace: config.trace ? collectMessageTrace(stack) : [],
-      ...getNodeMeta(stack),
+      trace: config.trace ? trace : [],
+      meta: nodeMeta.meta,
+      id: nodeMeta.id,
+      sid: nodeMeta.sid,
+      name: nodeMeta.name,
+      kind: nodeMeta.kind,
+      loc: nodeMeta.loc,
+      derived: nodeMeta.derived,
     })
   })
 })
@@ -153,9 +165,7 @@ function createSubscription(cleanup: () => void): Subscription {
 }
 
 function getNodeMeta(stack: Stack) {
-  const {node} = stack
-
-  return readNodeMeta(node)
+  return readNodeMeta(stack.node)
 }
 
 function readNodeMeta(node: Node): NodeCommonMeta {
@@ -175,11 +185,18 @@ function collectMessageTrace(stack: Stack) {
   let currentStack = stack.parent
 
   while (currentStack) {
+    const nodeMeta = getNodeMeta(currentStack)
     trace.push({
       type: 'update',
       value: currentStack.value,
       stack: currentStack.meta || {},
-      ...getNodeMeta(currentStack),
+      meta: nodeMeta.meta,
+      id: nodeMeta.id,
+      sid: nodeMeta.sid,
+      name: nodeMeta.name,
+      kind: nodeMeta.kind,
+      loc: nodeMeta.loc,
+      derived: nodeMeta.derived,
     })
 
     currentStack = currentStack.parent
@@ -197,7 +214,13 @@ function readUnitDeclaration(
   return {
     type: 'unit',
     region: readRegionStack(regionStack),
-    ...nodeMeta,
+    meta: nodeMeta.meta,
+    id: nodeMeta.id,
+    sid: nodeMeta.sid,
+    name: nodeMeta.name,
+    kind: nodeMeta.kind,
+    loc: nodeMeta.loc,
+    derived: nodeMeta.derived,
   }
 }
 

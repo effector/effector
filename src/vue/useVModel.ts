@@ -1,7 +1,6 @@
 import {Store, is, createWatch} from 'effector'
-import {onUnmounted, reactive, Ref, ref, watch} from 'vue-next'
+import {type EffectScope, reactive, ref, watch, effectScope, onScopeDispose, toRaw, Reactive} from 'vue-next'
 
-import {unwrapProxy} from './lib/unwrapProxy'
 import {deepCopy} from './lib/deepCopy'
 import {stateReader} from './lib/state-reader'
 import {getScope} from './lib/get-scope'
@@ -14,14 +13,14 @@ function createVModel<T>(
 ) {
   if (!is.store(store)) throw Error('expect useVModel argument to be a store')
 
-  let {scope} = getScope()
+  const {scope} = getScope()
 
-  let _ = ref(deepCopy(stateReader(store, scope)))
+  const _ = ref(deepCopy(stateReader(store, scope)))
 
   let isSelfUpdate = false
   let fromEvent = false
 
-  let stop = createWatch({
+  const stop = createWatch({
     unit: store,
     fn: payload => {
       if (isSelfUpdate) {
@@ -29,12 +28,12 @@ function createVModel<T>(
       }
 
       fromEvent = true
-      _.value = ref(deepCopy(payload)).value
+      _.value = deepCopy(payload)
     },
     scope,
   })
 
-  onUnmounted(() => {
+  onScopeDispose(() => {
     stop()
   })
 
@@ -51,18 +50,17 @@ function createVModel<T>(
       isSelfUpdate = true
 
       if (!fromEvent) {
-        let raw = ref(unwrapProxy(value)).value
         // @ts-ignore
-        store.setState(deepCopy(raw))
+        store.setState(deepCopy(toRaw(value)))
       }
 
       fromEvent = false
       isSelfUpdate = false
     },
-    {deep: true, immediate: false},
+    {deep: true}
   )
 
-  return _ as Ref<T>
+  return _
 }
 
 // @ts-expect-error
@@ -71,24 +69,28 @@ export const useVModel: UseVModel = <
   K extends string = keyof Store<unknown>,
 >(
   vm: Store<T> | Record<K, Store<T>>,
+  scope?: EffectScope
 ) => {
-  if (is.store(vm)) {
-    return createVModel(vm)
-  }
+  const vueScope = scope || effectScope()
 
-  const _ = reactive({})
+  return vueScope.run(() => {
+    const _ = reactive({}) as Reactive<Record<string, unknown>>
 
-  const shape = Object.fromEntries(
-    Object.entries<Store<T>>(vm).map(([key, value]) => [
-      key,
-      createVModel(value, key, _),
-    ]),
-  )
+    if (is.store(vm)) {
+      return createVModel(vm)
+    }
 
-  for (const key in shape) {
-    // @ts-ignore
-    _[key] = shape[key]
-  }
+    const shape = Object.fromEntries(
+      Object.entries<Store<T>>(vm).map(([key, value]) => [
+        key,
+        createVModel(value, key, _)
+      ]),
+    )
 
-  return _
+    for (const key in shape) {
+      _[key] = shape[key]
+    }
+
+    return _
+  })
 }

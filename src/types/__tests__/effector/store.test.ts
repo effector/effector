@@ -91,6 +91,7 @@ test('#map', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'Store<string>' is not assignable to type 'Store<number>'.
+      Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -266,24 +267,13 @@ test('#subscribe', () => {
 })
 
 test('#watch', () => {
-  const event: EventCallable<number> = createEvent()
   const store = createStore(0)
-  store.watch((state, payload) => {
+  store.watch(state => {
     const store_watch_check1: number = state
-    const store_watch_check2: typeof undefined = payload
-  })
-  store.watch(event, (state, payload) => {
-    const store_watchBy_check1: number = state
-    const store_watchBy_check2: number = payload
   })
   const computed = store.map(() => 'hello')
-  computed.watch((state, payload) => {
+  computed.watch(state => {
     const store_watchComputed_check1: string = state
-    const store_watchComputed_check2: typeof undefined = payload
-  })
-  computed.watch(event, (state, payload) => {
-    const store_watchByComputed_check1: string = state
-    const store_watchByComputed_check2: number = payload
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
@@ -308,7 +298,7 @@ test('unsafe widening (should fail)', () => {
       Types of property '____' are incompatible.
         Type 'StoreValueType<{ page: number; limit: number; id: number; }>' is not assignable to type 'StoreValueType<{ [key: string]: any; page: number; limit: number; }>'.
           Types of parameters 'type' and 'type' are incompatible.
-            Type '{ [key: string]: any; page: number; limit: number; }' is not assignable to type '{ page: number; limit: number; id: number; }'.
+            Property 'id' is missing in type '{ [key: string]: any; page: number; limit: number; }' but required in type '{ page: number; limit: number; id: number; }'.
     "
   `)
 })

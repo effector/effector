@@ -1,5 +1,5 @@
 import type {DataCarrier} from './unit.h'
-import type {Cmd, Stack} from './index.h'
+import type {Cmd, Stack, StateRef} from './index.h'
 import {is, isFunction, isObject, assertTarget} from './is'
 import {add, forIn, includes} from './collection'
 import {addRefOp, createStateRef} from './stateRef'
@@ -10,10 +10,11 @@ import {createNode} from './createNode'
 import {launch} from './kernel'
 import {getStoreState} from './getter'
 import {assert} from './throw'
-import {createEvent} from './createUnit'
+import {createEvent, getUnitTrace, setUnitTrace} from './createUnit'
 import {applyTemplate} from './template'
 import {createSampling} from './sample'
 import {addActivator} from './lazy'
+import {generateErrorTitle} from './naming'
 
 const launchCase = (
   scopeTargets: Record<string, DataCarrier>,
@@ -35,8 +36,9 @@ const launchCase = (
 export function split(...args: any[]) {
   const METHOD = 'split'
   let targets: Record<string, DataCarrier>
-  let clock: void | DataCarrier | DataCarrier[]
+  let clock: undefined | DataCarrier | DataCarrier[]
   let [[source, match], metadata] = processArgsToConfig(args)
+  const errorTitle = generateErrorTitle(METHOD, metadata)
   const configForm = !match
   if (configForm) {
     targets = source.cases
@@ -47,10 +49,10 @@ export function split(...args: any[]) {
   const matchIsUnit = is.store(match)
   const matchIsFunction = !is.unit(match) && isFunction(match)
   const matchIsShape = !matchIsUnit && !matchIsFunction && isObject(match)
-  assert(is.unit(source), 'source must be a unit')
+  assert(is.unit(source), 'source must be a unit', errorTitle)
   if (!targets!) targets = {}
   if (!configForm) {
-    assert(matchIsShape, 'match should be an object')
+    assert(matchIsShape, 'match should be an object', errorTitle)
     forIn(
       match,
       (_, key) =>
@@ -67,17 +69,21 @@ export function split(...args: any[]) {
     })
   } else {
     forIn(targets, (target, field) =>
-      assertTarget(METHOD, target, `cases.${field}`),
+      assertTarget(errorTitle, target, `cases.${field}`),
     )
   }
   const owners = new Set(
-    //@ts-expect-error
-    ([] as DataCarrier[]).concat(source, clock || [], Object.values(targets)),
+    ([] as DataCarrier[]).concat(
+      source as DataCarrier,
+      clock || [],
+      Object.values(targets),
+    ),
   )
   const caseNames = Object.keys(
     matchIsUnit || matchIsFunction ? targets : match,
   )
   let splitterSeq: Array<Cmd | false>
+  let lastValuesRef: StateRef | void
   if (matchIsUnit || matchIsFunction) {
     if (matchIsUnit) owners.add(match)
     splitterSeq = [
@@ -98,7 +104,7 @@ export function split(...args: any[]) {
       }),
     ]
   } else if (matchIsShape) {
-    const lastValues = createStateRef({})
+    const lastValues = (lastValuesRef = createStateRef({}))
     lastValues.type = 'shape'
     const units = [] as string[]
     let needBarrier: boolean
@@ -146,7 +152,7 @@ export function split(...args: any[]) {
   const ownersArray = Array.from(owners)
   const splitterNode = createNode({
     alwaysActive: false,
-    meta: {op: METHOD},
+    meta: {op: METHOD, stateRef: lastValuesRef!},
     parent: clock ? [] : source,
     scope: targets,
     node: splitterSeq!,
@@ -160,8 +166,7 @@ export function split(...args: any[]) {
     createSampling(
       METHOD,
       clock,
-      //@ts-expect-error
-      source,
+      source as DataCarrier,
       null,
       splitterNode,
       null,
@@ -173,5 +178,6 @@ export function split(...args: any[]) {
       false,
     )
   }
+  setUnitTrace(splitterNode, getUnitTrace(split))
   if (!configForm) return targets
 }

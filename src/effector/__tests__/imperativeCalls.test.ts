@@ -22,7 +22,7 @@ describe('store', () => {
     $x.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('.map', () => {
@@ -36,7 +36,7 @@ describe('store', () => {
     $y.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('updateFilter', () => {
@@ -50,7 +50,7 @@ describe('store', () => {
     }).on(trigger, x => x + 1)
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
 })
@@ -65,7 +65,7 @@ describe('event', () => {
     y.watch(() => {})
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('.prepend', () => {
@@ -77,7 +77,7 @@ describe('event', () => {
     y.watch(() => {})
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('.filterMap', () => {
@@ -89,7 +89,7 @@ describe('event', () => {
     y.watch(() => {})
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
 })
@@ -105,7 +105,7 @@ test('combine', () => {
   $comb.watch(() => {})
   trigger()
   expect(getWarning()).toMatchInlineSnapshot(
-    `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+    `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
   )
 })
 
@@ -124,7 +124,7 @@ describe('sample', () => {
     target.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
   test('filter', () => {
@@ -142,7 +142,7 @@ describe('sample', () => {
     target.watch(() => {})
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: unit call from pure function is not supported, use operators like sample instead]`,
+      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
     )
   })
 })

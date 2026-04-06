@@ -1,11 +1,12 @@
-import {createEvent, Event} from 'effector'
+import {createEvent} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+//@ts-expect-error
 import {show} from 'effector/fixtures/showstep'
 
 describe('event.filterMap', () => {
   test('event.filterMap should infer type', () => {
     const fn = jest.fn()
-    const num: Event<number | '-1'> = createEvent()
+    const num = createEvent<number | '-1'>()
 
     const evenNum = num.filterMap(n => {
       if (n !== '-1') return n
@@ -30,7 +31,7 @@ describe('event.filterMap', () => {
 
   test('event.filterMap should drop undefined values', () => {
     const fn = jest.fn()
-    const num: Event<number> = createEvent()
+    const num = createEvent<number>()
     const evenNum = num.filterMap(n => {
       if (n % 2 === 0) return n * 2
     })

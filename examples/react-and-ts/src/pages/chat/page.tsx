@@ -1,10 +1,10 @@
-import { useEvent, useList, useStore } from "effector-react";
+import { useList, useUnit } from "effector-react";
 import * as React from "react";
 
 import * as model from "./model";
 
 export function ChatPage() {
-  const handlePageMount = useEvent(model.pageMounted);
+  const handlePageMount = useUnit(model.pageMounted);
   React.useEffect(() => {
     handlePageMount();
   }, []);
@@ -18,8 +18,7 @@ export function ChatPage() {
 }
 
 function ChatHistory() {
-  const messageDeleting = useStore(model.$messageDeleting);
-  const handleMessageDelete = useEvent(model.messageDeleteClicked);
+  const [messageDeleting, handleMessageDelete] = useUnit([model.$messageDeleting, model.messageDeleteClicked]);
 
   // Hook `useList` allows React not rerender messages really doesn't changed
   const messages = useList(model.$messages, {
@@ -43,19 +42,19 @@ function ChatHistory() {
 }
 
 function MessageForm() {
-  const isLogged = useStore(model.$loggedIn);
+  const isLogged = useUnit(model.$loggedIn);
   return isLogged ? <SendMessage /> : <LoginForm />;
 }
 
 function SendMessage() {
-  const userName = useStore(model.$userName);
-  const messageText = useStore(model.$messageText);
-  const messageSending = useStore(model.$messageSending);
+  const [userName, messageText, messageSending] = useUnit([model.$userName, model.$messageText, model.$messageSending]);
 
-  const handleLogout = useEvent(model.logoutClicked);
-  const handleTextChange = useEvent(model.messageTextChanged);
-  const handleEnterPress = useEvent(model.messageEnterPressed);
-  const handleSendClick = useEvent(model.messageSendClicked);
+  const [handleLogout, handleTextChange, handleEnterPress, handleSendClick] = useUnit([
+    model.logoutClicked,
+    model.messageTextChanged,
+    model.messageEnterPressed,
+    model.messageSendClicked,
+  ]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -82,7 +81,7 @@ function SendMessage() {
 }
 
 function LoginForm() {
-  const handleLogin = useEvent(model.loginClicked);
+  const handleLogin = useUnit(model.loginClicked);
   return (
     <div className="message-form">
       <div>Please, log in to be able to send messages</div>

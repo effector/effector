@@ -1,19 +1,26 @@
 import {createEffect, createDomain} from 'effector'
+import {muteErrors} from 'effector/fixtures'
+
+muteErrors('getType')
 
 test("should return it's own name on effect.getType()", () => {
   expect(createEffect('foo').getType()).toBe('foo')
+  //@ts-expect-error
   expect(createEffect('foo', {name: 'bar'}).getType()).toBe('foo')
   expect(createEffect({name: 'foo'}).getType()).toBe('foo')
   expect(createEffect({handler: () => 'done!', name: 'foo'}).getType()).toBe(
     'foo',
   )
+  //@ts-expect-error
   expect(createEffect({handler: () => 'done!'}, {name: 'foo'}).getType()).toBe(
     'foo',
   )
   expect(
     createEffect(
+      //@ts-expect-error
       {handler: () => 'done!', name: 'foo'},
       {name: 'bar'},
+      //@ts-expect-error
     ).getType(),
   ).toBe('foo')
 })

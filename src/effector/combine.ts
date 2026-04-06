@@ -1,27 +1,42 @@
 import type {Store} from './unit.h'
-import {createStore, requireExplicitSkipVoidMessage} from './createUnit'
+import {
+  createStore,
+  getUnitTrace,
+  requireExplicitSkipVoidMessage,
+  setUnitTrace,
+} from './createUnit'
 import {createStateRef, addRefOp} from './stateRef'
 import {mov, calc, read, userFnCall} from './step'
 import {processArgsToConfig} from './config'
 import {getStoreState, setMeta} from './getter'
 import {is, isFunction, isObject, isVoid} from './is'
-import {unitObjectName} from './naming'
+import {generateErrorTitle, unitObjectName} from './naming'
 import {createLinkNode} from './forward'
-import {assert, deprecate} from './throw'
+import {assert} from './throw'
 import {readTemplate} from './region'
 import {forIn} from './collection'
-import {BARRIER, MAP, REG_A, VALUE} from './tag'
+import {MAP, REG_A, VALUE} from './tag'
 import {applyTemplate} from './template'
 import type {Config} from './index.h'
+import {createNode} from './createNode'
+import {own} from './own'
 
 export function combine(...args: any[]): Store<any> {
   let handler
   let stores
   let config
   ;[args, config] = processArgsToConfig(args)
+  const errorTitle = generateErrorTitle('combine', config)
   // skipVoid support, to be removed in effector 24
   const maybeExtConfig = args[args.length - 1]
-  const isExtendedConfig = !is.store(maybeExtConfig) && isObject(maybeExtConfig)
+  /**
+   * if there only one argument then it's a store or object with stores
+   * else if last argument is a store, then its `combine($foo, $bar)`
+   * else if last argument is not an object, then it's a handler
+   * else it's a config object
+   */
+  const isExtendedConfig =
+    args.length > 1 && !is.store(maybeExtConfig) && isObject(maybeExtConfig)
   const extConfig = isExtendedConfig && maybeExtConfig
   const rawHandler = isExtendedConfig ? args[args.length - 2] : maybeExtConfig
   if (isFunction(rawHandler)) {
@@ -56,7 +71,7 @@ export function combine(...args: any[]): Store<any> {
       shapeReady = true
     }
   }
-  let noArraySpread: boolean | void
+  let noArraySpread: boolean | undefined
   if (!shapeReady) {
     /*
     case combine(R,G,B, (R,G,B) => '~')
@@ -72,14 +87,14 @@ export function combine(...args: any[]): Store<any> {
       handler = (list: any[]) => fn(...list)
     }
   }
-  assert(isObject(structStoreShape), 'shape should be an object')
+  assert(isObject(structStoreShape), `${errorTitle}: shape should be an object`)
   return storeCombination(
     Array.isArray(structStoreShape),
     !noArraySpread,
     structStoreShape,
+    getUnitTrace(combine),
     config,
     handler,
-    //@ts-expect-error
     extConfig,
   )
 }
@@ -88,10 +103,12 @@ const storeCombination = (
   isArray: boolean,
   needSpread: boolean,
   obj: any,
+  unitTrace: string,
   config?: Config,
   fn?: (upd: any) => any,
-  extConfig?: {skipVoid?: boolean},
+  extConfig?: false | {skipVoid?: boolean},
 ) => {
+  const errorTitle = generateErrorTitle('combine', config)
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
 
@@ -107,11 +124,20 @@ const storeCombination = (
     ...extConfig,
     and: config,
   })
+  setUnitTrace(store, unitTrace)
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
   const lazy = store.graphite.lazy!
   lazy.alwaysActive = false
+  /**
+   * Easiest way to clean orphaned stateRefs which participate in initialization graph
+   * (has `addRefOp` calls).
+   * If you need to distinguish these nodes during graph analysis,
+   * note that they are not regional
+   * (because they belong explicitly to the unit) which is pretty uncommon
+   */
+  own(store, [createNode({meta: {stateRef: rawShape}})])
   const rawShapeReader = read(rawShape)
   /**
    * usual ref reading has very high priority, which leads to data races
@@ -154,7 +180,7 @@ const storeCombination = (
       from: VALUE,
       store: true,
       target: isFresh,
-      priority: BARRIER,
+      priority: 'barrier',
       batch: true,
     }),
     /**
@@ -172,6 +198,7 @@ const storeCombination = (
       assert(
         !is.unit(child) && !isVoid(child),
         `combine expects a store in a field ${key}`,
+        errorTitle,
       )
       stateNew[key] = defaultState[key] = child
       return
@@ -187,6 +214,7 @@ const storeCombination = (
   })
 
   store.defaultShape = obj
+  setMeta(store, 'defaultShape', obj)
   addRefOp(storeStateRef, {
     type: MAP,
     from: rawShape,
@@ -198,7 +226,7 @@ const storeCombination = (
       const computedValue = fn(stateNew)
 
       if (isVoid(computedValue) && (!extConfig || !('skipVoid' in extConfig))) {
-        console.error(requireExplicitSkipVoidMessage)
+        console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
       }
 
       storeStateRef.current = computedValue

@@ -2,6 +2,7 @@ import type {Template} from '../forest/index.h'
 import type {NodeUnit, Node, ID} from './index.h'
 import {getParent, getGraph} from './getter'
 import {createNode} from './createNode'
+import {is} from './is'
 
 type DeclarationSourceReporter = (
   node: Node | 'region',
@@ -48,10 +49,15 @@ export const readSidRoot = (sid?: string | null) => {
 }
 
 export function withRegion<T = void>(unit: NodeUnit, cb: () => T): T {
-  const meta = getGraph(unit).meta || {}
+  const node = getGraph(unit)
+  const meta = node.meta || {}
+
+  if (!is.domain(unit)) {
+    meta.isRegion = true
+  }
 
   regionStack = {
-    id: getGraph(unit).id,
+    id: node.id,
     parent: regionStack,
     value: unit,
     template: meta.template || readTemplate(),
@@ -81,6 +87,7 @@ export const withFactory = ({
 }) => {
   const factoryRootNode = createNode({
     meta: {sidRoot: readSidRoot(sid), sid, name, loc, method, type: 'factory'},
+    regional: true,
   })
 
   return withRegion(factoryRootNode, fn)

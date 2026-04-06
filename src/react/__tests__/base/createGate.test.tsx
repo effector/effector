@@ -1,7 +1,7 @@
 import * as React from 'react'
 //@ts-expect-error
 import {render, cleanup, container, act} from 'effector/fixtures/react'
-import {createGate, useGate, useStore, Provider} from 'effector-react'
+import {createGate, useGate, useUnit, Provider} from 'effector-react'
 import {createGate as createGateScope} from 'effector-react/scope'
 
 import {argumentHistory} from 'effector/fixtures'
@@ -11,23 +11,9 @@ import {
   createEvent,
   createStore,
   fork,
-  forward,
   sample,
   serialize,
 } from 'effector'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 test('plain gate', async () => {
   const Gate = createGate('plain gate')
@@ -35,6 +21,7 @@ test('plain gate', async () => {
   await render(
     <section>
       <div>div</div>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate />
     </section>,
   )
@@ -65,6 +52,7 @@ test('gate with props', async () => {
   const Gate = createGate('gate with props')
   await render(
     <section>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate foo="bar" />
     </section>,
   )
@@ -97,9 +85,10 @@ describe('updates deduplication', () => {
     Gate.state.updates.watch(fn)
 
     const Component = () => {
-      const x = useStore(count)
+      const x = useUnit(count)
       return (
         <section>
+          {/* @ts-expect-error vue messed with JSX global types */}
           <Gate field={x === 2} />
           {x}
         </section>
@@ -132,7 +121,7 @@ describe('updates deduplication', () => {
     Gate.state.updates.watch(fn)
 
     const Component = () => {
-      const x = useStore(count)
+      const x = useUnit(count)
       useGate(Gate, {field: x === 2})
       return <section>{x}</section>
     }
@@ -164,6 +153,7 @@ test('gate properties', async () => {
   Gate.state.watch(props => fn2(props))
   await render(
     <section>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate foo="bar" />
     </section>,
   )
@@ -249,6 +239,7 @@ test('gate component should be isomorphic to scope', async () => {
 
   await render(
     <Provider value={scope}>
+      {/* @ts-expect-error vue messed with JSX global types */}
       <Gate />
     </Provider>,
   )
@@ -282,12 +273,12 @@ test('setState warning', async () => {
   const setText = createEvent<string>()
   const gate = createGate<string>()
   const store = createStore('').on(setText, (_, text) => text)
-  forward({
-    from: gate.state,
-    to: setText,
+  sample({
+    clock: gate.state,
+    target: setText,
   })
   function Test({changeText}: {changeText: Function}) {
-    const text = useStore(store)
+    const text = useUnit(store)
     return (
       <div>
         <button
@@ -322,7 +313,7 @@ test('setState warning', async () => {
     container.querySelector('#button').click()
   })
   console.error = oldConsoleError
-  expect(argumentHistory(fn).join("")).toMatchInlineSnapshot(`""`)
+  expect(argumentHistory(fn).join('')).toMatchInlineSnapshot(`""`)
 })
 
 describe('createGate without arguments', () => {

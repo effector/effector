@@ -1,4 +1,16 @@
-import {createStore, createApi, Event, Store, createEvent} from 'effector'
+import {
+  createStore,
+  createApi,
+  EventCallable,
+  Store,
+  StoreWritable,
+  createEvent,
+} from 'effector'
+
+import {muteErrors} from 'effector/fixtures'
+
+/** this module really old but contains interesting ideas */
+muteErrors('watch second argument')
 
 test('list', () => {
   const done = createEvent()
@@ -63,8 +75,8 @@ test('list', () => {
   function storeList<T>(initials: Array<T>): {
     self: Store<Array<T>>
     watch: Store<Array<T>>['watch']
-    on: Store<Array<T>>['on']
-    swap: Event<
+    on: StoreWritable<Array<T>>['on']
+    swap: EventCallable<
       Array<
         [
           number | ((list: Array<T>) => number),
@@ -72,7 +84,7 @@ test('list', () => {
         ]
       >
     >
-    move: Event<
+    move: EventCallable<
       Array<
         [
           number | ((list: Array<T>) => number),
@@ -80,25 +92,25 @@ test('list', () => {
         ]
       >
     >
-    insert: Event<
+    insert: EventCallable<
       Array<{
         offset: number | ((list: Array<T>, entries: Array<T>) => number)
         entries: Array<T>
       }>
     >
-    replace: Event<
+    replace: EventCallable<
       Array<{
         offset: number | ((list: Array<T>, entries: Array<T>) => number)
         entries: Array<T>
       }>
     >
-    update: Event<
+    update: EventCallable<
       Array<{
         index: number | ((list: Array<T>) => number)
         updater: (value: T) => T
       }>
     >
-    delete: Event<
+    delete: EventCallable<
       Array<{
         offset: number | ((list: Array<T>) => number)
         amount: number
@@ -106,12 +118,12 @@ test('list', () => {
     >
 
     // Simple actions
-    push: Event<Array<T>>
-    unshift: Event<Array<T>>
-    reverse: Event<void>
-    shift: Event<void>
-    pop: Event<void>
-    clear: Event<void>
+    push: EventCallable<Array<T>>
+    unshift: EventCallable<Array<T>>
+    reverse: EventCallable<void>
+    shift: EventCallable<void>
+    pop: EventCallable<void>
+    clear: EventCallable<void>
   } {
     const store = createStore(initials)
     const reducers = {
@@ -319,7 +331,6 @@ test('list', () => {
 
       watch: model.store.watch,
       on: model.store.on,
-      //@ts-expect-error
       self: model.store,
     }
   }

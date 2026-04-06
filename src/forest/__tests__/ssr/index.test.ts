@@ -3,7 +3,7 @@ import {
   createStore,
   createEffect,
   createDomain,
-  forward,
+  sample,
   fork,
   allSettled,
   serialize,
@@ -14,19 +14,9 @@ import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-expect-error
 import {provideGlobals} from 'effector/fixtures/dom'
+import {muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['fork(domain)', 'hydrate(domain'])
 
 test('fork support', async () => {
   const fetchContent = createEffect(async () => {
@@ -257,9 +247,9 @@ test('fork isolation', async () => {
     (_, {title}) => title,
   )
 
-  forward({
-    from: click,
-    to: fetchContent,
+  sample({
+    clock: click,
+    target: fetchContent,
   })
 
   const client = provideGlobals()

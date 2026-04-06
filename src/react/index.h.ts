@@ -1,4 +1,4 @@
-import type {Event, Store} from 'effector'
+import type {Event, Store, EventCallable} from 'effector'
 import type {ComponentType, ReactNode} from 'react'
 
 export type StoreConsumer<State> = ComponentType<{
@@ -11,9 +11,9 @@ export type StoreView<State, Props> = ComponentType<Props> & {
 }
 
 export type Gate<Props = {}> = React.ComponentType<Props> & {
-  open: Event<Props>
-  close: Event<Props>
+  open: EventCallable<Props>
+  close: EventCallable<Props>
   status: Store<boolean>
   state: Store<Props>
-  set: Event<Props>
+  set: EventCallable<Props>
 }

@@ -14,9 +14,6 @@ export interface Session {
 
 const LocalStorageKey = "effector-example-session";
 
-// We need explicitly return `null` because `undefined` is a special value in the effector ecosystem,
-// that defines some "empty" state, and store will skip updates if we try to pass `undefined` inside.
-// Always use `null` for "no value state".
 // Note, that we need explicit types definition in that case, because `JSON.parse()` returns `any`
 export const sessionLoadFx = createEffect<void, Session | null>(async () => {
   const source = localStorage.getItem(LocalStorageKey);

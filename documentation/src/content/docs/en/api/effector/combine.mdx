@@ -1,0 +1,518 @@
+---
+title: combine API
+description: combine API - combining multiple stores into a single derived store with automatic updates. Examples, description and operational features.
+lang: en
+redirectFrom:
+  - /api/effector/combine
+  - /docs/api/effector/combine
+pagefindWeight: 8
+---
+
+[storeApi]: /en/api/effector/Store
+
+# `combine` API (#methods)
+
+```ts
+import { combine } from "effector";
+```
+
+The `combine` method allows retrieving the state from each passed [store][storeApi] and combining them into a single value, storing it in a new [derived store](/en/explanation/glossary#derived-store). The resulting store will update every time any of the passed stores is updated.
+
+## Algorithm (#algorithm)
+
+1. `combine` reads the current state from all passed stores.
+2. If a transformation function `fn` is provided, it calls `fn` with the values from stores.
+3. The result is saved to a new [derived store](/en/explanation/glossary#derived-store).
+4. The [derived store](/en/explanation/glossary#derived-store) updates whenever any of the source stores changes.
+
+## Peculiarities (#peculiarities)
+
+- **Batching updates**: When multiple stores update simultaneously (during one tick), `combine` processes them all at once, resulting in a single update of the derived store.
+- **Mixing stores with primitives**: You can pass not only stores but also primitives and objects to `combine`. Effector will not track mutations of these primitives and objects - they are treated as static values.
+- **Pure transformation functions**: All transformation functions passed to `combine` [must be pure](/en/explanation/glossary#purity).
+- **Strict equality check**: If a transformation function returns the same value as previous (by `!==` comparison), the derived store won't update.
+- **Error handling**: If a transformation function throws an error during execution, the application will crash. This will be fixed in [effector v24](https://github.com/effector/effector/issues/1163).
+
+## Configuration forms (#combine-config-forms)
+
+| <div style="width:280px">Form</div>                         | Description                                                             |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [`combine($a, fn)`](#methods-combine-store-fn)              | Transforms a single store's value via `fn`.                             |
+| [`combine(...$stores, fn?)`](#methods-combine-stores-fn)    | Combines multiple stores/values, optionally transforming via `fn`.      |
+| [`combine({ a: $a, b: $b }, fn?)`](#methods-combine-object) | Combines stores into an object store, optionally transforming via `fn`. |
+| [`combine([$a, $b], fn?)`](#methods-combine-array)          | Combines stores into an array store, optionally transforming via `fn`.  |
+
+## Configurations (#config)
+
+### `combine($store, fn)` (#methods-combine-store-fn)
+
+Creates a new [derived store](/en/explanation/glossary#derived-store) by transforming a single store's value. This is the **preferred method** for creating derived stores from a single source. It is an alternative way to [`Store.map()`](/en/api/effector/Store#methods-map-fn).
+
+- **Formula**
+
+```ts
+const $result = combine($source, (value) => {
+  // transformation logic
+  return result;
+});
+```
+
+- **Type**
+
+```ts
+export function combine<A, R>(
+  a: Store<A>,
+  fn: (a: A) => R,
+  config?: {
+    skipVoid?: boolean;
+  },
+): Store<R>;
+```
+
+- **Features**
+
+  - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+  - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+  - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+  - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
+
+- **Examples**
+
+```ts
+import { createStore, combine } from "effector";
+
+const $name = createStore("John");
+const $greeting = combine($name, (name) => `Hello, ${name}!`);
+
+$greeting.watch((greeting) => console.log(greeting));
+// => Hello, John!
+```
+
+```ts
+import { createStore, combine } from "effector";
+
+const $price = createStore(100);
+const $priceWithTax = combine($price, (price) => price * 1.2);
+
+$priceWithTax.watch((price) => console.log("Price with tax:", price));
+// => Price with tax: 120
+```
+
+- **Return value**
+
+Returns a new [derived store](/en/explanation/glossary#derived-store).
+
+---
+
+### `combine(...$stores, fn?)` (#methods-combine-stores-fn)
+
+Creates a new [derived store](/en/explanation/glossary#derived-store) that combines any number of stores and values. Accepts any number of arguments - stores, primitives, or objects. The last argument can optionally be a transformation function.
+
+Without `fn`, wraps all values into an array. With `fn`, transforms values using the function where stores are passed as separate arguments.
+
+- **Formula**
+
+```ts
+// without transformation function
+const $result = combine($a);
+const $result = combine($a, $b, $c);
+
+// with transformation function
+const $result = combine($a, (value) => {
+  // transformation logic
+  return result;
+});
+
+const $result = combine($a, $b, $c, (a, b, c) => {
+  // transformation logic
+  return result;
+});
+```
+
+- **Type**
+
+```ts
+export function combine<T extends any[]>(
+  ...stores: T
+): Store<{ [K in keyof T]: T[K] extends Store<infer U> ? U : T[K] }>;
+
+export function combine<T extends any[], R extends any>(
+  ...stores: T,
+  fn: (...stores: { [K in keyof T]: T[K] extends Store<infer U> ? U : T[K] }) => R,
+  config?: { skipVoid?: boolean },
+): Store<R>;
+
+// also supports any number of stores with optional fn as last argument
+```
+
+- **Features**
+
+  - Accepts any number of stores, primitives, or objects as arguments.
+  - Can mix stores with values such as primitives or objects.
+  - Without `fn`, returns an array store with values in the same order as arguments.
+  - When `fn` is provided:
+    - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+    - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+    - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+    - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
+
+- **Examples**
+
+Without transformation function - creates an array store:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+const $age = createStore(30);
+
+const $userData = combine($firstName, $lastName, $age);
+
+$userData.watch((data) => console.log(data));
+// => ["John", "Doe", 30]
+```
+
+With transformation function - transforms combined values:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+
+const $fullName = combine($firstName, $lastName, (first, last) => {
+  return `${first} ${last}`;
+});
+
+$fullName.watch((name) => console.log(name));
+// => "John Doe"
+```
+
+Combining multiple stores with transformation:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $price = createStore(100);
+const $quantity = createStore(2);
+const $discount = createStore(0.1);
+
+const $total = combine($price, $quantity, $discount, (price, qty, disc) => {
+  const subtotal = price * qty;
+  return subtotal - subtotal * disc;
+});
+
+$total.watch((total) => console.log(`Total: $${total}`));
+// => Total: $180
+```
+
+Mixing stores with primitives:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $userName = createStore("Alice");
+const API_URL = "https://api.example.com";
+
+const $userEndpoint = combine($userName, API_URL, (name, url) => {
+  return `${url}/users/${name}`;
+});
+
+$userEndpoint.watch((endpoint) => console.log(endpoint));
+// => https://api.example.com/users/Alice
+```
+
+- **Return value**
+
+Returns a new [derived store](/en/explanation/glossary#derived-store).
+
+---
+
+### `combine({ a: $a, b: $b }, fn?)` (#methods-combine-object)
+
+Creates a new [derived store](/en/explanation/glossary#derived-store) that combines an object of stores. Without `fn`, it creates an object store with values from the passed stores. With `fn`, it transforms the combined values using the function.
+
+- **Formula**
+
+```ts
+// without transformation function
+const $result = combine({
+  a: $a,
+  b: $b,
+  // ... more stores
+});
+
+// with transformation function
+const $result = combine({ a: $a, b: $b, c: $c }, ({ a, b, c }) => {
+  // transformation logic
+  return result;
+});
+```
+
+- **Type**
+
+```ts
+export function combine<State, R>(
+  shape: State,
+  fn?: (shape: { [K in keyof State]: State[K] extends Store<infer U> ? U : State[K] }) => R,
+  config?: {
+    skipVoid?: boolean;
+  },
+): Store<R>;
+```
+
+- **Features**
+
+  - Updates are batched when multiple stores change simultaneously.
+  - Can mix stores with values such as primitives or objects.
+  - if `fn` is provided:
+    - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+    - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+    - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+    - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
+
+- **Examples**
+
+Without transformation function - creates an object store:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+const $age = createStore(30);
+
+const $user = combine({
+  firstName: $firstName,
+  lastName: $lastName,
+  age: $age,
+});
+
+$user.watch((user) => console.log(user));
+// => { firstName: "John", lastName: "Doe", age: 30 }
+```
+
+With transformation function - transforms object values:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $firstName = createStore("John");
+const $lastName = createStore("Doe");
+const $age = createStore(30);
+
+const $userSummary = combine(
+  { firstName: $firstName, lastName: $lastName, age: $age },
+  ({ firstName, lastName, age }) => {
+    return `${firstName} ${lastName}, ${age} years old`;
+  },
+);
+
+$userSummary.watch((summary) => console.log(summary));
+// => "John Doe, 30 years old"
+```
+
+Practical example - form validation:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $email = createStore("");
+const $password = createStore("");
+const $confirmPassword = createStore("");
+
+const $formValidation = combine(
+  { email: $email, password: $password, confirmPassword: $confirmPassword },
+  ({ email, password, confirmPassword }) => {
+    const errors = [];
+
+    if (!email.includes("@")) {
+      errors.push("Invalid email");
+    }
+
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters");
+    }
+
+    if (password !== confirmPassword) {
+      errors.push("Passwords don't match");
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  },
+);
+```
+
+Mixing stores with primitives and objects:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $userId = createStore(123);
+const $isActive = createStore(true);
+
+const $userData = combine({
+  id: $userId,
+  isActive: $isActive,
+  role: "user",
+  permissions: ["read", "write"],
+});
+
+$userData.watch((data) => console.log(data));
+// => { id: 123, isActive: true, role: "user", permissions: ["read", "write"] }
+```
+
+- **Return value**
+
+Returns a new [derived store](/en/explanation/glossary#derived-store).
+
+---
+
+### `combine([$a, $b], fn?)` (#methods-combine-array)
+
+Creates a new [derived store](/en/explanation/glossary#derived-store) that combines an array of stores. Without `fn`, it creates an array store with values from the passed stores in the same order. With `fn`, it transforms the combined values using the function.
+
+- **Formula**
+
+```ts
+// without transformation function
+const $result = combine([$a, $b, $c]);
+
+// with transformation function
+const $result = combine([$a, $b, $c], ([a, b, c]) => {
+  // transformation logic
+  return result;
+});
+```
+
+- **Type**
+
+```ts
+export function combine<State extends any[]>(
+  tuple: State,
+): Store<{ [K in keyof State]: State[K] extends Store<infer U> ? U : State[K] }>;
+
+export function combine<State extends any[], R>(
+  tuple: State,
+  fn: (tuple: { [K in keyof State]: State[K] extends Store<infer U> ? U : State[K] }) => R,
+  config?: { skipVoid?: boolean },
+): Store<R>;
+```
+
+- **Features**
+
+  - Array order matches the order of passed stores.
+  - Updates are batched when multiple stores change simultaneously.
+  - Can mix stores with non-store values such as primitives or objects.
+  - When `fn` is provided:
+    - The transformation function `fn` [must be pure](/en/explanation/glossary#purity).
+    - Function receives an array where order matches the input array order.
+    - If `fn` returns the same value as previous (by `!==` comparison), the store won't update.
+    - If `fn` throws an error during execution, the application will crash (this will be fixed in [effector v24](https://github.com/effector/effector/issues/1163)).
+    - Optional `config` parameter: see [`createStore` configuration](/en/api/effector/createStore#create-store) for details on `skipVoid`.
+
+- **Examples**
+
+Without transformation function - creates an array store:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $x = createStore(10);
+const $y = createStore(20);
+const $z = createStore(30);
+
+const $coordinates = combine([$x, $y, $z]);
+
+$coordinates.watch((coords) => console.log(coords));
+// => [10, 20, 30]
+```
+
+With transformation function - transforms array values:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $x = createStore(3);
+const $y = createStore(4);
+
+const $distance = combine([$x, $y], ([x, y]) => {
+  return Math.sqrt(x * x + y * y);
+});
+
+$distance.watch((dist) => console.log(`Distance: ${dist}`));
+// => Distance: 5
+```
+
+Practical example - calculating totals from array:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $itemPrice1 = createStore(10);
+const $itemPrice2 = createStore(25);
+const $itemPrice3 = createStore(15);
+
+const $cartTotal = combine([$itemPrice1, $itemPrice2, $itemPrice3], (prices) => {
+  return prices.reduce((sum, price) => sum + price, 0);
+});
+
+$cartTotal.watch((total) => console.log(`Total: $${total}`));
+// => Total: $50
+```
+
+Array with different types:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $userName = createStore("Alice");
+const $score = createStore(100);
+const $isActive = createStore(true);
+
+const $playerInfo = combine([$userName, $score, $isActive], ([name, score, active]) => {
+  return `Player ${name}: ${score} points (${active ? "online" : "offline"})`;
+});
+
+$playerInfo.watch((info) => console.log(info));
+// => Player Alice: 100 points (online)
+```
+
+Mixing stores with primitives in array:
+
+```ts
+import { createStore, combine } from "effector";
+
+const $currentPage = createStore(1);
+const MAX_PAGES = 10;
+
+const $pagination = combine([$currentPage, MAX_PAGES], ([current, max]) => {
+  return {
+    current,
+    max,
+    hasNext: current < max,
+    hasPrev: current > 1,
+  };
+});
+
+$pagination.watch((pagination) => console.log(pagination));
+// => { current: 1, max: 10, hasNext: true, hasPrev: false }
+```
+
+- **Return value**
+
+Returns a new [derived store](/en/explanation/glossary#derived-store).
+
+## Related API and Articles (#related-api-and-docs-to-combine)
+
+- **API**
+  - [`Store API`](/en/api/effector/Store) - Description of stores, their methods and properties
+  - [`createStore`](/en/api/effector/createStore) - Creating a new store
+  - [`sample`](/en/api/effector/sample) - Key operator for building connections between units
+  - [`createEvent`](/en/api/effector/createEvent) - Creating an event
+- **Articles**
+  - [Managing states in effector and how to use derived stores](/en/essentials/manage-states)

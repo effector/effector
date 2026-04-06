@@ -75,8 +75,12 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
       const eventKeys: string[] = []
       const eventValues: Array<Unit<any>> = []
       for (const key in normShape) {
+        if (!Object.prototype.hasOwnProperty.call(normShape, key)) continue
         const unit = normShape[key]
-        if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
+        if (!is.unit(unit)) {
+          const keyMessage = isSingleUnit ? 'argument' : `value in key "${key}"`
+          throwError(`expect useUnit ${keyMessage} to be a unit`)
+        }
         if (is.event(unit) || is.effect(unit)) {
           shape[key] = scope ? scopeBind(unit as Event<any>, {scope}) : unit
           eventKeys.push(key)
@@ -309,7 +313,7 @@ export function useListBase<T>(
   fnRef.current = [fn, getKey!]
   const keysSelfMemo = React.useMemo(() => keys, keys)
   if (getKey!) {
-    const listItems = useStoreBase(list, scope)
+    const listItems = useUnitBase(list, scope)
     if (listItems.length === 0 && placeholder) return placeholder
     return listItems.map(value => {
       const key = fnRef.current[1](value)

@@ -3,10 +3,7 @@
 **/val/**
 **/es/**
 **/dist/**
-**/flow-typed/**
-**/flow/**
 **/node_modules/**
-**/**/*.flow
 **/logs/**
 **/npm/**
 **/*.bs.js

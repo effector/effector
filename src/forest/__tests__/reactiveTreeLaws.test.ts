@@ -1,28 +1,7 @@
-import {
-  createStore,
-  createEvent,
-  sample,
-  combine,
-  forward,
-  Event,
-  Store,
-} from 'effector'
+import {createStore, createEvent, sample, combine, Event, Store} from 'effector'
 import {h, using, list, node, spec, remap} from 'forest'
 
 import prettyHtml from 'effector/fixtures/prettyHtml'
-
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
 
 declare const act: (cb?: () => any) => Promise<void>
 declare const initBrowser: () => Promise<void>
@@ -325,8 +304,8 @@ describe('update store from nested block', () => {
                   h('p', () => {
                     const up = createEvent<any>()
                     const $myCount = createStore(0)
-                    forward({from: $counter, to: $myCount})
-                    forward({from: up, to: inc})
+                    sample({clock: $counter, target: $myCount})
+                    sample({clock: up, target: inc})
                     h('button', {
                       handler: {click: up},
                       text: $myCount,
@@ -336,8 +315,8 @@ describe('update store from nested block', () => {
                   h('p', () => {
                     const up = createEvent<any>()
                     const $myCount = createStore(0)
-                    forward({from: $counter, to: $myCount})
-                    forward({from: up, to: inc})
+                    sample({clock: $counter, target: $myCount})
+                    sample({clock: up, target: inc})
                     h('button', {
                       handler: {click: up},
                       text: $myCount,
@@ -425,8 +404,8 @@ describe('update store from nested block', () => {
                   h('p', () => {
                     const up = createEvent<any>()
                     const $myCount = createStore(0)
-                    forward({from: $counter, to: $myCount})
-                    forward({from: up, to: inc})
+                    sample({clock: $counter, target: $myCount})
+                    sample({clock: up, target: inc})
                     h('button', {
                       handler: {click: up},
                       text: $myCount,
@@ -436,8 +415,8 @@ describe('update store from nested block', () => {
                   h('p', () => {
                     const up = createEvent<any>()
                     const $myCount = createStore(0)
-                    forward({from: $counter, to: $myCount})
-                    forward({from: up, to: inc})
+                    sample({clock: $counter, target: $myCount})
+                    sample({clock: up, target: inc})
                     h('button', {
                       handler: {click: up},
                       text: $myCount,
@@ -684,10 +663,7 @@ describe('store and event on a same level', () => {
           fn() {
             const delta = createStore(0)
             const gotHeight = createEvent<number>()
-            forward({
-              from: gotHeight,
-              to: delta,
-            })
+            sample({clock: gotHeight, target: delta})
             delta.watch(x => {
               updates.push(x)
             })

@@ -1,5 +1,5 @@
 import type {Template} from '../forest/index.h'
-import type {Store, Event, CommonUnit, Effect, Domain} from './unit.h'
+import type {Store, Event, CommonUnit, Effect} from './unit.h'
 import type {Subscriber, Config, Cmd, Kind} from './index.h'
 
 import {observableSymbol} from './observable'
@@ -28,25 +28,19 @@ import {
   initRefAfterActivation,
 } from './kernel'
 
-import {createName} from './naming'
+import {createName, generateErrorTitle} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
-import {createSubscription} from './subscription'
 import {readTemplate, readSidRoot, reportDeclaration} from './region'
-import {
-  getSubscribers,
-  getStoreState,
-  getGraph,
-  getParent,
-  setMeta,
-  getMeta,
-} from './getter'
-import {assert, deprecate} from './throw'
-import {DOMAIN, STORE, EVENT, MAP, FILTER, STACK, REG_A} from './tag'
+import {getStoreState, getGraph, getParent, setMeta, getMeta} from './getter'
+import {assert, deprecate, printErrorWithNodeDetails} from './throw'
+import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
 import {addActivator, traverseSetAlwaysActive} from './lazy'
+import {clearNode} from './clearNode'
+import {debugTracesEnabled} from './debug_traces'
 
 export const applyParentHook = (
   source: CommonUnit,
@@ -56,7 +50,25 @@ export const applyParentHook = (
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
+export const setUnitTrace = (unit: any, unitTrace: string) =>
+  setMeta(unit, 'unitTrace', unitTrace)
+
+export const getUnitTrace = (caller: (...args: any[]) => void) => {
+  if (!debugTracesEnabled()) return ''
+
+  const traceError = Error('unit trace')
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(traceError, caller)
+  }
+  return traceError.stack!
+}
+
+export const initUnit = (
+  kind: Kind,
+  unit: any,
+  rawConfig: any,
+  unitTrace: string,
+) => {
   const config = flattenConfig(rawConfig)
   const isDomain = kind === DOMAIN
   const id = nextUnitID()
@@ -72,6 +84,7 @@ export const initUnit = (kind: Kind, unit: any, rawConfig: any) => {
     serialize: config.serialize,
     derived: config.derived,
     config,
+    unitTrace,
   }
   unit.targetable = !config.derived
   unit.parent = parent
@@ -147,14 +160,17 @@ export function createEvent<Payload = any>(
     or: maybeConfig,
     and: typeof nameOrConfig === 'string' ? {name: nameOrConfig} : nameOrConfig,
   }) as any
+  const errorTitle = generateErrorTitle('event', config)
   const event = ((payload: Payload, ...args: unknown[]) => {
     assert(
       !getMeta(event, 'derived'),
       'call of derived event is not supported, use createEvent instead',
+      errorTitle,
     )
     assert(
       !isPure,
       'unit call from pure function is not supported, use operators like sample instead',
+      errorTitle,
     )
     if (currentPage) {
       return callCreate(event, template, payload, args)
@@ -165,7 +181,12 @@ export function createEvent<Payload = any>(
   const finalEvent = Object.assign(event, {
     graphite: createNode({
       alwaysActive: false,
-      meta: initUnit(config.actualOp || EVENT, event, config),
+      meta: initUnit(
+        config.actualOp || EVENT,
+        event,
+        config,
+        getUnitTrace(createEvent),
+      ),
       regional: true,
     }),
     create(params: Payload, _: any[]) {
@@ -176,7 +197,7 @@ export function createEvent<Payload = any>(
     map: (fn: Function) => deriveEvent(event, MAP, fn, [userFnCall()]),
     filter: (fn: {fn: Function}) =>
       //@ts-expect-error
-      deriveEvent(event, FILTER, fn.fn ? fn : fn.fn, [
+      deriveEvent(event, 'filter', fn.fn ? fn : fn.fn, [
         userFnCall(callStack, true),
       ]),
     filterMap: (fn: Function) =>
@@ -189,6 +210,7 @@ export function createEvent<Payload = any>(
         // @ts-expect-error
         event.targetable,
         '.prepend of derived event is not supported, call source event instead',
+        errorTitle,
       )
       const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
         parent: getParent(event),
@@ -218,20 +240,21 @@ function on<State>(
   methodName: string,
   nodeSet: CommonUnit | CommonUnit[],
   fn: Function,
+  errorTitle: string,
 ) {
-  assertNodeSet(nodeSet, methodName, 'first argument')
-  assert(isFunction(fn), 'second argument should be a function')
+  assertNodeSet(nodeSet, `${errorTitle} ${methodName}`, 'first argument')
+  assert(isFunction(fn), 'second argument should be a function', errorTitle)
   deprecate(
     !getMeta(store, 'derived'),
     `${methodName} in derived store`,
     `${methodName} in store created via createStore`,
+    errorTitle,
   )
   const unitsArray = Array.isArray(nodeSet) ? nodeSet : [nodeSet]
   unitsArray.forEach(unit => traverseSetAlwaysActive(getGraph(unit)))
   forEach(unitsArray, trigger => {
     store.off(trigger)
-    const linkNode = updateStore(trigger, store, 'on', callARegStack, fn, true)
-    getSubscribers(store).set(trigger, createSubscription(linkNode))
+    updateStore(trigger, store, 'on', callARegStack, fn, true)
   })
   return store
 }
@@ -245,6 +268,7 @@ export function createStore<State>(
 ): Store<State> {
   const config = flattenConfig(props)
   const plainState = createStateRef(defaultState)
+  const errorTitle = generateErrorTitle('store', config)
   const updates = createEvent({named: 'updates', derived: true})
   applyTemplate('storeBase', plainState)
   const plainStateId = plainState.id
@@ -254,10 +278,9 @@ export function createStore<State>(
   const voidValueAllowed = explicitSkipVoid && !config.skipVoid
   const skipVoidTrueSet = explicitSkipVoid && config.skipVoid
 
-  deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter')
+  deprecate(!skipVoidTrueSet, '{skipVoid: true}', 'updateFilter', errorTitle)
 
   const store = {
-    subscribers: new Map(),
     updates,
     defaultState,
     stateRef: plainState,
@@ -292,23 +315,33 @@ export function createStore<State>(
         scope: forkPage!,
       }),
     reset(...units: CommonUnit[]) {
-      // @ts-expect-error
-      assert(store.targetable, '.reset of derived store is not supported')
+      assert(
+        // @ts-expect-error
+        store.targetable,
+        '.reset of derived store is not supported',
+        errorTitle,
+      )
       forEach(units, unit =>
-        on(store, '.reset', unit, () => store.defaultState),
+        on(store, '.reset', unit, () => store.defaultState, errorTitle),
       )
       return store
     },
     on(nodeSet: CommonUnit | CommonUnit[], fn: Function) {
-      // @ts-expect-error
-      assert(store.targetable, '.on of derived store is not supported')
-      return on(store, '.on', nodeSet, fn)
+      assert(
+        // @ts-expect-error
+        store.targetable,
+        '.on of derived store is not supported',
+        errorTitle,
+      )
+      return on(store, '.on', nodeSet, fn, errorTitle)
     },
     off(unit: CommonUnit) {
-      const currentSubscription = getSubscribers(store).get(unit)
-      if (currentSubscription) {
-        currentSubscription()
-        getSubscribers(store).delete(unit)
+      const triggerUnitId = getGraph(unit).id
+      const oldLink = getGraph(store).family.links.find(
+        e => e.meta.onTrigger === triggerUnitId,
+      )
+      if (oldLink) {
+        clearNode(oldLink)
       }
       return store
     },
@@ -348,7 +381,7 @@ export function createStore<State>(
       return innerStore
     },
     watch(eventOrFn: any, fn?: Function) {
-      deprecate(!fn, 'watch second argument', 'sample')
+      deprecate(!fn, 'watch second argument', 'sample', errorTitle)
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         if (!applyTemplate('storeWatch', plainState, eventOrFn)) {
@@ -356,13 +389,13 @@ export function createStore<State>(
         }
         return subscription
       }
-      assert(isFunction(fn), 'second argument should be a function')
+      assert(isFunction(fn), 'second argument should be a function', errorTitle)
       return (eventOrFn as CommonUnit).watch((payload: any) =>
         fn(store.getState(), payload),
       )
     },
   } as unknown as Store<State>
-  const meta = initUnit(STORE, store, config)
+  const meta = initUnit(STORE, store, config, getUnitTrace(createStore))
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     alwaysActive: true,
@@ -379,7 +412,10 @@ export function createStore<State>(
         const isVoidUpdate = isVoid(upd)
 
         if (isVoidUpdate && !explicitSkipVoid) {
-          console.error(requireExplicitSkipVoidMessage)
+          printErrorWithNodeDetails(
+            `${requireExplicitSkipVoidMessage}`,
+            store.graphite,
+          )
         }
 
         return (
@@ -394,6 +430,7 @@ export function createStore<State>(
     meta: {
       ...meta,
       defaultState,
+      stateRef: plainState,
     },
     regional: true,
   })
@@ -416,9 +453,10 @@ export function createStore<State>(
   assert(
     derived || !isVoidDefaultState || canVoid,
     requireExplicitSkipVoidMessage,
+    errorTitle,
   )
   if (derived && isVoidDefaultState && !explicitSkipVoid) {
-    console.error(requireExplicitSkipVoidMessage)
+    console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
   }
   own(store, [updates])
   if (config?.domain) {
@@ -466,5 +504,9 @@ const updateStore = (
     node,
     is.store(from) && getStoreState(from),
   )
-  return createLinkNode(from, store, node, op, fn, alwaysActive)
+  const result = createLinkNode(from, store, node, op, fn, alwaysActive)
+  if (op !== MAP) {
+    setMeta(result, 'onTrigger', getGraph(from).id)
+  }
+  return result
 }

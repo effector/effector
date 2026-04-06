@@ -1,1 +1,1 @@
-export {delay, argumentHistory} from './testUtils'
+export {delay, argumentHistory, muteErrors} from './testUtils'

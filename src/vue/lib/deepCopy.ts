@@ -1,27 +1,25 @@
 // @ts-nocheck
-function find(list, f) {
-  return list.filter(f)[0]
-}
-
-export function deepCopy<T>(obj, cache = []): T {
+export function deepCopy<T>(obj, cache = new Map()): T {
   if (obj === null || typeof obj !== 'object') {
     return obj
   }
 
-  const hit = find(cache, c => c.original === obj)
+  if (obj instanceof Date) {
+    return obj
+  }
+
+  const hit = cache.get(obj)
+
   if (hit) {
-    return hit.copy
+    return hit
   }
 
   const copy = Array.isArray(obj) ? [] : {}
-  cache.push({
-    original: obj,
-    copy,
-  })
+  cache.set(obj, copy)
 
-  Object.keys(obj).forEach(key => {
+  for (const key of Object.keys(obj)) {
     copy[key] = deepCopy(obj[key], cache)
-  })
+  }
 
   return copy
 }

@@ -21,8 +21,7 @@ test('createDomain', () => {
       Overload 1 of 2, '(domainName?: string | undefined, config?: { domain?: Domain | undefined; } | undefined): Domain', gave the following error.
         Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
       Overload 2 of 2, '(config?: { name?: string | undefined; domain?: Domain | undefined; } | undefined): Domain', gave the following error.
-        Argument of type '{ foo: boolean; }' is not assignable to parameter of type '{ name?: string | undefined; domain?: Domain | undefined; }'.
-          Object literal may only specify known properties, and 'foo' does not exist in type '{ name?: string | undefined; domain?: Domain | undefined; }'.
+        Object literal may only specify known properties, and 'foo' does not exist in type '{ name?: string | undefined; domain?: Domain | undefined; }'.
     "
   `)
 })

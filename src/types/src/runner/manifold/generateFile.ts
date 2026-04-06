@@ -1,5 +1,5 @@
 import {promises} from 'fs'
-import {resolve} from 'path'
+import {resolve, sep} from 'path'
 import {exec} from './operators'
 import {createGroupedCases} from './createGroupedCases'
 import {byFields} from './byFields'
@@ -112,9 +112,9 @@ export function generateFileData({cases}: {cases: Array<() => void>}) {
       '..',
       '__tests__',
       'effector',
-      ...`${file}.test.ts`.split('/'),
+      ...`${file}.test.ts`.split(sep),
     )
-    const readableFileName = `__tests__/effector/${file}.test.ts`
+    const readableFileName = `__tests__${sep}effector${sep}${file}.test.ts`
     const content = fileLines.join(`\n`)
     return {fullFileName, content, readableFileName}
   })

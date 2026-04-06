@@ -83,6 +83,7 @@ describe('#filterMap', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'Event<string>' is not assignable to type 'Event<number>'.
+        Type 'string' is not assignable to type 'number'.
       "
     `)
   })

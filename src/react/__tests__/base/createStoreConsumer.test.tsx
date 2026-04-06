@@ -1,14 +1,18 @@
 import * as React from 'react'
+//@ts-expect-error
 import {act, render, cleanup, container} from 'effector/fixtures/react'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {createEvent, createStore, combine} from 'effector'
 import {createStoreConsumer} from 'effector-react'
 
-test('createStoreComponent attempt', async() => {
+muteErrors(['createStoreConsumer', 'createComponent', 'useStore'])
+
+test('createStoreComponent attempt', async () => {
   const store1 = createStore('foo')
-  const changeText = createEvent()
+  const changeText = createEvent<string>()
   store1.on(changeText, (_, payload) => payload)
   const Store1 = createStoreConsumer(store1)
+  //@ts-expect-error vue messed with JSX global types
   await render(<Store1>{state => <span>Current state: {state}</span>}</Store1>)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <span>
@@ -16,7 +20,7 @@ test('createStoreComponent attempt', async() => {
       foo
     </span>
   `)
-  await act(async() => {
+  await act(async () => {
     changeText('bar')
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -27,7 +31,7 @@ test('createStoreComponent attempt', async() => {
   `)
 })
 
-test('no dull re-renders', async() => {
+test('no dull re-renders', async () => {
   const fn = jest.fn()
   const reset = createEvent()
   const inc = createEvent()
@@ -46,6 +50,7 @@ test('no dull re-renders', async() => {
   const CurrentList = createStoreConsumer(currentList)
 
   await render(
+    //@ts-expect-error vue messed with JSX global types
     <CurrentList>
       {state => {
         fn(state)
@@ -59,7 +64,7 @@ test('no dull re-renders', async() => {
       0,1,2
     </span>
   `)
-  await act(async() => {
+  await act(async () => {
     inc()
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -68,7 +73,7 @@ test('no dull re-renders', async() => {
       0,1,2,3
     </span>
   `)
-  await act(async() => {
+  await act(async () => {
     reset()
   })
   expect(container.firstChild).toMatchInlineSnapshot(`

@@ -9,4 +9,5 @@ export {
   useStoreMap,
   useUnit,
   useGate,
+  useProvidedScope,
 } from './nossr'

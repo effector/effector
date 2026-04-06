@@ -11,8 +11,10 @@ import {
   fork,
 } from 'effector'
 
-import {Provider, useList, useStore} from 'effector-react'
-import {argumentHistory} from 'effector/fixtures'
+import {Provider, useList, useUnit} from 'effector-react'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
+
+muteErrors(['No scope found', 'AppFail'])
 
 it('should render store items', async () => {
   const list = createStore(['foo', 'bar', 'baz'])
@@ -184,7 +186,7 @@ it('should update when keys are changed', async () => {
   const dependency = restore(changeDependency, 'dep')
 
   const List = () => {
-    const dep = useStore(dependency)
+    const dep = useUnit(dependency)
     return (
       <div>
         {useList(list, {
@@ -323,7 +325,7 @@ test('getKey', async () => {
   )
   const ListPlain = () => (
     <div>
-      {useStore($members).map(({name, id}) => {
+      {useUnit($members).map(({name, id}) => {
         return <PlainComponent key={id} name={name} id={id} />
       })}
     </div>
@@ -620,13 +622,13 @@ test('get value from scope if it is available', async () => {
 test('throw error on forceScope if it is not available', async () => {
   const $store = createStore(['original'])
 
-  function App() {
+  function AppFail() {
     const value = useList($store, t => <li>{t}</li>, {forceScope: true})
 
     return <ol>{value}</ol>
   }
 
-  expect(() => render(<App />)).rejects.toMatchInlineSnapshot(
+  expect(() => render(<AppFail />)).rejects.toMatchInlineSnapshot(
     `[Error: No scope found, consider adding <Provider> to app root]`,
   )
 })

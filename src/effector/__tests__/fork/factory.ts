@@ -1,4 +1,4 @@
-import {Store, combine, createEvent, createStore} from 'effector'
+import {StoreWritable, combine, createEvent, createStore} from 'effector'
 
 export function createField(field: string, initialValue: any) {
   const trigger = createEvent<any>()
@@ -8,7 +8,7 @@ export function createField(field: string, initialValue: any) {
 
 export function createFieldset(fn: () => ReturnType<typeof createField>[]) {
   const reset = createEvent()
-  const shape = {} as Record<string, Store<any>>
+  const shape = {} as Record<string, StoreWritable<any>>
   const fieldList = fn()
   for (const item of fieldList) {
     const {field, value} = item

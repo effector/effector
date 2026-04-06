@@ -13,7 +13,7 @@ import {argumentHistory} from 'effector/fixtures'
 describe('fromObservable', () => {
   it('works with typical Symbol.observable library: redux', () => {
     const fn = jest.fn()
-    const reduxStore = redux.createStore((state = 1, action) => {
+    const reduxStore = redux.createStore((state: number = 1, action) => {
       switch (action.type) {
         case 'inc':
           return state + 1
@@ -36,7 +36,7 @@ describe('fromObservable', () => {
   describe('works with itself', () => {
     test('event support', () => {
       const fn = jest.fn()
-      const trigger = createEvent()
+      const trigger = createEvent<number>()
       const target = fromObservable(trigger)
       target.watch(fn)
       trigger(0)
@@ -48,9 +48,7 @@ describe('fromObservable', () => {
     })
     test('effect support', async () => {
       const fn = jest.fn()
-      const trigger = createEffect({
-        handler() {},
-      })
+      const trigger = createEffect((x: number) => {})
       const target = fromObservable(trigger)
       target.watch(fn)
       await trigger(0)
@@ -80,7 +78,7 @@ describe('.subscribe', () => {
   describe('observer support', () => {
     test('event support', () => {
       const fn = jest.fn()
-      const trigger = createEvent()
+      const trigger = createEvent<number>()
       trigger.subscribe({next: fn})
       trigger(0)
       expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -91,9 +89,7 @@ describe('.subscribe', () => {
     })
     test('effect support', async () => {
       const fn = jest.fn()
-      const trigger = createEffect({
-        handler() {},
-      })
+      const trigger = createEffect((x: number) => {})
       trigger.subscribe({next: fn})
       await trigger(0)
       expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -104,7 +100,7 @@ describe('.subscribe', () => {
     })
     test('store support', () => {
       const fn = jest.fn()
-      const trigger = createEvent()
+      const trigger = createEvent<number>()
       const store = createStore(0).on(trigger, x => x + 1)
       store.subscribe({next: fn})
       trigger(0)
@@ -119,7 +115,8 @@ describe('.subscribe', () => {
   describe('function support', () => {
     test('event support', () => {
       const fn = jest.fn()
-      const trigger = createEvent()
+      const trigger = createEvent<number>()
+      //@ts-expect-error untyped feature
       trigger.subscribe(fn)
       trigger(0)
       expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -130,9 +127,8 @@ describe('.subscribe', () => {
     })
     test('effect support', async () => {
       const fn = jest.fn()
-      const trigger = createEffect({
-        handler() {},
-      })
+      const trigger = createEffect((x: number) => {})
+      //@ts-expect-error untyped feature
       trigger.subscribe(fn)
       await trigger(0)
       expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -143,7 +139,7 @@ describe('.subscribe', () => {
     })
     test('store support', () => {
       const fn = jest.fn()
-      const trigger = createEvent()
+      const trigger = createEvent<number>()
       const store = createStore(0).on(trigger, x => x + 1)
       store.subscribe(fn)
       trigger(0)
@@ -162,8 +158,8 @@ describe('port', () => {
     const used = jest.fn()
     const usedEff = jest.fn()
     const domain = createDomain()
-    const event = domain.createEvent()
-    const eff = domain.createEvent()
+    const event = domain.createEvent<number>()
+    const eff = domain.createEvent<number>()
     event.watch(used)
     eff.watch(usedEff)
     const str$ = periodic(50)
@@ -209,6 +205,7 @@ test('subscription', async () => {
 test('rxjs support', async () => {
   const fn = jest.fn()
   const event = createEvent<string>()
+  //@ts-expect-error not typed properly
   const event$ = rxjsFrom(event)
   const targetEvent = fromObservable(event$)
   targetEvent.watch(fn)

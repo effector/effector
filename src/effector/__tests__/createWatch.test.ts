@@ -74,7 +74,7 @@ describe('createWatch on scope', () => {
 
   test('store without scope', async () => {
     const event = createEvent<unknown>()
-    const store = createStore<unknown>(null).on(event, (_, value) => value)
+    const store = createStore<unknown>(null).on(event, state => state)
     const scope = fork()
     const listener = jest.fn()
 

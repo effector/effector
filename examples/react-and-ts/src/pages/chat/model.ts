@@ -3,6 +3,15 @@ import { Message, messageApi, Session, sessionApi } from "shared/api";
 import { $isLogged, $session } from "entities/session";
 import { messageSendFx } from "../../shared/api/message";
 
+// And the events report just what happened
+export const pageMounted = createEvent();
+export const messageDeleteClicked = createEvent<Message>();
+export const messageSendClicked = createEvent();
+export const messageEnterPressed = createEvent();
+export const messageTextChanged = createEvent<string>();
+export const loginClicked = createEvent();
+export const logoutClicked = createEvent();
+
 // At the moment, there is just raw data without any knowledge how to load
 export const $loggedIn = $isLogged;
 export const $userName = $session.map((session) => session?.name ?? "");
@@ -15,15 +24,6 @@ export const $messageText = createStore("");
 // page should NOT be changed, just because we changed the implementation
 export const $messageDeleting = messageApi.messageDeleteFx.pending;
 export const $messageSending = messageApi.messageSendFx.pending;
-
-// And the events report just what happened
-export const pageMounted = createEvent();
-export const messageDeleteClicked = createEvent<Message>();
-export const messageSendClicked = createEvent();
-export const messageEnterPressed = createEvent();
-export const messageTextChanged = createEvent<string>();
-export const loginClicked = createEvent();
-export const logoutClicked = createEvent();
 
 // Here the logic place
 

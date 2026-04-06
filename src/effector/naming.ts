@@ -56,3 +56,18 @@ export function createName(name: string, parent?: Domain): CompositeName {
   }
   return {shortName, fullName, path}
 }
+
+export function generateErrorTitle(method: string, metadata: any) {
+  if (!metadata) return method
+  if (!metadata.name && !metadata.named && !metadata.loc) return method
+  let result = `[${method}]`
+  const name = metadata.named || metadata.name
+  if (name) {
+    result += ` unit '${name}'`
+  }
+  const loc = metadata.loc
+  if (!name && loc) {
+    result += ` (${loc.file}:${loc.line}:${loc.column})`
+  }
+  return result
+}

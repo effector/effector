@@ -139,7 +139,7 @@ export function list<T>(opts: any, maybeFn?: any) {
             hydration: leaf.hydration,
           }
         },
-        greedy: true,
+        batch: false,
       })
 
       const pendingUpdate = createEvent<T[]>()
@@ -151,12 +151,12 @@ export function list<T>(opts: any, maybeFn?: any) {
           leaf,
           hydration: false,
         }),
-        greedy: true,
+        batch: false,
       })
       sample({
         source: updates,
         clock: [mountData, parentNodeUpdateSpawn],
-        greedy: true,
+        batch: false,
         fn(
           records: ListItemType[],
           {updates: input, leaf, hydration},

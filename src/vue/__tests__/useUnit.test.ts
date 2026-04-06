@@ -325,7 +325,7 @@ describe('useUnit', () => {
 
   describe('scopefull', () => {
     it('returns bound event', async () => {
-      const correnctScope = fork()
+      const correctScope = fork()
       const incorrectScope = fork()
 
       const someEvent = createEvent()
@@ -340,14 +340,14 @@ describe('useUnit', () => {
             return {greet}
           },
         },
-        {global: {plugins: [EffectorScopePlugin({scope: correnctScope})]}},
+        {global: {plugins: [EffectorScopePlugin({scope: correctScope})]}},
       )
 
       const correctListener = jest.fn()
       const unwatch1 = createWatch({
         unit: someEvent,
         fn: correctListener,
-        scope: correnctScope,
+        scope: correctScope,
       })
 
       const incorrectListener = jest.fn()
@@ -366,7 +366,7 @@ describe('useUnit', () => {
       unwatch2()
     })
     it('uses state from scope', async () => {
-      const correnctScope = fork()
+      const correctScope = fork()
       const incorrectScope = fork()
 
       const userAdded = createEvent()
@@ -389,14 +389,14 @@ describe('useUnit', () => {
             return {users, add}
           },
         },
-        {global: {plugins: [EffectorScopePlugin({scope: correnctScope})]}},
+        {global: {plugins: [EffectorScopePlugin({scope: correctScope})]}},
       )
 
       expect(wrapper.findAll('[data-test="item"]')).toHaveLength(1)
 
       await wrapper.find('[data-test="btn"]').trigger('click')
 
-      expect(correnctScope.getState($users)).toHaveLength(2)
+      expect(correctScope.getState($users)).toHaveLength(2)
       expect(incorrectScope.getState($users)).toHaveLength(1)
 
       expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)

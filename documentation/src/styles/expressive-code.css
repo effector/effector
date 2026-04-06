@@ -1,0 +1,11 @@
+.expressive-code [data-border="good"] {
+  border-color: var(--theme-border-good) !important;
+}
+
+.expressive-code [data-border="bad"] {
+  border-color: var(--theme-border-bad) !important;
+}
+
+.expressive-code [data-height="full"] {
+  height: 100% !important;
+}

@@ -26,8 +26,9 @@ describe('useUnit uses @@unitShape', () => {
         initial value
       </p>
     `)
-
-    await allSettled(internals.someEvent, {scope, params: 'new value'})
+    await act(async () => {
+      await allSettled(internals.someEvent, {scope, params: 'new value'})
+    })
 
     await render(
       <Provider value={scope}>

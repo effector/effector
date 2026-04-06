@@ -1,6 +1,6 @@
 import {
   createDomain,
-  forward,
+  sample,
   attach,
   createEvent,
   createStore,
@@ -12,33 +12,18 @@ import {
   combine,
   Store,
   Scope,
+  StoreWritable,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (
-      String(message).includes('forward') ||
-      String(message).includes('guard') ||
-      String(message).includes('object with handlers')
-    )
-      return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['fork(domain)', 'hydrate(domain', 'object with handlers'])
 
 test('usage with domain', async () => {
   const app = createDomain()
   const add = app.createEvent<number>()
   const $count = app.createStore(0).on(add, (n, x) => n + x)
   const addFx = app.createEffect(() => 0)
-  forward({from: addFx.doneData, to: add})
+  sample({clock: addFx.doneData, target: add})
 
   const scope = fork(app, {
     values: [[$count, 10]],
@@ -53,7 +38,7 @@ test('usage without domain', async () => {
   const add = createEvent<number>()
   const $count = createStore(0).on(add, (n, x) => n + x)
   const addFx = createEffect(() => 0)
-  forward({from: addFx.doneData, to: add})
+  sample({clock: addFx.doneData, target: add})
 
   const scope = fork({
     values: [[$count, 10]],
@@ -167,6 +152,36 @@ describe('units without sids support', () => {
     expect(scope.getState($sidBar)).toBe(4)
     expect(scope.getState($sidBarOther)).toBe(8)
   })
+
+  test('sids should not be used when `values` is not a record', () => {
+    /**
+     * Possible use-case:
+     * There is some problem with sids in the codebase, they are duplicated between different units
+     *
+     * But this should not matter for cases, when `values` is not a record (e.g. tests), units reference itself should be used instead
+     */
+    const $a = createStore('a', {sid: '$a'})
+    const $b = createStore('b', {sid: '$a'})
+    const $c = createStore('c', {sid: '$b'})
+    const $d = createStore('d', {sid: '$b'})
+
+    const scope = fork({
+      values: [
+        [$a, 'override'],
+        [$c, 'override'],
+      ],
+    })
+
+    expect(scope.getState($b)).toBe('b')
+    expect(scope.getState($a)).toBe('override')
+
+    /**
+     * scope.getState forces creation of the stateRef for the store,
+     * so order of getState calls is also important for this case
+     */
+    expect(scope.getState($c)).toBe('override')
+    expect(scope.getState($d)).toBe('d')
+  })
 })
 describe('fork values support', () => {
   test('values as js Map', async () => {
@@ -273,8 +288,11 @@ describe('fork values support', () => {
      * goal of this test is to create a lot of stores to pass to values
      * and ensure that combined stores will work as expected
      * */
-    let sumStore = createStore([0, []] as [number, any[]], {sid: 'sum'})
-    const stores: Store<number>[] = []
+    let sumStore: Store<[number, any[]]> = createStore(
+      [0, []] as [number, any[]],
+      {sid: 'sum'},
+    )
+    const stores: StoreWritable<number>[] = []
     const storesToShow: Store<number>[] = []
     function fab(n: number) {
       const store = createStore(n, {sid: `${n}.1`})
@@ -313,7 +331,9 @@ describe('fork values support', () => {
       return results
     })
     const scope = fork({
-      values: stores.filter((_, i) => i % 3 === 0).map(store => [store, 0]),
+      values: stores
+        .filter((_, i) => i % 3 === 0)
+        .map(store => [store, 0] as [StoreWritable<number>, number]),
     })
     const basicCase = serialize(scope)
     expect(scope.getState(finalStore)).toMatchInlineSnapshot(`
@@ -908,6 +928,7 @@ describe('derived units are not allowed in values', () => {
     const $map = $store.map(x => x)
 
     expect(() => {
+      // @ts-expect-error
       fork({values: [[$map, 1]]})
     }).toThrowErrorMatchingInlineSnapshot(
       `"Values map can contain only writable stores as keys"`,
@@ -918,6 +939,7 @@ describe('derived units are not allowed in values', () => {
     const $map = combine($store, x => x)
 
     expect(() => {
+      // @ts-expect-error
       fork({values: [[$map, 1]]})
     }).toThrowErrorMatchingInlineSnapshot(
       `"Values map can contain only writable stores as keys"`,

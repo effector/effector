@@ -2,8 +2,9 @@ import * as React from 'react'
 import {from} from 'most'
 
 import {createStore, combine, createEvent, createEffect} from 'effector'
-import {useStore} from 'effector-react'
+import {useUnit} from 'effector-react'
 
+//@ts-expect-error
 import {render, act, renderHTML} from 'effector/fixtures/react'
 
 test('rfc1 example implementation', async () => {
@@ -11,7 +12,7 @@ test('rfc1 example implementation', async () => {
   const fnClick = jest.fn()
   const clickEpicFn = jest.fn()
 
-  const inputText = createEvent()
+  const inputText = createEvent<string>()
   const click = createEvent()
   const resetForm = createEvent()
   const increment = createEvent()
@@ -22,7 +23,7 @@ test('rfc1 example implementation', async () => {
 
   const waitIncrement = createEffect({
     async handler() {
-      await new Promise(rs => {
+      await new Promise<void>(rs => {
         const unsub = increment.watch(() => {
           unsub()
           rs()
@@ -53,13 +54,13 @@ test('rfc1 example implementation', async () => {
 
   const messageStore = store.map(({counter}) => `Clicked: ${counter} times`)
   const ClickedTimes = () => {
-    const state = useStore(messageStore)
+    const state = useUnit(messageStore)
     expect(state).not.toBe(text)
     expect(typeof state).toBe('string')
     return <span>{state}</span>
   }
-  const CurrentText = ({prefix}) => {
-    const {text} = useStore(store)
+  const CurrentText = ({prefix}: {prefix: string}) => {
+    const {text} = useUnit(store)
     return (
       <div>
         <p>{prefix}</p>

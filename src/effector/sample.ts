@@ -1,5 +1,5 @@
-import type {Cmd, StateRef} from './index.h'
-import type {CommonUnit, DataCarrier, Event, Scope, Store} from './unit.h'
+import type {Cmd, Node, StateRef} from './index.h'
+import type {CommonUnit, DataCarrier, Scope, Store} from './unit.h'
 import {combine} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
@@ -14,16 +14,16 @@ import {
   isVoid,
   isFunction,
 } from './is'
-import {createStore} from './createUnit'
+import {createStore, getUnitTrace, setUnitTrace} from './createUnit'
 import {createEvent} from './createUnit'
 import {createNode} from './createNode'
 import {assert, deprecate} from './throw'
-import {forEach, removeItem} from './collection'
-import {SAMPLE, STACK, VALUE} from './tag'
-import {merge} from './merge'
+import {add, forEach, removeItem} from './collection'
+import {STACK, VALUE} from './tag'
 import {applyTemplate} from './template'
 import {own} from './own'
 import {createLinkNode} from './forward'
+import {generateErrorTitle} from './naming'
 import {
   addActivator,
   traverseDecrementActivations,
@@ -53,18 +53,19 @@ export function sample(...args: any[]) {
   let sid
   let batch = true
   let filter
+  const errorTitle = generateErrorTitle('sample', metadata)
   /** config case */
   if (
     isVoid(clock) &&
     isObject(source) &&
-    validateSampleConfig(source, SAMPLE)
+    validateSampleConfig(source, errorTitle)
   ) {
     clock = source.clock
     fn = source.fn
     if ('batch' in source) {
       batch = source.batch
     } else {
-      deprecate(!('greedy' in source), 'greedy in sample', 'batch')
+      deprecate(!('greedy' in source), 'greedy in sample', 'batch', errorTitle)
       batch = !source.greedy
     }
     filter = source.filter
@@ -75,7 +76,7 @@ export function sample(...args: any[]) {
     source = source.source
   }
   return createSampling(
-    SAMPLE,
+    'sample',
     clock,
     source,
     filter,
@@ -104,10 +105,11 @@ export const createSampling = (
   filterRequired: boolean,
   sid?: string | undefined,
 ) => {
+  const errorTitle = generateErrorTitle(method, metadata)
   const isUpward = !!target
   assert(
     !isVoid(source) || !isVoid(clock),
-    fieldErrorMessage(method, 'either source or clock'),
+    fieldErrorMessage(errorTitle, 'either source or clock'),
   )
   let sourceIsClock = false
   if (isVoid(source)) {
@@ -119,16 +121,36 @@ export const createSampling = (
     /** still undefined! */
     clock = source
   } else {
-    assertNodeSet(clock, method, 'clock')
+    assertNodeSet(clock, errorTitle, 'clock')
     if (Array.isArray(clock)) {
-      clock = merge(clock as CommonUnit[])
+      clock = createLinkNode(clock as CommonUnit[], [], [], method)
     }
   }
   if (sourceIsClock) {
     source = clock
   }
-  // @ts-expect-error
-  if (!metadata && !name) name = source.shortName
+  if (!metadata && !name) {
+    /**
+     * When there is no metadata and name, assign source name as a fallback.
+     * This is very misleading behavior (sample unit is not a source unit)
+     * introduced a long time ago, so we keep it only for backward compatibility
+     * for cases which were covered at the time.
+     *
+     * Therefore, this name will not be used as a fallback for newer (23.4.0) cases
+     * (a.k.a. sample support for patronum debug traces)
+     * and metadata will not be created
+     */
+    name = (source as any).shortName
+  } else if (metadata && name) {
+    /** name field from sample config (from user) has highest priority */
+    ;(metadata as any).name = name
+  } else if (!metadata && name) {
+    /**
+     * metadata comes from plugin, so when name is present and metadata is missing,
+     * we need to create fresh metadata with name
+     */
+    metadata = {name}
+  }
   let filterType: 'none' | 'unit' | 'fn' = 'none'
   if (filterRequired || filter) {
     if (is.unit(filter)) {
@@ -139,8 +161,8 @@ export const createSampling = (
     }
   }
   if (target) {
-    assertNodeSet(target, method, 'target')
-    assertTarget(method, target)
+    assertNodeSet(target, errorTitle, 'target')
+    assertTarget(errorTitle, target)
   } else {
     if (
       filterType === 'none' &&
@@ -162,6 +184,7 @@ export const createSampling = (
   //   isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
   const clockState = createStateRef()
   let filterNodes: Cmd[] = []
+  const syncNodes: Node[] = []
   let activateSources = (scope?: Scope) => {}
   let deactivateSources = (scope?: Scope) => {}
   if (filterType === 'unit') {
@@ -194,24 +217,42 @@ export const createSampling = (
         }),
       ],
     })
-    const [filterRef, hasFilter] = syncSourceState(
-      filter as DataCarrier,
-      target,
-      // @ts-expect-error
-      clock,
-      clockState,
-      method,
-    )
-    filterNodes = [...readAndFilter(hasFilter), ...readAndFilter(filterRef)]
+    const [filterRef, hasFilter, isFilterStore, filterSyncNode] =
+      syncSourceState(
+        filter as DataCarrier,
+        target,
+        // @ts-expect-error
+        clock,
+        clockState,
+        method,
+      )
+    filterSyncNode && add(syncNodes, filterSyncNode)
+    if (!isFilterStore) {
+      filterNodes.push(...readAndFilter(hasFilter))
+    }
+    filterNodes.push(...readAndFilter(filterRef))
   }
-  const [sourceRef, hasSource] = syncSourceState(
-    // @ts-expect-error
-    source,
-    target,
-    clock,
-    clockState,
-    method,
-  )
+  const jointNodeSeq: Cmd[] = []
+  if (sourceIsClock) {
+    if (batch) {
+      add(jointNodeSeq, read(clockState, true, true))
+    }
+  } else {
+    const [sourceRef, hasSource, isSourceStore, sourceSyncNode] =
+      syncSourceState(
+        // @ts-expect-error
+        source,
+        target,
+        clock,
+        clockState,
+        method,
+      )
+    sourceSyncNode && add(syncNodes, sourceSyncNode)
+    if (!isSourceStore) {
+      jointNodeSeq.push(...readAndFilter(hasSource))
+    }
+    add(jointNodeSeq, read(sourceRef, true, batch))
+  }
   const jointNode = createLinkNode(
     // @ts-expect-error
     clock,
@@ -219,8 +260,7 @@ export const createSampling = (
     [
       applyTemplate('sampleSourceLoader'),
       mov({from: STACK, target: clockState}),
-      ...readAndFilter(hasSource),
-      read(sourceRef, true, batch),
+      ...jointNodeSeq,
       ...filterNodes,
       read(clockState),
       filterType === 'fn' && userFnCall((src, _, {a}) => filter(src, a), true),
@@ -233,7 +273,9 @@ export const createSampling = (
   )
   // @ts-expect-error
   own(source, [jointNode])
-  Object.assign(jointNode.meta, metadata, {joint: true})
+  own(jointNode, syncNodes)
+  Object.assign(jointNode.meta, metadata, {joint: true, stateRef: clockState})
+  setUnitTrace(jointNode, getUnitTrace(sample))
   addActivator(target, [jointNode], true)
   let needToAddUsedBy = true
   if (is.store(filter) && filter.getState()) {
@@ -263,18 +305,22 @@ const syncSourceState = (
   const isSourceStore = is.store(source)
   const sourceRef = isSourceStore ? getStoreState(source) : createStateRef()
   const hasSource = createStateRef(isSourceStore)
+  let syncNode: Node | undefined
   if (!isSourceStore) {
-    createNode({
+    syncNode = createNode({
       parent: source,
       node: [
         mov({from: STACK, target: sourceRef}),
         mov({from: VALUE, store: true, target: hasSource}),
       ],
-      family: {owners: [source, target, clock], links: target},
+      family: {
+        owners: [...new Set([source, target, clock].flat())],
+        links: target,
+      },
       meta: {op: method},
       regional: true,
     })
   }
   applyTemplate('sampleSource', hasSource, sourceRef, clockState)
-  return [sourceRef, hasSource] as const
+  return [sourceRef, hasSource, isSourceStore, syncNode] as const
 }

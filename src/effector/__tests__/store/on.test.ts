@@ -289,7 +289,7 @@ describe('validation', () => {
       //@ts-expect-error
       foo.on(x => x + 1)
     }).toThrowErrorMatchingInlineSnapshot(
-      `".on: expect first argument to be a unit (store, event or effect) or array of units"`,
+      `"[store] unit 'foo' .on: expect first argument to be a unit (store, event or effect) or array of units"`,
     )
   })
 })

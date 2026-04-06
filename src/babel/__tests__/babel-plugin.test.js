@@ -1,7 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import {transformFileSync} from '@babel/core'
-import {format} from 'prettier'
+import {formatCode} from './utils'
+
+import babelPlugin from '../babel-plugin'
 
 describe('babel-plugin', () => {
   const fixturesDir = path.join(__dirname, 'fixtures')
@@ -26,12 +28,8 @@ describe('babel-plugin', () => {
           babelrc: false,
           envName: 'test',
           plugins: [
-            [path.resolve(__dirname, '../babel-plugin.js'), options],
-            [
-              path.resolve(__dirname, '../babel-plugin.js'),
-              options,
-              'effector-logger',
-            ],
+            [babelPlugin, options],
+            [babelPlugin, options, 'effector-logger'],
           ],
         })?.code
 
@@ -48,7 +46,7 @@ describe('babel-plugin', () => {
           configFile: false,
           babelrc: false,
           envName: 'test',
-          plugins: [[path.resolve(__dirname, '../babel-plugin.js'), options]],
+          plugins: [[babelPlugin, options]],
         })?.code
 
         expect(formatCode(fixture)).toMatchSnapshot()
@@ -65,17 +63,3 @@ describe('babel-plugin', () => {
     }
   }
 })
-
-function formatCode(code) {
-  return format(code, {
-    semi: false,
-    printWidth: 80,
-    tabWidth: 2,
-    singleQuote: true,
-    trailingComma: 'all',
-    bracketSpacing: false,
-    jsxBracketSameLine: true,
-    arrowParens: 'avoid',
-    parser: 'babel',
-  })
-}

@@ -10,7 +10,6 @@ export type Kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 export type StateRefOp =
   | {type: 'map'; from?: StateRef; fn?: (value: any) => any; lastValue?: any}
   | {type: 'field'; from: StateRef; field: string}
-  | {type: 'closure'; of: StateRef}
 
 export type StateRef = {
   id: ID
@@ -58,6 +57,8 @@ export type Node = {
   // reg: {[id: string]: StateRef}
   meta: {[tag: string]: any}
   family: {
+    /** amount of triggers during init */
+    triggers: number
     type: 'regular' | 'crosslink' | 'domain'
     links: Node[]
     owners: Node[]

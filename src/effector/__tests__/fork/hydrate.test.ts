@@ -1,7 +1,6 @@
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,
-  forward,
   combine,
   fork,
   allSettled,
@@ -16,18 +15,7 @@ import {
   sample,
 } from 'effector'
 
-const consoleError = console.error
-
-beforeAll(() => {
-  console.error = (message, ...args) => {
-    if (String(message).includes('forward')) return
-    consoleError(message, ...args)
-  }
-})
-
-afterAll(() => {
-  console.error = consoleError
-})
+muteErrors(['fork(domain)', 'hydrate(domain'])
 
 describe('sidless stores support', () => {
   test('with scope', () => {
@@ -68,9 +56,9 @@ test('watch calls during hydration', async () => {
 
   const store = app.store(-1).on(start, x => x + 1)
 
-  forward({
-    from: store,
-    to: fx,
+  sample({
+    clock: store,
+    target: fx,
   })
 
   const combined = combine({a: store, b: store})

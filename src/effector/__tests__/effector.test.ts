@@ -12,14 +12,14 @@ import {argumentHistory} from 'effector/fixtures'
 test('will run in expected order', () => {
   const fn = jest.fn()
   const reset = createEvent()
-  const add = createEvent()
-  const mult = createEvent()
+  const add = createEvent<number>()
+  const mult = createEvent<number>()
   const listSize = createStore(3)
     .on(add, (n, nn) => n + nn)
     .on(mult, (n, q) => n * q)
     .reset(reset)
 
-  const currentList = createStore([])
+  const currentList = createStore<Array<{add: number} | {mult: number}>>([])
     .on(add, (list, pl) => [...list, {add: pl}])
     .on(mult, (list, pl) => [...list, {mult: pl}])
     .reset(reset)
@@ -27,7 +27,7 @@ test('will run in expected order', () => {
 
   combine({listSize, currentList, selected})
 
-  const unsub = currentList.subscribe(state => fn(state))
+  const unsub = currentList.watch(state => fn(state))
   add(5)
   mult(4)
   unsub()
@@ -76,11 +76,12 @@ test('reducer defaults', () => {
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   const fn3 = jest.fn()
-  const add = createEvent()
-  const sub = createEvent()
+  const add = createEvent<number>()
+  const sub = createEvent<number>()
   const state1 = createStore(3)
     .on(add, (state, payload) => {
       fn1({state, payload})
+      return state
     })
     .on(sub, (state, payload) => {
       fn2({state, payload})
@@ -135,7 +136,7 @@ test('store.reset(event)', () => {
 
   combine({listSize, currentList, selected})
 
-  const unsub = currentList.subscribe(state => fn(state))
+  const unsub = currentList.watch(state => fn(state))
   inc()
   reset()
   unsub()
@@ -345,7 +346,7 @@ test('smoke', async () => {
   const effect = domain.createEffect()
   effect.use(used)
   effect.done.watch(usedDone)
-  const event = domain.createEvent()
+  const event = domain.createEvent<string>()
   expect(effect).toBeDefined()
   expect(event).toBeDefined()
   event('bar')

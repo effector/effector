@@ -1,13 +1,28 @@
 /* eslint-disable no-unused-vars */
 import {
   createEffect,
+  createStore,
+  sample,
   Effect,
   Event,
-  /*::type*/ CompositeName,
-  /*::type*/ kind,
+  CompositeName,
+  kind,
 } from 'effector'
 
 const typecheck = '{global}'
+
+test('generics support', () => {
+  function createModel<T>() {
+    const $data = createStore<T | null>(null)
+    const fx = createEffect(() => null as T)
+    sample({clock: fx.doneData, target: $data})
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
 
 test('createEffect', () => {
   const createEffect_effect1: Effect<number, string> = createEffect()
@@ -124,8 +139,7 @@ describe('single generic', () => {
           "
           No overload matches this call.
             Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
-              Argument of type '{ handler: (_: string) => Promise<number>; }' is not assignable to parameter of type 'SyncFn'.
-                Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
+              Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
             Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
                 Type 'Promise<number>' is not assignable to type 'number'.
@@ -140,8 +154,7 @@ describe('single generic', () => {
           "
           No overload matches this call.
             Overload 1 of 7, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
-              Argument of type '{ handler: (_: string) => number; }' is not assignable to parameter of type 'AsyncFn'.
-                Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
+              Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
             Overload 2 of 7, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => number' is not assignable to type 'AsyncFn'.
                 Type 'number' is not assignable to type 'Promise<number>'.
@@ -169,8 +182,7 @@ describe('single generic', () => {
         "
         No overload matches this call.
           Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
-            Argument of type '{ handler(_: string): Promise<string>; }' is not assignable to parameter of type 'SyncFn'.
-              Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
+            Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
           Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
             Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
               Type 'Promise<string>' is not assignable to type 'number'.

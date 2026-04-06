@@ -8,8 +8,8 @@ export type StoreConsumer<State> = React.ComponentType<{
 }>
 
 export type Gate<Props = {}> = React.ComponentType<Props> & {
-  open: Event<Props>
-  close: Event<Props>
+  open: EventCallable<Props>
+  close: EventCallable<Props>
   status: Store<boolean>
   state: Store<Props>
 }
@@ -61,7 +61,7 @@ export function useList<T, Key extends React.Key>(
     readonly placeholder?: React.ReactNode
   },
   {forceScope}?: {forceScope?: boolean},
-): JSX.Element
+): React.ReactNode
 export function useList<T>(
   list: Store<T[]> | Store<ReadonlyArray<T>>,
   renderItem:
@@ -72,7 +72,7 @@ export function useList<T>(
       }
     | ((item: T, index: number) => React.ReactNode),
   {forceScope}?: {forceScope?: boolean},
-): JSX.Element
+): React.ReactNode
 
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
@@ -159,6 +159,9 @@ export function useEvent<T, R>(
   fx: Effect<T, R, any>,
   opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
+/**
+ * @deprecated use useUnit hook instead
+ */
 export function useEvent<List extends (EventCallable<any> | Effect<any, any>)[]>(
   list: [...List],
   opts?: {forceScope?: boolean},
@@ -212,7 +215,7 @@ export function useUnit<T, R>(
   opts?: {forceScope?: boolean},
 ): (payload: T) => Promise<R>
 export function useUnit<
-  List extends (EventCallable<any> | Effect<any, any> | Store<any>)[],
+  List extends (EventCallable<any> | Effect<any, any, any> | Store<any>)[],
 >(
   list: [...List],
   opts?: {forceScope?: boolean},
@@ -247,3 +250,11 @@ export function useUnit<
     ? V
     : never
 }
+
+/**
+ * **Low-Level API for library developers.**
+ * For production code usage **prefer `useUnit` hook instead**.
+ *
+ * React hook, which returns current scope or null if no scope provided via `Provider`.
+ */
+export function useProvidedScope(): Scope | null

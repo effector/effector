@@ -1,8 +1,11 @@
 import * as React from 'react'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, muteErrors} from 'effector/fixtures'
+//@ts-expect-error
 import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {createStore, combine, createEvent, createApi} from 'effector'
 import {createComponent} from 'effector-react'
+
+muteErrors(['createComponent', 'useStore'])
 
 describe('createComponent', () => {
   test('combine', async () => {
@@ -19,6 +22,7 @@ describe('createComponent', () => {
         </select>
       </>
     ))
+    //@ts-expect-error vue messed with JSX global types
     await render(<Foo />)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
@@ -60,6 +64,7 @@ describe('createComponent', () => {
     const a = createStore(2)
     const b = createStore(2)
     const ObjectComponent = createComponent({a, b}, (_, {a, b}) => a * b)
+    //@ts-expect-error vue messed with JSX global types
     await render(<ObjectComponent />)
     expect(container.firstChild).toMatchInlineSnapshot(`4`)
   })
@@ -70,6 +75,7 @@ describe('createComponent', () => {
     const Component = createComponent(text, () => null)
     Component.mounted.watch(fn)
     Component.unmounted.watch(fn)
+    //@ts-expect-error vue messed with JSX global types
     await render(<Component foo={1} />)
     await act(async () => {
       //@ts-ignore
@@ -98,9 +104,9 @@ describe('createComponent', () => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
-      add: (x, y) => x + y,
+      add: (x, y: number) => x + y,
     })
-    const updateValue = createEvent()
+    const updateValue = createEvent<any>()
     const c = combine({a, b})
     const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
@@ -113,10 +119,12 @@ describe('createComponent', () => {
       </>
     ))
     Foo.mounted.watch(fn)
+    //@ts-expect-error vue messed with JSX global types
     await render(<Foo a="A" />)
     await act(async () => {
       add(5)
     })
+    //@ts-expect-error vue messed with JSX global types
     await render(<Foo b="B" />)
     await cleanup()
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -137,9 +145,9 @@ describe('createComponent', () => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
-      add: (x, y) => x + y,
+      add: (x, y: number) => x + y,
     })
-    const updateValue = createEvent()
+    const updateValue = createEvent<any>()
     const c = combine({a, b})
     const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
@@ -152,10 +160,12 @@ describe('createComponent', () => {
       </>
     ))
     Foo.unmounted.watch(fn)
+    //@ts-expect-error vue messed with JSX global types
     await render(<Foo a="A" />)
     await act(async () => {
       add(5)
     })
+    //@ts-expect-error vue messed with JSX global types
     await render(<Foo b="B" />)
     await cleanup()
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -187,58 +197,62 @@ describe('createComponent', () => {
         </div>
       )
     })
+    //@ts-expect-error vue messed with JSX global types
     await render(<HookComponent />)
     expect(container.firstChild).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Text: 
-    foo
-  </div>
-  <div>
-    Counter: 
-    0
-  </div>
-  <button
-    id="increment"
-  >
-    incr
-  </button>
-</div>
-`)
+      <div>
+        <div>
+          Text: 
+          foo
+        </div>
+        <div>
+          Counter: 
+          0
+        </div>
+        <button
+          id="increment"
+        >
+          incr
+        </button>
+      </div>
+    `)
     await act(async () => {
       container.firstChild.querySelector('#increment').click()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Text: 
-    foo
-  </div>
-  <div>
-    Counter: 
-    1
-  </div>
-  <button
-    id="increment"
-  >
-    incr
-  </button>
-</div>
-`)
+      <div>
+        <div>
+          Text: 
+          foo
+        </div>
+        <div>
+          Counter: 
+          1
+        </div>
+        <button
+          id="increment"
+        >
+          incr
+        </button>
+      </div>
+    `)
   })
   it('should not use props from failed renders', async () => {
     const fn = jest.fn()
     const text = createStore('foo')
-    const Foo = createComponent(text, (props, text) => {
-      if (props.shouldFail) {
-        throw Error('[expect error]')
-      }
-      return (
-        <div>
-          {props.field} {text}
-        </div>
-      )
-    })
+    const Foo = createComponent(
+      text,
+      (props: {shouldFail: boolean; field: string}, text) => {
+        if (props.shouldFail) {
+          throw Error('[expect error]')
+        }
+        return (
+          <div>
+            {props.field} {text}
+          </div>
+        )
+      },
+    )
     Foo.unmounted.watch(fn)
     const error = console.error
     //@ts-ignore
@@ -246,8 +260,11 @@ describe('createComponent', () => {
       args
     }
     try {
+      //@ts-expect-error vue messed with JSX global types
       await render(<Foo shouldFail={false} field="init" />)
+      //@ts-expect-error vue messed with JSX global types
       await render(<Foo shouldFail={false} field="correct" />)
+      //@ts-expect-error vue messed with JSX global types
       await render(<Foo shouldFail={true} field="incorrect" />).catch(() => {})
       await cleanup()
     } finally {
