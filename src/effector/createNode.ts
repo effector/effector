@@ -95,15 +95,16 @@ export function createNode({
   return result
 }
 
-/** simplified version of createNode for common cases */
 export const createLinkNode = (
   parent: NodeUnit | NodeUnit[],
   child: NodeUnit | NodeUnit[],
   node?: Array<Cmd | false | void | null>,
   op?: string,
   scopeFn?: Function,
+  alwaysActive?: boolean,
 ) =>
   createNode({
+    alwaysActive,
     node,
     parent,
     child,

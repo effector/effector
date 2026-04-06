@@ -64,8 +64,6 @@ test('@effector/next custom hydration works', async () => {
   const $combined = combine({ref: $count})
   const $nestedCombined = combine({ref: $derived})
 
-  longUpFx.inFlight.watch(() => {})
-  longUpFx.pending.watch(() => {})
   $nestedCombined.watch(() => {})
 
   const $sampled = sample({

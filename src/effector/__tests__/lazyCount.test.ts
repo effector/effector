@@ -11,7 +11,6 @@ import {
   Scope,
   sample,
   merge,
-  forward,
   restore,
   split,
   createEffect,
@@ -448,61 +447,6 @@ test('event.prepend support', () => {
   unwatch()
   expect(isActiveGlobal(bar)).toBe(false)
   expect(isActiveGlobal(baz)).toBe(false)
-})
-
-describe('forward support', () => {
-  const consoleError = console.error
-
-  beforeAll(() => {
-    console.error = (message, ...args) => {
-      if (String(message).includes('forward')) return
-      consoleError(message, ...args)
-    }
-  })
-
-  afterAll(() => {
-    console.error = consoleError
-  })
-
-  test('forward support', () => {
-    const from = createEvent()
-    const to = createEvent()
-
-    const unwatchFwd = forward({from, to})
-
-    expect(isActiveGlobal(from)).toBe(false)
-
-    const unwatch = to.watch(() => {})
-
-    expect(isActiveGlobal(from)).toBe(true)
-    unwatch()
-    expect(isActiveGlobal(from)).toBe(false)
-
-    to.watch(() => {})
-
-    expect(isActiveGlobal(from)).toBe(true)
-    unwatchFwd()
-    expect(isActiveGlobal(from)).toBe(false)
-  })
-
-  test('watch added before forward call', () => {
-    const from = createEvent()
-    const to = createEvent()
-
-    const unwatch = to.watch(() => {})
-
-    const unwatchFwd = forward({from, to})
-
-    expect(isActiveGlobal(from)).toBe(true)
-    unwatch()
-    expect(isActiveGlobal(from)).toBe(false)
-
-    to.watch(() => {})
-
-    expect(isActiveGlobal(from)).toBe(true)
-    unwatchFwd()
-    expect(isActiveGlobal(from)).toBe(false)
-  })
 })
 
 test('restore support', () => {

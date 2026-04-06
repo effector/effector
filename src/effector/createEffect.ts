@@ -222,6 +222,8 @@ export function createEffect<Params, Done, Fail = Error>(
   }))
 
   instance.graphite.lazy!.alwaysActive = true
+  inFlight.graphite.lazy!.alwaysActive = true
+  pending.graphite.lazy!.alwaysActive = true
 
   own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
   if (config?.domain) {

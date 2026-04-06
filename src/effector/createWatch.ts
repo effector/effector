@@ -84,13 +84,7 @@ export function createWatch<T>({
     activateList.forEach(currentNode =>
       traverseIncrementActivations(currentNode, node),
     )
-    return createSubscription(
-      createNode({
-        node: seq,
-        parent: units,
-        family: {owners: units},
-      }),
-    )
+    return createSubscription(node)
   }
 }
 
