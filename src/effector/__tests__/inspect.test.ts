@@ -15,6 +15,7 @@ import {
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
 import {withFactory} from '../region'
+import {activateAllDownstream} from './testUtils'
 
 muteErrors(['branch computation stopped'])
 
@@ -26,7 +27,7 @@ function compactMessage(m: Message) {
 }
 
 describe('inspect API', () => {
-  test.skip('should be possible to track chain of events', async () => {
+  test('should be possible to track chain of events', async () => {
     const start = createEvent()
     const $a = createStore(0).on(start, s => s + 1)
     const $b = $a.map(s => s + 1)
@@ -61,8 +62,16 @@ describe('inspect API', () => {
       target: end,
     })
 
-    evs.a.watch(() => {})
-    end.watch(() => {})
+    activateAllDownstream([
+      start,
+      $a,
+      $b,
+      end,
+      myFx,
+      attachedFx,
+      attachedFnFx,
+      evs.a,
+    ])
 
     const trackMock = jest.fn()
     inspect({
@@ -305,7 +314,7 @@ describe('inspect API', () => {
       target: end,
     })
 
-    end.watch(() => {})
+    activateAllDownstream([start, $a, $b, end])
 
     const trackMock = jest.fn()
     inspect({
@@ -653,7 +662,7 @@ describe('real use cases', () => {
   test('monitor out-of-scope computations', async () => {
     const start = createEvent()
 
-    start.watch(() => {})
+    activateAllDownstream([start])
 
     const scope = fork()
 
@@ -722,7 +731,7 @@ describe('real use cases', () => {
       },
     })
 
-    end.watch(() => {})
+    activateAllDownstream([start, end])
 
     const timeLog = jest.fn()
     let time = 0
@@ -792,7 +801,7 @@ describe('real use cases', () => {
       },
     })
 
-    started.watch(() => {})
+    activateAllDownstream([start, started])
 
     const scope = fork()
 

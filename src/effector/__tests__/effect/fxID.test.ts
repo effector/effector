@@ -9,6 +9,7 @@ import {
   allSettled,
   fork,
 } from 'effector'
+import {activateAllDownstream} from '../testUtils'
 
 function getNode(unit: Unit<any>): Node {
   //@ts-expect-error
@@ -56,7 +57,7 @@ describe('plain effect support', () => {
         },
       }),
     )
-    fx.done.watch(() => {})
+    activateAllDownstream([fx.done])
     await fx()
     expect(typeof fxID).toBe('string')
   })
@@ -73,7 +74,7 @@ describe('plain effect support', () => {
         },
       }),
     )
-    fx.doneData.watch(() => {})
+    activateAllDownstream([fx.doneData])
     await fx()
     expect(typeof fxID).toBe('string')
   })
@@ -121,7 +122,7 @@ describe('attach support', () => {
           },
         }),
       )
-      fx.done.watch(() => {})
+      activateAllDownstream([fx.done])
       await fx()
       expect(typeof fxID).toBe('string')
     })
@@ -138,7 +139,7 @@ describe('attach support', () => {
           },
         }),
       )
-      fx.doneData.watch(() => {})
+      activateAllDownstream([fx.doneData])
       await fx()
       expect(typeof fxID).toBe('string')
     })
@@ -187,7 +188,7 @@ describe('attach support', () => {
           },
         }),
       )
-      fx.done.watch(() => {})
+      activateAllDownstream([fx.done])
       await attached()
       expect(typeof fxID).toBe('string')
     })
@@ -205,7 +206,7 @@ describe('attach support', () => {
           },
         }),
       )
-      fx.doneData.watch(() => {})
+      activateAllDownstream([fx.doneData])
       await attached()
       expect(typeof fxID).toBe('string')
     })
@@ -259,7 +260,7 @@ describe('computation chain support', () => {
         },
       }),
     )
-    fx.done.watch(() => {})
+    activateAllDownstream([fx.done])
     await allSettled(trigger, {scope: fork()})
     expect(typeof fxID).toBe('string')
   })
@@ -278,7 +279,7 @@ describe('computation chain support', () => {
         },
       }),
     )
-    fx.doneData.watch(() => {})
+    activateAllDownstream([fx.doneData])
     await allSettled(trigger, {scope: fork()})
     expect(typeof fxID).toBe('string')
   })

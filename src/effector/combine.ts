@@ -192,6 +192,7 @@ const storeCombination = (
     fn && userFnCall(),
     softReader,
   ]
+  const rawShapeDeps: Record<string, any> = {}
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
       assert(
@@ -209,8 +210,10 @@ const storeCombination = (
     linkNode.scope.key = key
     const childRef = getStoreState(child)
     addRefOp(rawShape, {type: 'field', field: key, from: childRef})
+    rawShapeDeps[childRef.id] = childRef.current
     applyTemplate('combineField', childRef, linkNode)
   })
+  rawShape.deps = rawShapeDeps
 
   store.defaultShape = obj
   setMeta(store, 'defaultShape', obj)
@@ -218,7 +221,6 @@ const storeCombination = (
     type: MAP,
     from: rawShape,
     fn,
-    lastValue: stateNew,
   })
   if (!readTemplate()) {
     if (fn) {
@@ -237,5 +239,6 @@ const storeCombination = (
       store.defaultState = defaultState
     }
   }
+  storeStateRef.deps = {[rawShape.id]: rawShape.current}
   return store
 }

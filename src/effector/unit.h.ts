@@ -194,6 +194,7 @@ export interface Scope extends Unit {
       config: LazyConfig
     }
   >
+  depsMap?: Record<string, Record<string, any>>
 }
 
 export type CommonUnit<T = any> = Event<T> | Effect<T, any, any> | Store<T>

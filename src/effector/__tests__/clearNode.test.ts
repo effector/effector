@@ -15,6 +15,7 @@ import {
   merge,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+import {activateAllDownstream} from './testUtils'
 
 it('will deactivate event', () => {
   const fn = jest.fn()
@@ -88,7 +89,7 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
-    target.watch(() => {})
+    activateAllDownstream([target])
     //@ts-expect-error
     source.setState(1)
     expect(fn).toBeCalledTimes(2)
@@ -104,7 +105,7 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
-    target.watch(() => {})
+    activateAllDownstream([target])
     source(1)
     expect(fn).toBeCalledTimes(1)
     clearNode(target)
@@ -133,7 +134,7 @@ describe('itermediate steps should not stay', () => {
       clock: trigger,
       fn,
     })
-    result.watch(() => {})
+    activateAllDownstream([result])
     trigger()
     expect(fn).toBeCalledTimes(1)
     clearNode(result)
@@ -151,7 +152,7 @@ describe('itermediate steps should not stay', () => {
       fn,
       target,
     })
-    target.watch(() => {})
+    activateAllDownstream([target])
     trigger()
     expect(fn).toBeCalledTimes(1)
     clearNode(store)
@@ -746,7 +747,7 @@ describe('supports sample in withRegion', () => {
     const $source = createStore(0)
     const target = createEvent<number>()
 
-    target.watch(() => {})
+    activateAllDownstream([target])
 
     addFnCallStep(trigger, fnTrigger)
     addFnCallStep($source, fnSource)
@@ -834,7 +835,7 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
             target: regionalTarget,
           })
 
-          regionalTarget.watch(() => {})
+          activateAllDownstream([regionalTarget])
         })
         externalTrigger(0)
         clearNode(region)
@@ -857,7 +858,7 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
             target: [regionalTarget],
           })
 
-          regionalTarget.watch(() => {})
+          activateAllDownstream([regionalTarget])
         })
         externalTrigger(0)
         clearNode(region)

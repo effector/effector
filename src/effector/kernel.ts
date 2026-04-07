@@ -237,7 +237,7 @@ export const getPageRef = (
   const pageForRef = getPageForRef(page, ref.id)
   if (pageForRef) return pageForRef.reg[ref.id]
   if (forkPage) {
-    initRefInScope(forkPage!, ref, isGetState)
+    initRef(ref, forkPage!, {isGetState})
     return forkPage.reg[ref.id]
   }
   return ref
@@ -392,14 +392,14 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
                   if (pageForRef) {
                     reg = pageForRef.reg
                   } else if (hasScopeReg) {
-                    initRefInScope(forkPage!, data.store, false, true, data.softRead)
+                    initRef(data.store, forkPage!, {isGetState: false, isKernelCall: true, softRead: data.softRead})
                     reg = forkPage!.reg
                   } else {
                     reg = undefined //node.reg
                   }
                 } else if (hasScopeReg) {
                   /** StateRef in Scope.reg created only when needed */
-                  initRefInScope(forkPage!, data.store, false, true, data.softRead)
+                  initRef(data.store, forkPage!, {isGetState: false, isKernelCall: true, softRead: data.softRead})
                 } else {
                   // console.error('should not happen')
                   /** StateRef should exists at least in Node itself, but it is not found */
@@ -535,135 +535,241 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
 
 const noopParser = (x: any) => x
 
-function isEqual(a: any, b: any) {
-  if (a === b) return true
-  if (typeof a !== typeof b) return false
-  if (typeof a === 'object' && a && b) {
-    const aKeys = Object.keys(a)
-    const bKeys = Object.keys(b)
-    if (aKeys.length !== bKeys.length) return false
-    for (let i = 0; i < aKeys.length; i++) {
-      const key = aKeys[i]
-      if (!isEqual(a[key], b[key])) return false
-    }
-    return true
-  }
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (a.length !== b.length) return false
-    for (let i = 0; i < a.length; i++) {
-      if (!isEqual(a[i], b[i])) return false
-    }
-    return true
-  }
-  return false
+type InitRefOptions = {
+  isGetState?: boolean
+  isKernelCall?: boolean
+  softRead?: boolean
 }
 
-export function initRefAfterActivation(ref: StateRef) {
+function recomputeScopedRef(ref: StateRef, scope: Scope): void {
   if (!ref.before) return
+
+  const refsMap = scope.reg
+  const scopedRef = refsMap[ref.id]
   let isFresh = false
+  const newDeps: Record<string, any> = {}
+
   forEach(ref.before, cmd => {
     switch (cmd.type) {
       case MAP: {
         const from = cmd.from
         if (from || cmd.fn) {
-          if (from) initRefAfterActivation(from)
-          const value = from && from.current
-          if (isEqual(cmd.lastValue, value)) return
-          ref.current = cmd.fn ? cmd.fn(value) : value
-          cmd.lastValue = ref.current
+          const value = from && refsMap[from.id]?.current
+          if (from) newDeps[from.id] = value
+          if (value === undefined) break
+          const prevIsKernelContext = isKernelContext
+          isKernelContext = true
+          scopedRef.current = cmd.fn ? cmd.fn(value) : value
+          isKernelContext = prevIsKernelContext
         }
         break
       }
       case 'field': {
         if (!isFresh) {
           isFresh = true
-          if (Array.isArray(ref.current)) {
-            ref.current = [...ref.current]
-          } else {
-            ref.current = {...ref.current}
+          scopedRef.current = Array.isArray(scopedRef.current)
+            ? [...scopedRef.current]
+            : {...scopedRef.current}
+        }
+        const from = refsMap[cmd.from.id]
+        newDeps[cmd.from.id] = from.current
+        scopedRef.current[cmd.field] = from.current
+        break
+      }
+    }
+  })
+
+  if (!scope.depsMap) scope.depsMap = {}
+  scope.depsMap[ref.id] = newDeps
+  ref.deps = newDeps
+}
+
+export function initRef(
+  ref: StateRef,
+  scope?: Scope | null,
+  options?: InitRefOptions,
+): void {
+  if (scope) {
+    const refsMap = scope.reg
+
+    if (refsMap[ref.id]) {
+      if (options?.isGetState && ref.before && !options?.softRead) {
+        const storedDeps = scope.depsMap?.[ref.id]
+        if (storedDeps) {
+          let isStale = false
+          forEach(ref.before, cmd => {
+            if (isStale) return
+            const depRef =
+              cmd.type === MAP
+                ? cmd.from
+                : cmd.type === 'field'
+                ? cmd.from
+                : null
+            if (depRef) {
+              initRef(depRef, scope, options)
+              if (refsMap[depRef.id]?.current !== storedDeps[depRef.id]) {
+                isStale = true
+              }
+            }
+          })
+
+          if (isStale) {
+            const existing = refsMap[ref.id]
+            let isFresh = false
+            const newDeps: Record<string, any> = {}
+
+            forEach(ref.before, cmd => {
+              switch (cmd.type) {
+                case MAP: {
+                  const from = cmd.from
+                  if (from || cmd.fn) {
+                    if (from) initRef(from, scope, options)
+                    const value = from && refsMap[from.id]?.current
+                    if (from) newDeps[from.id] = value
+                    if (value === undefined) break
+                    const prevIsKernelContext = isKernelContext
+                    isKernelContext = true
+                    existing.current = cmd.fn ? cmd.fn(value) : value
+                    isKernelContext = prevIsKernelContext
+                  }
+                  break
+                }
+                case 'field': {
+                  initRef(cmd.from, scope, options)
+                  if (!isFresh) {
+                    isFresh = true
+                    existing.current = Array.isArray(existing.current)
+                      ? [...existing.current]
+                      : {...existing.current}
+                  }
+                  const from = refsMap[cmd.from.id]
+                  newDeps[cmd.from.id] = from.current
+                  existing.current[cmd.field] = from.current
+                  break
+                }
+              }
+            })
+
+            if (Object.keys(newDeps).length > 0) {
+              if (!scope.depsMap) scope.depsMap = {}
+              scope.depsMap[ref.id] = newDeps
+            }
           }
         }
+      }
+      return
+    }
+
+    const sid = ref.sid
+    const scopedRef: StateRef = {
+      id: ref.id,
+      current: ref.initial!,
+      meta: ref.meta,
+    }
+
+    if (ref.id in scope.values.idMap) {
+      scopedRef.current = scope.values.idMap[ref.id]
+    } else if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
+      const serialize = ref?.meta?.serialize
+      const parser =
+        scope.fromSerialize && serialize !== 'ignore'
+          ? serialize?.read || noopParser
+          : noopParser
+      scopedRef.current = parser(scope.values.sidMap[sid])
+    } else {
+      if (ref.before && !options?.softRead) {
+        let isFresh = false
+        const deps: Record<string, any> = {}
+
+        forEach(ref.before, cmd => {
+          switch (cmd.type) {
+            case MAP: {
+              const from = cmd.from
+              if (from || cmd.fn) {
+                if (from) initRef(from, scope, options)
+                const needToAssign =
+                  options?.isGetState || !ref.noInit || !cmd.fn
+                if (needToAssign) {
+                  const value = from && refsMap[from.id].current
+                  if (from) deps[from.id] = value
+                  if (value === undefined) break
+                  const prevIsKernelContext = isKernelContext
+                  isKernelContext = true
+                  scopedRef.current = cmd.fn ? cmd.fn(value) : value
+                  isKernelContext = prevIsKernelContext
+                }
+              }
+              break
+            }
+            case 'field': {
+              initRef(cmd.from, scope, options)
+              if (!isFresh) {
+                isFresh = true
+                scopedRef.current = Array.isArray(scopedRef.current)
+                  ? [...scopedRef.current]
+                  : {...scopedRef.current}
+              }
+              const from = refsMap[cmd.from.id]
+              deps[cmd.from.id] = refsMap[from.id].current
+              scopedRef.current[cmd.field] = refsMap[from.id].current
+              break
+            }
+          }
+        })
+
+        if (Object.keys(deps).length > 0) {
+          if (!scope.depsMap) scope.depsMap = {}
+          scope.depsMap[ref.id] = deps
+        }
+      }
+    }
+
+    if (sid) scope.sidIdMap[sid] = ref.id
+    refsMap[ref.id] = scopedRef
+    return
+  }
+
+  if (!ref.before) return
+  let isFresh = false
+  const deps: Record<string, any> = {}
+
+  forEach(ref.before, cmd => {
+    switch (cmd.type) {
+      case MAP: {
         const from = cmd.from
-        initRefAfterActivation(from)
+        if (from || cmd.fn) {
+          if (from) initRef(from)
+          const value = from && from.current
+          if (from) deps[from.id] = value
+          if (value === undefined) break
+          if (ref.deps && from && ref.deps[from.id] === value) break
+          const prevIsKernelContext = isKernelContext
+          isKernelContext = true
+          ref.current = cmd.fn ? cmd.fn(value) : value
+          isKernelContext = prevIsKernelContext
+        }
+        break
+      }
+      case 'field': {
+        const from = cmd.from
+        initRef(from)
+        deps[from.id] = from.current
+        if (ref.deps && ref.deps[from.id] === from.current) break
+        if (!isFresh) {
+          isFresh = true
+          ref.current = Array.isArray(ref.current)
+            ? [...ref.current]
+            : {...ref.current}
+        }
         ref.current[cmd.field] = from.current
         break
       }
     }
   })
-}
 
-export const initRefInScope = (
-  scope: Scope,
-  sourceRef: StateRef,
-  isGetState?: boolean,
-  isKernelCall?: boolean,
-  softRead?: boolean,
-) => {
-  const refsMap = scope.reg
-  if (refsMap[sourceRef.id]) return
-  const sid = sourceRef.sid
-  const ref: StateRef = {
-    id: sourceRef.id,
-    current: sourceRef.initial!,
-    meta: sourceRef.meta,
+  if (Object.keys(deps).length > 0) {
+    ref.deps = deps
   }
-
-  if (ref.id in scope.values.idMap) {
-    ref.current = scope.values.idMap[ref.id]
-  } else if (sid && sid in scope.values.sidMap && !(sid in scope.sidIdMap)) {
-    const serialize = sourceRef?.meta?.serialize
-    const parser =
-      scope.fromSerialize && serialize !== 'ignore'
-        ? serialize?.read || noopParser
-        : noopParser
-    ref.current = parser(scope.values.sidMap[sid])
-  } else {
-    if (sourceRef.before && !softRead) {
-      let isFresh = false
-      const needToAssign = isGetState || !sourceRef.noInit || isKernelCall
-      forEach(sourceRef.before, cmd => {
-        switch (cmd.type) {
-          case 'map': {
-            const from = cmd.from
-            if (from || cmd.fn) {
-              if (from) initRefInScope(scope, from, isGetState, isKernelCall)
-              if (needToAssign) {
-                const value = from && refsMap[from.id].current
-
-                const prevIsKernelContext = isKernelContext
-                isKernelContext = true
-
-                ref.current = cmd.fn ? cmd.fn(value) : value
-
-                isKernelContext = prevIsKernelContext
-              }
-            }
-            break
-          }
-          case 'field': {
-            initRefInScope(scope, cmd.from, isGetState, isKernelCall)
-            if (!isFresh) {
-              isFresh = true
-              if (Array.isArray(ref.current)) {
-                ref.current = [...ref.current]
-              } else {
-                ref.current = {...ref.current}
-              }
-            }
-            if (needToAssign) {
-              const from = refsMap[cmd.from.id]
-              ref.current[cmd.field] = refsMap[from.id].current
-            }
-            break
-          }
-          // case 'closure':
-          //   break
-        }
-      })
-    }
-  }
-  if (sid) scope.sidIdMap[sid] = sourceRef.id
-  refsMap[sourceRef.id] = ref
 }
 
 function isUsed(node: Node, scope: Scope | void | null) {

@@ -2,7 +2,7 @@ import {getGraph} from './getter'
 import {Node, NodeUnit} from './index.h'
 import {Scope} from './unit.h'
 import {removeItem, traverse} from './collection'
-import {initRefAfterActivation} from './kernel'
+import {initRef} from './kernel'
 
 function normalizeUnitsList(nodeUnit: NodeUnit | NodeUnit[]) {
   return [...new Set(Array.isArray(nodeUnit) ? nodeUnit : [nodeUnit])]
@@ -35,7 +35,7 @@ export function addActivator(
           targetsList.length > 0 &&
           node.scope.stateRef
         ) {
-          initRefAfterActivation(node.scope.stateRef)
+          initRef(node.scope.stateRef)
         }
         usedByDeps.forEach(depNode => {
           depNode.lazy!.activate.push(node)

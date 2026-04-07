@@ -9,6 +9,7 @@ import {
   createEffect,
   sample,
 } from 'effector'
+import {activateAllDownstream} from '../testUtils'
 
 test('@effector/next custom hydration works', async () => {
   /**
@@ -64,7 +65,7 @@ test('@effector/next custom hydration works', async () => {
   const $combined = combine({ref: $count})
   const $nestedCombined = combine({ref: $derived})
 
-  $nestedCombined.watch(() => {})
+  activateAllDownstream([$nestedCombined])
 
   const $sampled = sample({
     source: {ref: $combined},

@@ -8,7 +8,7 @@ export type ID = string
 export type Kind = 'store' | 'event' | 'effect' | 'domain' | 'scope'
 
 export type StateRefOp =
-  | {type: 'map'; from?: StateRef; fn?: (value: any) => any; lastValue?: any}
+  | {type: 'map'; from?: StateRef; fn?: (value: any) => any}
   | {type: 'field'; from: StateRef; field: string}
 
 export type StateRef = {
@@ -22,6 +22,7 @@ export type StateRef = {
   meta?: {
     serialize?: 'ignore' | {read: (p: any) => any; write: (p: any) => any}
   }
+  deps?: Record<string, any>
 }
 
 export type Config = {

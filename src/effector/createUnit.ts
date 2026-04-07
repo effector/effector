@@ -24,9 +24,8 @@ import {
   currentPage,
   forkPage,
   setCurrentPage,
-  initRefInScope,
+  initRef,
   isPure,
-  initRefAfterActivation,
   setIsKernelContext,
 } from './kernel'
 
@@ -296,7 +295,7 @@ export function createStore<State>(
         if (page) reachedPage = page
       }
       if (!reachedPage && forkPage) {
-        initRefInScope(forkPage, plainState, true)
+        initRef(plainState, forkPage, {isGetState: true})
         reachedPage = forkPage
       }
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
@@ -304,7 +303,7 @@ export function createStore<State>(
         !store.graphite.lazy!.alwaysActive &&
         store.graphite.lazy!.usedBy.length === 0
       ) {
-        initRefAfterActivation(targetRef)
+        initRef(targetRef)
       }
       return readRef(targetRef)
     },
@@ -370,13 +369,14 @@ export function createStore<State>(
         and: mapConfig,
       })
       const linkNode = updateStore(store, innerStore, MAP, callStack, fn, false)
-      addRefOp(getStoreState(innerStore), {
+      const innerStateRef = getStoreState(innerStore)
+      addRefOp(innerStateRef, {
         type: MAP,
         fn,
         from: plainState,
-        lastValue: storeState,
       })
-      getStoreState(innerStore).noInit = true
+      innerStateRef.noInit = true
+      innerStateRef.deps = {[plainState.id]: plainState.current}
       innerStore.graphite.lazy!.alwaysActive = false
       addActivator(innerStore, [store, linkNode], true)
       applyTemplate('storeMap', plainState, linkNode)

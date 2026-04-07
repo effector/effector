@@ -10,6 +10,7 @@ import {
   split,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+import {activateAllDownstream} from './testUtils'
 
 it('should call watcher as many times, as many store updates occured', () => {
   const fn = jest.fn()
@@ -113,7 +114,7 @@ test('watch behavior should be consistent', () => {
     parent: [trigger],
   })
 
-  trigger.watch(() => {})
+  activateAllDownstream([trigger])
 
   trigger(1)
 
