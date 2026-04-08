@@ -3,6 +3,7 @@ import {getGraph, getOwners, getLinks} from './getter'
 import {is} from './validate'
 import {includes, removeItem} from './collection'
 import {CROSSLINK} from './tag'
+import {traverseDecrementActivations} from './lazy'
 
 const removeFromNode = (currentNode: Node, targetNode: Node) => {
   removeItem(currentNode.next, targetNode)
@@ -31,7 +32,18 @@ const clearNodeNormalized = (
   //@ts-expect-error
   targetNode.scope = null
   let currentNode
-  let list = getLinks(targetNode)
+  let list: Node[]
+  if (targetNode.lazy) {
+    list = targetNode.lazy.activate
+    while ((currentNode = list.pop())) {
+      traverseDecrementActivations(currentNode, targetNode)
+      let dependencyTarget
+      while ((dependencyTarget = targetNode.lazy.usedBy.pop())) {
+        traverseDecrementActivations(currentNode, dependencyTarget)
+      }
+    }
+  }
+  list = getLinks(targetNode)
   const {stateRef, defaultShape, isRegion: isRegionNode, op} = targetNode.meta
   if (stateRef) {
     stateRef.before = []

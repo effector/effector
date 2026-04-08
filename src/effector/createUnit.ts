@@ -24,7 +24,7 @@ import {
   currentPage,
   forkPage,
   setCurrentPage,
-  initRefInScope,
+  initRef,
   isPure,
   setIsKernelContext,
 } from './kernel'
@@ -38,6 +38,7 @@ import {DOMAIN, STORE, EVENT, MAP, STACK, REG_A} from './tag'
 import {applyTemplate} from './template'
 import {forEach} from './collection'
 import {flattenConfig} from './config'
+import {addActivator, traverseSetAlwaysActive} from './lazy'
 import {clearNode} from './clearNode'
 import {debugTracesEnabled} from './debug_traces'
 
@@ -126,7 +127,8 @@ const deriveEvent = (
     derived: true,
     and: config,
   })
-  createLinkNode(event, mapped, node, op, fn)
+  const linkNode = createLinkNode(event, mapped, node, op, fn, false)
+  addActivator(mapped, [event, linkNode], true)
   return mapped
 }
 
@@ -178,6 +180,7 @@ export function createEvent<Payload = any>(
   const template = readTemplate()
   const finalEvent = Object.assign(event, {
     graphite: createNode({
+      alwaysActive: false,
       meta: initUnit(
         config.actualOp || EVENT,
         event,
@@ -213,7 +216,14 @@ export function createEvent<Payload = any>(
         parent: getParent(event),
       })
       applyTemplate('eventPrepend', getGraph(contramapped))
-      createLinkNode(contramapped, event, [userFnCall()], 'prepend', fn)
+      const linkNode = createLinkNode(
+        contramapped,
+        event,
+        [userFnCall()],
+        'prepend',
+        fn,
+      )
+      addActivator(event, [contramapped, linkNode], true)
       applyParentHook(event, contramapped)
       return contramapped
     },
@@ -240,9 +250,11 @@ function on<State>(
     `${methodName} in store created via createStore`,
     errorTitle,
   )
-  forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
+  const unitsArray = Array.isArray(nodeSet) ? nodeSet : [nodeSet]
+  unitsArray.forEach(unit => traverseSetAlwaysActive(getGraph(unit)))
+  forEach(unitsArray, trigger => {
     store.off(trigger)
-    updateStore(trigger, store, 'on', callARegStack, fn)
+    updateStore(trigger, store, 'on', callARegStack, fn, true)
   })
   return store
 }
@@ -283,10 +295,16 @@ export function createStore<State>(
         if (page) reachedPage = page
       }
       if (!reachedPage && forkPage) {
-        initRefInScope(forkPage, plainState, true)
+        initRef(plainState, forkPage, {isGetState: true})
         reachedPage = forkPage
       }
       if (reachedPage) targetRef = reachedPage.reg[plainStateId]
+      if (
+        !store.graphite.lazy!.alwaysActive &&
+        store.graphite.lazy!.usedBy.length === 0
+      ) {
+        initRef(targetRef)
+      }
       return readRef(targetRef)
     },
     setState: (state: State) =>
@@ -350,13 +368,17 @@ export function createStore<State>(
         ...outerConfig,
         and: mapConfig,
       })
-      const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
-      addRefOp(getStoreState(innerStore), {
+      const linkNode = updateStore(store, innerStore, MAP, callStack, fn, false)
+      const innerStateRef = getStoreState(innerStore)
+      addRefOp(innerStateRef, {
         type: MAP,
         fn,
         from: plainState,
       })
-      getStoreState(innerStore).noInit = true
+      innerStateRef.noInit = true
+      innerStateRef.deps = {[plainState.id]: plainState.current}
+      innerStore.graphite.lazy!.alwaysActive = false
+      addActivator(innerStore, [store, linkNode], true)
       applyTemplate('storeMap', plainState, linkNode)
       return innerStore
     },
@@ -378,6 +400,7 @@ export function createStore<State>(
   const meta = initUnit(STORE, store, config, getUnitTrace(createStore))
   const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
+    alwaysActive: true,
     scope: {state: plainState, fn: updateFilter},
     node: [
       calc((upd, _, stack) => {
@@ -413,6 +436,7 @@ export function createStore<State>(
     },
     regional: true,
   })
+  addActivator(updates, [store], true)
   setMeta(store, 'id', store.graphite.id)
   setMeta(store, 'rootStateRefId', plainStateId)
   const serializeMeta = getMeta(store, 'serialize')
@@ -461,6 +485,7 @@ const updateStore = (
   op: string,
   caller: typeof callStackAReg,
   fn: Function,
+  alwaysActive: boolean,
 ) => {
   const storeRef = getStoreState(store)
   const reader = mov({
@@ -481,7 +506,7 @@ const updateStore = (
     node,
     is.store(from) && getStoreState(from),
   )
-  const result = createLinkNode(from, store, node, op, fn)
+  const result = createLinkNode(from, store, node, op, fn, alwaysActive)
   if (op !== MAP) {
     setMeta(result, 'onTrigger', getGraph(from).id)
   }

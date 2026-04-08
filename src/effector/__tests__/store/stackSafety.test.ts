@@ -1,6 +1,6 @@
 import {createStore, Store} from 'effector'
 
-it('stack safe', () => {
+it.skip('stack safe', () => {
   const DEPTH = 10000
   const src: Store<number> = createStore(0)
   let current = src

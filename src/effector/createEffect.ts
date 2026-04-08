@@ -61,6 +61,7 @@ export function createEffect<Params, Done, Fail = Error>(
     named: 'finally',
     derived: true,
   }))
+  anyway.graphite.lazy!.alwaysActive = true
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
     fn({
@@ -101,6 +102,7 @@ export function createEffect<Params, Done, Fail = Error>(
   }))
 
   const runner = createNode({
+    alwaysActive: true,
     scope: {
       handler:
         instance.defaultConfig.handler ||
@@ -219,6 +221,8 @@ export function createEffect<Params, Done, Fail = Error>(
     named: 'pending',
   }))
 
+  instance.graphite.lazy!.alwaysActive = true
+
   own(instance, [anyway, done, fail, doneData, failData, pending, inFlight])
   if (config?.domain) {
     config.domain.hooks.effect(instance)
@@ -268,6 +272,7 @@ export const onSettled =
     })
   }
 const sidechain = createNode({
+  alwaysActive: true,
   node: [run({fn: ({fn, value}) => fn(value)})],
   meta: {op: 'fx', fx: 'sidechain'},
 })

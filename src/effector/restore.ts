@@ -4,6 +4,7 @@ import {forIn} from './collection'
 import {getParent} from './getter'
 import {createLinkNode} from './createNode'
 import {generateErrorTitle} from './naming'
+import {addActivator} from './lazy'
 
 export function restore(obj: any, defaultState: any, config?: any) {
   const errorTitle = generateErrorTitle('restore', config)
@@ -15,7 +16,9 @@ export function restore(obj: any, defaultState: any, config?: any) {
       name: obj.shortName,
       and: config,
     })
-    createLinkNode(is.effect(obj) ? obj.doneData : obj, result)
+    const clock = is.effect(obj) ? obj.doneData : obj
+    createLinkNode(clock, result)
+    addActivator(result, [clock], true)
     if (domain) domain.hooks.store(result)
     return result
   }

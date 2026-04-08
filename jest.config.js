@@ -119,6 +119,18 @@ const compatBrowsers = [
 ]
 
 module.exports = {
+  reporters: process.env.HTML_REPORT
+    ? [
+        'default',
+        [
+          'jest-html-reporters',
+          {
+            publicPath: './html-report',
+            filename: 'report.html',
+          },
+        ],
+      ]
+    : undefined,
   collectCoverage: boolean(process.env.COVERAGE),
   collectCoverageFrom: [
     '<rootDir>/src/effector/**/*.ts',

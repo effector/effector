@@ -15,6 +15,7 @@ import {
   merge,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
+import {activateAllDownstream} from './testUtils'
 
 it('will deactivate event', () => {
   const fn = jest.fn()
@@ -88,6 +89,7 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
+    activateAllDownstream([target])
     //@ts-expect-error
     source.setState(1)
     expect(fn).toBeCalledTimes(2)
@@ -103,6 +105,7 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
+    activateAllDownstream([target])
     source(1)
     expect(fn).toBeCalledTimes(1)
     clearNode(target)
@@ -131,6 +134,7 @@ describe('itermediate steps should not stay', () => {
       clock: trigger,
       fn,
     })
+    activateAllDownstream([result])
     trigger()
     expect(fn).toBeCalledTimes(1)
     clearNode(result)
@@ -139,13 +143,16 @@ describe('itermediate steps should not stay', () => {
   })
   it('support sample source', () => {
     const fn = jest.fn()
+    const target = createEvent()
     const trigger = createEvent()
     const store = createStore(null)
     sample({
       source: store,
       clock: trigger,
       fn,
+      target,
     })
+    activateAllDownstream([target])
     trigger()
     expect(fn).toBeCalledTimes(1)
     clearNode(store)
@@ -740,6 +747,8 @@ describe('supports sample in withRegion', () => {
     const $source = createStore(0)
     const target = createEvent<number>()
 
+    activateAllDownstream([target])
+
     addFnCallStep(trigger, fnTrigger)
     addFnCallStep($source, fnSource)
     addFnCallStep(target, fnTarget)
@@ -825,6 +834,8 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
             fn: upd => sampleFn(upd),
             target: regionalTarget,
           })
+
+          activateAllDownstream([regionalTarget])
         })
         externalTrigger(0)
         clearNode(region)
@@ -846,6 +857,8 @@ describe.each([{regionWrap: false}, {regionWrap: true}])(
             fn: upd => sampleFn(upd),
             target: [regionalTarget],
           })
+
+          activateAllDownstream([regionalTarget])
         })
         externalTrigger(0)
         clearNode(region)

@@ -15,6 +15,7 @@ import {
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {performance} from 'perf_hooks'
 import {withFactory} from '../region'
+import {activateAllDownstream} from './testUtils'
 
 muteErrors(['branch computation stopped'])
 
@@ -60,6 +61,17 @@ describe('inspect API', () => {
       clock: attachedFnFx.done,
       target: end,
     })
+
+    activateAllDownstream([
+      start,
+      $a,
+      $b,
+      end,
+      myFx,
+      attachedFx,
+      attachedFnFx,
+      evs.a,
+    ])
 
     const trackMock = jest.fn()
     inspect({
@@ -215,6 +227,8 @@ describe('inspect API', () => {
       target: end,
     })
 
+    end.watch(() => {})
+
     const scopeToTrack = fork()
     const anotherScope = fork()
 
@@ -241,16 +255,14 @@ describe('inspect API', () => {
         "update of 'start' [event] to value of 'MUST_BE_TRACKED' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of '$a' [store] to value of '1' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [undefined] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'undefined' [map] to value of '2' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of '$a → *' [store] to value of '2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [combine] to value of '1,2' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'combine($a, $a → *)' [store] to value of '1,2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '1,2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [sample] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'end' [event] to value of '3' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
+        "update of 'undefined' [watch] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of 'undefined' [undefined] to value of 'undefined' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
       ]
     `)
@@ -273,11 +285,9 @@ describe('inspect API', () => {
         "update of 'up' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '1' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of '$count' [store] to value of '1' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '1' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'up' [event] to value of 'undefined' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
         "update of 'undefined' [on] to value of '2' (id:string, sid:undefined, loc:undefined, meta:object, meta.id:undefined, meta.rootStateRefId:undefined)",
         "update of '$count' [store] to value of '2' (id:string, sid:string, loc:object, meta:object, meta.id:string, meta.rootStateRefId:string)",
-        "update of 'updates' [event] to value of '2' (id:string, sid:object, loc:undefined, meta:object, meta.id:string, meta.rootStateRefId:undefined)",
       ]
     `)
 
@@ -303,6 +313,8 @@ describe('inspect API', () => {
       fn: ([a, b]) => a + b,
       target: end,
     })
+
+    activateAllDownstream([start, $a, $b, end])
 
     const trackMock = jest.fn()
     inspect({
@@ -650,6 +662,8 @@ describe('real use cases', () => {
   test('monitor out-of-scope computations', async () => {
     const start = createEvent()
 
+    activateAllDownstream([start])
+
     const scope = fork()
 
     const outOfScope = jest.fn()
@@ -716,6 +730,8 @@ describe('real use cases', () => {
         }
       },
     })
+
+    activateAllDownstream([start, end])
 
     const timeLog = jest.fn()
     let time = 0
@@ -784,6 +800,8 @@ describe('real use cases', () => {
         throw new Error('unexpected error, branch computation stopped')
       },
     })
+
+    activateAllDownstream([start, started])
 
     const scope = fork()
 

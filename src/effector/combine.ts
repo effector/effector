@@ -126,6 +126,8 @@ const storeCombination = (
   const storeStateRef = getStoreState(store)
   storeStateRef.noInit = true
   setMeta(store, 'isCombine', true)
+  const lazy = store.graphite.lazy!
+  lazy.alwaysActive = false
   /**
    * Easiest way to clean orphaned stateRefs which participate in initialization graph
    * (has `addRefOp` calls).
@@ -190,6 +192,7 @@ const storeCombination = (
     fn && userFnCall(),
     softReader,
   ]
+  const rawShapeDeps: Record<string, any> = {}
   forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
       assert(
@@ -202,12 +205,15 @@ const storeCombination = (
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    const linkNode = createLinkNode(child, store, node, 'combine', fn)
+    const linkNode = createLinkNode(child, store, node, 'combine', fn, false)
+    lazy.activate.push(child.graphite, linkNode)
     linkNode.scope.key = key
     const childRef = getStoreState(child)
     addRefOp(rawShape, {type: 'field', field: key, from: childRef})
+    rawShapeDeps[childRef.id] = childRef.current
     applyTemplate('combineField', childRef, linkNode)
   })
+  rawShape.deps = rawShapeDeps
 
   store.defaultShape = obj
   setMeta(store, 'defaultShape', obj)
@@ -233,5 +239,6 @@ const storeCombination = (
       store.defaultState = defaultState
     }
   }
+  storeStateRef.deps = {[rawShape.id]: rawShape.current}
   return store
 }

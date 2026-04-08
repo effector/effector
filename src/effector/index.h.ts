@@ -22,6 +22,7 @@ export type StateRef = {
   meta?: {
     serialize?: 'ignore' | {read: (p: any) => any; write: (p: any) => any}
   }
+  deps?: Record<string, any>
 }
 
 export type Config = {
@@ -43,6 +44,12 @@ export type Config = {
   skipVoid?: boolean
 }
 
+export type LazyConfig = {
+  alwaysActive: boolean
+  usedBy: Node[]
+  activate: Node[]
+}
+
 export type Node = {
   id: ID
   next: Array<Node>
@@ -57,6 +64,7 @@ export type Node = {
     links: Node[]
     owners: Node[]
   }
+  lazy?: LazyConfig
 }
 
 export type NodeUnit = {graphite: Node} | Node

@@ -10,6 +10,7 @@ import {
   allSettled,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
+import {activateAllDownstream} from './testUtils'
 
 muteErrors('skipVoid')
 
@@ -287,6 +288,7 @@ it('doesn`t leak internal variables to transform function', () => {
     fn(args)
     return 0
   })
+  activateAllDownstream([combined])
   inc()
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
@@ -408,7 +410,7 @@ describe('fn retriggers', () => {
       fn(a)
       return a
     })
-
+    activateAllDownstream([$comb])
     const scope = fork({values: [[$a, 10]]})
     await allSettled(inc, {scope})
     expect(argumentHistory(fn)).toEqual([0, 11])
@@ -433,6 +435,8 @@ describe('fn retriggers', () => {
       fn(a)
       return a
     })
+
+    activateAllDownstream([$comb])
 
     const scope = fork({values: [[$a, 10]]})
     scope.getState($comb)

@@ -4,6 +4,7 @@ import {nextNodeID} from './id'
 import {CROSSLINK, DOMAIN} from './tag'
 import {regionStack} from './region'
 import {add, forEach} from './collection'
+import {traverseIncrementActivations} from './lazy'
 
 export const arrifyNodes = (
   list: NodeUnit | Array<NodeUnit | NodeUnit[]> = [],
@@ -21,6 +22,8 @@ export function createNode({
   meta = {},
   family: familyRaw = {type: 'regular'},
   regional,
+  alwaysActive,
+  activate,
 }: {
   node?: Array<Cmd | false | void | null>
   from?: NodeUnit | NodeUnit[]
@@ -37,6 +40,8 @@ export function createNode({
     owners?: NodeUnit | Array<NodeUnit | NodeUnit[]>
   }
   regional?: boolean
+  alwaysActive?: boolean
+  activate?: Node[]
 } = {}): Node {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
@@ -56,24 +61,50 @@ export function createNode({
       owners,
     },
   }
+  if (alwaysActive !== undefined || activate) {
+    result.lazy = {
+      alwaysActive: !!alwaysActive,
+      usedBy: [],
+      activate: activate || [],
+    }
+  }
   forEach(links, link => add(getOwners(link), result))
   forEach(owners, owner => add(getLinks(owner), result))
-  forEach(sources, source => add(source.next, result))
+  forEach(sources, source => {
+    add(source.next, result)
+    if (
+      meta.op === 'watch' &&
+      !result.lazy &&
+      source.lazy &&
+      !source.lazy.alwaysActive
+    ) {
+      if (!result.lazy) {
+        result.lazy = {
+          alwaysActive: true,
+          usedBy: [],
+          activate: [],
+        }
+      }
+      result.lazy.activate.push(source)
+      traverseIncrementActivations(source, result)
+    }
+  })
   if (regional && regionStack) {
     own(getValue(regionStack), [result])
   }
   return result
 }
 
-/** simplified version of createNode for common cases */
 export const createLinkNode = (
   parent: NodeUnit | NodeUnit[],
   child: NodeUnit | NodeUnit[],
   node?: Array<Cmd | false | void | null>,
   op?: string,
   scopeFn?: Function,
+  alwaysActive?: boolean,
 ) =>
   createNode({
+    alwaysActive,
     node,
     parent,
     child,

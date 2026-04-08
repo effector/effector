@@ -11,6 +11,7 @@ import {
   attach,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
+import {activateAllDownstream} from '../testUtils'
 
 describe('.map', () => {
   muteErrors('skipVoid')
@@ -463,6 +464,7 @@ describe('void skip pattern deprecation', () => {
       const store = createStore(0)
         .on(inc, (_, v) => v)
         .map(x => (x > 3 ? undefined : x))
+      activateAllDownstream([store])
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
         `"Error: store → *: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,
@@ -473,6 +475,7 @@ describe('void skip pattern deprecation', () => {
       const store = createStore(0)
         .on(inc, (_, v) => v)
         .map(x => (x > 3 ? undefined : x), {skipVoid: true})
+      activateAllDownstream([store])
       inc(4)
       inc(5)
       inc(6)
@@ -516,6 +519,7 @@ describe('void skip pattern deprecation', () => {
       const store = combine({a: createStore(0).on(inc, (_, v) => v)}, x =>
         x.a > 3 ? undefined : x,
       )
+      activateAllDownstream([store])
       inc(4)
       expect(getWarning()).toMatchInlineSnapshot(
         `"Error: store at /src/effector/__tests__/store/index.test.ts: undefined is used to skip updates. To allow undefined as a value provide explicit { skipVoid: false } option"`,

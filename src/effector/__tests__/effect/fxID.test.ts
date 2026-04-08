@@ -9,6 +9,7 @@ import {
   allSettled,
   fork,
 } from 'effector'
+import {activateAllDownstream} from '../testUtils'
 
 function getNode(unit: Unit<any>): Node {
   //@ts-expect-error
@@ -56,6 +57,7 @@ describe('plain effect support', () => {
         },
       }),
     )
+    activateAllDownstream([fx.done])
     await fx()
     expect(typeof fxID).toBe('string')
   })
@@ -72,6 +74,7 @@ describe('plain effect support', () => {
         },
       }),
     )
+    activateAllDownstream([fx.doneData])
     await fx()
     expect(typeof fxID).toBe('string')
   })
@@ -119,6 +122,7 @@ describe('attach support', () => {
           },
         }),
       )
+      activateAllDownstream([fx.done])
       await fx()
       expect(typeof fxID).toBe('string')
     })
@@ -135,6 +139,7 @@ describe('attach support', () => {
           },
         }),
       )
+      activateAllDownstream([fx.doneData])
       await fx()
       expect(typeof fxID).toBe('string')
     })
@@ -183,6 +188,7 @@ describe('attach support', () => {
           },
         }),
       )
+      activateAllDownstream([fx.done])
       await attached()
       expect(typeof fxID).toBe('string')
     })
@@ -200,6 +206,7 @@ describe('attach support', () => {
           },
         }),
       )
+      activateAllDownstream([fx.doneData])
       await attached()
       expect(typeof fxID).toBe('string')
     })
@@ -253,6 +260,7 @@ describe('computation chain support', () => {
         },
       }),
     )
+    activateAllDownstream([fx.done])
     await allSettled(trigger, {scope: fork()})
     expect(typeof fxID).toBe('string')
   })
@@ -271,6 +279,7 @@ describe('computation chain support', () => {
         },
       }),
     )
+    activateAllDownstream([fx.doneData])
     await allSettled(trigger, {scope: fork()})
     expect(typeof fxID).toBe('string')
   })

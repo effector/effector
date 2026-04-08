@@ -7,6 +7,7 @@ import {
   createNode,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
+import {activateAllDownstream} from './testUtils'
 
 it('binds watchers to region lifetime', () => {
   const fn = jest.fn()
@@ -43,6 +44,9 @@ it('binds units to region lifetime', () => {
       fn(x)
       return x.toString()
     })
+
+    // disable lazy mode
+    activateAllDownstream([countText])
     // => 0 (initial value)
   })
 

@@ -1,4 +1,5 @@
 import {createEvent, sample, createStore, combine} from 'effector'
+import {activateAllDownstream} from './testUtils'
 
 let warn: jest.SpyInstance<void, [message?: any, ...optionalParams: any[]]>
 beforeEach(() => {
@@ -19,6 +20,7 @@ describe('store', () => {
     const $x = createStore(0).on(trigger, x => {
       event()
     })
+    activateAllDownstream([$x])
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
@@ -32,6 +34,7 @@ describe('store', () => {
       event()
       return x
     })
+    activateAllDownstream([$y])
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
@@ -60,6 +63,7 @@ describe('event', () => {
     const y = x.map(() => {
       event()
     })
+    activateAllDownstream([y])
     x()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
@@ -71,6 +75,7 @@ describe('event', () => {
     const x = y.prepend(() => {
       event()
     })
+    activateAllDownstream([y])
     x()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
@@ -82,6 +87,7 @@ describe('event', () => {
     const y = x.filterMap(() => {
       event()
     })
+    activateAllDownstream([y])
     x()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
@@ -97,6 +103,7 @@ test('combine', () => {
     event()
     return x
   })
+  activateAllDownstream([$comb])
   trigger()
   expect(getWarning()).toMatchInlineSnapshot(
     `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
@@ -106,13 +113,16 @@ test('combine', () => {
 describe('sample', () => {
   test('fn', () => {
     const trigger = createEvent()
+    const target = createEvent()
     const event = createEvent()
     sample({
       clock: trigger,
       fn() {
         event()
       },
+      target,
     })
+    activateAllDownstream([target])
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
@@ -120,6 +130,7 @@ describe('sample', () => {
   })
   test('filter', () => {
     const trigger = createEvent()
+    const target = createEvent()
     const event = createEvent()
     sample({
       clock: trigger,
@@ -127,7 +138,9 @@ describe('sample', () => {
         event()
         return true
       },
+      target,
     })
+    activateAllDownstream([target])
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
       `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
