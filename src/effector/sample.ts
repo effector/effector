@@ -1,6 +1,6 @@
 import type {Cmd, Node, StateRef} from './index.h'
 import type {CommonUnit, DataCarrier, Store} from './unit.h'
-import {combine} from './combine'
+import {combine, combineSource} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg} from './caller'
@@ -110,7 +110,7 @@ export const createSampling = (
   if (isVoid(source)) {
     sourceIsClock = true
   } else if (!is.unit(source)) {
-    source = combine(source)
+    source = batch ? combine(source) : combineSource(source, batch)
   }
   if (isVoid(clock)) {
     /** still undefined! */
