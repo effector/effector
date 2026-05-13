@@ -97,6 +97,20 @@ export function combine(...args: any[]): Store<any> {
   )
 }
 
+export const combineSource = (shape: unknown, batch: boolean) => {
+  const errorTitle = generateErrorTitle('combine')
+  assert(isObject(shape), `${errorTitle}: shape should be an object`)
+  return storeCombination(
+    Array.isArray(shape),
+    true,
+    shape,
+    getUnitTrace(combine),
+    undefined,
+    undefined,
+    {batch},
+  )
+}
+
 const storeCombination = (
   isArray: boolean,
   needSpread: boolean,
@@ -104,9 +118,13 @@ const storeCombination = (
   unitTrace: string,
   config?: Config,
   fn?: (upd: any) => any,
-  extConfig?: false | {skipVoid?: boolean},
+  extConfig?: false | {skipVoid?: boolean; batch?: boolean},
 ) => {
   const errorTitle = generateErrorTitle('combine', config)
+  const {batch = true, ...storeConfig} = (extConfig || {}) as {
+    batch?: boolean
+    [key: string]: unknown
+  }
   const clone = isArray ? (list: any) => [...list] : (obj: any) => ({...obj})
   const defaultState: Record<string, any> = isArray ? [] : {}
 
@@ -119,7 +137,7 @@ const storeCombination = (
   const store = createStore(stateNew, {
     name: unitObjectName(obj),
     derived: true,
-    ...extConfig,
+    ...storeConfig,
     and: config,
   })
   setUnitTrace(store, unitTrace)
@@ -185,8 +203,7 @@ const storeCombination = (
      *
      *  basically, this makes `sample` and `combine` priorities equal
      */
-    read(rawShape, true, true),
-
+    read(rawShape, true, batch),
     fn && userFnCall(),
     softReader,
   ]
@@ -222,7 +239,7 @@ const storeCombination = (
       const computedValue = fn(stateNew)
       setIsKernelContext(false)
 
-      if (isVoid(computedValue) && (!extConfig || !('skipVoid' in extConfig))) {
+      if (isVoid(computedValue) && !('skipVoid' in storeConfig)) {
         console.error(`${errorTitle}: ${requireExplicitSkipVoidMessage}`)
       }
 
