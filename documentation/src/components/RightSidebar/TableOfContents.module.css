@@ -156,6 +156,7 @@
   max-height: 60vh;
   overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background-color: color-mix(in srgb, var(--theme-bg-sidebar-tabs-bg) 85%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
