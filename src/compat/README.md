@@ -16,3 +16,13 @@ These tests expects `.env` file with variables `BROWSERSTACK_USERNAME` and `BROW
 BROWSERSTACK_USERNAME=username
 BROWSERSTACK_ACCESS_KEY=key
 ```
+
+The BrowserStack suite also includes `src/compat/perf.test.ts`.
+It runs lightweight performance budgets for:
+
+- event-to-store graph updates
+- store graph creation
+- guard/split event routing
+
+To keep BrowserStack variance stable, each benchmark is measured in multiple
+rounds and compared by median time-per-iteration.
