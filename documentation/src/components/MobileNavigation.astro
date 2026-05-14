@@ -61,6 +61,7 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
     will-change: transform, opacity;
     contain: layout style;
     backface-visibility: hidden;
+    -webkit-overflow-scrolling: touch;
     background-color: var(--theme-bg-mobile-menu);
   }
 
@@ -69,6 +70,7 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
     font-family: "Lexend Deca", sans-serif;
 
     overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     padding-left: max(env(safe-area-inset-left), 1rem);
     padding-right: max(env(safe-area-inset-right), 1rem);
   }
