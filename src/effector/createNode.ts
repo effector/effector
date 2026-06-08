@@ -2,7 +2,7 @@ import type {Node, NodeUnit, Cmd} from './index.h'
 import {getGraph, getOwners, getLinks, getValue} from './getter'
 import {nextNodeID} from './id'
 import {CROSSLINK} from './tag'
-import {regionStack} from './region'
+import {regionStack, reportDeclaration} from './region'
 import {own} from './own'
 import {add, forEach} from './collection'
 
@@ -22,6 +22,7 @@ export function createNode({
   meta = {},
   family: familyRaw = {type: 'regular'},
   regional,
+  deferDeclaration,
 }: {
   node?: Array<Cmd | false | void | null>
   from?: NodeUnit | NodeUnit[]
@@ -38,6 +39,7 @@ export function createNode({
     owners?: NodeUnit | Array<NodeUnit | NodeUnit[]>
   }
   regional?: boolean
+  deferDeclaration?: boolean
 } = {}): Node {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
@@ -62,6 +64,9 @@ export function createNode({
   forEach(sources, source => add(source.next, result))
   if (regional && regionStack) {
     own(getValue(regionStack), [result])
+  }
+  if (!deferDeclaration) {
+    reportDeclaration(result)
   }
   return result
 }
