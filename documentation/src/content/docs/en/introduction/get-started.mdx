@@ -1,0 +1,284 @@
+---
+title: Getting started
+description: How to install effector and take the first steps
+redirectFrom:
+  - /en/introduction/installation
+  - /introduction/installation
+pagefindWeight: 4
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Quick start with effector (#quick-start-with-effector)
+
+Effector is a powerful state manager that offers a different perspective on handling application data. Instead of mutating state directly in actions, effector relies on a reactive, declarative model that keeps data flow explicit and predictable.
+
+## How to use the documentation (#how-to-use-documentation)
+
+Before diving in, note that we provide `llms.txt` so AI assistants such as [ChatGPT](https://chatgpt.com/), [Claude](https://claude.ai/), [Gemini](https://gemini.google.com), and others can read the docs. Share a link in chat or upload the docs into an IDE like [Cursor](https://www.cursor.com/en). Right now you can use:
+
+- https://effector.dev/ru/llms-full.txt
+- https://effector.dev/docs/llms.txt
+- https://effector.dev/docs/llms-full.txt
+
+We also maintain a [ChatGPT effector assistant](https://chatgpt.com/g/g-thabaCJlt-effector-assistant), keep a [DeepWiki](https://deepwiki.com/effector/effector), and have the docs uploaded to [Context7](https://context7.com/effector/effector) for quick AI references.
+
+## Effector features (#effector-features)
+
+- **Reactive:** effector tracks dependencies automatically and updates every connected piece for you.
+- **Declarative:** describe how data relates and transforms; effector decides when to run the logic.
+- **SSR and tests out of the box:** scopes make server rendering and testing straightforward.
+- **Flexible architecture:** scales from tiny widgets to enterprise systems.
+- **Universal:** integrates with popular frameworks but can run in any JavaScript environment.
+
+Read more about the key ideas [here](/en/introduction/core-concepts).
+
+## Install effector (#install-effector)
+
+Install effector via your preferred package manager:
+
+<Tabs>
+  <TabItem label="npm">
+
+```bash
+npm install effector
+```
+
+  </TabItem>
+  <TabItem label="yarn">
+
+```bash
+yarn install effector
+```
+
+  </TabItem>
+  <TabItem label="pnpm">
+
+```bash
+pnpm install effector
+```
+
+  </TabItem>
+</Tabs>
+
+### Create your first store (#first-store)
+
+A store represents part of your application state:
+
+```ts
+// counter.js
+import { createStore } from "effector";
+
+const $counter = createStore(0);
+```
+
+### Add events (#adding-events)
+
+Next, add events that will update the store when they fire:
+
+```ts ins={4-5}
+// counter.js
+import { createEvent } from "effector";
+
+const incremented = createEvent();
+const decremented = createEvent();
+```
+
+### Connect events to the store (#connection-event-to-store)
+
+Link the events and the store together:
+
+```ts ins={9-10}
+// counter.js
+import { createEvent, createStore } from "effector";
+
+const $counter = createStore(0);
+
+const incremented = createEvent();
+const decremented = createEvent();
+
+$counter.on(incremented, (counter) => counter + 1);
+$counter.on(decremented, (counter) => counter - 1);
+
+// call the events anywhere in your app
+incremented();
+// counter is increased by 1
+decremented();
+// counter is decreased by 1
+decremented();
+// counter is decreased by 1
+```
+
+## Framework integration (#effector-framework-integration)
+
+### Installation (#effector-framework-installation)
+
+To use effector with a framework install the matching integration:
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```bash
+npm install effector effector-react
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```bash
+npm install effector effector-vue
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```bash
+npm install effector effector-solid
+```
+
+  </TabItem>
+</Tabs>
+
+### Usage examples (#effector-framework-usage-examples)
+
+And wire everything up:
+
+<Tabs syncId="framework-choice">
+  <TabItem label="React">
+
+```jsx
+import { useUnit } from "effector-react";
+import { createEvent, createStore } from "effector";
+import { $counter, incremented, decremented } from "./counter.js";
+
+export const Counter = () => {
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // or
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // or
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+
+  return (
+    <div>
+      <h1>Count: {counter}</h1>
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```html
+<script setup>
+  import { useUnit } from "@effector-vue/composition";
+  import { $counter, incremented, decremented } from "./counter.js";
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // or
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // or
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+</script>
+
+<template>
+  <div>
+    <h1>Count: {{ counter }}</h1>
+    <button @click="onIncremented">Increment</button>
+    <button @click="onDecremented">Decrement</button>
+  </div>
+</template>
+```
+
+  </TabItem>
+  <TabItem label="Solid">
+
+```jsx
+import { createEvent, createStore } from "effector";
+import { useUnit } from "effector-solid";
+import { $counter, incremented, decremented } from "./counter.js";
+
+const Counter = () => {
+  const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
+  // or
+  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  // or
+  const counter = useUnit($counter);
+  const onIncremented = useUnit(incremented);
+  const onDecremented = useUnit(decremented);
+
+  return (
+    <div>
+      <h1>Count: {counter()}</h1>
+      <button onClick={onIncremented}>Increment</button>
+      <button onClick={onDecremented}>Decrement</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+  </TabItem>
+</Tabs>
+
+:::info{title="Where is Svelte?"}
+Svelte works with the base effector package, so no additional integration is required.
+:::
+
+## Additional installation options (#effector-additional-installation)
+
+### Older browsers (#old-browsers)
+
+For legacy browsers down to IE11 or Chrome 47 (often shipped with Smart TVs) import from the `compat` builds: `effector/compat`, `effector-react/compat`, and `effector-vue/compat`.
+
+You can update imports manually:
+
+```ts ins={2} del={1}
+import { createStore } from "effector";
+import { createStore } from "effector/compat";
+```
+
+Or use [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver). Example `.babelrc` configuration:
+
+```json
+{
+  "plugins": [
+    [
+      "babel-plugin-module-resolver",
+      {
+        "alias": {
+          "^effector$": "effector/compat",
+          "^effector-react$": "effector-react/compat"
+        }
+      }
+    ]
+  ]
+}
+```
+
+### Other runtimes (#environments)
+
+You can also run effector in environments like `deno`. Import `effector.mjs` directly from a CDN:
+
+```ts
+import { createStore } from "https://cdn.jsdelivr.net/npm/effector/effector.mjs";
+```
+
+CDN references:
+
+- https://www.jsdelivr.com/package/npm/effector
+- https://cdn.jsdelivr.net/npm/effector/effector.cjs.js
+- https://cdn.jsdelivr.net/npm/effector/effector.mjs
+- https://cdn.jsdelivr.net/npm/effector-react/effector-react.cjs.js
+- https://cdn.jsdelivr.net/npm/effector-vue/effector-vue.cjs.js
+
+## Playgrounds (#playgrounds)
+
+All examples in this documentation run inside [our online playground](https://share.effector.dev). It lets you prototype, test, and share ideas for free, with React and TypeScript support ready to go. The project lives in [this repository](https://github.com/effector/repl). For TypeScript-specific experiments, feel free to [try the official TS playground](https://www.typescriptlang.org/play/?#code/JYWwDg9gTgLgBAbwMZQKYEMaoMo2qgGhQywFEAzc1JGAXznKghDgHJVLq8pWAofoA).

@@ -1,0 +1,217 @@
+---
+title: Изолированный контекст
+description: Узнайте, как работать со скоупами в Effector, зачем они нужны и как использовать их с серверным рендерингом или тестированием.
+lang: ru
+pagefindWeight: 4
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+import SideBySide from "@components/SideBySide/SideBySide.astro";
+
+# Изолированный контекст (#isolated-scopes)
+
+С помощью [скоупов](/ru/api/effector/Scope) вы можете создать изолированный экземпляр всего приложения, который содержит независимую копию всех юнитов (включая их связи), а также базовые методы для работы с ними:
+
+```ts "fork" "allSettled"
+import { fork, allSettled, createStore, createEvent } from "effector";
+
+// Создаем новый скоуп
+const scope = fork();
+
+const $counter = createStore(0);
+const increment = createEvent();
+
+$counter.on(increment, (state) => state + 1);
+
+// Запускаем событие и дожидаемся всей цепочки выполнения
+await allSettled(increment, { scope });
+
+console.log(scope.getState($counter)); // 1
+console.log($counter.getState()); // 0 - оригинальный стор остается без изменений
+```
+
+С помощью [`fork`](/ru/api/effector/fork) мы создаем новый [скоуп](/ru/api/effector/Scope), а с помощью [`allSettled`](/ru/api/effector/allSettled) — запускаем цепочку событий внутри указанного скоупа и дожидаемся ее завершения.
+
+:::info{title="Независимость скоупов"}
+Не существует механизма для обмена данными между скоупами; каждый экземпляр полностью изолирован и работает самостоятельно.
+:::
+
+## Зачем нужен cкоуп? (#why-use-scope)
+
+В effector все состояние хранится глобально. В клиентском приложении (SPA) это не проблема: каждый пользователь получает собственный экземпляр кода и работает со своим состоянием. Но при серверном рендеринге (SSR) или параллельном тестировании глобальное состояние становится проблемой: данные одного запроса или теста могут “протечь” в другой. Поэтому нам необходим [скоуп](/ru/api/effector/Scope).
+
+- **SSR** — сервер работает как единый процесс и обслуживает запросы множества пользователей. Для каждого запроса можно создать скоуп, который изолирует данные от глобального контекста Effector и предотвращает утечку состояния одного пользователя в запрос другого.
+- **Тестирование** — при параллельном запуске тестов возможны гонки данных и коллизии состояний. Скоуп позволяет каждому тесту выполняться со своим собственным изолированным состоянием.
+
+У нас есть подробные гайды по [работе с серверным рендерингом (SSR)](/ru/guides/server-side-rendering) и [тестировании](/ru/guides/testing), а здесь мы сосредоточимся на основных принципах работы со скоупом, его правилах и способах избежать распространенных ошибок.
+
+## Правила работы со скоупом (#scope-rules)
+
+Для корректной работы со скоупом имеется ряд правил, чтобы избежать [потери скоупа](/ru/guides/scope-loss):
+
+### Вызов эффектов и промисов (#effect-calls-rules)
+
+Для обработчиков эффектов, которые вызывают другие эффекты, убедитесь, что вы вызываете только эффекты, а не обычные асинхронные функции. Кроме того, вызовы эффектов должны быть ожидаемыми (`awaited`).
+
+Императивные вызовы эффектов в этом плане безопасны, потому что effector запоминает скоуп в котором начинался императивный вызов эффекта и при завершении вызова восстанавливает его обратно, что позволяет сделать ещё один вызов подряд.
+
+Можно вызывать методы `Promise.all([fx1(), fx2()])` и прочие из стандартного api javascript, потому что в этих случаях вызовы эффектов по прежнему происходят синхронно и скоуп безопасно сохраняется.
+
+<SideBySide>
+
+<Fragment slot="left">
+
+```ts wrap data-border="good" data-height="full"
+// ✅ правильное использование эффекта без вложенных эффектов
+const delayFx = createEffect(async () => {
+  await new Promise((resolve) => setTimeout(resolve, 80));
+});
+
+// ✅ правильное использование эффекта с вложенными эффектами
+const authFx = createEffect(async () => {
+  await loginFx();
+
+  await Promise.all([loadProfileFx(), loadSettingsFx()]);
+});
+```
+
+</Fragment>
+
+  <Fragment slot="right">
+
+```ts wrap data-border="bad" data-height="full"
+// ❌ неправильное использование эффекта с вложенными эффектами
+
+const sendWithAuthFx = createEffect(async () => {
+  await authUserFx();
+
+  //неправильно! Это должно быть обернуто в эффект.
+  await new Promise((resolve) => setTimeout(resolve, 80));
+
+  // здесь скоуп теряется.
+  await sendMessageFx();
+});
+```
+
+</Fragment>
+
+</SideBySide>
+
+:::info{title="attach в деле"}
+Для сценариев, когда эффект может вызывать другой эффект или выполнять асинхронные вычисления, но не то и другое одновременно, рассмотрите использование метода [`attach`](/ru/api/effector/attach) для более лаконичных императивных вызовов.
+:::
+
+### Использование юнитов с фреймворками (#framework-rules)
+
+Всегда используйте хук `useUnit` в связке с фреймворками, чтобы effector сам вызвал юнит в нужном ему скоупе:
+
+```tsx wrap "useUnit"
+import { useUnit } from "effector-react";
+import { $counter, increased, sendToServerFx } from "./model";
+
+const Component = () => {
+  const [counter, increase, sendToServer] = useUnit([$counter, increased, sendToServerFx]);
+
+  return (
+    <div>
+      <button onClick={increase}>{counter}</button>
+      <button onClick={sendToServer}>send data to server</button>
+    </div>
+  );
+};
+```
+
+Ну все, хватит слов, давайте посмотри на то как это работает.
+
+## Использование в SSR (#ssr-usage)
+
+Представим ситуацию: у нас есть сайт с SSR, где на странице профиля показывается список личных уведомлений пользователя. Если мы не будем использовать скоуп, то получится следующее:
+
+- Пользователь А делает запрос → на сервере в `$notifications` загружаются его уведомления.
+- Почти одновременно Пользователь B делает запрос → стор перезаписывается его данными.
+- В результате оба получат список уведомлений Пользователя B.
+
+Получилось явно не то, что мы хотели, да ? Это и есть [состояние гонки](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5_%D0%B3%D0%BE%D0%BD%D0%BA%D0%B8), ведущее к утечке приватных данных.
+В этой ситуации скоуп обеспечит нам изолированный контекст, который будет работать только для текущего пользователя: Пользователь сделал запрос -> создался скоуп и теперь мы меняем состояние только в нашем скоупе, так будет работать для каждого запроса.
+
+<Tabs>
+  <TabItem label="Сервер">
+
+```tsx "fork" "allSettled" "serialize"
+// server.tsx
+import { renderToString } from "react-dom/server";
+import { fork, serialize, allSettled } from "effector";
+import { Provider } from "effector-react";
+import { fetchNotificationsFx } from "./model";
+
+async function serverRender() {
+  const scope = fork();
+
+  // Загружаем данные на сервере
+  await allSettled(fetchNotificationsFx, { scope });
+
+  // Рендерим приложение
+  const html = renderToString(
+    <Provider value={scope}>
+      <App />
+    </Provider>,
+  );
+
+  // Сериализуем состояние для передачи на клиент
+  const data = serialize(scope);
+
+  return `
+	<html>
+	  <body>
+		<div id="root">${html}</div>
+		<script>window.INITIAL_DATA = ${data}</script>
+	  </body>
+	</html>
+`;
+}
+```
+
+</TabItem>
+<TabItem label="Клиент">
+
+```tsx
+// client.tsx
+import { hydrateRoot } from "react-dom/client";
+import { fork } from "effector";
+
+// гидрируем скоуп начальными значениями
+const scope = fork({
+  values: window.INITIAL_DATA,
+});
+
+hydrateRoot(
+  document.getElementById("root"),
+  <Provider value={scope}>
+    <App />
+  </Provider>,
+);
+```
+
+</TabItem>
+</Tabs>
+
+Что стоит отметить в этом примере:
+
+1. Мы сериализовали данные с помощью метода [`serialize`](/ru/api/effector/serialize), чтобы корректно передать их на клиент.
+2. На клиенте мы гидрировали сторы [с помощью аргумента конфигурации `values` у `fork`](/ru/api/effector/fork#methods-fork-options).
+
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+  - [`Scope`](/ru/api/effector/Scope) - Описание скоупа и его методов
+  - [`scopeBind`](/ru/api/effector/scopeBind) - Метод для привязки юнита к скоупу
+  - [`fork`](/ru/api/effector/fork) - Оператор для создания скоупа
+  - [`allSettled`](/ru/api/effector/allSettled) - Метод для вызова юнита в предоставленном скоупе и ожидания завершения всей цепочки эффектов
+  - [`serialize`](/ru/api/effector/serialize) - Метод для получения сериализованного значения сторов
+  - [`hydrate`](/ru/api/effector/hydrate) - Метод для гидрации сериализованных данных
+- **Статьи**
+  - [Что такое потеря скоупа и как исправить эту проблему](/ru/guides/scope-loss)
+  - [Гайд по работе с SSR](/ru/guides/server-side-rendering)
+  - [Гайд по тестированию](/ru/guides/testing)
+  - [Важность SID для гидрации сторов](/ru/explanation/sids)

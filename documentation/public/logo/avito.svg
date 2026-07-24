@@ -1,0 +1,38 @@
+<svg version="1.1" id="layer" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	y="0px" width="652" height="652" viewBox="0 0 652 652" style="enable-background:new 0 0 652 652;" xml:space="preserve">
+	<style type="text/css">
+		[data-logo="avito_st0"] {
+			fill: #97CF26;
+		}
+
+		[data-logo="avito_st1"] {
+			fill: #A169F7;
+		}
+
+		[data-logo="avito_st2"] {
+			fill: #FF6163;
+		}
+
+		[data-logo="avito_st3"] {
+			fill: #00AAFF;
+		}
+	</style>
+	<g transform="translate(14 14)">
+		<circle data-logo="avito_st0" cx="136.8" cy="351.5" r="45.9" />
+		<circle data-logo="avito_st1" cx="50.6" cy="351.5" r="21.3" />
+		<circle data-logo="avito_st2" cx="136.8" cy="265.3" r="29.5" />
+		<circle data-logo="avito_st3" cx="50.6" cy="265.3" r="37.7" />
+		<path
+			d="M301.8,372.6h23.8l-44.1-120h-17.3l-44.1,120H244l8.4-22.9h41L301.8,372.6l-42.8-41l13.9-37.7l13.9,37.7H259L301.8,372.6z" />
+		<path d="M384.6,290.6l-21.9,59.6l-21.9-59.6h-22.4l30.1,82h28.3l30.1-82L384.6,290.6" />
+		<g>
+			<path d="M416.4,290.6h22.4v82h-22.4V290.6z" />
+			<circle cx="427.6" cy="266.9" r="14.4" />
+		</g>
+		<path d="M517.7,308.7v-18.1h-26.8V268h-22.4v22.6h-17.7v18.1h17.7v35.3c0,18.2,9.1,30.3,32.3,30.3c9,0,16.8-3.3,16.8-3.3l-2.7-17.7
+		c0,0-4.4,1.3-9.8,1.3c-6.6,0-14.3-2.9-14.3-12v-33.9L517.7,308.7" />
+		<path d="M569,353.8c-12.5,0-22.6-9.9-22.6-22.1c0-12.2,10.1-22.1,22.6-22.1c12.5,0,22.6,9.9,22.6,22.1
+		C591.6,343.9,581.5,353.8,569,353.8 M569,288.5c-24.2,0-43.9,19.2-43.9,42.9c0,23.7,19.7,42.9,43.9,42.9
+		c24.2,0,43.9-19.2,43.9-42.9C612.9,307.7,593.2,288.5,569,288.5" />
+	</g>
+</svg>

@@ -1,0 +1,180 @@
+---
+title: Как мыслить в парадигме effector
+description: Рассказываем,как легче писать код и построить масштабируемое приложение c effector
+lang: ru
+pagefindWeight: 4
+---
+
+import Tabs from "@components/Tabs/Tabs.astro";
+import TabItem from "@components/Tabs/TabItem.astro";
+
+# Как мыслить в парадигме effector (#how-to-think)
+
+На самом деле effector это не только про управление состоянием приложения, а также и про масштабируемое построение логики вашего приложения. Effector никак не ограничивает вас в написании кода, однако если понять следующие принципы, то будет гораздо проще писать код и мыслить, когда вы используете effector:
+
+- События – это описание вашего приложения, основа всего.
+- Бизнес-логика и UI – это разные вещи, нужно стараться разделять ответственность между данными и их отображением.
+
+## События — основа всего (#events-source-of-truth)
+
+Каждое взаимодействие пользователя с вашим приложением – это [событие](/ru/api/effector/Event). Событие не решает, что должно произойти, оно просто фиксирует факт произошедшего, например: пользователь отправил форму - `formSubmitted`, пользователь кликнул по кнопке обновить - `refreshButtonClicked`, пользователь изменил фильтр поиска - `searchFilterChanged` и так далее.
+При этом события не ограничиваются только действиями пользователя, они также могут описывать логику вашей модели, например: [явный запуск работы вашей модели (микрофронтенд или фича) - `start`](/ru/resources/explicit-start/), произошла ошибка - `errorOccurred` и так далее.
+
+Не стесняйтесь заводить столько [событий](/ru/api/effector/Event), сколько требуется, чтобы полно описать действия приложения, так проще видеть и отслеживать, как работает ваше приложение.
+
+При проектировании нового функционала проще всего начать с событий, поскольку они сразу наглядны в интерфейсе.
+
+:::tip{title="Давайте осмысленные названия"}
+Давайте [событиям](/ru/api/effector/Event) осмысленные название. Например, если вам надо загрузить данные при каком-то действии, то [событие](/ru/api/effector/Event) связано с действием, а не реализацией:
+
+```ts
+❌ const fetchData = createEvent()
+✅ const appStarted = createEvent()
+```
+
+:::
+
+## Разделяйте бизнес-логику и UI (#business-logic-not-ui)
+
+Effector позволяет разделять отображение (UI) и логику вашего приложения (бизнес-логику). Вся логика работы вашего приложения, как правило, должна описываться отдельно от вашего UI, в отдельном модуле, например `model.ts` и отдавать наружу для UI только то, что нужно для отображения или взаимодействие с пользователем.
+
+Например, при срабатывании [события](/ru/api/effector/Event) `formSubmitted` вы можете вызвать [эффект](/ru/api/effector/Effect) для отправки данных на сервер, еще один [эффект](/ru/api/effector/Effect) для отправки аналитики, а также [отобразить оповещение пользователю при срабатывании события](/ru/guides/events-in-ui-frameworks):
+
+```ts
+const formSubmitted = createEvent();
+
+const sendFormDataFx = createEffect(() => {});
+const sendAnalyticsFx = createEffect(() => {});
+const showNotificationFx = createEffect(() => {});
+
+sample({
+  clock: formSubmitted,
+  target: [sendFormDataFx, sendAnalyticsFx, showNotificationFx],
+});
+```
+
+В какой-то момент у вас может изменится логика, и вы решите отправлять аналитику только после успешной отправки формы, а оповещение показывать не только при отправке формы, но и при ошибке:
+
+```ts
+const formSubmitted = createEvent();
+
+const sendFormDataFx = createEffect(() => {});
+const sendAnalyticsFx = createEffect(() => {});
+const showNotificationFx = createEffect(() => {});
+
+sample({
+  clock: formSubmitted,
+  target: [sendFormDataFx, showNotificationFx],
+});
+
+sample({
+  clock: sendFormDataFx.doneData,
+  target: sendAnalyticsFx,
+});
+
+sample({
+  clock: sendFormDataFx.failData,
+  target: showNotificationFx,
+});
+```
+
+У нас изменилась логика приложения, но UI не изменился. Нашему UI не нужно знать какие [эффекты](/ru/api/effector/Effect) мы отправляем и что у нас меняется, все что знает наш UI это что была нажата кнопка обновления и ему нужно вызвать [событие](/ru/api/effector/Event) `refreshButtonClicked`.
+В ином случае, если мы будем смешивать логику и UI, то при изменении логики нам придется менять код и в UI.
+
+## Как это выглядит в реальном приложении? (#real-world-examples)
+
+Давайте рассмотрим для примера GitHub с его функционалом для репозиториев. Каждое действие пользователя — это [событие](/ru/api/effector/Event):
+
+![кнопки действий для репозитория в гитхаб](/images/github-repo-actions.png)
+
+- Пользователь поставил/убрал звездочку - `repoStarToggled`
+- Пользователь изменил ветку репозитория - `repoBranchChanged`
+- Строка поиска по репозиторию изменилась - `repoFileSearchChanged`
+- Репозиторий был форкнут - `repoForked`
+
+Всю логику приложения строить гораздо проще вокруг [событий](/ru/api/effector/Event) и реакций на них. UI просто сообщает о действии, а их обработка это уже часть бизнес-логики.
+
+Упрощенный пример логики с кнопкой звездочки:
+
+<Tabs>
+<TabItem label="Бизнес-логика">
+
+```ts
+// repo.model.ts
+
+// событие – факт действия
+const repoStarToggled = createEvent();
+
+// эффекты как дополнительная реакция на события
+// (предположим эффекты возвращают обновленное значение)
+const starRepoFx = createEffect(() => {});
+const unstarRepoFx = createEffect(() => {});
+
+// состояние приложения
+const $isRepoStarred = createStore(false);
+const $repoStarsCount = createStore(0);
+
+// логика переключения звездочки
+sample({
+  clock: repoStarToggled,
+  source: $isRepoStarred,
+  fn: (isRepoStarred) => !isRepoStarred,
+  target: $isRepoStarred,
+});
+
+// отправка запроса на сервер при переключении звезды
+sample({
+  clock: $isRepoStarred,
+  filter: (isRepoStarred) => isRepoStarred,
+  target: starRepoFx,
+});
+
+sample({
+  clock: $isRepoStarred,
+  filter: (isRepoStarred) => !isRepoStarred,
+  target: unstarRepoFx,
+});
+
+// обновляем счетчик
+sample({
+  clock: [starRepoFx.doneData, unstarRepoFx.doneData],
+  target: $repoStarsCount,
+});
+```
+
+</TabItem>
+<TabItem label="UI">
+
+```tsx
+import { repoStarToggled, $isRepoStarred, $repoStarsCount } from "./repo.model.ts";
+
+const RepoStarButton = () => {
+  const [onStarToggle, isRepoStarred, repoStarsCount] = useUnit([
+    repoStarToggled,
+    $isRepoStarred,
+    $repoStarsCount,
+  ]);
+
+  return (
+    <div>
+      <button onClick={onStarToggle}>{isRepoStarred ? "unstar" : "star"}</button>
+      <span>{repoStarsCount}</span>
+    </div>
+  );
+};
+```
+
+</TabItem>
+</Tabs>
+
+## Связанные API и статьи (#related-api-and-docs)
+
+- **API**
+  - [`Event`](/ru/api/effector/Event) - Описание события и его методов
+  - [`Store`](/ru/api/effector/Store) - Описание стора и его методов
+  - [`Effect`](/ru/api/effector/Effect) - Описание эффекта и его методов
+- **Статьи**
+  - [Почему вам нужно явное событие запуска вашего приложения](/ru/resources/explicit-start/)
+  - [Как управлять состоянием](/ru/essentials/manage-states)
+  - [Работа с событиями](/ru/essentials/events)
+  - [Как реагировать на события в UI](/ru/guides/events-in-ui-frameworks)

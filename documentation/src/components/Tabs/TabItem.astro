@@ -1,0 +1,14 @@
+---
+interface Props {
+  label: string;
+  default?: boolean;
+}
+
+const { label } = Astro.props;
+---
+
+<button data-label={label} role="tab">
+  <div>
+    <slot />
+  </div>
+</button>

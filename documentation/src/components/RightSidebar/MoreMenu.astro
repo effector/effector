@@ -1,0 +1,61 @@
+---
+import clsx from "clsx";
+import {
+  COMMUNITY_INVITE_URL,
+  GITHUB_DOCS_CONTENT_DIR,
+  GITHUB_DOCS_ROOT,
+  GITHUB_EDIT_URL,
+} from "../../consts";
+import { getPathParamsFromId, getTextLocalized, translations } from "../../languages";
+
+import IconDiscordLined from "../../icons/DiscordLined.astro";
+import IconEditPencil from "../../icons/EditPencil.astro";
+
+import styles from "./TableOfContents.module.css";
+
+type Props = {
+  documentId: string;
+};
+
+const { documentId } = Astro.props;
+const showMoreSection = Boolean(COMMUNITY_INVITE_URL);
+const { lang } = getPathParamsFromId(Astro.url.pathname);
+const editFilePath = [GITHUB_DOCS_ROOT, GITHUB_DOCS_CONTENT_DIR, documentId].join("");
+const editUrl = [GITHUB_EDIT_URL, editFilePath].join("");
+---
+
+{
+  showMoreSection && (
+    <h2 class:list={{ more: true, [styles.title]: true }}>
+      {getTextLocalized(translations.More, lang)}
+    </h2>
+  )
+}
+<ul class={styles.contents}>
+  {
+    documentId && (
+      <li class={clsx(styles.link, styles.level2)}>
+        <a class="edit-on-github" href={editUrl} target="_blank">
+          <IconEditPencil size={20} />
+          <span>{getTextLocalized(translations.EditThisPage, lang)}</span>
+        </a>
+      </li>
+    )
+  }
+  {
+    COMMUNITY_INVITE_URL && (
+      <li class={clsx(styles.link, styles.level2)}>
+        <a href={COMMUNITY_INVITE_URL} target="_blank">
+          <IconDiscordLined size={20} />
+          <span>{getTextLocalized(translations.JoinOurCommunity, lang)}</span>
+        </a>
+      </li>
+    )
+  }
+</ul>
+
+<style>
+  body .more {
+    margin-top: 1rem;
+  }
+</style>

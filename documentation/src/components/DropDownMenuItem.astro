@@ -1,0 +1,62 @@
+---
+import External from "@icons/External.astro";
+import { type LText, createLink, getTextLocalized, isExternal } from "src/languages";
+import { isSidebarIconItem } from "src/navigation";
+
+import IconExternal from "@icons/External.astro";
+
+interface Link {
+  link: string;
+  icon?: (props: { size: number; class?: string }) => any;
+  text: LText;
+}
+
+export interface Props {
+  link: Link;
+  lang: string;
+}
+
+const { link, lang } = Astro.props;
+
+const Comp = link.icon ? link.icon : () => null;
+---
+
+<a
+  class:list={{
+    link: true,
+    active: Astro.url.pathname.startsWith(link.link),
+  }}
+  href={createLink(link, lang)}
+  target={link.link.startsWith("/") ? undefined : "_blank"}
+>
+  {isSidebarIconItem(link) ? <Comp size={18} /> : null}
+  {getTextLocalized(link, lang)}
+  {isExternal(link) ? <External size={14} /> : null}
+</a>
+
+<style>
+  .link {
+    @apply rounded-md;
+    display: flex;
+    transition:
+      background-color 0.25s,
+      color 0.25s;
+    padding: 0 0.4rem;
+    color: currentColor;
+    font-weight: 400;
+    font-size: 0.9rem;
+    line-height: 2rem;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  .link:hover {
+    background-color: var(--theme-divider);
+    color: var(--theme-accent);
+  }
+
+  .link.active,
+  .group .link.active {
+    color: var(--theme-accent);
+  }
+</style>

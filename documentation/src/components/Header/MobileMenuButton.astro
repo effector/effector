@@ -1,0 +1,74 @@
+---
+import IconMenu from "../../icons/Menu.astro";
+
+// Animation copied from https://github.com/shuding/nextra/blob/a84ed9642e59a9f60c3cf1eaeca643b1f425bd9f/packages/nextra-theme-docs/css/hamburger.css
+---
+
+<button id="mobile-menu" type="button">
+  <IconMenu class="icon" size={20} />
+</button>
+
+<style>
+  button:focus {
+    color: var(--theme-text-accent);
+    outline: none;
+    @apply ring-2 ring-current ring-offset-2;
+  }
+</style>
+
+<style is:global>
+  #mobile-menu {
+    padding: 6px;
+    aspect-ratio: 1;
+  }
+
+  #mobile-menu svg g {
+    @apply origin-center;
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  #mobile-menu svg line {
+    opacity: 1;
+    transition:
+      transform 0.2s cubic-bezier(0.25, 1, 0.5, 1) 0.2s,
+      opacity 0.2s ease 0.2s;
+  }
+
+  #mobile-menu.open svg line {
+    transition:
+      transform 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0s ease 0.2s;
+  }
+
+  #mobile-menu.open svg g {
+    transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
+  }
+
+  #mobile-menu.open svg > line {
+    opacity: 0;
+  }
+
+  #mobile-menu.open svg > g:first-of-type {
+    transform: rotate(45deg);
+  }
+  #mobile-menu.open svg > g:first-of-type line {
+    transform: translate3d(0, 6px, 0);
+  }
+
+  #mobile-menu.open svg > g:last-of-type {
+    transform: rotate(-45deg);
+  }
+  #mobile-menu.open svg > g:last-of-type line {
+    transform: translate3d(0, -6px, 0);
+  }
+</style>
+
+<script>
+  const button = document.getElementById("mobile-menu") as HTMLButtonElement;
+  function toggle() {
+    button.classList.toggle("open");
+    document.body.classList.toggle("mobile-menu-opened");
+  }
+  button.addEventListener("touch", toggle);
+  button.addEventListener("click", toggle);
+</script>
