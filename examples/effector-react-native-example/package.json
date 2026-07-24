@@ -11,10 +11,5 @@
     "effector-react": "^20.0.5",
     "react": "16.8.6",
     "react-native": "0.60.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/runtime": "^7.5.5",
-    "metro-react-native-babel-preset": "^0.55.0"
   }
 }

@@ -4,14 +4,6 @@
   "main": "index.js",
   "private": true,
   "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-flow": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
-    "parcel-bundler": "^1.12.3"
-  },
   "dependencies": {
     "effector": "^20.2.1",
     "effector-react": "^20.3.0",
