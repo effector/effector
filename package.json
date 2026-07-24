@@ -4,16 +4,7 @@
   "description": "Business logic with ease",
   "private": true,
   "scripts": {
-    "browserstack": "COMPAT=true npx jest --config=jest.config.js --runInBand",
-    "test:old-react": "OLD_REACT=true yarn test",
-    "test": "npx jest --config=jest.config.js",
-    "coverage": "COVERAGE=yes jest --config=jest.config.js",
-    "build": "node tools/build",
-    "test:watch": "npx jest --config=jest.config.js --watch",
-    "doc:update-readme": "npx doctoc README.md",
-    "test:regen": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/testGenerator.ts",
-    "test:generate": "yarn test:regen && yarn test -u --selectProjects types",
-    "manifold": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/runner/manifold/tsFacade.ts"
+    "doc:update-readme": "npx doctoc README.md"
   },
   "author": "Zero Bias",
   "license": "MIT",
