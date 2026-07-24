@@ -1,5 +1,0 @@
-exclude_selectors:
-  - "pre > code"
-  - "script"
-site: ./dist
-output_subdir: ./_pagefind
