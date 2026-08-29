@@ -66,7 +66,7 @@ const apiPackages: LSidebarIconItem[] = [
 ];
 
 export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
-  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/get-started" },
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/core-concepts" },
   {
     text: { en: "API" },
     link: "/api",
