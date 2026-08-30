@@ -64,7 +64,6 @@ describe('no target', () => {
     //prettier-ignore
     {
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf})}
-      {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:(val: AN | null): val is AN => val !== null})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:fn0})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:({a}:AN) => ({a})})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}

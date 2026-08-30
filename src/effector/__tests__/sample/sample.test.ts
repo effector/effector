@@ -1,6 +1,5 @@
 import {
   sample,
-  guard,
   createEvent,
   createStore,
   createEffect,
@@ -10,8 +9,6 @@ import {
 } from 'effector'
 
 import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-muteErrors('guard')
 
 test('sid support', () => {
   const source = createStore(null)
@@ -67,30 +64,26 @@ describe('loc support', () => {
 })
 
 describe('temporal consistency', () => {
-  test('in combination with guard, pass immediately', () => {
+  test('in combination with other sample, pass immediately', () => {
     const fn = jest.fn()
     const trigger = createEvent<number>()
     const target = createEvent()
     sample({
       source: trigger,
-      clock: guard(trigger, {
-        filter: x => x > 0,
-      }),
+      clock: sample({clock: trigger, filter: x => x > 0}),
       target,
     })
     target.watch(fn)
     trigger(1)
     expect(argumentHistory(fn)).toEqual([1])
   })
-  test('in combination with guard, pass on second call', () => {
+  test('in combination with other sample, pass on second call', () => {
     const fn = jest.fn()
     const trigger = createEvent<number>()
     const target = createEvent()
     sample({
       source: trigger,
-      clock: guard(trigger, {
-        filter: x => x > 0,
-      }),
+      clock: sample({clock: trigger, filter: x => x > 0}),
       target,
     })
     target.watch(fn)
@@ -170,7 +163,7 @@ it('should not accept undefined clocks', () => {
       clock: undefined,
     })
   }).toThrowErrorMatchingInlineSnapshot(
-    `"[sample] (/src/effector/__tests__/sample/sample.test.ts:167:4): clock should be defined"`,
+    `"[sample] (/src/effector/__tests__/sample/sample.test.ts:160:4): clock should be defined"`,
   )
 })
 
@@ -704,7 +697,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({source: undefined, target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:705:6): source should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:698:6): source should be defined"`,
     )
   })
   test('clock validation', () => {
@@ -714,7 +707,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({clock: undefined, target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:715:6): clock should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:708:6): clock should be defined"`,
     )
   })
   test('no source no clock', () => {
@@ -724,7 +717,7 @@ describe('validation', () => {
       //@ts-expect-error
       sample({target})
     }).toThrowErrorMatchingInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:725:6): either source or clock should be defined"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:718:6): either source or clock should be defined"`,
     )
   })
 })
@@ -838,7 +831,7 @@ describe('greedy deprecation', () => {
       greedy: true,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:835:4): greedy in sample is deprecated, use batch instead"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:828:4): greedy in sample is deprecated, use batch instead"`,
     )
   })
   test('greedy false is deprecated', () => {
@@ -850,7 +843,7 @@ describe('greedy deprecation', () => {
       greedy: false,
     })
     expect(getWarning()).toMatchInlineSnapshot(
-      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:847:4): greedy in sample is deprecated, use batch instead"`,
+      `"[sample] (/src/effector/__tests__/sample/sample.test.ts:840:4): greedy in sample is deprecated, use batch instead"`,
     )
   })
 })

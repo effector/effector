@@ -84,17 +84,17 @@ const compatBrowsers = [
     },
   },
   {
-    name: 'iPhone XS',
+    name: 'iPhone 11',
     effectorBuild: 'cjs',
     needPolyfill: false,
     capabilitiesTag: 'ios',
     capabilities: {
       'bstack:options': {
-        osVersion: '12',
-        deviceName: 'iPhone XS',
+        osVersion: '13',
+        deviceName: 'iPhone 11',
         realMobile: 'true',
         projectName: 'effector-compat',
-        buildName: 'iPhone XS',
+        buildName: 'iPhone 11',
         deviceOrientation: 'portrait',
       },
     },

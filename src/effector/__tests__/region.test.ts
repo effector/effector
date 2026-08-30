@@ -5,11 +5,8 @@ import {
   withRegion,
   clearNode,
   createNode,
-  forward,
 } from 'effector'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
-
-muteErrors('forward')
 
 it('binds watchers to region lifetime', () => {
   const fn = jest.fn()
@@ -81,24 +78,6 @@ describe('api features support', () => {
     clearNode(region)
     inc()
     expect(argumentHistory(fn)).toEqual([0])
-  })
-  it('support forward', () => {
-    const fn = jest.fn()
-    const inc = createEvent()
-    const store = createStore(0).on(inc, x => x + 1)
-    const target = createEvent()
-    target.watch(fn)
-    const region = createNode({})
-    withRegion(region, () => {
-      forward({
-        from: store,
-        to: target,
-      })
-    })
-    inc()
-    clearNode(region)
-    inc()
-    expect(argumentHistory(fn)).toEqual([1])
   })
 })
 

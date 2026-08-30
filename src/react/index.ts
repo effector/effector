@@ -1,13 +1,2 @@
-export {createStoreConsumer} from './createStoreConsumer'
-export {createComponent} from './createComponent'
-export {connect} from './connect'
 export {createGate} from './createGate'
-export {
-  useEvent,
-  useList,
-  useStore,
-  useStoreMap,
-  useUnit,
-  useGate,
-  useProvidedScope,
-} from './nossr'
+export {useList, useStoreMap, useUnit, useGate, useProvidedScope} from './nossr'

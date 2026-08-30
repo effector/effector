@@ -4,7 +4,7 @@ import express from 'express'
 import {resolve} from 'path'
 import {promises as fs} from 'fs'
 import {fork, serialize, allSettled} from 'effector/fork'
-import {app, startServer, App} from './app'
+import {startServer, App} from './app'
 import users from './users.json'
 
 const port = process.env.PORT || 8080
@@ -16,7 +16,7 @@ const server = express()
 for (const key in users) {
   server.get(`/${key}`, async(req, res) => {
     try {
-      const scope = fork(app)
+      const scope = fork()
       await allSettled(startServer, {
         scope,
         params: users[key],

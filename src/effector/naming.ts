@@ -1,6 +1,6 @@
-import type {Store, CommonUnit, Domain} from './unit.h'
-import {is} from './is'
-import {getParent, getCompositeName} from './getter'
+import type {CommonUnit, Domain} from './unit.h'
+import {is} from './validate'
+import {getCompositeName} from './getter'
 import {forIn} from './collection'
 
 export function unitObjectName(objOrArr: any, method: string = 'combine') {
@@ -21,11 +21,6 @@ export function unitObjectName(objOrArr: any, method: string = 'combine') {
     }
   })
   return name + ')'
-}
-
-export function setStoreName<State>(store: Store<State>, rawName: string) {
-  store.shortName = rawName
-  Object.assign(getCompositeName(store), createName(rawName, getParent(store)))
 }
 
 export type CompositeName = {

@@ -5,7 +5,6 @@ import React from 'react'
 import {renderToString} from 'react-dom/server'
 import {fork, serialize, allSettled} from 'effector/fork'
 import {startServer, App} from '../app'
-import {app} from '../domain'
 import {APIGatewayProxyEvent} from 'aws-sdk'
 import domainConfig from '../../domain.json'
 
@@ -28,7 +27,7 @@ export default async (event: APIGatewayProxyEvent) => {
 
 async function dynamicContent(user) {
   try {
-    const scope = fork(app)
+    const scope = fork()
     await allSettled(startServer, {
       scope,
       params: user,

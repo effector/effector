@@ -6,12 +6,12 @@ import {
   watch,
   WatchStopHandle,
 } from 'vue-next'
-import {createApi, launch, createStore, createEvent, sample} from 'effector'
+import {launch, createStore, createEvent, sample} from 'effector'
 import {Gate, GateConfig} from './composition.h'
 import {deepCopy} from './lib/deepCopy'
 import {unwrapProxy} from './lib/unwrapProxy'
 import {flattenConfig, processArgsToConfig} from '../effector/config'
-import {isObject} from '../effector/is'
+import {isObject} from '../effector/validate'
 
 export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
   let unwatch: WatchStopHandle
@@ -34,7 +34,7 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
   }
 
   onMounted(() => {
-    if (typeof _ !== "undefined") {
+    if (typeof _ !== 'undefined') {
       const raw = unwrapProxy(_.value)
       GateComponent.open(deepCopy(raw))
     } else {
@@ -43,7 +43,7 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
   })
 
   onUnmounted(() => {
-    if (typeof _ !== "undefined") {
+    if (typeof _ !== 'undefined') {
       const raw = unwrapProxy(_.value)
       GateComponent.close(deepCopy(raw))
     } else {
@@ -108,7 +108,7 @@ export function createGate<Props>(...args: [GateConfig<Props>]): Gate<Props> {
   GateComponent.state = state
   GateComponent.set = set
 
-  sample({ clock: open, target: set })
+  sample({clock: open, target: set})
 
   state.reset(close)
 

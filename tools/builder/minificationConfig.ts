@@ -1,12 +1,6 @@
 const nameCache = {}
 
-export const minifyConfig = ({
-  beautify,
-  inline = true,
-}: {
-  beautify: boolean
-  inline?: boolean
-}) => ({
+export const minifyConfig = ({beautify}: {beautify: boolean}) => ({
   parse: {
     bare_returns: false,
     ecma: 8,
@@ -37,7 +31,7 @@ export const minifyConfig = ({
     hoist_props: true,
     hoist_vars: false,
     if_return: true,
-    inline,
+    inline: true,
     join_vars: true, //?
 
     defaults: false,
