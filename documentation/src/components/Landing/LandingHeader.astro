@@ -7,8 +7,8 @@ import MobileNavigation from "../MobileNavigation.astro";
 import Github from "@icons/Github.astro";
 import Telegram from "@icons/Telegram.astro";
 import { LINKS } from "../../consts";
-import { DESKTOP_NAVIGATION } from "../../navigation";
-import { getTextLocalized } from "../../languages";
+import { DESKTOP_NAVIGATION, isSidebarGroup } from "../../navigation";
+import { createLink, getTextLocalized, isExternal } from "../../languages";
 
 interface Props {
   lang?: "en" | "ru" | "uz";
@@ -16,19 +16,6 @@ interface Props {
 
 const { lang = "en" } = Astro.props;
 const telegramLink = lang === "ru" ? LINKS.telegramRU : LINKS.telegramEN;
-
-const apiNavigation = DESKTOP_NAVIGATION.find((item) => item.text.en === "API");
-const apiLinks = apiNavigation && "items" in apiNavigation ? apiNavigation.items ?? [] : [];
-const apiMenuLinks =
-  apiLinks.length > 0
-    ? apiLinks
-    : [{ text: { en: "API", ru: "API", uz: "API" }, link: "/api" }];
-const apiLabel = apiNavigation ? getTextLocalized(apiNavigation, lang) : "API";
-const guidesLink = `/${lang}/guides/server-side-rendering`;
-
-const learnLabel = { en: "Learn", ru: "Изучение", uz: "O'rganish" };
-const guidesLabel = { en: "Guides", ru: "Гайды", uz: "Qo'llanmalar" };
-const ecosystemLabel = { en: "Ecosystem", ru: "Экосистема", uz: "Ekotizim" };
 ---
 
 <!-- Mobile Header -->
@@ -39,18 +26,26 @@ const ecosystemLabel = { en: "Ecosystem", ru: "Экосистема", uz: "Ekoti
 <header class="landing-header">
   <div class="header-left">
     <nav class="header-nav">
-      <a href={`/${lang}/essentials/manage-states`} class="nav-link">
-        {getTextLocalized({ text: learnLabel }, lang)}
-      </a>
-      <a href={guidesLink} class="nav-link">
-        {getTextLocalized({ text: guidesLabel }, lang)}
-      </a>
-      <DropDownMenu class="nav-dropdown api-dropdown" links={apiMenuLinks}>
-        <span>{apiLabel}</span>
-      </DropDownMenu>
-      <a href={`/${lang}/introduction/ecosystem`} class="nav-link">
-        {getTextLocalized({ text: ecosystemLabel }, lang)}
-      </a>
+      {
+        DESKTOP_NAVIGATION.filter((item) => !isExternal(item)).map((navLink) => {
+          const href = createLink(navLink, lang);
+          const text = getTextLocalized(navLink, lang);
+
+          if (isSidebarGroup(navLink)) {
+            return (
+              <DropDownMenu class="nav-dropdown api-dropdown" links={navLink.items}>
+                <span>{text}</span>
+              </DropDownMenu>
+            );
+          }
+
+          return (
+            <a href={href} class="nav-link">
+              {text}
+            </a>
+          );
+        })
+      }
     </nav>
   </div>
   <div class="header-right">
@@ -118,6 +113,9 @@ const ecosystemLabel = { en: "Ecosystem", ru: "Экосистема", uz: "Ekoti
   }
 
   .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
     padding: 0.375rem 0.75rem;
     border-radius: 9999px;
     color: var(--theme-text);

@@ -66,12 +66,14 @@ const apiPackages: LSidebarIconItem[] = [
 ];
 
 export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
-  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/core-concepts" },
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/get-started" },
+  { text: { en: "Guides", ru: "Гайды", uz: "Qo'llanmalar" }, link: "/essentials/typescript" },
   {
     text: { en: "API" },
     link: "/api",
     items: [{ text: { en: "Overview", ru: "Обзор" }, link: "/api" }, ...apiPackages],
   },
+  { text: { en: "Ecosystem", ru: "Экосистема", uz: "Ekotizim" }, link: "/introduction/ecosystem" },
   { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
 ];
 
