@@ -1,5 +1,3 @@
-import type { LText } from "./languages";
-
 export const SITE = {
   title: "effector",
   description: "Business logic with ease.",
@@ -56,9 +54,6 @@ export const LINKS = {
   reddit: "https://www.reddit.com/r/effectorjs/",
   youtube: "https://youtube.com/@effectorjs",
   linesOfCode: "https://t.me/lines_of_code_diagrams",
-  chatgpt: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant",
-
-  zerobias: "https://github.com/zerobias",
 };
 
 export const COMMUNITY_INVITE_URL = LINKS.discord;
@@ -70,23 +65,6 @@ export const ALGOLIA = {
   // apiKey: import.meta.env.ALGOLIA_API_KEY!,
 };
 
-export const ANNOUNCEMENT: Announcement | null = {
-  title: { en: "Pay attention", ru: "Обратите внимание", uz: "Etibor bering" },
-  text: {
-    en: "This documentation is for the as yet unreleased version of effector Spacewatch 23.0.",
-    ru: "Эта версия документации предназначена для еще не вышедшего релиза effector Spacewatch 23.0.",
-    uz: "Bu hujjat hali chiqmagan effector Spacewatch 23.x versiyasiga tegishli",
-  },
-  button: {
-    text: {
-      en: "View actual documentation",
-      ru: "Посмотреть актуальную документацию",
-      uz: "Aktual hujjatni ko'rish",
-    },
-    link: "https://effector.dev",
-  },
-};
-
 export const PAGE_NAVIGATION = {
   next: {
     text: { en: "Next", ru: "Следующая", uz: "Keyingi" },
@@ -95,13 +73,3 @@ export const PAGE_NAVIGATION = {
     text: { en: "Previous", ru: "Предыдущая", uz: "Oldingi" },
   },
 } as const;
-
-export interface Announcement {
-  title: LText;
-  text: LText;
-  button?: {
-    text: LText;
-    // Slug without language or the absolute URL.
-    link: string;
-  };
-}

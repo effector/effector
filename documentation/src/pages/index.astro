@@ -7,7 +7,6 @@ import Companies from "@components/Landing/Companies.astro";
 
 import Landing from "../layouts/Landing.astro";
 import { SITE } from "../consts";
-import { getPathParamsFromId } from "../languages";
 
 const features = [
   {
@@ -55,7 +54,7 @@ const features = [
   },
 ] as { emoji: string; kind?: "minor" | "major"; title: string; description: string }[];
 
-const { lang } = getPathParamsFromId(Astro.url.pathname);
+const lang = "en" as const;
 ---
 
 <Landing title="Welcome" lang={lang} dir="ltr" description={SITE.description}>

@@ -119,63 +119,6 @@ export const MOBILE_NAVIGATION = createMobileNavigation([
   changelogLink,
 ] satisfies LMobileNavItem[]);
 
-export const FOOTER_LINKS = [
-  {
-    text: { en: "Docs", ru: "Документация", uz: "Hujjatlar" },
-    items: [
-      {
-        text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" },
-        link: "/introduction/get-started",
-      },
-      { text: { en: "API Reference", ru: "Справочник API", uz: "API Havolasi" }, link: "/api" },
-      {
-        text: { en: "Writing tests", ru: "Тестирование кода", uz: "Kodni testlash" },
-        link: "/guides/testing",
-      },
-      {
-        text: { en: "Release policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
-        link: "/resources/releases",
-      },
-      { text: { en: "What's new", ru: "Что нового", uz: "Yangiliklar" }, link: LINKS.changelog },
-    ],
-  },
-  {
-    text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
-    items: [
-      { text: { en: "Official", ru: "Официальное", uz: "Rasmiy" }, link: LINKS.community },
-      { text: { en: "Discord" }, link: LINKS.discord },
-      { text: { en: "dev.to" }, link: LINKS.devTo },
-      { text: { en: "Twitter" }, link: LINKS.twitter },
-      { text: { en: "Telegram 🇷🇺" }, link: LINKS.telegramRU },
-      { text: { en: "Telegram 🇺🇸" }, link: LINKS.telegramEN },
-    ],
-  },
-  {
-    text: { en: "More", ru: "Больше", uz: "Ko'proq" },
-    items: [
-      { text: { en: "Github" }, link: LINKS.github },
-      { text: { en: "Reddit" }, link: LINKS.reddit },
-      { text: { en: "Youtube" }, link: LINKS.youtube },
-      { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
-      { text: { en: "ChatGPT" }, link: LINKS.chatgpt },
-      blogLink,
-      changelogLink,
-      playgroundLink,
-      { text: { en: "Docs powered by Astro" }, link: "https://astro.build" },
-    ],
-  },
-] satisfies FooterGroup[];
-
-type FooterGroup = {
-  text: LText;
-  items: FooterItem[];
-};
-
-type FooterItem = {
-  text: LText;
-  link: string;
-};
-
 export type LMobileNavItem = LMobileNavLink | LMobileNavGroup | LMobileNavLinkGroup;
 
 type LMobileNavLink = {
