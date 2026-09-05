@@ -4,10 +4,7 @@ import Search from "../Header/Search.astro";
 import DropDownMenu from "../DropDownMenu.astro";
 import MobileHeader from "../Header/MobileHeader.astro";
 import MobileNavigation from "../MobileNavigation.astro";
-import Github from "@icons/Github.astro";
-import Telegram from "@icons/Telegram.astro";
-import { LINKS } from "../../consts";
-import { DESKTOP_NAVIGATION, isSidebarGroup } from "../../navigation";
+import { DESKTOP_NAVIGATION, getSocialLinks, isSidebarGroup } from "../../navigation";
 import { createLink, getTextLocalized, isExternal } from "../../languages";
 
 interface Props {
@@ -15,14 +12,12 @@ interface Props {
 }
 
 const { lang = "en" } = Astro.props;
-const telegramLink = lang === "ru" ? LINKS.telegramRU : LINKS.telegramEN;
+const socialLinks = getSocialLinks(lang);
 ---
 
-<!-- Mobile Header -->
 <MobileHeader lang={lang} />
 <MobileNavigation />
 
-<!-- Desktop Header -->
 <header class="landing-header">
   <div class="header-left">
     <nav class="header-nav">
@@ -52,18 +47,27 @@ const telegramLink = lang === "ru" ? LINKS.telegramRU : LINKS.telegramEN;
     <div class="header-search">
       <Search />
     </div>
-    <a href={LINKS.github} target="_blank" rel="noopener noreferrer" class="icon-link" title="GitHub">
-      <Github size={20} />
-    </a>
-    <a href={telegramLink} target="_blank" rel="noopener noreferrer" class="icon-link" title="Telegram">
-      <Telegram size={20} />
-    </a>
+    {
+      socialLinks.map((link) => {
+        const Icon = link.icon;
+        return (
+          <a
+            href={link.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="icon-link"
+            title={getTextLocalized(link, lang)}
+          >
+            <Icon size={20} />
+          </a>
+        );
+      })
+    }
     <ThemeSwitch />
   </div>
 </header>
 
 <style>
-  /* Desktop Header */
   .landing-header {
     display: none;
     justify-content: space-between;

@@ -56,6 +56,7 @@ export const LINKS = {
   reddit: "https://www.reddit.com/r/effectorjs/",
   youtube: "https://youtube.com/@effectorjs",
   linesOfCode: "https://t.me/lines_of_code_diagrams",
+  chatgpt: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant",
 
   zerobias: "https://github.com/zerobias",
 };

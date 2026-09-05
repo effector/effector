@@ -8,7 +8,7 @@ import {
   translations,
 } from "../../languages";
 import { SITE } from "../../consts";
-import { DESKTOP_NAVIGATION, SOCIAL_LINKS, DOCS_VERSIONS, isSidebarGroup } from "../../navigation";
+import { DESKTOP_NAVIGATION, getSocialLinks, DOCS_VERSIONS, isSidebarGroup } from "../../navigation";
 
 import MobileNavigation from "../MobileNavigation.astro";
 import DropDownMenu from "../DropDownMenu.astro";
@@ -23,12 +23,9 @@ import IconExternal from "@icons/External.astro";
 import IconLanguage from "@icons/Language.astro";
 import IconDots from "@icons/Dots.astro";
 
-type Props = {
-  currentPage: string;
-};
-
 const { lang, slug } = getPathParamsFromId(Astro.url.pathname);
 const languageLinks = createChangeLangLinks({ slug });
+const socialLinks = getSocialLinks(lang);
 const homeLink = lang === "en" ? "/" : `/${lang}`;
 ---
 
@@ -49,8 +46,8 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
           return (
             <div class="hidden md:flex">
               <DropDownMenu links={navLink.items}>
-                <a href={`/${lang}/api`} class="link">
-                  API
+                <a href={href} class="link">
+                  {text}
                 </a>
               </DropDownMenu>
             </div>
@@ -91,7 +88,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
     </div>
     <ThemeSwitch />
     {
-      SOCIAL_LINKS.map((link) => {
+      socialLinks.map((link) => {
         const Icon = link.icon;
         return (
           <a href={link.link} class="link only-medium" target="_blank">
@@ -114,7 +111,7 @@ const homeLink = lang === "en" ? "/" : `/${lang}`;
           },
           {
             text: { en: "Social", ru: "Социальные сети" },
-            links: SOCIAL_LINKS,
+            links: socialLinks,
           },
         ]}
       >

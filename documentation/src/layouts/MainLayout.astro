@@ -13,7 +13,6 @@ import MobileHeader from '@components/Header/MobileHeader.astro';
 import MobileTOC from '@components/Header/MobileTOC.astro';
 import MobileNavigation from '@components/MobileNavigation.astro';
 
-
 export type Props = CollectionEntry<'docs'>['data'] & {
 	headings: MarkdownHeading[];
 	translations: { lang: string; slug: string }[];
@@ -69,7 +68,6 @@ const currentPage = Astro.url.pathname;
 </CommonLayout>
 
 <style>
-	
 	:root {
 		--gutter: 0.5rem;
 		--content-max-width: 56rem;
@@ -101,10 +99,9 @@ const currentPage = Astro.url.pathname;
 	#grid-left {
 		display: none;
 		top: var(--space-4);
-		height: 100%;
 		position: sticky;
 		padding: 0;
-		height: calc(100vh - 2 * var(--space-4))
+		height: calc(100vh - 2 * var(--space-4));
 	}
 
 	#grid-right {
@@ -135,8 +132,6 @@ const currentPage = Astro.url.pathname;
 			padding-right: 1rem;
 		}
 	}
-
-	
 
 	@media (min-width: 768px) {
 		:root {
