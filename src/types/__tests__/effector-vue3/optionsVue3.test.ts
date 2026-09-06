@@ -44,6 +44,27 @@ describe('VueEffector', () => {
     `)
   })
 
+  /**
+   * The `{value, vModel}` form is passed through by the runtime, which reads
+   * `vModel` as falsy (optionsApi.ts:94), so omitting it is a valid option.
+   */
+  test('vModel flag of the wrapped store form is optional', () => {
+    const $count = createStore(0)
+
+    const options: ComponentCustomOptions = {
+      effector: () => ({
+        count: {value: $count},
+        editable: {value: $count, vModel: true},
+      }),
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
   test('effector option is a function, not a plain shape', () => {
     const $count = createStore(0)
 

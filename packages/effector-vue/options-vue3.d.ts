@@ -5,7 +5,7 @@ type EffectorOptionValue =
   | Store<any>
   | Event<any>
   | Effect<any, any, any>
-  | {value: Store<any>; vModel: boolean}
+  | {value: Store<any>; vModel?: boolean}
 
 declare module 'vue' {
   interface ComponentCustomOptions {
