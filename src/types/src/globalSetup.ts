@@ -123,9 +123,12 @@ async function runTypeScript(
     }
     return normalizeTSReport(cleanedMessage)
   } catch (error) {
+    /**
+     * An empty report makes every snapshot read "no errors", so a broken
+     * compiler pass would leave the whole suite green.
+     */
     console.error('compilation failed')
-    console.error(error)
-    return []
+    throw error
   }
   function normalizeTSReport(report: string) {
     let current = {
