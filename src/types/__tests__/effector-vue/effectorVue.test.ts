@@ -1,6 +1,6 @@
-import {createStore} from 'effector'
+import {createStore, fork} from 'effector'
 import Vue from 'vue'
-import {createComponent} from 'effector-vue'
+import {createComponent, EffectorScopePlugin} from 'effector-vue'
 
 const typecheck = '{global}'
 
@@ -216,5 +216,31 @@ describe('vue extend', () => {
         "
       `)
     })
+  })
+})
+
+describe('EffectorScopePlugin', () => {
+  test('returns an object accepted by app.use', () => {
+    const scope = fork()
+
+    const install: (app: any) => void = EffectorScopePlugin({scope}).install
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('scopeName is a string', () => {
+    const scope = fork()
+
+    EffectorScopePlugin({scope, scopeName: 0})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'number' is not assignable to type 'string'.
+      "
+    `)
   })
 })

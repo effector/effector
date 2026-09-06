@@ -58,25 +58,3 @@ describe('VueEffector', () => {
     `)
   })
 })
-
-describe('EffectorScopePlugin', () => {
-  test('structural plugin type of the root entry point works with app.use', () => {
-    /**
-     * `EffectorScopePlugin` is declared in the root `effector-vue` typings,
-     * which are written against Vue 2 and cannot be compiled in this pass. Its
-     * return type is checked structurally here, see
-     * packages/effector-vue/index.d.ts.
-     */
-    const scopePlugin: {install(app: any): void} = {install() {}}
-
-    const setup = (app: ReturnType<typeof createApp>) => {
-      app.use(scopePlugin)
-    }
-
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-})
