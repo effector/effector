@@ -1,4 +1,11 @@
-import {ComputedRef, DeepReadonly, EffectScope, Reactive, Ref, UnwrapRef} from '@vue/reactivity'
+import {
+  ComputedRef,
+  DeepReadonly,
+  EffectScope,
+  Ref,
+  UnwrapNestedRefs,
+  UnwrapRef,
+} from 'vue'
 import {Domain, Store, Event, Effect, Scope} from 'effector'
 
 type GateConfig<T> = {
@@ -17,12 +24,7 @@ type Gate<Props> = {
 }
 
 type ExtractStore<T extends Record<string, Store<unknown>>> = {
-  [Key in keyof T]: T[Key] extends Store<infer U> ? Reactive<U> : never
-}
-
-export interface UseVModel {
-  <T>(vm: Store<T>): Ref<T>
-  <T extends Record<string, Store<any>>>(vm: T, scope?: EffectScope): ExtractStore<T>
+  [Key in keyof T]: T[Key] extends Store<infer U> ? UnwrapNestedRefs<U> : never
 }
 
 export function useStoreMap<State, Result, Keys = unknown>(
@@ -40,6 +42,8 @@ export function useVModel<T extends Record<string, Store<any>>>(
   vm: T,
   scope?: EffectScope
 ): ExtractStore<T>
+/** Replaces the `UseVModel` interface, which declared its own signatures and drifted apart from the overloads above */
+export type UseVModel = typeof useVModel
 export function useStore<T>(store: Store<T>): DeepReadonly<Ref<T>>
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(
