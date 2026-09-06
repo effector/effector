@@ -2,6 +2,7 @@ import {
   ComputedRef,
   DeepReadonly,
   EffectScope,
+  Plugin,
   Ref,
   UnwrapNestedRefs,
   UnwrapRef,
@@ -109,6 +110,11 @@ export function useUnit<
     ? DeepReadonly<Ref<V>>
     : never
 }
+
+export function EffectorScopePlugin(config: {
+  scope: Scope
+  scopeName?: string
+}): Plugin
 
 type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
   ? 1
