@@ -114,7 +114,11 @@ describe('useUnit', () => {
     `)
   })
 
-  test('forceScope option', () => {
+  /**
+   * `forceScope` is declared in the typings only: the runtime signature of
+   * useUnit takes a single argument and never reads options (useUnit.ts:8).
+   */
+  test('forceScope option is declared but not implemented', () => {
     const $count = createStore(0)
 
     const setup = () => {
