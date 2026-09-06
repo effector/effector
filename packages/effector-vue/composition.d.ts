@@ -37,12 +37,15 @@ export function useStoreMap<State, Result, Keys = unknown>(
   },
   scope?: Scope,
 ): ComputedRef<Result>
-export function useVModel<T>(vm: Store<T>, scope?: EffectScope): Ref<UnwrapRef<T>>
+export function useVModel<T>(
+  vm: Store<T>,
+  scope?: EffectScope,
+): Ref<UnwrapRef<T>>
 export function useVModel<T extends Record<string, Store<any>>>(
   vm: T,
-  scope?: EffectScope
+  scope?: EffectScope,
 ): ExtractStore<T>
-/** Replaces the `UseVModel` interface, which declared its own signatures and drifted apart from the overloads above */
+/** Type of the `useVModel` overloads declared above */
 export type UseVModel = typeof useVModel
 export function useStore<T>(store: Store<T>): DeepReadonly<Ref<T>>
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
