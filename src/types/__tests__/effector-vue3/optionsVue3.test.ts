@@ -63,11 +63,12 @@ describe('EffectorScopePlugin', () => {
   /**
    * `EffectorScopePlugin` is declared in the root `effector-vue` typings, which
    * are written against Vue 2 and cannot be compiled in this pass. Its return
-   * type is spelled out here to check the Vue 3 side of the contract: the
-   * structural type of packages/effector-vue/index.d.ts has to stay assignable
-   * to `Plugin`. Keep both in sync until the root entry point moves to Vue 3.
+   * type is spelled out here to check the Vue 3 half of the contract: this
+   * shape has to stay assignable to `Plugin`. That the root entry point still
+   * declares exactly this shape is checked in
+   * effector-vue/effectorVue.test.ts.
    */
-  type ScopePluginReturn = {install(app: any): void}
+  type ScopePluginReturn = {install(app: unknown): void}
 
   test('return type of the root entry point is a vue plugin', () => {
     const plugin: Plugin = null as unknown as ScopePluginReturn

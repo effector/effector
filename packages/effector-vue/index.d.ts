@@ -176,4 +176,4 @@ declare function createComponent<
 export function EffectorScopePlugin(config: {
   scope: Scope
   scopeName?: string
-}): {install(app: any): void}
+}): {install(app: unknown): void}
