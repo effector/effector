@@ -7,6 +7,7 @@ import {
   useStore,
   useStoreMap,
   useUnit,
+  useVModel,
 } from 'effector-vue/composition'
 import {
   allSettled,
@@ -128,6 +129,46 @@ describe('server render', () => {
 
     expect(await renderSSR(App, {scope})).toBe('<p>loaded</p>')
     expect(seen).toEqual(['empty'])
+  })
+
+  test('useVModel renders the state of the scope and binds nothing', async () => {
+    const $form = createStore({name: 'global'})
+    const scope = fork({values: [[$form, {name: 'scoped'}]]})
+
+    const App = defineComponent({
+      setup() {
+        const form = useVModel($form)
+        return () => h('p', form.value.name)
+      },
+    })
+
+    const html = await renderSSR(App, {scope})
+
+    expect(html).toBe('<p>scoped</p>')
+    expect(linksCount(scope)).toBe(0)
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  test('useVModel renders the data loaded in onServerPrefetch', async () => {
+    const loadFx = createEffect(async () => ({name: 'loaded'}))
+    const $form = createStore({name: 'empty'}).on(
+      loadFx.doneData,
+      (_, form) => form,
+    )
+    const $title = createStore('empty').on(loadFx.doneData, () => 'loaded')
+    const scope = fork()
+
+    const App = defineComponent({
+      setup() {
+        const form = useVModel($form)
+        const shape = useVModel({title: $title})
+        const appScope = useProvidedScope({forceScope: true})
+        onServerPrefetch(() => allSettled(loadFx, {scope: appScope}))
+        return () => h('p', `${form.value.name} ${shape.title}`)
+      },
+    })
+
+    expect(await renderSSR(App, {scope})).toBe('<p>loaded loaded</p>')
   })
 
   test('renders the data loaded in onServerPrefetch', async () => {
