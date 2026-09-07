@@ -41,15 +41,25 @@ type ExtractStore<T extends Record<string, Store<unknown>>> = {
   [Key in keyof T]: T[Key] extends Store<infer U> ? UnwrapNestedRefs<U> : never
 }
 
+export type UseStoreMapConfig<State, Result, Keys> = {
+  store: Store<State>
+  /** Passed to `fn` as its second argument; a ref or a getter is tracked. */
+  keys?: MaybeRefOrGetter<Keys>
+  fn: (state: State, keys: Keys) => Result
+  /** Decides whether a new result of `fn` replaces the current one. */
+  updateFilter?: (update: Result, current: Result) => boolean
+  /** Used every time `fn` returns undefined. */
+  defaultValue?: Result
+} & ScopeOptions
+
 export function useStoreMap<State, Result, Keys = unknown>(
-  config: {
-    store: Store<State>
-    keys?: () => Keys
-    fn: (state: State, keys: Keys) => Result
-    updateFilter?: (update: Result, current: Result) => boolean
-    defaultValue?: Result
-  } & ScopeOptions,
+  config: UseStoreMapConfig<State, Result, Keys>,
   scope?: Scope,
+): ComputedRef<Result>
+export function useStoreMap<State, Result>(
+  store: Store<State>,
+  fn: (state: State) => Result,
+  opts?: ScopeOptions,
 ): ComputedRef<Result>
 export function useVModel<T>(
   vm: Store<T>,
