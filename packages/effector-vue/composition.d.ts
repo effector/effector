@@ -1,7 +1,6 @@
 import {
   App,
   ComputedRef,
-  DeepReadonly,
   EffectScope,
   InjectionKey,
   MaybeRefOrGetter,
@@ -10,7 +9,7 @@ import {
   UnwrapNestedRefs,
   UnwrapRef,
 } from 'vue'
-import {Domain, Store, Event, Effect, Scope} from 'effector'
+import {Domain, Store, EventCallable, Effect, Scope} from 'effector'
 
 export type ScopeOptions = {
   /** Scope to read stores from and to bind events to. */
@@ -22,6 +21,36 @@ export type ScopeOptions = {
   forceScope?: boolean
 }
 
+/** `true` when the two types are the same, `false` otherwise. */
+export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
+  T,
+>() => T extends Y ? 1 : 2
+  ? true
+  : false
+
+/**
+ * What a composable hands out for a single unit: a readonly ref for a store,
+ * a bound function for an event or an effect.
+ *
+ * The ref is `Readonly<Ref<V>>`: `value` is the state the store holds (#1130).
+ */
+export type UnitToValue<U> = U extends Store<infer V>
+  ? Readonly<Ref<V>>
+  : U extends Effect<infer P, infer D, any>
+  ? Equal<P, void> extends true
+    ? () => Promise<D>
+    : (params: P) => Promise<D>
+  : U extends EventCallable<infer T>
+  ? Equal<T, void> extends true
+    ? () => void
+    : (payload: T) => T
+  : never
+
+/** What `useUnit` hands out for a list or a shape of units. */
+export type UseUnitResult<Shape> = {
+  [Key in keyof Shape]: UnitToValue<Shape[Key]>
+}
+
 type GateConfig<T> = {
   name?: string
   defaultState?: T
@@ -30,11 +59,11 @@ type GateConfig<T> = {
 }
 
 type Gate<Props> = {
-  open: Event<Props>
-  close: Event<Props>
+  open: EventCallable<Props>
+  close: EventCallable<Props>
   status: Store<boolean>
   state: Store<Props>
-  set: Event<Props>
+  set: EventCallable<Props>
 }
 
 type ExtractStore<T extends Record<string, Store<unknown>>> = {
@@ -101,7 +130,7 @@ export type UseVModel = typeof useVModel
 export function useStore<T>(
   store: Store<T>,
   opts?: ScopeOptions,
-): DeepReadonly<Ref<T>>
+): Readonly<Ref<T>>
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(
   GateComponent: Gate<Props>,
@@ -111,10 +140,13 @@ export function useGate<Props>(
 export function useUnit<State>(
   store: Store<State>,
   opts?: ScopeOptions,
-): DeepReadonly<Ref<State>>
-export function useUnit(event: Event<void>, opts?: ScopeOptions): () => void
+): Readonly<Ref<State>>
+export function useUnit(
+  event: EventCallable<void>,
+  opts?: ScopeOptions,
+): () => void
 export function useUnit<T>(
-  event: Event<T>,
+  event: EventCallable<T>,
   opts?: ScopeOptions,
 ): (payload: T) => T
 export function useUnit<R>(
@@ -126,41 +158,17 @@ export function useUnit<T, R>(
   opts?: ScopeOptions,
 ): (payload: T) => Promise<R>
 export function useUnit<
-  List extends (Event<any> | Effect<any, any> | Store<any>)[],
->(
-  list: [...List],
-  opts?: ScopeOptions,
-): {
-  [Key in keyof List]: List[Key] extends Event<infer T>
-    ? Equal<T, void> extends true
-      ? () => void
-      : (payload: T) => T
-    : List[Key] extends Effect<infer P, infer D, any>
-    ? Equal<P, void> extends true
-      ? () => Promise<D>
-      : (payload: P) => Promise<D>
-    : List[Key] extends Store<infer V>
-    ? DeepReadonly<Ref<V>>
-    : never
-}
+  List extends (Store<any> | EventCallable<any> | Effect<any, any, any>)[],
+>(list: [...List], opts?: ScopeOptions): UseUnitResult<List>
 export function useUnit<
-  Shape extends Record<string, Event<any> | Effect<any, any, any> | Store<any>>,
+  Shape extends Record<
+    string,
+    Store<any> | EventCallable<any> | Effect<any, any, any>
+  >,
 >(
   shape: Shape | {'@@unitShape': () => Shape},
   opts?: ScopeOptions,
-): {
-  [Key in keyof Shape]: Shape[Key] extends Event<infer T>
-    ? Equal<T, void> extends true
-      ? () => void
-      : (payload: T) => T
-    : Shape[Key] extends Effect<infer P, infer D, any>
-    ? Equal<P, void> extends true
-      ? () => Promise<D>
-      : (payload: P) => Promise<D>
-    : Shape[Key] extends Store<infer V>
-    ? DeepReadonly<Ref<V>>
-    : never
-}
+): UseUnitResult<Shape>
 
 export type EffectorScopePluginOptions = {
   scope: Scope
@@ -188,9 +196,3 @@ export const EffectorScopeKey: InjectionKey<Scope>
 
 export function useProvidedScope(opts: {forceScope: true}): Scope
 export function useProvidedScope(opts?: {forceScope?: boolean}): Scope | null
-
-type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
-  ? 1
-  : 2
-  ? true
-  : false
