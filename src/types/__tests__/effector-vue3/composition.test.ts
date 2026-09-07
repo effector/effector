@@ -360,16 +360,51 @@ describe('useVModel', () => {
     `)
   })
 
-  test('vue effect scope as a second argument', () => {
+  test('options', () => {
     const $form = createStore({name: 'alice'})
+    const $age = createStore(30)
 
     const setup = () => {
-      useVModel($form, effectScope())
+      useVModel($form, {scope: fork(), forceScope: true, deep: false})
+      useVModel({age: $age}, {deep: false})
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
+      "
+    `)
+  })
+
+  test('vue effect scope as a second argument', () => {
+    const $form = createStore({name: 'alice'})
+    const $age = createStore(30)
+
+    const setup = () => {
+      useVModel($form, effectScope())
+      useVModel({age: $age}, effectScope())
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('an unknown option is rejected', () => {
+    const $form = createStore({name: 'alice'})
+
+    const setup = () => {
+      useVModel($form, {deeep: true})
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type 'StoreWritable<{ name: string; }>' is not assignable to parameter of type 'Record<string, Store<any>>'.
+            Index signature for type 'string' is missing in type 'StoreWritable<{ name: string; }>'.
       "
     `)
   })

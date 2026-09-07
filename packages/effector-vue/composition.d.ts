@@ -61,13 +61,40 @@ export function useStoreMap<State, Result>(
   fn: (state: State) => Result,
   opts?: ScopeOptions,
 ): ComputedRef<Result>
+
+export type UseVModelOptions = ScopeOptions & {
+  /**
+   * Copy the state into a deeply reactive value and watch it deeply, so that
+   * an edit of a nested field reaches the store. Default true; with false the
+   * state of the store is bound as it is and only assignments of the whole
+   * value are written back.
+   */
+  deep?: boolean
+}
+
 export function useVModel<T>(
   vm: Store<T>,
-  scope?: EffectScope,
+  opts?: UseVModelOptions,
 ): Ref<UnwrapRef<T>>
 export function useVModel<T extends Record<string, Store<any>>>(
   vm: T,
-  scope?: EffectScope,
+  opts?: UseVModelOptions,
+): ExtractStore<T>
+/**
+ * The form before the options object: a Vue effect scope to run in. It keeps
+ * working; the options object is the preferred form.
+ */
+export function useVModel<T>(
+  vm: Store<T>,
+  effectScope: EffectScope,
+): Ref<UnwrapRef<T>>
+/**
+ * The form before the options object: a Vue effect scope to run in. It keeps
+ * working; the options object is the preferred form.
+ */
+export function useVModel<T extends Record<string, Store<any>>>(
+  vm: T,
+  effectScope: EffectScope,
 ): ExtractStore<T>
 /** Type of the `useVModel` overloads declared above */
 export type UseVModel = typeof useVModel
