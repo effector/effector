@@ -78,7 +78,7 @@ Where the scope options go differs between the composables:
 | `useGate(Gate, props, opts)`  | `{ scope, forceScope }` as the last argument                                                                   |
 | `useStoreMap(config)`         | `scope` and `forceScope` in the config; the positional second argument also works                             |
 | `useProvidedScope(opts)`      | `{ forceScope }` only                                                                                          |
-| `useVModel($store, vueScope)` | none: the second argument is a Vue [EffectScope](https://vuejs.org/api/reactivity-advanced.html#effectscope)   |
+| `useVModel($store, opts)`     | `{ scope, forceScope }` as the last argument; a Vue [EffectScope](https://vuejs.org/api/reactivity-advanced.html#effectscope) there also works |
 
 Whatever the form, the scope is resolved in this order:
 
