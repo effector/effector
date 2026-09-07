@@ -1,6 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {flushPromises, mount} from 'vue-test-utils-next'
-import {EffectorScopePlugin, useStore, useUnit} from 'effector-vue/composition'
+import {
+  EffectorScopePlugin,
+  useStore,
+  useStoreMap,
+  useUnit,
+} from 'effector-vue/composition'
 import {
   Scope,
   createEvent,
@@ -34,9 +39,10 @@ describe('subscription', () => {
     const $b = createStore(2).on(inc, b => b + 1)
     const scope = fork()
 
-    const {result} = mountSetup(() => useUnit({a: $a, b: $b, inc}), [
-      EffectorScopePlugin({scope}),
-    ])
+    const {result} = mountSetup(
+      () => useUnit({a: $a, b: $b, inc}),
+      [EffectorScopePlugin({scope})],
+    )
 
     const getState = jest.spyOn(scope, 'getState')
     result.inc()
@@ -79,9 +85,10 @@ describe('subscription', () => {
     const $value = createStore('value')
     const scope = fork()
 
-    const {result} = mountSetup(() => useUnit({first: $value, second: $value}), [
-      EffectorScopePlugin({scope}),
-    ])
+    const {result} = mountSetup(
+      () => useUnit({first: $value, second: $value}),
+      [EffectorScopePlugin({scope})],
+    )
 
     expect(result.first).toBe(result.second)
     expect(linksCount(scope)).toBe(1)
@@ -106,9 +113,10 @@ describe('subscription', () => {
     const $value = createStore('value')
     const scope = fork()
 
-    const {result} = mountSetup(() => useUnit($value), [
-      EffectorScopePlugin({scope}),
-    ])
+    const {result} = mountSetup(
+      () => useUnit($value),
+      [EffectorScopePlugin({scope})],
+    )
     const [node] = storeWatchers(scope)
 
     launch({target: node, params: null, scope})
@@ -122,13 +130,18 @@ describe('dispose', () => {
     ['useUnit with a store', ($value: any) => useUnit($value)],
     ['useUnit with a shape', ($value: any) => useUnit({value: $value})],
     ['useStore', ($value: any) => useStore($value)],
+    [
+      'useStoreMap',
+      ($value: any) => useStoreMap({store: $value, fn: value => value}),
+    ],
   ])('unmounting stops the subscription of %s', (_, composable) => {
     const $value = createStore('value')
     const scope = fork()
 
-    const {unmount} = mountSetup(() => composable($value), [
-      EffectorScopePlugin({scope}),
-    ])
+    const {unmount} = mountSetup(
+      () => composable($value),
+      [EffectorScopePlugin({scope})],
+    )
 
     expect(linksCount(scope)).toBe(1)
 
