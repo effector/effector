@@ -1,5 +1,5 @@
 import {is, Unit, scopeBind, Scope, EventCallable, Store} from 'effector'
-import {readonly} from 'vue-next'
+import {shallowReadonly} from 'vue-next'
 
 import {ScopeOptions, resolveScope} from './lib/get-scope'
 import {subscribeStores} from './lib/subscribe'
@@ -57,8 +57,14 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
 
   const refs = subscribeStores(name, stores, scope)
 
+  /**
+   * `shallowReadonly`, see #1130. A deep proxy breaks identity with
+   * `scope.getState($store)`, getters over private fields and `Map` keys, and
+   * it flows back into stores through events. Only the ref itself is
+   * protected from writes.
+   */
   if (isSingleUnit && is.store(config)) {
-    return readonly(refs[0])
+    return shallowReadonly(refs[0])
   }
 
   if (isSingleUnit && (is.event(config) || is.effect(config))) {
@@ -71,7 +77,7 @@ export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
     result[key] = bindToScope(normShape[key], scope)
   }
   storeKeys.forEach((key, index) => {
-    result[key] = readonly(refs[index])
+    result[key] = shallowReadonly(refs[index])
   })
 
   if (isList) {
