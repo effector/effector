@@ -1,86 +1,99 @@
 import {
-  computed,
-  ComputedRef,
+  MaybeRefOrGetter,
+  getCurrentInstance,
   onMounted,
-  onUnmounted,
+  toValue,
   watch,
-  WatchStopHandle,
 } from 'vue-next'
-import {
-  createApi,
-  launch,
-  createStore,
-  createEvent,
-  sample,
-  scopeBind,
-  Scope,
-  EventCallable,
-} from 'effector'
+import {launch, createStore, createEvent, sample} from 'effector'
 import {Gate, GateConfig} from './composition.h'
 import {deepCopy} from './lib/deepCopy'
 import {unwrapProxy} from './lib/unwrapProxy'
-import {ScopeOptions, resolveScope} from './lib/get-scope'
+import {tryOnScopeDispose} from './lib/dispose'
+import {ScopeOptions} from './lib/get-scope'
+import {isServerRender} from './lib/ssr'
+import {useUnitBase} from './useUnit'
 import {flattenConfig, processArgsToConfig} from '../effector/config'
 import {isObject} from '../effector/is'
 
-const bindToScope = (
-  event: EventCallable<any>,
-  scope: Scope | undefined,
-): ((payload?: any) => any) => (scope ? scopeBind(event, {scope}) : event)
-
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  cb?: () => Props,
+  props?: MaybeRefOrGetter<Props>,
   opts?: ScopeOptions,
 ) {
-  let unwatch: WatchStopHandle
-  let _: ComputedRef<Props>
+  const gate = useUnitBase(
+    'useGate',
+    {
+      open: GateComponent.open,
+      close: GateComponent.close,
+      set: GateComponent.set,
+    } as any,
+    opts,
+  ) as Record<string, (payload?: any) => any>
 
-  const scope = resolveScope('useGate', opts)
-  const open = bindToScope(GateComponent.open as EventCallable<any>, scope)
-  const close = bindToScope(GateComponent.close as EventCallable<any>, scope)
-  const set = bindToScope(GateComponent.set as EventCallable<any>, scope)
+  /**
+   * A server render has no unmount to close the gate in, so a gate opened
+   * there stays open and its state reaches the client through `serialize`.
+   * effector-react opens its gate in a layout effect, and the server does
+   * not run it, so its gate stays closed too.
+   */
+  if (isServerRender()) return
 
-  if (cb) {
-    _ = computed(cb)
+  const withProps = (fn: (payload?: any) => any) => () => {
+    if (props === undefined) return fn()
+    fn(deepCopy(unwrapProxy(toValue(props))))
+  }
 
-    unwatch = watch(
-      _,
-      value => {
-        const raw = unwrapProxy(value)
-        set(deepCopy(raw))
-      },
-      {
-        /**
-         * `Boolean(true)` survives the build. A bare `true` ships as `1`, and Vue
-         * 3.5 reads a numeric `deep` as the depth to traverse.
-         */
-        deep: Boolean(true),
-        immediate: true,
-      },
+  let opened = false
+  const openGate = () => {
+    opened = true
+    withProps(gate.open)()
+  }
+
+  const watchProps = () => {
+    if (props === undefined) return
+    /**
+     * Not `immediate`: `open` carries the props already and the gate samples
+     * them into `set` on its own. The watcher reports what changes after
+     * that, so a mount runs one `set` and never writes the state of a gate
+     * that is still closed.
+     */
+    watch(
+      () => toValue(props),
+      value => gate.set(deepCopy(unwrapProxy(value))),
+      /**
+       * `Boolean(true)` survives the build. A bare `true` ships as `1`, and
+       * Vue 3.5 reads a numeric `deep` as the depth to traverse.
+       */
+      {deep: Boolean(true)},
     )
   }
 
-  onMounted(() => {
-    if (typeof _ !== "undefined") {
-      const raw = unwrapProxy(_.value)
-      open(deepCopy(raw))
-    } else {
-      open()
-    }
-  })
+  /**
+   * Inside a component the gate opens on mount, the way effector-react and
+   * effector-solid do, and the watcher starts there too: a props change
+   * while an async setup waits for its data would otherwise reach `set`
+   * before the mount opens the gate. Without a component instance there is
+   * no mount to wait for, so the gate opens during the call.
+   */
+  if (getCurrentInstance()) {
+    onMounted(() => {
+      openGate()
+      watchProps()
+    })
+  } else {
+    openGate()
+    watchProps()
+  }
 
-  onUnmounted(() => {
-    if (typeof _ !== "undefined") {
-      const raw = unwrapProxy(_.value)
-      close(deepCopy(raw))
-    } else {
-      close()
-    }
-
-    if (unwatch) {
-      unwatch()
-    }
+  /**
+   * A component can be dropped before it mounts, an abandoned `<Suspense>`
+   * branch for one, and its effect scope is disposed all the same. Closing a
+   * gate that never opened would reset the state of whoever holds it open.
+   */
+  tryOnScopeDispose('useGate', () => {
+    if (!opened) return
+    withProps(gate.close)()
   })
 }
 
@@ -136,7 +149,7 @@ export function createGate<Props>(...args: [GateConfig<Props>]): Gate<Props> {
   GateComponent.state = state
   GateComponent.set = set
 
-  sample({ clock: open, target: set })
+  sample({clock: open, target: set})
 
   state.reset(close)
 
