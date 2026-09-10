@@ -1,8 +1,7 @@
 import {resolve, join, relative} from 'path'
 import * as fs from 'fs-extra'
 
-//@ts-ignore
-import execa from 'execa'
+import {execa} from 'execa'
 
 export const cliArgs: {
   current: string[]
