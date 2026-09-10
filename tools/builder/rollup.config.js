@@ -53,7 +53,7 @@ const input = {
     '@rollup/plugin-alias',
     '@rollup/plugin-babel',
     '@rollup/plugin-node-resolve',
-    'rollup-plugin-terser',
+    '@rollup/plugin-terser',
     '@rollup/plugin-commonjs',
     '@rollup/plugin-replace',
     'rollup-plugin-visualizer',
