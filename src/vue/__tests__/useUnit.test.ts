@@ -95,7 +95,7 @@ describe('useUnit', () => {
 
       await wrapper.find('[data-test="btn"]').trigger('click')
 
-      expect(listener).toBeCalledTimes(1)
+      expect(listener).toHaveBeenCalledTimes(1)
 
       unwatch()
     })
