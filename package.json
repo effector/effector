@@ -68,7 +68,7 @@
     "babel-preset-solid": "^1.9.15",
     "browserstack-local": "^1.5.13",
     "chalk": "^6.0.0",
-    "chokidar": "^4.0.3",
+    "chokidar": "^5.0.0",
     "core-js": "^3.50.0",
     "core-js-bundle": "^3.50.0",
     "cross-fetch": "^4.1.0",
