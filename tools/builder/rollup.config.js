@@ -75,6 +75,9 @@ const output = {
   file: resolve(__dirname, '..', 'builder.js'),
   format: 'cjs',
   sourcemap: false,
+  // chalk and execa are esm only, node exposes them to require() as a
+  // namespace, so the default export has to be unwrapped
+  interop: 'auto',
 }
 
 module.exports = {input, output}
