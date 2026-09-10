@@ -1,4 +1,4 @@
-import {render} from 'solid-testing-library'
+import {render} from '@solidjs/testing-library'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,

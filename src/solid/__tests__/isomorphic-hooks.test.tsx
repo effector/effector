@@ -1,4 +1,4 @@
-import {render} from 'solid-testing-library'
+import {render} from '@solidjs/testing-library'
 import {argumentHistory} from 'effector/fixtures'
 import {
   createEvent,
