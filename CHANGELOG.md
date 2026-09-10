@@ -43,6 +43,8 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Add support for multiple arguments to `scopeBind`. This feature indirectly allows to use multiple arguments in `reflect` ([issue reflect#91](https://github.com/effector/reflect/issues/91))
 - Fix issues with `clearNode` ([issue #1200](https://github.com/effector/effector/issues/1200))
 
+## effector-vue 23.2.0
+
 ## effector-vue 23.1.1
 
 - Fix `Date` suppport in `useVModel`, `createGate` and options API ([PR #1228](https://github.com/effector/effector/pull/1228), thanks [egoson](https://github.com/egoson))
