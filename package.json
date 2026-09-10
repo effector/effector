@@ -49,7 +49,7 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
     "@solidjs/testing-library": "^0.8.10",
-    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/jest-dom": "^7.0.1",
     "@types/connect": "^3.4.38",
     "@types/core-js": "^2.5.8",
     "@types/jest": "^30.0.0",
@@ -110,7 +110,7 @@
     "vue-next": "npm:vue@^3.5.42",
     "vue-template-compiler": "^2.6.12",
     "vue-test-utils-legacy": "npm:@vue/test-utils@^1.1.0",
-    "vue-test-utils-next": "npm:@vue/test-utils@~2.4.11",
+    "vue-test-utils-next": "npm:@vue/test-utils@^2.5.0",
     "webdriverio": "^6.5.2"
   },
   "engines": {
