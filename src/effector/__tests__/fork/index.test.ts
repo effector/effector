@@ -615,7 +615,7 @@ test('forked scope update itself on new domain units access', async () => {
     params: undefined,
     scope,
   })
-  expect(fn).toBeCalledTimes(1)
+  expect(fn).toHaveBeenCalledTimes(1)
 })
 
 test('fork should pass through attach', () => {

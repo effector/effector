@@ -184,7 +184,7 @@ test('allSettled effect calls', async () => {
     .catch(err => {
       console.error(err)
     })
-  expect(fn).toBeCalled()
+  expect(fn).toHaveBeenCalled()
 })
 describe('useUnit', () => {
   test('useUnit and effect calls', async () => {
