@@ -74,7 +74,7 @@ describe('useUnit', () => {
 
       await wrapper.find('[data-test="btn"]').trigger('click')
 
-      expect(listener).toBeCalledTimes(1)
+      expect(listener).toHaveBeenCalledTimes(1)
 
       unwatch()
     })
@@ -229,13 +229,13 @@ describe('useUnit', () => {
 
       await wrapper.find('[data-test="btn-1"]').trigger('click')
 
-      expect(listener1).toBeCalledTimes(1)
-      expect(listener2).toBeCalledTimes(0)
+      expect(listener1).toHaveBeenCalledTimes(1)
+      expect(listener2).toHaveBeenCalledTimes(0)
 
       await wrapper.find('[data-test="btn-2"]').trigger('click')
 
-      expect(listener1).toBeCalledTimes(1)
-      expect(listener2).toBeCalledTimes(1)
+      expect(listener1).toHaveBeenCalledTimes(1)
+      expect(listener2).toHaveBeenCalledTimes(1)
 
       unwatch1()
       unwatch2()
@@ -265,13 +265,13 @@ describe('useUnit', () => {
 
       await wrapper.find('[data-test="btn-1"]').trigger('click')
 
-      expect(listener1).toBeCalledTimes(1)
-      expect(listener2).toBeCalledTimes(0)
+      expect(listener1).toHaveBeenCalledTimes(1)
+      expect(listener2).toHaveBeenCalledTimes(0)
 
       await wrapper.find('[data-test="btn-2"]').trigger('click')
 
-      expect(listener1).toBeCalledTimes(1)
-      expect(listener2).toBeCalledTimes(1)
+      expect(listener1).toHaveBeenCalledTimes(1)
+      expect(listener2).toHaveBeenCalledTimes(1)
 
       unwatch1()
       unwatch2()
@@ -405,8 +405,8 @@ describe('useUnit', () => {
 
       await wrapper.find('[data-test="btn"]').trigger('click')
 
-      expect(correctListener).toBeCalledTimes(1)
-      expect(incorrectListener).toBeCalledTimes(0)
+      expect(correctListener).toHaveBeenCalledTimes(1)
+      expect(incorrectListener).toHaveBeenCalledTimes(0)
 
       unwatch1()
       unwatch2()
@@ -517,7 +517,7 @@ describe('useUnit', () => {
       },
     })
 
-    expect(listener).toBeCalledTimes(1)
+    expect(listener).toHaveBeenCalledTimes(1)
     expect(argumentHistory(listener)).toMatchInlineSnapshot(`
       Array [
         Array [
@@ -537,7 +537,7 @@ describe('useUnit', () => {
     expect(wrapper.find('[data-test="a"]').element.textContent).toBe('2')
     expect(wrapper.find('[data-test="b"]').element.textContent).toBe('3')
 
-    expect(listener).toBeCalledTimes(2)
+    expect(listener).toHaveBeenCalledTimes(2)
     expect(argumentHistory(listener)).toMatchInlineSnapshot(`
       Array [
         Array [

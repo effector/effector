@@ -1,4 +1,4 @@
-import {render} from 'solid-testing-library'
+import {render} from '@solidjs/testing-library'
 import {createStore, createEvent, createDomain, fork} from 'effector'
 import {useUnit, useStoreMap, Provider} from 'effector-solid'
 import {createEffect as createSolidEffect, createMemo, For} from 'solid-js'

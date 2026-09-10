@@ -1,16 +1,17 @@
 import {rollup} from 'rollup'
 import {babel} from '@rollup/plugin-babel'
 import json from '@rollup/plugin-json'
-import resolve from '@rollup/plugin-node-resolve'
-import {terser} from 'rollup-plugin-terser'
+import {nodeResolve as resolve} from '@rollup/plugin-node-resolve'
+import terser from '@rollup/plugin-terser'
 import commonjs from '@rollup/plugin-commonjs'
-import analyze from 'rollup-plugin-visualizer'
+import {visualizer as analyze} from 'rollup-plugin-visualizer'
 import alias from '@rollup/plugin-alias'
 
 import {dir, getSourcemapPathTransform} from './utils'
 import {minifyConfig} from './minificationConfig'
 
-const compatNameCache = {}
+// rollup 3 changed both defaults, keep the published cjs bundles as they were
+const cjsInterop = {interop: 'compat', esModule: true} as const
 const onwarn = (warning: any, rollupWarn: any) => {
   if (
     warning.code !== 'CIRCULAR_DEPENDENCY' &&
@@ -193,7 +194,7 @@ export async function rollupEffector() {
         name: 'babel-plugin',
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform('babel'),
-        interop: false,
+        interop: 'esModule',
         exports: 'default',
       })
     })(),
@@ -297,6 +298,7 @@ export async function rollupEffectorReact() {
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
         externalLiveBindings: isEsm,
+        ...(isEsm ? {} : cjsInterop),
       })
     }
   }
@@ -361,6 +363,7 @@ export async function rollupEffectorSolid() {
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
         externalLiveBindings: format === 'es',
+        ...(format === 'es' ? {} : cjsInterop),
       })
     }
   }
@@ -444,6 +447,7 @@ async function createUmd(
     name: umdName,
     sourcemap: true,
     globals,
+    ...cjsInterop,
   })
 }
 async function createCompat(name: string) {
@@ -525,7 +529,6 @@ async function createCompat(name: string) {
         webkit: true,
       },
       ecma: 5,
-      nameCache: compatNameCache,
       safari10: true,
     }),
     plugins.analyzer,
@@ -545,6 +548,7 @@ async function createCompat(name: string) {
     sourcemap: true,
     sourcemapPathTransform: getSourcemapPathTransform(name),
     externalLiveBindings: false,
+    ...cjsInterop,
   })
 }
 async function createEsCjs(
@@ -613,6 +617,7 @@ async function createEsCjs(
       sourcemap: true,
       sourcemapPathTransform: getSourcemapPathTransform(name),
       externalLiveBindings: false,
+      ...cjsInterop,
     }),
     es &&
       buildEs.write({
