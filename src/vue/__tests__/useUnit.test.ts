@@ -2,7 +2,13 @@
 import {shallowMount} from 'vue-test-utils-next'
 import {EffectorScopePlugin} from 'effector-vue'
 import {useUnit} from 'effector-vue/composition'
-import {createEvent, createStore, createWatch, fork} from 'effector'
+import {
+  createEffect,
+  createEvent,
+  createStore,
+  createWatch,
+  fork,
+} from 'effector'
 import {watchEffect} from 'vue-next'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -71,6 +77,46 @@ describe('useUnit', () => {
       expect(listener).toHaveBeenCalledTimes(1)
 
       unwatch()
+    })
+
+    it('returns effect as function', async () => {
+      const someEffect = createEffect(() => {})
+      const wrapper = shallowMount({
+        template: `
+          <button data-test="btn" @click="run">Click me</button>
+        `,
+        setup() {
+          const run = useUnit(someEffect)
+          return {run}
+        },
+      })
+      const listener = jest.fn()
+      const unwatch = createWatch({unit: someEffect, fn: listener})
+
+      await wrapper.find('[data-test="btn"]').trigger('click')
+
+      expect(listener).toHaveBeenCalledTimes(1)
+
+      unwatch()
+    })
+
+    it('returns effect as function in array and in object as well', () => {
+      const someEffect = createEffect(() => {})
+      const results: Record<string, any> = {}
+
+      shallowMount({
+        template: `<div />`,
+        setup() {
+          results.single = useUnit(someEffect)
+          results.list = useUnit([someEffect])
+          results.shape = useUnit({run: someEffect})
+          return {}
+        },
+      })
+
+      expect(typeof results.single).toBe('function')
+      expect(typeof results.list[0]).toBe('function')
+      expect(typeof results.shape.run).toBe('function')
     })
 
     it('supports array of stores', async () => {
@@ -365,6 +411,43 @@ describe('useUnit', () => {
       unwatch1()
       unwatch2()
     })
+
+    it('returns bound effect', async () => {
+      const scope = fork()
+
+      let resolveEffect: () => void = () => {}
+      const someEffect = createEffect(() => {
+        return new Promise<void>(resolve => {
+          resolveEffect = resolve
+        })
+      })
+
+      const wrapper = shallowMount(
+        {
+          template: `
+            <button data-test="btn" @click="run">Click me</button>
+          `,
+          setup() {
+            const run = useUnit(someEffect)
+            return {run}
+          },
+        },
+        {global: {plugins: [EffectorScopePlugin({scope})]}},
+      )
+
+      await wrapper.find('[data-test="btn"]').trigger('click')
+
+      expect(scope.getState(someEffect.pending)).toBe(true)
+      expect(someEffect.pending.getState()).toBe(false)
+      expect(scope.getState(someEffect.inFlight)).toBe(1)
+      expect(someEffect.inFlight.getState()).toBe(0)
+
+      resolveEffect()
+      await new Promise(resolve => setTimeout(resolve, 0))
+
+      expect(scope.getState(someEffect.pending)).toBe(false)
+    })
+
     it('uses state from scope', async () => {
       const correctScope = fork()
       const incorrectScope = fork()
