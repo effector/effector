@@ -18,7 +18,7 @@ describe('createWatch on scope', () => {
     await allSettled(event, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith(undefined)
+    expect(listener).toHaveBeenCalledWith(undefined)
   })
 
   test('event without scope', async () => {
@@ -43,7 +43,7 @@ describe('createWatch on scope', () => {
     await allSettled(effect, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith(undefined)
+    expect(listener).toHaveBeenCalledWith(undefined)
   })
 
   test('effect without scope', async () => {
@@ -69,7 +69,7 @@ describe('createWatch on scope', () => {
     await allSettled(event, {scope, params: {}})
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith({})
+    expect(listener).toHaveBeenCalledWith({})
   })
 
   test('store without scope', async () => {
@@ -96,7 +96,7 @@ describe('createWatch without scope', () => {
     event()
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith(undefined)
+    expect(listener).toHaveBeenCalledWith(undefined)
   })
 
   test('event with scope', async () => {
@@ -109,7 +109,7 @@ describe('createWatch without scope', () => {
     await allSettled(event, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith(undefined)
+    expect(listener).toHaveBeenCalledWith(undefined)
   })
 
   test('effect', async () => {
@@ -121,7 +121,7 @@ describe('createWatch without scope', () => {
     await effect()
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith(undefined)
+    expect(listener).toHaveBeenCalledWith(undefined)
   })
 
   test('effect with scope', async () => {
@@ -134,7 +134,7 @@ describe('createWatch without scope', () => {
     await allSettled(effect, {scope})
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith(undefined)
+    expect(listener).toHaveBeenCalledWith(undefined)
   })
 
   test('store', async () => {
@@ -147,7 +147,7 @@ describe('createWatch without scope', () => {
     event({})
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith({})
+    expect(listener).toHaveBeenCalledWith({})
   })
 
   test('store with scope', async () => {
@@ -161,6 +161,6 @@ describe('createWatch without scope', () => {
     await allSettled(event, {scope, params: {}})
 
     expect(listener).toHaveBeenCalledTimes(1)
-    expect(listener).toBeCalledWith({})
+    expect(listener).toHaveBeenCalledWith({})
   })
 })

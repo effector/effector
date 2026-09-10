@@ -86,7 +86,7 @@ describe('useEvent is deprecated', () => {
 
     await render(<App />)
 
-    expect(warn).toBeCalledTimes(1)
+    expect(warn).toHaveBeenCalledTimes(1)
     expect(warn.mock.calls[0][0]).toMatchInlineSnapshot(
       `"useEvent is deprecated, prefer useUnit instead"`,
     )
@@ -107,7 +107,7 @@ describe('useEvent is deprecated', () => {
 
     await render(<App />)
 
-    expect(warn).toBeCalledTimes(1)
+    expect(warn).toHaveBeenCalledTimes(1)
     expect(warn.mock.calls[0][0]).toMatchInlineSnapshot(
       `"useEvent is deprecated, prefer useUnit instead"`,
     )

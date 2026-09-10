@@ -366,7 +366,7 @@ describe('useUnit', () => {
             42
           </div>
       `)
-    expect(rendered).toBeCalledTimes(2)
+    expect(rendered).toHaveBeenCalledTimes(2)
   })
   it('should support dynamic change of store', async () => {
     const upA = createEvent()
@@ -510,8 +510,8 @@ describe('useUnit', () => {
     await act(async () => {
       container.firstChild.querySelector('#run').click()
     })
-    expect(fnL).toBeCalledTimes(1)
-    expect(fnR).toBeCalledTimes(1)
+    expect(fnL).toHaveBeenCalledTimes(1)
+    expect(fnR).toHaveBeenCalledTimes(1)
   })
   it('should support dynamic change of store positions', async () => {
     const upA = createEvent()

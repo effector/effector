@@ -244,8 +244,8 @@ test('gate component should be isomorphic to scope', async () => {
     </Provider>,
   )
 
-  expect(logged).toBeCalledTimes(1)
-  expect(logged).toBeCalledWith('scoped')
+  expect(logged).toHaveBeenCalledTimes(1)
+  expect(logged).toHaveBeenCalledWith('scoped')
 })
 
 test('gate properties hook', async () => {

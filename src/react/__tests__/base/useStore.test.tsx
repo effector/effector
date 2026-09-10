@@ -774,7 +774,7 @@ describe('useStoreMap', () => {
         42
       </div>
     `)
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
 
     await act(async () => {
       trigger(1)
@@ -784,7 +784,7 @@ describe('useStoreMap', () => {
         42
       </div>
     `)
-    expect(fn).toBeCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
 
     // change in the key should not trigger computation
     await act(async () => {
@@ -795,7 +795,7 @@ describe('useStoreMap', () => {
         42
       </div>
     `)
-    expect(fn).toBeCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
 
     await act(async () => {
       trigger(2)
@@ -805,7 +805,7 @@ describe('useStoreMap', () => {
         42
       </div>
     `)
-    expect(fn).toBeCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
   })
   test('re-render by external reason shoud not trigger `fn` computation if it is unaffected', async () => {
     const trigger = createEvent<any>()
@@ -840,8 +840,8 @@ describe('useStoreMap', () => {
         42
       </div>
     `)
-    expect(fn).toBeCalledTimes(1)
-    expect(rendered).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(rendered).toHaveBeenCalledTimes(1)
 
     await act(async () => {
       trigger(1)
@@ -851,8 +851,8 @@ describe('useStoreMap', () => {
         42
       </div>
     `)
-    expect(fn).toBeCalledTimes(1)
-    expect(rendered).toBeCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(rendered).toHaveBeenCalledTimes(2)
 
     await act(async () => {
       trigger(2)
@@ -862,8 +862,8 @@ describe('useStoreMap', () => {
         42
       </div>
     `)
-    expect(fn).toBeCalledTimes(1)
-    expect(rendered).toBeCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(rendered).toHaveBeenCalledTimes(3)
   })
   test('defaultValue support', async () => {
     const addItem = createEvent<{id: string; value: string}>()
@@ -997,7 +997,7 @@ describe('useStore is deprecated', () => {
 
     await render(<App />)
 
-    expect(warn).toBeCalledTimes(1)
+    expect(warn).toHaveBeenCalledTimes(1)
     expect(warn.mock.calls[0][0]).toMatchInlineSnapshot(
       `"useStore is deprecated, prefer useUnit instead"`,
     )
