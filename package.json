@@ -53,7 +53,7 @@
     "@types/connect": "^3.4.38",
     "@types/core-js": "^2.5.8",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.20.2",
+    "@types/node": "^24.13.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/use-sync-external-store": "^1.7.0",
@@ -114,7 +114,7 @@
     "webdriverio": "^6.5.2"
   },
   "engines": {
-    "node": ">=20.x"
+    "node": ">=24.x"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
