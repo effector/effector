@@ -121,8 +121,8 @@ describe('array forwarding support', () => {
       to: [t1, t2],
     })
     s1()
-    expect(fn1).toBeCalledTimes(1)
-    expect(fn2).toBeCalledTimes(1)
+    expect(fn1).toHaveBeenCalledTimes(1)
+    expect(fn2).toHaveBeenCalledTimes(1)
   })
   it('support forwarding from arrays', () => {
     const fn = jest.fn()
@@ -136,7 +136,7 @@ describe('array forwarding support', () => {
     })
     s1()
     s2()
-    expect(fn).toBeCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
   it('support forwarding from arrays to arrays', () => {
     const fn1 = jest.fn()
@@ -153,8 +153,8 @@ describe('array forwarding support', () => {
     })
     s1()
     s2()
-    expect(fn1).toBeCalledTimes(2)
-    expect(fn2).toBeCalledTimes(2)
+    expect(fn1).toHaveBeenCalledTimes(2)
+    expect(fn2).toHaveBeenCalledTimes(2)
   })
 })
 it('should validate arguments', () => {

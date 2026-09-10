@@ -1,4 +1,4 @@
-import {render} from 'solid-testing-library'
+import {render} from '@solidjs/testing-library'
 import {argumentHistory, muteErrors} from 'effector/fixtures'
 import {
   createDomain,
@@ -184,7 +184,7 @@ test('allSettled effect calls', async () => {
     .catch(err => {
       console.error(err)
     })
-  expect(fn).toBeCalled()
+  expect(fn).toHaveBeenCalled()
 })
 describe('useUnit', () => {
   test('useUnit and effect calls', async () => {

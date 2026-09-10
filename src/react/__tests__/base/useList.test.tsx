@@ -91,7 +91,7 @@ it('should handle updates without dull re-renders', async () => {
       </div>
     </div>
   `)
-  expect(fn).toBeCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
   await act(async () => {
     update({key: 1, value: 'update'})
   })
@@ -111,7 +111,7 @@ it('should handle updates without dull re-renders', async () => {
       </div>
     </div>
   `)
-  expect(fn).toBeCalledTimes(4)
+  expect(fn).toHaveBeenCalledTimes(4)
 })
 
 it('should handle inserts without dull re-renders', async () => {
@@ -153,7 +153,7 @@ it('should handle inserts without dull re-renders', async () => {
       </div>
     </div>
   `)
-  expect(fn).toBeCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
   await act(async () => {
     insert('update')
   })
@@ -177,7 +177,7 @@ it('should handle inserts without dull re-renders', async () => {
       </div>
     </div>
   `)
-  expect(fn).toBeCalledTimes(4)
+  expect(fn).toHaveBeenCalledTimes(4)
 })
 
 it('should update when keys are changed', async () => {

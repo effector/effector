@@ -159,7 +159,7 @@ it('works', async () => {
       "user": "bob",
     }
   `)
-  expect(indirectCallFn).toBeCalled()
+  expect(indirectCallFn).toHaveBeenCalled()
 })
 
 test('attach support', async () => {
@@ -265,7 +265,7 @@ test('attach support', async () => {
       "user": "bob",
     }
   `)
-  expect(indirectCallFn).toBeCalled()
+  expect(indirectCallFn).toHaveBeenCalled()
 })
 
 test('computed values support', async () => {
@@ -409,7 +409,7 @@ test('allSettled effect calls', async () => {
     .catch(err => {
       console.error(err)
     })
-  expect(fn).toBeCalled()
+  expect(fn).toHaveBeenCalled()
 })
 describe('useEvent', () => {
   test('useEvent and effect calls', async () => {

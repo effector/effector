@@ -1,4 +1,6 @@
-const {format} = require('prettier')
+// prettier 3 has no sync api, and this helper is called inline from snapshot
+// assertions all over the forest tests
+const {format} = require('@prettier/sync')
 
 module.exports = function prettyHtml(content) {
   if (typeof content !== 'string') return content

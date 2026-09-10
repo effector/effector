@@ -28,6 +28,20 @@ const formatDate = (date: Date) => {
   return `${date.getUTCFullYear()}-${month}-${day}`;
 };
 
+function formatCompactCount(value: number): string {
+  if (value >= 1_000_000) {
+    const millions = value / 1_000_000;
+    const digits = millions >= 10 ? 0 : 1;
+    return `${millions.toFixed(digits).replace(/\.0$/, "")}M`;
+  }
+
+  if (value >= 1_000) {
+    return `${(value / 1_000).toFixed(0)}K`;
+  }
+
+  return String(value);
+}
+
 async function getNpmStats() {
   const to = new Date();
   const from = new Date("2018-01-17T03:17:09.763Z");
@@ -43,7 +57,7 @@ async function getNpmStats() {
 
     return {
       latest,
-      downloads: `${(downloadCounts.downloads / 1000).toFixed(0)}K`,
+      downloads: formatCompactCount(downloadCounts.downloads),
     };
   } catch (error) {
     console.error("Failed to get NPM stats", error);
@@ -78,9 +92,7 @@ async function fetchRepoStats(octokit: Octokit) {
 }
 
 async function getRepoStats() {
-  const clients = githubToken
-    ? [createOctokit(), createOctokit(githubToken)]
-    : [createOctokit()];
+  const clients = githubToken ? [createOctokit(), createOctokit(githubToken)] : [createOctokit()];
 
   let lastError: unknown;
   for (const octokit of clients) {
@@ -125,7 +137,7 @@ const statsMeta = {
   },
   contributors: {
     label: getTextLocalized(translations.Landing.Stats.contributors, lang),
-    link: "https://github.com/effector/effector/graphs/contributors",
+    link: "https://github.com/effector/effector/graphs/contributors?all=1",
   },
   stars: {
     label: getTextLocalized(translations.Landing.Stats.stars, lang),
@@ -137,7 +149,7 @@ const statsMeta = {
   },
   latest: {
     label: getTextLocalized(translations.Landing.Stats.latest, lang),
-    link: "https://github.com/effector/effector/releases",
+    link: "https://www.npmjs.com/package/effector?activeTab=versions",
   },
   license: {
     label: getTextLocalized(translations.Landing.Stats.license, lang),
