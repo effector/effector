@@ -24,15 +24,22 @@ const transform = {
   '^.+\\.tsx?$': 'babel-jest',
 }
 
+// babel-jest defaults `root` to jest rootDir, so it has to be pointed at the
+// solid config explicitly, otherwise the root babel.config.js wins
+const solidBabelRoot = resolvePath(__dirname, 'src/solid')
 const solidTransform = {
-  '^.+\\.jsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
-  '^.+\\.tsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
+  '^.+\\.jsx?$': ['babel-jest', {cwd: solidBabelRoot, root: solidBabelRoot}],
+  '^.+\\.tsx?$': ['babel-jest', {cwd: solidBabelRoot, root: solidBabelRoot}],
 }
+
+// keeps the pre-jest-29 serialization of the existing snapshots
+const snapshotFormat = {escapeString: true, printBasicPrototype: true}
 
 const createDefaultConfig = () => ({
   automock: false,
   testEnvironment: 'node',
   transform,
+  snapshotFormat,
   // moduleNameMapper: {},
   modulePathIgnorePatterns: watchPathIgnorePatterns,
   testPathIgnorePatterns: watchPathIgnorePatterns,
@@ -120,6 +127,7 @@ const compatBrowsers = [
 
 module.exports = {
   collectCoverage: boolean(process.env.COVERAGE),
+  maxConcurrency: 25,
   collectCoverageFrom: [
     '<rootDir>/src/effector/**/*.ts',
     '<rootDir>/src/react/**/*.ts',
@@ -214,7 +222,6 @@ module.exports = {
         solid: {
           testEnvironment: 'jsdom',
           testMatch: [`<rootDir>/src/solid/**/*.test.tsx`],
-          resolver: resolvePath(__dirname, 'src/solid/resolver.js'),
           transform: solidTransform,
           setupFilesAfterEnv: ['<rootDir>/src/solid/__tests__/setupTests.ts'],
         },
@@ -240,7 +247,6 @@ module.exports = {
           ],
           globalSetup: './src/types/src/globalSetup.ts',
           globalTeardown: './src/types/src/globalTeardown.ts',
-          maxConcurrency: 25,
           transform,
         },
       },
