@@ -5,6 +5,13 @@ import {compile} from './tsRunner'
 const WRITE_RAW_REPORTS = false
 
 const TESTS_DIR = resolve(__dirname, '..', '__tests__')
+/**
+ * effector-vue is published with two sets of typings: the root entry point is
+ * written against Vue 2 and `composition`/`options-vue3` against Vue 3. Both
+ * cannot be compiled in a single program, so tests for the Vue 3 typings live
+ * in a separate directory and get their own compiler pass.
+ */
+const VUE3_TESTS_DIR = resolve(TESTS_DIR, 'effector-vue3')
 const FULL_REPORT_PATH = resolve(
   __dirname,
   '..',
@@ -17,9 +24,37 @@ const RAW_REPORT_PATH = resolve(
   '.reports',
   'type-report-ts-raw',
 )
+const DEFAULT_PATHS = {
+  effector: '../../../packages/effector/index.d.ts',
+  'effector-react/scope': '../../../packages/effector-react/scope.d.ts',
+  'effector-react': '../../../packages/effector-react/index.d.ts',
+  'effector-solid/scope': '../../../packages/effector-solid/scope.d.ts',
+  'effector-solid': '../../../packages/effector-solid/index.d.ts',
+  'effector-vue': '../../../packages/effector-vue/index.d.ts',
+  'forest/server': '../../../packages/forest/server.d.ts',
+  forest: '../../../packages/forest/index.d.ts',
+  react: '../../../node_modules/@types/react/index.d.ts',
+  vue: '../../../node_modules/vue/types/index.d.ts',
+}
+const VUE3_PATHS = {
+  effector: '../../../packages/effector/index.d.ts',
+  'effector-vue/composition': '../../../packages/effector-vue/composition.d.ts',
+  'effector-vue/options-vue3':
+    '../../../packages/effector-vue/options-vue3.d.ts',
+  vue: '../../../node_modules/vue-next/dist/vue.d.ts',
+}
 export default async function () {
   const testFiles = await readTypeDir(TESTS_DIR, TESTS_DIR)
-  const tsReport = await runTypeScript(testFiles)
+  const vue3TestFiles = testFiles.filter(fullPath =>
+    fullPath.startsWith(`${VUE3_TESTS_DIR}${sep}`),
+  )
+  const defaultTestFiles = testFiles.filter(
+    fullPath => !vue3TestFiles.includes(fullPath),
+  )
+  const tsReport = [
+    ...(await runTypeScript(defaultTestFiles, DEFAULT_PATHS)),
+    ...(await runTypeScript(vue3TestFiles, VUE3_PATHS)),
+  ]
   const fileNames = testFiles.map(fullPath => relative(TESTS_DIR, fullPath))
   await fs.writeFile(
     FULL_REPORT_PATH,
@@ -48,23 +83,16 @@ async function readTypeDir(dir: string, base: string) {
   }
   return files
 }
-async function runTypeScript(testFiles: string[]) {
+async function runTypeScript(
+  testFiles: string[],
+  paths: {[moduleName: string]: string},
+) {
+  if (testFiles.length === 0) return []
   try {
     const report = await compile({
       fullTestFileNames: testFiles,
       testsRoot: TESTS_DIR,
-      paths: {
-        effector: '../../../packages/effector/index.d.ts',
-        'effector-react/scope': '../../../packages/effector-react/scope.d.ts',
-        'effector-react': '../../../packages/effector-react/index.d.ts',
-        'effector-solid/scope': '../../../packages/effector-solid/scope.d.ts',
-        'effector-solid': '../../../packages/effector-solid/index.d.ts',
-        'effector-vue': '../../../packages/effector-vue/index.d.ts',
-        'forest/server': '../../../packages/forest/server.d.ts',
-        forest: '../../../packages/forest/index.d.ts',
-        react: '../../../node_modules/@types/react/index.d.ts',
-        vue: '../../../node_modules/vue/types/index.d.ts',
-      },
+      paths,
       typings: ['@types/jest/index.d.ts'],
       tsConfig: {
         strictNullChecks: true,
@@ -95,9 +123,12 @@ async function runTypeScript(testFiles: string[]) {
     }
     return normalizeTSReport(cleanedMessage)
   } catch (error) {
+    /**
+     * An empty report makes every snapshot read "no errors", so a broken
+     * compiler pass would leave the whole suite green.
+     */
     console.error('compilation failed')
-    console.error(error)
-    return []
+    throw error
   }
   function normalizeTSReport(report: string) {
     let current = {
