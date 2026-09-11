@@ -1,0 +1,36 @@
+{
+  "name": "effector-devtools",
+  "version": "1.0.0",
+  "description": "Visualization tool for effector stores, events, and relationships",
+  "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/effector/effector",
+    "directory": "packages/effector-devtools"
+  },
+  "keywords": [
+    "effector",
+    "devtools",
+    "debugging",
+    "visualization",
+    "state",
+    "management"
+  ],
+  "author": "Zero Bias",
+  "license": "MIT",
+  "peerDependencies": {
+    "effector": "^23.0.0"
+  },
+  "devDependencies": {
+    "effector": "^23.0.0"
+  }
+}
