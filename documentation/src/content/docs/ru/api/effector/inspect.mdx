@@ -159,6 +159,55 @@ const $count = createStore(0);
 // выведет "store $count" в консоль
 ```
 
+## Связи графа (#inspect-graph-relationships)
+
+`inspectGraph` также может сообщать связи между узлами для девтулз, которым нужно построить граф юнитов и промежуточных узлов. Передайте `includeLinks: true`, чтобы получить метаданные `graph` у объявлений юнитов и дополнительные объявления `link` для внутренних узлов связей.
+
+Поле `graph` содержит только ID узлов:
+
+- `owners`: узлы, которые владеют текущим узлом в графе владения
+- `links`: узлы, которыми владеет текущий узел
+- `next`: узлы, которые запускаются после текущего узла в графе вычислений
+
+### Пример (#inspect-graph-relationships-example)
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+import { inspectGraph, type Declaration } from "effector/inspect";
+
+const nodes = new Map<string, { id: string; label: string; kind?: string }>();
+const edges: Array<{ source: string; target: string; kind?: string }> = [];
+
+inspectGraph({
+  includeLinks: true,
+  fn: (d: Declaration) => {
+    if (d.type === "unit") {
+      nodes.set(d.id, { id: d.id, label: d.name ?? d.id, kind: d.kind });
+    }
+
+    if (d.type === "link") {
+      for (const owner of d.graph.owners) {
+        edges.push({ source: owner, target: d.id, kind: d.kind });
+      }
+
+      for (const target of d.graph.links) {
+        edges.push({ source: d.id, target, kind: d.kind });
+      }
+    }
+  },
+});
+
+const started = createEvent();
+const finished = createEvent();
+const $count = createStore(0);
+
+sample({
+  clock: started,
+  source: $count,
+  target: finished,
+});
+```
+
 ## `withRegion` (#inspect-graph-withRegion)
 
 Метаданные, предоставленные через корневой узел региона, доступны при объявлении.

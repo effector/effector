@@ -28,6 +28,12 @@ type NodeCommonMeta = {
   derived?: boolean
 }
 
+type GraphLinks = {
+  owners: string[]
+  links: string[]
+  next: string[]
+}
+
 // Watch calculations
 type Message = {
   type: 'update' | 'error'
@@ -124,31 +130,43 @@ type UnitDeclaration = {
   type: 'unit'
   meta: Record<string, unknown>
   region?: Region
+  graph?: GraphLinks
 } & NodeCommonMeta
 
-type Declaration = UnitDeclaration | Region
+type LinkDeclaration = {
+  type: 'link'
+  id: string
+  name?: string
+  kind?: string
+  meta: Record<string, unknown>
+  loc?: Loc
+  region?: Region
+  graph: GraphLinks
+}
+
+type Declaration = UnitDeclaration | LinkDeclaration | Region
 
 const inspectGraphSubs = new Set<{
+  includeLinks?: boolean
   fn: (declaration: Declaration) => void
 }>()
 
 setGraphInspector((node: Node | 'region', regionStack: RegionStack) => {
-  let decl: Declaration | undefined
+  inspectGraphSubs.forEach(sub => {
+    const decls =
+      node === 'region'
+        ? [readRegionStack(regionStack)]
+        : readNodeDeclarations(node, regionStack, sub.includeLinks)
 
-  if (node === 'region') {
-    decl = readRegionStack(regionStack)
-  } else {
-    decl = readUnitDeclaration(node, regionStack)
-  }
-
-  if (decl) {
-    inspectGraphSubs.forEach(sub => {
-      sub.fn(decl!)
+    decls.forEach(decl => {
+      if (!decl) return
+      sub.fn(decl)
     })
-  }
+  })
 })
 
 export function inspectGraph(config: {
+  includeLinks?: boolean
   fn: (declaration: Declaration) => void
 }): Subscription {
   inspectGraphSubs.add(config)
@@ -205,13 +223,31 @@ function collectMessageTrace(stack: Stack) {
   return trace
 }
 
+function readNodeDeclarations(
+  node: Node,
+  regionStack: RegionStack,
+  includeLinks?: boolean,
+): Declaration[] {
+  if (node.meta.id || node.meta.rootStateRefId) {
+    return [readUnitDeclaration(node, regionStack, includeLinks)]
+  }
+
+  if (isUnitKind(node.meta.op)) return []
+
+  if (!includeLinks) return []
+
+  const linkDeclaration = readLinkDeclaration(node, regionStack)
+  return linkDeclaration ? [linkDeclaration] : []
+}
+
 function readUnitDeclaration(
   node: Node,
   regionStack: RegionStack,
+  includeLinks?: boolean,
 ): UnitDeclaration {
   const nodeMeta = readNodeMeta(node)
 
-  return {
+  const declaration: UnitDeclaration = {
     type: 'unit',
     region: readRegionStack(regionStack),
     meta: nodeMeta.meta,
@@ -221,6 +257,43 @@ function readUnitDeclaration(
     kind: nodeMeta.kind,
     loc: nodeMeta.loc,
     derived: nodeMeta.derived,
+  }
+
+  if (includeLinks) {
+    declaration.graph = readGraphLinks(node)
+  }
+
+  return declaration
+}
+
+function readLinkDeclaration(
+  node: Node,
+  regionStack: RegionStack,
+): LinkDeclaration | undefined {
+  const graph = readGraphLinks(node)
+  if (!graph.owners.length && !graph.links.length && !graph.next.length) return
+
+  return {
+    type: 'link',
+    id: node.id,
+    name: node.meta.name,
+    kind: node.meta.op,
+    meta: node.meta,
+    loc: getLoc(node.meta),
+    region: readRegionStack(regionStack),
+    graph,
+  }
+}
+
+function isUnitKind(kind: unknown) {
+  return kind === 'event' || kind === 'store' || kind === 'effect'
+}
+
+function readGraphLinks(node: Node): GraphLinks {
+  return {
+    owners: node.family.owners.map(({id}) => id),
+    links: node.family.links.map(({id}) => id),
+    next: node.next.map(({id}) => id),
   }
 }
 
