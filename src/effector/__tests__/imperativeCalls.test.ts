@@ -21,7 +21,7 @@ describe('store', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"on: This error happened in function from this unit:"`,
     )
   })
   test('.map', () => {
@@ -34,7 +34,7 @@ describe('store', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"map: This error happened in function from this unit:"`,
     )
   })
   test('updateFilter', () => {
@@ -48,7 +48,7 @@ describe('store', () => {
     }).on(trigger, x => x + 1)
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"$x at /src/effector/__tests__/imperativeCalls.test.ts: This error happened in function from this unit:"`,
     )
   })
 })
@@ -62,7 +62,7 @@ describe('event', () => {
     })
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"map: This error happened in function from this unit:"`,
     )
   })
   test('.prepend', () => {
@@ -73,7 +73,7 @@ describe('event', () => {
     })
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"prepend: This error happened in function from this unit:"`,
     )
   })
   test('.filterMap', () => {
@@ -84,7 +84,7 @@ describe('event', () => {
     })
     x()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"filterMap: This error happened in function from this unit:"`,
     )
   })
 })
@@ -99,7 +99,7 @@ test('combine', () => {
   })
   trigger()
   expect(getWarning()).toMatchInlineSnapshot(
-    `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+    `"combine: This error happened in function from this unit:"`,
   )
 })
 
@@ -115,7 +115,7 @@ describe('sample', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"sample: This error happened in function from this unit:"`,
     )
   })
   test('filter', () => {
@@ -130,7 +130,7 @@ describe('sample', () => {
     })
     trigger()
     expect(getWarning()).toMatchInlineSnapshot(
-      `[Error: [event] unit 'event': unit call from pure function is not supported, use operators like sample instead]`,
+      `"sample: This error happened in function from this unit:"`,
     )
   })
 })
