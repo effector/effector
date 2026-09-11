@@ -1,6 +1,6 @@
 import type {DOMElement} from '../index.h'
 
-import {currentTemplate} from '../template'
+import {currentTemplate} from '../engine/createTemplate'
 
 import {assertClosure} from '../assert'
 

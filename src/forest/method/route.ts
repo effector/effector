@@ -2,12 +2,12 @@ import {Store, is, launch, createEvent, sample, merge, combine} from 'effector'
 
 import type {Leaf, LeafDataRoute, RouteDraft} from '../index.h'
 
-import {createTemplate, currentTemplate} from '../template'
-import {mountChild, setInParentIndex} from '../mountChild'
+import {createTemplate, currentTemplate} from '../engine/createTemplate'
+import {mountChild, setInParentIndex} from '../engine/mountChild'
 import {assertClosure} from '../assert'
 import {mountFn} from '../mountFn'
 import {mutualSample} from '../mutualSample'
-import {changeChildLeafsVisible} from '../iterateChildLeafs'
+import {changeChildLeafsVisible} from '../engine/iterateChildLeafs'
 
 export function route<T>(config: {
   source: Store<T>

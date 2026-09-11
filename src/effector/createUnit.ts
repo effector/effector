@@ -103,7 +103,10 @@ export const initUnit = (
     }
     unit[observableSymbol] = () => unit
     const template = readTemplate()
-    if (template) meta.nativeTemplate = template
+    if (template) {
+      meta.nativeTemplate = template
+      template.units.push(unit)
+    }
   }
   return meta
 }
