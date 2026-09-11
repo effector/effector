@@ -10,6 +10,8 @@ import type {
   ClassListProperty,
 } from '../index.h'
 
+import {createStore} from 'effector'
+
 import {escapeTag} from '../bindings'
 import {currentTemplate} from '../template'
 import {assertClosure} from '../assert'
@@ -112,16 +114,16 @@ function normalizeClassList(
 ) {
   if (Array.isArray(classList)) {
     classList.forEach(className => {
-      const name =
-        typeof className === 'string'
-          ? classListArray(className)
-          : className.map(optionalClass => classListArray(optionalClass || ''))
-      const enabled =
-        typeof className === 'string'
-          ? true
-          : className.map(optionalClass => optionalClass !== null)
-
-      cb({name, enabled})
+      if (typeof className === 'string') {
+        const name = classListArray(className)
+        const enabled = true
+        cb({name, enabled})
+      } else {
+        const name = createStore(classListArray(className.getState() ?? ''))
+          .on(className, (_, value) => value ? classListArray(value) : [])
+        const enabled = className.map(value => value !== null)
+        cb({name, enabled})
+      }
     })
   } else {
     forIn(classList, (enabled, names) => {
