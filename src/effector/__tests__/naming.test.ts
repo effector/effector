@@ -78,13 +78,13 @@ describe('naming scheme', () => {
     ).toBe('combine(1, 2, 3)')
   })
 
-  test('storeObjectArrayName doesnt breaks maximum', () => {
+  test('storeObjectArrayName doesnt break maximum', () => {
     const mock = Array.from({length: 100}, (_, i) => i.toString(36))
     const obj2 = mock.slice(0, 25)
     expect(unitObjectName(mock)).toBe(`combine(${obj2.join(', ')})`)
   })
 
-  test('storeObjectName doesnt breaks maximum', () => {
+  test('storeObjectName doesnt break maximum', () => {
     const mock = Array.from({length: 100}, (_, i) => i.toString(36))
     const obj = mock.reduce((acc, v) => ({...acc, [v]: v}), {})
     const obj2 = Object.values(obj).slice(0, 25)

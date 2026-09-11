@@ -375,7 +375,7 @@ test('interaction with watch and parallel updates', async () => {
   ])
 })
 
-test('attached effect should got its name from parent domain', () => {
+test('attached effect should get its name from parent domain', () => {
   const app = createDomain()
   const fx = app.createEffect(() => {})
   const attached = attach({effect: fx})

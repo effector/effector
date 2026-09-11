@@ -255,7 +255,7 @@ export const onSettled =
         {value: data, fn: ok ? req.rs : req.rj},
       ],
       defer: true,
-      // WARN! Will broke forest pages as they arent moved to new scope
+      // WARN! Will break forest pages as they aren't moved to new scope
       page: stack.page,
       scope: stack.scope,
       meta: stack.meta,

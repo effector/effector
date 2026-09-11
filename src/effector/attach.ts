@@ -111,8 +111,8 @@ export function attach(config: any) {
      * but when node is executed, everything in it will run sequentially
      * so kernel will find "effect a" earlier than already queued "effect b"
      *
-     * this behavior leads to state reading happened before another effect handlers
-     * execution and in this case we dont want that, as it leads
+     * this behavior leads to state being read before another effect handlers
+     * execution and in this case we don't want that, as it leads
      * to reading values which are going to change
      */
     delete runner.seq[1].order

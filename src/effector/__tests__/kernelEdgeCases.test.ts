@@ -8,7 +8,7 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
-it('should call watcher as many times, as many store updates occured', () => {
+it('should call watcher as many times, as many store updates occurred', () => {
   const fn = jest.fn()
   const e1 = createEvent<string>()
   const e2 = e1.map(() => 'e2')
