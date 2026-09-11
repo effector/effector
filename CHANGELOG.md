@@ -43,6 +43,13 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Add support for multiple arguments to `scopeBind`. This feature indirectly allows to use multiple arguments in `reflect` ([issue reflect#91](https://github.com/effector/reflect/issues/91))
 - Fix issues with `clearNode` ([issue #1200](https://github.com/effector/effector/issues/1200))
 
+## effector-vue 23.2.0
+
+- Fix nested reactivity in `useVModel` and `useGate` on Vue 3.5: the `deep` watch option shipped as `1` after minification, and Vue 3.5 reads a number as the depth to traverse ([issue #1344](https://github.com/effector/effector/issues/1344), [PR #1345](https://github.com/effector/effector/pull/1345), thanks [egoson](https://github.com/egoson) for the report)
+- Fix `useUnit(effect)` with a single effect: it returns a bound function, as the typings promise, instead of `{unit}` ([PR #1341](https://github.com/effector/effector/pull/1341))
+- Make the root `effector-vue` entry loadable on Vue 3 and export `EffectorScopePlugin` from `effector-vue/composition` ([issue #1280](https://github.com/effector/effector/issues/1280), [issue #1131](https://github.com/effector/effector/issues/1131), [PR #1343](https://github.com/effector/effector/pull/1343))
+- Fix the Vue 3 typings of `effector-vue/composition`: types come from `vue` instead of `@vue/reactivity`, and CI typechecks them ([issue #1186](https://github.com/effector/effector/issues/1186), [PR #1342](https://github.com/effector/effector/pull/1342))
+
 ## effector-vue 23.1.1
 
 - Fix `Date` suppport in `useVModel`, `createGate` and options API ([PR #1228](https://github.com/effector/effector/pull/1228), thanks [egoson](https://github.com/egoson))

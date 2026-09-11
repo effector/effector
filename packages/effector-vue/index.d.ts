@@ -37,7 +37,9 @@ type ExpandType<
 
 declare module 'vue/types/vue' {
   interface Vue {
+    /** @deprecated not implemented, will be removed */
     $watchAsStore: typeof watchAsStore
+    /** @deprecated not implemented, will be removed */
     $store: typeof store
   }
 
@@ -165,7 +167,13 @@ declare function createComponent<
   store?: S,
 ): ExtendedVue<Inference<S> & V, Data, Methods, Computed, PropNames>
 
+/**
+ * The return type is structural because this entry point is typed against
+ * Vue 2, which has no `Plugin` type to import: without it `Plugin` silently
+ * resolved to the DOM `Plugin` interface. Becomes `Plugin` from 'vue' in v24,
+ * when the root entry point moves to Vue 3.
+ */
 export function EffectorScopePlugin(config: {
   scope: Scope
   scopeName?: string
-}): Plugin
+}): {install(app: unknown): void}

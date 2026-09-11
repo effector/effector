@@ -27,7 +27,11 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
         GateComponent.set(deepCopy(raw))
       },
       {
-        deep: true,
+        /**
+         * `Boolean(true)` survives the build. A bare `true` ships as `1`, and Vue
+         * 3.5 reads a numeric `deep` as the depth to traverse.
+         */
+        deep: Boolean(true),
         immediate: true,
       },
     )
