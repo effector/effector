@@ -62,13 +62,6 @@ export const LINKS = {
 
 export const COMMUNITY_INVITE_URL = LINKS.discord;
 
-// See "Algolia" section of the README for more information.
-export const ALGOLIA = {
-  indexName: "effector-beta",
-  appId: "ARB8LV9Z4L",
-  // apiKey: import.meta.env.ALGOLIA_API_KEY!,
-};
-
 export const ANNOUNCEMENT: Announcement | null = {
   title: { en: "Pay attention", ru: "Обратите внимание", uz: "Etibor bering" },
   text: {

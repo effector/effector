@@ -8,8 +8,7 @@ import Companies from "@components/Landing/Companies.astro";
 
 import Landing from "../layouts/Landing.astro";
 import { SITE } from "../consts";
-import { DESKTOP_NAVIGATION } from "../navigation";
-import { getPathParamsFromId, getTextLocalized } from "../languages";
+import { getPathParamsFromId } from "../languages";
 
 const features = [
   {
@@ -71,6 +70,7 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
       <span>O`rganishni boshlash</span>
       <IconChevron />
     </a>
+    </div>
   </Hero>
   <FeaturesGrid>
     {
@@ -84,3 +84,18 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
   <Stats />
   <Companies />
 </Landing>
+
+<style>
+  .started-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  :global(.hero .links) {
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+</style>
