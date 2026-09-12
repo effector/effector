@@ -15,13 +15,31 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
 const [owner, repo] = GITHUB_REPO.split("/");
 const repoInfo = { owner, repo };
 
-const octokit = new Octokit({ auth: import.meta.env.GITHUB_TOKEN });
+const githubToken = import.meta.env.GITHUB_TOKEN as string | undefined;
+
+function createOctokit(auth?: string) {
+  return auth ? new Octokit({ auth }) : new Octokit();
+}
 
 const formatDate = (date: Date) => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
   return `${date.getUTCFullYear()}-${month}-${day}`;
 };
+
+function formatCompactCount(value: number): string {
+  if (value >= 1_000_000) {
+    const millions = value / 1_000_000;
+    const digits = millions >= 10 ? 0 : 1;
+    return `${millions.toFixed(digits).replace(/\.0$/, "")}M`;
+  }
+
+  if (value >= 1_000) {
+    return `${(value / 1_000).toFixed(0)}K`;
+  }
+
+  return String(value);
+}
 
 async function getNpmStats() {
   const to = new Date();
@@ -38,7 +56,7 @@ async function getNpmStats() {
 
     return {
       latest,
-      downloads: `${(downloadCounts.downloads / 1000).toFixed(0)}K`,
+      downloads: formatCompactCount(downloadCounts.downloads),
     };
   } catch (error) {
     console.error("Failed to get NPM stats", error);
@@ -46,7 +64,7 @@ async function getNpmStats() {
   }
 }
 
-async function getRepoStats() {
+async function fetchRepoStats(octokit: Octokit) {
   const { data: repo } = await octokit.repos.get(repoInfo);
 
   let contributorsCount = 0;
@@ -70,6 +88,22 @@ async function getRepoStats() {
     contributors: contributorsCount,
     license: repo.license?.spdx_id,
   };
+}
+
+async function getRepoStats() {
+  const clients = githubToken ? [createOctokit(), createOctokit(githubToken)] : [createOctokit()];
+
+  let lastError: unknown;
+  for (const octokit of clients) {
+    try {
+      return await fetchRepoStats(octokit);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  console.error("Failed to get GitHub stats", lastError);
+  return null;
 }
 
 async function getGzipSize() {
@@ -102,7 +136,7 @@ const statsMeta = {
   },
   contributors: {
     label: getTextLocalized(translations.Landing.Stats.contributors, lang),
-    link: "https://github.com/effector/effector/graphs/contributors",
+    link: "https://github.com/effector/effector/graphs/contributors?all=1",
   },
   stars: {
     label: getTextLocalized(translations.Landing.Stats.stars, lang),
@@ -114,7 +148,7 @@ const statsMeta = {
   },
   latest: {
     label: getTextLocalized(translations.Landing.Stats.latest, lang),
-    link: "https://github.com/effector/effector/releases",
+    link: "https://www.npmjs.com/package/effector?activeTab=versions",
   },
   license: {
     label: getTextLocalized(translations.Landing.Stats.license, lang),

@@ -14,13 +14,23 @@ The Plugin provides a general scope which needs for read and update effector's s
 1. `scope` [Scope](/en/api/effector/Scope)
 2. `scopeName?` custom scopeName (default: `root`)
 
+### Imports (#plugins-EffectorScopePlugin-scope-scopeName-imports)
+
+On Vue 3 import the plugin from `effector-vue/composition`, next to the other composition API methods:
+
+```js
+import { EffectorScopePlugin } from "effector-vue/composition";
+```
+
+The root entry `effector-vue` also exports the plugin and keeps doing so for backward compatibility. It is the entry of the Vue 2 API (`VueEffector`, `createComponent`), so a Vue 3 app that imports from it pulls in code it never runs.
+
 ### Examples (#plugins-EffectorScopePlugin-scope-scopeName-examples)
 
 #### Basic Usage (#plugins-EffectorScopePlugin-scope-scopeName-examples-basic)
 
 ```js
 import { createSSRApp } from "vue";
-import { EffectorScopePlugin } from "effector-vue";
+import { EffectorScopePlugin } from "effector-vue/composition";
 import { fork } from "effector";
 
 const app = createSSRApp(AppComponent);

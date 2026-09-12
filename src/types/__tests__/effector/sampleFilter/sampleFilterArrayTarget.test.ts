@@ -271,9 +271,9 @@ describe('combinable', () => {
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number] | [number, string]; }[]; }'.
         "
       `)
     })
@@ -493,7 +493,7 @@ describe('combinable', () => {
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string] | [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number, string]; }[]; }'.
@@ -503,7 +503,7 @@ describe('combinable', () => {
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
-        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string] | [number]; }[]; }'.
+        Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number] | [number, string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [string]; }[]; }'.
         Object literal may only specify known properties, and 'filter' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number, string]; }[]; }'.

@@ -52,7 +52,14 @@ const mixin: ComponentOptions = {
       for (const key in shape) {
         const value = shape[key]
 
-        const watchOptions: WatchOptions = {deep: true, immediate: false}
+        /**
+         * `Boolean(true)` survives the build. A bare `true` ships as `1`, and Vue
+         * 3.5 reads a numeric `deep` as the depth to traverse.
+         */
+        const watchOptions: WatchOptions = {
+          deep: Boolean(true),
+          immediate: false,
+        }
         let watchCallback: WatchCallback
 
         let nextID = 0

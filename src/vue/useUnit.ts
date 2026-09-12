@@ -69,7 +69,7 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
     return readonly(states.unit.ref)
   }
 
-  if (isSingleUnit && is.event(config)) {
+  if (isSingleUnit && (is.event(config) || is.effect(config))) {
     // @ts-expect-error TS can't infer that normShape.unit is a Effect/Event
     return scopeBind(normShape.unit, {scope, safe: true})
   }

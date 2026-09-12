@@ -1,4 +1,12 @@
-import {ComputedRef, DeepReadonly, EffectScope, Reactive, Ref, UnwrapRef} from '@vue/reactivity'
+import {
+  ComputedRef,
+  DeepReadonly,
+  EffectScope,
+  Plugin,
+  Ref,
+  UnwrapNestedRefs,
+  UnwrapRef,
+} from 'vue'
 import {Domain, Store, Event, Effect, Scope} from 'effector'
 
 type GateConfig<T> = {
@@ -17,12 +25,7 @@ type Gate<Props> = {
 }
 
 type ExtractStore<T extends Record<string, Store<unknown>>> = {
-  [Key in keyof T]: T[Key] extends Store<infer U> ? Reactive<U> : never
-}
-
-export interface UseVModel {
-  <T>(vm: Store<T>): Ref<T>
-  <T extends Record<string, Store<any>>>(vm: T, scope?: EffectScope): ExtractStore<T>
+  [Key in keyof T]: T[Key] extends Store<infer U> ? UnwrapNestedRefs<U> : never
 }
 
 export function useStoreMap<State, Result, Keys = unknown>(
@@ -35,11 +38,16 @@ export function useStoreMap<State, Result, Keys = unknown>(
   },
   scope?: Scope,
 ): ComputedRef<Result>
-export function useVModel<T>(vm: Store<T>, scope?: EffectScope): Ref<UnwrapRef<T>>
+export function useVModel<T>(
+  vm: Store<T>,
+  scope?: EffectScope,
+): Ref<UnwrapRef<T>>
 export function useVModel<T extends Record<string, Store<any>>>(
   vm: T,
-  scope?: EffectScope
+  scope?: EffectScope,
 ): ExtractStore<T>
+/** Type of the `useVModel` overloads declared above */
+export type UseVModel = typeof useVModel
 export function useStore<T>(store: Store<T>): DeepReadonly<Ref<T>>
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(
@@ -102,6 +110,11 @@ export function useUnit<
     ? DeepReadonly<Ref<V>>
     : never
 }
+
+export function EffectorScopePlugin(config: {
+  scope: Scope
+  scopeName?: string
+}): Plugin
 
 type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y
   ? 1

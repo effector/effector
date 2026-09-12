@@ -1,5 +1,5 @@
 ---
-import { markActiveNavigation, MOBILE_NAVIGATION, SOCIAL_LINKS } from "../navigation";
+import { markActiveNavigation, MOBILE_NAVIGATION, getSocialLinks } from "../navigation";
 import { createChangeLangLinks, getPathParamsFromId, getTextLocalized } from "../languages";
 import ThemeSwitch from "./Header/ThemeSwitch.astro";
 
@@ -9,6 +9,7 @@ import IconExternal from "@icons/External.astro";
 
 const { slug, lang } = getPathParamsFromId(Astro.url.pathname);
 const languageLinks = createChangeLangLinks({ slug });
+const socialLinks = getSocialLinks(lang);
 const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOBILE_NAVIGATION);
 ---
 
@@ -19,10 +20,10 @@ const activeNavigation = markActiveNavigation(`/${slug.replace(/\/$/, "")}`, MOB
   <footer>
     <div class="socials">
       {
-        SOCIAL_LINKS.map((link) => {
+        socialLinks.map((link) => {
           const Icon = link.icon ?? IconExternal;
           return (
-            <a class="social" href={link.link} class="link only-medium" target="_blank">
+            <a class="social" href={link.link} target="_blank">
               <Icon size={24} />
             </a>
           );

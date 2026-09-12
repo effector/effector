@@ -48,31 +48,48 @@ export const DOCS_VERSIONS = [
   { text: { en: "v20.17.2" }, link: "https://v20.effector.dev" },
 ];
 
-export const SOCIAL_LINKS: {
+export type SocialLink = {
   text: LText;
   icon: (props: { size?: number }) => any;
   link: string;
-}[] = [
-  { text: { en: "GitHub" }, icon: IconGithub, link: LINKS.github },
-  { text: { en: "Telegram" }, icon: IconTelegram, link: LINKS.telegramRU },
-];
+};
 
-const apiPackages: LSidebarIconItem[] = [
-  { text: { en: "effector" }, link: "/api/effector", icon: IconEffector },
-  { text: { en: "effector-react" }, link: "/api/effector-react", icon: IconReact },
-  { text: { en: "effector-solid" }, link: "/api/effector-solid", icon: IconSolid },
-  { text: { en: "effector-vue" }, link: "/api/effector-vue", icon: IconVue },
+export function getSocialLinks(lang: string): SocialLink[] {
+  return [
+    { text: { en: "GitHub" }, icon: IconGithub, link: LINKS.github },
+    {
+      text: { en: "Telegram" },
+      icon: IconTelegram,
+      link: lang === "ru" ? LINKS.telegramRU : LINKS.telegramEN,
+    },
+  ];
+}
+
+const apiPackages = [
+  { text: { en: "effector" }, link: "/api/effector", icon: IconEffector, items: effector },
+  { text: { en: "effector-react" }, link: "/api/effector-react", icon: IconReact, items: effectorReact },
+  { text: { en: "effector-solid" }, link: "/api/effector-solid", icon: IconSolid, items: effectorSolid },
+  { text: { en: "effector-vue" }, link: "/api/effector-vue", icon: IconVue, items: effectorVue },
   { text: { en: "@effector/next" }, link: "https://github.com/effector/next", icon: IconNextJs },
 ];
 
+const blogLink = { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog };
+const playgroundLink = { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl };
+const changelogLink = { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog };
+
 export const DESKTOP_NAVIGATION: (LSidebarItem & Partial<LSidebarGroup>)[] = [
-  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/core-concepts" },
+  { text: { en: "Learn", ru: "Изучение", uz: "O'rganish" }, link: "/introduction/get-started" },
+  { text: { en: "Guides", ru: "Гайды", uz: "Qo'llanmalar" }, link: "/essentials/typescript" },
   {
     text: { en: "API" },
     link: "/api",
-    items: [{ text: { en: "Overview", ru: "Обзор" }, link: "/api" }, ...apiPackages],
+    items: [
+      { text: { en: "Overview", ru: "Обзор" }, link: "/api" },
+      ...apiPackages.map(({ text, link, icon }) => ({ text, link, icon })),
+    ],
   },
-  { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
+  { text: { en: "Ecosystem", ru: "Экосистема", uz: "Ekotizim" }, link: "/introduction/ecosystem" },
+  blogLink,
 ];
 
 export const MOBILE_NAVIGATION = createMobileNavigation([
@@ -83,12 +100,7 @@ export const MOBILE_NAVIGATION = createMobileNavigation([
   {
     text: { en: "API" },
     link: "/api",
-    items: [
-      { text: { en: "effector" }, link: "/api/effector", items: effector },
-      { text: { en: "effector-react" }, link: "/api/effector-react", items: effectorReact },
-      { text: { en: "effector-solid" }, link: "/api/effector-solid", items: effectorSolid },
-      { text: { en: "effector-vue" }, link: "/api/effector-vue", items: effectorVue },
-    ],
+    items: apiPackages.map(({ icon, ...pkg }) => pkg),
   },
   {
     text: { en: "Recipes", ru: "Рецепты", uz: "Retseptlar" },
@@ -102,67 +114,10 @@ export const MOBILE_NAVIGATION = createMobileNavigation([
       },
     ],
   },
-  { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
-  { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
-  { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
+  blogLink,
+  playgroundLink,
+  changelogLink,
 ] satisfies LMobileNavItem[]);
-
-export const FOOTER_LINKS = [
-  {
-    text: { en: "Docs", ru: "Документация", uz: "Hujjatlar" },
-    items: [
-      {
-        text: { en: "Getting started", ru: "С чего начать", uz: "Boshlash" },
-        link: "/introduction/installation",
-      },
-      { text: { en: "API Reference", ru: "Справочник API", uz: "API Havolasi" }, link: "/api" },
-      {
-        text: { en: "Writings tests", ru: "Тестирование кода", uz: "Kodni testlash" },
-        link: "/guides/testing",
-      },
-      {
-        text: { en: "Release policy", ru: "Политика релизов", uz: "Relizlar siyosati" },
-        link: "/core-principles/releases",
-      },
-      { text: { en: "What's new", ru: "Что нового", uz: "Yangiliklar" }, link: LINKS.changelog },
-    ],
-  },
-  {
-    text: { en: "Community", ru: "Сообщество", uz: "Jamiyat" },
-    items: [
-      { text: { en: "Official", ru: "Официальное", uz: "Rasmiy" }, link: LINKS.community },
-      { text: { en: "Discord" }, link: LINKS.discord },
-      { text: { en: "dev.to" }, link: LINKS.devTo },
-      { text: { en: "Twitter" }, link: LINKS.twitter },
-      { text: { en: "Telegram 🇷🇺" }, link: LINKS.telegramRU },
-      { text: { en: "Telegram 🇺🇸" }, link: LINKS.telegramEN },
-    ],
-  },
-  {
-    text: { en: "More", ru: "Больше", uz: "Ko'proq" },
-    items: [
-      { text: { en: "Github" }, link: LINKS.github },
-      { text: { en: "Reddit" }, link: LINKS.reddit },
-      { text: { en: "Youtube" }, link: LINKS.youtube },
-      { text: { en: "Lines of Code" }, link: LINKS.linesOfCode },
-      { text: { en: "ChatGPT" }, link: "https://chat.openai.com/g/g-thabaCJlt-effector-assistant" },
-      { text: { en: "Blog", ru: "Блог", uz: "Blog" }, link: LINKS.blog },
-      { text: { en: "Changelog", ru: "Изменения", uz: "O'zgarishlar" }, link: LINKS.changelog },
-      { text: { en: "Playground", ru: "Песочница", uz: "Playground" }, link: LINKS.repl },
-      { text: { en: "Docs powered by Astro" }, link: "https://astro.build" },
-    ],
-  },
-] satisfies FooterGroup[];
-
-type FooterGroup = {
-  text: LText;
-  items: FooterItem[];
-};
-
-type FooterItem = {
-  text: LText;
-  link: string;
-};
 
 export type LMobileNavItem = LMobileNavLink | LMobileNavGroup | LMobileNavLinkGroup;
 

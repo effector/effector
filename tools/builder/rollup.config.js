@@ -53,7 +53,7 @@ const input = {
     '@rollup/plugin-alias',
     '@rollup/plugin-babel',
     '@rollup/plugin-node-resolve',
-    'rollup-plugin-terser',
+    '@rollup/plugin-terser',
     '@rollup/plugin-commonjs',
     '@rollup/plugin-replace',
     'rollup-plugin-visualizer',
@@ -75,6 +75,9 @@ const output = {
   file: resolve(__dirname, '..', 'builder.js'),
   format: 'cjs',
   sourcemap: false,
+  // chalk and execa are esm only, node exposes them to require() as a
+  // namespace, so the default export has to be unwrapped
+  interop: 'auto',
 }
 
 module.exports = {input, output}
