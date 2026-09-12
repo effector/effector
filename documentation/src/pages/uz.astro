@@ -3,6 +3,7 @@ import IconChevron from "@icons/Chevron.astro";
 import Hero from "@components/Landing/Hero.astro";
 import FeaturesGrid from "@components/Landing/FeaturesGrid.astro";
 import Feature from "@components/Landing/Feature.astro";
+import LiveExamples from "@components/Landing/LiveExamples.astro";
 import Stats from "@components/Landing/Stats.astro";
 import Companies from "@components/Landing/Companies.astro";
 
@@ -81,6 +82,27 @@ const { lang } = getPathParamsFromId(Astro.url.pathname);
       ))
     }
   </FeaturesGrid>
+  <LiveExamples
+    title="Amalda ko'ring"
+    subtitle="Quyidagi kodni tahrirlashingiz mumkin — u aynan shu yerda ishlayapti."
+    examples={[
+      {
+        title: "Ortiqcha kodsiz reaktiv holat",
+        description:
+          "Event nima sodir bo'lganini tasvirlaydi. Store o'zini o'zi yangilaydi — dispatch, reducer va selectorlarsiz.",
+      },
+      {
+        title: "Har doim sinxron bo'lgan hosila qiymatlar",
+        description:
+          "Store'larni yangi storega birlashtiring. Har qanday bog'liqlik o'zgarganda effector qiymatni avtomatik qayta hisoblaydi.",
+      },
+      {
+        title: "Kutish holati o'rnatilgan asinxron effektlar",
+        description:
+          "Har qanday asinxron funksiyani effect ichiga o'rang va bepul .pending, .done va .fail oling.",
+      },
+    ]}
+  />
   <Stats />
   <Companies />
 </Landing>

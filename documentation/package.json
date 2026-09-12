@@ -26,6 +26,7 @@
     "@astrojs/mdx": "^3.1.9",
     "@astrojs/preact": "^3.5.3",
     "@astrojs/tailwind": "^5.1.2",
+    "@codesandbox/sandpack-react": "^2.10.0",
     "@effector/remark-heading-id": "^2.0.2",
     "@octokit/rest": "^21.0.2",
     "@pagefind/default-ui": "^1.1.0",
