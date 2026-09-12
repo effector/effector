@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: #fafafa;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        text-align: center;
+      }
+      button {
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        background: hsl(28, 100%, 58%);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      button:hover:not(:disabled) {
+        background: hsl(28, 100%, 50%);
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+      #status {
+        font-size: 13px;
+        color: #888;
+        min-height: 16px;
+      }
+      #name {
+        font-size: 18px;
+        font-weight: 700;
+        min-height: 22px;
+      }
+      #role {
+        font-size: 14px;
+        color: #777;
+        min-height: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <button id="load">Load user</button>
+      <span id="status">Ready</span>
+      <span id="name"></span>
+      <span id="role"></span>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>

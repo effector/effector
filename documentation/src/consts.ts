@@ -58,13 +58,6 @@ export const LINKS = {
 
 export const COMMUNITY_INVITE_URL = LINKS.discord;
 
-// See "Algolia" section of the README for more information.
-export const ALGOLIA = {
-  indexName: "effector-beta",
-  appId: "ARB8LV9Z4L",
-  // apiKey: import.meta.env.ALGOLIA_API_KEY!,
-};
-
 export const PAGE_NAVIGATION = {
   next: {
     text: { en: "Next", ru: "Следующая", uz: "Keyingi" },
