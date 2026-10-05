@@ -130,6 +130,7 @@ type Declaration = UnitDeclaration | Region
 
 const inspectGraphSubs = new Set<{
   fn: (declaration: Declaration) => void
+  onNode?: (node: Node) => void
 }>()
 
 setGraphInspector((node: Node | 'region', regionStack: RegionStack) => {
@@ -146,10 +147,16 @@ setGraphInspector((node: Node | 'region', regionStack: RegionStack) => {
       sub.fn(decl!)
     })
   }
+  if (node !== 'region') {
+    inspectGraphSubs.forEach(sub => {
+      if (sub.onNode) sub.onNode(node)
+    })
+  }
 })
 
 export function inspectGraph(config: {
   fn: (declaration: Declaration) => void
+  onNode?: (node: Node) => void
 }): Subscription {
   inspectGraphSubs.add(config)
   return createSubscription(() => {
