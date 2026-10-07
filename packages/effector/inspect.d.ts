@@ -44,6 +44,12 @@ type Region =
       }
     }
 
+type GraphLinks = {
+  owners: string[]
+  links: string[]
+  next: string[]
+}
+
 export type Declaration =
   | {
       type: 'unit'
@@ -58,8 +64,29 @@ export type Declaration =
       }
       meta: Record<string, unknown>
       region?: Show<Region>
+      graph?: GraphLinks
       // for derived units - stores or events
       derived?: boolean
+    }
+  | {
+      type: 'link'
+      id: string
+      kind?: string
+      name?: string
+      loc?: {
+        file: string
+        line: number
+        column: number
+      }
+      meta: Record<string, unknown>
+      region?: Show<Region>
+      graph: GraphLinks
+      // these fields are not provided to graph links
+      // however, to make it easier to work with it in Typescript
+      // and to avoid annoying `some prop does not exist` errors
+      derived?: undefined
+      sid?: undefined
+      method?: undefined
     }
   | {
       type: 'factory'
@@ -99,5 +126,6 @@ export type Declaration =
     }
 
 export function inspectGraph(config: {
+  includeLinks?: boolean
   fn: (declaration: Declaration) => void
 }): Subscription
