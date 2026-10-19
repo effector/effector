@@ -1,5 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {useProvidedScope, useStore, useUnit} from 'effector-vue/composition'
+import {
+  EffectorScopePlugin,
+  useProvidedScope,
+  useStore,
+  useUnit,
+} from 'effector-vue/composition'
 import {
   allSettled,
   createEffect,
@@ -10,7 +15,7 @@ import {
 } from 'effector'
 import {defineComponent, h, nextTick, onServerPrefetch} from 'vue-next'
 
-import {hydrateInto, linksCount, renderSSR} from './helpers'
+import {hydrateInto, linksCount, mountSetup, renderSSR} from './helpers'
 
 jest.mock('vue', () => require('vue-next'))
 
@@ -99,6 +104,37 @@ describe('server render', () => {
     ])
 
     expect(html).toEqual(['<p>first</p>', '<p>second</p>'])
+  })
+})
+
+describe('the ssr option of the plugin', () => {
+  test('turns the subscription off where there is no render context', () => {
+    const setValue = createEvent<string>()
+    const $value = createStore('value').on(setValue, (_, value) => value)
+    const scope = fork()
+
+    const {result} = mountSetup(() => useUnit($value), [
+      EffectorScopePlugin({scope, ssr: true}),
+    ])
+
+    expect(linksCount(scope)).toBe(0)
+    expect(result.value).toBe('value')
+
+    scopeBind(setValue, {scope})('updated')
+
+    /** Nothing pushes the update, the ref reads the scope when asked. */
+    expect(result.value).toBe('updated')
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  test('keeps the subscription when set to false', () => {
+    const $value = createStore('value')
+    const scope = fork()
+    const plugin = EffectorScopePlugin({scope, ssr: false})
+
+    mountSetup(() => useUnit($value), [plugin])
+
+    expect(linksCount(scope)).toBe(1)
   })
 })
 
