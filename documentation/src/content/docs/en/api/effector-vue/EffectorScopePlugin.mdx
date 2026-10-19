@@ -7,19 +7,22 @@ The Plugin provides a general scope which needs for read and update effector's s
 
 # Plugins (#plugins)
 
-## `EffectorScopePlugin({ scope, scopeName })` (#plugins-EffectorScopePlugin-scope-scopeName)
+## `EffectorScopePlugin({ scope, scopeName, forceScope })` (#plugins-EffectorScopePlugin-scope-scopeName)
 
 ### Arguments (#plugins-EffectorScopePlugin-scope-scopeName-arguments)
 
-1. `scope` [Scope](/en/api/effector/Scope)
-2. `scopeName?` custom scopeName (default: `root`)
+1. `scope` [Scope](/en/api/effector/Scope), created by [`fork`](/en/api/effector/fork)
+2. `scopeName?` custom scopeName (default: `root`), the legacy string injection key
+3. `forceScope?` throw instead of falling back to global mode when a composable of this app resolves no scope (default: `false`)
+
+The plugin provides the scope under the `EffectorScopeKey` injection key and, for backward compatibility, under the string `scopeName`.
 
 ### Imports (#plugins-EffectorScopePlugin-scope-scopeName-imports)
 
 On Vue 3 import the plugin from `effector-vue/composition`, next to the other composition API methods:
 
 ```js
-import { EffectorScopePlugin } from "effector-vue/composition";
+import { EffectorScopePlugin, EffectorScopeKey } from "effector-vue/composition";
 ```
 
 The root entry `effector-vue` also exports the plugin and keeps doing so for backward compatibility. It is the entry of the Vue 2 API (`VueEffector`, `createComponent`), so a Vue 3 app that imports from it pulls in code it never runs.
@@ -43,3 +46,57 @@ app.use(
   }),
 );
 ```
+
+#### Passing options to `app.use` (#plugins-EffectorScopePlugin-scope-scopeName-examples-app-use)
+
+Both forms install the plugin:
+
+```js
+app.use(EffectorScopePlugin({ scope }));
+app.use(EffectorScopePlugin, { scope });
+```
+
+#### Requiring a scope (#plugins-EffectorScopePlugin-scope-scopeName-examples-force-scope)
+
+With `forceScope` a composable that resolves no scope throws instead of reading global stores:
+
+```js
+app.use(EffectorScopePlugin({ scope, forceScope: true }));
+```
+
+The option is read through the injection context, so it covers the calls that see the app: `setup`, `app.runWithContext` and anything called before the first `await` of an async `setup`. A call that lost the context sees neither the scope nor the option: pass `{ forceScope: true }` to it directly.
+
+# How the scope is resolved (#resolution)
+
+Where the scope options go differs between the composables:
+
+| Composable                    | Scope options                                                                                                |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `useUnit(unit, opts)`         | `{ scope, forceScope }` as the last argument                                                                   |
+| `useStore($store, opts)`      | `{ scope, forceScope }` as the last argument                                                                   |
+| `useGate(Gate, props, opts)`  | `{ scope, forceScope }` as the last argument                                                                   |
+| `useStoreMap(config)`         | `scope` and `forceScope` in the config; the positional second argument also works                             |
+| `useProvidedScope(opts)`      | `{ forceScope }` only                                                                                          |
+| `useVModel($store, vueScope)` | none: the second argument is a Vue [EffectScope](https://vuejs.org/api/reactivity-advanced.html#effectscope)   |
+
+Whatever the form, the scope is resolved in this order:
+
+1. the `scope` option of the call;
+2. the value provided under `EffectorScopeKey`, if the current call has an injection context;
+3. the legacy string key, when a component instance is available;
+4. global mode, unless `forceScope` is on.
+
+The legacy string key is read only when nothing is provided under `EffectorScopeKey`. With the plugin installed, a subtree overrides the scope with `provide(EffectorScopeKey, scope)`; a value provided under the `scopeName` string no longer does.
+
+The key is created with `Symbol.for`, so a scope provided by another copy of the package is still found. Providing it by hand is enough, no plugin required:
+
+```js
+import { provide } from "vue";
+import { EffectorScopeKey } from "effector-vue/composition";
+
+provide(EffectorScopeKey, scope);
+```
+
+# Related APIs (#related)
+
+- [useProvidedScope](/en/api/effector-vue/useProvidedScope) reads the resolved scope directly.
