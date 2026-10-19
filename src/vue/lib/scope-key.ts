@@ -15,6 +15,8 @@ export type EffectorScopeConfig = {
   forceScope?: boolean
   /** Legacy string key the scope is provided under as well. */
   scopeName?: string
+  /** Overrides whether the composables subscribe to the scope. */
+  live?: boolean
 }
 
 /** Internal: plugin options shared with the composables. */

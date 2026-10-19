@@ -7,13 +7,14 @@ The Plugin provides a general scope which needs for read and update effector's s
 
 # Plugins (#plugins)
 
-## `EffectorScopePlugin({ scope, scopeName, forceScope })` (#plugins-EffectorScopePlugin-scope-scopeName)
+## `EffectorScopePlugin({ scope, scopeName, forceScope, live })` (#plugins-EffectorScopePlugin-scope-scopeName)
 
 ### Arguments (#plugins-EffectorScopePlugin-scope-scopeName-arguments)
 
 1. `scope` [Scope](/en/api/effector/Scope), created by [`fork`](/en/api/effector/fork)
 2. `scopeName?` custom scopeName (default: `root`), the legacy string injection key
 3. `forceScope?` throw instead of falling back to global mode when a composable of this app resolves no scope (default: `false`)
+4. `live?` whether the composables subscribe to the scope: `false` makes them read the scope on access without subscribing to it, as in a server render, `true` makes them always subscribe (default: `false` inside `renderToString`, `true` elsewhere)
 
 The plugin provides the scope under the `EffectorScopeKey` injection key and, for backward compatibility, under the string `scopeName`.
 

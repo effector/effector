@@ -8,6 +8,13 @@ export type EffectorScopePluginOptions = {
   scope: Scope
   scopeName?: string
   forceScope?: boolean
+  /**
+   * Overrides whether the composables subscribe to the scope. `false` makes
+   * them read the scope on access without subscribing, as in a server render;
+   * `true` makes them always subscribe. Set it for a renderer that provides no
+   * context of its own, or for a test of the server branch.
+   */
+  live?: boolean
 }
 
 export function EffectorScopePlugin(options: EffectorScopePluginOptions): Plugin
@@ -45,10 +52,10 @@ function install(app: App, options?: EffectorScopePluginOptions) {
     )
   }
 
-  const {scope, scopeName = 'root', forceScope} = options
+  const {scope, scopeName = 'root', forceScope, live} = options
 
   app.provide(EffectorScopeKey, scope)
-  app.provide(EffectorScopeConfigKey, {forceScope, scopeName})
+  app.provide(EffectorScopeConfigKey, {forceScope, scopeName, live})
 
   /**
    * The scope used to be provided under a string key read from
