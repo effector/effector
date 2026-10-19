@@ -6,16 +6,40 @@ import {
   watch,
   WatchStopHandle,
 } from 'vue-next'
-import {createApi, launch, createStore, createEvent, sample} from 'effector'
+import {
+  createApi,
+  launch,
+  createStore,
+  createEvent,
+  sample,
+  scopeBind,
+  Scope,
+  EventCallable,
+} from 'effector'
 import {Gate, GateConfig} from './composition.h'
 import {deepCopy} from './lib/deepCopy'
 import {unwrapProxy} from './lib/unwrapProxy'
+import {ScopeOptions, resolveScope} from './lib/get-scope'
 import {flattenConfig, processArgsToConfig} from '../effector/config'
 import {isObject} from '../effector/is'
 
-export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
+const bindToScope = (
+  event: EventCallable<any>,
+  scope: Scope | undefined,
+): ((payload?: any) => any) => (scope ? scopeBind(event, {scope}) : event)
+
+export function useGate<Props>(
+  GateComponent: Gate<Props>,
+  cb?: () => Props,
+  opts?: ScopeOptions,
+) {
   let unwatch: WatchStopHandle
   let _: ComputedRef<Props>
+
+  const scope = resolveScope('useGate', opts)
+  const open = bindToScope(GateComponent.open as EventCallable<any>, scope)
+  const close = bindToScope(GateComponent.close as EventCallable<any>, scope)
+  const set = bindToScope(GateComponent.set as EventCallable<any>, scope)
 
   if (cb) {
     _ = computed(cb)
@@ -24,7 +48,7 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
       _,
       value => {
         const raw = unwrapProxy(value)
-        GateComponent.set(deepCopy(raw))
+        set(deepCopy(raw))
       },
       {
         /**
@@ -40,18 +64,18 @@ export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props) {
   onMounted(() => {
     if (typeof _ !== "undefined") {
       const raw = unwrapProxy(_.value)
-      GateComponent.open(deepCopy(raw))
+      open(deepCopy(raw))
     } else {
-      GateComponent.open()
+      open()
     }
   })
 
   onUnmounted(() => {
     if (typeof _ !== "undefined") {
       const raw = unwrapProxy(_.value)
-      GateComponent.close(deepCopy(raw))
+      close(deepCopy(raw))
     } else {
-      GateComponent.close()
+      close()
     }
 
     if (unwatch) {

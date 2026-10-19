@@ -7,12 +7,14 @@ import {resolve} from 'path'
  * read the build when it is there, after `yarn build`, and are skipped when it
  * is not.
  */
+const dir = resolve(__dirname, '../../../npm/effector-vue')
+
 const files = [
   'composition.mjs',
   'composition.cjs.js',
   'options-vue3.mjs',
   'options-vue3.cjs.js',
-].map(name => resolve(__dirname, '../../../npm/effector-vue', name))
+].map(name => resolve(dir, name))
 
 const built = files.every(file => existsSync(file))
 
@@ -26,5 +28,23 @@ const built = files.every(file => existsSync(file))
     const code = readFileSync(file, 'utf8')
 
     expect(code.match(/deep:\s*\d+/g) || []).toEqual([])
+  })
+
+  /**
+   * The root entry serves Vue 2 and also exports EffectorScopePlugin. A named
+   * import from 'vue' fails there, Vue 2 lacks most of the Vue 3 API, and the
+   * UMD and compat builds bundle a Vue 3 runtime they cannot resolve.
+   */
+  test('keeps Vue 3 imports out of the root entry', () => {
+    const esm = readFileSync(resolve(dir, 'effector-vue.mjs'), 'utf8')
+
+    const named = esm.match(/import\s*\{[^}]*\}\s*from\s*['"]vue['"]/g)
+
+    expect(named || []).toEqual([])
+    for (const name of ['effector-vue.umd.js', 'compat.js']) {
+      const code = readFileSync(resolve(dir, name), 'utf8')
+
+      expect(code).not.toContain('@vue/runtime-core')
+    }
   })
 })

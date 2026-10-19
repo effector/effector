@@ -252,10 +252,10 @@ export default {
     'jsnext:main': 'effector-vue.mjs',
     typings: 'index.d.ts',
     peerDependencies: {
-      vue: '*',
+      vue: '2 || >=3.3.0',
       effector: '^23.0.0',
-      '@vue/reactivity': '^3.0.2',
-      '@vue/runtime-core': '^3.0.2',
+      '@vue/reactivity': '^3.3.0',
+      '@vue/runtime-core': '^3.3.0',
     },
     files: [
       ...getFiles('effector-vue'),
