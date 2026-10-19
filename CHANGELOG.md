@@ -2,6 +2,8 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 23.3.0
+
 ## effector-vue 23.2.0
 
 - Fix nested reactivity in `useVModel` and `useGate` on Vue 3.5: the `deep` watch option shipped as `1` after minification, and Vue 3.5 reads a number as the depth to traverse ([issue #1344](https://github.com/effector/effector/issues/1344), [PR #1345](https://github.com/effector/effector/pull/1345), thanks [egoson](https://github.com/egoson) for the report)
