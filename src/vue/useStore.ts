@@ -7,7 +7,7 @@ import {throwError} from './lib/throw'
 
 export function useStore<T>(store: Store<T>, opts?: ScopeOptions) {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
-  let scope = resolveScope('useStore', opts) ?? undefined
+  let scope = resolveScope('useStore', opts)
 
   let state = stateReader(store, scope)
   let _ = shallowRef(state)

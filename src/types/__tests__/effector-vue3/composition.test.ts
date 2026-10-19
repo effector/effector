@@ -1,9 +1,19 @@
 /* eslint-disable no-unused-vars */
-import {createEffect, createEvent, createStore, Store} from 'effector'
-import {effectScope} from 'vue'
+import {
+  createEffect,
+  createEvent,
+  createStore,
+  fork,
+  Scope,
+  Store,
+} from 'effector'
+import {createApp, effectScope, InjectionKey} from 'vue'
 import {
   createGate,
+  EffectorScopeKey,
+  EffectorScopePlugin,
   useGate,
+  useProvidedScope,
   useStore,
   useStoreMap,
   useUnit,
@@ -114,15 +124,15 @@ describe('useUnit', () => {
     `)
   })
 
-  /**
-   * `forceScope` is declared in the typings only: the runtime signature of
-   * useUnit takes a single argument and never reads options (useUnit.ts:8).
-   */
-  test('forceScope option is declared but not implemented', () => {
+  test('scope options', () => {
     const $count = createStore(0)
+    const scope = fork()
 
     const setup = () => {
       useUnit($count, {forceScope: true})
+      useUnit($count, {scope})
+      useUnit([$count], {scope, forceScope: true})
+      useUnit({count: $count}, {scope})
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -132,11 +142,11 @@ describe('useUnit', () => {
     `)
   })
 
-  test('scope option is not declared', () => {
+  test('scope option rejects anything but a Scope', () => {
     const $count = createStore(0)
 
     const setup = () => {
-      useUnit($count, {scope: null as any})
+      useUnit($count, {scope: effectScope()})
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -151,6 +161,70 @@ describe('useUnit', () => {
   })
 })
 
+describe('scope', () => {
+  test('EffectorScopePlugin', () => {
+    const scope = fork()
+
+    const start = () => {
+      const app = createApp({})
+
+      app.use(EffectorScopePlugin({scope}))
+      app.use(
+        EffectorScopePlugin({
+          scope,
+          scopeName: 'app',
+          forceScope: true,
+        }),
+      )
+      app.use(EffectorScopePlugin, {scope})
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('EffectorScopeKey', () => {
+    const setup = () => {
+      const key: InjectionKey<Scope> = EffectorScopeKey
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('useProvidedScope', () => {
+    const setup = () => {
+      const maybeScope: Scope | null = useProvidedScope()
+      const scope: Scope = useProvidedScope({forceScope: true})
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('useProvidedScope without forceScope may return null', () => {
+    const setup = () => {
+      const scope: Scope = useProvidedScope()
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'Scope | null' is not assignable to type 'Scope'.
+        Type 'null' is not assignable to type 'Scope'.
+      "
+    `)
+  })
+})
+
 describe('useStore', () => {
   test('store', () => {
     const $count = createStore(0)
@@ -158,6 +232,8 @@ describe('useStore', () => {
     const setup = () => {
       const count = useStore($count)
       const value: number = count.value
+      const scoped = useStore($count, {scope: fork(), forceScope: true})
+      const scopedValue: number = scoped.value
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
@@ -199,27 +275,30 @@ describe('useStoreMap', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'StoreWritable<{ name: string; age: number; }>' is not assignable to parameter of type '{ store: Store<unknown>; keys?: (() => unknown) | undefined; fn: (state: unknown, keys: unknown) => unknown; updateFilter?: ((update: unknown, current: unknown) => boolean) | undefined; defaultValue?: unknown; }'.
+      Argument of type 'StoreWritable<{ name: string; age: number; }>' is not assignable to parameter of type '{ store: Store<unknown>; keys?: (() => unknown) | undefined; fn: (state: unknown, keys: unknown) => unknown; updateFilter?: ((update: unknown, current: unknown) => boolean) | undefined; defaultValue?: unknown; } & ScopeOptions'.
         Type 'StoreWritable<{ name: string; age: number; }>' is missing the following properties from type '{ store: Store<unknown>; keys?: (() => unknown) | undefined; fn: (state: unknown, keys: unknown) => unknown; updateFilter?: ((update: unknown, current: unknown) => boolean) | undefined; defaultValue?: unknown; }': store, fn
       Parameter 'user' implicitly has an 'any' type.
       "
     `)
   })
 
-  test('scope is only a positional argument', () => {
+  test('scope in the config and as a positional argument', () => {
     const $user = createStore({name: 'alice', age: 30})
+    const scope = fork()
 
     const setup = () => {
       useStoreMap({
         store: $user,
         fn: user => user.name,
-        scope: null as any,
+        scope,
+        forceScope: true,
       })
+      useStoreMap({store: $user, fn: user => user.name}, scope)
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'scope' does not exist in type '{ store: Store<{ name: string; age: number; }>; keys?: (() => unknown) | undefined; fn: (state: { name: string; age: number; }, keys: unknown) => string; updateFilter?: ((update: string, current: string) => boolean) | undefined; defaultValue?: string | undefined; }'.
+      no errors
       "
     `)
   })
@@ -282,6 +361,7 @@ describe('gate', () => {
       const $state: Store<{id: number}> = Gate.state
 
       useGate(Gate, () => ({id: 1}))
+      useGate(Gate, () => ({id: 1}), {scope: fork(), forceScope: true})
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
