@@ -30,6 +30,7 @@ Creates a [_Gate_](/api/effector-vue/Gate) to consume data from view, designed f
 #### Basic Usage (#methods-createGate-config-examples-basic)
 
 ```js
+import { createApp, ref } from "vue";
 import { createGate, useGate } from "effector-vue/composition";
 
 const ListGate = createGate({
@@ -37,11 +38,7 @@ const ListGate = createGate({
 });
 
 const ListItem = {
-  template: `
-    <div>
-      {{id}}
-    </div>
-  `,
+  template: `<div>{{ id }}</div>`,
   props: {
     id: {
       type: String,
@@ -53,12 +50,8 @@ const ListItem = {
   },
 };
 
-const app = {
-  template: `
-    <div>
-      <ListItem :id="id" />
-    </div>
-  `,
+const app = createApp({
+  template: `<div><ListItem :id="id" /></div>`,
   components: {
     ListItem,
   },
@@ -66,9 +59,9 @@ const app = {
     const id = ref("1");
     return { id };
   },
-};
+});
 
-Gate.state.watch((state) => {
+ListGate.state.watch((state) => {
   console.log("current state", state);
 });
 // => current state null
@@ -79,3 +72,5 @@ app.mount("#app");
 app.unmount();
 // => current state null
 ```
+
+The gate opens on mount with the props it has at that moment and closes on unmount. [useGate](/en/api/effector-vue/useGate) describes the order of `open` and `set`, the behavior under `<KeepAlive>` and on the server.
