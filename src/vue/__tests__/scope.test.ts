@@ -20,7 +20,6 @@ import {
   fork,
 } from 'effector'
 import {
-  App,
   Plugin,
   createApp,
   effectScope,
@@ -28,6 +27,8 @@ import {
   h,
   provide,
 } from 'vue-next'
+
+import {withApp, withSetup} from './helpers'
 
 jest.mock('vue', () => require('vue-next'))
 
@@ -39,31 +40,6 @@ function legacyPlugin(scope: Scope, scopeName = 'root'): Plugin {
       app.provide(scopeName, scope)
     },
   }
-}
-
-/** Runs a composable inside the setup of a mounted component. */
-function withSetup<T>(composable: () => T, plugins: Plugin[] = []): T {
-  let result: T
-  const app = createApp({
-    setup() {
-      result = composable()
-      return () => null
-    },
-  })
-  for (const plugin of plugins) app.use(plugin)
-  app.mount(document.createElement('div'))
-  return result!
-}
-
-/**
- * Runs a composable with an injection context but without a component
- * instance: the same conditions `app.runWithContext` and Vapor components
- * give.
- */
-function withApp<T>(composable: () => T, install?: (app: App) => void): T {
-  const app = createApp({render: () => null})
-  if (install) install(app)
-  return app.runWithContext(composable)
 }
 
 describe('scope resolution', () => {
