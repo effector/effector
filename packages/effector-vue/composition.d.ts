@@ -4,6 +4,7 @@ import {
   DeepReadonly,
   EffectScope,
   InjectionKey,
+  MaybeRefOrGetter,
   Plugin,
   Ref,
   UnwrapNestedRefs,
@@ -40,23 +41,60 @@ type ExtractStore<T extends Record<string, Store<unknown>>> = {
   [Key in keyof T]: T[Key] extends Store<infer U> ? UnwrapNestedRefs<U> : never
 }
 
+export type UseStoreMapConfig<State, Result, Keys> = {
+  store: Store<State>
+  /** Passed to `fn` as its second argument; a ref or a getter is tracked. */
+  keys?: MaybeRefOrGetter<Keys>
+  fn: (state: State, keys: Keys) => Result
+  /** Decides whether a new result of `fn` replaces the current one. */
+  updateFilter?: (update: Result, current: Result) => boolean
+  /** Used every time `fn` returns undefined. */
+  defaultValue?: Result
+} & ScopeOptions
+
 export function useStoreMap<State, Result, Keys = unknown>(
-  config: {
-    store: Store<State>
-    keys?: () => Keys
-    fn: (state: State, keys: Keys) => Result
-    updateFilter?: (update: Result, current: Result) => boolean
-    defaultValue?: Result
-  } & ScopeOptions,
+  config: UseStoreMapConfig<State, Result, Keys>,
   scope?: Scope,
 ): ComputedRef<Result>
+export function useStoreMap<State, Result>(
+  store: Store<State>,
+  fn: (state: State) => Result,
+  opts?: ScopeOptions,
+): ComputedRef<Result>
+
+export type UseVModelOptions = ScopeOptions & {
+  /**
+   * Copy the state into a deeply reactive value and watch it deeply, so that
+   * an edit of a nested field reaches the store. Default true; with false the
+   * state of the store is bound as it is and only assignments of the whole
+   * value are written back.
+   */
+  deep?: boolean
+}
+
 export function useVModel<T>(
   vm: Store<T>,
-  scope?: EffectScope,
+  opts?: UseVModelOptions,
 ): Ref<UnwrapRef<T>>
 export function useVModel<T extends Record<string, Store<any>>>(
   vm: T,
-  scope?: EffectScope,
+  opts?: UseVModelOptions,
+): ExtractStore<T>
+/**
+ * The form before the options object: a Vue effect scope to run in. It keeps
+ * working; the options object is the preferred form.
+ */
+export function useVModel<T>(
+  vm: Store<T>,
+  effectScope: EffectScope,
+): Ref<UnwrapRef<T>>
+/**
+ * The form before the options object: a Vue effect scope to run in. It keeps
+ * working; the options object is the preferred form.
+ */
+export function useVModel<T extends Record<string, Store<any>>>(
+  vm: T,
+  effectScope: EffectScope,
 ): ExtractStore<T>
 /** Type of the `useVModel` overloads declared above */
 export type UseVModel = typeof useVModel
@@ -67,17 +105,14 @@ export function useStore<T>(
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  cb?: () => Props,
+  props?: MaybeRefOrGetter<Props>,
   opts?: ScopeOptions,
 ): void
 export function useUnit<State>(
   store: Store<State>,
   opts?: ScopeOptions,
 ): DeepReadonly<Ref<State>>
-export function useUnit(
-  event: Event<void>,
-  opts?: ScopeOptions,
-): () => void
+export function useUnit(event: Event<void>, opts?: ScopeOptions): () => void
 export function useUnit<T>(
   event: Event<T>,
   opts?: ScopeOptions,
@@ -133,11 +168,15 @@ export type EffectorScopePluginOptions = {
   scopeName?: string
   /** Default forceScope for every composable call that does not pass its own. */
   forceScope?: boolean
+  /**
+   * Overrides the server render detection of the composables. They detect a
+   * server render through the context of `renderToString`; set it explicitly
+   * for a renderer that provides no context.
+   */
+  ssr?: boolean
 }
 
-export function EffectorScopePlugin(
-  config: EffectorScopePluginOptions,
-): Plugin
+export function EffectorScopePlugin(config: EffectorScopePluginOptions): Plugin
 export function EffectorScopePlugin(
   app: App,
   config: EffectorScopePluginOptions,

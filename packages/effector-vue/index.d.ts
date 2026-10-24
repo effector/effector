@@ -173,6 +173,12 @@ type EffectorScopePluginOptions = {
   scopeName?: string
   /** Default forceScope for every composable call that does not pass its own. */
   forceScope?: boolean
+  /**
+   * Overrides the server render detection of the composables. They detect a
+   * server render through the context of `renderToString`; set it explicitly
+   * for a renderer that provides no context.
+   */
+  ssr?: boolean
 }
 
 /**
