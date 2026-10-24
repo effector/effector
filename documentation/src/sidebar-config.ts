@@ -613,6 +613,10 @@ export const effectorVue: LSidebarGroup[] = [
         link: "/api/effector-vue/useVModel",
         tags: ["useful"],
       },
+      {
+        text: { en: "useProvidedScope" },
+        link: "/api/effector-vue/useProvidedScope",
+      },
     ],
   },
   {

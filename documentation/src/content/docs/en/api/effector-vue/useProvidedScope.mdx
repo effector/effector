@@ -1,0 +1,51 @@
+---
+title: useProvidedScope
+description: Read the scope provided to the application. Designed for Vue 3
+pagefindWeight: 7
+---
+
+```ts
+import { useProvidedScope } from "effector-vue/composition";
+```
+
+Returns the [Scope](/en/api/effector/Scope) the component works in, or `null` when the application runs in global mode. Mostly needed for [`allSettled`](/en/api/effector/allSettled) and [`scopeBind`](/en/api/effector/scopeBind) calls written by hand: the other composables resolve the scope on their own.
+
+**Designed for Vue 3 and Composition API exclusively.**
+
+# Methods (#methods)
+
+## `useProvidedScope(options?)` (#methods-useProvidedScope-options)
+
+### Arguments (#methods-useProvidedScope-options-arguments)
+
+1. `options?` `{ forceScope?: boolean }`, `forceScope` throws instead of returning `null`
+
+### Returns (#methods-useProvidedScope-options-returns)
+
+`Scope | null`, and `Scope` when `forceScope: true` is passed.
+
+### Examples (#methods-useProvidedScope-options-examples)
+
+#### Prefetching data on the server (#methods-useProvidedScope-options-examples-prefetch)
+
+```html
+<script setup>
+  import { onServerPrefetch } from "vue";
+  import { useProvidedScope, useUnit } from "effector-vue/composition";
+  import { allSettled } from "effector";
+  import { loadUserFx, $user } from "./model";
+
+  const scope = useProvidedScope({ forceScope: true });
+  const user = useUnit($user);
+
+  onServerPrefetch(() => allSettled(loadUserFx, { scope, params: 1 }));
+</script>
+
+<template>
+  <p>{{ user.name }}</p>
+</template>
+```
+
+### Notes (#methods-useProvidedScope-options-notes)
+
+The scope is resolved through the injection context, so call it in `setup` before the first `await`, or inside [`app.runWithContext`](https://vuejs.org/api/application#app-runwithcontext). See [EffectorScopePlugin](/en/api/effector-vue/EffectorScopePlugin) for the full resolution order.
