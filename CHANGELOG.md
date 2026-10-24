@@ -4,6 +4,24 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector-vue 23.3.0
 
+- Require Vue 3.3 or newer for Vue 3: the peer range of `vue` is `2 || >=3.3.0` ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Resolve the scope through the `EffectorScopeKey` injection key, with the string `scopeName` key as a fallback: composables see a scope provided under `EffectorScopeKey` and the app scope in `app.runWithContext`. With the plugin installed, a subtree overrides the scope through the key; the string key is read only when the key is absent ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Add `{scope, forceScope}` to `useUnit`, `useStore`, `useGate` and the `useStoreMap` config: `forceScope` throws when no scope resolves. Add `useProvidedScope`, which returns the resolved scope ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Fix `app.use(EffectorScopePlugin, {scope})`: it installs the plugin. The plugin throws without a valid `scope` ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Return events and effects from `useUnit` as they are when no scope resolves, as effector-react does. Bind the events of `useGate` to the resolved scope: with the plugin installed the gate opened in the global stores ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Dispose `useUnit` and `useStore` subscriptions with `onScopeDispose`, so a composable in a detached `effectScope` no longer leaks. Batch the stores of one call into one subscription ([PR #1358](https://github.com/effector/effector/pull/1358))
+- Skip subscriptions during a server render. Add the `ssr` plugin option, which overrides the detection ([PR #1358](https://github.com/effector/effector/pull/1358))
+- Fix `useGate`: it opens the gate before it sets the props, so `Gate.state` is never written while the gate is closed and a mount runs one `set` ([PR #1359](https://github.com/effector/effector/pull/1359))
+- Close the gate of `useGate` when its effect scope stops, so it works outside of a component, and keep it closed during a server render. Accept the props as a value, a ref or a getter ([PR #1359](https://github.com/effector/effector/pull/1359))
+- Fix `useStoreMap`: it no longer mutates the object the store holds, and `fn` receives that object instead of a proxy over it ([PR #1360](https://github.com/effector/effector/pull/1360))
+- Run `updateFilter` of `useStoreMap` on the results of `fn`, as effector-react does. A filter written against the raw state of the store has to be rewritten ([PR #1360](https://github.com/effector/effector/pull/1360))
+- Drop a key removed from the state in `useStoreMap` instead of keeping its last value, and support a store that holds `null`. Dispose its subscription with the effect scope and skip it during a server render. Accept `keys` as a value, a ref or a getter, and add the documented `useStoreMap($store, fn)` form ([PR #1360](https://github.com/effector/effector/pull/1360))
+- Fix `useVModel`: user input reaches the scope instead of the global store, and an edit in the same tick as a store update is no longer lost ([PR #1361](https://github.com/effector/effector/pull/1361))
+- Copy the state of `useVModel` with `structuredClone` where the runtime has it, so `Map`, `Set`, `RegExp` and typed arrays keep their content and a `Date` is no longer shared with the store ([issue #975](https://github.com/effector/effector/issues/975), [PR #1361](https://github.com/effector/effector/pull/1361))
+- Add the options of `useVModel`: `scope`, `forceScope` and `deep`. The `EffectScope` second argument keeps working ([PR #1361](https://github.com/effector/effector/pull/1361))
+- Return shallow readonly refs typed `Readonly<Ref<T>>` from `useUnit` and `useStore`: `value` is the state itself, and a write to a nested field changes the state of the store ([issue #1130](https://github.com/effector/effector/issues/1130), [PR #1362](https://github.com/effector/effector/pull/1362))
+- Reject a derived event in `useUnit` at the type level, and type the events of a gate as `EventCallable`. Accept an effect with a custom fail type in a list, and map a list or a shape typed as a union of units to a union of results instead of `never`. Export `Equal`, `UnitToValue` and `UseUnitResult` from `effector-vue/composition` ([PR #1362](https://github.com/effector/effector/pull/1362))
+
 ## effector-vue 23.2.0
 
 - Fix nested reactivity in `useVModel` and `useGate` on Vue 3.5: the `deep` watch option shipped as `1` after minification, and Vue 3.5 reads a number as the depth to traverse ([issue #1344](https://github.com/effector/effector/issues/1344), [PR #1345](https://github.com/effector/effector/pull/1345), thanks [egoson](https://github.com/egoson) for the report)
