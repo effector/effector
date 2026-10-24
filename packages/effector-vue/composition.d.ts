@@ -4,6 +4,7 @@ import {
   DeepReadonly,
   EffectScope,
   InjectionKey,
+  MaybeRefOrGetter,
   Plugin,
   Ref,
   UnwrapNestedRefs,
@@ -67,17 +68,14 @@ export function useStore<T>(
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  cb?: () => Props,
+  props?: MaybeRefOrGetter<Props>,
   opts?: ScopeOptions,
 ): void
 export function useUnit<State>(
   store: Store<State>,
   opts?: ScopeOptions,
 ): DeepReadonly<Ref<State>>
-export function useUnit(
-  event: Event<void>,
-  opts?: ScopeOptions,
-): () => void
+export function useUnit(event: Event<void>, opts?: ScopeOptions): () => void
 export function useUnit<T>(
   event: Event<T>,
   opts?: ScopeOptions,
@@ -133,11 +131,15 @@ export type EffectorScopePluginOptions = {
   scopeName?: string
   /** Default forceScope for every composable call that does not pass its own. */
   forceScope?: boolean
+  /**
+   * Overrides the server render detection of the composables. They detect a
+   * server render through the context of `renderToString`; set it explicitly
+   * for a renderer that provides no context.
+   */
+  ssr?: boolean
 }
 
-export function EffectorScopePlugin(
-  config: EffectorScopePluginOptions,
-): Plugin
+export function EffectorScopePlugin(config: EffectorScopePluginOptions): Plugin
 export function EffectorScopePlugin(
   app: App,
   config: EffectorScopePluginOptions,
