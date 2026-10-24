@@ -1,14 +1,25 @@
-import {is, createWatch, Unit, scopeBind} from 'effector'
+import {is, createWatch, Unit, scopeBind, Scope, EventCallable} from 'effector'
 import {onUnmounted, readonly, shallowRef} from 'vue-next'
 
 import {stateReader} from './lib/state-reader'
-import {getScope} from './lib/get-scope'
+import {ScopeOptions, resolveScope} from './lib/get-scope'
 import {throwError} from './lib/throw'
+
+/**
+ * Without a scope the unit itself is returned, the same way effector-react
+ * and effector-solid do it. A `scopeBind(unit, {safe: true})` wrapper would
+ * capture the ambient scope at bind time and reset it on every call, pushing
+ * calls made inside an effect handler out of the running scope.
+ */
+function bindToScope(unit: Unit<any>, scope?: Scope) {
+  return scope ? scopeBind(unit as EventCallable<any>, {scope}) : unit
+}
 
 export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   config: Shape | {'@@unitShape': () => Shape},
+  opts?: ScopeOptions,
 ) {
-  const {scope} = getScope()
+  const scope = resolveScope('useUnit', opts)
 
   const isSingleUnit = is.unit(config)
 
@@ -70,15 +81,13 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   }
 
   if (isSingleUnit && (is.event(config) || is.effect(config))) {
-    // @ts-expect-error TS can't infer that normShape.unit is a Effect/Event
-    return scopeBind(normShape.unit, {scope, safe: true})
+    return bindToScope(normShape.unit, scope)
   }
 
   const result: Record<string, any> = {}
 
   for (const key of eventKeys) {
-    // @ts-expect-error TS can't infer that normShape[key] is a Effect/Event
-    result[key] = scopeBind(normShape[key], {scope, safe: true})
+    result[key] = bindToScope(normShape[key], scope)
   }
   for (const [key, value] of Object.entries(states)) {
     result[key] = readonly(value.ref)

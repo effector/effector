@@ -5,6 +5,7 @@ import {
   useUnit,
 } from 'effector-vue/composition'
 import {createEvent, createStore, fork, allSettled} from 'effector'
+import {createApp} from 'vue-next'
 
 jest.mock('vue', () => require('vue-next'))
 
@@ -60,5 +61,32 @@ describe('EffectorScopePlugin', () => {
     expect(EffectorScopePluginFromComposition).toBe(EffectorScopePlugin)
 
     await expectScopeIsolation(EffectorScopePluginFromComposition)
+  })
+
+  test('installs when passed to app.use with options', () => {
+    const $value = createStore('no scope')
+    const scope = fork({values: [[$value, 'scoped']]})
+
+    const wrapper = shallowMount(
+      {
+        template: `<p data-test="value">{{value}}</p>`,
+        setup() {
+          return {value: useUnit($value)}
+        },
+      },
+      // app.use(EffectorScopePlugin, {scope}) used to do nothing at all
+      {global: {plugins: [[EffectorScopePlugin, {scope}]]}},
+    )
+
+    expect(wrapper.find('[data-test="value"]').text()).toBe('scoped')
+  })
+
+  test('does not install silently without a scope', () => {
+    expect(() => createApp({}).use(EffectorScopePlugin({} as any))).toThrow(
+      /\[effector-vue\] EffectorScopePlugin: expected "scope"/,
+    )
+    expect(() => createApp({}).use(EffectorScopePlugin)).toThrow(
+      /\[effector-vue\] EffectorScopePlugin: expected "scope"/,
+    )
   })
 })

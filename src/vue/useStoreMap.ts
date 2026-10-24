@@ -1,6 +1,6 @@
 import { createWatch, is, Scope, Store } from "effector";
 import { computed, onUnmounted, shallowReactive, shallowRef } from "vue-next";
-import { getScope } from "./lib/get-scope";
+import { ScopeOptions, resolveScope } from "./lib/get-scope";
 import { stateReader } from "./lib/state-reader";
 import { throwError } from "./lib/throw";
 
@@ -13,15 +13,18 @@ export function useStoreMap<State, Result, Keys = unknown>(
     fn: (state: State, keys: Keys) => Result;
     updateFilter?: (update: Result, current: Result) => boolean;
     defaultValue?: Result;
-  },
+  } & ScopeOptions,
   scope?: Scope
 ) {
   if (!is.store(config.store)) throwError('useStoreMap expects a store')
   if (config.keys !== undefined && typeof config.keys !== 'function') throwError('useStoreMap expects keys as a function')
   if (typeof config.fn !== 'function') throwError('useStoreMap expects fn as a function')
 
-
-  let _scope = scope || getScope().scope
+  let _scope =
+    resolveScope('useStoreMap', {
+      scope: scope ?? config.scope,
+      forceScope: config.forceScope,
+    })
   let keys = config.keys ? computed(config.keys) : computed(() => undefined as Keys)
   let updateFilter = config.updateFilter || basicUpdateFilter;
 
