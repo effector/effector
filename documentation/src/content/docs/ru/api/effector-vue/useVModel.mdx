@@ -1,0 +1,159 @@
+---
+title: useVModel
+description: Хук, который связывает стор с v-model через записываемый ref. Для Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { useVModel } from "effector-vue/composition";
+```
+
+:::info{title="since"}
+`useVModel` появился в [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
+
+Возвращает записываемый ref, связанный со стором: обновление стора доходит до ref, а правка ref записывается в стор. В основном нужен для форм с `v-model` во Vue 3.
+
+# Методы (#methods)
+
+## `useVModel($store, options?)` (#methods-useVModel-store)
+
+### Формула (#methods-useVModel-store-formulae)
+
+```ts
+useVModel($store: Store<State>, options?: UseVModelOptions): Ref<UnwrapRef<State>>;
+useVModel<T extends Record<string, Store<any>>>(shape: T, options?: UseVModelOptions): ExtractStore<T>;
+```
+
+Для Vue 3.
+
+### Аргументы (#methods-useVModel-store-arguments)
+
+1. `$store` ([_Стор_](/ru/api/effector/Store)) или объект сторов
+2. `options?` (_Object_)
+   - `scope?` ([_Scope_](/ru/api/effector/Scope)): скоуп для чтения и записи вместо скоупа плагина
+   - `forceScope?` (_boolean_): бросить ошибку, если скоуп не найден, вместо перехода в глобальный режим
+   - `deep?` (_boolean_): глубокое отслеживание значения, чтобы правка вложенного поля доходила до стора (по умолчанию `true`)
+
+:::info{title="since"}
+Аргумент `options` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше вторым аргументом был Vue `EffectScope`, и эта форма работает по-прежнему
+:::
+
+### Возвращает (#methods-useVModel-store-returns)
+
+Записываемый `Ref` с копией состояния, а для объекта сторов объект таких копий. Правка записывает в стор всё новое значение целиком, а обновление стора заменяет копию.
+
+### Примеры (#methods-useVModel-examples)
+
+#### Один стор (#methods-useVModel-examples-singleStore)
+
+```ts
+// model.ts
+import { createStore } from "effector";
+
+export const $user = createStore({
+  name: "",
+  surname: "",
+  skills: ["CSS", "HTML"],
+});
+```
+
+```vue
+<!-- UserForm.vue -->
+<script setup lang="ts">
+import { useVModel } from "effector-vue/composition";
+
+import { $user } from "./model";
+
+const user = useVModel($user);
+</script>
+
+<template>
+  <input type="text" v-model="user.name" />
+  <input type="text" v-model="user.surname" />
+
+  <div>
+    <input type="checkbox" v-model="user.skills" value="HTML" />
+    <input type="checkbox" v-model="user.skills" value="CSS" />
+    <input type="checkbox" v-model="user.skills" value="JS" />
+  </div>
+</template>
+```
+
+#### Объект сторов (#methods-useVModel-examples-storeShape)
+
+```ts
+// model.ts
+import { createStore } from "effector";
+
+export const $name = createStore("");
+export const $surname = createStore("");
+export const $skills = createStore<string[]>([]);
+```
+
+```vue
+<!-- UserForm.vue -->
+<script setup lang="ts">
+import { useVModel } from "effector-vue/composition";
+
+import { $name, $surname, $skills } from "./model";
+
+const user = useVModel({ name: $name, surname: $surname, skills: $skills });
+</script>
+
+<template>
+  <input type="text" v-model="user.name" />
+  <input type="text" v-model="user.surname" />
+
+  <div>
+    <input type="checkbox" v-model="user.skills" value="HTML" />
+    <input type="checkbox" v-model="user.skills" value="CSS" />
+    <input type="checkbox" v-model="user.skills" value="JS" />
+  </div>
+</template>
+```
+
+#### Скоуп (#methods-useVModel-examples-scope)
+
+:::info{title="since"}
+`useVModel` пишет в скоуп с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше правка попадала в глобальный стор даже при установленном плагине
+:::
+
+С [`EffectorScopePlugin`](/ru/api/effector-vue/EffectorScopePlugin) форма читает и пишет скоуп приложения, поэтому ввод пользователя попадает в `scope.getState($form)` и в [`serialize`](/ru/api/effector/serialize). Без скоупа пишется сам стор, как раньше.
+
+```ts
+import { fork } from "effector";
+import { EffectorScopePlugin } from "effector-vue/composition";
+
+const scope = fork();
+app.use(EffectorScopePlugin({ scope }));
+```
+
+Вызов вне компонента или вызов, который должен писать в другой скоуп, получает скоуп через опцию:
+
+```ts
+const form = useVModel($form, { scope });
+```
+
+#### Неглубокая привязка (#methods-useVModel-examples-deep)
+
+По умолчанию копия отслеживается глубоко, поэтому правка вложенного поля записывает в стор всё новое значение. С `deep: false` состояние стора привязывается как есть, и обратно пишется только присваивание всего значения. Это подходит для формы из примитивов или для большого состояния, которое в основном читают:
+
+```ts
+const form = useVModel($form, { deep: false });
+
+form.value = { ...form.value, name: "John" };
+```
+
+В этом режиме ref держит сам объект состояния стора, а присваивание отдаёт этот объект обратно без копии. Запись во вложенное поле меняет состояние стора на месте, и никто не считает это обновлением: стор хранит тот же объект, и ни один наблюдатель не срабатывает. Заменяйте значение целиком, как в примере, или не трогайте `deep`.
+
+### Ограничения (#methods-useVModel-limitations)
+
+:::info{title="since"}
+Копия делается через `structuredClone` с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+- Копия состояния делается через `structuredClone`, поэтому `Date`, `Map`, `Set`, `RegExp` и типизированные массивы переживают круг туда и обратно. Если в среде нет `structuredClone` или он бросает ошибку на каком-то значении в состоянии, например на функции, вся копия делается простым рекурсивным копированием. Такая копия держит функции и даты по ссылке, а `Map` и `Set` превращает в пустые объекты. Экземпляр класса в обоих случаях теряет прототип.
+- Производный стор, результат `map` или `combine`, принимает правку, и следующее обновление исходного стора её перезаписывает. Хук сообщает об этом через `console.error`: привязывайте форму к исходному стору.
+- Раньше вторым аргументом был Vue `EffectScope`. Эта форма работает, но предпочтительна форма с объектом опций.

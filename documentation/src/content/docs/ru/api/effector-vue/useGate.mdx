@@ -1,0 +1,100 @@
+---
+title: useGate
+description: Хук, который открывает гейт на время жизни компонента и передаёт в него пропсы. Для Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { useGate } from "effector-vue/composition";
+```
+
+:::info{title="since"}
+`useGate` появился в [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
+
+# Методы (#methods)
+
+## `useGate(Gate, props?, options?)` (#methods-useGate-Gate-props)
+
+Открывает [`Gate`](/ru/api/effector-vue/Gate) на время жизни компонента или effect scope, где вызван хук, и синхронизирует [`Gate.state`](/ru/api/effector-vue/Gate#properties-state) с `props`. Для Vue 3.
+
+### Формула (#methods-useGate-Gate-props-formulae)
+
+```ts
+useGate(Gate: Gate<Props>, props?: MaybeRefOrGetter<Props>, options?: ScopeOptions): void;
+```
+
+### Аргументы (#methods-useGate-Gate-props-arguments)
+
+1. `Gate<Props>` ([_Gate_](/ru/api/effector-vue/Gate))
+2. `props?` (`MaybeRefOrGetter<Props>`): значение, ref или геттер. Ref, геттер и объект `reactive()` держат `Gate.state` в синхронизации. Нереактивное значение читается, когда гейт открывается и когда закрывается.
+3. `options?` (_Object_): `{ scope, forceScope }`, см. [EffectorScopePlugin](/ru/api/effector-vue/EffectorScopePlugin#resolution). События гейта `open`, `close` и `set` вызываются в найденном скоупе.
+
+:::info{title="since"}
+Аргумент `options` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+:::info{title="since"}
+`props` принимает значение или ref с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше он принимал только геттер
+:::
+
+:::info{title="since"}
+События гейта вызываются в найденном скоупе с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше они вызывались вне скоупа плагина
+:::
+
+### Возвращает (#methods-useGate-Gate-props-returns)
+
+(_`void`_)
+
+### Время жизни (#methods-useGate-Gate-props-lifetime)
+
+- В компоненте гейт открывается при монтировании и закрывается при размонтировании. Деактивация в [`<KeepAlive>`](https://ru.vuejs.org/guide/built-ins/keep-alive.html) оставляет гейт открытым, закрывает его только размонтирование.
+- Вне компонента гейт открывается сразу и закрывается, когда останавливают окружающий effect scope, например `effectScope()`.
+- Без активного effect scope закрыть гейт некому, поэтому вызов выводит предупреждение и оставляет гейт открытым. `app.runWithContext()` даёт контекст инъекции без effect scope, поэтому запускайте его внутри `effectScope()`.
+
+:::info{title="since"}
+Закрытие вместе с effect scope появилось в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше гейт работал только внутри компонента
+:::
+
+### Порядок событий (#methods-useGate-Gate-props-order)
+
+:::info{title="since"}
+`open` вызывается раньше `set` с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше первым срабатывал `set`, пока гейт был закрыт
+:::
+
+Первым вызывается `open` с текущими пропсами, и гейт сам передаёт их в `set`. Последующие изменения пропсов приходят в `set` после этого. Пока гейт закрыт, `Gate.state` не пишется, а монтирование вызывает `set` один раз:
+
+```ts
+import { sample } from "effector";
+import { PageGate, loadPageFx } from "./model";
+
+sample({ clock: PageGate.open, target: loadPageFx }); // получает пропсы монтирования
+```
+
+### Серверный рендеринг (#methods-useGate-Gate-props-ssr)
+
+При серверном рендере гейт остаётся закрытым: на сервере ничего не размонтируется, поэтому открытый там гейт никогда бы не закрылся, а его состояние сериализовалось бы на клиент. Данные страницы загружайте в `onServerPrefetch`, а гейт используйте на клиенте. Так же работает `useGate` из effector-react.
+
+:::info{title="since"}
+С [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0) при серверном рендере не вызывается и `set`. Раньше пропсы попадали в `Gate.state` на сервере
+:::
+
+### Примеры (#methods-useGate-Gate-props-examples)
+
+```vue
+<script setup lang="ts">
+import { useGate } from "effector-vue/composition";
+import { PageGate } from "./model";
+
+const props = defineProps<{ id: string }>();
+
+useGate(PageGate, () => ({ id: props.id }));
+</script>
+
+<template>
+  <div>{{ id }}</div>
+</template>
+```
+
+[Полный пример](/ru/api/effector-vue/createGate#methods-createGate-config-examples-basic)

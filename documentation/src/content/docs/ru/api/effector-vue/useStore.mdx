@@ -1,0 +1,77 @@
+---
+title: useStore
+description: Хук, который связывает стор с реактивностью Vue. Для Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+# useStore (#useStore)
+
+```ts
+import { useStore } from "effector-vue/composition";
+```
+
+:::info{title="since"}
+`useStore` появился в [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
+
+Подписывается на стор и возвращает его состояние как readonly-ref, поэтому компонент обновляется при изменении стора. Меняйте состояние **только через [события](/ru/api/effector/createEvent)**. Для Vue 3.
+
+[useUnit($store)](/ru/api/effector-vue/useUnit#methods-useUnit-store) делает то же самое и вдобавок работает с событиями, эффектами и наборами юнитов.
+
+## `useStore($store, options?)` (#useStore-store)
+
+### Формула (#useStore-store-formulae)
+
+```ts
+useStore($store: Store<State>, options?: ScopeOptions): Readonly<Ref<State>>;
+```
+
+### Аргументы (#useStore-store-arguments)
+
+1. `$store` ([`Store<State>`](/ru/api/effector/Store))
+2. `options?` (_Object_): `{ scope, forceScope }`, те же [опции скоупа](/ru/api/effector-vue/useUnit#methods-useUnit-options), что у `useUnit`
+
+:::info{title="since"}
+Аргумент `options` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+### Возвращает (#useStore-store-returns)
+
+(`Readonly<Ref<State>>`): неглубокий readonly-ref, его `value` это само состояние стора
+
+:::info{title="since"}
+Ref неглубокий с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше `value` был глубоким readonly-прокси над состоянием
+:::
+
+### Пример (#useStore-store-example)
+
+```ts
+// model.ts
+import { createStore, createApi } from "effector";
+
+export const $counter = createStore(0);
+
+export const { incremented, decremented } = createApi($counter, {
+  incremented: (count) => count + 1,
+  decremented: (count) => count - 1,
+});
+```
+
+```vue
+<!-- Counter.vue -->
+<script setup lang="ts">
+import { useStore, useUnit } from "effector-vue/composition";
+
+import { $counter, incremented, decremented } from "./model";
+
+const counter = useStore($counter);
+const [onIncrement, onDecrement] = useUnit([incremented, decremented]);
+</script>
+
+<template>
+  <button @click="onDecrement">-</button>
+  <span>{{ counter }}</span>
+  <button @click="onIncrement">+</button>
+</template>
+```
