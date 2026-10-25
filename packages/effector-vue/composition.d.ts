@@ -4,6 +4,7 @@ import {
   DeepReadonly,
   EffectScope,
   InjectionKey,
+  MaybeRefOrGetter,
   Plugin,
   Ref,
   UnwrapNestedRefs,
@@ -67,17 +68,14 @@ export function useStore<T>(
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  cb?: () => Props,
+  props?: MaybeRefOrGetter<Props>,
   opts?: ScopeOptions,
 ): void
 export function useUnit<State>(
   store: Store<State>,
   opts?: ScopeOptions,
 ): DeepReadonly<Ref<State>>
-export function useUnit(
-  event: Event<void>,
-  opts?: ScopeOptions,
-): () => void
+export function useUnit(event: Event<void>, opts?: ScopeOptions): () => void
 export function useUnit<T>(
   event: Event<T>,
   opts?: ScopeOptions,
@@ -142,9 +140,7 @@ export type EffectorScopePluginOptions = {
   live?: boolean
 }
 
-export function EffectorScopePlugin(
-  config: EffectorScopePluginOptions,
-): Plugin
+export function EffectorScopePlugin(config: EffectorScopePluginOptions): Plugin
 export function EffectorScopePlugin(
   app: App,
   config: EffectorScopePluginOptions,

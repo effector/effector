@@ -7,7 +7,7 @@ import {
   Scope,
   Store,
 } from 'effector'
-import {createApp, effectScope, InjectionKey} from 'vue'
+import {computed, createApp, effectScope, InjectionKey, ref} from 'vue'
 import {
   createGate,
   EffectorScopeKey,
@@ -372,16 +372,33 @@ describe('gate', () => {
     `)
   })
 
-  test('props are only accepted as a getter', () => {
+  test('props accept a value, a ref and a getter', () => {
     const Gate = createGate<{id: number}>()
 
     const setup = () => {
       useGate(Gate, {id: 1})
+      useGate(Gate, ref({id: 1}))
+      useGate(Gate, computed(() => ({id: 1})))
+      useGate(Gate, () => ({id: 1}))
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'id' does not exist in type '() => { id: number; }'.
+      no errors
+      "
+    `)
+  })
+
+  test('props of another shape are rejected', () => {
+    const Gate = createGate<{id: number}>()
+
+    const setup = () => {
+      useGate(Gate, {id: 'one'})
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'string' is not assignable to type 'number'.
       "
     `)
   })

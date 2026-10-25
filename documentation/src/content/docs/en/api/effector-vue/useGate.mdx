@@ -13,19 +13,56 @@ import { useGate } from "effector-vue/composition";
 
 # Methods (#methods)
 
-## `useGate(Gate, props)` (#methods-useGate-Gate-props)
+## `useGate(Gate, props?, options?)` (#methods-useGate-Gate-props)
 
-Using a [`Gate`](/en/api/effector-vue/Gate) to consume data from view. Designed for Vue 3
+Opens a [`Gate`](/en/api/effector-vue/Gate) for the lifetime of the component or the effect scope that called it, and keeps [`Gate.state`](/en/api/effector-vue/Gate#properties-state) in sync with `props`. Designed for Vue 3.
 
 ### Arguments (#methods-useGate-Gate-props-arguments)
 
 1. `Gate<Props>` ([_Gate_](/en/api/effector-vue/Gate))
-2. `props` (_Props_)
+2. `props?` (_Props_ | _Ref\<Props>_ | _() => Props_): a value, a ref or a getter. A ref, a getter and a `reactive()` object keep `Gate.state` in sync. A value that is not reactive is read when the gate opens and when it closes.
+3. `options?` (_Object_): `{ scope, forceScope }`, see [EffectorScopePlugin](/en/api/effector-vue/EffectorScopePlugin#resolution). The `open`, `close` and `set` events of the gate are called in the resolved scope.
 
 ### Returns (#methods-useGate-Gate-props-returns)
 
 (_`void`_)
 
+### Lifetime (#methods-useGate-Gate-props-lifetime)
+
+- In a component the gate opens on mount and closes when the component unmounts. Deactivation by [`<KeepAlive>`](https://vuejs.org/guide/built-ins/keep-alive.html) keeps the gate open, only unmounting closes it.
+- Outside of a component the gate opens right away and closes when the surrounding effect scope is stopped, `effectScope()` for example.
+- With no active effect scope there is nothing to close the gate, so the call warns and leaves it open. `app.runWithContext()` gives an injection context and no effect scope, so run it inside `effectScope()`.
+
+### Order of the events (#methods-useGate-Gate-props-order)
+
+`open` is called first, with the current props, and the gate samples them into `set` on its own. Later changes of the props reach `set` after that. `Gate.state` is not written while the gate is closed, and a mount runs one `set`:
+
+```js
+import { sample } from "effector";
+import { PageGate, loadPageFx } from "./model";
+
+sample({ clock: PageGate.open, target: loadPageFx }); // gets the props of the mount
+```
+
+### Server-side rendering (#methods-useGate-Gate-props-ssr)
+
+During a server render the gate stays closed: nothing unmounts on the server, so a gate opened there would never be closed, and its state would be serialized into the client. Load the data of a page with `onServerPrefetch` instead and use the gate on the client. This matches `useGate` of effector-react.
+
 ### Examples (#methods-useGate-Gate-props-examples)
 
-[See example](/en/api/effector-vue/Gate)
+```vue
+<script setup>
+import { useGate } from "effector-vue/composition";
+import { PageGate } from "./model";
+
+const props = defineProps({ id: { type: String, required: true } });
+
+useGate(PageGate, () => ({ id: props.id }));
+</script>
+
+<template>
+  <div>{{ id }}</div>
+</template>
+```
+
+[See a full example](/en/api/effector-vue/createGate#methods-createGate-config-examples-basic)

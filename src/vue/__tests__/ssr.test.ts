@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
+  createGate,
   EffectorScopePlugin,
+  useGate,
   useProvidedScope,
   useStore,
   useUnit,
@@ -113,6 +115,26 @@ describe('server render', () => {
     expect(html).toBe('<p>after after</p>')
     expect(linksCount(scope)).toBe(0)
     expect($value.getState()).toBe('before')
+  })
+
+  test('does not open the gate', async () => {
+    const Gate = createGate<{id: number}>()
+    const scope = fork()
+
+    const App = defineComponent({
+      setup() {
+        useGate(Gate, {id: 1})
+        return () => h('p', 'rendered')
+      },
+    })
+
+    const html = await renderSSR(App, {scope})
+
+    expect(html).toBe('<p>rendered</p>')
+    expect(scope.getState(Gate.status)).toBe(false)
+    expect(scope.getState(Gate.state)).toBe(null)
+    expect(Gate.status.getState()).toBe(false)
+    expect(warn).not.toHaveBeenCalled()
   })
 
   test('parallel renders do not mix their scopes', async () => {
