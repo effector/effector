@@ -1,5 +1,6 @@
 ---
 title: useEvent
+description: Deprecated composable that binds an event to the current scope. Use useUnit instead
 redirectFrom:
   - /api/effector-vue/useEvent
   - /docs/api/effector-vue/useEvent
@@ -11,7 +12,7 @@ import { useEvent } from "effector-vue/ssr";
 ```
 
 :::warning{title="Deprecated"}
-Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) `useEvent` is deprecated. Use [`useUnit`](./useUnit#useUnit) instead.
+Since [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0) `useEvent` is deprecated. Use [`useUnit`](/en/api/effector-vue/useUnit) instead.
 :::
 
 Bind event to current fork instance to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing
@@ -32,24 +33,29 @@ Bind event to current fork instance to use in dom event handlers. Used **only** 
 
 #### Basic (#methods-useEvent-unit-examples-basic)
 
-```js
+```ts
+// model.ts
 import { createStore, createEvent } from "effector";
-import { useEvent } from "effector-vue/ssr";
 
-const incremented = createEvent();
-const $count = createStore(0);
+export const incremented = createEvent();
+export const $count = createStore(0);
 
 $count.on(incremented, (x) => x + 1);
+```
 
-export default {
-  setup() {
-    const counter = useStore($count);
-    const onIncrement = useEvent(incremented);
+```vue
+<!-- Counter.vue -->
+<script setup lang="ts">
+import { useStore } from "effector-vue/composition";
+import { useEvent } from "effector-vue/ssr";
 
-    return {
-      onIncrement,
-      counter,
-    };
-  },
-};
+import { $count, incremented } from "./model";
+
+const counter = useStore($count);
+const onIncrement = useEvent(incremented);
+</script>
+
+<template>
+  <button @click="onIncrement">{{ counter }}</button>
+</template>
 ```
