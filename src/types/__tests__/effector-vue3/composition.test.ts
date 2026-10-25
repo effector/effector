@@ -267,18 +267,40 @@ describe('useStoreMap', () => {
     `)
   })
 
-  test('short form is documented but not declared', () => {
+  test('short form', () => {
     const $user = createStore({name: 'alice', age: 30})
+    const scope = fork()
 
     const setup = () => {
       const name = useStoreMap($user, user => user.name)
+      const value: string = name.value
+      useStoreMap($user, user => user.name, {scope, forceScope: true})
     }
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type 'StoreWritable<{ name: string; age: number; }>' is not assignable to parameter of type '{ store: Store<unknown>; keys?: (() => unknown) | undefined; fn: (state: unknown, keys: unknown) => unknown; updateFilter?: ((update: unknown, current: unknown) => boolean) | undefined; defaultValue?: unknown; } & ScopeOptions'.
-        Type 'StoreWritable<{ name: string; age: number; }>' is missing the following properties from type '{ store: Store<unknown>; keys?: (() => unknown) | undefined; fn: (state: unknown, keys: unknown) => unknown; updateFilter?: ((update: unknown, current: unknown) => boolean) | undefined; defaultValue?: unknown; }': store, fn
-      Parameter 'user' implicitly has an 'any' type.
+      no errors
+      "
+    `)
+  })
+
+  test('keys as a ref, a getter and a plain value', () => {
+    const $users = createStore<Record<string, string>>({alice: 'Alice'})
+
+    const setup = () => {
+      const key = ref('alice')
+      useStoreMap({store: $users, keys: key, fn: (users, id) => users[id]})
+      useStoreMap({
+        store: $users,
+        keys: () => key.value,
+        fn: (users, id) => users[id],
+      })
+      useStoreMap({store: $users, keys: 'alice', fn: (users, id) => users[id]})
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
       "
     `)
   })
