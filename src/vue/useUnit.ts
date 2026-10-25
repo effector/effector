@@ -1,8 +1,8 @@
-import {is, createWatch, Unit, scopeBind, Scope, EventCallable} from 'effector'
-import {onUnmounted, readonly, shallowRef} from 'vue-next'
+import {is, Unit, scopeBind, Scope, EventCallable, Store} from 'effector'
+import {readonly} from 'vue-next'
 
-import {stateReader} from './lib/state-reader'
 import {ScopeOptions, resolveScope} from './lib/get-scope'
+import {subscribeStores} from './lib/subscribe'
 import {throwError} from './lib/throw'
 
 /**
@@ -15,11 +15,13 @@ function bindToScope(unit: Unit<any>, scope?: Scope) {
   return scope ? scopeBind(unit as EventCallable<any>, {scope}) : unit
 }
 
-export function useUnit<Shape extends {[key: string]: Unit<any>}>(
+/** Shared by `useUnit` and `useStore`, `name` only names them in messages. */
+export function useUnitBase<Shape extends {[key: string]: Unit<any>}>(
+  name: string,
   config: Shape | {'@@unitShape': () => Shape},
   opts?: ScopeOptions,
 ) {
-  const scope = resolveScope('useUnit', opts)
+  const scope = resolveScope(name, opts)
 
   const isSingleUnit = is.unit(config)
 
@@ -39,45 +41,24 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   const isList = Array.isArray(normShape)
 
   const storeKeys: string[] = []
+  const stores: Store<any>[] = []
   const eventKeys: string[] = []
 
   for (const key in normShape) {
     const unit = normShape[key]
-    if (!is.unit(unit)) throwError('expect useUnit argument to be a unit')
+    if (!is.unit(unit)) throwError(`expect ${name} argument to be a unit`)
     if (is.event(unit) || is.effect(unit)) {
       eventKeys.push(key)
     } else {
       storeKeys.push(key)
+      stores.push(unit as Store<any>)
     }
   }
 
-  const states: Record<string, any> = {}
-  for (const key of storeKeys) {
-    // @ts-expect-error TS can't infer that normShape[key] is a Store
-    const state = stateReader(normShape[key], scope)
-    const ref = shallowRef(state)
-    const stop = createWatch({
-      unit: normShape[key],
-      fn: value => {
-        ref.value = shallowRef(value).value
-      },
-      scope,
-    })
-
-    states[key] = {
-      stop,
-      ref,
-    }
-  }
-
-  onUnmounted(() => {
-    for (const val of Object.values(states)) {
-      val.stop()
-    }
-  })
+  const refs = subscribeStores(name, stores, scope)
 
   if (isSingleUnit && is.store(config)) {
-    return readonly(states.unit.ref)
+    return readonly(refs[0])
   }
 
   if (isSingleUnit && (is.event(config) || is.effect(config))) {
@@ -89,13 +70,20 @@ export function useUnit<Shape extends {[key: string]: Unit<any>}>(
   for (const key of eventKeys) {
     result[key] = bindToScope(normShape[key], scope)
   }
-  for (const [key, value] of Object.entries(states)) {
-    result[key] = readonly(value.ref)
-  }
+  storeKeys.forEach((key, index) => {
+    result[key] = readonly(refs[index])
+  })
 
   if (isList) {
     return Object.values(result)
   }
 
   return result
+}
+
+export function useUnit<Shape extends {[key: string]: Unit<any>}>(
+  config: Shape | {'@@unitShape': () => Shape},
+  opts?: ScopeOptions,
+) {
+  return useUnitBase('useUnit', config, opts)
 }

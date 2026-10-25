@@ -173,6 +173,13 @@ type EffectorScopePluginOptions = {
   scopeName?: string
   /** Default forceScope for every composable call that does not pass its own. */
   forceScope?: boolean
+  /**
+   * Overrides whether the composables subscribe to the scope. `false` makes
+   * them read the scope on access without subscribing, as in a server render;
+   * `true` makes them always subscribe. By default they detect a server
+   * render through the context of `renderToString`.
+   */
+  live?: boolean
 }
 
 /**
