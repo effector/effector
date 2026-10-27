@@ -48,6 +48,18 @@ test('plain gate hook', async () => {
   expect(Gate.status.getState()).toBe(false)
 })
 
+test('gate with null default state keeps null state on open and close', () => {
+  const Gate = createGate<number | null>('gate', null)
+
+  expect(Gate.state.getState()).toBe(null)
+
+  Gate.open(11111)
+  expect(Gate.state.getState()).toBe(11111)
+
+  Gate.close()
+  expect(Gate.state.getState()).toBe(null)
+})
+
 test('gate with props', async () => {
   const Gate = createGate('gate with props')
   await render(
