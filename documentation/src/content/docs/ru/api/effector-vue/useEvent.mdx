@@ -1,0 +1,59 @@
+---
+title: useEvent
+description: Устаревший хук, который привязывает событие к текущему скоупу. Используйте useUnit
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { useEvent } from "effector-vue/ssr";
+```
+
+:::warning{title="Устарело"}
+С [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0) `useEvent` устарел. Используйте [`useUnit`](/ru/api/effector-vue/useUnit).
+:::
+
+Привязывает событие к текущему скоупу для обработчиков DOM-событий. Работает **только** с SSR: в приложении без скоупа `useEvent` ничего не делает.
+
+# Методы (#methods)
+
+## `useEvent(unit)` (#methods-useEvent-unit)
+
+### Аргументы (#methods-useEvent-unit-arguments)
+
+1. `unit` ([_Событие_](/ru/api/effector/Event) или [_эффект_](/ru/api/effector/Effect)): событие или эффект, который привяжется к текущему скоупу
+
+### Возвращает (#methods-useEvent-unit-returns)
+
+(`Function`): функция для обработчиков событий. Запускает юнит в текущем скоупе
+
+### Примеры (#methods-useEvent-unit-examples)
+
+#### Базовый пример (#methods-useEvent-unit-examples-basic)
+
+```ts
+// model.ts
+import { createStore, createEvent } from "effector";
+
+export const incremented = createEvent();
+export const $count = createStore(0);
+
+$count.on(incremented, (x) => x + 1);
+```
+
+```vue
+<!-- Counter.vue -->
+<script setup lang="ts">
+import { useStore } from "effector-vue/composition";
+import { useEvent } from "effector-vue/ssr";
+
+import { $count, incremented } from "./model";
+
+const counter = useStore($count);
+const onIncrement = useEvent(incremented);
+</script>
+
+<template>
+  <button @click="onIncrement">{{ counter }}</button>
+</template>
+```

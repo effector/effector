@@ -2,19 +2,62 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-# effector 23.4.4
+## effector-vue 23.3.0
+
+### Improvements
+
+- Resolve the scope through the `EffectorScopeKey` injection key, with the string `scopeName` key as a fallback: composables see the scope in `app.runWithContext` and in a subtree that provides its own ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Add `{scope, forceScope}` to `useUnit`, `useStore`, `useGate`, `useVModel` and the `useStoreMap` config. `forceScope` throws when no scope resolves ([PR #1357](https://github.com/effector/effector/pull/1357), [PR #1361](https://github.com/effector/effector/pull/1361))
+- Add `useProvidedScope` ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Add the `live` plugin option: it turns subscriptions on or off regardless of the server render detection ([PR #1358](https://github.com/effector/effector/pull/1358))
+- Add the `deep` option of `useVModel` ([PR #1361](https://github.com/effector/effector/pull/1361))
+- Accept the props of `useGate` and the `keys` of `useStoreMap` as a value, a ref or a getter. Add the `useStoreMap($store, fn)` form ([PR #1359](https://github.com/effector/effector/pull/1359), [PR #1360](https://github.com/effector/effector/pull/1360))
+- Batch the stores of one call into one subscription ([PR #1358](https://github.com/effector/effector/pull/1358))
+
+### Bug fixes
+
+- Fix `app.use(EffectorScopePlugin, {scope})`, which installed nothing ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Fix `useGate` with the plugin installed: it opened the gate in the global stores. It also wrote `Gate.state` before `Gate.open` ([PR #1357](https://github.com/effector/effector/pull/1357), [PR #1359](https://github.com/effector/effector/pull/1359))
+- Fix events of `useUnit` pushing a running effect out of its scope when no scope resolves ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Fix subscriptions leaking in a detached `effectScope` and during a server render ([PR #1358](https://github.com/effector/effector/pull/1358), [PR #1359](https://github.com/effector/effector/pull/1359), [PR #1360](https://github.com/effector/effector/pull/1360))
+- Fix `useStoreMap` mutating the store state, keeping removed keys and failing on a store that holds `null` ([PR #1360](https://github.com/effector/effector/pull/1360))
+- Fix `useVModel` writing user input to the global store instead of the scope, and losing an edit made in the same tick as a store update ([PR #1361](https://github.com/effector/effector/pull/1361))
+- Fix `useVModel` losing the content of `Map`, `Set`, `RegExp` and typed arrays, and sharing a `Date` with the store ([issue #975](https://github.com/effector/effector/issues/975), [PR #1361](https://github.com/effector/effector/pull/1361))
+
+### Typings
+
+- Reject a derived event in `useUnit` and type the events of a gate as `EventCallable` ([PR #1362](https://github.com/effector/effector/pull/1362))
+- Map a list or a shape typed as a union of units to a union of results instead of `never` ([PR #1362](https://github.com/effector/effector/pull/1362))
+- Export `Equal`, `UnitToValue` and `UseUnitResult` from `effector-vue/composition` ([PR #1362](https://github.com/effector/effector/pull/1362))
+
+### Behavior changes
+
+- Require Vue 3.3 or newer for Vue 3: the peer range of `vue` is `2 || >=3.3.0` ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Return shallow readonly refs typed `Readonly<Ref<T>>` from `useUnit` and `useStore` ([issue #1130](https://github.com/effector/effector/issues/1130), [PR #1362](https://github.com/effector/effector/pull/1362))
+- Return events and effects from `useUnit` as they are when no scope resolves, as effector-react does ([PR #1357](https://github.com/effector/effector/pull/1357))
+- Run `updateFilter` of `useStoreMap` on the results of `fn`, as effector-react does ([PR #1360](https://github.com/effector/effector/pull/1360))
+- Throw on `forceScope: true` when no scope resolves: the option was declared and ignored before ([PR #1357](https://github.com/effector/effector/pull/1357))
+
+## effector-vue 23.2.0
+
+- Fix nested reactivity in `useVModel` and `useGate` on Vue 3.5: the `deep` watch option shipped as `1` after minification, and Vue 3.5 reads a number as the depth to traverse ([issue #1344](https://github.com/effector/effector/issues/1344), [PR #1345](https://github.com/effector/effector/pull/1345), thanks [egoson](https://github.com/egoson) for the report)
+- Fix `useUnit(effect)` with a single effect: it returns a bound function, as the typings promise, instead of `{unit}` ([PR #1341](https://github.com/effector/effector/pull/1341))
+- Make the root `effector-vue` entry loadable on Vue 3 and export `EffectorScopePlugin` from `effector-vue/composition` ([issue #1280](https://github.com/effector/effector/issues/1280), [issue #1131](https://github.com/effector/effector/issues/1131), [PR #1343](https://github.com/effector/effector/pull/1343))
+- Fix the Vue 3 typings of `effector-vue/composition`: types come from `vue` instead of `@vue/reactivity`, and CI typechecks them ([issue #1186](https://github.com/effector/effector/issues/1186), [PR #1342](https://github.com/effector/effector/pull/1342))
+
+## effector 23.4.4
 
 - Add `enable_debug_traces` compilation to debug files
 
-# effector 23.4.3
+## effector 23.4.3
 
 - Make `effector/enable_debug_traces` actually built for production bundle
 
-# effector 23.4.2
+## effector 23.4.2
 
 - Turn off debug traces by default, enable by designated api [PR](https://github.com/effector/effector/pull/1285), [Docs](https://effector.dev/en/api/effector/debug_traces/)
 
-# effector 23.4.1
+## effector 23.4.1
 
 - Fix sample name support for cases without plugin
 
@@ -42,13 +85,6 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Improve error messages: now errors for `skipVoid` and `store without sid` will point to the line of store creation. This will help locate troublesome units easily
 - Add support for multiple arguments to `scopeBind`. This feature indirectly allows to use multiple arguments in `reflect` ([issue reflect#91](https://github.com/effector/reflect/issues/91))
 - Fix issues with `clearNode` ([issue #1200](https://github.com/effector/effector/issues/1200))
-
-## effector-vue 23.2.0
-
-- Fix nested reactivity in `useVModel` and `useGate` on Vue 3.5: the `deep` watch option shipped as `1` after minification, and Vue 3.5 reads a number as the depth to traverse ([issue #1344](https://github.com/effector/effector/issues/1344), [PR #1345](https://github.com/effector/effector/pull/1345), thanks [egoson](https://github.com/egoson) for the report)
-- Fix `useUnit(effect)` with a single effect: it returns a bound function, as the typings promise, instead of `{unit}` ([PR #1341](https://github.com/effector/effector/pull/1341))
-- Make the root `effector-vue` entry loadable on Vue 3 and export `EffectorScopePlugin` from `effector-vue/composition` ([issue #1280](https://github.com/effector/effector/issues/1280), [issue #1131](https://github.com/effector/effector/issues/1131), [PR #1343](https://github.com/effector/effector/pull/1343))
-- Fix the Vue 3 typings of `effector-vue/composition`: types come from `vue` instead of `@vue/reactivity`, and CI typechecks them ([issue #1186](https://github.com/effector/effector/issues/1186), [PR #1342](https://github.com/effector/effector/pull/1342))
 
 ## effector-vue 23.1.1
 
@@ -1396,11 +1432,7 @@ export default Vue.extend({
 
 ```html
 <template>
-
-
   <input v-model="$msg" />
-
-
 </template>
 ```
 
@@ -3499,33 +3531,19 @@ const {addMessage, cut} = createApi($text, {
 ```html
 <!DOCTYPE html>
 
-
 <html>
-
-
   <head>
-
-
     <script src="https://unpkg.com/effector@0.18.2/effector.umd.js"></script>
-
-
   </head>
 
-
   <body>
-
-
     <script>
       const header = document.createElement('h1')
       document.body.appendChild(header)
       const $text = effector.createStore('hello')
       $text.watch(str => (header.innerHTML = str))
     </script>
-
-
   </body>
-
-
 </html>
 ```
 

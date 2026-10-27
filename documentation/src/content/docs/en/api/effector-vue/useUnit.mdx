@@ -1,6 +1,6 @@
 ---
 title: useUnit
-description: TDB
+description: Composable that binds stores to Vue reactivity and binds events and effects to the current scope. Designed for Vue 3
 redirectFrom:
   - /docs/api/effector-vue/useUnit
 pagefindWeight: 7
@@ -10,15 +10,19 @@ pagefindWeight: 7
 import { useUnit } from "effector-vue/composition";
 ```
 
-Bind [_Stores_](../effector/Store) to Vue reactivity system or, in the case of [_Events_](../effector/Event)/[_Effects_](../effector/Effect) - bind to current [_Scope_](../effector/Scope) to use in DOM event handlers.
+:::info{title="since"}
+`useUnit` introduced in [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0)
+:::
+
+Bind [_Stores_](/en/api/effector/Store) to Vue reactivity system or, in the case of [_Events_](/en/api/effector/Event)/[_Effects_](/en/api/effector/Effect) - bind to current [_Scope_](/en/api/effector/Scope) to use in DOM event handlers.
 
 **Designed for Vue 3 and Composition API exclusively.**
 
 :::info{title="Future"}
 This API can completely replace the following APIs:
 
-- [useStore($store)](./useStore)
-- [useEvent(event)](./useEvent)
+- [useStore($store)](/en/api/effector-vue/useStore)
+- [useEvent(event)](/en/api/effector-vue/useEvent)
 
 In the future, these APIs can be deprecated and removed.
 
@@ -26,39 +30,54 @@ In the future, these APIs can be deprecated and removed.
 
 # Methods (#methods)
 
-## `useUnit(unit)` (#methods-useUnit-unit)
+## `useUnit(unit, options?)` (#methods-useUnit-unit)
+
+### Formulae (#methods-useUnit-unit-formulae)
+
+```ts
+useUnit(event: EventCallable<T>, options?: ScopeOptions): (payload: T) => T;
+useUnit(effect: Effect<Params, Done, Fail>, options?: ScopeOptions): (payload: Params) => Promise<Done>;
+```
 
 ### Arguments (#methods-useUnit-unit-arguments)
 
-1. `unit` ([_Event_](../effector/Event) or [_Effect_](../effector/Effect)): Event or effect which will be bound to current [_Scope_](../effector/Scope)
+1. `unit` ([_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect)): Event or effect which will be bound to current [_Scope_](/en/api/effector/Scope). A derived event, the result of `map` or `filter`, is rejected by the typings: it cannot be called
+2. `options?` (_Object_): `{ scope, forceScope }`, see [scope options](#methods-useUnit-options)
+
+:::info{title="since"}
+`options` argument introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
 
 ### Returns (#methods-useUnit-unit-returns)
 
-(`Function`): Function to pass to event handlers. Will trigger given unit in current scope
+(`Function`): Function to pass to event handlers. Will trigger given unit in current scope. When no scope is resolved, the unit itself is returned, as `useUnit` of effector-react does
+
+:::info{title="since"}
+A single effect returns a bound function since [effector-vue 23.2.0](https://changelog.effector.dev/#effector-vue-23-2-0). Without a scope the unit itself is returned since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
 
 ### Examples (#methods-useUnit-unit-examples)
 
 #### Basic Usage (#methods-useUnit-unit-examples-basic)
 
-```js
-// model.js
-import { createEvent, createStore, fork } from "effector";
+```ts
+// model.ts
+import { createEvent, createStore } from "effector";
 
-const incremented = createEvent();
-const $count = createStore(0);
+export const incremented = createEvent();
+export const $count = createStore(0);
 
 $count.on(incremented, (count) => count + 1);
 ```
 
-```html
-// App.vue
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { useUnit } from "effector-vue/composition";
 
-<script setup>
-  import { useUnit } from "effector-vue/composition";
+import { incremented } from "./model";
 
-  import { incremented, $count } from "./model.js";
-
-  const onClick = useUnit(incremented);
+const onClick = useUnit(incremented);
 </script>
 
 <template>
@@ -66,39 +85,47 @@ $count.on(incremented, (count) => count + 1);
 </template>
 ```
 
-### `useUnit($store)` (#methods-useUnit-store)
+## `useUnit($store, options?)` (#methods-useUnit-store)
 
-#### Arguments (#methods-useUnit-store-arguments)
+### Formulae (#methods-useUnit-store-formulae)
 
-1. `$store` ([_Store_](../effector/Store)): Store which will be bound to Vue reactivity system
-
-#### Returns (#methods-useUnit-store-returns)
-
-Reactive value of given [_Store_](../effector/Store)
-
-#### Examples (#methods-useUnit-store-examples)
-
-##### Basic Usage (#methods-useUnit-store-examples-basic)
-
-```js
-// model.js
-import { createEvent, createStore, fork } from "effector";
-
-const incremented = createEvent();
-const $count = createStore(0);
-
-$count.on(incremented, (count) => count + 1);
+```ts
+useUnit($store: Store<State>, options?: ScopeOptions): Readonly<Ref<State>>;
 ```
 
-```html
-// App.vue
+### Arguments (#methods-useUnit-store-arguments)
 
-<script setup>
-  import { useUnit } from "effector-vue/composition";
+1. `$store` ([_Store_](/en/api/effector/Store)): Store which will be bound to Vue reactivity system
+2. `options?` (_Object_): `{ scope, forceScope }`, see [scope options](#methods-useUnit-options)
 
-  import { $count } from "./model.js";
+:::info{title="since"}
+`options` argument introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
 
-  const count = useUnit($count);
+### Returns (#methods-useUnit-store-returns)
+
+(`Readonly<Ref<State>>`): a shallow readonly ref. Its `value` is the state of the store itself, not a copy and not a reactive proxy, so it stays equal to `scope.getState($store)`
+
+:::info{title="since"}
+The ref is shallow since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that `value` was a deep readonly proxy over the state
+:::
+
+:::warning{title="Important"}
+Only the ref is protected from writes. A write to a nested field of `value` changes the state of the store in place, and no update is triggered. Change the state through events.
+:::
+
+### Examples (#methods-useUnit-store-examples)
+
+#### Basic Usage (#methods-useUnit-store-examples-basic)
+
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { useUnit } from "effector-vue/composition";
+
+import { $count } from "./model";
+
+const count = useUnit($count);
 </script>
 
 <template>
@@ -106,42 +133,45 @@ $count.on(incremented, (count) => count + 1);
 </template>
 ```
 
-### `useUnit(shape)` (#methods-useUnit-shape)
+## `useUnit(shape, options?)` (#methods-useUnit-shape)
 
-#### Arguments (#methods-useUnit-shape-arguments)
+### Formulae (#methods-useUnit-shape-formulae)
 
-1. `shape` Object or array of ([_Events_](../effector/Event) or [_Effects_](../effector/Effect) or [_Stores_](../effector/Store)): Every unit will be processed by `useUnit` and returned as a reactive value in case of [_Store_](../effector/Store) or as a function to pass to event handlers in case of [_Event_](../effector/Event) or [_Effect_](../effector/Effect).
+```ts
+useUnit({ a: Store<A>, b: EventCallable<B> }, options?: ScopeOptions): { a: Readonly<Ref<A>>, b: (payload: B) => B };
+useUnit([Store<A>, EventCallable<B>], options?: ScopeOptions): [Readonly<Ref<A>>, (payload: B) => B];
+```
 
-#### Returns (#methods-useUnit-shape-returns)
+### Arguments (#methods-useUnit-shape-arguments)
+
+1. `shape` Object or array of ([_Events_](/en/api/effector/Event) or [_Effects_](/en/api/effector/Effect) or [_Stores_](/en/api/effector/Store)): Every unit will be processed by `useUnit` and returned as a reactive value in case of [_Store_](/en/api/effector/Store) or as a function to pass to event handlers in case of [_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect).
+2. `options?` (_Object_): `{ scope, forceScope }`, see [scope options](#methods-useUnit-options)
+
+:::info{title="since"}
+`options` argument introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+### Returns (#methods-useUnit-shape-returns)
 
 (Object or Array):
 
-- if [_Event_](../effector/Event) or [_Effect_](../effector/Effect): functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current [_Scope_](../effector/Scope).
-- if [_Store_](../effector/Store): reactive value of given [_Store_](../effector/Store) with the same names or keys as argument.
+- if [_Event_](/en/api/effector/Event) or [_Effect_](/en/api/effector/Effect): functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current [_Scope_](/en/api/effector/Scope).
+- if [_Store_](/en/api/effector/Store): a shallow readonly ref of given [_Store_](/en/api/effector/Store) with the same names or keys as argument.
 
-#### Examples (#methods-useUnit-shape-examples)
+All stores of one call share one subscription.
 
-##### Basic Usage (#methods-useUnit-shape-examples-basic)
+### Examples (#methods-useUnit-shape-examples)
 
-```js
-// model.js
-import { createEvent, createStore, fork } from "effector";
+#### Basic Usage (#methods-useUnit-shape-examples-basic)
 
-const incremented = createEvent();
-const $count = createStore(0);
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { useUnit } from "effector-vue/composition";
 
-$count.on(incremented, (count) => count + 1);
-```
+import { $count, incremented } from "./model";
 
-```html
-// App.vue
-
-<script setup>
-  import { useUnit } from "effector-vue/composition";
-
-  import { $count, incremented } from "./model.js";
-
-  const { count, handleClick } = useUnit({ count: $count, handleClick: incremented });
+const { count, handleClick } = useUnit({ count: $count, handleClick: incremented });
 </script>
 
 <template>
@@ -149,3 +179,23 @@ $count.on(incremented, (count) => count + 1);
   <button @click="handleClick">increment</button>
 </template>
 ```
+
+## Scope options (#methods-useUnit-options)
+
+- `scope?` ([_Scope_](/en/api/effector/Scope)): the scope to read stores from and to bind events to, instead of the one provided to the application
+- `forceScope?` (_boolean_): throw when no scope is resolved instead of falling back to global mode. Overrides the `forceScope` option of the plugin for this call
+
+See [How the scope is resolved](/en/api/effector-vue/EffectorScopePlugin#resolution).
+
+```ts
+const count = useUnit($count, { scope });
+const onClick = useUnit(incremented, { forceScope: true });
+```
+
+## Lifetime (#methods-useUnit-lifetime)
+
+The subscription lives as long as the component or the effect scope that called `useUnit`, and is disposed with `onScopeDispose`. A call inside a detached `effectScope()` unsubscribes when that scope is stopped. During a server render nothing is subscribed: the refs read the scope on access. The [`live`](/en/api/effector-vue/EffectorScopePlugin#plugins-EffectorScopePlugin-scope-scopeName-arguments) option of the plugin overrides this detection.
+
+:::info{title="since"}
+Disposal with the effect scope, one subscription per call and no subscriptions during a server render since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::

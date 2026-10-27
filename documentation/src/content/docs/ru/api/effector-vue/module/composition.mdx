@@ -1,0 +1,45 @@
+---
+title: effector-vue/composition
+description: Модуль effector-vue с API для Composition API
+lang: ru
+pagefindWeight: 7
+---
+
+# effector-vue/composition (#effector-vue-composition)
+
+```ts
+import {} from "effector-vue/composition";
+```
+
+API [effector-vue](/ru/api/effector-vue) для [Composition API](https://ru.vuejs.org/guide/extras/composition-api-faq.html).
+
+## API (#api)
+
+- [useUnit(shape, options?)](/ru/api/effector-vue/useUnit)
+- [useStore($store, options?)](/ru/api/effector-vue/useStore)
+- [`useStoreMap({ store, keys, fn })`](/ru/api/effector-vue/useStoreMap)
+- [useVModel($store, options?)](/ru/api/effector-vue/useVModel)
+- [useProvidedScope(options?)](/ru/api/effector-vue/useProvidedScope)
+- [createGate(config?)](/ru/api/effector-vue/createGate)
+- [useGate(Gate, props?, options?)](/ru/api/effector-vue/useGate)
+- [EffectorScopePlugin](/ru/api/effector-vue/EffectorScopePlugin)
+- [EffectorScopeKey](/ru/api/effector-vue/EffectorScopePlugin#resolution)
+
+:::info{title="since"}
+`EffectorScopePlugin` экспортируется из `effector-vue/composition` с [effector-vue 23.2.0](https://changelog.effector.dev/#effector-vue-23-2-0).
+`useProvidedScope` и `EffectorScopeKey` появились в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0).
+:::
+
+## Типы (#types)
+
+- `ScopeOptions`: `{ scope?, forceScope? }`, опции [useUnit](/ru/api/effector-vue/useUnit), [useStore](/ru/api/effector-vue/useStore) и [useGate](/ru/api/effector-vue/useGate)
+- `UseVModelOptions`: опции [useVModel](/ru/api/effector-vue/useVModel)
+- `UseStoreMapConfig`: конфиг [useStoreMap](/ru/api/effector-vue/useStoreMap)
+- `EffectorScopePluginOptions`: опции [EffectorScopePlugin](/ru/api/effector-vue/EffectorScopePlugin)
+- `UseUnitResult<Shape>` и `UnitToValue<Unit>`: результат `useUnit` для набора юнитов и для одного юнита
+- `Equal<X, Y>`: `true`, когда два типа совпадают
+- `UseVModel`: тип `useVModel`
+
+:::info{title="since"}
+Все типы, кроме `UseVModel`, экспортируются с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0).
+:::

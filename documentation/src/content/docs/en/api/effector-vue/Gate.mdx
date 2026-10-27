@@ -1,13 +1,13 @@
 ---
 title: Effector Vue Gate
-description: Effector Vue
+description: A gate connects the lifetime of a component to effector units
 redirectFrom:
   - /api/effector-vue/Gate
   - /docs/api/effector-vue/gate
 pagefindWeight: 7
 ---
 
-_Gate_ is a hook for conditional rendering, based on current value (or values) in props. An example of a problem that Gate can solve – you can put together all required data, when component was mounted.
+_Gate_ connects a component to the model: the gate is open while the component is mounted and holds its props. For example, a gate can collect all required data when the component mounts.
 
 This allows you to send props back to _Store_ to create feedback loop.
 
@@ -18,15 +18,17 @@ Gate can have two states:
 - **Open**, which means mounted
 - **Closed**, which means unmounted
 
+A gate opens on mount with the props it has at that moment and passes them to `.set` itself, so `.open` fires before `.set`. `<KeepAlive>` deactivation leaves the gate open, only unmounting closes it. During a server render the gate stays closed, see [useGate](/en/api/effector-vue/useGate#methods-useGate-Gate-props-ssr).
+
 # Gate Properties (#properties)
 
 ## `.state` (#properties-state)
 
 :::warning{title="Important"}
-Do not modify `state` value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
+Do not modify `state` value! It is [derived store](/en/explanation/glossary#derived-store) and should be in predictable state.
 :::
 
-`Store<Props>`: [DerivedStore](/en/api/effector/Store#readonly) with current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-vue/useGate) and from props when rendering gate as a component.
+`Store<Props>`: [DerivedStore](/en/explanation/glossary#derived-store) with current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-vue/useGate).
 
 ## `.open` (#properties-open)
 
@@ -34,7 +36,7 @@ Do not modify `state` value! It is [derived store](/en/api/effector/Store#readon
 Do not manually call this event. It is an event that depends on a Gate state.
 :::
 
-[`Event<Props>`](/en/api/effector/Event): Event which will be called during gate mounting
+[`Event<Props>`](/en/api/effector/Event): Event which will be called during gate mounting, with the current props
 
 ## `.close` (#properties-close)
 
@@ -47,7 +49,28 @@ Do not manually call this event. It is an event that depends on a Gate state.
 ## `.status` (#properties-status)
 
 :::warning{title="Important"}
-Do not modify `status` value! It is [derived store](/en/api/effector/Store#readonly) and should be in predictable state.
+Do not modify `status` value! It is [derived store](/en/explanation/glossary#derived-store) and should be in predictable state.
 :::
 
-`Store<boolean>`: Boolean [DerivedStore](/en/api/effector/Store#readonly), which show if given gate is mounted.
+`Store<boolean>`: Boolean [DerivedStore](/en/explanation/glossary#derived-store), which show if given gate is mounted.
+
+# Example (#example)
+
+The model reacts to the gate. A component opens it with [useGate](/en/api/effector-vue/useGate#methods-useGate-Gate-props-examples).
+
+```ts
+// model.ts
+import { createEffect, sample } from "effector";
+import { createGate } from "effector-vue/composition";
+
+export const PageGate = createGate<{ id: string }>();
+
+const loadPageFx = createEffect(async ({ id }: { id: string }) => {
+  const response = await fetch(`/api/pages/${id}`);
+  return response.json();
+});
+
+sample({ clock: PageGate.open, target: loadPageFx });
+
+PageGate.status.watch((opened) => console.log("page opened:", opened));
+```

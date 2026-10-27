@@ -1,0 +1,50 @@
+---
+title: effector-vue
+description: Биндинги effector для Vue 2 и Vue 3, для Options API и Composition API.
+lang: ru
+pagefindWeight: 7
+---
+
+Биндинги effector для Vue.
+
+:::info{title="Требования"}
+`effector-vue` работает с Vue 2 и с Vue 3.3 и новее. Vue 3.0, 3.1 и 3.2 не поддерживаются с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0).
+:::
+
+Примеры Composition API написаны на TypeScript: `<script setup lang="ts">` и `model.ts`. Для JavaScript уберите `lang="ts"` и аннотации типов, остальной код не меняется.
+
+# Основные экспорты (#top-level-exports)
+
+- [VueEffector(Vue, options?)](/ru/api/effector-vue/VueEffector)
+- [createComponent(ComponentOptions, store?)](/ru/api/effector-vue/createComponent)
+- [`EffectorScopePlugin({scope, scopeName?, forceScope?, live?})`](/ru/api/effector-vue/EffectorScopePlugin)
+
+# ComponentOptions API (#componentOptions-api)
+
+- [ComponentOptions\<V\>](/ru/api/effector-vue/ComponentOptions)
+
+# Хуки (#hooks)
+
+- [useUnit(shape, options?)](/ru/api/effector-vue/useUnit)
+- [useStore(store, options?)](/ru/api/effector-vue/useStore)
+- [`useStoreMap({store, keys, fn})`](/ru/api/effector-vue/useStoreMap)
+- [useVModel(store, options?)](/ru/api/effector-vue/useVModel)
+- [useProvidedScope(options?)](/ru/api/effector-vue/useProvidedScope)
+
+# Gate API (#gate-api)
+
+- [Gate](/ru/api/effector-vue/Gate)
+- [createGate()](/ru/api/effector-vue/createGate)
+- [useGate(Gate, props?, options?)](/ru/api/effector-vue/useGate)
+
+# Скоуп (#scope)
+
+- [`EffectorScopeKey`](/ru/api/effector-vue/EffectorScopePlugin#resolution), ключ инъекции скоупа
+- [Как выбирается скоуп](/ru/api/effector-vue/EffectorScopePlugin#resolution)
+
+# Точки входа (#import-map)
+
+У пакета `effector-vue` несколько точек входа для разных задач:
+
+- [effector-vue/composition](/ru/api/effector-vue/module/composition)
+- [effector-vue/ssr](/ru/api/effector-vue/module/ssr)

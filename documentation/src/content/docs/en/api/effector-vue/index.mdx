@@ -1,18 +1,25 @@
 ---
 title: effector-vue
+description: Effector bindings for Vue 2 and Vue 3, with the Options API and the Composition API.
 redirectFrom:
   - /api/effector-vue
   - /docs/api/effector-vue
 pagefindWeight: 7
 ---
 
-Effector binginds for Vue.
+Effector bindings for Vue.
+
+:::info{title="Requirements"}
+`effector-vue` supports Vue 2 and Vue 3.3 or newer. Vue 3.0, 3.1 and 3.2 are not supported since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0).
+:::
+
+Examples of the Composition API are written in TypeScript: `<script setup lang="ts">` and `model.ts`. In JavaScript, drop `lang="ts"` and the type annotations, the rest of the code stays the same.
 
 # Top-Level Exports (#top-level-exports)
 
 - [VueEffector(Vue, options?)](/en/api/effector-vue/VueEffector)
 - [createComponent(ComponentOptions, store?)](/en/api/effector-vue/createComponent)
-- [`EffectorScopePlugin({scope, scopeName?})`](/en/api/effector-vue/EffectorScopePlugin)
+- [`EffectorScopePlugin({scope, scopeName?, forceScope?, live?})`](/en/api/effector-vue/EffectorScopePlugin)
 
 # ComponentOptions API (#componentOptions-api)
 
@@ -20,16 +27,22 @@ Effector binginds for Vue.
 
 # Hooks (#hooks)
 
-- [useUnit(shape)](/en/api/effector-vue/useUnit)
-- [useStore(store)](/en/api/effector-vue/useStore)
+- [useUnit(shape, options?)](/en/api/effector-vue/useUnit)
+- [useStore(store, options?)](/en/api/effector-vue/useStore)
 - [`useStoreMap({store, keys, fn})`](/en/api/effector-vue/useStoreMap)
-- [useVModel(store)](/en/api/effector-vue/useVModel)
+- [useVModel(store, options?)](/en/api/effector-vue/useVModel)
+- [useProvidedScope(options?)](/en/api/effector-vue/useProvidedScope)
 
 # Gate API (#gate-api)
 
 - [Gate](/en/api/effector-vue/Gate)
 - [createGate()](/en/api/effector-vue/createGate)
-- [useGate(GateComponent, props)](/en/api/effector-vue/useGate)
+- [useGate(Gate, props?, options?)](/en/api/effector-vue/useGate)
+
+# Scope (#scope)
+
+- [`EffectorScopeKey`](/en/api/effector-vue/EffectorScopePlugin#resolution), the injection key of the scope
+- [How the scope is resolved](/en/api/effector-vue/EffectorScopePlugin#resolution)
 
 # Import map (#import-map)
 

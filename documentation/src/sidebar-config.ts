@@ -613,6 +613,10 @@ export const effectorVue: LSidebarGroup[] = [
         link: "/api/effector-vue/useVModel",
         tags: ["useful"],
       },
+      {
+        text: { en: "useProvidedScope" },
+        link: "/api/effector-vue/useProvidedScope",
+      },
     ],
   },
   {
@@ -631,7 +635,7 @@ export const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Options and properties", uz: "Variantlar va xususiyatlar" },
+    text: { en: "Options and properties", ru: "Опции и свойства", uz: "Variantlar va xususiyatlar" },
     items: [
       {
         text: { en: "ComponentOptions (Vue2)" },
@@ -641,7 +645,7 @@ export const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Scoped API" },
+    text: { en: "Scoped API", ru: "Устаревший API для SSR" },
     items: [
       {
         text: { en: "useEvent" },

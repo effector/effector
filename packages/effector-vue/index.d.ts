@@ -167,13 +167,32 @@ declare function createComponent<
   store?: S,
 ): ExtendedVue<Inference<S> & V, Data, Methods, Computed, PropNames>
 
+type EffectorScopePluginOptions = {
+  scope: Scope
+  /** Legacy string injection key the scope is also provided under. */
+  scopeName?: string
+  /** Default forceScope for every composable call that does not pass its own. */
+  forceScope?: boolean
+  /**
+   * Overrides whether the composables subscribe to the scope. `false` makes
+   * them read the scope on access without subscribing, as in a server render;
+   * `true` makes them always subscribe. By default they detect a server
+   * render through the context of `renderToString`.
+   */
+  live?: boolean
+}
+
 /**
  * The return type is structural because this entry point is typed against
  * Vue 2, which has no `Plugin` type to import: without it `Plugin` silently
  * resolved to the DOM `Plugin` interface. Becomes `Plugin` from 'vue' in v24,
  * when the root entry point moves to Vue 3.
  */
-export function EffectorScopePlugin(config: {
-  scope: Scope
-  scopeName?: string
-}): {install(app: unknown): void}
+export function EffectorScopePlugin(config: EffectorScopePluginOptions): {
+  install(app: unknown): void
+}
+/** `app.use(EffectorScopePlugin, {scope})` calls the plugin this way. */
+export function EffectorScopePlugin(
+  app: unknown,
+  config: EffectorScopePluginOptions,
+): void

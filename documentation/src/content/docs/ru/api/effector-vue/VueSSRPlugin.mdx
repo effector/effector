@@ -1,0 +1,41 @@
+---
+title: VueSSRPlugin
+description: Устаревший плагин Vue, который передаёт скоуп для SSR. Используйте EffectorScopePlugin
+lang: ru
+pagefindWeight: 7
+---
+
+Плагин передаёт приложению общий скоуп: через него читаются сторы и вызываются события. Нужен для SSR.
+
+# Плагины (#plugins)
+
+## `VueSSRPlugin({ scope, scopeName })` (#plugins-VueSSRPlugin-scope-scopeName)
+
+:::warning{title="Устарело"}
+С [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0) `VueSSRPlugin` устарел. Используйте [`EffectorScopePlugin`](/ru/api/effector-vue/EffectorScopePlugin).
+:::
+
+## Аргументы (#plugins-VueSSRPlugin-scope-scopeName-arguments)
+
+1. `scope` [Scope](/ru/api/effector/Scope)
+2. `scopeName?` своё имя скоупа (по умолчанию `root`)
+
+## Примеры (#plugins-VueSSRPlugin-scope-scopeName-examples)
+
+### Базовый пример (#plugins-VueSSRPlugin-scope-scopeName-examples-basicUsage)
+
+```ts
+import { createSSRApp } from "vue";
+import { VueSSRPlugin } from "effector-vue/ssr";
+import { fork } from "effector";
+
+const app = createSSRApp(AppComponent);
+const scope = fork();
+
+app.use(
+  VueSSRPlugin({
+    scope,
+    scopeName: "app-scope-name",
+  }),
+);
+```

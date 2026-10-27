@@ -1,6 +1,6 @@
 ---
 title: VueEffector
-description: effector-vue plugin for vue 3
+description: effector-vue plugin for the Options API of Vue 3
 redirectFrom:
   - /api/effector-vue/VueEffector
   - /docs/api/effector-vue/vue-effector
@@ -11,7 +11,11 @@ pagefindWeight: 7
 import { VueEffector } from "effector-vue/options-vue3";
 ```
 
-`effector-vue` plugin for vue 3 creates a mixin that takes a binding function from the effector option.
+:::info{title="since"}
+`effector-vue/options-vue3` introduced in [effector-vue 23.1.0](https://changelog.effector.dev/#effector-vue-23-1-0)
+:::
+
+`effector-vue` plugin for the Options API of Vue 3. It creates a mixin that reads the `effector` option of a component. Helps to migrate a large codebase from Vue 2.
 
 # Methods (#methods)
 
@@ -47,8 +51,7 @@ app.use(VueEffector);
   <div>
     <span v-if="createPending">loading...</span>
     <p>{{ user.name }}</p>
-    ...
-    <button @click="create">Create<button>
+    <button @click="create">Create</button>
   </div>
 </template>
 ```
@@ -72,6 +75,5 @@ export default {
     create, // template binding
     createFx,
   },
-  ...
 }
 ```

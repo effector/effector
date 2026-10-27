@@ -1,6 +1,6 @@
 ---
 title: useVModel
-description: hook function, which subscribes to watcher, that observes changes in the current store. Designed for vue 3
+description: Composable that binds a store to v-model through a writable ref. Designed for Vue 3
 redirectFrom:
   - /api/effector-vue/useVModel
   - /docs/api/effector-vue/useVModel
@@ -11,54 +11,67 @@ pagefindWeight: 7
 import { useVModel } from "effector-vue/composition";
 ```
 
-A hook function, which subscribes to a watcher that observes changes in the current store, so when recording results, the component will automatically update. It is primarily used when working with forms (`v-model`) in Vue 3.
+:::info{title="since"}
+`useVModel` introduced in [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
+
+Returns a writable ref bound to a store: an update of the store reaches the ref, and an edit of the ref is written into the store. It is primarily used for forms with `v-model` in Vue 3.
 
 # Methods (#methods)
 
-## `useVModel($store)` (#methods-useVModel-store)
+## `useVModel($store, options?)` (#methods-useVModel-store)
 
 ### Formulae (#methods-useVModel-store-formulae)
 
 ```ts
-useVModel($store: Store<State>): Ref<UnwrapRef<State>>;
+useVModel($store: Store<State>, options?: UseVModelOptions): Ref<UnwrapRef<State>>;
+useVModel<T extends Record<string, Store<any>>>(shape: T, options?: UseVModelOptions): ExtractStore<T>;
 ```
 
 Designed for Vue 3.
 
 ### Arguments (#methods-useVModel-store-arguments)
 
-1. `$store` ([_Store_](/en/api/effector/Store))
-2. `shape of Stores` ([_Store_](/en/api/effector/Store))
+1. `$store` ([_Store_](/en/api/effector/Store)) or a shape of stores
+2. `options?` (_Object_)
+   - `scope?` ([_Scope_](/en/api/effector/Scope)) to read and to write instead of the scope of the plugin
+   - `forceScope?` (_boolean_) throw when no scope is resolved instead of falling back to global mode
+   - `deep?` (_boolean_) watch the value deeply, so that an edit of a nested field reaches the store (default: `true`)
+
+:::info{title="since"}
+The `options` argument introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that the second argument was a Vue `EffectScope`, and it still works
+:::
 
 ### Returns (#methods-useVModel-store-returns)
 
-(`State`)
+A writable `Ref` with a copy of the state, or an object of such copies for a shape of stores. Editing it writes the whole new value into the store; an update of the store replaces the copy.
 
 ### Examples (#methods-useVModel-examples)
 
 #### Single Store (#methods-useVModel-examples-singleStore)
 
-```js
-import { createStore, createApi } from "effector";
-import { useVModel } from "effector-vue/composition";
+```ts
+// model.ts
+import { createStore } from "effector";
 
-const $user = createStore({
+export const $user = createStore({
   name: "",
   surname: "",
   skills: ["CSS", "HTML"],
 });
-
-export default {
-  setup() {
-    const user = useVModel($user);
-
-    return { user };
-  },
-};
 ```
 
-```html
-<div id="app">
+```vue
+<!-- UserForm.vue -->
+<script setup lang="ts">
+import { useVModel } from "effector-vue/composition";
+
+import { $user } from "./model";
+
+const user = useVModel($user);
+</script>
+
+<template>
   <input type="text" v-model="user.name" />
   <input type="text" v-model="user.surname" />
 
@@ -67,36 +80,31 @@ export default {
     <input type="checkbox" v-model="user.skills" value="CSS" />
     <input type="checkbox" v-model="user.skills" value="JS" />
   </div>
-</div>
+</template>
 ```
 
 #### Store Shape (#methods-useVModel-examples-storeShape)
 
-```js
-import { createStore, createApi } from "effector";
-import { useVModel } from "effector-vue/composition";
+```ts
+// model.ts
+import { createStore } from "effector";
 
-const $name = createStore("");
-const $surname = createStore("");
-const $skills = createStore([]);
-
-const model = {
-  name: $name,
-  surname: $surname,
-  skills: $skills,
-};
-
-export default {
-  setup() {
-    const user = useVModel(model);
-
-    return { user };
-  },
-};
+export const $name = createStore("");
+export const $surname = createStore("");
+export const $skills = createStore<string[]>([]);
 ```
 
-```html
-<div id="app">
+```vue
+<!-- UserForm.vue -->
+<script setup lang="ts">
+import { useVModel } from "effector-vue/composition";
+
+import { $name, $surname, $skills } from "./model";
+
+const user = useVModel({ name: $name, surname: $surname, skills: $skills });
+</script>
+
+<template>
   <input type="text" v-model="user.name" />
   <input type="text" v-model="user.surname" />
 
@@ -105,5 +113,49 @@ export default {
     <input type="checkbox" v-model="user.skills" value="CSS" />
     <input type="checkbox" v-model="user.skills" value="JS" />
   </div>
-</div>
+</template>
 ```
+
+#### Scope (#methods-useVModel-examples-scope)
+
+:::info{title="since"}
+`useVModel` writes into the scope since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that an edit reached the global store even under the plugin
+:::
+
+Under [`EffectorScopePlugin`](/en/api/effector-vue/EffectorScopePlugin) the form reads and writes the scope of the application, so the input of the user reaches `scope.getState($form)` and [`serialize`](/en/api/effector/serialize). Without a scope the store itself is written, as before.
+
+```ts
+import { fork } from "effector";
+import { EffectorScopePlugin } from "effector-vue/composition";
+
+const scope = fork();
+app.use(EffectorScopePlugin({ scope }));
+```
+
+A call outside of a component, or a call that has to write into another scope, takes the scope as an option:
+
+```ts
+const form = useVModel($form, { scope });
+```
+
+#### Shallow binding (#methods-useVModel-examples-deep)
+
+By default the copy is watched deeply, so an edit of a nested field writes the whole new value into the store. With `deep: false` the state of the store is bound as it is and only an assignment of the whole value is written back, which suits a form of primitives or a large state that is mostly read:
+
+```ts
+const form = useVModel($form, { deep: false });
+
+form.value = { ...form.value, name: "John" };
+```
+
+In this mode the ref holds the state object of the store itself, and an assignment hands that object back without a copy. Writing into a nested field of it changes the state of the store in place, and nothing reads that as an update: the store keeps the same object and no watcher fires. Replace the whole value, the way the example does, or leave `deep` alone.
+
+### Limitations (#methods-useVModel-limitations)
+
+:::info{title="since"}
+The copy is made with `structuredClone` since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+- The copy of the state is made with `structuredClone`, so `Date`, `Map`, `Set`, `RegExp` and typed arrays survive the round trip. If the runtime has no `structuredClone`, or it throws on some value in the state, a function for one, the whole copy is made with a plain recursive copy instead. That copy keeps functions and dates by reference and turns `Map` and `Set` into empty objects. A class instance loses its prototype either way.
+- A derived store, the result of `map` or `combine`, takes an edit, and the next update of the store it is computed from overwrites it. The composable reports it through `console.error`; bind the form to that store.
+- The second argument used to be a Vue `EffectScope`. It still works; the options object is the preferred form.

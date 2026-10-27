@@ -7,7 +7,11 @@ redirectFrom:
 pagefindWeight: 7
 ---
 
-Creates a [_Gate_](/api/effector-vue/Gate) to consume data from view, designed for vue 3. If `defaultState` is defined, [Gate.state](/api/effector-vue/Gate#state) will be created with passed value.
+Creates a [_Gate_](/en/api/effector-vue/Gate) to consume data from view, designed for Vue 3. If `defaultState` is defined, [Gate.state](/en/api/effector-vue/Gate#properties-state) will be created with passed value.
+
+:::info{title="since"}
+`createGate` introduced in [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
 
 # Methods (#methods)
 
@@ -17,8 +21,8 @@ Creates a [_Gate_](/api/effector-vue/Gate) to consume data from view, designed f
 
 `config` (_Object_): Optional configuration object
 
-- `defaultState?`: Optional default state for [Gate.state](/en/api/effector-vue/Gate#state)
-- `domain?` ([_Domain_](/en/api/effector/Domain)): Optional domain which will be used to create gate units ([Gate.open](/en/api/effector-vue/Gate#open) event, [Gate.state](/en/api/effector-vue/Gate#state) store, and so on)
+- `defaultState?`: Optional default state for [Gate.state](/en/api/effector-vue/Gate#properties-state)
+- `domain?` ([_Domain_](/en/api/effector/Domain)): Optional domain which will be used to create gate units ([Gate.open](/en/api/effector-vue/Gate#properties-open) event, [Gate.state](/en/api/effector-vue/Gate#properties-state) store, and so on)
 - `name?` (_string_): Optional name which will be used as the name of a created Vue component
 
 ### Returns (#methods-createGate-config-returns)
@@ -29,49 +33,59 @@ Creates a [_Gate_](/api/effector-vue/Gate) to consume data from view, designed f
 
 #### Basic Usage (#methods-createGate-config-examples-basic)
 
-```js
-import { createGate, useGate } from "effector-vue/composition";
+```ts
+// model.ts
+import { createGate } from "effector-vue/composition";
 
-const ListGate = createGate({
+export const ListGate = createGate<string>({
   name: "Gate with required props",
 });
 
-const ListItem = {
-  template: `
-    <div>
-      {{id}}
-    </div>
-  `,
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props) {
-    useGate(ListGate, () => props.id);
-  },
-};
-
-const app = {
-  template: `
-    <div>
-      <ListItem :id="id" />
-    </div>
-  `,
-  components: {
-    ListItem,
-  },
-  setup() {
-    const id = ref("1");
-    return { id };
-  },
-};
-
-Gate.state.watch((state) => {
+ListGate.state.watch((state) => {
   console.log("current state", state);
 });
 // => current state null
+```
+
+```vue
+<!-- ListItem.vue -->
+<script setup lang="ts">
+import { useGate } from "effector-vue/composition";
+
+import { ListGate } from "./model";
+
+const props = defineProps<{ id: string }>();
+
+useGate(ListGate, () => props.id);
+</script>
+
+<template>
+  <div>{{ id }}</div>
+</template>
+```
+
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { ref } from "vue";
+
+import ListItem from "./ListItem.vue";
+
+const id = ref("1");
+</script>
+
+<template>
+  <ListItem :id="id" />
+</template>
+```
+
+```ts
+// main.ts
+import { createApp } from "vue";
+
+import App from "./App.vue";
+
+const app = createApp(App);
 
 app.mount("#app");
 // => current state 1
@@ -79,3 +93,5 @@ app.mount("#app");
 app.unmount();
 // => current state null
 ```
+
+The gate opens on mount with the props it has at that moment and closes on unmount. [useGate](/en/api/effector-vue/useGate) describes the order of `open` and `set`, the behavior under `<KeepAlive>` and on the server.
