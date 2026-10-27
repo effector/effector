@@ -1,5 +1,6 @@
 ---
 title: useStoreMap
+description: Composable that selects a part of a store and updates only when that part changes. Designed for Vue 3
 redirectFrom:
   - /api/effector-vue/useStoreMap
   - /docs/api/effector-vue/useStoreMap
@@ -10,11 +11,19 @@ pagefindWeight: 7
 import { useStoreMap } from "effector-vue/composition";
 ```
 
-Function, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given selector. The returned `ComputedRef` updates only when the result of the selector changes, so a component reading one item of a large store is not touched by the updates of the other items.
+:::info{title="since"}
+`useStoreMap` introduced in [effector-vue 22.2.0](https://changelog.effector.dev/#effector-vue-22-2-0)
+:::
+
+Function, which subscribes to a [store](/en/api/effector/Store) and transforms its value with a given selector. `fn` receives the state object of the store itself, not a copy or a proxy, and must not mutate it. The returned `ComputedRef` updates only when the result of the selector changes, so a component reading one item of a large store is not touched by the updates of the other items.
 
 # Methods (#methods)
 
 ## `useStoreMap($store, fn)` (#methods-useStoreMap-store-fn)
+
+:::info{title="since"}
+Short version of `useStoreMap` introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
 
 ### Formulae (#methods-useStoreMap-store-fn-formulae)
 
@@ -35,6 +44,22 @@ useStoreMap(
 ### Returns (#methods-useStoreMap-store-fn-returns)
 
 (`ComputedRef<Result>`)
+
+### Examples (#methods-useStoreMap-store-fn-examples)
+
+```vue
+<script setup lang="ts">
+import { useStoreMap } from "effector-vue/composition";
+
+import { $user } from "./model";
+
+const name = useStoreMap($user, (user) => user.name);
+</script>
+
+<template>
+  <p>{{ name }}</p>
+</template>
+```
 
 ## `useStoreMap(config)` (#methods-useStoreMap-config)
 
@@ -62,9 +87,25 @@ useStoreMap({
    - `defaultValue` (`Result`): Used every time `fn` returns `undefined`
    - `scope` ([`Scope`](/en/api/effector/Scope)) and `forceScope` (`boolean`): [Scope](/en/api/effector-vue/EffectorScopePlugin) options of the call
 
+:::info{title="since"}
+`scope` and `forceScope` options introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+:::info{title="since"}
+`keys` accepts a value or a ref since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that it accepted a getter only
+:::
+
 ### Returns (#methods-useStoreMap-config-returns)
 
 (`ComputedRef<Result>`)
+
+:::info{title="since"}
+Changed in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0):
+
+- `fn` receives the state object of the store. Before that it received a proxy, and the state of the store was mutated in place
+- a store that holds `null` is supported, and a key removed from the state is dropped instead of keeping its last value
+- the subscription is disposed with the effect scope and skipped during a server render
+:::
 
 ### Examples (#methods-useStoreMap-config-examples)
 
@@ -73,26 +114,24 @@ This hook is very useful for working with lists, especially with large ones
 ##### User.vue (#methods-useStoreMap-config-example-userVue)
 
 ```vue
-<script setup>
+<script setup lang="ts">
 import { useStoreMap } from "effector-vue/composition";
 
 import { $users } from "./model";
 
-const props = defineProps({
-  id: Number,
-});
+const props = defineProps<{ id: number }>();
 
-const user = useStoreMap({
+const name = useStoreMap({
   store: $users,
   keys: () => props.id,
-  fn: (users, userId) => users.find(({ id }) => id === userId),
-  defaultValue: { name: "unknown" },
+  fn: (users, userId) => users.find(({ id }) => id === userId)?.name,
+  defaultValue: "unknown",
 });
 </script>
 
 <template>
   <div>
-    <strong>[{{ id }}]</strong> {{ user.name }}
+    <strong>[{{ id }}]</strong> {{ name }}
   </div>
 </template>
 ```
@@ -100,7 +139,7 @@ const user = useStoreMap({
 ##### App.vue (#methods-useStoreMap-config-examples-appVue)
 
 ```vue
-<script setup>
+<script setup lang="ts">
 import { useUnit } from "effector-vue/composition";
 
 import { $ids } from "./model";
@@ -121,7 +160,9 @@ const ids = useUnit($ids);
 ```ts
 import { createStore } from "effector";
 
-export const $users = createStore([
+type User = { id: number; name: string };
+
+export const $users = createStore<User[]>([
   { id: 1, name: "Yung" },
   { id: 2, name: "Lean" },
   { id: 3, name: "Kyoto" },
@@ -135,9 +176,13 @@ export const $count = createStore(0);
 
 ### Filtering updates (#methods-useStoreMap-config-updateFilter)
 
+:::warning{title="Changed in 23.3.0"}
+Since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0) `updateFilter` receives the results of `fn`, as in effector-react. Before that it received the state of the store, so a filter written against the raw state has to be rewritten.
+:::
+
 `updateFilter` receives the results of `fn`, not the state of the store. A rejected result is dropped, and the previous one stays until an accepted one arrives. A recompute caused by `keys` goes through the filter as well.
 
-```js
+```ts
 const evenCount = useStoreMap({
   store: $count,
   fn: (count) => count,

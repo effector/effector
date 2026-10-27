@@ -1,0 +1,64 @@
+---
+title: useProvidedScope
+description: Хук, который возвращает скоуп, переданный приложению. Для Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { useProvidedScope } from "effector-vue/composition";
+```
+
+:::info{title="since"}
+`useProvidedScope` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+Возвращает [Scope](/ru/api/effector/Scope), в котором работает компонент, или `null`, если приложение работает в глобальном режиме. В основном нужен для ручных вызовов [`allSettled`](/ru/api/effector/allSettled) и [`scopeBind`](/ru/api/effector/scopeBind): остальные хуки находят скоуп сами.
+
+**Только для Vue 3 и Composition API.**
+
+# Методы (#methods)
+
+## `useProvidedScope(options?)` (#methods-useProvidedScope-options)
+
+### Формула (#methods-useProvidedScope-options-formulae)
+
+```ts
+useProvidedScope(options?: { forceScope?: boolean }): Scope | null;
+useProvidedScope(options: { forceScope: true }): Scope;
+```
+
+### Аргументы (#methods-useProvidedScope-options-arguments)
+
+1. `options?` `{ forceScope?: boolean }`: с `forceScope` хук бросает ошибку вместо возврата `null`
+
+### Возвращает (#methods-useProvidedScope-options-returns)
+
+`Scope | null`, а с `forceScope: true` всегда `Scope`.
+
+### Примеры (#methods-useProvidedScope-options-examples)
+
+#### Загрузка данных на сервере (#methods-useProvidedScope-options-examples-prefetch)
+
+```vue
+<script setup lang="ts">
+import { onServerPrefetch } from "vue";
+import { allSettled } from "effector";
+import { useProvidedScope, useUnit } from "effector-vue/composition";
+
+import { loadUserFx, $user } from "./model";
+
+const scope = useProvidedScope({ forceScope: true });
+const user = useUnit($user);
+
+onServerPrefetch(() => allSettled(loadUserFx, { scope, params: 1 }));
+</script>
+
+<template>
+  <p>{{ user.name }}</p>
+</template>
+```
+
+### Примечания (#methods-useProvidedScope-options-notes)
+
+Скоуп ищется через контекст инъекции, поэтому вызывайте хук в `setup` до первого `await` или внутри [`app.runWithContext`](https://ru.vuejs.org/api/application.html#app-runwithcontext). Полный порядок поиска описан в [EffectorScopePlugin](/ru/api/effector-vue/EffectorScopePlugin).

@@ -1,13 +1,25 @@
 ---
 title: EffectorScopePlugin
+description: Vue plugin that provides a scope to the composables of an application. Required for SSR
 pagefindWeight: 7
 ---
 
-The Plugin provides a general scope which needs for read and update effector's stores, call effector's events. Required for SSR.
+The plugin provides a [scope](/en/api/effector/Scope) to the whole application: the composables read stores from it and call events in it. Required for SSR.
+
+:::info{title="since"}
+`EffectorScopePlugin` introduced in [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0)
+:::
 
 # Plugins (#plugins)
 
 ## `EffectorScopePlugin({ scope, scopeName, forceScope, live })` (#plugins-EffectorScopePlugin-scope-scopeName)
+
+### Formulae (#plugins-EffectorScopePlugin-scope-scopeName-formulae)
+
+```ts
+EffectorScopePlugin(options: EffectorScopePluginOptions): Plugin;
+app.use(EffectorScopePlugin, options: EffectorScopePluginOptions): App;
+```
 
 ### Arguments (#plugins-EffectorScopePlugin-scope-scopeName-arguments)
 
@@ -16,23 +28,35 @@ The Plugin provides a general scope which needs for read and update effector's s
 3. `forceScope?` throw instead of falling back to global mode when a composable of this app resolves no scope (default: `false`)
 4. `live?` whether the composables subscribe to the scope: `false` makes them read the scope on access without subscribing to it, as in a server render, `true` makes them always subscribe (default: `false` inside `renderToString`, `true` elsewhere)
 
+:::info{title="since"}
+`forceScope` option introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+:::info{title="since"}
+`live` option introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
 The plugin provides the scope under the `EffectorScopeKey` injection key and, for backward compatibility, under the string `scopeName`.
+
+:::info{title="since"}
+`EffectorScopeKey` introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). The plugin throws without a valid `scope` since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
 
 ### Imports (#plugins-EffectorScopePlugin-scope-scopeName-imports)
 
 On Vue 3 import the plugin from `effector-vue/composition`, next to the other composition API methods:
 
-```js
+```ts
 import { EffectorScopePlugin, EffectorScopeKey } from "effector-vue/composition";
 ```
 
-The root entry `effector-vue` also exports the plugin and keeps doing so for backward compatibility. It is the entry of the Vue 2 API (`VueEffector`, `createComponent`), so a Vue 3 app that imports from it pulls in code it never runs.
+Exported from `effector-vue/composition` since [effector-vue 23.2.0](https://changelog.effector.dev/#effector-vue-23-2-0). The root entry `effector-vue` also exports the plugin and keeps doing so for backward compatibility. It is the entry of the Vue 2 API (`VueEffector`, `createComponent`), so a Vue 3 app that imports from it pulls in code it never runs.
 
 ### Examples (#plugins-EffectorScopePlugin-scope-scopeName-examples)
 
 #### Basic Usage (#plugins-EffectorScopePlugin-scope-scopeName-examples-basic)
 
-```js
+```ts
 import { createSSRApp } from "vue";
 import { EffectorScopePlugin } from "effector-vue/composition";
 import { fork } from "effector";
@@ -50,9 +74,13 @@ app.use(
 
 #### Passing options to `app.use` (#plugins-EffectorScopePlugin-scope-scopeName-examples-app-use)
 
+:::info{title="since"}
+The `app.use(EffectorScopePlugin, options)` form works since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
 Both forms install the plugin:
 
-```js
+```ts
 app.use(EffectorScopePlugin({ scope }));
 app.use(EffectorScopePlugin, { scope });
 ```
@@ -61,13 +89,17 @@ app.use(EffectorScopePlugin, { scope });
 
 With `forceScope` a composable that resolves no scope throws instead of reading global stores:
 
-```js
+```ts
 app.use(EffectorScopePlugin({ scope, forceScope: true }));
 ```
 
 The option is read through the injection context, so it covers the calls that see the app: `setup`, `app.runWithContext` and anything called before the first `await` of an async `setup`. A call that lost the context sees neither the scope nor the option: pass `{ forceScope: true }` to it directly.
 
 # How the scope is resolved (#resolution)
+
+:::info{title="since"}
+Resolution through `EffectorScopeKey` and the scope options of the composables introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that the scope was read from the string `scopeName` key of the component instance only
+:::
 
 Where the scope options go differs between the composables:
 
@@ -91,7 +123,7 @@ The legacy string key is read only when nothing is provided under `EffectorScope
 
 The key is created with `Symbol.for`, so a scope provided by another copy of the package is still found. Providing it by hand is enough, no plugin required:
 
-```js
+```ts
 import { provide } from "vue";
 import { EffectorScopeKey } from "effector-vue/composition";
 

@@ -1,6 +1,6 @@
 ---
 title: useStore
-description: Hook function, which subscribes to watcher, that observes changes in store. Designed for vue 3
+description: Composable that binds a store to Vue reactivity. Designed for Vue 3
 redirectFrom:
   - /api/effector-vue/useStore
   - /docs/api/effector-vue/useStore
@@ -13,40 +13,67 @@ pagefindWeight: 7
 import { useStore } from "effector-vue/composition";
 ```
 
-A hook function, which subscribes to watcher, that observes changes in the current **readonly** store, so when recording results, the component will update automatically. You can mutate the store value **only via [createEvent](/en/api/effector/createEvent)**. Designed for vue 3
+:::info{title="since"}
+`useStore` introduced in [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
 
-## `useStore($store)` (#useStore-store)
+Subscribes to a store and returns its state as a readonly ref, so the component updates when the store changes. Change the state **only through [events](/en/api/effector/createEvent)**. Designed for Vue 3.
+
+[useUnit($store)](/en/api/effector-vue/useUnit#methods-useUnit-store) does the same and also handles events, effects and shapes of units.
+
+## `useStore($store, options?)` (#useStore-store)
+
+### Formulae (#useStore-store-formulae)
+
+```ts
+useStore($store: Store<State>, options?: ScopeOptions): Readonly<Ref<State>>;
+```
 
 ### Arguments (#useStore-store-arguments)
 
 1. `$store` ([`Store<State>`](/en/api/effector/Store))
+2. `options?` (_Object_): `{ scope, forceScope }`, the same [scope options](/en/api/effector-vue/useUnit#methods-useUnit-options) as `useUnit` takes
+
+:::info{title="since"}
+`options` argument introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
 
 ### Returns (#useStore-store-returns)
 
 (`Readonly<Ref<State>>`): a shallow readonly ref whose `value` is the state of the store itself
 
+:::info{title="since"}
+The ref is shallow since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that `value` was a deep readonly proxy over the state
+:::
+
 ### Example (#useStore-store-example)
 
-```js
+```ts
+// model.ts
 import { createStore, createApi } from "effector";
-import { useStore } from "effector-vue/composition";
 
-const $counter = createStore(0);
+export const $counter = createStore(0);
 
-const { incremented, decremented } = createApi($counter, {
+export const { incremented, decremented } = createApi($counter, {
   incremented: (count) => count + 1,
   decremented: (count) => count - 1,
 });
+```
 
-export default {
-  setup() {
-    const counter = useStore($counter);
+```vue
+<!-- Counter.vue -->
+<script setup lang="ts">
+import { useStore, useUnit } from "effector-vue/composition";
 
-    return {
-      counter,
-      incremented,
-      decremented,
-    };
-  },
-};
+import { $counter, incremented, decremented } from "./model";
+
+const counter = useStore($counter);
+const [onIncrement, onDecrement] = useUnit([incremented, decremented]);
+</script>
+
+<template>
+  <button @click="onDecrement">-</button>
+  <span>{{ counter }}</span>
+  <button @click="onIncrement">+</button>
+</template>
 ```

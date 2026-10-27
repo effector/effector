@@ -1,0 +1,74 @@
+---
+title: Gate во Vue
+description: Гейт связывает время жизни компонента с юнитами effector
+lang: ru
+pagefindWeight: 7
+---
+
+_Gate_ (гейт) связывает компонент с моделью: пока компонент смонтирован, гейт открыт и хранит его пропсы. Например, через гейт можно собрать все нужные данные в момент монтирования компонента.
+
+Так пропсы попадают обратно в _стор_, и получается обратная связь.
+
+Гейт используется через хук [useGate](/ru/api/effector-vue/useGate). Сторы и события гейта работают в приложении как обычные юниты.
+
+У гейта два состояния:
+
+- **открыт**: компонент смонтирован
+- **закрыт**: компонент размонтирован
+
+Гейт открывается при монтировании с пропсами, которые есть в этот момент, и сам передаёт их в `.set`, поэтому `.open` срабатывает раньше `.set`. Деактивация в `<KeepAlive>` оставляет гейт открытым, закрывает его только размонтирование. При серверном рендере гейт остаётся закрытым, см. [useGate](/ru/api/effector-vue/useGate#methods-useGate-Gate-props-ssr).
+
+# Свойства гейта (#properties)
+
+## `.state` (#properties-state)
+
+:::warning{title="Важно"}
+Не меняйте значение `state`! Это [производный стор](/ru/explanation/glossary#derived-store), его состояние должно быть предсказуемым.
+:::
+
+`Store<Props>`: [производный стор](/ru/explanation/glossary#derived-store) с текущим состоянием гейта. Состояние приходит из второго аргумента [useGate](/ru/api/effector-vue/useGate).
+
+## `.open` (#properties-open)
+
+:::info{title="Важно"}
+Не вызывайте это событие вручную. Оно зависит от состояния гейта.
+:::
+
+[`Event<Props>`](/ru/api/effector/Event): событие, которое вызывается при монтировании гейта с текущими пропсами.
+
+## `.close` (#properties-close)
+
+:::info{title="Важно"}
+Не вызывайте это событие вручную. Оно зависит от состояния гейта.
+:::
+
+[`Event<Props>`](/ru/api/effector/Event): событие, которое вызывается при размонтировании гейта.
+
+## `.status` (#properties-status)
+
+:::warning{title="Важно"}
+Не меняйте значение `status`! Это [производный стор](/ru/explanation/glossary#derived-store), его состояние должно быть предсказуемым.
+:::
+
+`Store<boolean>`: булев [производный стор](/ru/explanation/glossary#derived-store), показывает, смонтирован ли гейт.
+
+# Пример (#example)
+
+Модель реагирует на гейт. Компонент открывает его через [useGate](/ru/api/effector-vue/useGate#methods-useGate-Gate-props-examples).
+
+```ts
+// model.ts
+import { createEffect, sample } from "effector";
+import { createGate } from "effector-vue/composition";
+
+export const PageGate = createGate<{ id: string }>();
+
+const loadPageFx = createEffect(async ({ id }: { id: string }) => {
+  const response = await fetch(`/api/pages/${id}`);
+  return response.json();
+});
+
+sample({ clock: PageGate.open, target: loadPageFx });
+
+PageGate.status.watch((opened) => console.log("page opened:", opened));
+```

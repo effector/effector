@@ -1,6 +1,6 @@
 ---
 title: useGate
-description: Using a gate to consume data from view. Designed for vue 3
+description: Composable that opens a gate for the lifetime of a component and passes props to it. Designed for Vue 3
 redirectFrom:
   - /api/effector-vue/useGate
   - /docs/api/effector-vue/useGate
@@ -11,17 +11,39 @@ pagefindWeight: 7
 import { useGate } from "effector-vue/composition";
 ```
 
+:::info{title="since"}
+`useGate` introduced in [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
+
 # Methods (#methods)
 
 ## `useGate(Gate, props?, options?)` (#methods-useGate-Gate-props)
 
 Opens a [`Gate`](/en/api/effector-vue/Gate) for the lifetime of the component or the effect scope that called it, and keeps [`Gate.state`](/en/api/effector-vue/Gate#properties-state) in sync with `props`. Designed for Vue 3.
 
+### Formulae (#methods-useGate-Gate-props-formulae)
+
+```ts
+useGate(Gate: Gate<Props>, props?: MaybeRefOrGetter<Props>, options?: ScopeOptions): void;
+```
+
 ### Arguments (#methods-useGate-Gate-props-arguments)
 
 1. `Gate<Props>` ([_Gate_](/en/api/effector-vue/Gate))
 2. `props?` (_Props_ | _Ref\<Props>_ | _() => Props_): a value, a ref or a getter. A ref, a getter and a `reactive()` object keep `Gate.state` in sync. A value that is not reactive is read when the gate opens and when it closes.
 3. `options?` (_Object_): `{ scope, forceScope }`, see [EffectorScopePlugin](/en/api/effector-vue/EffectorScopePlugin#resolution). The `open`, `close` and `set` events of the gate are called in the resolved scope.
+
+:::info{title="since"}
+`options` argument introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+:::info{title="since"}
+`props` accepts a value or a ref since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that it accepted a getter only
+:::
+
+:::info{title="since"}
+The events of the gate are called in the resolved scope since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that they were called outside of the scope of the plugin
+:::
 
 ### Returns (#methods-useGate-Gate-props-returns)
 
@@ -33,11 +55,19 @@ Opens a [`Gate`](/en/api/effector-vue/Gate) for the lifetime of the component or
 - Outside of a component the gate opens right away and closes when the surrounding effect scope is stopped, `effectScope()` for example.
 - With no active effect scope there is nothing to close the gate, so the call warns and leaves it open. `app.runWithContext()` gives an injection context and no effect scope, so run it inside `effectScope()`.
 
+:::info{title="since"}
+Closing with the effect scope since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that the gate worked only inside a component
+:::
+
 ### Order of the events (#methods-useGate-Gate-props-order)
+
+:::info{title="since"}
+`open` before `set` since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Before that `set` ran first, while the gate was closed
+:::
 
 `open` is called first, with the current props, and the gate samples them into `set` on its own. Later changes of the props reach `set` after that. `Gate.state` is not written while the gate is closed, and a mount runs one `set`:
 
-```js
+```ts
 import { sample } from "effector";
 import { PageGate, loadPageFx } from "./model";
 
@@ -48,14 +78,18 @@ sample({ clock: PageGate.open, target: loadPageFx }); // gets the props of the m
 
 During a server render the gate stays closed: nothing unmounts on the server, so a gate opened there would never be closed, and its state would be serialized into the client. Load the data of a page with `onServerPrefetch` instead and use the gate on the client. This matches `useGate` of effector-react.
 
+:::info{title="since"}
+Since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0) `set` is not called during a server render either. Before that the props reached `Gate.state` on the server
+:::
+
 ### Examples (#methods-useGate-Gate-props-examples)
 
 ```vue
-<script setup>
+<script setup lang="ts">
 import { useGate } from "effector-vue/composition";
 import { PageGate } from "./model";
 
-const props = defineProps({ id: { type: String, required: true } });
+const props = defineProps<{ id: string }>();
 
 useGate(PageGate, () => ({ id: props.id }));
 </script>

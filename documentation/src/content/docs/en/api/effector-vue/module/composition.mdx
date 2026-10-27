@@ -10,11 +10,35 @@ pagefindWeight: 7
 import {} from "effector-vue/composition";
 ```
 
-Provides additional API for [effector-vue](/en/api/effector-vue) that allows to use [Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html)
+Provides additional API for [effector-vue](/en/api/effector-vue) that allows to use [Composition API](https://vuejs.org/guide/extras/composition-api-faq.html)
 
 ## APIs (#api)
 
-- [useUnit(shape)](/en/api/effector-vue/useUnit)
-- [useStore($store)](/en/api/effector-vue/useStore)
+- [useUnit(shape, options?)](/en/api/effector-vue/useUnit)
+- [useStore($store, options?)](/en/api/effector-vue/useStore)
 - [`useStoreMap({ store, keys, fn })`](/en/api/effector-vue/useStoreMap)
-- [useVModel($store)](/en/api/effector-vue/useVModel)
+- [useVModel($store, options?)](/en/api/effector-vue/useVModel)
+- [useProvidedScope(options?)](/en/api/effector-vue/useProvidedScope)
+- [createGate(config?)](/en/api/effector-vue/createGate)
+- [useGate(Gate, props?, options?)](/en/api/effector-vue/useGate)
+- [EffectorScopePlugin](/en/api/effector-vue/EffectorScopePlugin)
+- [EffectorScopeKey](/en/api/effector-vue/EffectorScopePlugin#resolution)
+
+:::info{title="since"}
+`EffectorScopePlugin` is exported from `effector-vue/composition` since [effector-vue 23.2.0](https://changelog.effector.dev/#effector-vue-23-2-0).
+`useProvidedScope` and `EffectorScopeKey` introduced in [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0).
+:::
+
+## Types (#types)
+
+- `ScopeOptions`: `{ scope?, forceScope? }`, the options of [useUnit](/en/api/effector-vue/useUnit), [useStore](/en/api/effector-vue/useStore) and [useGate](/en/api/effector-vue/useGate)
+- `UseVModelOptions`: the options of [useVModel](/en/api/effector-vue/useVModel)
+- `UseStoreMapConfig`: the config of [useStoreMap](/en/api/effector-vue/useStoreMap)
+- `EffectorScopePluginOptions`: the options of [EffectorScopePlugin](/en/api/effector-vue/EffectorScopePlugin)
+- `UseUnitResult<Shape>` and `UnitToValue<Unit>`: the result of `useUnit` for a shape and for one unit
+- `Equal<X, Y>`: `true` when two types are the same
+- `UseVModel`: the type of `useVModel`
+
+:::info{title="since"}
+All types except `UseVModel` are exported since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0).
+:::

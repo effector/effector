@@ -635,7 +635,7 @@ export const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Options and properties", uz: "Variantlar va xususiyatlar" },
+    text: { en: "Options and properties", ru: "Опции и свойства", uz: "Variantlar va xususiyatlar" },
     items: [
       {
         text: { en: "ComponentOptions (Vue2)" },
@@ -645,7 +645,7 @@ export const effectorVue: LSidebarGroup[] = [
     ],
   },
   {
-    text: { en: "Scoped API" },
+    text: { en: "Scoped API", ru: "Устаревший API для SSR" },
     items: [
       {
         text: { en: "useEvent" },

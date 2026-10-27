@@ -1,5 +1,6 @@
 ---
 title: VueSSRPlugin
+description: Deprecated Vue plugin that provides a scope for SSR. Use EffectorScopePlugin instead
 redirectFrom:
   - /api/effector-vue/VueSSRPlugin
   - /docs/api/effector-vue/VueSSRPlugin
@@ -13,7 +14,7 @@ The Plugin provides a general scope which needs for read and update effector's s
 ## `VueSSRPlugin({ scope, scopeName })` (#plugins-VueSSRPlugin-scope-scopeName)
 
 :::warning{title="Deprecated"}
-Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) `VueSSRPlugin` is deprecated. Use [`EffectorScopePlugin`](./EffectorScopePlugin) instead.
+Since [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0) `VueSSRPlugin` is deprecated. Use [`EffectorScopePlugin`](/en/api/effector-vue/EffectorScopePlugin) instead.
 :::
 
 ## Arguments (#plugins-VueSSRPlugin-scope-scopeName-arguments)
@@ -25,7 +26,7 @@ Since [effector 23.0.0](https://changelog.effector.dev/#effector-23-0-0) `VueSSR
 
 ### Basic usage (#plugins-VueSSRPlugin-scope-scopeName-examples-basicUsage)
 
-```js
+```ts
 import { createSSRApp } from "vue";
 import { VueSSRPlugin } from "effector-vue/ssr";
 import { fork } from "effector";
