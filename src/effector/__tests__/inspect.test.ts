@@ -892,3 +892,64 @@ describe('real use cases', () => {
     })
   })
 })
+
+describe('an exception from a subscriber does not break the kernel', () => {
+  test('the propagation it was watching still completes', () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+    try {
+      const inc = createEvent()
+      const $count = createStore(0).on(inc, n => n + 1)
+      const boom = new Error('inspector of a devtool is broken')
+      let armed = true
+      const unsubscribe = inspect({
+        fn: () => {
+          if (!armed) return
+          armed = false
+          throw boom
+        },
+      })
+
+      expect(() => inc()).not.toThrow()
+      expect($count.getState()).toBe(1)
+      expect(consoleError).toHaveBeenCalledWith(boom)
+
+      inc()
+      expect($count.getState()).toBe(2)
+      unsubscribe()
+    } finally {
+      consoleError.mockRestore()
+    }
+  })
+
+  test('effects launched afterwards still settle', async () => {
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+    try {
+      const boom = createEvent()
+      const fx = createEffect(async () => 'ok')
+      let armed = true
+      const unsubscribe = inspect({
+        fn: () => {
+          if (!armed) return
+          armed = false
+          throw new Error('inspector of a devtool is broken')
+        },
+      })
+
+      boom()
+      unsubscribe()
+
+      /**
+       * Effect runners and onSettled are launched with `defer`, so they are
+       * dropped by `if (upsert && !isRoot) return` while `isRoot` is stuck.
+       */
+      await expect(fx()).resolves.toBe('ok')
+      expect(fx.pending.getState()).toBe(false)
+    } finally {
+      consoleError.mockRestore()
+    }
+  })
+})
