@@ -405,7 +405,19 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
       stop = local.fail || skip
     }
     if (inspector) {
-      inspector(stack, local)
+      /**
+       * The inspector is instrumentation: an exception thrown by a devtool or by
+       * a user `inspect` callback must not unwind `launch`, which would leave
+       * `isRoot` at false forever and make every later deferred launch return
+       * early. Reported like any other exception from user code in the loop
+       * (see `tryRun`), without touching `local`: instrumentation must not
+       * change the propagation it observes.
+       */
+      try {
+        inspector(stack, local)
+      } catch (err) {
+        console.error(err)
+      }
     }
     if (!stop) {
       const finalValue = getValue(stack)
