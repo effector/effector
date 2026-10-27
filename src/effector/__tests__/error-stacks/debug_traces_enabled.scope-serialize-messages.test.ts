@@ -50,7 +50,7 @@ describe('skipVoid error messages', () => {
     expect(getErrorStacks()).toMatchInlineSnapshot(`
       Array [
         "serialize: One or more stores dont have sids, their values are omitted",
-        "store should have sid or \`serialize: ignore\`
+        "store: store should have sid or \`serialize: ignore\`
       error-stacks/stub/sidless-store.ts:5:29)
       ,__tests__/error-stacks/debug_traces_enabled.scope-serialize-messages.test.ts:7:1)
       ",

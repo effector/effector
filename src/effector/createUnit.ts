@@ -125,7 +125,8 @@ const deriveEvent = (
     derived: true,
     and: config,
   })
-  createLinkNode(event, mapped, node, op, fn)
+  const linkNode = createLinkNode(event, mapped, node, op, fn)
+  setUnitTrace(linkNode, getUnitTrace(deriveEvent))
   return mapped
 }
 
@@ -212,7 +213,14 @@ export function createEvent<Payload = any>(
         parent: getParent(event),
       })
       applyTemplate('eventPrepend', getGraph(contramapped))
-      createLinkNode(contramapped, event, [userFnCall()], 'prepend', fn)
+      const node = createLinkNode(
+        contramapped,
+        event,
+        [userFnCall()],
+        'prepend',
+        fn,
+      )
+      setUnitTrace(node, getUnitTrace(createEvent))
       applyParentHook(event, contramapped)
       return contramapped
     },
@@ -241,7 +249,7 @@ function on<State>(
   )
   forEach(Array.isArray(nodeSet) ? nodeSet : [nodeSet], trigger => {
     store.off(trigger)
-    updateStore(trigger, store, 'on', callARegStack, fn)
+    updateStore(trigger, store, 'on', callARegStack, fn, getUnitTrace(on))
   })
   return store
 }
@@ -348,7 +356,14 @@ export function createStore<State>(
         ...outerConfig,
         and: mapConfig,
       })
-      const linkNode = updateStore(store, innerStore, MAP, callStack, fn)
+      const linkNode = updateStore(
+        store,
+        innerStore,
+        MAP,
+        callStack,
+        fn,
+        getUnitTrace(createStore),
+      )
       addRefOp(getStoreState(innerStore), {
         type: MAP,
         fn,
@@ -459,6 +474,7 @@ const updateStore = (
   op: string,
   caller: typeof callStackAReg,
   fn: Function,
+  stack: string | undefined,
 ) => {
   const storeRef = getStoreState(store)
   const reader = mov({
@@ -482,6 +498,9 @@ const updateStore = (
   const result = createLinkNode(from, store, node, op, fn)
   if (op !== MAP) {
     setMeta(result, 'onTrigger', getGraph(from).id)
+  }
+  if (stack) {
+    setMeta(result, 'unitTrace', stack)
   }
   return result
 }
