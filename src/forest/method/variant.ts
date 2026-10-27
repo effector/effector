@@ -1,6 +1,6 @@
 import {Store, is} from 'effector'
 
-import {currentTemplate} from '../template'
+import {currentTemplate} from '../engine/createTemplate'
 import {assert, assertClosure} from '../assert'
 
 import {route} from './route'

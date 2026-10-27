@@ -1,6 +1,6 @@
 import {Event, is} from 'effector'
 
-import {currentTemplate} from '../template'
+import {currentTemplate} from '../engine/createTemplate'
 import {assert} from '../assert'
 
 export function handler(
