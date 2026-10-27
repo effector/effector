@@ -161,6 +161,55 @@ const $count = createStore(0);
 // logs "store $count" to console
 ```
 
+## Graph relationships (#inspect-graph-relationships)
+
+`inspectGraph` can also report node relationships for developer tools that need to build a graph of units and intermediate nodes. Pass `includeLinks: true` to receive `graph` metadata on unit declarations and additional `link` declarations for internal relationship nodes.
+
+The `graph` field contains node IDs only:
+
+- `owners`: nodes that own the current node in the ownership graph
+- `links`: nodes owned by the current node
+- `next`: nodes triggered after the current node in the computation graph
+
+### Example (#inspect-graph-relationships-example)
+
+```ts
+import { createEvent, createStore, sample } from "effector";
+import { inspectGraph, type Declaration } from "effector/inspect";
+
+const nodes = new Map<string, { id: string; label: string; kind?: string }>();
+const edges: Array<{ source: string; target: string; kind?: string }> = [];
+
+inspectGraph({
+  includeLinks: true,
+  fn: (d: Declaration) => {
+    if (d.type === "unit") {
+      nodes.set(d.id, { id: d.id, label: d.name ?? d.id, kind: d.kind });
+    }
+
+    if (d.type === "link") {
+      for (const owner of d.graph.owners) {
+        edges.push({ source: owner, target: d.id, kind: d.kind });
+      }
+
+      for (const target of d.graph.links) {
+        edges.push({ source: d.id, target, kind: d.kind });
+      }
+    }
+  },
+});
+
+const started = createEvent();
+const finished = createEvent();
+const $count = createStore(0);
+
+sample({
+  clock: started,
+  source: $count,
+  target: finished,
+});
+```
+
 ## `withRegion` (#inspect-graph-withRegion)
 
 Meta-data provided via region's root node is available on declaration.

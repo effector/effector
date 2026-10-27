@@ -405,6 +405,95 @@ describe('inspectGraph API', () => {
 
     expect(argumentHistory(declMock)).toEqual(history)
   })
+  test('should not include graph metadata by default', () => {
+    const declarations: Declaration[] = []
+    const unsub = inspectGraph({
+      fn: d => declarations.push(d),
+    })
+
+    const start = createEvent()
+    const target = createEvent()
+    const $source = createStore(0)
+
+    sample({
+      clock: start,
+      source: $source,
+      target,
+    })
+
+    unsub()
+
+    expect(declarations.some(d => d.type === 'link')).toBe(false)
+    expect(
+      declarations.some(d => d.type === 'unit' && d.graph !== undefined),
+    ).toBe(false)
+  })
+  test('should include graph links for visualization when requested', () => {
+    const declarations: Declaration[] = []
+    const unsub = inspectGraph({
+      includeLinks: true,
+      fn: d => declarations.push(d),
+    })
+
+    const start = createEvent()
+    const target = createEvent()
+    const $source = createStore(0)
+    const $mapped = $source.map(value => value + 1)
+
+    sample({
+      clock: start,
+      source: $source,
+      target,
+    })
+
+    unsub()
+
+    const units = declarations.filter(
+      (d): d is Extract<Declaration, {type: 'unit'}> => d.type === 'unit',
+    )
+    const links = declarations.filter(
+      (d): d is Extract<Declaration, {type: 'link'}> => d.type === 'link',
+    )
+
+    const startDeclaration = units.find(
+      d => d.id === (start as any).graphite.id,
+    )!
+    const targetDeclaration = units.find(
+      d => d.id === (target as any).graphite.id,
+    )!
+    const sourceDeclaration = units.find(
+      d => d.id === ($source as any).graphite.id,
+    )!
+    const mappedDeclaration = units.find(
+      d => d.id === ($mapped as any).graphite.id,
+    )!
+
+    expect(units.every(d => d.graph)).toBe(true)
+    expect(links.length).toBeGreaterThan(0)
+    expect(links.filter(d => d.kind === 'sample')).toHaveLength(1)
+    expect(links).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'map',
+          graph: expect.objectContaining({
+            owners: expect.arrayContaining([sourceDeclaration.id]),
+            links: expect.arrayContaining([mappedDeclaration.id]),
+          }),
+        }),
+        expect.objectContaining({
+          kind: 'sample',
+          graph: expect.objectContaining({
+            owners: expect.arrayContaining([
+              startDeclaration.id,
+              targetDeclaration.id,
+              sourceDeclaration.id,
+            ]),
+            links: expect.arrayContaining([targetDeclaration.id]),
+          }),
+        }),
+      ]),
+    )
+  })
   describe('region support', () => {
     test('one-level withRegion', () => {
       function customOperator(config: Record<string, unknown>) {
