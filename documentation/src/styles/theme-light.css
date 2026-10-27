@@ -20,7 +20,6 @@
      ======================================== */
 
   --theme-bg: #fff;
-  --theme-bg-color: 0, 0%, 100%;
   --theme-bg-mobile-menu: #fff;
   --theme-bg-sidebar-tabs-bg: hsl(var(--color-gray-50));
   --theme-bg-sidebar-main-tabs: hsl(var(--color-base-gray), 97%);
@@ -40,7 +39,6 @@
   --theme-text: hsl(var(--color-gray-900));
   --theme-text-light: hsl(var(--color-gray-800));
   --theme-text-lighter: hsl(var(--color-gray-500));
-  --theme-text-dark: hsl(var(--color-gray-950));
 
   /* ========================================
      DIVIDERS AND BORDERS
@@ -55,8 +53,6 @@
      ======================================== */
 
   --theme-card: hsla(0, 0%, 100%, 1);
-  --theme-card-hover: hsl(var(--color-gray-50));
-  --theme-card-divider: hsla(var(--color-gray-200), 0.8);
   --theme-search-card-bg: hsla(var(--color-gray-300), 0.35);
 
   /* ========================================
@@ -81,13 +77,6 @@
      ======================================== */
   --theme-navbar-bg: rgba(255, 255, 255, 0.9);
   --theme-navbar-height: 4rem;
-
-  /* ========================================
-     SELECTION
-     ======================================== */
-
-  --theme-selection-color: hsl(var(--color-blue-600));
-  --theme-selection-bg: hsla(var(--color-blue-200), 0.5);
 
   /* ========================================
      SIDEBAR

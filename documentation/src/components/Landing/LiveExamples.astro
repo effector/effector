@@ -1,0 +1,147 @@
+---
+import LiveDemo from "@components/LiveDemo.jsx";
+
+import counterCode from "src/content/demo/landing/counter.live.js?raw";
+import counterHtml from "src/content/demo/landing/counter.live.html?raw";
+import totalCode from "src/content/demo/landing/derived-total.live.js?raw";
+import totalHtml from "src/content/demo/landing/derived-total.live.html?raw";
+import effectCode from "src/content/demo/landing/async-effect.live.js?raw";
+import effectHtml from "src/content/demo/landing/async-effect.live.html?raw";
+
+interface Props {
+  title: string;
+  subtitle: string;
+  examples: { title: string; description: string }[];
+}
+
+const { title, subtitle, examples } = Astro.props;
+const demos = [
+  { code: counterCode, html: counterHtml },
+  { code: totalCode, html: totalHtml },
+  { code: effectCode, html: effectHtml },
+];
+---
+
+<section class="live-examples">
+  <div class="wrapper">
+    <h3>{title}</h3>
+    <p class="subtitle">{subtitle}</p>
+
+    <div class="examples-grid">
+      {
+        examples.map((example, i) => (
+          <div class="example-card">
+            <h4>{example.title}</h4>
+            <p>{example.description}</p>
+            <div class="sandbox-wrapper">
+              <LiveDemo
+                client:only="preact"
+                demoFile={demos[i].code}
+                demoHtml={demos[i].html}
+                layout="console"
+              />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .live-examples {
+    @apply px-3 pb-10 pt-6;
+  }
+
+  @media (min-width: 480px) {
+    .live-examples {
+      @apply px-4 pb-12 pt-8;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .live-examples {
+      @apply px-6 pb-16 pt-10;
+    }
+  }
+
+  .wrapper {
+    @apply mx-auto max-w-6xl;
+  }
+
+  .live-examples h3 {
+    @apply mb-2 text-2xl;
+    -webkit-box-decoration-break: clone;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(to right bottom, var(--theme-text-light) 30%, var(--theme-text));
+    -webkit-background-clip: text;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  @media (min-width: 480px) {
+    .live-examples h3 {
+      @apply text-3xl;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .live-examples h3 {
+      @apply text-4xl;
+    }
+  }
+
+  .subtitle {
+    @apply mx-auto mb-6 max-w-[50ch] text-center text-sm;
+    color: var(--theme-text-light);
+  }
+
+  @media (min-width: 480px) {
+    .subtitle {
+      @apply mb-8 text-base;
+    }
+  }
+
+  .examples-grid {
+    @apply grid grid-cols-1 gap-4;
+  }
+
+  @media (min-width: 1024px) {
+    .examples-grid {
+      @apply gap-6;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    }
+  }
+
+  .example-card {
+    @apply flex flex-col gap-2 rounded-2xl p-3;
+    background-color: var(--theme-card);
+    border: 1px solid var(--theme-divider);
+  }
+
+  @media (min-width: 480px) {
+    .example-card {
+      @apply gap-3 p-4;
+    }
+  }
+
+  .example-card h4 {
+    @apply text-base font-semibold;
+  }
+
+  .example-card > p {
+    @apply text-xs;
+    color: var(--theme-text-light);
+  }
+
+  @media (min-width: 480px) {
+    .example-card > p {
+      @apply text-sm;
+    }
+  }
+
+  .sandbox-wrapper {
+    @apply overflow-x-auto rounded-xl;
+    border: 1px solid var(--theme-divider);
+  }
+</style>

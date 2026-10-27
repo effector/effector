@@ -26,7 +26,7 @@ import IconNextJs from "@icons/NextJs.astro";
 
 export type MostUsefulItem = {
   text: LText;
-  icon: (props: { size?: number | number; class?: string }) => any;
+  icon: (props: { size?: number; class?: string }) => any;
   description: LText;
   items: LSidebarGroup[];
 };

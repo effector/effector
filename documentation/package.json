@@ -23,7 +23,6 @@
     "react-dom": "npm:@preact/compat@latest"
   },
   "dependencies": {
-    "@algolia/client-search": "^4.22.1",
     "@astrojs/mdx": "^3.1.9",
     "@astrojs/preact": "^3.5.3",
     "@astrojs/tailwind": "^5.1.2",
@@ -65,6 +64,7 @@
   "devDependencies": {
     "@types/mdast": "^4.0.4",
     "@types/unist": "^3.0.3",
+    "autoprefixer": "^10.4.20",
     "glob": "^11.0.1",
     "mdast-util-directive": "^3.0.0",
     "prettier": "^3.3.3",

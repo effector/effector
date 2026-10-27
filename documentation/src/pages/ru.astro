@@ -3,6 +3,7 @@ import IconChevron from "@icons/Chevron.astro";
 import Hero from "@components/Landing/Hero.astro";
 import FeaturesGrid from "@components/Landing/FeaturesGrid.astro";
 import Feature from "@components/Landing/Feature.astro";
+import LiveExamples from "@components/Landing/LiveExamples.astro";
 import Stats from "@components/Landing/Stats.astro";
 import Companies from "@components/Landing/Companies.astro";
 
@@ -80,7 +81,42 @@ const { lang } = getPathParamsFromId(Astro.url.pathname)
       ))
     }
   </FeaturesGrid>
+  <LiveExamples
+    title="Посмотрите сами"
+    subtitle="Код ниже можно редактировать — он выполняется прямо здесь и сейчас."
+    examples={[
+      {
+        title: "Реактивное состояние без шаблонного кода",
+        description:
+          "Событие описывает, что произошло. Стор сам обновляет себя — без диспатчей, редьюсеров и селекторов.",
+      },
+      {
+        title: "Производные значения, которые никогда не рассинхронизируются",
+        description:
+          "Объедините сторы в новый. Effector автоматически пересчитывает значение при изменении любой зависимости.",
+      },
+      {
+        title: "Асинхронные эффекты со встроенным состоянием загрузки",
+        description:
+          "Оберните любую асинхронную функцию в эффект и получите .pending, .done и .fail бесплатно.",
+      },
+    ]}
+  />
   <Stats />
   <Companies />
 </Landing>
 
+<style>
+  .started-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  :global(.hero .links) {
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+</style>
