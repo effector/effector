@@ -5,6 +5,7 @@ import type {
   IfStatement,
   ImportDeclaration,
   ObjectExpression,
+  StringLiteral,
   TaggedTemplateExpression,
   Identifier,
 } from '@babel/types'
@@ -23,11 +24,11 @@ export type CreateHMRRegionTemplate = (params: {
 }) => VariableDeclaration
 
 export type FactoryTemplate = (params: {
-  SID: string
+  SID: StringLiteral
   FN: CallExpression | TaggedTemplateExpression
   FACTORY: string
-  NAME?: string
-  METHOD?: string
+  NAME?: StringLiteral
+  METHOD?: StringLiteral
   LOC?: ObjectExpression
 }) => CallExpression
 
