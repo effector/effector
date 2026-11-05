@@ -437,3 +437,29 @@ describe('without target', () => {
     `)
   })
 })
+
+test('empty clock without source and target (should pass)', () => {
+  const result: Event<unknown> = sample({clock: []})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
+test('empty clock with target (current limitation)', () => {
+  const unknownTarget = createEvent<unknown>()
+
+  //@ts-expect-error
+  sample({clock: [], target: unknownTarget})
+  //@ts-expect-error
+  sample({clock: [], filter: Boolean, target: unknownTarget})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type 'never[]' is not assignable to type 'never'.
+    Type 'never[]' is not assignable to type 'never'.
+    "
+  `)
+})
