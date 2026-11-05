@@ -104,7 +104,7 @@ describe('source:wide', () => {
       Unmarked error at test line 7 'sample({source:[$num,$str]         , target:[l_num_str]      })'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
       Unmarked error at test line 8 'sample({source:[$num,$str]         , target:[l_num,l_num_str]})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number] | [number, string]; }[]; }'.
       Unmarked error at test line 9 'sample({source:[$num,$str] as const, target:[l_num]          })'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number]; }[]; }'.
       Unmarked error at test line 15 'sample({source:[$num,$str]         , clock:num, target:[l_num]          })'
@@ -112,7 +112,7 @@ describe('source:wide', () => {
       Unmarked error at test line 16 'sample({source:[$num,$str]         , clock:num, target:[l_num_str]      })'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
       Unmarked error at test line 17 'sample({source:[$num,$str]         , clock:num, target:[l_num,l_num_str]})'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string] | [number]; }[]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number] | [number, string]; }[]; }'.
       Unmarked error at test line 18 'sample({source:[$num,$str] as const, clock:num, target:[l_num]          })'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number]; }[]; }'.
       "
@@ -1652,7 +1652,7 @@ describe('source:same', () => {
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
       Unmarked error at test line 105 'source: [$num],'
       lack of expected error at test line 101 'l_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string] | [number]; }[]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number] | [number, string]; }[]; }'.
       Unmarked error at test line 113 'source: [$num],'
       lack of expected error at test line 109 'l_num_str,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number]; }[]; }'.
@@ -1730,7 +1730,7 @@ describe('source:same', () => {
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [string] | [number]; }[]; }'.
       Unmarked error at test line 334 'source: [$num],'
       lack of expected error at test line 330 'l_str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, string] | [number]; }[]; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number] | [number, string]; }[]; }'.
       Unmarked error at test line 343 'source: [$num],'
       lack of expected error at test line 339 'l_num_str,'
       Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number] | [number]; }[]; }'.

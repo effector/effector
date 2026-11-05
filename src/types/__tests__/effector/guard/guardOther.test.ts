@@ -117,6 +117,7 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 23 'filter: (e): e is {field: number | string; data: number} => !!e,'
     A type predicate's type must be assignable to its parameter's type.
       Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
         Types of property 'data' are incompatible.
@@ -181,6 +182,7 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 24 'filter: (e): e is {field: number; data: number} => !!e,'
     A type predicate's type must be assignable to its parameter's type.
       Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
         Types of property 'data' are incompatible.
@@ -216,6 +218,7 @@ test('generic support', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
+    Unmarked error at test line 8 'guard({source, filter, target})'
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<number>' is not assignable to type '\\"incompatible unit in target\\"'.

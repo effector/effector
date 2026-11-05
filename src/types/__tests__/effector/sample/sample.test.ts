@@ -878,11 +878,9 @@ describe('partial edge case', () => {
     type: 'ticket' | 'search' | null
     source: string | null
   }>
-  function spread<Payload>(
-    targets: {
-      [Key in keyof Payload]?: UnitTargetable<Payload[Key]>
-    },
-  ): EventCallable<Partial<Payload>> {
+  function spread<Payload>(targets: {
+    [Key in keyof Payload]?: UnitTargetable<Payload[Key]>
+  }): EventCallable<Partial<Payload>> {
     return createEvent<Partial<Payload>>()
   }
   const clock = createEvent<Data>()
@@ -1064,7 +1062,7 @@ describe('partial edge case', () => {
             Unmarked error at test line 1 'sample({'
             Argument of type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to parameter of type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => clk is Data) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
               Type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"ticket\\" | \\"search\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
                   Types of property 'target' are incompatible.
                     Type 'EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]' is not assignable to type 'undefined'.
             "
