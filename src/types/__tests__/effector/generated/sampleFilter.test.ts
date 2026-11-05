@@ -3693,9 +3693,7 @@ describe('object source', () => {
             Type '{ a: number; }' is not assignable to type 'string'.
         Type 'string' is not assignable to type '{ a: number; }'.
         Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; target: EventCallable<{ a: number; }>; filter: (val: { readonly a: number | null; readonly b: string; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { source: { readonly a: StoreWritable<number | null>; readonly b: StoreWritable<string>; }; clock?: undefined; filter?: ((src: { readonly a: number | null; readonly b: string; }) => src is { ...; }) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; target: EventCallable<{ a: number; }>; filter: (val: { readonly a: number | null; readonly b: string; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (src: { readonly a: number | null; readonly b: string; }) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type '{ a: number; }' is not assignable to type 'string'.
@@ -3803,12 +3801,8 @@ describe('object source', () => {
         Type 'string' is not assignable to type '{ a: number; }'.
         Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
         Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<any>; source: { readonly a: StoreWritable<number | null>; readonly b: StoreWritable<string>; }; filter?: ((src: { ...; }, clk: any) => src is { ...; }) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<number>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<number>; source: { readonly a: StoreWritable<number | null>; readonly b: StoreWritable<string>; }; filter?: ((src: { ...; }, clk: number) => src is { ...; }) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<number>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type '{ a: number; }' is not assignable to type 'string'.
@@ -3922,12 +3916,8 @@ describe('object source', () => {
         Type 'string' is not assignable to type '{ a: number; }'.
         Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
         Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: [EventCallable<any>]; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<any>]; source: { readonly a: StoreWritable<number | null>; readonly b: StoreWritable<string>; }; filter?: ((src: { ...; }, clk: any) => src is { ...; }) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: [EventCallable<any>]; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: [EventCallable<number>, StoreWritable<number>]; target: EventCallable<...>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<number>, StoreWritable<number>]; source: { readonly a: StoreWritable<number | null>; readonly b: StoreWritable<string>; }; ... 5 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: [EventCallable<number>, StoreWritable<number>]; target: EventCallable<...>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type '{ a: number; }' is not assignable to type 'string'.
@@ -4047,46 +4037,54 @@ describe('tuple source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
@@ -4208,46 +4206,54 @@ describe('tuple source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
@@ -4369,46 +4375,54 @@ describe('tuple source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'readonly [number, string]'.
@@ -4498,21 +4512,25 @@ describe('tuple source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
             Type '[number, number]' is not assignable to type 'readonly [number]'.
@@ -4631,21 +4649,25 @@ describe('tuple source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
             Type '[number, number]' is not assignable to type 'readonly [number]'.
@@ -4764,21 +4786,25 @@ describe('tuple source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
-          Type at position 1 in source is not compatible with type at position 1 in target.
-            The types of '__' are incompatible between these types.
-              Type 'number' is not assignable to type 'string'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
           Types of property '__' are incompatible.
             Type '[number, number]' is not assignable to type 'readonly [number]'.

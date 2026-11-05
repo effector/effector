@@ -120,8 +120,8 @@ describe('params type mismatch', () => {
       No overload matches this call.
         The last overload gave the following error.
           Type '(text: number, source: number) => { foo: number; }' is not assignable to type '(params: any, source: number) => { foo: string; }'.
-            Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
-              The types of 'foo' are incompatible between these types.
+            Type '{ foo: number; }' is not assignable to type '{ foo: string; }'.
+              Types of property 'foo' are incompatible.
                 Type 'number' is not assignable to type 'string'.
       "
     `)
@@ -147,8 +147,8 @@ describe('params type mismatch', () => {
       No overload matches this call.
         The last overload gave the following error.
           Type '(text: number) => { foo: number; }' is not assignable to type '(params: any, source: any) => { foo: string; }'.
-            Call signature return types '{ foo: number; }' and '{ foo: string; }' are incompatible.
-              The types of 'foo' are incompatible between these types.
+            Type '{ foo: number; }' is not assignable to type '{ foo: string; }'.
+              Types of property 'foo' are incompatible.
                 Type 'number' is not assignable to type 'string'.
       "
     `)
@@ -323,7 +323,7 @@ describe('string subtyping', () => {
       Unmarked error at test line 8 'string: 'one','
       No overload matches this call.
         The last overload gave the following error.
-          Type 'string' is not assignable to type '\\"one\\" | \\"two\\" | \\"three\\"'.
+          Type 'string' is not assignable to type '\\"one\\" | \\"three\\" | \\"two\\"'.
       "
     `)
   })
@@ -344,7 +344,7 @@ describe('string subtyping', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'string' is not assignable to type '\\"one\\" | \\"two\\" | \\"three\\"'.
+          Type 'string' is not assignable to type '\\"one\\" | \\"three\\" | \\"two\\"'.
       "
     `)
   })

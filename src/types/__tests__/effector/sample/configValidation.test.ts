@@ -322,14 +322,14 @@ describe('target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
       "
     `)
   })
@@ -385,14 +385,14 @@ describe('target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
       "
     `)
   })
@@ -437,12 +437,12 @@ describe('clock', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
       "
     `)
   })
@@ -484,12 +484,12 @@ describe('clock', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
-      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any> | Unit<any>[]'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
+      Object literal may only specify known properties, and 'a' does not exist in type 'Unit<any>[] | Unit<any>'.
       "
     `)
   })
@@ -541,12 +541,12 @@ describe('source', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
       "
     `)
   })
@@ -595,12 +595,12 @@ describe('source', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '() => void' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type '() => void' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type '() => void' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type '() => void' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type '() => void' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type '() => void' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
+      Type '() => void' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type '() => void' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type '() => void' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type '() => void' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type '() => void' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type '() => void' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
       "
     `)
   })
@@ -620,8 +620,8 @@ describe('multiple errors', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
       "
     `)
   })
@@ -638,8 +638,8 @@ describe('multiple errors', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
       "
     `)
   })
@@ -656,8 +656,8 @@ describe('multiple errors', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
       "
     `)
   })
@@ -745,9 +745,7 @@ describe('invalid container items', () => {
       Type 'number' is not assignable to type 'Unit<any>'.
       Type 'number' is not assignable to type 'Unit<any>'.
       Type 'EventCallable<number>' is missing the following properties from type 'Store<any>': updates, getState, thru, defaultState
-      Type '{ valid: StoreWritable<number>; invalid: EventCallable<number>; }' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-        Types of property 'invalid' are incompatible.
-          Type 'EventCallable<number>' is missing the following properties from type 'Store<any>': updates, getState, thru, defaultState
+      Type 'EventCallable<number>' is missing the following properties from type 'Store<any>': updates, getState, thru, defaultState
       "
     `)
   })
@@ -770,9 +768,9 @@ describe('invalid container items', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
-      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
-      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
+      Type 'null' is not assignable to type 'Record<string, Store<any>> | RoTuple<Store<any>> | Unit<any>'.
+      Type 'null' is not assignable to type 'Unit<any>[] | Unit<any>'.
       Type 'null' is not assignable to type '() => any'.
       Type 'null' is not assignable to type 'Store<boolean> | (() => boolean)'.
       "
@@ -787,8 +785,7 @@ describe('invalid container items', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Argument of type '{}' is not assignable to parameter of type '{ clock: unknown; source?: undefined; filter?: undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-        Property 'clock' is missing in type '{}' but required in type '{ clock: unknown; source?: undefined; filter?: undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+      Property 'clock' is missing in type '{}' but required in type '{ clock: unknown; source?: undefined; filter?: undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
       "
     `)
   })

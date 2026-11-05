@@ -231,18 +231,12 @@ describe('any to void support', () => {
           Type 'EventCallable<string>' is not assignable to type 'Unit<void>'.
             Types of property '__' are incompatible.
               Type 'string' is not assignable to type 'void'.
-                Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
-                  Types of property '__' are incompatible.
-                    Type 'string' is not assignable to type 'void'.
       Unmarked error at test line 5 'forward({from, to: [to1, to2]})'
       No overload matches this call.
         The last overload gave the following error.
-          Type 'EventCallable<string>' is not assignable to type 'Unit<void>'.
+          Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
             Types of property '__' are incompatible.
               Type 'string' is not assignable to type 'void'.
-                Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
-                  Types of property '__' are incompatible.
-                    Type 'string' is not assignable to type 'void'.
       "
     `)
   })
@@ -308,8 +302,8 @@ test('edge case #1 (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ value: { value: string; }; }>' is not assignable to type 'UnitTargetable<unknown> | readonly UnitTargetable<unknown>[]'.
-          Type 'Event<{ value: { value: string; }; }>' is missing the following properties from type 'readonly UnitTargetable<unknown>[]': length, concat, join, slice, and 24 more.
+        Type 'Event<{ value: { value: string; }; }>' is not assignable to type 'readonly UnitTargetable<unknown>[] | UnitTargetable<unknown>'.
+          Property 'targetable' is missing in type 'Event<{ value: { value: string; }; }>' but required in type 'UnitTargetable<unknown>'.
     "
   `)
 })
@@ -361,23 +355,11 @@ describe('array support', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
-          Unmarked error at test line 5 'from: s1,'
           No overload matches this call.
             The last overload gave the following error.
-              Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+              Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
                 Types of property '__' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-                    Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
-                      Types of property '__' are incompatible.
-                        Type 'string' is not assignable to type 'number'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
-                Types of property '__' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-                    Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
-                      Types of property '__' are incompatible.
-                        Type 'string' is not assignable to type 'number'.
+                  Type 'number' is not assignable to type 'string'.
           "
         `)
       })
@@ -429,7 +411,7 @@ describe('array support', () => {
           "
           No overload matches this call.
             The last overload gave the following error.
-              Type '(EventCallable<number> | EventCallable<string>)[]' is missing the following properties from type 'Unit<string>': kind, __
+              Type '(EventCallable<string> | EventCallable<number>)[]' is missing the following properties from type 'Unit<string>': kind, __
           "
         `)
       })

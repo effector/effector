@@ -293,9 +293,9 @@ describe('with target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(src: { a: string; b: string; }, clk: string | void) => any'.
+      Type '({ a, b }: any, clock: string) => { a: any; b: any; clock: string; }' is not assignable to type '(src: { a: string; b: string; }, clk: void | string) => any'.
         Types of parameters 'clock' and 'clk' are incompatible.
-          Type 'string | void' is not assignable to type 'string'.
+          Type 'void | string' is not assignable to type 'string'.
             Type 'void' is not assignable to type 'string'.
       "
     `)

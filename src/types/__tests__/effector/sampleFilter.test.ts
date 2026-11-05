@@ -431,7 +431,7 @@ describe('sample(config)', () => {
         Unmarked error at test line 4 'const result: Event<User> = sample({'
         Type 'Event<NonNullable<User | FalsyValues>>' is not assignable to type 'Event<User>'.
           Type 'NonNullable<User | FalsyValues>' is not assignable to type 'User'.
-            Type 'boolean' is not assignable to type 'User'.
+            Type 'string' is not assignable to type 'User'.
         "
       `)
     })
