@@ -801,17 +801,17 @@ export function createStore<State, SerializedState extends Json = Json>(
 
 export function setStoreName<State>(store: Store<State>, name: string): void
 
-type UnionToIntersection<Union> = (
-  Union extends any ? (k: Union) => void : never
-  ) extends (k: infer intersection) => void
-  ? intersection
+type UnionToIntersection<U> = (
+  U extends any ? (k: U) => void : never
+  ) extends (k: infer Intersection) => void
+  ? Intersection
   : never;
 
-type GetUnionLast<Union> = UnionToIntersection<
-  Union extends any ? () => Union : never
+type GetUnionLast<U> = UnionToIntersection<
+  [U] extends [boolean] ? () => U : U extends any ? () => U : never
 > extends () => infer Last
   ? Last
-  : never;
+  : never
 
 /**
  * Chooses one of the cases by given conditions. It "splits" source unit into several events, which fires when payload matches their conditions.
@@ -846,7 +846,7 @@ export function split<
   Clock extends Unit<any> | RoTuple<Unit<any>>,
   Source extends Unit<any>,
   Match extends MatchConstraint<Source>,
-  Cases extends CaseRecord<InferMatchKeys<Match>>,
+  Cases extends CaseRecord<InferMatchKeys<Match, Source>>,
 >(
   config: SplitConfig<Clock, Source, Match, Cases>
 ): void;
@@ -855,8 +855,8 @@ type SplitConfig<
   Clock,
   Source,
   Match extends MatchConstraint<Source>,
-  Cases extends CaseRecord<InferMatchKeys<Match>>
-> = Exclude<keyof Cases, '__'> extends InferMatchKeys<Match>
+  Cases extends CaseRecord<InferMatchKeys<Match, Source>>
+> = Exclude<keyof Cases, '__'> extends InferMatchKeys<Match, Source>
   ? TypeOfMatch<Match> extends 'record'
     ? SplitImpl<Clock, Source, Match, Cases>
     : TypeOfMatch<Match> extends 'unit'
@@ -868,16 +868,22 @@ type SplitConfig<
     clock?: Clock;
     source: Source;
     match: RebuildMatch<Source, Match, Cases>;
-    cases: { [K in keyof Cases as K extends InferMatchKeys<Match> | '__' ? K : never]: Cases[K] };
+    cases: { [K in keyof Cases as K extends InferMatchKeys<Match, Source> | '__' ? K : never]: Cases[K] };
   };
 
-type InferMatchKeys<Match> = Match extends Unit<infer Keys>
-  ? Keys extends PropertyKey ? Keys : never
-  : Match extends (source: any) => infer Keys
+
+type InferMatchKeys<Match, Source> =
+  Match extends Unit<infer Keys>
     ? Keys extends PropertyKey ? Keys : never
-    : Match extends Record<string, ((source: any) => boolean) | Store<boolean>>
-      ? keyof Match
-      : never;
+    : Match extends (source: any) => infer Keys
+      ? Keys extends PropertyKey
+        ? Keys
+        : Match extends <T>(source: T) => T
+          ? UnitValue<Source> extends PropertyKey ? UnitValue<Source> : never
+          : never
+      : Match extends Record<string, ((source: any) => boolean) | Store<boolean>>
+        ? keyof Match
+        : never;
 
 type TypeOfMatch<Match> =
   Match extends Unit<any>
@@ -993,7 +999,7 @@ type RebuildMatchInference<
   : never;
 
 type RebuildCases<Source, Match, Cases> = {
-  [K in keyof Cases]: K extends InferMatchKeys<Match> | '__'
+  [K in keyof Cases]: K extends InferMatchKeys<Match, Source> | '__'
     ? RebuildCase<MatchValueReader<Match, K, Source>, Cases[K]>
     : Cases[K];
 }
@@ -1029,7 +1035,7 @@ type RebuildSource<Source, Cases> =
 
 type GetFirstUnassignableCase<SourceValue, Case> =
   Case extends UnitTargetable<infer CaseValue>
-    ? IfValidCaseValue<CaseValue, SourceValue, SourceValue, CaseValue>
+    ? IfValidCaseValue<CaseValue, SourceValue, never, CaseValue>
     : Case extends RoTuple<UnitTargetable<any>>
       ? GetFirstUnassignableLoop<Case, SourceValue>
       : never;
