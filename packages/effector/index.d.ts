@@ -1237,7 +1237,7 @@ type MultiTarget<Target, Result> = Target extends UnitTargetable<infer Value>
 type ValidateSampleConfig<
   RawConfig,
   FnValid extends ('yes' | 'no') = RawConfig extends {fn: infer CheckFN}
-  ? CheckFN extends ((...args: any[]) => void)
+  ? CheckFN extends ((...args: never[]) => any)
     ? 'yes'
     : 'no'
   : 'yes',
@@ -2288,7 +2288,7 @@ type RebuildTargetLoopBranch<
       FilterMode
     >
     : never
-  : Result
+  : Readonly<Result>
 
 type RebuildTargetLoop<
   Clock extends readonly unknown[],
@@ -2304,8 +2304,8 @@ type RebuildTargetLoop<
   >
   // non-inline array unable to match condition above
   // so we handle it in separate branch
-  : Target extends Array<UnitTargetable<infer TargetType>>
-    ? Array<RebuildTargetClockLoop<
+  : Target extends ReadonlyArray<UnitTargetable<infer TargetType>>
+    ? ReadonlyArray<RebuildTargetClockLoop<
       Clock,
       UnitTargetable<TargetType>,
       TargetType,

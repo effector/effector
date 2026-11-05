@@ -78,6 +78,23 @@ describe('basic cases (should pass)', () => {
       "
     `)
   })
+
+  test('readonly target arrays and tuples (should pass)', () => {
+    const clock = createEvent<number>()
+    const target = createEvent<number>()
+    const wideTarget = createEvent<number | string>()
+    const targetArray: ReadonlyArray<typeof target> = [target]
+    const targetTuple = [target, wideTarget] as const
+
+    sample({clock, target: targetArray})
+    sample({clock, target: targetTuple})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
 })
 
 describe('basic cases', () => {
