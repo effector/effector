@@ -257,7 +257,7 @@ export default () => {
       },
       event: 'Event<AN>',
       store: 'Store<AN>',
-      tuple: '[Event<AN>, Store<AN>]',
+      tuple: 'readonly [Event<AN>, Store<AN>]',
     },
   })
   sortOrder([targetToken, typedFn, source, clock, fn, methodCode])
