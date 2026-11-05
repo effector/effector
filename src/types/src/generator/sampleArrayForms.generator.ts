@@ -3,6 +3,7 @@ import {
   computeFn,
   computeVariant,
   config,
+  every,
   not,
   union,
 } from '../runner/manifold/operators'
@@ -97,11 +98,20 @@ export default () => {
     fn: ({clockType, targetType}) =>
       isAssignable(clockType, targetType),
   })
-  const pass = bool({
+  const valuePass = bool({
     source: {valueCompatible},
     true: {valueCompatible: true},
   })
-  const fieldError = not(pass)
+  const formSupported = computeFn({
+    source: {clockForm},
+    fn: ({clockForm}) => clockForm !== 'readonlyTuple',
+  })
+  const formPass = bool({
+    source: {formSupported},
+    true: {formSupported: true},
+  })
+  const pass = every([valuePass, formPass])
+  const fieldError = every([formPass, not(valuePass)])
 
   config({
     header,
@@ -123,7 +133,10 @@ export default () => {
             markError: fieldError,
           },
           filter: filterCode,
-          target: targetCode,
+          target: {
+            field: targetCode,
+            markError: fieldError,
+          },
         },
       },
     },

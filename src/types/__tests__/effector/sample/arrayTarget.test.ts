@@ -167,6 +167,10 @@ describe('basic cases', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -187,6 +191,10 @@ describe('basic cases', () => {
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -442,7 +450,7 @@ describe('combinable source object (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Object literal may only specify known properties, and 'source' does not exist in type '{ target: readonly [Unit<{ readonly a: number; }>, EventCallable<{ a: number; }>]; error: \\"source should extend target type\\"; }'.
+      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
       "
     `)
   })

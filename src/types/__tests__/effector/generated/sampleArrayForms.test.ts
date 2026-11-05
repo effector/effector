@@ -112,56 +112,67 @@ describe('unit/unit, none filter', () => {
       sample({
         //@ts-expect-error
         clock: numberClock,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: numberClock,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: anyClock,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
+        //@ts-expect-error
         target: neverTarget,
       })
     }
@@ -170,52 +181,55 @@ describe('unit/unit, none filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTarget,'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTarget,'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTarget,'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTarget,'
       "
     `)
   })
@@ -263,66 +277,77 @@ describe('unit/unit, Boolean filter', () => {
         //@ts-expect-error
         clock: numberClock,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: numberClock,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: anyClock,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
     }
@@ -331,52 +356,55 @@ describe('unit/unit, Boolean filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTarget,'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTarget,'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTarget,'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTarget,'
       "
     `)
   })
@@ -423,56 +451,67 @@ describe('unit/inline, none filter', () => {
       sample({
         //@ts-expect-error
         clock: numberClock,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: numberClock,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: anyClock,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
+        //@ts-expect-error
         target: [neverTarget],
       })
     }
@@ -481,52 +520,55 @@ describe('unit/inline, none filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: [neverTarget],'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: [neverTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: [numberTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: [stringTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: [neverTarget],'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: [neverTarget],'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: [neverTarget],'
       "
     `)
   })
@@ -574,66 +616,77 @@ describe('unit/inline, Boolean filter', () => {
         //@ts-expect-error
         clock: numberClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: numberClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: stringClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: unknownClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: anyClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: voidClock,
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
     }
@@ -642,396 +695,324 @@ describe('unit/inline, Boolean filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: [neverTarget],'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: [neverTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: [numberTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: [stringTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: [neverTarget],'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: [neverTarget],'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: [neverTarget],'
       "
     `)
   })
 })
-describe('readonlyTuple/readonlyTuple, none filter', () => {
-  test('readonlyTuple/readonlyTuple, none filter (should pass)', () => {
-    //prettier-ignore
-    {
-      sample({clock:numberClockReadonlyTuple , target:numberTargetReadonlyTuple })
-      sample({clock:numberClockReadonlyTuple , target:unknownTargetReadonlyTuple})
-      sample({clock:numberClockReadonlyTuple , target:anyTargetReadonlyTuple    })
-      sample({clock:numberClockReadonlyTuple , target:voidTargetReadonlyTuple   })
-      sample({clock:stringClockReadonlyTuple , target:stringTargetReadonlyTuple })
-      sample({clock:stringClockReadonlyTuple , target:unknownTargetReadonlyTuple})
-      sample({clock:stringClockReadonlyTuple , target:anyTargetReadonlyTuple    })
-      sample({clock:stringClockReadonlyTuple , target:voidTargetReadonlyTuple   })
-      sample({clock:unknownClockReadonlyTuple, target:unknownTargetReadonlyTuple})
-      sample({clock:unknownClockReadonlyTuple, target:anyTargetReadonlyTuple    })
-      sample({clock:unknownClockReadonlyTuple, target:voidTargetReadonlyTuple   })
-      sample({clock:anyClockReadonlyTuple    , target:numberTargetReadonlyTuple })
-      sample({clock:anyClockReadonlyTuple    , target:stringTargetReadonlyTuple })
-      sample({clock:anyClockReadonlyTuple    , target:unknownTargetReadonlyTuple})
-      sample({clock:anyClockReadonlyTuple    , target:anyTargetReadonlyTuple    })
-      sample({clock:anyClockReadonlyTuple    , target:voidTargetReadonlyTuple   })
-      sample({clock:voidClockReadonlyTuple   , target:unknownTargetReadonlyTuple})
-      sample({clock:voidClockReadonlyTuple   , target:anyTargetReadonlyTuple    })
-      sample({clock:voidClockReadonlyTuple   , target:voidTargetReadonlyTuple   })
-      sample({clock:neverClockReadonlyTuple  , target:numberTargetReadonlyTuple })
-      sample({clock:neverClockReadonlyTuple  , target:stringTargetReadonlyTuple })
-      sample({clock:neverClockReadonlyTuple  , target:unknownTargetReadonlyTuple})
-      sample({clock:neverClockReadonlyTuple  , target:anyTargetReadonlyTuple    })
-      sample({clock:neverClockReadonlyTuple  , target:voidTargetReadonlyTuple   })
-      sample({clock:neverClockReadonlyTuple  , target:neverTargetReadonlyTuple  })
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('readonlyTuple/readonlyTuple, none filter (should fail)', () => {
-    //prettier-ignore
-    {
-      sample({
-        //@ts-expect-error
-        clock: numberClockReadonlyTuple,
-        target: stringTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: numberClockReadonlyTuple,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: stringClockReadonlyTuple,
-        target: numberTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: stringClockReadonlyTuple,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: unknownClockReadonlyTuple,
-        target: numberTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: unknownClockReadonlyTuple,
-        target: stringTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: unknownClockReadonlyTuple,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: anyClockReadonlyTuple,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: voidClockReadonlyTuple,
-        target: numberTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: voidClockReadonlyTuple,
-        target: stringTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: voidClockReadonlyTuple,
-        target: neverTargetReadonlyTuple,
-      })
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [Unit<string>]'.
-        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: stringTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<number>]'.
-        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'number'.
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [Unit<number>]'.
-        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: numberTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<string>]'.
-        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'string'.
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<unknown>]' is not assignable to type 'readonly [Unit<number>]'.
-        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
-          Types of property '__' are incompatible.
-            Type 'unknown' is not assignable to type 'number'.
-      Type 'readonly [EventCallable<unknown>]' is not assignable to type 'readonly [Unit<string>]'.
-        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
-          Types of property '__' are incompatible.
-            Type 'unknown' is not assignable to type 'string'.
-      Type 'readonly [EventCallable<unknown>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'unknown' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<any>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'any' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<void>]' is not assignable to type 'readonly [Unit<number>]'.
-        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
-          Types of property '__' are incompatible.
-            Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: numberTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
-        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'void'.
-      Type 'readonly [EventCallable<void>]' is not assignable to type 'readonly [Unit<string>]'.
-        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
-          Types of property '__' are incompatible.
-            Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: stringTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
-        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'void'.
-      Type 'readonly [EventCallable<void>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'void' is not assignable to type 'never'.
-      "
-    `)
-  })
+test('readonlyTuple/readonlyTuple, none filter (should fail)', () => {
+  //prettier-ignore
+  {
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , target:neverTargetReadonlyTuple  })
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<string>]'.
+    Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<number>]'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<number>]'.
+    Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<string>]'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<number>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<string>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<unknown>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<unknown>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<unknown>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<number>]'.
+    Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'void'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<string>]'.
+    Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'void'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<void>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<void>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<void>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    "
+  `)
 })
-describe('readonlyTuple/readonlyTuple, Boolean filter', () => {
-  test('readonlyTuple/readonlyTuple, Boolean filter (should pass)', () => {
-    //prettier-ignore
-    {
-      sample({clock:numberClockReadonlyTuple , filter:Boolean, target:numberTargetReadonlyTuple })
-      sample({clock:numberClockReadonlyTuple , filter:Boolean, target:unknownTargetReadonlyTuple})
-      sample({clock:numberClockReadonlyTuple , filter:Boolean, target:anyTargetReadonlyTuple    })
-      sample({clock:numberClockReadonlyTuple , filter:Boolean, target:voidTargetReadonlyTuple   })
-      sample({clock:stringClockReadonlyTuple , filter:Boolean, target:stringTargetReadonlyTuple })
-      sample({clock:stringClockReadonlyTuple , filter:Boolean, target:unknownTargetReadonlyTuple})
-      sample({clock:stringClockReadonlyTuple , filter:Boolean, target:anyTargetReadonlyTuple    })
-      sample({clock:stringClockReadonlyTuple , filter:Boolean, target:voidTargetReadonlyTuple   })
-      sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:unknownTargetReadonlyTuple})
-      sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:anyTargetReadonlyTuple    })
-      sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:voidTargetReadonlyTuple   })
-      sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:numberTargetReadonlyTuple })
-      sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:stringTargetReadonlyTuple })
-      sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:unknownTargetReadonlyTuple})
-      sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:anyTargetReadonlyTuple    })
-      sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:voidTargetReadonlyTuple   })
-      sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:unknownTargetReadonlyTuple})
-      sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:anyTargetReadonlyTuple    })
-      sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:voidTargetReadonlyTuple   })
-      sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:numberTargetReadonlyTuple })
-      sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:stringTargetReadonlyTuple })
-      sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:unknownTargetReadonlyTuple})
-      sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:anyTargetReadonlyTuple    })
-      sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:voidTargetReadonlyTuple   })
-      sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:neverTargetReadonlyTuple  })
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      no errors
-      "
-    `)
-  })
-  test('readonlyTuple/readonlyTuple, Boolean filter (should fail)', () => {
-    //prettier-ignore
-    {
-      sample({
-        //@ts-expect-error
-        clock: numberClockReadonlyTuple,
-        filter: Boolean,
-        target: stringTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: numberClockReadonlyTuple,
-        filter: Boolean,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: stringClockReadonlyTuple,
-        filter: Boolean,
-        target: numberTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: stringClockReadonlyTuple,
-        filter: Boolean,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: unknownClockReadonlyTuple,
-        filter: Boolean,
-        target: numberTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: unknownClockReadonlyTuple,
-        filter: Boolean,
-        target: stringTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: unknownClockReadonlyTuple,
-        filter: Boolean,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: anyClockReadonlyTuple,
-        filter: Boolean,
-        target: neverTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: voidClockReadonlyTuple,
-        filter: Boolean,
-        target: numberTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: voidClockReadonlyTuple,
-        filter: Boolean,
-        target: stringTargetReadonlyTuple,
-      })
-      sample({
-        //@ts-expect-error
-        clock: voidClockReadonlyTuple,
-        filter: Boolean,
-        target: neverTargetReadonlyTuple,
-      })
-    }
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [Unit<string>]'.
-        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: stringTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<number>]'.
-        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'number'.
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [Unit<number>]'.
-        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: numberTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<string>]'.
-        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'string'.
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<unknown>]' is not assignable to type 'readonly [Unit<number>]'.
-        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
-          Types of property '__' are incompatible.
-            Type 'unknown' is not assignable to type 'number'.
-      Type 'readonly [EventCallable<unknown>]' is not assignable to type 'readonly [Unit<string>]'.
-        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
-          Types of property '__' are incompatible.
-            Type 'unknown' is not assignable to type 'string'.
-      Type 'readonly [EventCallable<unknown>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'unknown' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<any>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'any' is not assignable to type 'never'.
-      Type 'readonly [EventCallable<void>]' is not assignable to type 'readonly [Unit<number>]'.
-        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
-          Types of property '__' are incompatible.
-            Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: numberTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
-        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
-          Types of property '__' are incompatible.
-            Type 'number' is not assignable to type 'void'.
-      Type 'readonly [EventCallable<void>]' is not assignable to type 'readonly [Unit<string>]'.
-        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
-          Types of property '__' are incompatible.
-            Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: stringTargetReadonlyTuple,'
-      Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
-        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
-          Types of property '__' are incompatible.
-            Type 'string' is not assignable to type 'void'.
-      Type 'readonly [EventCallable<void>]' is not assignable to type 'readonly [Unit<never>]'.
-        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
-          Types of property '__' are incompatible.
-            Type 'void' is not assignable to type 'never'.
-      "
-    `)
-  })
+test('readonlyTuple/readonlyTuple, Boolean filter (should fail)', () => {
+  //prettier-ignore
+  {
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , filter:Boolean, target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , filter:Boolean, target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , filter:Boolean, target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , filter:Boolean, target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , filter:Boolean, target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:numberClockReadonlyTuple , filter:Boolean, target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , filter:Boolean, target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , filter:Boolean, target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , filter:Boolean, target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , filter:Boolean, target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , filter:Boolean, target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:stringClockReadonlyTuple , filter:Boolean, target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:unknownClockReadonlyTuple, filter:Boolean, target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:anyClockReadonlyTuple    , filter:Boolean, target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:voidClockReadonlyTuple   , filter:Boolean, target:neverTargetReadonlyTuple  })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:numberTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:stringTargetReadonlyTuple })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:unknownTargetReadonlyTuple})
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:anyTargetReadonlyTuple    })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:voidTargetReadonlyTuple   })
+    //@ts-expect-error
+    sample({clock:neverClockReadonlyTuple  , filter:Boolean, target:neverTargetReadonlyTuple  })
+  }
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<string>]'.
+    Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<number>]'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<number>]'.
+    The type 'readonly [EventCallable<number>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<number>]'.
+    Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<string>]'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<string>]'.
+    The type 'readonly [EventCallable<string>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<number>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<string>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<unknown>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<unknown>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<unknown>]'.
+    The type 'readonly [EventCallable<unknown>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<any>]'.
+    The type 'readonly [EventCallable<any>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<number>]'.
+    Type 'readonly [EventCallable<number>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'void'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<string>]'.
+    Type 'readonly [EventCallable<string>]' is not assignable to type 'readonly [UnitTargetable<void>]'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'void'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<void>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<void>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<void>]'.
+    The type 'readonly [EventCallable<void>]' is 'readonly' and cannot be assigned to the mutable type '[Unit<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    The type 'readonly [EventCallable<never>]' is 'readonly' and cannot be assigned to the mutable type '[EventCallable<never>]'.
+    "
+  `)
 })
 describe('readonlyArray/readonlyArray, none filter', () => {
   test('readonlyArray/readonlyArray, none filter (should pass)', () => {
@@ -1075,56 +1056,67 @@ describe('readonlyArray/readonlyArray, none filter', () => {
       sample({
         //@ts-expect-error
         clock: numberClockReadonlyArray,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: numberClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: anyClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
     }
@@ -1134,7 +1126,6 @@ describe('readonlyArray/readonlyArray, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -1143,11 +1134,11 @@ describe('readonlyArray/readonlyArray, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -1156,27 +1147,31 @@ describe('readonlyArray/readonlyArray, none filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1185,7 +1180,6 @@ describe('readonlyArray/readonlyArray, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1194,6 +1188,7 @@ describe('readonlyArray/readonlyArray, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTargetReadonlyArray,'
       "
     `)
   })
@@ -1241,66 +1236,77 @@ describe('readonlyArray/readonlyArray, Boolean filter', () => {
         //@ts-expect-error
         clock: numberClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: numberClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: anyClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
     }
@@ -1310,7 +1316,6 @@ describe('readonlyArray/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -1319,11 +1324,11 @@ describe('readonlyArray/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -1332,27 +1337,31 @@ describe('readonlyArray/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTargetReadonlyArray,'
       Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1361,7 +1370,6 @@ describe('readonlyArray/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1370,6 +1378,7 @@ describe('readonlyArray/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTargetReadonlyArray,'
       "
     `)
   })
@@ -1416,56 +1425,67 @@ describe('readonlyArray/mutable, none filter', () => {
       sample({
         //@ts-expect-error
         clock: numberClockReadonlyArray,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: numberClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: anyClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
     }
@@ -1475,7 +1495,6 @@ describe('readonlyArray/mutable, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -1484,11 +1503,11 @@ describe('readonlyArray/mutable, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTargetMutable,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -1497,27 +1516,31 @@ describe('readonlyArray/mutable, none filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTargetMutable,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTargetMutable,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTargetMutable,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTargetMutable,'
       Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTargetMutable,'
       Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1526,7 +1549,6 @@ describe('readonlyArray/mutable, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1535,6 +1557,7 @@ describe('readonlyArray/mutable, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTargetMutable,'
       "
     `)
   })
@@ -1582,66 +1605,77 @@ describe('readonlyArray/mutable, Boolean filter', () => {
         //@ts-expect-error
         clock: numberClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: numberClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: anyClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockReadonlyArray,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
     }
@@ -1651,7 +1685,6 @@ describe('readonlyArray/mutable, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -1660,11 +1693,11 @@ describe('readonlyArray/mutable, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTargetMutable,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -1673,27 +1706,31 @@ describe('readonlyArray/mutable, Boolean filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTargetMutable,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTargetMutable,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTargetMutable,'
       Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTargetMutable,'
       Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTargetMutable,'
       Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1702,7 +1739,6 @@ describe('readonlyArray/mutable, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1711,6 +1747,7 @@ describe('readonlyArray/mutable, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTargetMutable,'
       "
     `)
   })
@@ -1757,56 +1794,67 @@ describe('mutable/readonlyArray, none filter', () => {
       sample({
         //@ts-expect-error
         clock: numberClockMutable,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: numberClockMutable,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: anyClockMutable,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
     }
@@ -1816,7 +1864,6 @@ describe('mutable/readonlyArray, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -1825,11 +1872,11 @@ describe('mutable/readonlyArray, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -1838,27 +1885,31 @@ describe('mutable/readonlyArray, none filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTargetReadonlyArray,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTargetReadonlyArray,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1867,7 +1918,6 @@ describe('mutable/readonlyArray, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -1876,6 +1926,7 @@ describe('mutable/readonlyArray, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTargetReadonlyArray,'
       "
     `)
   })
@@ -1923,66 +1974,77 @@ describe('mutable/readonlyArray, Boolean filter', () => {
         //@ts-expect-error
         clock: numberClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: numberClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: anyClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetReadonlyArray,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetReadonlyArray,
       })
     }
@@ -1992,7 +2054,6 @@ describe('mutable/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -2001,11 +2062,11 @@ describe('mutable/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -2014,27 +2075,31 @@ describe('mutable/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTargetReadonlyArray,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTargetReadonlyArray,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTargetReadonlyArray,'
       Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: numberTargetReadonlyArray,'
       Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -2043,7 +2108,6 @@ describe('mutable/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: stringTargetReadonlyArray,'
       Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -2052,6 +2116,7 @@ describe('mutable/readonlyArray, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTargetReadonlyArray,'
       "
     `)
   })
@@ -2098,56 +2163,67 @@ describe('mutable/mutable, none filter', () => {
       sample({
         //@ts-expect-error
         clock: numberClockMutable,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: numberClockMutable,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: anyClockMutable,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
     }
@@ -2157,7 +2233,6 @@ describe('mutable/mutable, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -2166,11 +2241,11 @@ describe('mutable/mutable, none filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -2179,27 +2254,31 @@ describe('mutable/mutable, none filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTargetMutable,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTargetMutable,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTargetMutable,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTargetMutable,'
       Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTargetMutable,'
       Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -2208,7 +2287,6 @@ describe('mutable/mutable, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -2217,6 +2295,7 @@ describe('mutable/mutable, none filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTargetMutable,'
       "
     `)
   })
@@ -2264,66 +2343,77 @@ describe('mutable/mutable, Boolean filter', () => {
         //@ts-expect-error
         clock: numberClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: numberClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: stringClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: unknownClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: anyClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: numberTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: stringTargetMutable,
       })
       sample({
         //@ts-expect-error
         clock: voidClockMutable,
         filter: Boolean,
+        //@ts-expect-error
         target: neverTargetMutable,
       })
     }
@@ -2333,7 +2423,6 @@ describe('mutable/mutable, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
           Types of property '__' are incompatible.
@@ -2342,11 +2431,11 @@ describe('mutable/mutable, Boolean filter', () => {
         Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
           Types of property '__' are incompatible.
@@ -2355,27 +2444,31 @@ describe('mutable/mutable, Boolean filter', () => {
         Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTargetMutable,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTargetMutable,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTargetMutable,'
       Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTargetMutable,'
       Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
         Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTargetMutable,'
       Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
         Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: numberTargetMutable,'
       Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -2384,7 +2477,6 @@ describe('mutable/mutable, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: stringTargetMutable,'
       Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
         Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
           Types of property '__' are incompatible.
@@ -2393,6 +2485,7 @@ describe('mutable/mutable, Boolean filter', () => {
         Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
           Types of property '__' are incompatible.
             Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTargetMutable,'
       "
     `)
   })
@@ -2439,56 +2532,67 @@ describe('inline/unit, none filter', () => {
       sample({
         //@ts-expect-error
         clock: [numberClock],
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: [numberClock],
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [anyClock],
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
+        //@ts-expect-error
         target: neverTarget,
       })
     }
@@ -2497,52 +2601,55 @@ describe('inline/unit, none filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTarget,'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTarget,'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTarget,'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTarget,'
       "
     `)
   })
@@ -2590,66 +2697,77 @@ describe('inline/unit, Boolean filter', () => {
         //@ts-expect-error
         clock: [numberClock],
         filter: Boolean,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: [numberClock],
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
         filter: Boolean,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
         filter: Boolean,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
         filter: Boolean,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [anyClock],
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
         filter: Boolean,
+        //@ts-expect-error
         target: numberTarget,
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
         filter: Boolean,
+        //@ts-expect-error
         target: stringTarget,
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
         filter: Boolean,
+        //@ts-expect-error
         target: neverTarget,
       })
     }
@@ -2658,52 +2776,55 @@ describe('inline/unit, Boolean filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTarget,'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTarget,'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTarget,'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTarget,'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: numberTarget,'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: stringTarget,'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTarget,'
       "
     `)
   })
@@ -2750,56 +2871,67 @@ describe('inline/inline, none filter', () => {
       sample({
         //@ts-expect-error
         clock: [numberClock],
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: [numberClock],
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [anyClock],
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
+        //@ts-expect-error
         target: [neverTarget],
       })
     }
@@ -2808,52 +2940,55 @@ describe('inline/inline, none filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 6 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: [neverTarget],'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 16 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: [neverTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: [numberTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: [stringTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: [neverTarget],'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: [neverTarget],'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 46 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 51 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: [neverTarget],'
       "
     `)
   })
@@ -2901,66 +3036,77 @@ describe('inline/inline, Boolean filter', () => {
         //@ts-expect-error
         clock: [numberClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: [numberClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: [stringClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: [unknownClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [anyClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [numberTarget],
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [stringTarget],
       })
       sample({
         //@ts-expect-error
         clock: [voidClock],
         filter: Boolean,
+        //@ts-expect-error
         target: [neverTarget],
       })
     }
@@ -2969,52 +3115,55 @@ describe('inline/inline, Boolean filter', () => {
       Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 7 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: [neverTarget],'
       Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
-      Unmarked error at test line 19 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'string'.
       Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: [neverTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: [numberTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: [stringTarget],'
       Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: [neverTarget],'
       Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: [neverTarget],'
       Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'number'.
-      Unmarked error at test line 55 'target: [numberTarget],'
       Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'number' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'string'.
-      Unmarked error at test line 61 'target: [stringTarget],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'void'.
       Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
         Types of property '__' are incompatible.
           Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: [neverTarget],'
       "
     `)
   })

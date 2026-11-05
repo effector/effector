@@ -50,12 +50,11 @@ test('wide union (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'EventCallable<{ a: 1; } | { a: 2; }>'.
-      Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, targetable
+    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; } | { a: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[EventCallable<{ a: 1; } | { a: 2; }>]'.
+    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[EventCallable<{ a: 1; } | { a: 2; }>]'.
     "
   `)
 })
@@ -120,12 +119,11 @@ test('unknown type in source (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<unknown>' is not assignable to type 'EventCallable<string>'.
-      Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
+    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<string>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<unknown>' is not assignable to type '[EventCallable<string>]'.
+    Type 'Event<unknown>' is not assignable to type '[EventCallable<string>]'.
     "
   `)
 })
@@ -190,12 +188,11 @@ test('optional props (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'EventCallable<{ a: 1; b: 2; }>'.
-      Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, targetable
+    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; }>]'.
+    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; }>]'.
     "
   `)
 })
@@ -260,12 +257,11 @@ test('narrow object (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<{ a: 1; b: 2; }>' is not assignable to type 'EventCallable<{ a: 1; b: 2; c: 3; }>'.
-      Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, targetable
+    Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ a: 1; b: 2; c: 3; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<{ a: 1; b: 2; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; c: 3; }>]'.
+    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
 })
@@ -381,12 +377,11 @@ test('wide union in array (should fail)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<(string | number | boolean)[]>' is not assignable to type 'EventCallable<(string | number)[]>'.
-      Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, targetable
+    Type 'Event<(string | number | boolean)[]>' is missing the following properties from type 'EventCallable<(string | number)[]>': prepend, targetable
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<(string | number)[]>' is not assignable to type '\\"incompatible unit in target\\"'.
-    Type 'GuardResult<(string | number | boolean)[]>' is not assignable to type '[EventCallable<(string | number)[]>]'.
+    Type 'Event<(string | number | boolean)[]>' is not assignable to type '[EventCallable<(string | number)[]>]'.
     "
   `)
 })
