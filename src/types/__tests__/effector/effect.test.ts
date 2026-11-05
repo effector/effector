@@ -282,7 +282,7 @@ describe('#filter', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<number>' is not assignable to type 'Event<boolean>'.
+      Type 'EventAsReturnType<number>' is not assignable to type 'Event<boolean>'.
         Type 'number' is not assignable to type 'boolean'.
       "
     `)

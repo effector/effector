@@ -51,7 +51,8 @@ test('incompatible effect params and derived targets (should fail)', () => {
       The types of '__.id' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
     Binding element 'id' implicitly has an 'any' type.
-    Type 'Event<string>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
+    Type 'EventAsReturnType<string>' is not assignable to type 'EventCallable<string>'.
+      Type 'Event<string>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
     "
   `)
 })

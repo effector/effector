@@ -505,17 +505,9 @@ describe('source:wide', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 20 'a_num,'
-      Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
-        Types of property '__' are incompatible.
-          Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
-      Unmarked error at test line 28 'a_num,'
-      Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
-        Types of property '__' are incompatible.
-          Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -629,17 +621,9 @@ describe('source:wide', () => {
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
-      Unmarked error at test line 188 'a_num,'
-      Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
-        Types of property '__' are incompatible.
-          Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type 'AS' but required in type '{ readonly a: number; readonly b: string; }'.
-      Unmarked error at test line 197 'a_num,'
-      Type 'EventCallable<AN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
-        Types of property '__' are incompatible.
-          Property 'b' is missing in type 'AN' but required in type '{ readonly a: number; readonly b: string; }'.
       Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
         The types of '__.b' are incompatible between these types.
           Type 'number' is not assignable to type 'string'.
@@ -1906,10 +1890,10 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 33 'source: {a:$num},'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ target: readonly [EventCallable<AN>, Unit<{ readonly a: number; }>]; error: \\"source should extend target type\\"; }'.
       Unmarked error at test line 41 'source: {a:$num},'
       lack of expected error at test line 37 'abn,'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ target: readonly [EventCallable<AN>, Unit<{ readonly a: number; }>]; error: \\"source should extend target type\\"; }'.
       lack of expected error at test line 45 'ab,'
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
         The types of '__.a' are incompatible between these types.
@@ -1920,8 +1904,7 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 67 'source: {a:$num},'
-      Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: StoreWritable<number>; b: Store<string>; } | { a: StoreWritable<number>; b: Store<number>; }'.
-        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ target: readonly [Unit<{ readonly a: number; }>, Unit<{ readonly a: number; }>]; error: \\"source should extend target type\\"; }'.
       lack of expected error at test line 70 'abn,'
       lack of expected error at test line 72 'ab,'
       Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.
@@ -2033,10 +2016,10 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 253 'source: {a:$num},'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ target: readonly [EventCallable<AN>, Unit<{ readonly a: number; }>]; error: \\"source should extend target type\\"; }'.
       Unmarked error at test line 262 'source: {a:$num},'
       lack of expected error at test line 258 'abn,'
-      Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ target: readonly [EventCallable<AN>, Unit<{ readonly a: number; }>]; error: \\"source should extend target type\\"; }'.
       lack of expected error at test line 267 'ab,'
       Type 'EventCallable<AS>' is not assignable to type 'Unit<{ readonly a: number; }>'.
         The types of '__.a' are incompatible between these types.
@@ -2047,8 +2030,7 @@ describe('source:same', () => {
         The types of '__.a' are incompatible between these types.
           Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 291 'source: {a:$num},'
-      Type '{ a: StoreWritable<number>; }' is not assignable to type '{ a: StoreWritable<number>; b: Store<string>; } | { a: StoreWritable<number>; b: Store<number>; }'.
-        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<number>; }'.
+      Object literal may only specify known properties, and 'source' does not exist in type '{ target: readonly [Unit<{ readonly a: number; }>, Unit<{ readonly a: number; }>]; error: \\"source should extend target type\\"; }'.
       lack of expected error at test line 295 'abn,'
       lack of expected error at test line 297 'ab,'
       Type 'EventCallable<[string]>' is not assignable to type 'Unit<readonly [number]>'.

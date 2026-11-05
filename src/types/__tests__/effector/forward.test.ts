@@ -302,7 +302,7 @@ test('edge case #1 (should fail)', () => {
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Event<{ value: { value: string; }; }>' is not assignable to type 'readonly UnitTargetable<unknown>[] | UnitTargetable<unknown>'.
+        Type 'EventAsReturnType<{ value: { value: string; }; }>' is not assignable to type 'readonly UnitTargetable<unknown>[] | UnitTargetable<unknown>'.
           Property 'targetable' is missing in type 'Event<{ value: { value: string; }; }>' but required in type 'UnitTargetable<unknown>'.
     "
   `)

@@ -180,10 +180,7 @@ describe('generic with either type', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 6 'sample({'
-      Argument of type '[{ clock: NoInfer<EventAsReturnType<R | null>>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type '(NoInfer<EventAsReturnType<R | null>> extends Units ? ((clk: TypeOfClock<NoInfer<EventAsReturnType<R | null>>>) => clk is ...) | ((clk: TypeOfClock<...>) => boolean) : never) extends ... ? ... : [config: ...]'.
-      Unmarked error at test line 8 'fn: data => ({data}),'
-      Parameter 'data' implicitly has an 'any' type.
+      no errors
       "
     `)
   })
@@ -236,10 +233,7 @@ describe('generic union', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 6 'sample({'
-      Argument of type '[{ clock: NoInfer<EventAsReturnType<R>>; fn: (data: any) => { data: any; }; }]' is not assignable to parameter of type '(NoInfer<EventAsReturnType<R>> extends Units ? ((clk: TypeOfClock<NoInfer<EventAsReturnType<R>>>) => clk is ...) | ((clk: TypeOfClock<...>) => boolean) : never) extends ... ? ... : [config: ...]'.
-      Unmarked error at test line 8 'fn: data => ({data}),'
-      Parameter 'data' implicitly has an 'any' type.
+      no errors
       "
     `)
   })

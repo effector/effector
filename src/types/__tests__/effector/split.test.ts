@@ -1375,7 +1375,7 @@ describe('array cases', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<{ a: number | null; b: number | null; }>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+        Type 'EventAsReturnType<{ a: number | null; b: number | null; }>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
           The types of '__.a' are incompatible between these types.
             Type 'number | null' is not assignable to type 'number'.
               Type 'null' is not assignable to type 'number'.

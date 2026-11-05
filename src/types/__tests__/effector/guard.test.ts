@@ -291,7 +291,7 @@ describe('guard(source, config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'GuardResult<number>' is not assignable to type 'Event<string>'.
           Type 'number' is not assignable to type 'string'.
         "
       `)
@@ -351,7 +351,7 @@ describe('guard(source, config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User>' is not assignable to type 'Event<string>'.
+        Type 'GuardResult<User>' is not assignable to type 'Event<string>'.
           Type 'User' is not assignable to type 'string'.
         "
       `)
@@ -538,7 +538,7 @@ describe('guard(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'GuardResult<number>' is not assignable to type 'Event<string>'.
           Type 'number' is not assignable to type 'string'.
         "
       `)
@@ -639,7 +639,7 @@ describe('guard(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User>' is not assignable to type 'Event<string>'.
+        Type 'GuardResult<User>' is not assignable to type 'Event<string>'.
           Type 'User' is not assignable to type 'string'.
         "
       `)

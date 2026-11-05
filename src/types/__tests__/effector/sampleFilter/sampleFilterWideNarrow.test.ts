@@ -42,7 +42,8 @@ test('wide union (should fail)', () => {
             Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
               Types of property 'a' are incompatible.
                 Type '3' is not assignable to type '2'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, targetable
+    Type 'EventAsReturnType<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'EventCallable<{ a: 1; } | { a: 2; }>'.
+      Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, targetable
     Type 'EventCallable<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Unit<{ a: 1; } | { a: 2; }>'.
       Types of property '__' are incompatible.
         Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
@@ -50,7 +51,7 @@ test('wide union (should fail)', () => {
             Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
               Types of property 'a' are incompatible.
                 Type '3' is not assignable to type '2'.
-    Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[EventCallable<{ a: 1; } | { a: 2; }>]'.
+    Type 'EventAsReturnType<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[EventCallable<{ a: 1; } | { a: 2; }>]'.
     "
   `)
 })
@@ -115,11 +116,12 @@ test('unknown type in source (should fail)', () => {
     Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
       Types of property '__' are incompatible.
         Type 'unknown' is not assignable to type 'string'.
-    Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
+    Type 'EventAsReturnType<unknown>' is not assignable to type 'EventCallable<string>'.
+      Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
     Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
       Types of property '__' are incompatible.
         Type 'unknown' is not assignable to type 'string'.
-    Type 'Event<unknown>' is not assignable to type '[EventCallable<string>]'.
+    Type 'EventAsReturnType<unknown>' is not assignable to type '[EventCallable<string>]'.
     "
   `)
 })
@@ -185,12 +187,13 @@ test('optional props (should fail)', () => {
       The types of '__.b' are incompatible between these types.
         Type '2 | undefined' is not assignable to type '2'.
           Type 'undefined' is not assignable to type '2'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, targetable
+    Type 'EventAsReturnType<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'EventCallable<{ a: 1; b: 2; }>'.
+      Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, targetable
     Type 'EventCallable<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Unit<{ a: 1; b: 2; }>'.
       The types of '__.b' are incompatible between these types.
         Type '2 | undefined' is not assignable to type '2'.
           Type 'undefined' is not assignable to type '2'.
-    Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; }>]'.
+    Type 'EventAsReturnType<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; }>]'.
     "
   `)
 })
@@ -255,11 +258,12 @@ test('narrow object (should fail)', () => {
     Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type 'Unit<{ a: 1; b: 2; c: 3; }>'.
       Types of property '__' are incompatible.
         Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
-    Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, targetable
+    Type 'EventAsReturnType<{ a: 1; b: 2; }>' is not assignable to type 'EventCallable<{ a: 1; b: 2; c: 3; }>'.
+      Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, targetable
     Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type 'Unit<{ a: 1; b: 2; c: 3; }>'.
       Types of property '__' are incompatible.
         Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
-    Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; c: 3; }>]'.
+    Type 'EventAsReturnType<{ a: 1; b: 2; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
 })
@@ -375,7 +379,7 @@ test('wide union in array (should fail)', () => {
         Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
           Type 'string | number | boolean' is not assignable to type 'string | number'.
             Type 'boolean' is not assignable to type 'string | number'.
-    Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
+    Type 'EventAsReturnType<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
       Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
         Type 'string | number | boolean' is not assignable to type 'string | number'.
           Type 'boolean' is not assignable to type 'string | number'.

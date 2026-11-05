@@ -1088,15 +1088,27 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
         Unmarked error at test line 35 'clock: nullableAB,'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB | null; fnArg: ABN; }'.
+        Unmarked error at test line 36 'filter: (clk) => clk !== null,'
+        Parameter 'clk' implicitly has an 'any' type.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 41 'clock: nullableAB,'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
         Property 'c' does not exist on type 'ABN'.
-        'clk' is possibly 'null'.
+        Unmarked error at test line 47 'clock: nullableAB,'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB | null; fnArg: ABN; }'.
+        Parameter 'clk' implicitly has an 'any' type.
         Property 'c' does not exist on type 'ABN'.
         lack of expected error at test line 56 'filter: (clk: AB) => clk.a > 0,'
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
         Property 'c' does not exist on type 'ABN'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
         Property 'c' does not exist on type 'ABN'.
         Property 'c' does not exist on type 'ABN'.
         "
@@ -1229,15 +1241,27 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
         Unmarked error at test line 35 'clock: [ab,nullableAB],'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB | null; fnArg: ABN; }'.
+        Unmarked error at test line 36 'filter: (clk) => clk !== null,'
+        Parameter 'clk' implicitly has an 'any' type.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 41 'clock: [ab,nullableAB],'
         Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
         Property 'c' does not exist on type 'ABN'.
-        'clk' is possibly 'null'.
+        Unmarked error at test line 47 'clock: [ab,nullableAB],'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB | null; fnArg: ABN; }'.
+        Parameter 'clk' implicitly has an 'any' type.
         Property 'c' does not exist on type 'ABN'.
         lack of expected error at test line 56 'filter: (clk: AB) => clk.a > 0,'
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
         Property 'c' does not exist on type 'ABN'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB | null' is not assignable to type 'ABN'.
+              Type 'null' is not assignable to type 'ABN'.
         Property 'c' does not exist on type 'ABN'.
         Property 'c' does not exist on type 'ABN'.
         "

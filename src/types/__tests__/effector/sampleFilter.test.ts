@@ -155,7 +155,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'EventAsReturnType<number>' is not assignable to type 'Event<string>'.
           Type 'number' is not assignable to type 'string'.
         "
       `)
@@ -260,7 +260,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<number>' is not assignable to type 'Event<string>'.
+        Type 'EventAsReturnType<number>' is not assignable to type 'Event<string>'.
           Type 'number' is not assignable to type 'string'.
         "
       `)
@@ -408,7 +408,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User>' is not assignable to type 'Event<string>'.
+        Type 'EventAsReturnType<User>' is not assignable to type 'Event<string>'.
           Type 'User' is not assignable to type 'string'.
         "
       `)
@@ -429,7 +429,7 @@ describe('sample(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Unmarked error at test line 4 'const result: Event<User> = sample({'
-        Type 'Event<NonNullable<User | FalsyValues>>' is not assignable to type 'Event<User>'.
+        Type 'EventAsReturnType<NonNullable<User | FalsyValues>>' is not assignable to type 'Event<User>'.
           Type 'NonNullable<User | FalsyValues>' is not assignable to type 'User'.
             Type 'string' is not assignable to type 'User'.
         "
@@ -517,7 +517,7 @@ describe('sample(config)', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Type 'Event<User>' is not assignable to type 'Event<string>'.
+        Type 'EventAsReturnType<User>' is not assignable to type 'Event<string>'.
           Type 'User' is not assignable to type 'string'.
         "
       `)

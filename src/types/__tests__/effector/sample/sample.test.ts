@@ -417,9 +417,11 @@ describe('derived unit in target', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'Event<boolean>' is missing the following properties from type 'EventCallable<boolean>': prepend, targetable
+      Type 'EventAsReturnType<boolean>' is not assignable to type 'EventCallable<boolean>'.
+        Type 'Event<boolean>' is missing the following properties from type 'EventCallable<boolean>': prepend, targetable
       Type 'Store<boolean>' is missing the following properties from type 'StoreWritable<boolean>': ____, on, off, reset, and 2 more.
-      Type 'Event<boolean>' is missing the following properties from type 'EventCallable<boolean>': prepend, targetable
+      Type 'EventAsReturnType<boolean>' is not assignable to type 'EventCallable<boolean>'.
+        Type 'Event<boolean>' is missing the following properties from type 'EventCallable<boolean>': prepend, targetable
       Type 'Store<boolean>' is missing the following properties from type 'StoreWritable<boolean>': ____, on, off, reset, and 2 more.
       "
     `)
@@ -462,11 +464,6 @@ describe('derived unit in target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 13 'correct,'
-      Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
       Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
@@ -501,17 +498,9 @@ describe('derived unit in target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 11 'clock,'
-      Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
-        The types of '__.a' are incompatible between these types.
-          Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<{ a: number; }>' is not assignable to type 'UnitTargetable<{ a: string; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-      Unmarked error at test line 19 'clock: [clock],'
-      Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
-        The types of '__.a' are incompatible between these types.
-          Type 'string' is not assignable to type 'number'.
       Type 'EventCallable<{ a: number; }>' is not assignable to type 'UnitTargetable<{ a: string; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
@@ -549,9 +538,7 @@ describe('mix of wider and narrower types', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-        Types of property '__' are incompatible.
-          Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+      lack of expected error at test line 6 'clock: [exact, narrower],'
       "
     `)
   })
@@ -600,17 +587,11 @@ describe('mix of wider and narrower types', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'EventCallable<{ a: string; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
-            Type 'null' is not assignable to type '{ a: string; b: string; }'.
+      lack of expected error at test line 7 'clock: [clock],'
       Type 'EventCallable<{ a: string; }>' is not assignable to type 'UnitTargetable<{ a: string; b: string; } | null>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
-      Type 'EventCallable<{ a: string; b: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; b: string; } | null' is not assignable to type '{ a: string; b: string; }'.
-            Type 'null' is not assignable to type '{ a: string; b: string; }'.
+      lack of expected error at test line 13 'clock,'
       Type 'EventCallable<{ a: string; }>' is not assignable to type 'UnitTargetable<{ a: string; b: string; } | null>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
@@ -681,10 +662,7 @@ describe('mix of wider and narrower types', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'EventCallable<{ a: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; } | null' is not assignable to type '{ a: string; b: string; }'.
-            Type 'null' is not assignable to type '{ a: string; b: string; }'.
+      lack of expected error at test line 10 'clockNarrower,'
       Type 'EventCallable<{ a: string; } | null>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
         Types of property '__' are incompatible.
           Type '{ a: string; } | null' is not assignable to type '{ a: string; b: string; }'.
@@ -756,11 +734,6 @@ describe('mix of wider and narrower types', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 13 'correct,'
-      Type 'EventCallable<{ a: string; b: string; } | { a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
-        Types of property '__' are incompatible.
-          Type '{ a: string; b: string; } | { a: number; }' is not assignable to type '{ a: string; b: string; }'.
-            Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
       Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ a: string; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
@@ -798,15 +771,11 @@ describe('mix of wider and narrower types', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
-        The types of '__.a' are incompatible between these types.
-          Type 'string' is not assignable to type 'number'.
+      lack of expected error at test line 13 'clock,'
       Type 'EventCallable<{ a: number; }>' is not assignable to type 'UnitTargetable<{ a: string; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
-      Type 'EventCallable<{ a: string; b: string; }>' is not assignable to type 'Unit<{ a: number; }>'.
-        The types of '__.a' are incompatible between these types.
-          Type 'string' is not assignable to type 'number'.
+      lack of expected error at test line 22 'clock: [clock],'
       Type 'EventCallable<{ a: number; }>' is not assignable to type 'UnitTargetable<{ a: string; b: string; }>'.
         Types of property '__' are incompatible.
           Property 'b' is missing in type '{ a: number; }' but required in type '{ a: string; b: string; }'.
@@ -844,15 +813,11 @@ test('edge cases from issue #957 (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
-      Types of property '__' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 8 'clock,'
     Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
       Types of property '__' are incompatible.
         Type 'string' is not assignable to type 'number'.
-    Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
-      Types of property '__' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+    lack of expected error at test line 15 'clock,'
     Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
       Types of property '__' are incompatible.
         Type 'string' is not assignable to type 'number'.
@@ -927,12 +892,7 @@ describe('cross mismatch', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'number' is not assignable to type 'string'.
+      lack of expected error at test line 6 'clock: [str, num],'
       Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
         Types of property '__' are incompatible.
           Type 'string' is not assignable to type 'number'.
@@ -1173,9 +1133,9 @@ describe('partial edge case', () => {
           expect(typecheck).toMatchInlineSnapshot(`
             "
             Unmarked error at test line 1 'sample({'
-            Argument of type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to parameter of type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => clk is Data) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
-              Type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+            Argument of type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to parameter of type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => boolean) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
+              Type '[{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }]' is not assignable to type '[config: { clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => clk is Data) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
+                Type '{ clock: EventCallable<Data>; target: EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]; }' is not assignable to type '{ clock: EventCallable<Data>; source?: undefined; filter?: ((clk: Data) => clk is Data) | undefined; fn?: ((clk: Data) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
                   Types of property 'target' are incompatible.
                     Type 'EventCallable<Partial<{ type: \\"search\\" | \\"ticket\\" | null; source: string | null; }>>[]' is not assignable to type 'undefined'.
             "
@@ -1242,6 +1202,31 @@ test('sample should accept non-inline arrays in target (should pass)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     no errors
+    "
+  `)
+})
+
+test('sample validates fn result for non-inline targets (should fail)', () => {
+  const clock = createEvent<void>()
+  const target: ReadonlyArray<EventCallable<{name: string}>> = [
+    createEvent<{name: string}>(),
+  ]
+
+  sample({
+    clock,
+    //@ts-expect-error
+    fn: () => ({name: 1}),
+    //@ts-expect-error
+    target,
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    Type 'number' is not assignable to type 'string'.
+    Type 'readonly EventCallable<{ name: string; }>[]' is not assignable to type 'readonly Unit<{ name: number; }>[]'.
+      Type 'EventCallable<{ name: string; }>' is not assignable to type 'Unit<{ name: number; }>'.
+        The types of '__.name' are incompatible between these types.
+          Type 'string' is not assignable to type 'number'.
     "
   `)
 })
