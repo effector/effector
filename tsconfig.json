@@ -28,7 +28,8 @@
       "effector-vue/options-vue3": ["packages/effector-vue/options-vue3.d.ts"],
       "effector-vue": ["packages/effector-vue/index.d.ts"],
       "Builder/*": ["tools/builder/*"]
-    }
+    },
+    "noErrorTruncation": true
   },
   "exclude": [
     "./dist",

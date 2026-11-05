@@ -225,6 +225,7 @@ describe('any to void support', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 5 'forward({from, to: [to1, to2]})'
       No overload matches this call.
         The last overload gave the following error.
           Type 'EventCallable<string>' is not assignable to type 'Unit<void>'.
@@ -233,6 +234,7 @@ describe('any to void support', () => {
                 Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
                   Types of property '__' are incompatible.
                     Type 'string' is not assignable to type 'void'.
+      Unmarked error at test line 5 'forward({from, to: [to1, to2]})'
       No overload matches this call.
         The last overload gave the following error.
           Type 'EventCallable<string>' is not assignable to type 'Unit<void>'.
@@ -359,6 +361,7 @@ describe('array support', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
+          Unmarked error at test line 5 'from: s1,'
           No overload matches this call.
             The last overload gave the following error.
               Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.

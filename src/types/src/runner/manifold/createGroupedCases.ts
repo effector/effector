@@ -235,12 +235,18 @@ export function createGroupedCases<T extends Obj>(
         addExpectError = (obj: T) => !passGetter(obj),
       } = createTestLines
       const readExpectError = createReader(addExpectError, {isBool: true})
-      const printShape: Record<string, string | {field: string; when: string}> =
-        {}
+      const printShape: Record<
+        string,
+        string | {field: string; when?: string; markError?: string}
+      > = {}
       forIn(shape, (value, key) => {
         printShape[key] = isRef(value)
           ? value.name
-          : {field: value.field.name, when: value.when.name}
+          : {
+              field: value.field.name,
+              when: value.when?.name,
+              markError: value.markError?.name,
+            }
       })
       if (!dedupeGetter) {
         dedupeGetter = createDedupeReader(value =>
@@ -249,6 +255,7 @@ export function createGroupedCases<T extends Obj>(
             values: [value],
             shape: printShape,
             addExpectError: () => false,
+            noMultiline: true,
           }),
         )
       }

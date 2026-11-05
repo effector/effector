@@ -74,6 +74,7 @@ describe('VueEffector', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'effector: {count: $count},'
       Object literal may only specify known properties, and 'count' does not exist in type '() => Record<string, EffectorOptionValue>'.
       "
     `)

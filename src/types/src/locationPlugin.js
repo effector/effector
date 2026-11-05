@@ -19,7 +19,7 @@ module.exports = function(babel) {
       path.node.arguments[1].body.body.unshift(
         locationTemplate({
           FILE: JSON.stringify(relative(testsRoot, state.filename)),
-          LOC: JSON.stringify(path.node.loc, null, 2),
+          LOC: JSON.stringify(path.node.loc),
         }),
       )
     },

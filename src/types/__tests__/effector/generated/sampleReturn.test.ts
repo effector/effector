@@ -64,7 +64,6 @@ describe('no target', () => {
     //prettier-ignore
     {
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf})}
-      {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:(val: AN | null): val is AN => val !== null})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:fn0})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:({a}:AN) => ({a})})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
@@ -951,70 +950,103 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 14 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 15 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 16 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 17 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 18 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 19 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 20 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 21 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 22 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 23 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 24 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 25 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 26 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 27 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 28 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 29 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 30 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 31 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 32 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 33 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 34 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 35 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "
@@ -1070,92 +1102,136 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 14 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 15 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 16 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 17 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 18 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 19 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 20 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 21 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 22 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 23 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 24 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 25 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 26 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 27 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 28 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 29 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 30 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 31 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 32 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 33 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 34 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 35 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 36 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 37 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 38 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 39 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 40 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 41 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 42 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 43 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 44 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 45 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 46 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "
@@ -1211,92 +1287,136 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 14 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 15 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 16 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 17 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 18 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 19 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 20 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 21 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 22 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 23 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 24 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 25 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 26 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 27 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 28 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 29 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 30 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 31 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 32 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 33 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 34 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 35 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 36 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 37 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 38 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 39 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 40 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 41 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 42 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 43 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 44 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 45 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 46 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "
@@ -1352,92 +1472,136 @@ describe('tuple target', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 14 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 15 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 16 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 17 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 18 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 19 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 20 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 21 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 22 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 23 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 24 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 25 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 26 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 27 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT]})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 28 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 29 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 30 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 31 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 32 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 33 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 34 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 35 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 36 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 37 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 38 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 39 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 40 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 41 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 42 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 43 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 44 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn0})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 45 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 46 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "
@@ -1462,26 +1626,37 @@ describe('tuple target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "
@@ -1515,48 +1690,70 @@ describe('tuple target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 14 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 15 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 16 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 17 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 18 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 19 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 20 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 21 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 22 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 23 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 24 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "
@@ -1590,48 +1787,70 @@ describe('tuple target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 14 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 15 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 16 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 17 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 18 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 19 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 20 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 21 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 22 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 23 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 24 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "
@@ -1665,48 +1884,70 @@ describe('tuple target, typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 4 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 5 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 6 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 7 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 8 '{const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 9 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 10 '{const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 11 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 12 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 13 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 14 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 15 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 16 '{const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 17 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 18 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 19 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 20 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 21 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 22 '{const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 23 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn1})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
+      Unmarked error at test line 24 '{const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn2})}'
       Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
         Target requires 2 element(s) but source may have fewer.
       "

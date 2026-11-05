@@ -165,6 +165,7 @@ describe('useUnit', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'useUnit($count, {scope: effectScope()})'
       No overload matches this call.
         The last overload gave the following error.
           Argument of type 'StoreWritable<number>' is not assignable to parameter of type 'Record<string, Store<any> | Effect<any, any, any> | EventCallable<any>> | { '@@unitShape': () => Record<string, Store<any> | Effect<any, any, any> | EventCallable<...>>; }'.
@@ -212,6 +213,7 @@ describe('readonly refs', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 2 'return useUnit($store)'
       Type 'Readonly<Ref<T, T>>' is not assignable to type 'Readonly<Ref<DeepReadonly<T>, DeepReadonly<T>>>'.
         Types of property 'value' are incompatible.
           Type 'T' is not assignable to type 'DeepReadonly<T>'.
@@ -229,6 +231,7 @@ describe('readonly refs', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 1 'count.value = 1'
       Cannot assign to 'value' because it is a read-only property.
       "
     `)
@@ -299,6 +302,7 @@ describe('exported types', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'const onUpdate = useUnit($count.updates)'
       No overload matches this call.
         The last overload gave the following error.
           Argument of type 'Event<number>' is not assignable to parameter of type 'Record<string, Store<any> | Effect<any, any, any> | EventCallable<any>> | { '@@unitShape': () => Record<string, Store<any> | Effect<any, any, any> | EventCallable<...>>; }'.
@@ -319,10 +323,12 @@ describe('exported types', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 5 'useUnit({onUpdate: $count.updates})'
       No overload matches this call.
         The last overload gave the following error.
           Type 'Event<number>' is not assignable to type 'Store<any> | Effect<any, any, any> | EventCallable<any>'.
             Type 'Event<number>' is missing the following properties from type 'EventCallable<any>': prepend, targetable
+      Unmarked error at test line 1 'useUnit([domain])'
       No overload matches this call.
         The last overload gave the following error.
           Type 'Domain' is not assignable to type 'Store<any> | Effect<any, any, any> | EventCallable<any>'.
@@ -446,6 +452,7 @@ describe('scope', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 2 'const scope: Scope = useProvidedScope()'
       Type 'Scope | null' is not assignable to type 'Scope'.
         Type 'null' is not assignable to type 'Scope'.
       "
@@ -628,6 +635,7 @@ describe('useVModel', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'useVModel($form, {deeep: true})'
       No overload matches this call.
         The last overload gave the following error.
           Argument of type 'StoreWritable<{ name: string; }>' is not assignable to parameter of type 'Record<string, Store<any>>'.
@@ -662,7 +670,10 @@ describe('gate', () => {
     const setup = () => {
       useGate(Gate, {id: 1})
       useGate(Gate, ref({id: 1}))
-      useGate(Gate, computed(() => ({id: 1})))
+      useGate(
+        Gate,
+        computed(() => ({id: 1})),
+      )
       useGate(Gate, () => ({id: 1}))
     }
 
@@ -698,6 +709,7 @@ describe('gate', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'useGate(Gate, {id: 'one'})'
       Type 'string' is not assignable to type 'number'.
       "
     `)
