@@ -25,8 +25,8 @@ const transform = {
 }
 
 const typeTestsTransform = {
-  '^.+\\.jsx?$': ['babel-jest', {sourceMaps: true}],
-  '^.+\\.tsx?$': ['babel-jest', {sourceMaps: true}],
+  '^.+\\.jsx?$': ['babel-jest', {sourceMaps: true, retainLines: true}],
+  '^.+\\.tsx?$': ['babel-jest', {sourceMaps: true, retainLines: true}],
 }
 
 // babel-jest defaults `root` to jest rootDir, so it has to be pointed at the
