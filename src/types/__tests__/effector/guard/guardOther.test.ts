@@ -119,7 +119,7 @@ test('custom typeguards: target array support (1)', () => {
     "
     Unmarked error at test line 23 'filter: (e): e is {field: number | string; data: number} => !!e,'
     A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
+      Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number; data: { a: number; }; }'.
         Types of property 'data' are incompatible.
           Type 'number' is not assignable to type '{ a: number; }'.
     No overload matches this call.
@@ -184,7 +184,7 @@ test('custom typeguards: target array support (2)', () => {
     "
     Unmarked error at test line 24 'filter: (e): e is {field: number; data: number} => !!e,'
     A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
+      Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number; data: { a: number; }; }'.
         Types of property 'data' are incompatible.
           Type 'number' is not assignable to type '{ a: number; }'.
     No overload matches this call.

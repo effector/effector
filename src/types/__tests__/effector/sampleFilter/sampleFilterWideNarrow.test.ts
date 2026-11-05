@@ -35,9 +35,21 @@ test('wide union (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }; }'.
+    Type 'EventCallable<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Unit<{ a: 1; } | { a: 2; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+          Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+            Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
+              Types of property 'a' are incompatible.
+                Type '3' is not assignable to type '2'.
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is missing the following properties from type 'EventCallable<{ a: 1; } | { a: 2; }>': prepend, targetable
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; } | { a: 2; } | { a: 3; }; targetType: { a: 1; } | { a: 2; }; }[]; }'.
+    Type 'EventCallable<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type 'Unit<{ a: 1; } | { a: 2; }>'.
+      Types of property '__' are incompatible.
+        Type '{ a: 1; } | { a: 2; } | { a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+          Type '{ a: 3; }' is not assignable to type '{ a: 1; } | { a: 2; }'.
+            Type '{ a: 3; }' is not assignable to type '{ a: 2; }'.
+              Types of property 'a' are incompatible.
+                Type '3' is not assignable to type '2'.
     Type 'Event<{ a: 1; } | { a: 2; } | { a: 3; }>' is not assignable to type '[EventCallable<{ a: 1; } | { a: 2; }>]'.
     "
   `)
@@ -100,9 +112,13 @@ test('unknown type in source (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }; }'.
+    Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+      Types of property '__' are incompatible.
+        Type 'unknown' is not assignable to type 'string'.
     Type 'Event<unknown>' is missing the following properties from type 'EventCallable<string>': prepend, targetable
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: unknown; targetType: string; }[]; }'.
+    Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+      Types of property '__' are incompatible.
+        Type 'unknown' is not assignable to type 'string'.
     Type 'Event<unknown>' is not assignable to type '[EventCallable<string>]'.
     "
   `)
@@ -165,9 +181,15 @@ test('optional props (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }; }'.
+    Type 'EventCallable<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Unit<{ a: 1; b: 2; }>'.
+      The types of '__.b' are incompatible between these types.
+        Type '2 | undefined' is not assignable to type '2'.
+          Type 'undefined' is not assignable to type '2'.
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; }>': prepend, targetable
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b?: 2 | undefined; }; targetType: { a: 1; b: 2; }; }[]; }'.
+    Type 'EventCallable<{ a: 1; b?: 2 | undefined; }>' is not assignable to type 'Unit<{ a: 1; b: 2; }>'.
+      The types of '__.b' are incompatible between these types.
+        Type '2 | undefined' is not assignable to type '2'.
+          Type 'undefined' is not assignable to type '2'.
     Type 'Event<{ a: 1; b?: 2 | undefined; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; }>]'.
     "
   `)
@@ -230,9 +252,13 @@ test('narrow object (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }; }'.
+    Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type 'Unit<{ a: 1; b: 2; c: 3; }>'.
+      Types of property '__' are incompatible.
+        Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
     Type 'Event<{ a: 1; b: 2; }>' is missing the following properties from type 'EventCallable<{ a: 1; b: 2; c: 3; }>': prepend, targetable
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: { a: 1; b: 2; }; targetType: { a: 1; b: 2; c: 3; }; }[]; }'.
+    Type 'EventCallable<{ a: 1; b: 2; }>' is not assignable to type 'Unit<{ a: 1; b: 2; c: 3; }>'.
+      Types of property '__' are incompatible.
+        Property 'c' is missing in type '{ a: 1; b: 2; }' but required in type '{ a: 1; b: 2; c: 3; }'.
     Type 'Event<{ a: 1; b: 2; }>' is not assignable to type '[EventCallable<{ a: 1; b: 2; c: 3; }>]'.
     "
   `)
@@ -251,7 +277,7 @@ test('narrow object combined (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { foo: string; }; targetType: { foo: string; bar: string; }; }; }'.
+    Property 'bar' is missing in type '{ foo: StoreWritable<string>; }' but required in type '{ foo: StoreWritable<string>; bar: Store<string>; }'.
     "
   `)
 })
@@ -301,8 +327,18 @@ test('narrow tuple (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }; }'.
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: [1, 2]; targetType: [1, 2, 3]; }[]; }'.
+    Unmarked error at test line 9 'target,'
+    lack of expected error at test line 7 'source: trigger,'
+    Type 'EventCallable<[1, 2, 3]>' is not assignable to type 'Unit<[1, 2]>'.
+      Types of property '__' are incompatible.
+        Type '[1, 2, 3]' is not assignable to type '[1, 2]'.
+          Source has 3 element(s) but target allows only 2.
+    Unmarked error at test line 16 'target: [target],'
+    lack of expected error at test line 14 'source: trigger,'
+    Type 'EventCallable<[1, 2, 3]>' is not assignable to type 'Unit<[1, 2]>'.
+      Types of property '__' are incompatible.
+        Type '[1, 2, 3]' is not assignable to type '[1, 2]'.
+          Source has 3 element(s) but target allows only 2.
     "
   `)
 })
@@ -334,12 +370,20 @@ test('wide union in array (should fail)', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }; }'.
+    Type 'EventCallable<(string | number | boolean)[]>' is not assignable to type 'Unit<(string | number)[]>'.
+      Types of property '__' are incompatible.
+        Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
+          Type 'string | number | boolean' is not assignable to type 'string | number'.
+            Type 'boolean' is not assignable to type 'string | number'.
     Type 'Event<(string | number | boolean)[]>' is not assignable to type 'Event<(string | number)[]>'.
       Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
         Type 'string | number | boolean' is not assignable to type 'string | number'.
           Type 'boolean' is not assignable to type 'string | number'.
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: (string | number | boolean)[]; targetType: (string | number)[]; }[]; }'.
+    Type 'EventCallable<(string | number | boolean)[]>' is not assignable to type 'Unit<(string | number)[]>'.
+      Types of property '__' are incompatible.
+        Type '(string | number | boolean)[]' is not assignable to type '(string | number)[]'.
+          Type 'string | number | boolean' is not assignable to type 'string | number'.
+            Type 'boolean' is not assignable to type 'string | number'.
     "
   `)
 })

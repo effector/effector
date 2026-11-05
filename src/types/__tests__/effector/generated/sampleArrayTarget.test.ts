@@ -652,118 +652,378 @@ describe('no fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
-      Unmarked error at test line 11 'source: num,'
-      lack of expected error at test line 7 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 34 'source: num,'
-      lack of expected error at test line 14 'strBool,'
-      lack of expected error at test line 22 'str,'
-      lack of expected error at test line 30 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 42 'source: num,'
-      lack of expected error at test line 37 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 82 'source: str,'
-      lack of expected error at test line 45 'str,'
-      lack of expected error at test line 54 'str,'
-      lack of expected error at test line 62 'str,'
-      lack of expected error at test line 70 'strBool,'
-      lack of expected error at test line 78 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-      Unmarked error at test line 89 'source: str,'
-      lack of expected error at test line 85 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 38 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 46 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 60 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 76 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 93 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 117 'strBool,'
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'string'.
+            Type 'boolean' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 125 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string'.
+            Type 'number' is not assignable to type 'string'.
       Unmarked error at test line 129 'clock: num,'
-      lack of expected error at test line 92 'num,'
-      lack of expected error at test line 100 'num,'
-      lack of expected error at test line 109 'num,'
-      lack of expected error at test line 116 'num,'
-      lack of expected error at test line 124 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: number; targetType: string; }[]; }'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 136 'clock: num,'
-      lack of expected error at test line 132 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: number; targetType: string | boolean; }[]; }'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string | boolean>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string | boolean'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 143 'clock: num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 151 'clock: num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string | boolean>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string | boolean'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 159 'clock: num,'
-      lack of expected error at test line 139 'strBool,'
-      lack of expected error at test line 147 'str,'
-      lack of expected error at test line 155 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: number; targetType: string | boolean | void; }[]; }'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string | boolean>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string | boolean'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 167 'clock: num,'
-      lack of expected error at test line 162 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: number; targetType: string | void; }[]; }'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 175 'clock: num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 183 'clock: num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 191 'clock: num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string | boolean>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string | boolean'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 199 'clock: num,'
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string | boolean>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string | boolean'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'UnitTargetable<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
       Unmarked error at test line 207 'clock: str,'
-      lack of expected error at test line 170 'str,'
-      lack of expected error at test line 179 'str,'
-      lack of expected error at test line 187 'str,'
-      lack of expected error at test line 195 'strBool,'
-      lack of expected error at test line 203 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number; }[]; }'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
       Unmarked error at test line 214 'clock: str,'
-      lack of expected error at test line 210 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 254 'source: num,'
-      lack of expected error at test line 217 'num,'
-      lack of expected error at test line 225 'num,'
-      lack of expected error at test line 234 'num,'
-      lack of expected error at test line 241 'num,'
-      lack of expected error at test line 249 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
-      Unmarked error at test line 262 'source: num,'
-      lack of expected error at test line 258 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 288 'source: num,'
-      lack of expected error at test line 266 'strBool,'
-      lack of expected error at test line 275 'str,'
-      lack of expected error at test line 284 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 297 'source: num,'
-      lack of expected error at test line 292 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 342 'source: num,'
-      lack of expected error at test line 301 'str,'
-      lack of expected error at test line 311 'str,'
-      lack of expected error at test line 320 'str,'
-      lack of expected error at test line 329 'strBool,'
-      lack of expected error at test line 338 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string; }[]; }'.
-      Unmarked error at test line 350 'source: num,'
-      lack of expected error at test line 346 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 376 'source: num,'
-      lack of expected error at test line 354 'strBool,'
-      lack of expected error at test line 363 'str,'
-      lack of expected error at test line 372 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 385 'source: num,'
-      lack of expected error at test line 380 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 430 'source: str,'
-      lack of expected error at test line 389 'str,'
-      lack of expected error at test line 399 'str,'
-      lack of expected error at test line 408 'str,'
-      lack of expected error at test line 417 'strBool,'
-      lack of expected error at test line 426 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-      Unmarked error at test line 438 'source: str,'
-      lack of expected error at test line 434 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 483 'source: str,'
-      lack of expected error at test line 442 'num,'
-      lack of expected error at test line 451 'num,'
-      lack of expected error at test line 461 'num,'
-      lack of expected error at test line 469 'num,'
-      lack of expected error at test line 478 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number; }[]; }'.
-      Unmarked error at test line 491 'source: str,'
-      lack of expected error at test line 487 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: string; targetType: number | void; }[]; }'.
-      lack of expected error at test line 495 'num,'
-      lack of expected error at test line 504 'num,'
-      lack of expected error at test line 514 'num,'
-      lack of expected error at test line 522 'num,'
-      lack of expected error at test line 531 'num,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 222 'clock: str,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 230 'clock: str,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 238 'clock: str,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 246 'clock: str,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 293 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 302 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 318 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 336 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 381 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 390 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 406 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 424 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 443 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 470 'strBool,'
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'string'.
+            Type 'boolean' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 479 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string'.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 496 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 523 'strBool,'
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'string'.
+            Type 'boolean' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 532 'numStr,'
+      Type 'EventCallable<string | number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string'.
+            Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -1442,110 +1702,365 @@ describe('untyped fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 12 'source: num,'
-      lack of expected error at test line 7 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 38 'source: num,'
-      lack of expected error at test line 15 'strBool,'
-      lack of expected error at test line 24 'str,'
-      lack of expected error at test line 33 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 47 'source: num,'
-      lack of expected error at test line 41 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 92 'source: str,'
-      lack of expected error at test line 50 'str,'
-      lack of expected error at test line 60 'str,'
-      lack of expected error at test line 69 'str,'
-      lack of expected error at test line 78 'strBool,'
-      lack of expected error at test line 87 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 100 'source: str,'
-      lack of expected error at test line 95 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 145 'clock: num,'
-      lack of expected error at test line 103 'num,'
-      lack of expected error at test line 112 'num,'
-      lack of expected error at test line 122 'num,'
-      lack of expected error at test line 130 'num,'
-      lack of expected error at test line 139 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 153 'clock: num,'
-      lack of expected error at test line 148 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 179 'clock: num,'
-      lack of expected error at test line 156 'strBool,'
-      lack of expected error at test line 165 'str,'
-      lack of expected error at test line 174 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 188 'clock: num,'
-      lack of expected error at test line 182 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 233 'clock: str,'
-      lack of expected error at test line 191 'str,'
-      lack of expected error at test line 201 'str,'
-      lack of expected error at test line 210 'str,'
-      lack of expected error at test line 219 'strBool,'
-      lack of expected error at test line 228 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 241 'clock: str,'
-      lack of expected error at test line 236 'num,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 286 'source: num,'
-      lack of expected error at test line 244 'num,'
-      lack of expected error at test line 253 'num,'
-      lack of expected error at test line 263 'num,'
-      lack of expected error at test line 271 'num,'
-      lack of expected error at test line 280 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 295 'source: num,'
-      lack of expected error at test line 290 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 324 'source: num,'
-      lack of expected error at test line 299 'strBool,'
-      lack of expected error at test line 309 'str,'
-      lack of expected error at test line 319 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 334 'source: num,'
-      lack of expected error at test line 328 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 384 'source: num,'
-      lack of expected error at test line 338 'str,'
-      lack of expected error at test line 349 'str,'
-      lack of expected error at test line 359 'str,'
-      lack of expected error at test line 369 'strBool,'
-      lack of expected error at test line 379 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 393 'source: num,'
-      lack of expected error at test line 388 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 443 'source: str,'
-      lack of expected error at test line 397 'num,'
-      lack of expected error at test line 407 'num,'
-      lack of expected error at test line 418 'num,'
-      lack of expected error at test line 427 'num,'
-      lack of expected error at test line 437 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 452 'source: str,'
-      lack of expected error at test line 447 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      Unmarked error at test line 502 'source: str,'
-      lack of expected error at test line 456 'num,'
-      lack of expected error at test line 466 'num,'
-      lack of expected error at test line 477 'num,'
-      lack of expected error at test line 486 'num,'
-      lack of expected error at test line 496 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number; }[]; }'.
-      Unmarked error at test line 511 'source: str,'
-      lack of expected error at test line 506 'num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: number | void; }[]; }'.
-      lack of expected error at test line 515 'num,'
-      lack of expected error at test line 525 'num,'
-      lack of expected error at test line 536 'num,'
-      lack of expected error at test line 545 'num,'
-      lack of expected error at test line 555 'num,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 9 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 17 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 26 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 35 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 42 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 44 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 51 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 53 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 62 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 71 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 80 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 89 'fn: (src) => src + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 97 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 104 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 106 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 115 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 124 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 133 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 142 'fn: (src) => src + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 150 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 158 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 167 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 176 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 183 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 185 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 192 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 194 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 203 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 212 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 221 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 230 'fn: (clk) => clk + 1,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 238 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 245 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 247 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 256 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 265 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 274 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 283 'fn: (clk) => clk + 1,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 292 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 301 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 311 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 321 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 329 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 331 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 339 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 341 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 351 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 361 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 371 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 381 'fn: (src,clk) => src + clk,'
+      Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 390 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 398 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 400 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 410 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 420 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 430 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 440 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 449 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 457 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 459 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 469 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 479 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 489 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 499 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 508 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 516 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'string'.
+      Unmarked error at test line 518 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 528 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 538 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 548 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+      Unmarked error at test line 558 'fn: (src,clk) => src + clk,'
+      Type 'string' is not assignable to type 'number'.
       "
     `)
   })
@@ -1871,60 +2386,225 @@ describe('typed fn', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Unmarked error at test line 4 'source: num,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 12 'source: num,'
-      lack of expected error at test line 7 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 38 'source: num,'
-      lack of expected error at test line 15 'strBool,'
-      lack of expected error at test line 24 'str,'
-      lack of expected error at test line 33 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 47 'source: num,'
-      lack of expected error at test line 41 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 92 'clock: num,'
-      lack of expected error at test line 50 'str,'
-      lack of expected error at test line 60 'str,'
-      lack of expected error at test line 69 'str,'
-      lack of expected error at test line 78 'strBool,'
-      lack of expected error at test line 87 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 100 'clock: num,'
-      lack of expected error at test line 95 'str,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 126 'clock: num,'
-      lack of expected error at test line 103 'strBool,'
-      lack of expected error at test line 112 'str,'
-      lack of expected error at test line 121 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 135 'clock: num,'
-      lack of expected error at test line 129 'strBool,'
-      Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      Unmarked error at test line 180 'source: num,'
-      lack of expected error at test line 138 'str,'
-      lack of expected error at test line 148 'str,'
-      lack of expected error at test line 157 'str,'
-      lack of expected error at test line 166 'strBool,'
-      lack of expected error at test line 175 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string; }[]; }'.
-      Unmarked error at test line 189 'source: num,'
-      lack of expected error at test line 184 'str,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean; }[]; }'.
-      Unmarked error at test line 218 'source: num,'
-      lack of expected error at test line 193 'strBool,'
-      lack of expected error at test line 203 'str,'
-      lack of expected error at test line 213 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | boolean | void; }[]; }'.
-      Unmarked error at test line 228 'source: num,'
-      lack of expected error at test line 222 'strBool,'
-      Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: number; targetType: string | void; }[]; }'.
-      lack of expected error at test line 232 'str,'
-      lack of expected error at test line 243 'str,'
-      lack of expected error at test line 253 'str,'
-      lack of expected error at test line 263 'strBool,'
-      lack of expected error at test line 273 'strBool,'
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 9 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 17 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 26 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 35 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 42 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 44 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 51 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 53 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 62 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 71 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 80 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 89 'fn: (src:number) => src+1,'
+      Type '(src: number) => number' is not assignable to type '(src: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 97 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 105 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 114 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 123 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 130 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 132 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 139 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 141 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 150 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 159 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 168 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 177 'fn: (clk:number) => clk+1,'
+      Type '(clk: number) => number' is not assignable to type '(clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 186 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 195 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 205 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 215 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 223 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 225 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 233 'voidt,'
+      Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'void' is not assignable to type 'number'.
+      Unmarked error at test line 235 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 245 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 255 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 265 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => true'.
+        Type 'number' is not assignable to type 'true'.
+      Type 'EventCallable<string | boolean>' is not assignable to type 'Unit<number>'.
+        Types of property '__' are incompatible.
+          Type 'string | boolean' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
+      Unmarked error at test line 275 'fn: (src:number,clk:number) => src+clk,'
+      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: number) => string'.
+        Type 'number' is not assignable to type 'string'.
       "
     `)
   })
@@ -2215,166 +2895,126 @@ test('wrong args (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: number, clk: string) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
-        Types of parameters 'clk' and 'clk' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-    Type '(src: number, clk: number) => number' is not assignable to type '((src: string, clk: number) => any) & ((src: number, clk: number) => number)'.
-      Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
-        Types of parameters 'src' and 'src' are incompatible.
-          Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: number, clk: string) => any'.
+      Types of parameters 'clk' and 'clk' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+    Type '(src: number, clk: number) => number' is not assignable to type '(src: string, clk: number) => any'.
+      Types of parameters 'src' and 'src' are incompatible.
+        Type 'string' is not assignable to type 'number'.
     "
   `)
 })
