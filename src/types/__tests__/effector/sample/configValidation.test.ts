@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createEvent, sample} from 'effector'
+import {createEvent, createStore, sample} from 'effector'
 
 const typecheck = '{global}'
 
@@ -658,6 +658,137 @@ describe('multiple errors', () => {
       "
       Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
       Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      "
+    `)
+  })
+})
+
+describe('config metadata', () => {
+  test('valid metadata', () => {
+    const clock = createEvent<number>()
+    const target = createEvent<number>()
+
+    sample({
+      clock,
+      target,
+      name: 'named sample',
+      greedy: false,
+      batch: true,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('invalid metadata and unknown fields', () => {
+    const clock = createEvent<number>()
+    const target = createEvent<number>()
+
+    sample({
+      clock,
+      target,
+      //@ts-expect-error
+      name: 1,
+      //@ts-expect-error
+      greedy: 'yes',
+      //@ts-expect-error
+      batch: 1,
+      //@ts-expect-error
+      clocks: clock,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'number' is not assignable to type 'never'.
+      Type 'string' is not assignable to type 'never'.
+      Type 'number' is not assignable to type 'never'.
+      Type 'EventCallable<number>' is not assignable to type 'never'.
+      "
+    `)
+  })
+})
+
+describe('invalid container items', () => {
+  test('clock, target and source containers', () => {
+    const clock = createEvent<number>()
+    const target = createEvent<number>()
+    const source = createStore(0)
+
+    function factory() {
+      sample({
+        //@ts-expect-error
+        clock: [clock, 0],
+        target,
+      })
+      sample({
+        clock,
+        //@ts-expect-error
+        target: [target, 0],
+      })
+      sample({
+        //@ts-expect-error
+        source: [source, clock],
+        target: createEvent<readonly [number, number]>(),
+      })
+      sample({
+        //@ts-expect-error
+        source: {valid: source, invalid: clock},
+        target: createEvent<{valid: number; invalid: number}>(),
+      })
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'number' is not assignable to type 'Unit<any>'.
+      Type 'number' is not assignable to type 'Unit<any>'.
+      Type 'EventCallable<number>' is missing the following properties from type 'Store<any>': updates, getState, thru, defaultState
+      Type '{ valid: StoreWritable<number>; invalid: EventCallable<number>; }' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
+        Types of property 'invalid' are incompatible.
+          Type 'EventCallable<number>' is missing the following properties from type 'Store<any>': updates, getState, thru, defaultState
+      "
+    `)
+  })
+
+  test('all config fields are invalid', () => {
+    function factory() {
+      sample({
+        //@ts-expect-error
+        clock: null,
+        //@ts-expect-error
+        source: null,
+        //@ts-expect-error
+        target: null,
+        //@ts-expect-error
+        fn: null,
+        //@ts-expect-error
+        filter: null,
+      })
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type 'Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>'.
+      Type 'null' is not assignable to type 'Unit<any> | Unit<any>[]'.
+      Type 'null' is not assignable to type '() => any'.
+      Type 'null' is not assignable to type 'Store<boolean> | (() => boolean)'.
+      "
+    `)
+  })
+
+  test('empty config', () => {
+    function factory() {
+      //@ts-expect-error
+      sample({})
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Argument of type '{}' is not assignable to parameter of type '{ clock: unknown; source?: undefined; filter?: undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+        Property 'clock' is missing in type '{}' but required in type '{ clock: unknown; source?: undefined; filter?: undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
       "
     `)
   })
