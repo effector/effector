@@ -1,124 +1,12 @@
-import * as ts from 'typescript'
+import {spawn} from 'child_process'
 import {promises as fs} from 'fs'
-import {resolve, relative, sep} from 'path'
+import {dirname, relative, resolve, sep} from 'path'
 
-function createCompilerHost({
-  options,
-  testFiles,
-  declarations,
-}: {
-  options: ts.CompilerOptions
-  testFiles: Array<{
-    name: string
-    code: string
-  }>
-  declarations: Array<{
-    name: string
-    fileName: string
-    code: string
-  }>
-}): ts.CompilerHost {
-  const testFileNames = testFiles.map(({name}) => name)
-  const testFileNamesRelative = testFileNames.map(name => {
-    return name
-      .replace(`..${sep}__tests__${sep}`, '')
-      .replace(/\.(j|t)sx?$/gi, '')
-      .replaceAll(/\\/gi, '')
-      .replaceAll(/\t/gi, 't')
-      .replaceAll(/\r/gi, 'r')
-      .replaceAll(/\f/gi, 'f')
-  })
-  const tests = testFiles.map(({code}) => code)
-  const declNames = declarations.map(({name}) => name)
-  const declFileNames = declarations.map(({fileName}) => fileName)
-  const decls = declarations.map(({code}) => code)
-  function withFile<T>(
-    fileName: string,
-    {virtual, real}: {virtual: (code: string) => T; real: () => T},
-  ) {
-    const path = fileName.split('/').join(sep)
-    if (testFileNames.includes(fileName))
-      return virtual(tests[testFileNames.indexOf(fileName)])
-    if (testFileNames.includes(path))
-      return virtual(tests[testFileNames.indexOf(path)])
-    if (declFileNames.includes(fileName))
-      return virtual(decls[declFileNames.indexOf(fileName)])
-    if (declFileNames.includes(path))
-      return virtual(decls[declFileNames.indexOf(path)])
-    return real()
-  }
-  const resolutionHost: ts.ModuleResolutionHost = {
-    fileExists(fileName) {
-      return withFile(fileName, {
-        virtual: () => true,
-        real: () => ts.sys.fileExists(fileName),
-      })
-    },
-    readFile(fileName) {
-      return withFile(fileName, {
-        virtual: code => code,
-        real: () => ts.sys.readFile(fileName),
-      })
-    },
-  }
-  return {
-    ...resolutionHost,
-    getSourceFile(fileName, languageVersion) {
-      const sourceText = resolutionHost.readFile(fileName)
-      if (sourceText !== undefined)
-        return ts.createSourceFile(fileName, sourceText, languageVersion)
-    },
-    getDefaultLibFileName: () => 'lib.d.ts',
-    getDefaultLibLocation: () =>
-      resolve(__dirname, '..', '..', '..', 'node_modules', 'typescript', 'lib'),
-    writeFile(fileName, content) {
-      // return ts.sys.writeFile(fileName, content)
-      throw Error('not implemented')
-    },
-    getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
-    getDirectories: path => ts.sys.getDirectories(path),
-    getCanonicalFileName: fileName =>
-      ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase(),
-    getNewLine: () => ts.sys.newLine,
-    useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
-    resolveModuleNames(moduleNames, containingFile) {
-      const consistentModuleNames = moduleNames.map(name =>
-        name
-          .replaceAll(/\\/gi, '')
-          .replaceAll(/\t/gi, 't')
-          .replaceAll(/\r/gi, 'r')
-          .replaceAll(/\f/gi, 'f'),
-      )
-      const resolvedModules: ts.ResolvedModule[] = []
-      for (const moduleName of consistentModuleNames) {
-        if (declNames.includes(moduleName)) {
-          resolvedModules.push({
-            resolvedFileName: declFileNames[declNames.indexOf(moduleName)],
-          })
-        } else if (testFileNamesRelative.includes(moduleName)) {
-          resolvedModules.push({
-            resolvedFileName:
-              testFileNames[testFileNamesRelative.indexOf(moduleName)],
-          })
-        } else {
-          // try to use standard resolution
-          const result = ts.resolveModuleName(
-            moduleName,
-            containingFile,
-            options,
-            resolutionHost,
-          )
-          if (result.resolvedModule) {
-            resolvedModules.push(result.resolvedModule)
-          } else {
-            console.error(`module '${moduleName}' is not found`)
-            console.log({testFileNames, testFileNamesRelative})
-          }
-        }
-      }
-      return resolvedModules
-    },
-  }
+type Diagnostic = {
+  fileName?: string
+  line: number
+  character: number
+  message: string
 }
 
 export async function compile({
@@ -134,163 +22,266 @@ export async function compile({
   typings: string[]
   tsConfig: Record<string, any>
 }) {
-  const [declarations, filesContents] = await Promise.all([
-    Promise.all(
-      Object.entries(paths).map(async ([name, path]) => {
-        const fileName = resolve(__dirname, ...path.split(sep))
-        return {
-          name,
-          fileName,
-          code: await fs.readFile(fileName, 'utf8'),
-        }
-      }),
-    ),
-    Promise.all(
-      fullTestFileNames.map(async name => ({
-        name: relative(__dirname, name),
-        code: await fs
-          .readFile(name, 'utf8')
-          .then(code =>
-            code.replace(/\@ts\-expect\-error/gm, '//expected-error'),
-          ),
-      })),
-    ),
-  ])
+  const filesContents = await Promise.all(
+    fullTestFileNames.map(async name => ({
+      name: relative(__dirname, name),
+      fullName: name,
+      code: await fs
+        .readFile(name, 'utf8')
+        .then(code => code.replace(/\@ts\-expect\-error/gm, '//expected-error')),
+    })),
+  )
   const expectErrorsLines = filesContents.map(({name, code}) => {
     const linesOfCode = code.split(`\n`)
     return {
       name,
       expectedErrors: linesOfCode
-        .map((e, idx) => (e.includes('//expected-error') ? idx : -1))
-        .filter(e => e !== -1),
+        .map((line, index) => (line.includes('//expected-error') ? index : -1))
+        .filter(index => index !== -1),
       testLines: linesOfCode
-        .map((e, idx) => {
-          if (e.includes('test(') || e.includes('it(')) return idx
-          return -1
-        })
-        .filter(e => e !== -1),
+        .map((line, index) =>
+          line.includes('test(') || line.includes('it(') ? index : -1,
+        )
+        .filter(index => index !== -1),
       linesOfCode,
     }
   })
-  const options = ts.convertCompilerOptionsFromJson(
-    tsConfig,
-    '../../..',
-  ).options
-  const rootFileFullPath = resolve(testsRoot, 'index.ts')
-  const rootFileRelativePath = relative(__dirname, rootFileFullPath)
-  const host = createCompilerHost({
-    options,
-    testFiles: [
-      {
-        name: rootFileRelativePath,
-        code: fullTestFileNames
-          .map(file => {
-            const relativeImport = relative(testsRoot, file)
-            const noExt = relativeImport.replace(/\.(j|t)sx?$/gi, '')
-            return `import '${noExt}'`
-          })
-          .join(`\n`),
-      },
-      ...filesContents,
-    ],
-    declarations: declarations,
-  })
-  const program = ts.createProgram(
-    [
-      ...typings.map(typing => `./node_modules/${typing}`),
-      rootFileRelativePath,
-    ],
-    options,
-    host,
-  )
-  const allDiagnostics = program
-    .getOptionsDiagnostics()
-    .concat(program.getSyntacticDiagnostics())
-    .concat(program.getSemanticDiagnostics())
-    .concat(program.getDeclarationDiagnostics())
-  return createReport(allDiagnostics)
+  const runnerRoot = resolve(__dirname, '..', '.reports', 'ts-runner')
+  const materializedTestsRoot = resolve(runnerRoot, '__tests__')
+  const configFile = resolve(runnerRoot, 'tsconfig.json')
+  const tempToOriginal = new Map<string, string>()
 
-  function createReport(allDiagnostics: ts.Diagnostic[]) {
-    const messages: string[] = []
-    const unprocessedExpectErrors = expectErrorsLines.map(
-      ({name, expectedErrors}) => ({
-        fileName: name,
-        expectedErrors: [...expectedErrors],
+  await fs.rm(runnerRoot, {recursive: true, force: true})
+  await fs.mkdir(materializedTestsRoot, {recursive: true})
+
+  try {
+    const materializedFiles = await Promise.all(
+      filesContents.map(async ({name, fullName, code}) => {
+        const fileName = resolve(
+          materializedTestsRoot,
+          relative(testsRoot, fullName),
+        )
+        await fs.mkdir(dirname(fileName), {recursive: true})
+        await fs.writeFile(fileName, code, 'utf8')
+        tempToOriginal.set(normalizePath(fileName), name)
+        return fileName
       }),
     )
-    function pushExpectedErrorMessage(
-      expectedErrorLine: number,
-      fileName: string,
-    ) {
-      const fileExpectErrors = expectErrorsLines.find(e => e.name === fileName)!
-      const testLineOffset = fileExpectErrors.testLines.findLast(
-        testLine => testLine < expectedErrorLine,
-      )
-      /** error is expected at line next to line with expect error mark */
-      const targetLine = expectedErrorLine + 1
-      const errorOffset =
-        testLineOffset === undefined ? targetLine : targetLine - testLineOffset
-      const content = fileExpectErrors.linesOfCode[targetLine].trim()
-      messages.push(
-        `Error ${fileName} (${targetLine},4): lack of expected error at test line ${errorOffset} '${content}'`,
-      )
-    }
-    for (const diagnostic of allDiagnostics) {
-      const message = ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        '\n',
-      )
-      if (diagnostic.file) {
-        const fileName = diagnostic.file.fileName
-        const fileExpectErrors = expectErrorsLines.find(
-          e => e.name === fileName,
-        )!
-        const {expectedErrors: fileUnprocessedExpectErrors} =
-          unprocessedExpectErrors.find(e => e.fileName === fileName)!
-        let {line, character} = diagnostic.file.getLineAndCharacterOfPosition(
-          diagnostic.start!,
-        )
-        const expectedErrorLine = line - 1
-        const errorPosition = `${line + 1},${character + 1}`
+    const rootFile = resolve(materializedTestsRoot, 'index.ts')
+    await fs.writeFile(
+      rootFile,
+      materializedFiles
+        .map(fileName => {
+          const importPath = `./${relative(materializedTestsRoot, fileName)
+            .replace(/\.(j|t)sx?$/gi, '')
+            .split(sep)
+            .join('/')}`
+          return `import '${importPath}'`
+        })
+        .join(`\n`),
+      'utf8',
+    )
 
-        if (!fileExpectErrors.expectedErrors.includes(expectedErrorLine)) {
-          const testLineOffset = fileExpectErrors.testLines.findLast(
-            testLine => testLine < line,
-          )
-          const errorOffset =
-            testLineOffset === undefined ? line : line - testLineOffset
-          const content = fileExpectErrors.linesOfCode[line].trim()
-          messages.push(
-            `Error ${fileName} (${errorPosition}): Unmarked error at test line ${errorOffset} '${content}'`,
-          )
-        } else {
-          /** there could be more than one error per line, protect from removing twice */
-          if (fileUnprocessedExpectErrors.includes(expectedErrorLine)) {
-            fileUnprocessedExpectErrors.splice(
-              fileUnprocessedExpectErrors.indexOf(expectedErrorLine),
-              1,
-            )
-          }
-        }
-        const unprocessedExpectErrorsBehind =
-          fileUnprocessedExpectErrors.filter(e => e < expectedErrorLine)
-        for (const expectedErrorLine of unprocessedExpectErrorsBehind) {
-          pushExpectedErrorMessage(expectedErrorLine, fileName)
-          fileUnprocessedExpectErrors.splice(
-            fileUnprocessedExpectErrors.indexOf(expectedErrorLine),
-            1,
-          )
-        }
-        messages.push(`Error ${fileName} (${errorPosition}): ${message}`)
-      } else {
-        messages.push(`Error: ${message}`)
-      }
+    const compilerOptions = {
+      ...tsConfig,
+      module: 'Node16',
+      moduleResolution: 'Node16',
+      paths: Object.fromEntries(
+        Object.entries(paths).map(([moduleName, path]) => {
+          const declaration = resolve(__dirname, ...path.split(sep))
+          return [
+            moduleName,
+            [relative(runnerRoot, declaration).split(sep).join('/')],
+          ]
+        }),
+      ),
     }
-    for (const {fileName, expectedErrors} of unprocessedExpectErrors) {
-      for (const expectedErrorLine of expectedErrors) {
-        pushExpectedErrorMessage(expectedErrorLine, fileName)
-      }
-    }
-    return messages.join(`\n`)
+    delete compilerOptions.baseUrl
+    const files = [
+      rootFile,
+      ...typings.map(typing =>
+        resolve(process.cwd(), 'node_modules', ...typing.split('/')),
+      ),
+    ]
+    await fs.writeFile(
+      configFile,
+      JSON.stringify({compilerOptions, files}, null, 2),
+      'utf8',
+    )
+
+    const output = await runTypeScript(configFile)
+    return createReport(
+      parseDiagnostics(output, tempToOriginal),
+      expectErrorsLines,
+    )
+  } finally {
+    await fs.rm(runnerRoot, {recursive: true, force: true})
   }
+}
+
+async function runTypeScript(configFile: string) {
+  const tsc = resolve(process.cwd(), 'node_modules', 'typescript', 'bin', 'tsc')
+  return new Promise<string>((resolvePromise, reject) => {
+    const child = spawn(
+      process.execPath,
+      [tsc, '--project', configFile, '--pretty', 'false'],
+      {
+        cwd: __dirname,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      },
+    )
+    let output = ''
+    child.stdout.on('data', chunk => {
+      output += chunk
+    })
+    child.stderr.on('data', chunk => {
+      output += chunk
+    })
+    child.on('error', reject)
+    child.on('close', code => {
+      if (code !== 0 && output.trim() === '') {
+        reject(new Error(`TypeScript exited with code ${code}`))
+      } else {
+        resolvePromise(output)
+      }
+    })
+  })
+}
+
+function parseDiagnostics(
+  output: string,
+  tempToOriginal: Map<string, string>,
+): Diagnostic[] {
+  const diagnostics: Diagnostic[] = []
+  const fileDiagnostic = /^(.+)\((\d+),(\d+)\): error TS\d+: (.*)$/
+  const globalDiagnostic = /^error TS\d+: (.*)$/
+  let current: Diagnostic | null = null
+
+  for (const line of output.replace(/\r/g, '').split('\n')) {
+    const fileMatch = line.match(fileDiagnostic)
+    if (fileMatch) {
+      if (current) diagnostics.push(current)
+      const absoluteFileName = normalizePath(resolve(__dirname, fileMatch[1]))
+      current = {
+        fileName: tempToOriginal.get(absoluteFileName) ?? fileMatch[1],
+        line: Number(fileMatch[2]),
+        character: Number(fileMatch[3]),
+        message: fileMatch[4],
+      }
+      continue
+    }
+    const globalMatch = line.match(globalDiagnostic)
+    if (globalMatch) {
+      if (current) diagnostics.push(current)
+      current = {
+        line: -1,
+        character: -1,
+        message: globalMatch[1],
+      }
+      continue
+    }
+    if (current && line !== '') {
+      current.message += `\n${line}`
+    }
+  }
+  if (current) diagnostics.push(current)
+  return diagnostics
+}
+
+function createReport(
+  diagnostics: Diagnostic[],
+  expectErrorsLines: Array<{
+    name: string
+    expectedErrors: number[]
+    testLines: number[]
+    linesOfCode: string[]
+  }>,
+) {
+  const messages: string[] = []
+  const unprocessedExpectErrors = expectErrorsLines.map(
+    ({name, expectedErrors}) => ({
+      fileName: name,
+      expectedErrors: [...expectedErrors],
+    }),
+  )
+  function pushExpectedErrorMessage(
+    expectedErrorLine: number,
+    fileName: string,
+  ) {
+    const fileExpectErrors = expectErrorsLines.find(e => e.name === fileName)!
+    const testLineOffset = fileExpectErrors.testLines.findLast(
+      testLine => testLine < expectedErrorLine,
+    )
+    const targetLine = expectedErrorLine + 1
+    const errorOffset =
+      testLineOffset === undefined ? targetLine : targetLine - testLineOffset
+    const content = fileExpectErrors.linesOfCode[targetLine].trim()
+    messages.push(
+      `Error ${fileName} (${targetLine},4): lack of expected error at test line ${errorOffset} '${content}'`,
+    )
+  }
+
+  for (const diagnostic of diagnostics) {
+    if (!diagnostic.fileName) {
+      messages.push(`Error: ${diagnostic.message}`)
+      continue
+    }
+    const fileName = diagnostic.fileName
+    const fileExpectErrors = expectErrorsLines.find(e => e.name === fileName)
+    const fileUnprocessed = unprocessedExpectErrors.find(
+      e => e.fileName === fileName,
+    )
+    if (!fileExpectErrors || !fileUnprocessed) {
+      throw new Error(
+        `TypeScript diagnostic outside type tests: ${fileName}(${diagnostic.line},${diagnostic.character}): ${diagnostic.message}`,
+      )
+    }
+
+    const line = diagnostic.line - 1
+    const character = diagnostic.character - 1
+    const expectedErrorLine = line - 1
+    const errorPosition = `${line + 1},${character + 1}`
+
+    if (!fileExpectErrors.expectedErrors.includes(expectedErrorLine)) {
+      const testLineOffset = fileExpectErrors.testLines.findLast(
+        testLine => testLine < line,
+      )
+      const errorOffset =
+        testLineOffset === undefined ? line : line - testLineOffset
+      const content = fileExpectErrors.linesOfCode[line].trim()
+      messages.push(
+        `Error ${fileName} (${errorPosition}): Unmarked error at test line ${errorOffset} '${content}'`,
+      )
+    } else if (fileUnprocessed.expectedErrors.includes(expectedErrorLine)) {
+      fileUnprocessed.expectedErrors.splice(
+        fileUnprocessed.expectedErrors.indexOf(expectedErrorLine),
+        1,
+      )
+    }
+
+    const unprocessedBehind = fileUnprocessed.expectedErrors.filter(
+      expectedLine => expectedLine < expectedErrorLine,
+    )
+    for (const expectedLine of unprocessedBehind) {
+      pushExpectedErrorMessage(expectedLine, fileName)
+      fileUnprocessed.expectedErrors.splice(
+        fileUnprocessed.expectedErrors.indexOf(expectedLine),
+        1,
+      )
+    }
+    messages.push(
+      `Error ${fileName} (${errorPosition}): ${diagnostic.message}`,
+    )
+  }
+
+  for (const {fileName, expectedErrors} of unprocessedExpectErrors) {
+    for (const expectedErrorLine of expectedErrors) {
+      pushExpectedErrorMessage(expectedErrorLine, fileName)
+    }
+  }
+  return messages.join(`\n`)
+}
+
+function normalizePath(path: string) {
+  return resolve(path).split(sep).join('/')
 }

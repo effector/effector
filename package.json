@@ -11,9 +11,9 @@
     "build": "node tools/build",
     "test:watch": "npx jest --config=jest.config.js --watch",
     "doc:update-readme": "npx doctoc README.md",
-    "test:regen": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/testGenerator.ts",
+    "test:regen": "tsx --tsconfig src/types/src/tsconfig.json src/types/src/testGenerator.ts",
     "test:generate": "yarn test:regen && yarn test -u --selectProjects types",
-    "manifold": "npx ts-node -T -P src/types/src/tsconfig.json src/types/src/runner/manifold/tsFacade.ts"
+    "manifold": "tsx --tsconfig src/types/src/tsconfig.json src/types/src/runner/manifold/tsFacade.ts"
   },
   "author": "Zero Bias",
   "license": "MIT",
@@ -103,8 +103,8 @@
     "serve": "^14.2.6",
     "solid-js": "^1.9.15",
     "terser": "^5.51.2",
-    "ts-node": "^10.9.2",
-    "typescript": "5.8.3",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
     "use-sync-external-store": "^1.7.0",
     "vue": "^2.6.12",
     "vue-next": "npm:vue@^3.5.42",
