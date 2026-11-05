@@ -168,8 +168,8 @@ describe('useUnit', () => {
       Unmarked error at test line 4 'useUnit($count, {scope: effectScope()})'
       No overload matches this call.
         The last overload gave the following error.
-          Argument of type 'StoreWritable<number>' is not assignable to parameter of type 'Record<string, Store<any> | Effect<any, any, any> | EventCallable<any>> | { '@@unitShape': () => Record<string, Store<any> | Effect<any, any, any> | EventCallable<...>>; }'.
-            Type 'StoreWritable<number>' is not assignable to type 'Record<string, Store<any> | Effect<any, any, any> | EventCallable<any>>'.
+          Argument of type 'StoreWritable<number>' is not assignable to parameter of type 'Record<string, Effect<any, any, any> | EventCallable<any> | Store<any>> | { '@@unitShape': () => Record<string, Effect<any, any, any> | EventCallable<...> | Store<...>>; }'.
+            Type 'StoreWritable<number>' is not assignable to type 'Record<string, Effect<any, any, any> | EventCallable<any> | Store<any>>'.
               Index signature for type 'string' is missing in type 'StoreWritable<number>'.
       "
     `)
@@ -305,8 +305,8 @@ describe('exported types', () => {
       Unmarked error at test line 4 'const onUpdate = useUnit($count.updates)'
       No overload matches this call.
         The last overload gave the following error.
-          Argument of type 'Event<number>' is not assignable to parameter of type 'Record<string, Store<any> | Effect<any, any, any> | EventCallable<any>> | { '@@unitShape': () => Record<string, Store<any> | Effect<any, any, any> | EventCallable<...>>; }'.
-            Type 'Event<number>' is not assignable to type 'Record<string, Store<any> | Effect<any, any, any> | EventCallable<any>>'.
+          Argument of type 'Event<number>' is not assignable to parameter of type 'Record<string, Effect<any, any, any> | EventCallable<any> | Store<any>> | { '@@unitShape': () => Record<string, Effect<any, any, any> | EventCallable<...> | Store<...>>; }'.
+            Type 'Event<number>' is not assignable to type 'Record<string, Effect<any, any, any> | EventCallable<any> | Store<any>>'.
               Index signature for type 'string' is missing in type 'Event<number>'.
       "
     `)
@@ -326,13 +326,13 @@ describe('exported types', () => {
       Unmarked error at test line 5 'useUnit({onUpdate: $count.updates})'
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Event<number>' is not assignable to type 'Store<any> | Effect<any, any, any> | EventCallable<any>'.
+          Type 'Event<number>' is not assignable to type 'Effect<any, any, any> | EventCallable<any> | Store<any>'.
             Type 'Event<number>' is missing the following properties from type 'EventCallable<any>': prepend, targetable
       Unmarked error at test line 1 'useUnit([domain])'
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Domain' is not assignable to type 'Store<any> | Effect<any, any, any> | EventCallable<any>'.
-            Type 'Domain' is missing the following properties from type 'EventCallable<any>': prepend, map, filter, filterMap, and 3 more.
+          Type 'Domain' is not assignable to type 'Effect<any, any, any> | EventCallable<any> | Store<any>'.
+            Type 'Domain' is missing the following properties from type 'EventCallable<any>': prepend, targetable, map, filter, and 3 more.
       "
     `)
   })

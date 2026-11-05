@@ -60,8 +60,11 @@ test('launch({target: unit})', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     No overload matches this call.
-      Overload 1 of 3, '(config: { target: Node | Unit<number>; params: number; defer?: boolean | undefined; page?: any; scope?: Scope | undefined; meta?: Record<string, any> | undefined; }): void', gave the following error.
-        Type 'string' is not assignable to type 'number'.
+      The last overload gave the following error.
+        Type 'EventCallable<number>' is missing the following properties from type '(Node | Unit<any>)[]': pop, push, concat, join, and 32 more.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'string' is not assignable to type 'any[]'.
     "
   `)
 })

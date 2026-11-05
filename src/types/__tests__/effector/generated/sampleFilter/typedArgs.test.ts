@@ -356,9 +356,7 @@ describe('no source', () => {
         lack of expected error at test line 23 'filter: (clk: AB) => clk.a > 0,'
         Type '{ a: number; b: string; }' is not assignable to type 'number'.
         Unmarked error at test line 28 'clock: nullableAB,'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[error: { fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
         lack of expected error at test line 30 'target: strt,'
         lack of expected error at test line 33 'fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),'
         lack of expected error at test line 38 'target: strt,'
@@ -367,9 +365,7 @@ describe('no source', () => {
             Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'clk' is possibly 'null'.
         Unmarked error at test line 51 'clock: nullableAB,'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[error: { fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
         lack of expected error at test line 53 'target: strt,'
         'clk' is possibly 'null'.
         lack of expected error at test line 57 'fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),'
@@ -399,14 +395,10 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
         Unmarked error at test line 108 'clock: nullableAB,'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => AB) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 115 'clock: nullableAB,'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         lack of expected error at test line 117 'target: strt,'
         Property 'c' does not exist on type 'ABN'.
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => AB) & ((val: ABN) => { a: any; b: string; })'.
@@ -425,15 +417,11 @@ describe('no source', () => {
                   Type 'string' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 138 'clock: nullableAB,'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => AB) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 146 'clock: nullableAB,'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         lack of expected error at test line 148 'target: strt,'
         'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
@@ -478,23 +466,15 @@ describe('no source', () => {
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(val: ABN) => number'.
           Type '{ a: any; b: string; }' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
-        Unmarked error at test line 217 'sample({'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { a: number; b: string; }; }]' is not assignable to parameter of type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }] | [config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB) | undefined; ... 4 more ...; name?: string | undefined; }]'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB) | undefined; fn?: ((clk: AB) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB) | undefined; fn?: ((clk: AB) => number) | undefined; target: EventCallable<number>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'fn(...)' are incompatible between these types.
-                Type '{ a: number; b: string; }' is not assignable to type 'number'.
+        Unmarked error at test line 218 'clock: nullableAB,'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Unmarked error at test line 226 'clock: nullableAB,'
         lack of expected error at test line 220 'target: strt,'
         lack of expected error at test line 223 'fn: (val: AB) => ({a:val.a, b:val.b}),'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => AB) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Unmarked error at test line 233 'clock: nullableAB,'
         lack of expected error at test line 230 'fn: (val: ABN) => ({a:val.a, b:val.b}),'
-        Argument of type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Unmarked error at test line 242 'target: $ab,'
         lack of expected error at test line 235 'target: strt,'
         lack of expected error at test line 238 'fn: (val: ABN) => ({a:val.a, b:val.b}),'
@@ -502,8 +482,8 @@ describe('no source', () => {
           The types of '__.b' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
         Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(val: ABN) => AB'.
-          Call signature return types '{ a: number; b: number; }' and 'AB' are incompatible.
-            The types of 'b' are incompatible between these types.
+          Type '{ a: number; b: number; }' is not assignable to type 'AB'.
+            Types of property 'b' are incompatible.
               Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
           Types of property '__' are incompatible.
@@ -844,9 +824,7 @@ describe('no source', () => {
         lack of expected error at test line 23 'filter: (clk: AB) => clk.a > 0,'
         Type '{ a: number; b: string; }' is not assignable to type 'number'.
         Unmarked error at test line 28 'clock: [ab,nullableAB],'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[error: { fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
         lack of expected error at test line 30 'target: strt,'
         lack of expected error at test line 33 'fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),'
         lack of expected error at test line 38 'target: strt,'
@@ -855,9 +833,7 @@ describe('no source', () => {
             Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'clk' is possibly 'null'.
         Unmarked error at test line 51 'clock: [ab,nullableAB],'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[error: { fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (val: AB | null) => number; target: Unit<{ a: number; b: string; }>; error: \\"fn result should extend target type\\"; }'.
         lack of expected error at test line 53 'target: strt,'
         'clk' is possibly 'null'.
         lack of expected error at test line 57 'fn: (val: AB | null) => ({a:1, b: val ? val.b : ''}),'
@@ -887,14 +863,10 @@ describe('no source', () => {
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
         Unmarked error at test line 108 'clock: [ab,nullableAB],'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 115 'clock: [ab,nullableAB],'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         lack of expected error at test line 117 'target: strt,'
         Property 'c' does not exist on type 'ABN'.
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => AB) & ((val: ABN) => { a: any; b: string; })'.
@@ -913,15 +885,11 @@ describe('no source', () => {
                   Type 'string' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 138 'clock: [ab,nullableAB],'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
         Unmarked error at test line 146 'clock: [ab,nullableAB],'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         lack of expected error at test line 148 'target: strt,'
         'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
@@ -966,23 +934,15 @@ describe('no source', () => {
         Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(val: ABN) => number'.
           Type '{ a: any; b: string; }' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
-        Unmarked error at test line 217 'sample({'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { ...; }; }]' is not assignable to parameter of type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }] | [config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; ... 6 more ...; name?: string | undefined; }]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { ...; }; }]' is not assignable to type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB) | undefined; fn?: ((clk: AB) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: AB) => { ...; }; }' is not assignable to type '{ clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB) | undefined; fn?: ((clk: AB) => number) | undefined; target: EventCallable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'fn(...)' are incompatible between these types.
-                Type '{ a: number; b: string; }' is not assignable to type 'number'.
+        Unmarked error at test line 218 'clock: [ab,nullableAB],'
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Unmarked error at test line 226 'clock: [ab,nullableAB],'
         lack of expected error at test line 220 'target: strt,'
         lack of expected error at test line 223 'fn: (val: AB) => ({a:val.a, b:val.b}),'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Unmarked error at test line 233 'clock: [ab,nullableAB],'
         lack of expected error at test line 230 'fn: (val: ABN) => ({a:val.a, b:val.b}),'
-        Argument of type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: readonly [EventCallable<AB>, EventCallable<AB | null>]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [error: ...]'.
-          Type '[{ clock: [EventCallable<AB>, EventCallable<AB | null>]; target: EventCallable<number>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[error: { fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }]'.
-            Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'clock' does not exist in type '{ fn: (clk: AB | null) => any; error: \\"fn parameters should match clock/source types\\"; }'.
         Unmarked error at test line 242 'target: $ab,'
         lack of expected error at test line 235 'target: strt,'
         lack of expected error at test line 238 'fn: (val: ABN) => ({a:val.a, b:val.b}),'
@@ -990,8 +950,8 @@ describe('no source', () => {
           The types of '__.b' are incompatible between these types.
             Type 'string' is not assignable to type 'number'.
         Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(val: ABN) => AB'.
-          Call signature return types '{ a: number; b: number; }' and 'AB' are incompatible.
-            The types of 'b' are incompatible between these types.
+          Type '{ a: number; b: number; }' is not assignable to type 'AB'.
+            Types of property 'b' are incompatible.
               Type 'number' is not assignable to type 'string'.
         Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
           Types of property '__' are incompatible.

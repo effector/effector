@@ -183,19 +183,19 @@ describe('fn clock assertion', () => {
       Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number) => any'.
         Types of parameters 'clock' and 'clk' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
+      Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void | number) => any'.
         Types of parameters 'clock' and 'clk' are incompatible.
-          Type 'number | void' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+          Type 'void | number' is not assignable to type 'string'.
+            Type 'void' is not assignable to type 'string'.
       lack of expected error at test line 29 'fn: (a:string, clock:string) => ({a,clock}),'
       lack of expected error at test line 36 'fn: (a:string, clock:string) => ({a,clock}),'
       lack of expected error at test line 43 'fn: (a:string, clock:string) => ({a,clock}),'
       lack of expected error at test line 50 'fn: (a:string, clock:string) => ({a,clock}),'
       lack of expected error at test line 57 'fn: (a:string, clock:string) => ({a,clock}),'
-      Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: number | void) => any'.
+      Type '(a: string, clock: string) => { a: string; clock: string; }' is not assignable to type '(src: string, clk: void | number) => any'.
         Types of parameters 'clock' and 'clk' are incompatible.
-          Type 'number | void' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+          Type 'void | number' is not assignable to type 'string'.
+            Type 'void' is not assignable to type 'string'.
       "
     `)
   })
@@ -364,19 +364,19 @@ describe('fn clock assertion', () => {
       Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { readonly a: string; readonly b: number; }, clk: number) => any'.
         Types of parameters 'clock' and 'clk' are incompatible.
           Type 'number' is not assignable to type 'string'.
-      Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { readonly a: string; readonly b: number; }, clk: number | void) => any'.
+      Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { readonly a: string; readonly b: number; }, clk: void | number) => any'.
         Types of parameters 'clock' and 'clk' are incompatible.
-          Type 'number | void' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+          Type 'void | number' is not assignable to type 'string'.
+            Type 'void' is not assignable to type 'string'.
       lack of expected error at test line 29 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
       lack of expected error at test line 36 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
       lack of expected error at test line 43 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
       lack of expected error at test line 50 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
       lack of expected error at test line 57 'fn: ({a,b}:AB, clock:string) => ({a,b,clock}),'
-      Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { readonly a: string; readonly b: number; }, clk: number | void) => any'.
+      Type '({ a, b }: AB, clock: string) => { a: string; b: number; clock: string; }' is not assignable to type '(src: { readonly a: string; readonly b: number; }, clk: void | number) => any'.
         Types of parameters 'clock' and 'clk' are incompatible.
-          Type 'number | void' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+          Type 'void | number' is not assignable to type 'string'.
+            Type 'void' is not assignable to type 'string'.
       "
     `)
   })

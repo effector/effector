@@ -125,18 +125,12 @@ test('custom typeguards: target array support (1)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-          Type 'EventCallable<{ field: number; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-          Type 'EventCallable<{ field: number; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'EventCallable<{ field: number; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-          Type 'EventCallable<{ field: number; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })
@@ -190,18 +184,12 @@ test('custom typeguards: target array support (2)', () => {
     No overload matches this call.
       The last overload gave the following error.
         Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-          Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-          Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-          Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type '\\"incompatible unit in target\\"'.
-            Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
+        Type 'EventCallable<{ field: any; data: any; extra: boolean; }>' is not assignable to type '\\"incompatible unit in target\\"'.
     "
   `)
 })

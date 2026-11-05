@@ -140,9 +140,7 @@ describe('#prepend', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
-        Overload 1 of 2, '(payload: number): number', gave the following error.
-          Argument of type 'string' is not assignable to parameter of type 'number'.
-        Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
+        The last overload gave the following error.
           The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
       "
     `)
@@ -155,9 +153,7 @@ describe('#prepend', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
-        Overload 1 of 2, '(payload: void): void', gave the following error.
-          Argument of type 'string' is not assignable to parameter of type 'void'.
-        Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
+        The last overload gave the following error.
           Argument of type 'string' is not assignable to parameter of type 'void'.
       "
     `)
@@ -284,9 +280,7 @@ describe('event as function argument', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
-        Overload 1 of 2, '(payload: string): string', gave the following error.
-          Argument of type 'number' is not assignable to parameter of type 'string'.
-        Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: string | undefined): void', gave the following error.
+        The last overload gave the following error.
           The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
       "
     `)

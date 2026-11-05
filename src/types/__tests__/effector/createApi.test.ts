@@ -33,8 +33,9 @@ test('check2', () => {
     "
     Type 'EventCallable<number>' is not assignable to type 'EventCallable<string>'.
       Types of property 'prepend' are incompatible.
-        Types of parameters 'fn' and 'fn' are incompatible.
-          Type 'string' is not assignable to type 'number'.
+        Type '<Before = void>(fn: (_: Before) => number) => EventCallableAsReturnType<Before>' is not assignable to type '<Before = void>(fn: (_: Before) => string) => EventCallableAsReturnType<Before>'.
+          Types of parameters 'fn' and 'fn' are incompatible.
+            Type 'string' is not assignable to type 'number'.
     "
   `)
 })
@@ -48,11 +49,8 @@ test('check3', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     Type 'EventCallable<void>' is not assignable to type 'EventCallable<string>'.
-      Types of property 'map' are incompatible.
-        Type '<T>(fn: (payload: void) => T) => EventAsReturnType<T>' is not assignable to type '<T>(fn: (payload: string) => T) => EventAsReturnType<T>'.
-          Types of parameters 'fn' and 'fn' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'void' is not assignable to type 'string'.
+      Types of property '__' are incompatible.
+        Type 'void' is not assignable to type 'string'.
     "
   `)
 })
@@ -157,9 +155,7 @@ describe('type validation', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       No overload matches this call.
-        Overload 1 of 2, '(payload: number): number', gave the following error.
-          Argument of type 'string' is not assignable to parameter of type 'number'.
-        Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
+        The last overload gave the following error.
           The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
       "
     `)
@@ -206,9 +202,7 @@ test('optional return false-positive check (should fail)', () => {
     "
     The 'this' context of type '{ moveRight: EventCallable<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
     No overload matches this call.
-      Overload 1 of 2, '(payload: number): number', gave the following error.
-        Argument of type 'string' is not assignable to parameter of type 'number'.
-      Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
+      The last overload gave the following error.
         The 'this' context of type '{ moveRight: EventCallable<number>; }' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
     "
   `)

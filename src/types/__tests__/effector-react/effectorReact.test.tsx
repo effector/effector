@@ -67,8 +67,7 @@ test('createGate', () => {
     Unmarked error at test line 7 'useGate(Bar, 1)'
     Argument of type 'number' is not assignable to parameter of type '{ a: number; }'.
     Unmarked error at test line 9 'useGate(Bar, {})'
-    Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
-      Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+    Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
     "
   `)
 })
@@ -216,7 +215,7 @@ test('useUnit should not allow non-unit values', () => {
     Unmarked error at test line 4 'wrong: 'plain string','
     No overload matches this call.
       The last overload gave the following error.
-        Type 'string' is not assignable to type 'Store<any> | Effect<any, any, any> | EventCallable<any>'.
+        Type 'string' is not assignable to type 'Effect<any, any, any> | EventCallable<any> | Store<any>'.
     "
   `)
 })
