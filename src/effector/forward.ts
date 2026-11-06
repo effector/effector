@@ -12,6 +12,7 @@ export const createLinkNode = (
   node?: Array<Cmd | false | void | null>,
   op?: string,
   scopeFn?: Function,
+  deferDeclaration?: boolean,
 ) =>
   createNode({
     node,
@@ -21,6 +22,7 @@ export const createLinkNode = (
     meta: {op},
     family: {owners: [parent, child], links: child},
     regional: true,
+    deferDeclaration,
   })
 export const forward = (opts: {
   from: NodeUnit | NodeUnit[]
