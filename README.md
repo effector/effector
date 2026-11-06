@@ -325,14 +325,21 @@ Your support allows us to improve the developer experience 🧡.
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/cursoragent>
+            <img src=https://avatars.githubusercontent.com/u/199161495?v=4 width="100;"  alt=Cursor Agent/>
+            <br />
+            <sub style="font-size:14px"><b>Cursor Agent</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/zarabotaet>
             <img src=https://avatars.githubusercontent.com/u/15930980?v=4 width="100;"  alt=Dmitrij Shuleshov/>
             <br />
             <sub style="font-size:14px"><b>Dmitrij Shuleshov</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/dimensi>
             <img src=https://avatars.githubusercontent.com/u/11390039?v=4 width="100;"  alt=Nikita Nafranets/>
@@ -368,6 +375,8 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Зухриддин Камильжанов</b></sub>
         </a>
     </td>
+</tr>
+<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/mitapfer>
             <img src=https://avatars.githubusercontent.com/u/65118092?v=4 width="100;"  alt=Mikhail Krilov/>
@@ -375,20 +384,11 @@ Your support allows us to improve the developer experience 🧡.
             <sub style="font-size:14px"><b>Mikhail Krilov</b></sub>
         </a>
     </td>
-</tr>
-<tr>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/victordidenko>
             <img src=https://avatars.githubusercontent.com/u/15016227?v=4 width="100;"  alt=Victor Didenko/>
             <br />
             <sub style="font-size:14px"><b>Victor Didenko</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/cursoragent>
-            <img src=https://avatars.githubusercontent.com/u/199161495?v=4 width="100;"  alt=Cursor Agent/>
-            <br />
-            <sub style="font-size:14px"><b>Cursor Agent</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
