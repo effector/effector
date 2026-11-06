@@ -98,14 +98,13 @@ export default () => {
     fn: ({clockType, targetType}) =>
       isAssignable(clockType, targetType),
   })
-  const formSupported = computeFn({
-    source: {clockForm},
-    fn: ({clockForm}) =>
-      clockForm !== 'readonlyTuple' && clockForm !== 'readonlyArray',
-  })
   const valuePass = bool({
     source: {valueCompatible},
     true: {valueCompatible: true},
+  })
+  const formSupported = computeFn({
+    source: {clockForm},
+    fn: ({clockForm}) => clockForm !== 'readonlyTuple',
   })
   const formPass = bool({
     source: {formSupported},

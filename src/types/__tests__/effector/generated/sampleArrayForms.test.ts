@@ -1014,473 +1014,743 @@ test('readonlyTuple/readonlyTuple, Boolean filter (should fail)', () => {
     "
   `)
 })
-test('readonlyArray/readonlyArray, none filter (should fail)', () => {
-  //prettier-ignore
-  {
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:neverTargetReadonlyArray  })
-  }
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    "
-  `)
+describe('readonlyArray/readonlyArray, none filter', () => {
+  test('readonlyArray/readonlyArray, none filter (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock:numberClockReadonlyArray , target:numberTargetReadonlyArray })
+      sample({clock:numberClockReadonlyArray , target:unknownTargetReadonlyArray})
+      sample({clock:numberClockReadonlyArray , target:anyTargetReadonlyArray    })
+      sample({clock:numberClockReadonlyArray , target:voidTargetReadonlyArray   })
+      sample({clock:stringClockReadonlyArray , target:stringTargetReadonlyArray })
+      sample({clock:stringClockReadonlyArray , target:unknownTargetReadonlyArray})
+      sample({clock:stringClockReadonlyArray , target:anyTargetReadonlyArray    })
+      sample({clock:stringClockReadonlyArray , target:voidTargetReadonlyArray   })
+      sample({clock:unknownClockReadonlyArray, target:unknownTargetReadonlyArray})
+      sample({clock:unknownClockReadonlyArray, target:anyTargetReadonlyArray    })
+      sample({clock:unknownClockReadonlyArray, target:voidTargetReadonlyArray   })
+      sample({clock:anyClockReadonlyArray    , target:numberTargetReadonlyArray })
+      sample({clock:anyClockReadonlyArray    , target:stringTargetReadonlyArray })
+      sample({clock:anyClockReadonlyArray    , target:unknownTargetReadonlyArray})
+      sample({clock:anyClockReadonlyArray    , target:anyTargetReadonlyArray    })
+      sample({clock:anyClockReadonlyArray    , target:voidTargetReadonlyArray   })
+      sample({clock:voidClockReadonlyArray   , target:unknownTargetReadonlyArray})
+      sample({clock:voidClockReadonlyArray   , target:anyTargetReadonlyArray    })
+      sample({clock:voidClockReadonlyArray   , target:voidTargetReadonlyArray   })
+      sample({clock:neverClockReadonlyArray  , target:numberTargetReadonlyArray })
+      sample({clock:neverClockReadonlyArray  , target:stringTargetReadonlyArray })
+      sample({clock:neverClockReadonlyArray  , target:unknownTargetReadonlyArray})
+      sample({clock:neverClockReadonlyArray  , target:anyTargetReadonlyArray    })
+      sample({clock:neverClockReadonlyArray  , target:voidTargetReadonlyArray   })
+      sample({clock:neverClockReadonlyArray  , target:neverTargetReadonlyArray  })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('readonlyArray/readonlyArray, none filter (should fail)', () => {
+    //prettier-ignore
+    {
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        //@ts-expect-error
+        target: stringTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        //@ts-expect-error
+        target: numberTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        //@ts-expect-error
+        target: numberTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        //@ts-expect-error
+        target: stringTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: anyClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        //@ts-expect-error
+        target: numberTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        //@ts-expect-error
+        target: stringTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTargetReadonlyArray,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTargetReadonlyArray,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTargetReadonlyArray,'
+      "
+    `)
+  })
 })
-test('readonlyArray/readonlyArray, Boolean filter (should fail)', () => {
-  //prettier-ignore
-  {
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:neverTargetReadonlyArray  })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:numberTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:stringTargetReadonlyArray })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:unknownTargetReadonlyArray})
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:anyTargetReadonlyArray    })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:voidTargetReadonlyArray   })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:neverTargetReadonlyArray  })
-  }
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    "
-  `)
+describe('readonlyArray/readonlyArray, Boolean filter', () => {
+  test('readonlyArray/readonlyArray, Boolean filter (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:numberTargetReadonlyArray })
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:unknownTargetReadonlyArray})
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:anyTargetReadonlyArray    })
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:voidTargetReadonlyArray   })
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:stringTargetReadonlyArray })
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:unknownTargetReadonlyArray})
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:anyTargetReadonlyArray    })
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:voidTargetReadonlyArray   })
+      sample({clock:unknownClockReadonlyArray, filter:Boolean, target:unknownTargetReadonlyArray})
+      sample({clock:unknownClockReadonlyArray, filter:Boolean, target:anyTargetReadonlyArray    })
+      sample({clock:unknownClockReadonlyArray, filter:Boolean, target:voidTargetReadonlyArray   })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:numberTargetReadonlyArray })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:stringTargetReadonlyArray })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:unknownTargetReadonlyArray})
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:anyTargetReadonlyArray    })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:voidTargetReadonlyArray   })
+      sample({clock:voidClockReadonlyArray   , filter:Boolean, target:unknownTargetReadonlyArray})
+      sample({clock:voidClockReadonlyArray   , filter:Boolean, target:anyTargetReadonlyArray    })
+      sample({clock:voidClockReadonlyArray   , filter:Boolean, target:voidTargetReadonlyArray   })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:numberTargetReadonlyArray })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:stringTargetReadonlyArray })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:unknownTargetReadonlyArray})
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:anyTargetReadonlyArray    })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:voidTargetReadonlyArray   })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:neverTargetReadonlyArray  })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('readonlyArray/readonlyArray, Boolean filter (should fail)', () => {
+    //prettier-ignore
+    {
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: stringTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: numberTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: numberTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: stringTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: anyClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: numberTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: stringTargetReadonlyArray,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetReadonlyArray,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTargetReadonlyArray,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTargetReadonlyArray,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTargetReadonlyArray,'
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTargetReadonlyArray,'
+      "
+    `)
+  })
 })
-test('readonlyArray/mutable, none filter (should fail)', () => {
-  //prettier-ignore
-  {
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , target:neverTargetMutable  })
-  }
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    "
-  `)
+describe('readonlyArray/mutable, none filter', () => {
+  test('readonlyArray/mutable, none filter (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock:numberClockReadonlyArray , target:numberTargetMutable })
+      sample({clock:numberClockReadonlyArray , target:unknownTargetMutable})
+      sample({clock:numberClockReadonlyArray , target:anyTargetMutable    })
+      sample({clock:numberClockReadonlyArray , target:voidTargetMutable   })
+      sample({clock:stringClockReadonlyArray , target:stringTargetMutable })
+      sample({clock:stringClockReadonlyArray , target:unknownTargetMutable})
+      sample({clock:stringClockReadonlyArray , target:anyTargetMutable    })
+      sample({clock:stringClockReadonlyArray , target:voidTargetMutable   })
+      sample({clock:unknownClockReadonlyArray, target:unknownTargetMutable})
+      sample({clock:unknownClockReadonlyArray, target:anyTargetMutable    })
+      sample({clock:unknownClockReadonlyArray, target:voidTargetMutable   })
+      sample({clock:anyClockReadonlyArray    , target:numberTargetMutable })
+      sample({clock:anyClockReadonlyArray    , target:stringTargetMutable })
+      sample({clock:anyClockReadonlyArray    , target:unknownTargetMutable})
+      sample({clock:anyClockReadonlyArray    , target:anyTargetMutable    })
+      sample({clock:anyClockReadonlyArray    , target:voidTargetMutable   })
+      sample({clock:voidClockReadonlyArray   , target:unknownTargetMutable})
+      sample({clock:voidClockReadonlyArray   , target:anyTargetMutable    })
+      sample({clock:voidClockReadonlyArray   , target:voidTargetMutable   })
+      sample({clock:neverClockReadonlyArray  , target:numberTargetMutable })
+      sample({clock:neverClockReadonlyArray  , target:stringTargetMutable })
+      sample({clock:neverClockReadonlyArray  , target:unknownTargetMutable})
+      sample({clock:neverClockReadonlyArray  , target:anyTargetMutable    })
+      sample({clock:neverClockReadonlyArray  , target:voidTargetMutable   })
+      sample({clock:neverClockReadonlyArray  , target:neverTargetMutable  })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('readonlyArray/mutable, none filter (should fail)', () => {
+    //prettier-ignore
+    {
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        //@ts-expect-error
+        target: stringTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        //@ts-expect-error
+        target: numberTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        //@ts-expect-error
+        target: numberTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        //@ts-expect-error
+        target: stringTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: anyClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        //@ts-expect-error
+        target: numberTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        //@ts-expect-error
+        target: stringTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 13 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 25 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 31 'target: numberTargetMutable,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 37 'target: stringTargetMutable,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 43 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 49 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 67 'target: neverTargetMutable,'
+      "
+    `)
+  })
 })
-test('readonlyArray/mutable, Boolean filter (should fail)', () => {
-  //prettier-ignore
-  {
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:numberClockReadonlyArray , filter:Boolean, target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:stringClockReadonlyArray , filter:Boolean, target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:unknownClockReadonlyArray, filter:Boolean, target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:anyClockReadonlyArray    , filter:Boolean, target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:voidClockReadonlyArray   , filter:Boolean, target:neverTargetMutable  })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:numberTargetMutable })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:stringTargetMutable })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:unknownTargetMutable})
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:anyTargetMutable    })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:voidTargetMutable   })
-    //@ts-expect-error
-    sample({clock:neverClockReadonlyArray  , filter:Boolean, target:neverTargetMutable  })
-  }
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<number>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<string>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<unknown>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<any>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<void>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    Type 'readonly EventCallable<never>[]' is not assignable to type 'never'.
-    "
-  `)
+describe('readonlyArray/mutable, Boolean filter', () => {
+  test('readonlyArray/mutable, Boolean filter (should pass)', () => {
+    //prettier-ignore
+    {
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:numberTargetMutable })
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:unknownTargetMutable})
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:anyTargetMutable    })
+      sample({clock:numberClockReadonlyArray , filter:Boolean, target:voidTargetMutable   })
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:stringTargetMutable })
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:unknownTargetMutable})
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:anyTargetMutable    })
+      sample({clock:stringClockReadonlyArray , filter:Boolean, target:voidTargetMutable   })
+      sample({clock:unknownClockReadonlyArray, filter:Boolean, target:unknownTargetMutable})
+      sample({clock:unknownClockReadonlyArray, filter:Boolean, target:anyTargetMutable    })
+      sample({clock:unknownClockReadonlyArray, filter:Boolean, target:voidTargetMutable   })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:numberTargetMutable })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:stringTargetMutable })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:unknownTargetMutable})
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:anyTargetMutable    })
+      sample({clock:anyClockReadonlyArray    , filter:Boolean, target:voidTargetMutable   })
+      sample({clock:voidClockReadonlyArray   , filter:Boolean, target:unknownTargetMutable})
+      sample({clock:voidClockReadonlyArray   , filter:Boolean, target:anyTargetMutable    })
+      sample({clock:voidClockReadonlyArray   , filter:Boolean, target:voidTargetMutable   })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:numberTargetMutable })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:stringTargetMutable })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:unknownTargetMutable})
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:anyTargetMutable    })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:voidTargetMutable   })
+      sample({clock:neverClockReadonlyArray  , filter:Boolean, target:neverTargetMutable  })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+  test('readonlyArray/mutable, Boolean filter (should fail)', () => {
+    //prettier-ignore
+    {
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: stringTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: numberClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: numberTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: stringClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: numberTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: stringTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: unknownClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: anyClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: numberTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: stringTargetMutable,
+      })
+      sample({
+        //@ts-expect-error
+        clock: voidClockReadonlyArray,
+        filter: Boolean,
+        //@ts-expect-error
+        target: neverTargetMutable,
+      })
+    }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
+      lack of expected error at test line 15 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
+      lack of expected error at test line 29 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
+      lack of expected error at test line 36 'target: numberTargetMutable,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
+      lack of expected error at test line 43 'target: stringTargetMutable,'
+      Type 'readonly EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
+      lack of expected error at test line 50 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
+      lack of expected error at test line 57 'target: neverTargetMutable,'
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'readonly EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
+      lack of expected error at test line 78 'target: neverTargetMutable,'
+      "
+    `)
+  })
 })
 describe('mutable/readonlyArray, none filter', () => {
   test('mutable/readonlyArray, none filter (should pass)', () => {
@@ -1590,27 +1860,72 @@ describe('mutable/readonlyArray, none filter', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      lack of expected error at test line 5 'clock: numberClockMutable,'
-      lack of expected error at test line 7 'target: stringTargetReadonlyArray,'
-      lack of expected error at test line 11 'clock: numberClockMutable,'
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
       lack of expected error at test line 13 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 17 'clock: stringClockMutable,'
-      lack of expected error at test line 19 'target: numberTargetReadonlyArray,'
-      lack of expected error at test line 23 'clock: stringClockMutable,'
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
       lack of expected error at test line 25 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 29 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
       lack of expected error at test line 31 'target: numberTargetReadonlyArray,'
-      lack of expected error at test line 35 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
       lack of expected error at test line 37 'target: stringTargetReadonlyArray,'
-      lack of expected error at test line 41 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
       lack of expected error at test line 43 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 47 'clock: anyClockMutable,'
+      Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
       lack of expected error at test line 49 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 53 'clock: voidClockMutable,'
-      lack of expected error at test line 55 'target: numberTargetReadonlyArray,'
-      lack of expected error at test line 59 'clock: voidClockMutable,'
-      lack of expected error at test line 61 'target: stringTargetReadonlyArray,'
-      lack of expected error at test line 65 'clock: voidClockMutable,'
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
       lack of expected error at test line 67 'target: neverTargetReadonlyArray,'
       "
     `)
@@ -1735,27 +2050,72 @@ describe('mutable/readonlyArray, Boolean filter', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      lack of expected error at test line 5 'clock: numberClockMutable,'
-      lack of expected error at test line 8 'target: stringTargetReadonlyArray,'
-      lack of expected error at test line 12 'clock: numberClockMutable,'
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
       lack of expected error at test line 15 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 19 'clock: stringClockMutable,'
-      lack of expected error at test line 22 'target: numberTargetReadonlyArray,'
-      lack of expected error at test line 26 'clock: stringClockMutable,'
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
       lack of expected error at test line 29 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 33 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
       lack of expected error at test line 36 'target: numberTargetReadonlyArray,'
-      lack of expected error at test line 40 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
       lack of expected error at test line 43 'target: stringTargetReadonlyArray,'
-      lack of expected error at test line 47 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
       lack of expected error at test line 50 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 54 'clock: anyClockMutable,'
+      Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
       lack of expected error at test line 57 'target: neverTargetReadonlyArray,'
-      lack of expected error at test line 61 'clock: voidClockMutable,'
-      lack of expected error at test line 64 'target: numberTargetReadonlyArray,'
-      lack of expected error at test line 68 'clock: voidClockMutable,'
-      lack of expected error at test line 71 'target: stringTargetReadonlyArray,'
-      lack of expected error at test line 75 'clock: voidClockMutable,'
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'readonly EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'readonly EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
       lack of expected error at test line 78 'target: neverTargetReadonlyArray,'
       "
     `)
@@ -1869,27 +2229,72 @@ describe('mutable/mutable, none filter', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      lack of expected error at test line 5 'clock: numberClockMutable,'
-      lack of expected error at test line 7 'target: stringTargetMutable,'
-      lack of expected error at test line 11 'clock: numberClockMutable,'
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
       lack of expected error at test line 13 'target: neverTargetMutable,'
-      lack of expected error at test line 17 'clock: stringClockMutable,'
-      lack of expected error at test line 19 'target: numberTargetMutable,'
-      lack of expected error at test line 23 'clock: stringClockMutable,'
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
       lack of expected error at test line 25 'target: neverTargetMutable,'
-      lack of expected error at test line 29 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
       lack of expected error at test line 31 'target: numberTargetMutable,'
-      lack of expected error at test line 35 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
       lack of expected error at test line 37 'target: stringTargetMutable,'
-      lack of expected error at test line 41 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
       lack of expected error at test line 43 'target: neverTargetMutable,'
-      lack of expected error at test line 47 'clock: anyClockMutable,'
+      Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
       lack of expected error at test line 49 'target: neverTargetMutable,'
-      lack of expected error at test line 53 'clock: voidClockMutable,'
-      lack of expected error at test line 55 'target: numberTargetMutable,'
-      lack of expected error at test line 59 'clock: voidClockMutable,'
-      lack of expected error at test line 61 'target: stringTargetMutable,'
-      lack of expected error at test line 65 'clock: voidClockMutable,'
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
       lack of expected error at test line 67 'target: neverTargetMutable,'
       "
     `)
@@ -2014,27 +2419,72 @@ describe('mutable/mutable, Boolean filter', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      lack of expected error at test line 5 'clock: numberClockMutable,'
-      lack of expected error at test line 8 'target: stringTargetMutable,'
-      lack of expected error at test line 12 'clock: numberClockMutable,'
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'never'.
       lack of expected error at test line 15 'target: neverTargetMutable,'
-      lack of expected error at test line 19 'clock: stringClockMutable,'
-      lack of expected error at test line 22 'target: numberTargetMutable,'
-      lack of expected error at test line 26 'clock: stringClockMutable,'
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<string>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<string>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'never'.
       lack of expected error at test line 29 'target: neverTargetMutable,'
-      lack of expected error at test line 33 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'number'.
       lack of expected error at test line 36 'target: numberTargetMutable,'
-      lack of expected error at test line 40 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'string'.
       lack of expected error at test line 43 'target: stringTargetMutable,'
-      lack of expected error at test line 47 'clock: unknownClockMutable,'
+      Type 'EventCallable<unknown>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<unknown>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'unknown' is not assignable to type 'never'.
       lack of expected error at test line 50 'target: neverTargetMutable,'
-      lack of expected error at test line 54 'clock: anyClockMutable,'
+      Type 'EventCallable<any>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<any>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'any' is not assignable to type 'never'.
       lack of expected error at test line 57 'target: neverTargetMutable,'
-      lack of expected error at test line 61 'clock: voidClockMutable,'
-      lack of expected error at test line 64 'target: numberTargetMutable,'
-      lack of expected error at test line 68 'clock: voidClockMutable,'
-      lack of expected error at test line 71 'target: stringTargetMutable,'
-      lack of expected error at test line 75 'clock: voidClockMutable,'
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<number>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'number'.
+      Type 'EventCallable<number>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<string>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'string'.
+      Type 'EventCallable<string>[]' is not assignable to type 'readonly UnitTargetable<void>[]'.
+        Type 'EventCallable<string>' is not assignable to type 'UnitTargetable<void>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type 'void'.
+      Type 'EventCallable<void>[]' is not assignable to type 'readonly Unit<never>[]'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<never>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'never'.
       lack of expected error at test line 78 'target: neverTargetMutable,'
       "
     `)
