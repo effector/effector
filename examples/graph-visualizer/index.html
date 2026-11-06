@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Effector relationship graph</title>
+    <style>
+      body {
+        font:
+          15px/1.5 system-ui,
+          sans-serif;
+        margin: 24px;
+        color: #25344c;
+        background: #f6f8fc;
+      }
+      h1,
+      h2 {
+        line-height: 1.2;
+      }
+      button,
+      input {
+        font: inherit;
+        padding: 6px 10px;
+        border: 1px solid #a8b4c6;
+        border-radius: 5px;
+        background: white;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #4483dd;
+      }
+      .graph-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .graph-controls input[type='search'] {
+        min-width: 280px;
+      }
+      .effector-graph {
+        padding: 18px;
+        background: white;
+        border: 1px solid #d3dbea;
+        border-radius: 10px;
+      }
+      .graph-viewport {
+        height: 65vh;
+        overflow: auto;
+        border: 1px solid #d3dbea;
+        background: #fbfcff;
+      }
+      svg {
+        display: block;
+        font-family: system-ui, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Effector relationship graph</h1>
+    <p>
+      Real stores, events and an effect created after graph capture starts.
+      Refresh reads existing relationships without modifying the application.
+    </p>
+    <p id="state"></p>
+    <p>
+      <button id="increment">Increment</button>
+      <button id="reset">Reset</button>
+      <button id="more">Add 300 stores</button>
+      <button id="dispose">Dispose viewer and capture</button>
+    </p>
+    <main id="graph"></main>
+    <script src="./dist/demo.js"></script>
+  </body>
+</html>
