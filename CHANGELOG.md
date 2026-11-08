@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.5.0
+
+- `sample` type improvements
+
 ## effector-vue 23.3.0
 
 ### Improvements
