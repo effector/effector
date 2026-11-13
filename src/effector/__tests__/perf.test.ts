@@ -143,11 +143,14 @@ async function runTestCase({
   })
   const filtered = percentile(results, avg(results), 0.95)
   /** typical is 50-70ms */
+  const medianTime = median(filtered)
   console.log(
-    `${name}: avg ${avg(filtered).toFixed(2)} median ${median(filtered).toFixed(
+    `${name}: avg ${avg(filtered).toFixed(2)} median ${medianTime.toFixed(
       2,
     )}`,
   )
+  if (medianTime > 100) {
+    throw new Error(`Performance budget exceeded for ${name}: ${medianTime.toFixed(2)}ms > 100ms`)
 
   function avg(list: number[]) {
     return list.reduce((acc, val) => acc + val, 0) / list.length
