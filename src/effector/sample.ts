@@ -24,6 +24,7 @@ import {applyTemplate} from './template'
 import {own} from './own'
 import {createLinkNode} from './forward'
 import {generateErrorTitle} from './naming'
+import {reportDeclaration} from './region'
 
 const sampleConfigFields = ['source', 'clock', 'target']
 
@@ -233,12 +234,14 @@ export const createSampling = (
     ],
     method,
     fn,
+    true,
   )
   // @ts-expect-error
   own(source, [jointNode])
   own(jointNode, syncNodes)
   Object.assign(jointNode.meta, metadata, {joint: true, stateRef: clockState})
   setUnitTrace(jointNode, getUnitTrace(sample))
+  reportDeclaration(jointNode)
   return target
 }
 
