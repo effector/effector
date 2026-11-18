@@ -64,16 +64,17 @@ export function transformFactory(
     loc!.column,
     debugSids,
   )
+  // @babel/template string placeholders must be identifiers or AST nodes.
   const factoryConfig: Parameters<FactoryTemplate>[0] = {
-    SID: JSON.stringify(sid),
+    SID: t.stringLiteral(sid),
     FN: node,
     FACTORY: withFactoryImportName,
   }
   if (addLoc || addNames) {
-    factoryConfig.NAME = JSON.stringify(
+    factoryConfig.NAME = t.stringLiteral(
       !resultName || resultName === '' ? 'none' : resultName,
     )
-    factoryConfig.METHOD = JSON.stringify(importedName)
+    factoryConfig.METHOD = t.stringLiteral(importedName)
   }
   if (addLoc) {
     factoryConfig.LOC = makeTrace(
