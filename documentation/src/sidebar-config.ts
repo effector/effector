@@ -817,6 +817,10 @@ export const effector: LSidebarGroup[] = [
         text: { en: "hydrate" },
         link: "/api/effector/hydrate",
       },
+      {
+        text: { en: "hydrateScope" },
+        link: "/api/effector/hydrateScope",
+      },
     ],
   },
   {
