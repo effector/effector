@@ -4,6 +4,8 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector 23.5.0
 
+- Add `perform({action, source, target, update})` for synchronous, scoped transactions ([issue #1275](https://github.com/effector/effector/issues/1275))
+
 - `sample` type improvements
 
 ## effector-vue 23.3.0

@@ -3888,3 +3888,165 @@ export function createWatch<T>({
   scope?: Scope
   batch?: boolean
 }): Subscription
+
+/** Targets available during a synchronous perform callback. */
+type PerformTargets<T> =
+  T extends UnitTargetable<infer V>
+    ? ((value: V) => V) & (T extends StoreWritable<any> ? {reinit(): void} : {})
+    : {[K in keyof T]: PerformTargets<T[K]>}
+type PerformSource<S> =
+  S extends Store<infer V>
+    ? V
+    : {
+        [K in keyof S as K extends `$${infer N}` ? N : K]: S[K] extends Store<
+          infer V
+        >
+          ? V
+          : never
+      }
+type PerformClock<C> =
+  C extends ReadonlyArray<Unit<any>>
+    ? UnitValue<C[number]>
+    : C extends Unit<any>
+      ? UnitValue<C>
+      : never
+type PerformOptions = {name?: string; sid?: string; batch?: boolean}
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<
+  C extends Unit<any> | ReadonlyArray<Unit<any>>,
+  U extends StoreWritable<any>,
+>(
+  config: PerformOptions & {
+    clock: C
+    update: U
+    source?: never
+    target?: never
+    action: (
+      target: PerformTargets<U>,
+      source: PerformSource<U>,
+      payload: PerformClock<C>,
+    ) => void
+  },
+): void
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<
+  C extends Unit<any> | ReadonlyArray<Unit<any>>,
+  U extends Record<string, StoreWritable<any>>,
+  S extends Record<string, Store<any>> = {},
+  T extends Record<string, UnitTargetable<any>> = {},
+>(
+  config: PerformOptions & {
+    clock: C
+    update: U
+    source?: S & {[K in keyof U]?: never}
+    target?: T & {[K in keyof U]?: never}
+    action: (
+      target: PerformTargets<T & U>,
+      source: PerformSource<S & U>,
+      payload: PerformClock<C>,
+    ) => void
+  },
+): void
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<
+  C extends Unit<any> | ReadonlyArray<Unit<any>>,
+  T extends UnitTargetable<any> | Record<string, UnitTargetable<any>>,
+  S extends Store<any> | Record<string, Store<any>>,
+>(
+  config: PerformOptions & {
+    clock: C
+    source: S
+    target: T
+    update?: never
+    action: (
+      target: PerformTargets<T>,
+      source: PerformSource<S>,
+      payload: PerformClock<C>,
+    ) => void
+  },
+): void
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<
+  C extends Unit<any> | ReadonlyArray<Unit<any>>,
+  T extends UnitTargetable<any> | Record<string, UnitTargetable<any>>,
+>(
+  config: PerformOptions & {
+    clock: C
+    target: T
+    source?: never
+    update?: never
+    action: (target: PerformTargets<T>, payload: PerformClock<C>) => void
+  },
+): void
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<U extends StoreWritable<any>, P = void>(
+  config: PerformOptions & {
+    update: U
+    source?: never
+    target?: never
+    clock?: never
+    action: (
+      target: PerformTargets<U>,
+      source: PerformSource<U>,
+      payload: P,
+    ) => void
+  },
+): EventCallable<P>
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<
+  U extends Record<string, StoreWritable<any>>,
+  S extends Record<string, Store<any>> = {},
+  T extends Record<string, UnitTargetable<any>> = {},
+  P = void,
+>(
+  config: PerformOptions & {
+    update: U
+    source?: S & {[K in keyof U]?: never}
+    target?: T & {[K in keyof U]?: never}
+    clock?: never
+    action: (
+      target: PerformTargets<T & U>,
+      source: PerformSource<S & U>,
+      payload: P,
+    ) => void
+  },
+): EventCallable<P>
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<
+  T extends UnitTargetable<any> | Record<string, UnitTargetable<any>>,
+  S extends Store<any> | Record<string, Store<any>>,
+  P = void,
+>(
+  config: PerformOptions & {
+    source: S
+    target: T
+    update?: never
+    clock?: never
+    action: (
+      target: PerformTargets<T>,
+      source: PerformSource<S>,
+      payload: P,
+    ) => void
+  },
+): EventCallable<P>
+
+/** Group synchronous target calls in one graph transaction. */
+export function perform<
+  T extends UnitTargetable<any> | Record<string, UnitTargetable<any>>,
+  P = void,
+>(
+  config: PerformOptions & {
+    target: T
+    source?: never
+    update?: never
+    clock?: never
+    action: (target: PerformTargets<T>, payload: P) => void
+  },
+): EventCallable<P>
