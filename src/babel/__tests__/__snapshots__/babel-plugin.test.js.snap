@@ -4338,6 +4338,124 @@ const c = merge(...args, {
 "
 `;
 
+exports[`babel-plugin should perform 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/perform.js'
+import {
+  perform,
+  perform as run,
+  createStore,
+  createEvent,
+  createDomain,
+} from 'effector'
+const count = createStore(0, {
+  loc: {
+    file: _effectorFileName,
+    line: 8,
+    column: 14,
+  },
+  name: 'count',
+  sid: '-avd654',
+})
+const event = createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 9,
+    column: 14,
+  },
+  name: 'event',
+  sid: '3tx5i4',
+})
+const increment = perform({
+  and: {
+    update: count,
+    action: (set, n) => set(n + 1),
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 10,
+      column: 18,
+    },
+    name: 'increment',
+    sid: '-ror393',
+  },
+})
+perform({
+  and: {
+    target: {
+      event,
+    },
+    action: target => target.event(),
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 11,
+      column: 0,
+    },
+    sid: '-piriu',
+  },
+})
+const config = {
+  target: {
+    event,
+  },
+  action,
+}
+function action(target) {
+  const alias = target
+  alias.event()
+}
+run({
+  and: config,
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 17,
+      column: 0,
+    },
+    sid: '-m7zyo',
+  },
+})
+const reset = run({
+  and: {
+    target: {
+      store: count,
+    },
+    action(target) {
+      target.store(0)
+    },
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 18,
+      column: 14,
+    },
+    name: 'reset',
+    sid: '-tyrizf',
+  },
+})
+const domain = createDomain({
+  loc: {
+    file: _effectorFileName,
+    line: 24,
+    column: 15,
+  },
+  name: 'domain',
+  sid: '-glouki',
+})
+domain.event({
+  loc: {
+    file: _effectorFileName,
+    line: 25,
+    column: 0,
+  },
+  sid: '-69yr7',
+})
+"
+`;
+
 exports[`babel-plugin should references 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/references.js'
 function outerScope() {

@@ -1,0 +1,77 @@
+---
+title: perform
+description: Group synchronous target calls in one transaction
+---
+
+```ts
+import {perform} from 'effector'
+```
+
+`perform` declares a synchronous computation which can conditionally call several
+stores, events, or effects. All selected calls propagate together through the
+Effector graph, preserving the current scope.
+
+```ts
+const increment = perform({
+  update: $count,
+  action: (setCount, count, amount: number) => {
+    setCount(count + amount)
+  },
+})
+
+increment(2)
+```
+
+## Configuration
+
+- `target`: a writable store, callable event, effect, or object of these units.
+  The first `action` argument has the same shape, with each unit replaced by a
+  synchronous callback. A callback returns its payload, including for effects.
+  Store callbacks also have `.reinit()`.
+- `source`: a store or object of stores to read before `action` runs. When supplied,
+  its value is the second `action` argument and the clock payload is the third.
+  As in `effector-action`, a leading `$` is removed from source object keys.
+- `clock`: a unit or array of units. Without a clock, `perform` returns a new
+  callable event whose payload is inferred from `action`. With a clock it returns
+  `undefined` and subscribes to that clock.
+- `update`: shorthand for including writable stores in both `source` and
+  `target`. A single store can be used on its own. An object can be combined
+  with object-shaped `source` and `target`; overlapping keys are rejected.
+- `action`: `(target, payload) => void`, or `(target, source, payload) => void`
+  when `source` or `update` is supplied.
+- `batch`: defaults to `true`, with the same clock scheduling as `sample`.
+- `name`, `sid`: optional metadata for the created event.
+
+```ts
+const saveProfile = perform({
+  source: {config: $config},
+  update: {profile: $profile},
+  target: {saveFx},
+  action: (set, {config, profile}, patch: Partial<Profile>) => {
+    const next = {...profile, ...patch}
+    set.profile(next)
+    if (config.autoSave) set.saveFx(next)
+  },
+})
+```
+
+Only called targets receive an update. Repeated calls of the same target in one
+invocation log a warning and use the last payload. Calls through aliases of the
+same unit share this rule. Function-valued payloads are stored as values;
+reducer setters such as `setCount(count => count + 1)` are not supported.
+Read the current value using `source` or `update` instead.
+
+The callback must finish synchronously. Saving a target callback for later use
+throws when it is called after `action` returns. If `action` throws, its collected writes
+are discarded and Effector reports the error. For asynchronous work, call an
+effect target and compose its completion events with `sample` or another
+`perform`.
+
+The returned event works with `sample`, `scopeBind`, `allSettled`, and as another
+`perform` target. Store updates participate in normal Effector batching, so
+combined stores and batched samplers see the resulting state together.
+
+This API implements the synchronous `createAction` model from
+[effector-action](https://github.com/AlexeyDuybo/effector-action), with one
+configuration argument and the `update` shorthand proposed in
+[issue #1275](https://github.com/effector/effector/issues/1275).
