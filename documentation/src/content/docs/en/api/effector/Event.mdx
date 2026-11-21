@@ -207,13 +207,15 @@ Returns a new derived event.
 :::tip{title="Tip"}
 [`sample`](/en/api/effector/sample) with the `filter` argument is the preferred method for filtering:
 
-````ts
+```ts
 const event = createEvent();
 
 const filteredEvent = sample({
   clock: event,
   filter: () => true,
 });
+```
+
 :::
 
 `.filter` creates a **derived** event, which is triggered **only** if the function `fn` returns `true`. This is helpful for branching the data flow and reacting to specific conditions.
@@ -223,7 +225,7 @@ const filteredEvent = sample({
 ```ts
 const first: Event<T> | EventCallable<T>;
 const second: Event<T> = first.filter({ fn });
-````
+```
 
 - **Type**
 

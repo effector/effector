@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: #fafafa;
+      }
+      .cart {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 220px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 15px;
+        color: #555;
+      }
+      input {
+        width: 56px;
+        padding: 6px 8px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 15px;
+        text-align: center;
+      }
+      .total-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid #e5e5e5;
+      }
+      .total-label {
+        font-size: 15px;
+        color: #555;
+      }
+      #total {
+        font-size: 28px;
+        font-weight: 700;
+        color: hsl(28, 100%, 45%);
+        font-variant-numeric: tabular-nums;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cart">
+      <div class="row">
+        <span>Price per item</span>
+        <span>$4.50</span>
+      </div>
+      <div class="row">
+        <span>Quantity</span>
+        <input id="quantity" type="number" min="0" value="1" />
+      </div>
+      <div class="total-row">
+        <span class="total-label">Total</span>
+        <span id="total">$4.50</span>
+      </div>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
