@@ -12,11 +12,37 @@ finishes. Dependencies remain declared in `source`, `clock`, and `target`.
 
 ## Usage
 
-### Conditional updates
+### Writing to a store
+
+Pass a store to `target`. The first argument of `action` is a callback that accepts
+its new value. Without `clock`, `perform` returns an event that runs the action:
 
 ```ts
 import {createEffect, createEvent, createStore, perform} from 'effector'
 
+const $count = createStore(0)
+const setCount = perform({
+  target: $count,
+  action: (set, amount: number) => {
+    set(amount)
+  },
+})
+
+setCount(2)
+```
+
+The event payload is passed to `action` after the target callbacks. Its type is
+inferred from the parameter annotation.
+
+### Reading state and choosing targets
+
+Pass stores to `source` to read their values in `action`. These values become the
+second argument, before the event payload. For an object of stores, a leading `$`
+is removed from its keys: `source: {$name}` gives `{name}`.
+
+Use an object in `target` to update several units. Its keys become callbacks:
+
+```ts
 const $name = createStore('')
 const $error = createStore('')
 const saveNameFx = createEffect(async (name: string) => {
@@ -43,14 +69,13 @@ submit()
 Only called targets are triggered. Here an empty name updates the error without
 starting the effect. Target callbacks return nothing, including effect callbacks.
 
-### Updating a single store
+### Reading and updating the same store
 
 To read and update a store, pass it to both `source` and `target`.
 `action` receives a setter as its first argument and the current store value as
 its second. Calculate the new value and pass it to the setter:
 
 ```ts
-const $count = createStore(0)
 const increment = perform({
   source: $count,
   target: $count,
@@ -61,9 +86,6 @@ const increment = perform({
 
 increment(2)
 ```
-
-Without `clock`, `perform` returns an event. Its payload type is inferred from the
-last `action` parameter; omit that parameter for an event without a payload.
 
 ### Resetting a store
 
@@ -118,9 +140,6 @@ With `clock`, `perform` returns nothing. The clock payload is the last argument 
   the last payload is used, including calls through different keys for the same unit.
 - Do not use `async` or save target callbacks for later. A call after `action`
   finishes throws. Start asynchronous work through an effect in `target`.
-- Store callbacks accept the new value, not a function that calculates it.
-  Use `setCount(count + 1)`, not `setCount(count => count + 1)`;
-  `count` comes from `source`, as in the example above.
 - If `action` throws, none of its collected target calls are applied.
 
 ## Coming from effector-action
