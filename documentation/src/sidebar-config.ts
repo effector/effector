@@ -745,6 +745,12 @@ export const effector: LSidebarGroup[] = [
         tags: ["useful"],
       },
       {
+        text: { en: "perform" },
+        link: "/api/effector/perform",
+        tags: ["useful"],
+        status: "new",
+      },
+      {
         text: { en: "combine" },
         link: "/api/effector/combine",
         tags: ["useful"],

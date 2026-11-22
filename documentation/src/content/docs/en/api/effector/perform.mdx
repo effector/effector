@@ -45,8 +45,9 @@ starting the effect. Target callbacks return nothing, including effect callbacks
 
 ### Updating a single store
 
-`target` accepts a single unit or an object of units. Read the current state through
-`source` to calculate a new value:
+To read and update a store, pass it to both `source` and `target`.
+`action` receives a setter as its first argument and the current store value as
+its second. Calculate the new value and pass it to the setter:
 
 ```ts
 const $count = createStore(0)
@@ -117,8 +118,9 @@ With `clock`, `perform` returns nothing. The clock payload is the last argument 
   the last payload is used, including calls through different keys for the same unit.
 - Do not use `async` or save target callbacks for later. A call after `action`
   finishes throws. Start asynchronous work through an effect in `target`.
-- Pass values to store callbacks, not reducers. Functions are stored as values.
-  Read the previous state through `source` instead.
+- Store callbacks accept the new value, not a function that calculates it.
+  Use `setCount(count + 1)`, not `setCount(count => count + 1)`;
+  `count` comes from `source`, as in the example above.
 - If `action` throws, none of its collected target calls are applied.
 
 ## Coming from effector-action
