@@ -124,10 +124,10 @@ test('undefined and function payloads remain values', () => {
   const watch = jest.fn()
   event.watch(watch)
   perform({
-    target: {event, store},
+    target: {emit: event, value: store},
     action: set => {
-      set.event()
-      set.store(fn)
+      set.emit()
+      set.value(fn)
     },
   })()
   expect(watch.mock.calls).toEqual([[undefined]])
@@ -304,10 +304,10 @@ test('object keys cannot collide with internal reset routing', () => {
   const seen = jest.fn()
   event.watch(seen)
   perform({
-    target: {store, '__store.reinit__': event},
+    target: {value: store, '__value.reinit__': event},
     action: set => {
-      set.store(1)
-      set['__store.reinit__'](2)
+      set.value(1)
+      set['__value.reinit__'](2)
     },
   })()
   expect(store.getState()).toBe(1)

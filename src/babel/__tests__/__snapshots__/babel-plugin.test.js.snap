@@ -4383,9 +4383,9 @@ const increment = perform({
 perform({
   and: {
     target: {
-      event,
+      emit: event,
     },
-    action: target => target.event(),
+    action: target => target.emit(),
   },
   or: {
     loc: {
@@ -4398,13 +4398,13 @@ perform({
 })
 const config = {
   target: {
-    event,
+    emit: event,
   },
   action,
 }
 function action(target) {
   const alias = target
-  alias.event()
+  alias.emit()
 }
 run({
   and: config,
@@ -4420,10 +4420,10 @@ run({
 const reset = run({
   and: {
     target: {
-      store: count,
+      count,
     },
     action(target) {
-      target.store(0)
+      target.count(0)
     },
   },
   or: {

@@ -21,10 +21,7 @@ import {
 import {getMethodParsers, normalizeOptions} from './config'
 import {transformReactHooks} from './transform/reactHooks'
 import {transformFactory} from './transform/factory'
-import {
-  processLegacyDomainHooks,
-  markPerformTargets,
-} from './transform/legacyDomainHooks'
+import {processLegacyDomainHooks} from './transform/legacyDomainHooks'
 import {transformHmr} from './transform/hmr'
 import {
   createFactoryTemplate,
@@ -222,20 +219,6 @@ export default function effectorBabelPlugin(
           }
 
           path.traverse(importVisitor, state)
-          if (transformLegacyDomainMethods) {
-            path.traverse({
-              CallExpression(call) {
-                const name = getNonIgnoredCalee(t, call, state)
-                if (
-                  name &&
-                  fullConfig.performCreators.has(name) &&
-                  !isLocalVariable(call, name)
-                ) {
-                  markPerformTargets(call)
-                }
-              },
-            })
-          }
         },
       },
       CallExpression(path, state) {
