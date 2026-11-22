@@ -3,58 +3,72 @@ import {createNode} from './createNode'
 import {createSampling} from './sample'
 import {createLinkNode} from './forward'
 import {calc} from './step'
-import {assertTarget, is, isObject} from './is'
+import {assertTarget, is, isFunction, isObject, isVoid} from './is'
+import {generateErrorTitle} from './naming'
 import {assert} from './throw'
 import {processArgsToConfig} from './config'
+import {forEach} from './collection'
 
 /** Collect target calls before propagating them through the graph. */
 export function perform(rawConfig: any) {
   const [config, metadata] = processArgsToConfig(rawConfig, true)
-  const {action, target} = config
-  assert(typeof action === 'function', 'perform: action should be a function')
-  let {source} = config
-  const shape = (value: any) =>
-    isObject(value) && !is.unit(value) && !Array.isArray(value)
-  assert(
-    is.unit(target) || shape(target),
-    'perform: target should be a unit or object',
-  )
+  const errorTitle = generateErrorTitle('perform', metadata)
+  const {action, target, name, sid, batch = true} = config
+  let {source, clock} = config
   const singleTarget = is.unit(target)
-  const entries = singleTarget ? [['', target]] : Object.entries(target)
-  entries.forEach(([, unit]) => {
-    assert(is.unit(unit), 'perform: target should contain units')
-    assertTarget('perform', unit as any)
-  })
-  const hasSource = source !== undefined
+  const hasSource = !isVoid(source)
+  const hasClock = !isVoid(clock)
+  assert(isFunction(action), 'action should be a function', errorTitle)
+  assert(
+    singleTarget || isShape(target),
+    'target should be a unit or object',
+    errorTitle,
+  )
   if (hasSource && !is.store(source)) {
     assert(
-      shape(source),
-      'perform: source should be a store or object of stores',
+      isShape(source),
+      'source should be a store or object of stores',
+      errorTitle,
     )
     const normalized = Object.create(null)
     Object.keys(source).forEach(key => {
-      assert(is.store(source[key]), 'perform: source should contain stores')
-      const name = key[0] === '$' ? key.slice(1) : key
-      assert(!(name in normalized), `perform: duplicate source key "${name}"`)
-      normalized[name] = source[key]
+      const keyName = key.startsWith('$') ? key.slice(1) : key
+      assert(
+        is.store(source[key]),
+        `source should contain store in key "${key}"`,
+        errorTitle,
+      )
+      assert(
+        !(keyName in normalized),
+        `duplicate source key "${keyName}"`,
+        errorTitle,
+      )
+      normalized[keyName] = source[key]
     })
     source = normalized
   }
-  const clock =
-    config.clock === undefined
-      ? createEvent({name: config.name, sid: config.sid, or: metadata})
-      : config.clock
   const units: any[] = []
   const register = (unit: any) => {
     let index = units.indexOf(unit)
-    if (index < 0) index = units.push(unit) - 1
+    if (index === -1) {
+      index = units.push(unit) - 1
+    }
     return index
   }
-  const targets = entries.map(([key, unit]: any) => ({
-    key,
-    index: register(unit),
-    reset: is.store(unit) ? register(unit.reinit) : -1,
-  }))
+  const targets = Object.entries(singleTarget ? {'': target} : target).map(
+    ([key, unit]: [string, any]) => {
+      assert(is.unit(unit), 'target should contain units', errorTitle)
+      assertTarget(errorTitle, unit)
+      return {
+        key,
+        index: register(unit),
+        reset: is.store(unit) ? register(unit.reinit) : -1,
+      }
+    },
+  )
+  if (!hasClock) {
+    clock = createEvent({name, sid, or: metadata})
+  }
   const result = createNode({regional: true, meta: {op: 'perform'}})
   createSampling(
     'perform',
@@ -68,39 +82,46 @@ export function perform(rawConfig: any) {
       const setter = (index: number) => (value: any) => {
         assert(
           active,
-          'perform: target calls are only allowed synchronously inside action',
+          'target calls are only allowed synchronously inside action',
+          errorTitle,
         )
-        if (index in calls)
+        if (index in calls) {
           console.error(
             'perform: target called more than once; only the last value is used',
           )
+        }
         calls[index] = value
         return value
       }
       const callbacks: any = Object.create(null)
-      targets.forEach(({key, index, reset}) => {
+      forEach(targets, ({key, index, reset}) => {
         const call: any = setter(index)
-        if (reset >= 0) call.reinit = setter(reset)
+        if (reset >= 0) {
+          call.reinit = setter(reset)
+        }
         callbacks[key] = call
       })
       try {
         const callable = singleTarget ? callbacks[''] : callbacks
-        if (hasSource) action(callable, value, payload)
-        else action(callable, value)
+        if (hasSource) {
+          action(callable, value, payload)
+        } else {
+          action(callable, value)
+        }
       } finally {
         active = false
       }
       return calls
     },
-    config.name,
+    name,
     metadata,
-    config.batch !== false,
+    batch,
     false,
     false,
     undefined,
     perform,
   )
-  units.forEach((unit, index) => {
+  forEach(units, (unit, index) => {
     createLinkNode(
       result,
       unit,
@@ -108,5 +129,10 @@ export function perform(rawConfig: any) {
       'perform',
     )
   })
-  if (config.clock === undefined) return clock
+  if (!hasClock) {
+    return clock
+  }
 }
+
+const isShape = (value: unknown) =>
+  isObject(value) && !is.unit(value) && !Array.isArray(value)

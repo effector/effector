@@ -227,10 +227,19 @@ test('region cleanup removes perform links', () => {
 test('rejects invalid configuration before use', () => {
   const store = createStore(0)
   const invalid: any[] = [
+    {},
+    {target: null},
+    {target: [store]},
     {target: store.map(x => x)},
+    {target: {derived: store.map(x => x)}},
     {source: {$a: store, a: store}, target: store},
     {source: createEvent(), target: store},
+    {source: null, target: store},
+    {source: [store], target: store},
+    {source: {bad: createEvent()}, target: store},
     {target: {bad: 1}},
+    {clock: null, target: store},
+    {clock: [createEvent(), null], target: store},
   ]
   invalid.forEach(config =>
     expect(() => perform({...config, action() {}})).toThrow('perform'),
@@ -333,10 +342,19 @@ test('clearing a perform event preserves other target subscriptions', () => {
   expect(seen.mock.calls).toEqual([[0], [1], [2]])
 })
 
-test('requires the action field', () => {
-  expect(() => perform({target: {}, fn() {}} as any)).toThrow(
+test.each([undefined, null, 1])('rejects invalid action %s', action => {
+  expect(() => perform({target: {}, action} as any)).toThrow(
     'action should be a function',
   )
+})
+
+test('validation errors include plugin metadata', () => {
+  expect(() =>
+    perform({
+      and: {target: {invalid: 1}, action() {}},
+      or: {name: 'save'},
+    } as any),
+  ).toThrow("[perform] unit 'save': target should contain units")
 })
 
 test('declares only the public event with its sid', () => {
