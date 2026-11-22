@@ -20,8 +20,8 @@ test('infers target, source and payload shapes', () => {
       action: (set, value, n: number) => {
         const s: string = value.text
         const v: number = value.a
-        const result: number = set.a(v + n)
-        set.save(result)
+        const result: void = set.a(v + n)
+        set.save(v + n)
         set.a.reinit()
       },
     })
@@ -52,7 +52,7 @@ test('infers target, source and payload shapes', () => {
       clock: createEvent<number>(),
       target: save,
       action: (set, n) => {
-        const v: number = set(n)
+        const v: void = set(n)
       },
     })
     perform({
@@ -98,7 +98,7 @@ test('rejects invalid targets, sources, and payloads', () => {
     perform({
       target: createEffect((n: number) => String(n)),
       action: set => {
-        // @ts-expect-error effect setters return payload, not a promise
+        // @ts-expect-error effect setters return void, not a promise
         const promise: Promise<string> = set(1)
       },
     })
@@ -119,8 +119,8 @@ test('rejects invalid targets, sources, and payloads', () => {
     Argument of type '(n: number) => number' is not assignable to parameter of type 'number'.
     Argument of type 'string' is not assignable to parameter of type 'number'.
     This expression is not callable.
-      Not all constituents of type '((value: any) => any) | { [x: string]: (value: any) => any; }' are callable.
-        Type '{ [x: string]: (value: any) => any; }' has no call signatures.
+      Not all constituents of type '((value: any) => void) | { [x: string]: (value: any) => void; }' are callable.
+        Type '{ [x: string]: (value: any) => void; }' has no call signatures.
     No overload matches this call.
       The last overload gave the following error.
         The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
@@ -145,7 +145,7 @@ test('contextual payload inference and function values', () => {
     perform({
       target: store,
       action: set => {
-        const value: () => number = set(() => 2)
+        const value: void = set(() => 2)
       },
     })
     const $value = createStore(1)

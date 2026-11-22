@@ -27,7 +27,7 @@ increment(2)
 
 - `target`: a writable store, callable event, effect, or object of these units.
   The first `action` argument has the same shape, with each unit replaced by a
-  synchronous callback. A callback returns its payload, including for effects.
+  synchronous callback. Callbacks return nothing, including for effects.
   Store callbacks also have `.reinit()`.
 - `source`: a store or object of stores to read before `action` runs. When supplied,
   its value is the second `action` argument and the clock payload is the third.

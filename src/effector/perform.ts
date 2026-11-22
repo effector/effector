@@ -91,7 +91,6 @@ export function perform(rawConfig: any) {
           )
         }
         calls[index] = value
-        return value
       }
       const callbacks: any = Object.create(null)
       forEach(targets, ({key, index, reset}) => {

@@ -99,7 +99,7 @@ test('clock arrays, source prefixes and conditional targets', () => {
       source: {$value: store},
       target,
       action: (set, {value}, n) => {
-        if (n > 0) expect(set(value + n)).toBe(value + n)
+        if (n > 0) expect(set(value + n)).toBeUndefined()
       },
     }),
   ).toBeUndefined()
@@ -120,6 +120,19 @@ test('perform events compose as targets', () => {
   sample({clock: start, target: outer})
   start(3)
   expect(store.getState()).toBe(6)
+})
+
+test('target callbacks return nothing', () => {
+  const count = createStore(0)
+  const save = createEffect((n: number) => n)
+  perform({
+    target: {count, save},
+    action: set => {
+      expect(set.count(1)).toBeUndefined()
+      expect(set.save(2)).toBeUndefined()
+    },
+  })()
+  expect(count.getState()).toBe(1)
 })
 
 test('undefined and function payloads remain values', () => {

@@ -3892,7 +3892,7 @@ export function createWatch<T>({
 /** Targets available during a synchronous perform callback. */
 type PerformTargets<T> =
   T extends UnitTargetable<infer V>
-    ? ((value: V) => V) & (T extends StoreWritable<any> ? {reinit(): void} : {})
+    ? ((value: V) => void) & (T extends StoreWritable<any> ? {reinit(): void} : {})
     : {[K in keyof T]: PerformTargets<T[K]>}
 type PerformSource<S> =
   S extends Store<infer V>
