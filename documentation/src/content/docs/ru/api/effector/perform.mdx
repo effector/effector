@@ -1,0 +1,131 @@
+---
+title: perform
+description: Обновление сторов и вызов событий или эффектов в одном синхронном действии
+lang: ru
+---
+
+`perform` собирает логику одного действия в одной функции. Используйте его, когда
+иначе пришлось бы писать несколько `sample` с ветвлениями и промежуточными событиями.
+
+Внутри `action` можно использовать обычные `if` и вызывать колбэки из `target`.
+Эти вызовы собирают значения; Effector передаёт их целевым юнитам после завершения
+`action`. Зависимости остаются явно заданными в `source`, `clock` и `target`.
+
+## Использование
+
+### Условные обновления
+
+```ts
+import {createEffect, createEvent, createStore, perform} from 'effector'
+
+const $name = createStore('')
+const $error = createStore('')
+const saveNameFx = createEffect(async (name: string) => {
+  await fetch('/api/name', {method: 'POST', body: name})
+})
+
+const submit = perform({
+  source: {$name},
+  target: {error: $error, saveNameFx},
+  action: (target, {name}) => {
+    const trimmed = name.trim()
+    if (!trimmed) {
+      target.error('Введите имя')
+      return
+    }
+    target.error('')
+    target.saveNameFx(trimmed)
+  },
+})
+
+submit()
+```
+
+Срабатывают только вызванные targets. Здесь пустое имя обновляет ошибку, но не
+запускает эффект. Колбэки targets ничего не возвращают, в том числе колбэки эффектов.
+
+### Обновление одного стора
+
+`target` принимает один юнит или объект юнитов. Чтобы вычислить новое значение,
+прочитайте текущее состояние через `source`:
+
+```ts
+const $count = createStore(0)
+const increment = perform({
+  source: $count,
+  target: $count,
+  action: (setCount, count, amount: number) => {
+    setCount(count + amount)
+  },
+})
+
+increment(2)
+```
+
+Без `clock` метод `perform` возвращает событие. Тип его payload выводится из
+последнего параметра `action`; для события без payload этот параметр не нужен.
+
+### Сброс стора
+
+У колбэков сторов есть метод `.reinit()`:
+
+```ts
+const reset = perform({
+  target: {count: $count},
+  action: target => {
+    target.count.reinit()
+  },
+})
+```
+
+### Внешний clock
+
+Передайте `clock`, чтобы запускать действие от существующего юнита или массива юнитов:
+
+```ts
+const amountChanged = createEvent<number>()
+
+perform({
+  clock: amountChanged,
+  target: $count,
+  action: (setCount, amount) => {
+    setCount(amount)
+  },
+})
+```
+
+С `clock` метод `perform` ничего не возвращает. Payload clock передаётся последним
+аргументом `action`.
+
+## Конфигурация
+
+- **`target`** — записываемый стор, вызываемое событие, эффект или объект таких юнитов.
+  Обязателен. Первый аргумент `action` повторяет эту форму, заменяя юниты колбэками.
+- **`source`** — стор или объект сторов. Их значения передаются вторым аргументом
+  `action`. Начальный `$` удаляется из ключей объекта:
+  `source: {$name}` даёт `{name}`. Ключи target не меняются.
+- **`clock`** — юнит или массив юнитов, запускающих действие. Если не указан,
+  возвращается новое вызываемое событие.
+- **`action`** — обязательная синхронная чистая функция:
+  `(target, payload) => void` или `(target, source, payload) => void` при наличии `source`.
+  Побочные эффекты запускайте через `target`, а не прямыми вызовами юнитов.
+- **`batch`** — по умолчанию `true`; управляет батчингом, как в [`sample`](/ru/api/effector/sample).
+- **`name`, `sid`** — необязательные метаданные возвращаемого события.
+
+## Ограничения
+
+- Вызывайте каждый target не более одного раза за действие. Повторные вызовы выводят
+  предупреждение; используется только последний payload. Это относится и к вызовам
+  одного юнита через разные ключи.
+- Не используйте `async` и не сохраняйте колбэки targets на потом. Вызов после
+  завершения `action` выбросит ошибку. Асинхронную работу запускайте через эффект в `target`.
+- Передавайте в колбэки сторов значения, а не редьюсеры. Функции сохраняются как значения.
+  Для чтения предыдущего состояния используйте `source`.
+- Если `action` выбросит ошибку, ни один из собранных вызовов targets не будет применён.
+
+## Переход с effector-action
+
+`perform` следует модели синхронного [`createAction`](https://github.com/AlexeyDuybo/effector-action).
+Он использует `action` вместо `fn` и принимает один объект конфигурации.
+Редьюсеры в колбэках сторов, возвращаемые колбэками значения, отдельный аргумент clock
+и `createAsyncAction` не поддерживаются.

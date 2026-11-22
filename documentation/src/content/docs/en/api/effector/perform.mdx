@@ -1,17 +1,55 @@
 ---
 title: perform
-description: Group synchronous target calls in one transaction
+description: Update stores and call events or effects in one synchronous action
 ---
 
+`perform` groups the logic of one action in a single function. Use it when a task
+would otherwise require several `sample` calls with branching and intermediate events.
+
+Inside `action`, use ordinary `if` statements and call the callbacks provided by
+`target`. These calls collect values; Effector propagates them after `action`
+finishes. Dependencies remain declared in `source`, `clock`, and `target`.
+
+## Usage
+
+### Conditional updates
+
 ```ts
-import {perform} from 'effector'
+import {createEffect, createEvent, createStore, perform} from 'effector'
+
+const $name = createStore('')
+const $error = createStore('')
+const saveNameFx = createEffect(async (name: string) => {
+  await fetch('/api/name', {method: 'POST', body: name})
+})
+
+const submit = perform({
+  source: {$name},
+  target: {error: $error, saveNameFx},
+  action: (target, {name}) => {
+    const trimmed = name.trim()
+    if (!trimmed) {
+      target.error('Enter a name')
+      return
+    }
+    target.error('')
+    target.saveNameFx(trimmed)
+  },
+})
+
+submit()
 ```
 
-`perform` declares a synchronous computation which can conditionally call several
-stores, events, or effects. All selected calls propagate together through the
-Effector graph, preserving the current scope.
+Only called targets are triggered. Here an empty name updates the error without
+starting the effect. Target callbacks return nothing, including effect callbacks.
+
+### Updating a single store
+
+`target` accepts a single unit or an object of units. Read the current state through
+`source` to calculate a new value:
 
 ```ts
+const $count = createStore(0)
 const increment = perform({
   source: $count,
   target: $count,
@@ -23,52 +61,69 @@ const increment = perform({
 increment(2)
 ```
 
-## Configuration
+Without `clock`, `perform` returns an event. Its payload type is inferred from the
+last `action` parameter; omit that parameter for an event without a payload.
 
-- `target`: a writable store, callable event, effect, or object of these units.
-  The first `action` argument has the same shape, with each unit replaced by a
-  synchronous callback. Callbacks return nothing, including for effects.
-  Store callbacks also have `.reinit()`.
-- `source`: a store or object of stores to read before `action` runs. When supplied,
-  its value is the second `action` argument and the clock payload is the third.
-  As in `effector-action`, a leading `$` is removed from source object keys.
-- `clock`: a unit or array of units. Without a clock, `perform` returns a new
-  callable event whose payload is inferred from `action`. With a clock it returns
-  `undefined` and subscribes to that clock.
-- `action`: `(target, payload) => void`, or `(target, source, payload) => void`
-  when `source` is supplied.
-- `batch`: defaults to `true`, with the same clock scheduling as `sample`.
-- `name`, `sid`: optional metadata for the created event.
+### Resetting a store
+
+Store callbacks expose `.reinit()`:
 
 ```ts
-const saveProfile = perform({
-  source: {config: $config, profile: $profile},
-  target: {saveFx, profile: $profile},
-  action: (set, {config, profile}, patch: Partial<Profile>) => {
-    const next = {...profile, ...patch}
-    set.profile(next)
-    if (config.autoSave) set.saveFx(next)
+const reset = perform({
+  target: {count: $count},
+  action: target => {
+    target.count.reinit()
   },
 })
 ```
 
-Only called targets receive an update. Repeated calls of the same target in one
-invocation log a warning and use the last payload. Calls through aliases of the
-same unit share this rule. Function-valued payloads are stored as values;
-reducer setters such as `setCount(count => count + 1)` are not supported.
-Read the current value using `source` instead.
+### External clock
 
-The callback must finish synchronously. Saving a target callback for later use
-throws when it is called after `action` returns. If `action` throws, its collected writes
-are discarded and Effector reports the error. For asynchronous work, call an
-effect target and compose its completion events with `sample` or another
-`perform`.
+Pass `clock` to run the action on an existing unit or array of units:
 
-The returned event works with `sample`, `scopeBind`, `allSettled`, and as another
-`perform` target. Store updates participate in normal Effector batching, so
-combined stores and batched samplers see the resulting state together.
+```ts
+const amountChanged = createEvent<number>()
 
-This API implements the synchronous `createAction` model from
-[effector-action](https://github.com/AlexeyDuybo/effector-action), with one
-configuration argument and `action` instead of `fn`. Reducer setters and
-`createAsyncAction` are not included.
+perform({
+  clock: amountChanged,
+  target: $count,
+  action: (setCount, amount) => {
+    setCount(amount)
+  },
+})
+```
+
+With `clock`, `perform` returns nothing. The clock payload is the last argument of
+`action`.
+
+## Configuration
+
+- **`target`** — a writable store, callable event, effect, or object of these units.
+  Required. The first `action` argument mirrors this shape, replacing units with callbacks.
+- **`source`** — a store or object of stores. Its values are passed as the second
+  argument of `action`. A leading `$` is removed from object keys:
+  `source: {$name}` gives `{name}`. Target keys remain unchanged.
+- **`clock`** — a unit or array of units that triggers the action. If omitted,
+  a new callable event is returned.
+- **`action`** — a required synchronous, pure function:
+  `(target, payload) => void`, or `(target, source, payload) => void` with `source`.
+  Route side effects through `target`, not direct calls to units.
+- **`batch`** — `true` by default; controls batching as in [`sample`](/en/api/effector/sample).
+- **`name`, `sid`** — optional metadata for the returned event.
+
+## Restrictions
+
+- Call each target at most once per action. Repeated calls log a warning and only
+  the last payload is used, including calls through different keys for the same unit.
+- Do not use `async` or save target callbacks for later. A call after `action`
+  finishes throws. Start asynchronous work through an effect in `target`.
+- Pass values to store callbacks, not reducers. Functions are stored as values.
+  Read the previous state through `source` instead.
+- If `action` throws, none of its collected target calls are applied.
+
+## Coming from effector-action
+
+`perform` follows the synchronous [`createAction`](https://github.com/AlexeyDuybo/effector-action)
+model. It uses `action` instead of `fn` and accepts one configuration object.
+Reducer setters, callback return values, a separate clock argument, and
+`createAsyncAction` are not supported.
