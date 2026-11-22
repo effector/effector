@@ -16,7 +16,7 @@ import {
   createNode,
 } from 'effector'
 
-test('update swaps stores atomically and composes with sample and combine', () => {
+test('target swaps stores atomically and composes with sample and combine', () => {
   const a = createStore(1)
   const b = createStore(2)
   const watch = jest.fn()
@@ -25,7 +25,8 @@ test('update swaps stores atomically and composes with sample and combine', () =
   const sampled = jest.fn()
   swapped.watch(sampled)
   const swap = perform({
-    update: {a, b},
+    source: {a, b},
+    target: {a, b},
     action: (set, value) => {
       set.a(value.b)
       set.b(value.a)
@@ -37,15 +38,14 @@ test('update swaps stores atomically and composes with sample and combine', () =
   expect(sampled.mock.calls).toEqual([[{a: 2, b: 1}]])
 })
 
-test('source, update and targets share scope and settle effects', async () => {
+test('source and targets share scope and settle effects', async () => {
   const config = createStore(2, {sid: 'perform-config'})
   const count = createStore(0, {sid: 'perform-count'})
   const save = createEffect((n: number) => n * 2)
   const fn = jest.fn((n: number) => n * 3)
   const action = perform({
-    source: {config},
-    update: {count},
-    target: {save},
+    source: {config, count},
+    target: {save, count},
     action: (set, source, n: number) => {
       set.count(source.count + n * source.config)
       set.save(source.count + n)
@@ -71,9 +71,13 @@ test('source, update and targets share scope and settle effects', async () => {
   expect(scope.getState(count)).toBe(26)
 })
 
-test('single update and store reinit', async () => {
+test('single store target and reinit', async () => {
   const count = createStore(1)
-  const inc = perform({update: count, action: (set, count) => set(count + 1)})
+  const inc = perform({
+    source: count,
+    target: count,
+    action: (set, count) => set(count + 1),
+  })
   const reset = perform({target: count, action: set => set.reinit()})
   const scope = fork()
   await allSettled(inc, {scope})
@@ -107,7 +111,8 @@ test('clock arrays, source prefixes and conditional targets', () => {
 test('perform events compose as targets', () => {
   const store = createStore(0)
   const inner = perform({
-    update: store,
+    source: store,
+    target: store,
     action: (set, value, n: number) => set(value + n),
   })
   const outer = perform({target: inner, action: (set, n: number) => set(n * 2)})
@@ -223,9 +228,6 @@ test('rejects invalid configuration before use', () => {
   const store = createStore(0)
   const invalid: any[] = [
     {target: store.map(x => x)},
-    {update: createEvent()},
-    {update: store, source: {store}},
-    {update: {store}, target: {store}},
     {source: {$a: store, a: store}, target: store},
     {source: createEvent(), target: store},
     {target: {bad: 1}},
@@ -237,7 +239,11 @@ test('rejects invalid configuration before use', () => {
 
 test('independent scopes do not share collected writes or source state', async () => {
   const count = createStore(0)
-  const inc = perform({update: count, action: (set, value) => set(value + 1)})
+  const inc = perform({
+    source: count,
+    target: count,
+    action: (set, value) => set(value + 1),
+  })
   const a = fork({values: [[count, 10]]})
   const b = fork({values: [[count, 20]]})
   await Promise.all([allSettled(inc, {scope: a}), allSettled(inc, {scope: b})])

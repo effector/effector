@@ -4340,44 +4340,39 @@ const c = merge(...args, {
 
 exports[`babel-plugin should perform 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/perform.js'
-import {
-  perform,
-  perform as run,
-  createStore,
-  createEvent,
-  createDomain,
-} from 'effector'
+import {perform, perform as run, createStore, createEvent} from 'effector'
 const count = createStore(0, {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 14,
+  },
+  name: 'count',
+  sid: '-bcesjb',
+})
+const event = createEvent({
   loc: {
     file: _effectorFileName,
     line: 8,
     column: 14,
   },
-  name: 'count',
-  sid: '-avd654',
-})
-const event = createEvent({
-  loc: {
-    file: _effectorFileName,
-    line: 9,
-    column: 14,
-  },
   name: 'event',
-  sid: '3tx5i4',
+  sid: '3cvj3x',
 })
 const increment = perform({
   and: {
-    update: count,
+    source: count,
+    target: count,
     action: (set, n) => set(n + 1),
   },
   or: {
     loc: {
       file: _effectorFileName,
-      line: 10,
+      line: 9,
       column: 18,
     },
     name: 'increment',
-    sid: '-ror393',
+    sid: '-6c5865',
   },
 })
 perform({
@@ -4390,10 +4385,10 @@ perform({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 11,
+      line: 10,
       column: 0,
     },
-    sid: '-piriu',
+    sid: '-q2k47',
   },
 })
 const config = {
@@ -4411,10 +4406,10 @@ run({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 17,
+      line: 16,
       column: 0,
     },
-    sid: '-m7zyo',
+    sid: '-mrsk1',
   },
 })
 const reset = run({
@@ -4429,29 +4424,12 @@ const reset = run({
   or: {
     loc: {
       file: _effectorFileName,
-      line: 18,
+      line: 17,
       column: 14,
     },
     name: 'reset',
-    sid: '-tyrizf',
+    sid: '-uft5dm',
   },
-})
-const domain = createDomain({
-  loc: {
-    file: _effectorFileName,
-    line: 24,
-    column: 15,
-  },
-  name: 'domain',
-  sid: '-glouki',
-})
-domain.event({
-  loc: {
-    file: _effectorFileName,
-    line: 25,
-    column: 0,
-  },
-  sid: '-69yr7',
 })
 "
 `;

@@ -13,7 +13,8 @@ Effector graph, preserving the current scope.
 
 ```ts
 const increment = perform({
-  update: $count,
+  source: $count,
+  target: $count,
   action: (setCount, count, amount: number) => {
     setCount(count + amount)
   },
@@ -34,19 +35,15 @@ increment(2)
 - `clock`: a unit or array of units. Without a clock, `perform` returns a new
   callable event whose payload is inferred from `action`. With a clock it returns
   `undefined` and subscribes to that clock.
-- `update`: shorthand for including writable stores in both `source` and
-  `target`. A single store can be used on its own. An object can be combined
-  with object-shaped `source` and `target`; overlapping keys are rejected.
 - `action`: `(target, payload) => void`, or `(target, source, payload) => void`
-  when `source` or `update` is supplied.
+  when `source` is supplied.
 - `batch`: defaults to `true`, with the same clock scheduling as `sample`.
 - `name`, `sid`: optional metadata for the created event.
 
 ```ts
 const saveProfile = perform({
-  source: {config: $config},
-  update: {profile: $profile},
-  target: {saveFx},
+  source: {config: $config, profile: $profile},
+  target: {saveFx, profile: $profile},
   action: (set, {config, profile}, patch: Partial<Profile>) => {
     const next = {...profile, ...patch}
     set.profile(next)
@@ -59,7 +56,7 @@ Only called targets receive an update. Repeated calls of the same target in one
 invocation log a warning and use the last payload. Calls through aliases of the
 same unit share this rule. Function-valued payloads are stored as values;
 reducer setters such as `setCount(count => count + 1)` are not supported.
-Read the current value using `source` or `update` instead.
+Read the current value using `source` instead.
 
 The callback must finish synchronously. Saving a target callback for later use
 throws when it is called after `action` returns. If `action` throws, its collected writes
@@ -73,5 +70,5 @@ combined stores and batched samplers see the resulting state together.
 
 This API implements the synchronous `createAction` model from
 [effector-action](https://github.com/AlexeyDuybo/effector-action), with one
-configuration argument and the `update` shorthand proposed in
-[issue #1275](https://github.com/effector/effector/issues/1275).
+configuration argument and `action` instead of `fn`. Reducer setters and
+`createAsyncAction` are not included.

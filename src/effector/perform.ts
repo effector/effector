@@ -10,39 +10,11 @@ import {processArgsToConfig} from './config'
 /** Collect target calls before propagating them through the graph. */
 export function perform(rawConfig: any) {
   const [config, metadata] = processArgsToConfig(rawConfig, true)
-  const {action, update} = config
+  const {action, target} = config
   assert(typeof action === 'function', 'perform: action should be a function')
-  let {source, target} = config
+  let {source} = config
   const shape = (value: any) =>
     isObject(value) && !is.unit(value) && !Array.isArray(value)
-  const merge = (left: any, right: any, field: string) => {
-    if (left === undefined) return right
-    assert(
-      shape(left) && shape(right),
-      `perform: ${field} and update should be objects`,
-    )
-    const result = {...left}
-    Object.keys(right).forEach(key => {
-      assert(
-        !Object.prototype.hasOwnProperty.call(result, key),
-        `perform: duplicate ${field} key "${key}"`,
-      )
-      result[key] = right[key]
-    })
-    return result
-  }
-  if (update !== undefined) {
-    const stores = is.store(update)
-      ? [update]
-      : shape(update) && Object.values(update)
-    assert(
-      stores && stores.every(is.store),
-      'perform: update should contain stores',
-    )
-    stores.forEach((store: any) => assertTarget('perform', store, 'update'))
-    source = merge(source, update, 'source')
-    target = merge(target, update, 'target')
-  }
   assert(
     is.unit(target) || shape(target),
     'perform: target should be a unit or object',

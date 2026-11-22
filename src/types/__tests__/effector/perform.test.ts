@@ -9,15 +9,14 @@ import {
 } from 'effector'
 const typecheck = '{global}'
 
-test('infers target, source, payload and update shapes', () => {
+test('infers target, source and payload shapes', () => {
   const check = () => {
     const a = createStore(0)
     const text = createStore('')
     const save = createEffect((n: number) => String(n))
     const action: EventCallable<number> = perform({
-      source: {$text: text},
-      update: {a},
-      target: {save},
+      source: {$text: text, a},
+      target: {save, a},
       action: (set, value, n: number) => {
         const s: string = value.text
         const v: number = value.a
@@ -27,7 +26,8 @@ test('infers target, source, payload and update shapes', () => {
       },
     })
     const inc: EventCallable<void> = perform({
-      update: a,
+      source: a,
+      target: a,
       action: (set, value) => set(value + 1),
     })
     const source: EventCallable<string> = perform({
@@ -41,7 +41,8 @@ test('infers target, source, payload and update shapes', () => {
     })
     const result: void = perform({
       clock: [createEvent<number>(), createEvent<string>()],
-      update: a,
+      source: a,
+      target: a,
       action: (set, value, payload) => {
         const n: string | number = payload
         set(value)
@@ -62,8 +63,8 @@ test('infers target, source, payload and update shapes', () => {
     })
     perform({
       clock: createEvent<number>(),
-      update: {a},
-      target: {save},
+      source: {a},
+      target: {save, a},
       action: (set, value, n) => {
         set.a(value.a + n)
         set.save(n)
@@ -82,14 +83,11 @@ test('rejects invalid targets, sources, and payloads', () => {
     const a = createStore(0)
     // @ts-expect-error derived stores are not targets
     perform({target: a.map(x => x), action() {}})
-    // @ts-expect-error events are not update stores
-    perform({update: createEvent(), action() {}})
     // @ts-expect-error source must contain stores
     perform({source: {bad: createEvent()}, target: a, action() {}})
-    // @ts-expect-error single update cannot be merged with a shape
-    perform({update: a, target: {a}, action() {}})
     perform({
-      update: a,
+      source: a,
+      target: a,
       action: (set, value) => {
         // @ts-expect-error no reducer setters
         set((n: number) => n + 1)
@@ -117,13 +115,7 @@ test('rejects invalid targets, sources, and payloads', () => {
             Index signature for type 'string' is missing in type 'Store<number>'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'EventCallable<void>' is not assignable to type 'undefined'.
-    No overload matches this call.
-      The last overload gave the following error.
         Type '{ bad: EventCallable<void>; }' is not assignable to type 'undefined'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type 'StoreWritable<number>' is not assignable to type 'undefined'.
     Argument of type '(n: number) => number' is not assignable to parameter of type 'number'.
     Argument of type 'string' is not assignable to parameter of type 'number'.
     This expression is not callable.
@@ -156,8 +148,10 @@ test('contextual payload inference and function values', () => {
         const value: () => number = set(() => 2)
       },
     })
+    const $value = createStore(1)
     perform({
-      update: {$value: createStore(1)},
+      source: {$value},
+      target: {$value},
       action: (set, {value}) => set.$value(value + 1),
     })
     // @ts-expect-error invalid clock
@@ -177,43 +171,6 @@ test('contextual payload inference and function values', () => {
         Type 'Event<number>' is not assignable to type 'Record<string, UnitTargetable<any>> | UnitTargetable<any>'.
           Type 'Event<number>' is not assignable to type 'Record<string, UnitTargetable<any>>'.
             Index signature for type 'string' is missing in type 'Event<number>'.
-    "
-  `)
-})
-
-test('action is the required callback field', () => {
-  const check = () => {
-    // @ts-expect-error fn is not an alias for action
-    perform({target: {}, fn() {}})
-  }
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    No overload matches this call.
-      The last overload gave the following error.
-        Object literal may only specify known properties, and 'fn' does not exist in type 'PerformOptions & { target: Record<string, UnitTargetable<any>> | UnitTargetable<any>; source?: undefined; update?: undefined; clock?: undefined; action: (target: ((value: any) => any) | { ...; }, payload: void) => void; }'.
-    "
-  `)
-})
-
-test('update keys cannot shadow explicit dependencies', () => {
-  const check = () => {
-    const a = createStore(0)
-    // @ts-expect-error duplicate update/source key
-    perform({update: {a}, source: {a}, action() {}})
-    // @ts-expect-error duplicate update/target key
-    perform({update: {a}, target: {a}, action() {}})
-  }
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    No overload matches this call.
-      The last overload gave the following error.
-        Type '{ a: StoreWritable<number>; }' is not assignable to type 'undefined'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type '{ a: StoreWritable<number>; }' is not assignable to type 'undefined'.
-    No overload matches this call.
-      The last overload gave the following error.
-        Type '{ a: StoreWritable<number>; }' is not assignable to type 'undefined'.
     "
   `)
 })
