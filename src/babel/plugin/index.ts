@@ -16,6 +16,7 @@ import {
   stripRoot,
   rememberLocalName,
   getImportedName,
+  isLocalVariable,
 } from './util'
 import {getMethodParsers, normalizeOptions} from './config'
 import {transformReactHooks} from './transform/reactHooks'

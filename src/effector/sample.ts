@@ -99,6 +99,7 @@ export const createSampling = (
   targetMayBeStore: boolean,
   filterRequired: boolean,
   sid?: string | undefined,
+  caller: (...args: any[]) => any = sample,
 ) => {
   const errorTitle = generateErrorTitle(method, metadata)
   const isUpward = !!target
@@ -238,7 +239,7 @@ export const createSampling = (
   own(source, [jointNode])
   own(jointNode, syncNodes)
   Object.assign(jointNode.meta, metadata, {joint: true, stateRef: clockState})
-  setUnitTrace(jointNode, getUnitTrace(sample))
+  setUnitTrace(jointNode, getUnitTrace(caller))
   return target
 }
 
