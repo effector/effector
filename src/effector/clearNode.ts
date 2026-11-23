@@ -14,6 +14,7 @@ const nonPassableNodes = [
   'on',
   'reset',
   'sample',
+  'perform',
   'split',
   'merge',
   'guard',

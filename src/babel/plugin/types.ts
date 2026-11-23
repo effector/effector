@@ -110,6 +110,7 @@ export type EffectorPluginOptions = {
   restoreCreators?: string[]
   combineCreators?: string[]
   sampleCreators?: string[]
+  performCreators?: string[]
   forwardCreators?: string[]
   guardCreators?: string[]
   attachCreators?: string[]
@@ -124,6 +125,7 @@ export type EffectorPluginOptions = {
   restores?: boolean
   combines?: boolean
   samples?: boolean
+  performs?: boolean
   forwards?: boolean
   guards?: boolean
   attaches?: boolean
@@ -167,6 +169,7 @@ export type EffectorPluginOptionsNormalized = {
   restores: boolean
   combines: boolean
   samples: boolean
+  performs: boolean
   forwards: boolean
   guards: boolean
   attaches: boolean
@@ -182,6 +185,7 @@ export type EffectorPluginOptionsNormalized = {
   restoreCreators: Set<string>
   combineCreators: Set<string>
   sampleCreators: Set<string>
+  performCreators: Set<string>
   forwardCreators: Set<string>
   guardCreators: Set<string>
   attachCreators: Set<string>

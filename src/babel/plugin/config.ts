@@ -33,6 +33,7 @@ export function normalizeOptions(options: EffectorPluginOptions) {
         restore: [],
         combine: [],
         sample: [],
+        perform: [],
         forward: [],
         guard: [],
         attach: [],
@@ -58,6 +59,7 @@ export function normalizeOptions(options: EffectorPluginOptions) {
         restore: ['restore'],
         combine: ['combine'],
         sample: ['sample'],
+        perform: ['perform'],
         forward: ['forward'],
         guard: ['guard'],
         attach: ['attach'],
@@ -89,6 +91,7 @@ export function normalizeOptions(options: EffectorPluginOptions) {
       restores: true,
       combines: true,
       samples: true,
+      performs: true,
       forwards: true,
       guards: true,
       attaches: true,
@@ -134,6 +137,7 @@ export function normalizeOptions(options: EffectorPluginOptions) {
       restoreCreators: new Set(options.restoreCreators || defaults.restore),
       combineCreators: new Set(options.combineCreators || defaults.combine),
       sampleCreators: new Set(options.sampleCreators || defaults.sample),
+      performCreators: new Set(options.performCreators || defaults.perform),
       forwardCreators: new Set(options.forwardCreators || defaults.forward),
       guardCreators: new Set(options.guardCreators || defaults.guard),
       attachCreators: new Set(options.attachCreators || defaults.attach),
@@ -170,6 +174,7 @@ export function normalizeOptions(options: EffectorPluginOptions) {
     fullConfig.restoreCreators,
     fullConfig.combineCreators,
     fullConfig.sampleCreators,
+    fullConfig.performCreators,
     fullConfig.forwardCreators,
     fullConfig.guardCreators,
     fullConfig.attachCreators,
@@ -248,6 +253,7 @@ export function getMethodParsers(
     restores,
     combines,
     samples,
+    performs,
     forwards,
     guards,
     attaches,
@@ -263,6 +269,7 @@ export function getMethodParsers(
     restoreCreators,
     combineCreators,
     sampleCreators,
+    performCreators,
     forwardCreators,
     guardCreators,
     attachCreators,
@@ -279,6 +286,7 @@ export function getMethodParsers(
     restores: boolean
     combines: boolean
     samples: boolean
+    performs: boolean
     forwards: boolean
     guards: boolean
     attaches: boolean
@@ -294,6 +302,7 @@ export function getMethodParsers(
     restoreCreators: Set<string>
     combineCreators: Set<string>
     sampleCreators: Set<string>
+    performCreators: Set<string>
     forwardCreators: Set<string>
     guardCreators: Set<string>
     attachCreators: Set<string>
@@ -353,6 +362,12 @@ export function getMethodParsers(
       set: sampleCreators,
       fn: (path, state, name, id) =>
         setConfigForConfMethod(path, state, id, t, smallConfig, false, name),
+    },
+    {
+      flag: performs,
+      set: performCreators,
+      fn: (path, state, name, id) =>
+        setConfigForConfMethod(path, state, id, t, smallConfig, true, name),
     },
     {
       flag: forwards,

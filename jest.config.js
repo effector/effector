@@ -96,20 +96,19 @@ const compatBrowsers = [
     },
   },
   {
-    // browserstack retired ios 12, and 11 is not an option either: this runs
-    // the plain cjs build with no polyfill, and it needs Array.prototype.flat,
-    // which safari only got in 12. 13 is the oldest ios still offered above it
-    name: 'iPhone 11',
+    // browserstack retired iPhone 11–13; use iPhone 14 with iOS 16.
+    // The plain cjs build needs Array.prototype.flat without a polyfill.
+    name: 'iPhone 14',
     effectorBuild: 'cjs',
     needPolyfill: false,
     capabilitiesTag: 'ios',
     capabilities: {
       'bstack:options': {
-        osVersion: '13',
-        deviceName: 'iPhone 11',
+        osVersion: '16',
+        deviceName: 'iPhone 14',
         realMobile: 'true',
         projectName: 'effector-compat',
-        buildName: 'iPhone 11',
+        buildName: 'iPhone 14',
         deviceOrientation: 'portrait',
       },
     },

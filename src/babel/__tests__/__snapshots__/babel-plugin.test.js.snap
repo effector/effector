@@ -4338,6 +4338,102 @@ const c = merge(...args, {
 "
 `;
 
+exports[`babel-plugin should perform 1`] = `
+"var _effectorFileName = '/src/babel/__tests__/fixtures/perform.js'
+import {perform, perform as run, createStore, createEvent} from 'effector'
+const count = createStore(0, {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 14,
+  },
+  name: 'count',
+  sid: '-bcesjb',
+})
+const event = createEvent({
+  loc: {
+    file: _effectorFileName,
+    line: 8,
+    column: 14,
+  },
+  name: 'event',
+  sid: '3cvj3x',
+})
+const increment = perform({
+  and: {
+    source: count,
+    target: count,
+    action: (set, n) => set(n + 1),
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 9,
+      column: 18,
+    },
+    name: 'increment',
+    sid: '-6c5865',
+  },
+})
+perform({
+  and: {
+    target: {
+      emit: event,
+    },
+    action: target => target.emit(),
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 10,
+      column: 0,
+    },
+    sid: '-q2k47',
+  },
+})
+const config = {
+  target: {
+    emit: event,
+  },
+  action,
+}
+function action(target) {
+  const alias = target
+  alias.emit()
+}
+run({
+  and: config,
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 16,
+      column: 0,
+    },
+    sid: '-mrsk1',
+  },
+})
+const reset = run({
+  and: {
+    target: {
+      count,
+    },
+    action(target) {
+      target.count(0)
+    },
+  },
+  or: {
+    loc: {
+      file: _effectorFileName,
+      line: 17,
+      column: 14,
+    },
+    name: 'reset',
+    sid: '-uft5dm',
+  },
+})
+"
+`;
+
 exports[`babel-plugin should references 1`] = `
 "var _effectorFileName = '/src/babel/__tests__/fixtures/references.js'
 function outerScope() {
