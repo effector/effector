@@ -2,6 +2,11 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 23.5.1
+
+- Fix inline target inference in `sample`
+- Fix `split` types for generic identity match functions and error messages for union and boolean payloads ([PR #1298](https://github.com/effector/effector/pull/1298))
+
 ## effector 23.5.0 Nina
 
 - Add [`perform`](https://effector.dev/en/api/effector/perform/) to update stores and call events or effects in one synchronous action, without splitting branching logic across several `sample` calls. Based on [`createAction` from effector-action](https://github.com/AlexeyDuybo/effector-action) ([issue #1275](https://github.com/effector/effector/issues/1275))
