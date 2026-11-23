@@ -2,10 +2,13 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-## effector 23.5.0
+## effector 23.5.0 Nina
 
 - Add [`perform`](https://effector.dev/en/api/effector/perform/) to update stores and call events or effects in one synchronous action, without splitting branching logic across several `sample` calls. Based on [`createAction` from effector-action](https://github.com/AlexeyDuybo/effector-action) ([issue #1275](https://github.com/effector/effector/issues/1275))
-- `sample` type improvements
+- Major `sample` type improvements - use native typescript errors where possible instead of custom ones, more cases handled, better type inference.
+- Fix inspect kernel bug
+
+In memory of Nina Boldyreva
 
 ## effector-vue 23.3.0
 
