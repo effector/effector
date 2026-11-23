@@ -785,7 +785,7 @@ describe('invalid container items', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Property 'clock' is missing in type '{}' but required in type '{ clock: unknown; source?: undefined; filter?: undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
+      Property 'clock' is missing in type '{}' but required in type '{ clock: unknown; source?: undefined; filter?: undefined; target?: unknown; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
       "
     `)
   })
