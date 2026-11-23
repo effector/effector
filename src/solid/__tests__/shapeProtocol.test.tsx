@@ -1,6 +1,6 @@
 import {allSettled, createEvent, createStore, fork, sample} from 'effector'
 import {useUnit, Provider} from 'effector-solid'
-import {render, fireEvent} from 'solid-testing-library'
+import {render, fireEvent} from '@solidjs/testing-library'
 
 describe('useUnit uses @@unitShape', () => {
   it('resolves custom shape of stores', async () => {

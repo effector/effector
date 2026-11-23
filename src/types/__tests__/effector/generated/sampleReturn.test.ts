@@ -64,7 +64,6 @@ describe('no target', () => {
     //prettier-ignore
     {
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf})}
-      {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:(val: AN | null): val is AN => val !== null})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:fn0})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:({a}:AN) => ({a})})}
       {const result: Event<AN> = sample({source:aNumNull, clock:num, filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
@@ -915,531 +914,205 @@ describe('tuple target', () => {
   test('tuple target, none clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })
   test('tuple target, event clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })
   test('tuple target, store clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })
   test('tuple target, tuple clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT]})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn0})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:({a}:AN,c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT]})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn0})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a}) => ({a})})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:({a},c) => ({a:a+c})})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })
@@ -1448,267 +1121,117 @@ describe('tuple target, typed fn', () => {
   test('tuple target, typed fn, none clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , target:[aNumT,aT], filter:$flag, fn:fn1})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })
   test('tuple target, typed fn, event clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:num, target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:num, target:[aNumT,aT], filter:$flag, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:num, target:[aNumT,aT], filter:$flag, fn:fn2})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })
   test('tuple target, typed fn, store clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:filterInf, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:$num, target:[aNumT,aT], filter:Boolean, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:$num, target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:filterFun, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:$num, target:[aNumT,aT], filter:$flag, fn:fn2})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })
   test('tuple target, typed fn, tuple clock (should pass)', () => {
     //prettier-ignore
     {
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn2})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn1})}
-      {const result: [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:filterInf, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNumNull, clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:$aNull  , clock:[num,$num], target:[aNumT,aT], filter:Boolean, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:{a:$num}, clock:[num,$num], target:[aNumT,aT], fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:filterFun, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:aNum    , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn2})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn1})}
+      {const result: readonly [Event<AN>, Store<AN>] = sample({source:a       , clock:[num,$num], target:[aNumT,aT], filter:$flag, fn:fn2})}
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
-      Type '(EventCallable<AN> | StoreWritable<{ a: number; }>)[]' is not assignable to type '[Event<AN>, Store<AN>]'.
-        Target requires 2 element(s) but source may have fewer.
+      no errors
       "
     `)
   })

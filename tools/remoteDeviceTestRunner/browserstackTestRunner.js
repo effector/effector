@@ -138,166 +138,166 @@ async function setSessionStatus(browser, status, reason) {
   } catch (error) {}
 }
 
+function noop() {}
+
+function projectName({displayName, id}) {
+  if (typeof displayName === 'string') return displayName
+  return (displayName && displayName.name) || id
+}
+
 module.exports = class BSTestRunner extends require('jest-runner').default {
   constructor(...args) {
     super(...args)
     this.isSerial = true
-    this.__PRIVATE_UNSTABLE_API_supportsEventEmitters__ = false
   }
-  async runTests(tests, watcher, onStart, onResult, onFailure, options) {
+  // jest drives this runner through the event emitter api, so the browser is
+  // set up in a `test-file-start` listener: jest awaits those before running
+  // the file, which is what makes the injected globals visible to it
+  async runTests(tests, watcher, options) {
     const browserRequests = {}
     const testMap = {}
     function requestBrowser(tag, config) {
       if (!browserRequests[tag]) {
         testMap[tag] = {browser: null, fails: []}
         browserRequests[tag] = remote(createBrowserstackConfig(config))
+        // the rejection is reported by whoever awaits the request itself,
+        // this branch only records the instance for the teardown
         browserRequests[tag].then(browser => {
           testMap[tag].browser = browser
-        })
+        }, noop)
       }
       return browserRequests[tag]
     }
-    try {
-      return await super.runTests(
-        tests,
-        watcher,
-        async test => {
-          const {
-            needForest,
-            effectorBuild,
-            needPolyfill,
-            capabilitiesTag,
-            capabilities,
-            noAsyncAwait,
-          } = test.context.config.globals
-          let browser
-          try {
-            browser = await requestBrowser(capabilitiesTag, capabilities)
-          } catch (error) {
-            console.error('remote() call error', error)
-            if (error && error.message)
-              throw Error(`remote error: ${error.message}`)
-            throw error
-          }
-          const initBrowser = async () => {
-            try {
-              await browser.url('about:blank')
-              await browser.execute(initPageRuntime, modulesList)
-            } catch (error) {
-              console.error('initBrowser error', error)
-              throw error
-            }
-          }
+    const prepareTest = async test => {
+      const {
+        needForest,
+        effectorBuild,
+        needPolyfill,
+        capabilitiesTag,
+        capabilities,
+        noAsyncAwait,
+      } = test.context.config.globals
+      let browser
+      try {
+        browser = await requestBrowser(capabilitiesTag, capabilities)
+      } catch (error) {
+        console.error('remote() call error', error)
+        if (error && error.message) throw Error(`remote error: ${error.message}`)
+        throw error
+      }
+      const initBrowser = async () => {
+        try {
+          await browser.url('about:blank')
+          await browser.execute(initPageRuntime, modulesList)
+        } catch (error) {
+          console.error('initBrowser error', error)
+          throw error
+        }
+      }
 
-          const libs = {}
-          const moduleRequests = []
-          if (needPolyfill) {
-            moduleRequests.push(moduleRequest('polyfill', 'polyfill', libs))
-          }
-          moduleRequests.push(moduleRequest(effectorBuild, 'effector', libs))
-          if (needForest) {
-            moduleRequests.push(moduleRequest('forest', 'forest', libs))
-          }
-          await Promise.all(moduleRequests)
-          const modulesList = []
-          if (needPolyfill) {
-            modulesList.push({
-              name: 'polyfill',
-              src: libs.polyfill,
-            })
-          }
-          modulesList.push({
-            name: 'effector',
-            src: libs.effector,
-          })
-          if (needForest) {
-            modulesList.push({
-              name: 'forest',
-              src: libs.forest,
-            })
-          }
-          // if (browser.isChrome) browser.takeHeapSnapshot
-          const execFunc = async cb => {
-            let cbText = typeof cb === 'function' ? cb.toString() : cb
-            if (noAsyncAwait) {
-              const {transformSync} = require('@babel/core')
-              cbText = transformSync(cbText, {
-                babelrc: false,
-                filename: 'execFunc.js',
-                sourceType: 'script',
-                sourceMaps: false,
-                presets: [
-                  [
-                    '@babel/preset-env',
-                    {
-                      loose: true,
-                      useBuiltIns: 'entry',
-                      corejs: 3,
-                      modules: false,
-                      shippedProposals: true,
-                      targets: ['Chrome 47', 'IE 11'],
-                    },
-                  ],
-                ],
-                plugins: [
-                  [
-                    'babel-plugin-transform-async-to-promises',
-                    {
-                      inlineHelpers: true,
-                    },
-                  ],
-                ],
-              }).code.slice(1, -2)
-            }
-            const result = await browser.executeAsync(execAsyncCode, cbText)
-            if (Object(result).error) {
-              throw result.error
-            }
-            return result
-          }
-          const exec = cb =>
-            execFunc(`async () => {
+      const libs = {}
+      const moduleRequests = []
+      if (needPolyfill) {
+        moduleRequests.push(moduleRequest('polyfill', 'polyfill', libs))
+      }
+      moduleRequests.push(moduleRequest(effectorBuild, 'effector', libs))
+      if (needForest) {
+        moduleRequests.push(moduleRequest('forest', 'forest', libs))
+      }
+      await Promise.all(moduleRequests)
+      const modulesList = []
+      if (needPolyfill) {
+        modulesList.push({
+          name: 'polyfill',
+          src: libs.polyfill,
+        })
+      }
+      modulesList.push({
+        name: 'effector',
+        src: libs.effector,
+      })
+      if (needForest) {
+        modulesList.push({
+          name: 'forest',
+          src: libs.forest,
+        })
+      }
+      // if (browser.isChrome) browser.takeHeapSnapshot
+      const execFunc = async cb => {
+        let cbText = typeof cb === 'function' ? cb.toString() : cb
+        if (noAsyncAwait) {
+          const {transformSync} = require('@babel/core')
+          cbText = transformSync(cbText, {
+            babelrc: false,
+            filename: 'execFunc.js',
+            sourceType: 'script',
+            sourceMaps: false,
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  loose: true,
+                  useBuiltIns: 'entry',
+                  corejs: 3,
+                  modules: false,
+                  shippedProposals: true,
+                  targets: ['Chrome 47', 'IE 11'],
+                },
+              ],
+            ],
+            plugins: [
+              [
+                'babel-plugin-transform-async-to-promises',
+                {
+                  inlineHelpers: true,
+                },
+              ],
+            ],
+          }).code.slice(1, -2)
+        }
+        const result = await browser.executeAsync(execAsyncCode, cbText)
+        if (Object(result).error) {
+          throw result.error
+        }
+        return result
+      }
+      const exec = cb =>
+        execFunc(`async () => {
             await (${typeof cb === 'function' ? cb.toString() : cb})()
             return domSnapshots
           }`).then(result => {
-              if (Array.isArray(result)) {
-                const prettyHtml = require('../../src/fixtures/prettyHtml')
-                return result.map(prettyHtml)
-              }
-              return result
-            })
-          test.context.config = {
-            ...test.context.config,
-            globals: {
-              ...test.context.config.globals,
-              browser,
-              execFunc,
-              exec,
-              initBrowser,
-            },
+          if (Array.isArray(result)) {
+            const prettyHtml = require('../../src/fixtures/prettyHtml')
+            return result.map(prettyHtml)
           }
-          if (typeof onStart === 'function') return await onStart(test)
-          return test
-        },
-        async (test, result) => {
-          if (typeof onResult === 'function')
-            return await onResult(test, result)
           return result
+        })
+      test.context.config = {
+        ...test.context.config,
+        globals: {
+          ...test.context.config.globals,
+          browser,
+          execFunc,
+          exec,
+          initBrowser,
         },
-        async (test, result) => {
-          const tag = test.context.config.globals.capabilitiesTag
-          const name =
-            test.context.config.displayName || test.context.config.name
-          const testName = `[${tag}] ${name}`
-          testMap[tag].fails.push(testName)
-          console.error('onFailure result:', result)
-          if (typeof onFailure === 'function')
-            return await onFailure(test, result)
-          return result
-        },
-        options,
-      )
+      }
+    }
+    const trackFailure = (test, error) => {
+      const tag = test.context.config.globals.capabilitiesTag
+      if (testMap[tag]) {
+        testMap[tag].fails.push(`[${tag}] ${projectName(test.context.config)}`)
+      }
+      console.error('test file failure:', error)
+    }
+    const listeners = [
+      this.on('test-file-start', ([test]) => prepareTest(test)),
+      this.on('test-file-failure', ([test, error]) => trackFailure(test, error)),
+    ]
+    try {
+      return await super.runTests(tests, watcher, options)
     } finally {
+      for (const removeListener of listeners) removeListener()
       const instances = Object.values(testMap).filter(e => !!e.browser)
       if (instances.length > 0) {
         await Promise.all(

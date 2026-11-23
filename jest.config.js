@@ -24,15 +24,27 @@ const transform = {
   '^.+\\.tsx?$': 'babel-jest',
 }
 
-const solidTransform = {
-  '^.+\\.jsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
-  '^.+\\.tsx?$': ['babel-jest', {cwd: resolvePath(__dirname, 'src/solid')}],
+const typeTestsTransform = {
+  '^.+\\.jsx?$': ['babel-jest', {sourceMaps: true, retainLines: true}],
+  '^.+\\.tsx?$': ['babel-jest', {sourceMaps: true, retainLines: true}],
 }
+
+// babel-jest defaults `root` to jest rootDir, so it has to be pointed at the
+// solid config explicitly, otherwise the root babel.config.js wins
+const solidBabelRoot = resolvePath(__dirname, 'src/solid')
+const solidTransform = {
+  '^.+\\.jsx?$': ['babel-jest', {cwd: solidBabelRoot, root: solidBabelRoot}],
+  '^.+\\.tsx?$': ['babel-jest', {cwd: solidBabelRoot, root: solidBabelRoot}],
+}
+
+// keeps the pre-jest-29 serialization of the existing snapshots
+const snapshotFormat = {escapeString: true, printBasicPrototype: true}
 
 const createDefaultConfig = () => ({
   automock: false,
   testEnvironment: 'node',
   transform,
+  snapshotFormat,
   // moduleNameMapper: {},
   modulePathIgnorePatterns: watchPathIgnorePatterns,
   testPathIgnorePatterns: watchPathIgnorePatterns,
@@ -84,17 +96,19 @@ const compatBrowsers = [
     },
   },
   {
-    name: 'iPhone XS',
+    // browserstack retired iPhone 11–13; use iPhone 14 with iOS 16.
+    // The plain cjs build needs Array.prototype.flat without a polyfill.
+    name: 'iPhone 14',
     effectorBuild: 'cjs',
     needPolyfill: false,
     capabilitiesTag: 'ios',
     capabilities: {
       'bstack:options': {
-        osVersion: '12',
-        deviceName: 'iPhone XS',
+        osVersion: '16',
+        deviceName: 'iPhone 14',
         realMobile: 'true',
         projectName: 'effector-compat',
-        buildName: 'iPhone XS',
+        buildName: 'iPhone 14',
         deviceOrientation: 'portrait',
       },
     },
@@ -120,6 +134,7 @@ const compatBrowsers = [
 
 module.exports = {
   collectCoverage: boolean(process.env.COVERAGE),
+  maxConcurrency: 25,
   collectCoverageFrom: [
     '<rootDir>/src/effector/**/*.ts',
     '<rootDir>/src/react/**/*.ts',
@@ -214,7 +229,6 @@ module.exports = {
         solid: {
           testEnvironment: 'jsdom',
           testMatch: [`<rootDir>/src/solid/**/*.test.tsx`],
-          resolver: resolvePath(__dirname, 'src/solid/resolver.js'),
           transform: solidTransform,
           setupFilesAfterEnv: ['<rootDir>/src/solid/__tests__/setupTests.ts'],
         },
@@ -240,8 +254,7 @@ module.exports = {
           ],
           globalSetup: './src/types/src/globalSetup.ts',
           globalTeardown: './src/types/src/globalTeardown.ts',
-          maxConcurrency: 25,
-          transform,
+          transform: typeTestsTransform,
         },
       },
     ],

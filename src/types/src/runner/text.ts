@@ -124,21 +124,31 @@ export function printMethodValues({
   values,
   shape,
   addExpectError,
+  noMultiline,
 }: {
   method: string
   values: Record<string, any>[]
-  shape: Record<string, string | {field: string; when?: string}>
+  shape: Record<
+    string,
+    string | {field: string; when?: string; markError?: string}
+  >
   addExpectError: (value: any) => boolean
+  noMultiline?: boolean
 }) {
   const parts = Array.from(values, () => [method, '({'])
+  const partsMultiline = Array.from(values, () => [`${method}({`])
   const isFirstField = Array.from(values, () => true)
+  const useMultiline = Array.from(values, () => false)
   forIn(shape, (schemaRecord, methodField) => {
     const objectField =
       typeof schemaRecord === 'string' ? schemaRecord : schemaRecord.field
     const when: string | null | void =
       typeof schemaRecord === 'string' ? null : schemaRecord.when
+    const markError =
+      typeof schemaRecord === 'string' ? null : schemaRecord.markError
     let max = 0
-    for (const value of values) {
+    for (let i = 0; i < values.length; i++) {
+      const value = values[i]
       const objectFieldValue = value[objectField]
       if (when && !value[when]) continue
       if (
@@ -146,10 +156,35 @@ export function printMethodValues({
         (objectFieldValue === undefined || objectFieldValue === null)
       )
         continue
+      const markErrorValueRaw: boolean | string | string[] | null | void =
+        markError ? value[markError] : null
+      const markErrorValue =
+        typeof markErrorValueRaw === 'string'
+          ? [markErrorValueRaw]
+          : markErrorValueRaw
+      let skipAlign = false
       const content = Array.isArray(objectFieldValue)
         ? printArray(objectFieldValue)
         : `${objectFieldValue}`
-      max = Math.max(max, content.length)
+      if (markErrorValue === true) {
+        useMultiline[i] = true
+        skipAlign = true
+      } else if (Array.isArray(markErrorValue)) {
+        if (Array.isArray(objectFieldValue)) {
+          if (objectFieldValue.some(item => markErrorValue.includes(item))) {
+            useMultiline[i] = true
+            skipAlign = true
+          }
+        } else {
+          if (markErrorValue.includes(objectFieldValue)) {
+            useMultiline[i] = true
+            skipAlign = true
+          }
+        }
+      }
+      if (!skipAlign) {
+        max = Math.max(max, content.length)
+      }
     }
     for (let i = 0; i < values.length; i++) {
       const value = values[i]
@@ -160,10 +195,44 @@ export function printMethodValues({
         (objectFieldValue === undefined || objectFieldValue === null)
       )
         continue
+      const markErrorValueRaw: boolean | string | string[] | null | void =
+        markError ? value[markError] : null
+      const markErrorValue =
+        typeof markErrorValueRaw === 'string'
+          ? [markErrorValueRaw]
+          : markErrorValueRaw
       const content = Array.isArray(objectFieldValue)
         ? printArray(objectFieldValue)
         : `${objectFieldValue}`
-      const alignPad = ' '.repeat(max - content.length)
+      if (markErrorValue === true) {
+        partsMultiline[i].push(
+          '  //' + `@ts-expect-error`,
+          `  ${methodField}: ${content},`,
+        )
+      } else if (Array.isArray(markErrorValue)) {
+        if (Array.isArray(objectFieldValue)) {
+          if (objectFieldValue.some(item => markErrorValue.includes(item))) {
+            partsMultiline[i].push(`  ${methodField}: [`)
+            for (const item of objectFieldValue) {
+              if (markErrorValue.includes(item)) {
+                partsMultiline[i].push('    //' + `@ts-expect-error`)
+              }
+              partsMultiline[i].push(`    ${item},`)
+            }
+            partsMultiline[i].push('  ],')
+          } else {
+            partsMultiline[i].push(`  ${methodField}: ${content},`)
+          }
+        } else {
+          if (markErrorValue.includes(objectFieldValue)) {
+            partsMultiline[i].push('  //' + `@ts-expect-error`)
+          }
+          partsMultiline[i].push(`  ${methodField}: ${content},`)
+        }
+      } else {
+        partsMultiline[i].push(`  ${methodField}: ${content},`)
+      }
+      const alignPad = ' '.repeat(Math.max(0, max - content.length))
       if (isFirstField[i]) {
         parts[i].push(`${methodField}:${content}`, alignPad)
       } else {
@@ -175,8 +244,16 @@ export function printMethodValues({
   parts.forEach(part => {
     part.push('})')
   })
+  partsMultiline.forEach(part => {
+    part.push('})')
+  })
   values.forEach((value, i) => {
     if (addExpectError(value)) parts[i].unshift('//' + `@ts-expect-error\n`)
   })
-  return parts.map(part => part.join(''))
+  return parts.flatMap((part, idx) => {
+    if (noMultiline || !useMultiline[idx]) {
+      return [part.join('')]
+    }
+    return partsMultiline[idx]
+  })
 }

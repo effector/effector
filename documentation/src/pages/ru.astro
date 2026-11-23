@@ -8,14 +8,15 @@ import Companies from "@components/Landing/Companies.astro";
 
 import Landing from "../layouts/Landing.astro";
 import { SITE } from "../consts";
+import { getPathParamsFromId } from "../languages";
 
 const features = [
   {
     emoji: "☄️",
     kind: "major",
-    title: "Effector Spacewatch",
+    title: "Effector Atlas",
     description:
-      "Оцените мощь effector v23.0, отличающегося улучшенной типизацией, поддержкой универсальных хуков.",
+      "Оцените мощь effector v23.4, отличающегося улучшенной типизацией, поддержкой универсальных хуков.",
   },
   {
     emoji: "🛡️",
@@ -52,6 +53,8 @@ const features = [
       "Дружелюбное сообщество всегда поможет найти ответы. Легко писать тесты. Легко поднимать серверный рендеринг",
   },
 ] as { emoji: string; kind?: "minor" | "major"; title: string; description: string }[];
+
+const { lang } = getPathParamsFromId(Astro.url.pathname)
 ---
 
 <Landing lang="ru" title="Приветствуем" dir="ltr" description={SITE.description}>
@@ -60,10 +63,13 @@ const features = [
     <br />
     Типизированный, реактивный, не зависящий от фреймворка.
 
-    <a slot="links" class="primary" href="/ru/introduction/get-started">
+    <div slot="links" class="started-links">
+      <a class="primary" href={`/${lang}/introduction/get-started`}>
       <span>Начать изучение</span>
       <IconChevron />
     </a>
+    </div>
+
   </Hero>
   <FeaturesGrid>
     {
@@ -77,3 +83,4 @@ const features = [
   <Stats />
   <Companies />
 </Landing>
+

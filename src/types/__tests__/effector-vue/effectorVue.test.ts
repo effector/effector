@@ -1,6 +1,6 @@
-import {createStore} from 'effector'
+import {createStore, fork} from 'effector'
 import Vue from 'vue'
-import {createComponent} from 'effector-vue'
+import {createComponent, EffectorScopePlugin} from 'effector-vue'
 
 const typecheck = '{global}'
 
@@ -42,6 +42,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 9 'return this.name * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -82,6 +83,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 7 'return this.state * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -128,6 +130,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 11 'return this.state * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -168,6 +171,7 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 7 'return this.state * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -212,9 +216,31 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 7 'return this.$name * 2'
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
     })
+  })
+})
+
+describe('EffectorScopePlugin', () => {
+  /**
+   * The plugin is passed to `app.use` of Vue 3, but this entry point is typed
+   * against Vue 2 and has no `Plugin` type to compare the return type with, so
+   * this pass checks the declared shape. That the shape is accepted by
+   * `app.use` is checked in effector-vue3/optionsVue3.test.ts.
+   */
+  test('should pass typecheck', () => {
+    const scope = fork()
+
+    const plugin: {install(app: unknown): void} = EffectorScopePlugin({scope})
+    const install: (app: unknown) => void = plugin.install
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
   })
 })

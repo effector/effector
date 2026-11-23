@@ -1,0 +1,191 @@
+---
+title: useStoreMap
+description: Хук, который выбирает часть стора и обновляется, только когда эта часть меняется. Для Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { useStoreMap } from "effector-vue/composition";
+```
+
+:::info{title="since"}
+`useStoreMap` появился в [effector-vue 22.2.0](https://changelog.effector.dev/#effector-vue-22-2-0)
+:::
+
+Подписывается на [стор](/ru/api/effector/Store) и преобразует его значение функцией-селектором. `fn` получает сам объект состояния стора, без копии и без прокси, и не должна его менять. Возвращаемый `ComputedRef` обновляется, только когда меняется результат селектора, поэтому компонент, который читает один элемент большого стора, не затрагивают обновления других элементов.
+
+# Методы (#methods)
+
+## `useStoreMap($store, fn)` (#methods-useStoreMap-store-fn)
+
+:::info{title="since"}
+Краткая форма `useStoreMap` появилась в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+### Формула (#methods-useStoreMap-store-fn-formulae)
+
+```ts
+useStoreMap(
+  $store: Store<State>,
+  fn: (state: State) => Result,
+  opts?: {scope?: Scope, forceScope?: boolean},
+): ComputedRef<Result>;
+```
+
+### Аргументы (#methods-useStoreMap-store-fn-arguments)
+
+1. `$store`: исходный [`Store<State>`](/ru/api/effector/Store)
+2. `fn`: функция-селектор, получает состояние стора и возвращает его часть
+3. `opts` (_Object_): необязательные [опции скоупа](/ru/api/effector-vue/EffectorScopePlugin)
+
+### Возвращает (#methods-useStoreMap-store-fn-returns)
+
+(`ComputedRef<Result>`)
+
+### Примеры (#methods-useStoreMap-store-fn-examples)
+
+```vue
+<script setup lang="ts">
+import { useStoreMap } from "effector-vue/composition";
+
+import { $user } from "./model";
+
+const name = useStoreMap($user, (user) => user.name);
+</script>
+
+<template>
+  <p>{{ name }}</p>
+</template>
+```
+
+## `useStoreMap(config)` (#methods-useStoreMap-config)
+
+### Формула (#methods-useStoreMap-config-formulae)
+
+```ts
+useStoreMap({
+  store: Store<State>,
+  keys?: MaybeRefOrGetter<Keys>,
+  fn: (state: State, keys: Keys) => Result,
+  updateFilter?: (update: Result, current: Result) => boolean,
+  defaultValue?: Result,
+  scope?: Scope,
+  forceScope?: boolean,
+}): ComputedRef<Result>;
+```
+
+### Аргументы (#methods-useStoreMap-config-arguments)
+
+1. `params` (_Object_): объект конфигурации
+   - `store`: исходный [стор](/ru/api/effector/Store)
+   - `keys` (`MaybeRefOrGetter<Keys>`): передаётся в `fn` вторым аргументом. Геттер и ref отслеживаются, и при их изменении селектор запускается снова. Обычное значение используется как есть
+   - `fn`: функция-селектор, получает состояние стора и `keys` и возвращает часть стора
+   - `updateFilter`: получает новый и текущий результат `fn` и решает, заменит ли новый текущий. По умолчанию `update !== current`
+   - `defaultValue` (`Result`): используется каждый раз, когда `fn` возвращает `undefined`
+   - `scope` ([`Scope`](/ru/api/effector/Scope)) и `forceScope` (`boolean`): [опции скоупа](/ru/api/effector-vue/EffectorScopePlugin) вызова
+
+:::info{title="since"}
+Опции `scope` и `forceScope` появились в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+:::info{title="since"}
+`keys` принимает значение или ref с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше он принимал только геттер
+:::
+
+### Возвращает (#methods-useStoreMap-config-returns)
+
+(`ComputedRef<Result>`)
+
+:::info{title="since"}
+Изменения в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0):
+
+- `fn` получает объект состояния стора. Раньше она получала прокси, а состояние стора менялось на месте
+- поддерживается стор со значением `null`, а ключ, удалённый из состояния, пропадает, а не держит последнее значение
+- подписка снимается вместе с effect scope и не создаётся при серверном рендере
+:::
+
+### Примеры (#methods-useStoreMap-config-examples)
+
+Хук удобен для работы со списками, особенно с большими.
+
+##### User.vue (#methods-useStoreMap-config-example-userVue)
+
+```vue
+<script setup lang="ts">
+import { useStoreMap } from "effector-vue/composition";
+
+import { $users } from "./model";
+
+const props = defineProps<{ id: number }>();
+
+const name = useStoreMap({
+  store: $users,
+  keys: () => props.id,
+  fn: (users, userId) => users.find(({ id }) => id === userId)?.name,
+  defaultValue: "unknown",
+});
+</script>
+
+<template>
+  <div>
+    <strong>[{{ id }}]</strong> {{ name }}
+  </div>
+</template>
+```
+
+##### App.vue (#methods-useStoreMap-config-examples-appVue)
+
+```vue
+<script setup lang="ts">
+import { useUnit } from "effector-vue/composition";
+
+import { $ids } from "./model";
+import User from "./User.vue";
+
+const ids = useUnit($ids);
+</script>
+
+<template>
+  <div>
+    <User v-for="id in ids" :key="id" :id="id" />
+  </div>
+</template>
+```
+
+##### model.ts (#methods-useStoreMap-config-examples-model)
+
+```ts
+import { createStore } from "effector";
+
+type User = { id: number; name: string };
+
+export const $users = createStore<User[]>([
+  { id: 1, name: "Yung" },
+  { id: 2, name: "Lean" },
+  { id: 3, name: "Kyoto" },
+  { id: 4, name: "Sesh" },
+]);
+
+export const $ids = createStore([1, 2, 3, 4]);
+
+export const $count = createStore(0);
+```
+
+### Фильтрация обновлений (#methods-useStoreMap-config-updateFilter)
+
+:::warning{title="Изменено в 23.3.0"}
+С [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0) `updateFilter` получает результаты `fn`, как в effector-react. Раньше он получал состояние стора, поэтому фильтр, написанный под сырое состояние, нужно переписать.
+:::
+
+`updateFilter` получает результаты `fn`, а не состояние стора. Отклонённый результат отбрасывается, и предыдущий остаётся, пока не придёт принятый. Пересчёт из-за `keys` тоже проходит через фильтр.
+
+```ts
+const evenCount = useStoreMap({
+  store: $count,
+  fn: (count) => count,
+  updateFilter: (update) => update % 2 === 0,
+});
+```
+
+При серверном рендере фильтровать нечего: значение следует за стором до конца рендера, и `updateFilter` не вызывается.

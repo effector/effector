@@ -1,0 +1,200 @@
+---
+title: useUnit
+description: Хук, который связывает сторы с реактивностью Vue, а события и эффекты привязывает к текущему скоупу. Для Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { useUnit } from "effector-vue/composition";
+```
+
+:::info{title="since"}
+`useUnit` появился в [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0)
+:::
+
+Связывает [сторы](/ru/api/effector/Store) с реактивностью Vue. [События](/ru/api/effector/Event) и [эффекты](/ru/api/effector/Effect) привязывает к текущему [скоупу](/ru/api/effector/Scope), чтобы вызывать их из обработчиков DOM-событий.
+
+**Только для Vue 3 и Composition API.**
+
+:::info{title="В будущем"}
+Этот API может полностью заменить:
+
+- [useStore($store)](/ru/api/effector-vue/useStore)
+- [useEvent(event)](/ru/api/effector-vue/useEvent)
+
+Со временем эти API могут объявить устаревшими и удалить.
+
+:::
+
+# Методы (#methods)
+
+## `useUnit(unit, options?)` (#methods-useUnit-unit)
+
+### Формула (#methods-useUnit-unit-formulae)
+
+```ts
+useUnit(event: EventCallable<T>, options?: ScopeOptions): (payload: T) => T;
+useUnit(effect: Effect<Params, Done, Fail>, options?: ScopeOptions): (payload: Params) => Promise<Done>;
+```
+
+### Аргументы (#methods-useUnit-unit-arguments)
+
+1. `unit` ([_Событие_](/ru/api/effector/Event) или [_эффект_](/ru/api/effector/Effect)): событие или эффект, который привяжется к текущему [скоупу](/ru/api/effector/Scope). Производное событие, результат `map` или `filter`, типы не принимают: его нельзя вызвать
+2. `options?` (_Object_): `{ scope, forceScope }`, см. [опции скоупа](#methods-useUnit-options)
+
+:::info{title="since"}
+Аргумент `options` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+### Возвращает (#methods-useUnit-unit-returns)
+
+(`Function`): функция для обработчиков событий. Запускает юнит в текущем скоупе. Если скоуп не найден, возвращается сам юнит, как в `useUnit` из effector-react
+
+:::info{title="since"}
+С [effector-vue 23.2.0](https://changelog.effector.dev/#effector-vue-23-2-0) для одного эффекта возвращается привязанная функция. С [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0) без скоупа возвращается сам юнит
+:::
+
+### Примеры (#methods-useUnit-unit-examples)
+
+#### Базовый пример (#methods-useUnit-unit-examples-basic)
+
+```ts
+// model.ts
+import { createEvent, createStore } from "effector";
+
+export const incremented = createEvent();
+export const $count = createStore(0);
+
+$count.on(incremented, (count) => count + 1);
+```
+
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { useUnit } from "effector-vue/composition";
+
+import { incremented } from "./model";
+
+const onClick = useUnit(incremented);
+</script>
+
+<template>
+  <button @click="onClick">increment</button>
+</template>
+```
+
+## `useUnit($store, options?)` (#methods-useUnit-store)
+
+### Формула (#methods-useUnit-store-formulae)
+
+```ts
+useUnit($store: Store<State>, options?: ScopeOptions): Readonly<Ref<State>>;
+```
+
+### Аргументы (#methods-useUnit-store-arguments)
+
+1. `$store` ([_Стор_](/ru/api/effector/Store)): стор, который свяжется с реактивностью Vue
+2. `options?` (_Object_): `{ scope, forceScope }`, см. [опции скоупа](#methods-useUnit-options)
+
+:::info{title="since"}
+Аргумент `options` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+### Возвращает (#methods-useUnit-store-returns)
+
+(`Readonly<Ref<State>>`): неглубокий readonly-ref. Его `value` это само состояние стора, без копии и без реактивного прокси, поэтому оно равно `scope.getState($store)`
+
+:::info{title="since"}
+Ref неглубокий с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше `value` был глубоким readonly-прокси над состоянием
+:::
+
+:::warning{title="Важно"}
+От записи защищён только сам ref. Запись во вложенное поле `value` меняет состояние стора на месте, и обновления не происходит. Меняйте состояние через события.
+:::
+
+### Примеры (#methods-useUnit-store-examples)
+
+#### Базовый пример (#methods-useUnit-store-examples-basic)
+
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { useUnit } from "effector-vue/composition";
+
+import { $count } from "./model";
+
+const count = useUnit($count);
+</script>
+
+<template>
+  <p>Count: {{ count }}</p>
+</template>
+```
+
+## `useUnit(shape, options?)` (#methods-useUnit-shape)
+
+### Формула (#methods-useUnit-shape-formulae)
+
+```ts
+useUnit({ a: Store<A>, b: EventCallable<B> }, options?: ScopeOptions): { a: Readonly<Ref<A>>, b: (payload: B) => B };
+useUnit([Store<A>, EventCallable<B>], options?: ScopeOptions): [Readonly<Ref<A>>, (payload: B) => B];
+```
+
+### Аргументы (#methods-useUnit-shape-arguments)
+
+1. `shape`: объект или массив [_событий_](/ru/api/effector/Event), [_эффектов_](/ru/api/effector/Effect) и [_сторов_](/ru/api/effector/Store). Каждый юнит обрабатывается как в `useUnit`: стор становится реактивным значением, событие или эффект становится функцией для обработчиков событий
+2. `options?` (_Object_): `{ scope, forceScope }`, см. [опции скоупа](#methods-useUnit-options)
+
+:::info{title="since"}
+Аргумент `options` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+### Возвращает (#methods-useUnit-shape-returns)
+
+(Object или Array) с теми же ключами, что у аргумента:
+
+- для [_события_](/ru/api/effector/Event) или [_эффекта_](/ru/api/effector/Effect): функция для обработчиков событий. Запускает юнит в текущем [скоупе](/ru/api/effector/Scope)
+- для [_стора_](/ru/api/effector/Store): неглубокий readonly-ref этого стора
+
+Все сторы одного вызова используют одну подписку.
+
+### Примеры (#methods-useUnit-shape-examples)
+
+#### Базовый пример (#methods-useUnit-shape-examples-basic)
+
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { useUnit } from "effector-vue/composition";
+
+import { $count, incremented } from "./model";
+
+const { count, handleClick } = useUnit({ count: $count, handleClick: incremented });
+</script>
+
+<template>
+  <p>Count: {{ count }}</p>
+  <button @click="handleClick">increment</button>
+</template>
+```
+
+## Опции скоупа (#methods-useUnit-options)
+
+- `scope?` ([_Scope_](/ru/api/effector/Scope)): скоуп, из которого читаются сторы и к которому привязываются события, вместо скоупа приложения
+- `forceScope?` (_boolean_): бросить ошибку, если скоуп не найден, вместо перехода в глобальный режим. Перекрывает опцию `forceScope` плагина для этого вызова
+
+Порядок поиска скоупа описан в разделе [Как выбирается скоуп](/ru/api/effector-vue/EffectorScopePlugin#resolution).
+
+```ts
+const count = useUnit($count, { scope });
+const onClick = useUnit(incremented, { forceScope: true });
+```
+
+## Время жизни (#methods-useUnit-lifetime)
+
+Подписка живёт, пока жив компонент или effect scope, где вызван `useUnit`, и снимается через `onScopeDispose`. Вызов внутри отдельного `effectScope()` отписывается, когда этот scope останавливают. Во время серверного рендера подписок нет: ref читает скоуп при каждом обращении. Опция [`live`](/ru/api/effector-vue/EffectorScopePlugin#plugins-EffectorScopePlugin-scope-scopeName-arguments) плагина перекрывает это определение.
+
+:::info{title="since"}
+Отписка вместе с effect scope, одна подписка на вызов и отсутствие подписок при серверном рендере появились в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::

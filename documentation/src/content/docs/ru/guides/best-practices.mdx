@@ -1,14 +1,15 @@
 ---
-title: Лучшие практики и рекомендации в effector
+title: Лучшие практики и рекомендации
 lang: ru
 description: Лучшие практики и рекомендации по эффективной работе с Effector, включая общие паттерны, типизацию, оптимизацию и популярные библиотеки экосистемы
 redirectFrom:
   - /ru/docs/conventions/naming
   - /ru/conventions/naming
+pagefindWeight: 5
 ---
 
-import Tabs from "@components/Tabs/Tabs.astro";
-import TabItem from "@components/Tabs/TabItem.astro";
+import Tabs from '@components/Tabs/Tabs.astro';
+import TabItem from '@components/Tabs/TabItem.astro';
 
 # Лучшие практики в Effector (#best-practices)
 
@@ -63,8 +64,8 @@ const UserName = () => {
 Если ваш стор содержит в себе вложенные структуры, то вы можете использовать всеми любимый [Immer](https://github.com/immerjs/immer) для упрощенного обновления:
 
 ```ts
-import { createStore } from "effector";
-import { produce } from "immer";
+import { createStore } from 'effector';
+import { produce } from 'immer';
 
 const $users = createStore<User[]>([]);
 
@@ -80,54 +81,11 @@ $users.on(userUpdated, (users, updatedUser) =>
 
 ## Явный старт приложения (#explicit-app-start)
 
-Мы рекомендуем использовать явный старт приложения через специальные события, чтобы запустить инициализацию.
-
-Почему это важно:
-
-1. Контроль жизненного цикла приложения
-2. Возможность корректного тестирования
-3. Предсказуемое поведение приложения
-4. Возможность явного запуска инициализации
+Чтобы лучше контролировать жизненный цикл вашего приложения мы рекомендуем создавать явные [событие](/ru/api/effector/Event), например `appStarted`. Если вам необходим более гранулярный контроль, то не стесняйтесь создавать больше дополнительных [событий](/ru/api/effector/Event). Более полную информацию вы найдете на странице [Явный запуск приложения](/ru/resources/explicit-start).
 
 ```ts
 export const appStarted = createEvent();
 ```
-
-а также подписаться и запустить событие:
-
-<Tabs>
-  <TabItem label="Без скоупов">
-
-```ts
-import { sample } from "effector";
-import { scope } from "./app.js";
-
-sample({
-  clock: appStarted,
-  target: initFx,
-});
-
-appStarted();
-```
-
-  </TabItem>
-  <TabItem label="Со скоупами">
-
-```ts
-import { sample, allSettled } from "effector";
-import { scope } from "./app.js";
-
-sample({
-  clock: appStarted,
-  target: initFx,
-});
-
-allSettled(appStarted, { scope });
-```
-
-  </TabItem>
-
-</Tabs>
 
 ## Используйте `scope` (#use-scope)
 
@@ -161,11 +119,11 @@ allSettled(appStarted, { scope });
 Мы настоятельно рекомендуем вам использовать библиотеку [`patronum`](https://patronum.effector.dev/operators/) и метод [`debug`](https://patronum.effector.dev/operators/debug/).
 
 ```ts
-import { createStore, createEvent, createEffect } from "effector";
-import { debug } from "patronum/debug";
+import { createStore, createEvent, createEffect } from 'effector';
+import { debug } from 'patronum/debug';
 
 const event = createEvent();
-const effect = createEffect().use((payload) => Promise.resolve("result" + payload));
+const effect = createEffect().use((payload) => Promise.resolve('result' + payload));
 const $store = createStore(0)
   .on(event, (state, value) => state + value)
   .on(effect.done, (state) => state * 10);
@@ -173,7 +131,7 @@ const $store = createStore(0)
 debug($store, event, effect);
 
 event(5);
-effect("demo");
+effect('demo');
 
 // => [store] $store 1
 // => [event] event 5
@@ -220,7 +178,7 @@ Farfetched предоставляет:
   <TabItem label="❌ Сложный sample">
 
 ```ts
-import { sample } from "effector";
+import { sample } from 'effector';
 
 sample({
   clock: formSubmitted,
@@ -257,7 +215,7 @@ sample({
 <TabItem label="✅ С createAction">
 
 ```ts
-import { createAction } from "effector-action";
+import { createAction } from 'effector-action';
 
 const submitForm = createAction({
   source: {
@@ -312,11 +270,11 @@ const updateUserNameFx = createEffect(() => {});
 
 const userNameUpdated = createEvent();
 
-const $userName = createStore("JS");
+const $userName = createStore('JS');
 
 $userName.on(userNameUpdated, (_, newName) => newName);
 
-userNameUpdated("TS");
+userNameUpdated('TS');
 ```
 
 :::info{title="Соглашение об именовании"}
@@ -335,7 +293,7 @@ userNameUpdated("TS");
 ```ts
 // Логика в watch
 $user.watch((user) => {
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem('user', JSON.stringify(user));
   api.trackUserUpdate(user);
   someEvent(user.id);
 });
@@ -347,7 +305,7 @@ $user.watch((user) => {
 ```ts
 // Отдельные эффекты для сайд-эффектов
 const saveToStorageFx = createEffect((user: User) =>
-  localStorage.setItem("user", JSON.stringify(user)),
+  localStorage.setItem('user', JSON.stringify(user)),
 );
 
 const trackUpdateFx = createEffect((user: User) => api.trackUserUpdate(user));
@@ -421,8 +379,8 @@ const loginFx = createEffect(async (params) => {
 
   // Императивные вызовы
   setUser(user);
-  redirectFx("/dashboard");
-  showNotification("Welcome!");
+  redirectFx('/dashboard');
+  showNotification('Welcome!');
 
   return user;
 });
@@ -499,6 +457,10 @@ sample({
 
 Не тащите вашу логику в UI элементы, это [основная философия](/ru/introduction/motivation) effector и то, от чего effector пытается избавить вас, а именно зависимость логики от UI.
 
+### Создание юнитов в рантайме (#create-units-in-runtime)
+
+Никогда не создавайте юниты и связи между ними в рантайме или другим динамическим образом. Корректная [инициализация юнитов](/ru/resources/static-initialization) является статичным образом на уровне модуля.
+
 Кратко об антипаттернах:
 
 1. Не используйте `watch` для логики, только для отладки
@@ -509,3 +471,4 @@ sample({
 6. Не вызывайте события внутри эффектов императивно
 7. Не используйте `$store.getState` для работы
 8. Не тащите логику в UI
+9. Не создавайте юниты в рантайме

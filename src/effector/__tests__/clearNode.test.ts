@@ -25,18 +25,18 @@ it('will deactivate event', () => {
   event.watch(x => fn(x))
   clearNode(event)
   event(1)
-  expect(fn).toBeCalledTimes(0)
+  expect(fn).toHaveBeenCalledTimes(0)
 })
 
 it('will deactivate store', () => {
   const fn = jest.fn()
   const store = createStore(0)
   store.watch(x => fn(x))
-  expect(fn).toBeCalledTimes(1)
+  expect(fn).toHaveBeenCalledTimes(1)
   clearNode(store)
   //@ts-expect-error
   store.setState(1)
-  expect(fn).toBeCalledTimes(1)
+  expect(fn).toHaveBeenCalledTimes(1)
 })
 
 it('will not broke subscribers', () => {
@@ -51,13 +51,13 @@ it('will not broke subscribers', () => {
   })
 
   eventA(0)
-  expect(fn).toBeCalledTimes(1)
+  expect(fn).toHaveBeenCalledTimes(1)
   clearNode(eventA)
 
   eventA(1) //nothing happens
-  expect(fn).toBeCalledTimes(1)
+  expect(fn).toHaveBeenCalledTimes(1)
   eventB(2) //work as expected
-  expect(fn).toBeCalledTimes(2)
+  expect(fn).toHaveBeenCalledTimes(2)
 })
 
 test('deep cleaning', () => {
@@ -69,18 +69,18 @@ test('deep cleaning', () => {
     return x
   })
   target.watch(x => fn2(x))
-  expect(fn1).toBeCalledTimes(1)
-  expect(fn2).toBeCalledTimes(1)
+  expect(fn1).toHaveBeenCalledTimes(1)
+  expect(fn2).toHaveBeenCalledTimes(1)
   //please be careful with {deep: true}
   //it will destroy everything related to that node
   clearNode(source, {deep: true})
   //@ts-expect-error
   source.setState(1) //nothing happens
-  expect(fn1).toBeCalledTimes(1)
-  expect(fn2).toBeCalledTimes(1)
+  expect(fn1).toHaveBeenCalledTimes(1)
+  expect(fn2).toHaveBeenCalledTimes(1)
   //@ts-expect-error
   target.setState(2) //dead as well
-  expect(fn2).toBeCalledTimes(1)
+  expect(fn2).toHaveBeenCalledTimes(1)
 })
 
 describe('itermediate steps should not stay', () => {
@@ -93,11 +93,11 @@ describe('itermediate steps should not stay', () => {
     })
     //@ts-expect-error
     source.setState(1)
-    expect(fn).toBeCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
     clearNode(target)
     //@ts-expect-error
     source.setState(2)
-    expect(fn).toBeCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
   it('support event.map', () => {
     const fn = jest.fn()
@@ -107,10 +107,10 @@ describe('itermediate steps should not stay', () => {
       return x
     })
     source(1)
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
     clearNode(target)
     source(2)
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
   })
   it('support store.on', () => {
     const fn = jest.fn()
@@ -120,10 +120,10 @@ describe('itermediate steps should not stay', () => {
       return x + 1
     })
     trigger()
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
     clearNode(store)
     trigger()
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
   })
   it('support sample result', () => {
     const fn = jest.fn()
@@ -135,10 +135,10 @@ describe('itermediate steps should not stay', () => {
       fn,
     })
     trigger()
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
     clearNode(result)
     trigger()
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
   })
   it('support sample source', () => {
     const fn = jest.fn()
@@ -150,10 +150,10 @@ describe('itermediate steps should not stay', () => {
       fn,
     })
     trigger()
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
     clearNode(store)
     trigger()
-    expect(fn).toBeCalledTimes(1)
+    expect(fn).toHaveBeenCalledTimes(1)
   })
 })
 describe('based on clearNode', () => {
@@ -676,7 +676,7 @@ describe('domain support', () => {
           1,
         ]
       `)
-      expect(fn2).toBeCalledTimes(2)
+      expect(fn2).toHaveBeenCalledTimes(2)
     })
     describe('to sibling domain', () => {
       test('through effect without domain', async () => {
@@ -705,7 +705,7 @@ describe('domain support', () => {
             1,
           ]
         `)
-        expect(fn2).toBeCalledTimes(2)
+        expect(fn2).toHaveBeenCalledTimes(2)
       })
       test('through effect in sibling domain', async () => {
         const fn1 = jest.fn()
@@ -733,7 +733,7 @@ describe('domain support', () => {
             1,
           ]
         `)
-        expect(fn2).toBeCalledTimes(2)
+        expect(fn2).toHaveBeenCalledTimes(2)
       })
       test('through effect in target domain', async () => {
         const fn1 = jest.fn()
@@ -759,7 +759,7 @@ describe('domain support', () => {
             -1,
           ]
         `)
-        expect(fn2).toBeCalledTimes(0)
+        expect(fn2).toHaveBeenCalledTimes(0)
       })
     })
     describe('to parent domain', () => {
@@ -789,7 +789,7 @@ describe('domain support', () => {
             1,
           ]
         `)
-        expect(fn2).toBeCalledTimes(2)
+        expect(fn2).toHaveBeenCalledTimes(2)
       })
       test('through effect in root domain', async () => {
         const fn1 = jest.fn()
@@ -817,7 +817,7 @@ describe('domain support', () => {
             1,
           ]
         `)
-        expect(fn2).toBeCalledTimes(2)
+        expect(fn2).toHaveBeenCalledTimes(2)
       })
       test('through effect in target domain', async () => {
         const fn1 = jest.fn()
@@ -843,7 +843,7 @@ describe('domain support', () => {
             -1,
           ]
         `)
-        expect(fn2).toBeCalledTimes(0)
+        expect(fn2).toHaveBeenCalledTimes(0)
       })
     })
   })

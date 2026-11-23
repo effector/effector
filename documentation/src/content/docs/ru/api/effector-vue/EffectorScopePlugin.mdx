@@ -1,0 +1,136 @@
+---
+title: EffectorScopePlugin
+description: Плагин Vue, который передаёт скоуп хукам приложения. Нужен для SSR
+lang: ru
+pagefindWeight: 7
+---
+
+Плагин передаёт [скоуп](/ru/api/effector/Scope) всему приложению: хуки читают из него сторы и вызывают в нём события. Нужен для SSR.
+
+:::info{title="since"}
+`EffectorScopePlugin` появился в [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0)
+:::
+
+# Плагины (#plugins)
+
+## `EffectorScopePlugin({ scope, scopeName, forceScope, live })` (#plugins-EffectorScopePlugin-scope-scopeName)
+
+### Формула (#plugins-EffectorScopePlugin-scope-scopeName-formulae)
+
+```ts
+EffectorScopePlugin(options: EffectorScopePluginOptions): Plugin;
+app.use(EffectorScopePlugin, options: EffectorScopePluginOptions): App;
+```
+
+### Аргументы (#plugins-EffectorScopePlugin-scope-scopeName-arguments)
+
+1. `scope` [Scope](/ru/api/effector/Scope), созданный через [`fork`](/ru/api/effector/fork)
+2. `scopeName?` своё имя скоупа (по умолчанию `root`), устаревший строковый ключ инъекции
+3. `forceScope?` бросить ошибку вместо перехода в глобальный режим, когда хук этого приложения не нашёл скоуп (по умолчанию `false`)
+4. `live?` подписываются ли хуки на скоуп: `false` заставляет их читать скоуп при обращении без подписки, как при серверном рендере, `true` заставляет подписываться всегда (по умолчанию `false` внутри `renderToString`, `true` в остальных случаях)
+
+:::info{title="since"}
+Опция `forceScope` появилась в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+:::info{title="since"}
+Опция `live` появилась в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+Плагин передаёт скоуп под ключом инъекции `EffectorScopeKey` и, для обратной совместимости, под строкой `scopeName`.
+
+:::info{title="since"}
+`EffectorScopeKey` появился в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). С этой же версии плагин бросает ошибку без корректного `scope`
+:::
+
+### Импорт (#plugins-EffectorScopePlugin-scope-scopeName-imports)
+
+Во Vue 3 импортируйте плагин из `effector-vue/composition`, рядом с остальными методами Composition API:
+
+```ts
+import { EffectorScopePlugin, EffectorScopeKey } from "effector-vue/composition";
+```
+
+Из `effector-vue/composition` плагин экспортируется с [effector-vue 23.2.0](https://changelog.effector.dev/#effector-vue-23-2-0). Корневая точка входа `effector-vue` тоже экспортирует плагин и продолжит это делать ради обратной совместимости. Это точка входа API для Vue 2 (`VueEffector`, `createComponent`), поэтому приложение на Vue 3, которое импортирует из неё, тянет код, который никогда не выполняет.
+
+### Примеры (#plugins-EffectorScopePlugin-scope-scopeName-examples)
+
+#### Базовый пример (#plugins-EffectorScopePlugin-scope-scopeName-examples-basic)
+
+```ts
+import { createSSRApp } from "vue";
+import { EffectorScopePlugin } from "effector-vue/composition";
+import { fork } from "effector";
+
+const app = createSSRApp(AppComponent);
+const scope = fork();
+
+app.use(
+  EffectorScopePlugin({
+    scope,
+    scopeName: "app-scope-name",
+  }),
+);
+```
+
+#### Опции в `app.use` (#plugins-EffectorScopePlugin-scope-scopeName-examples-app-use)
+
+:::info{title="since"}
+Форма `app.use(EffectorScopePlugin, options)` работает с [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0)
+:::
+
+Обе формы устанавливают плагин:
+
+```ts
+app.use(EffectorScopePlugin({ scope }));
+app.use(EffectorScopePlugin, { scope });
+```
+
+#### Обязательный скоуп (#plugins-EffectorScopePlugin-scope-scopeName-examples-force-scope)
+
+С `forceScope` хук, который не нашёл скоуп, бросает ошибку, а не читает глобальные сторы:
+
+```ts
+app.use(EffectorScopePlugin({ scope, forceScope: true }));
+```
+
+Опция читается через контекст инъекции, поэтому действует на вызовы, которые видят приложение: `setup`, `app.runWithContext` и всё, что вызвано до первого `await` в асинхронном `setup`. Вызов, потерявший контекст, не видит ни скоупа, ни опции: передайте ему `{ forceScope: true }` напрямую.
+
+# Как выбирается скоуп (#resolution)
+
+:::info{title="since"}
+Поиск через `EffectorScopeKey` и опции скоупа у хуков появились в [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0). Раньше скоуп читался только по строковому ключу `scopeName` через экземпляр компонента
+:::
+
+Куда передаются опции скоупа, зависит от хука:
+
+| Хук                          | Опции скоупа                                                                                                                |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `useUnit(unit, opts)`        | `{ scope, forceScope }` последним аргументом                                                                                |
+| `useStore($store, opts)`     | `{ scope, forceScope }` последним аргументом                                                                                |
+| `useGate(Gate, props, opts)` | `{ scope, forceScope }` последним аргументом                                                                                |
+| `useStoreMap(config)`        | `scope` и `forceScope` в конфиге; второй позиционный аргумент тоже работает                                                 |
+| `useProvidedScope(opts)`     | только `{ forceScope }`                                                                                                     |
+| `useVModel($store, opts)`    | `{ scope, forceScope }` последним аргументом; Vue [EffectScope](https://ru.vuejs.org/api/reactivity-advanced.html#effectscope) там тоже работает |
+
+В любой форме скоуп ищется в таком порядке:
+
+1. опция `scope` вызова;
+2. значение под ключом `EffectorScopeKey`, если у вызова есть контекст инъекции;
+3. устаревший строковый ключ, если доступен экземпляр компонента;
+4. глобальный режим, если не включён `forceScope`.
+
+Строковый ключ читается, только когда под `EffectorScopeKey` ничего не передано. С установленным плагином поддерево переопределяет скоуп через `provide(EffectorScopeKey, scope)`; значение, переданное под строкой `scopeName`, этого больше не делает.
+
+Ключ создан через `Symbol.for`, поэтому скоуп, переданный другой копией пакета, тоже находится. Плагин для этого не нужен, достаточно передать скоуп вручную:
+
+```ts
+import { provide } from "vue";
+import { EffectorScopeKey } from "effector-vue/composition";
+
+provide(EffectorScopeKey, scope);
+```
+
+# Связанные API (#related)
+
+- [useProvidedScope](/ru/api/effector-vue/useProvidedScope) возвращает найденный скоуп напрямую.

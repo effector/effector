@@ -1,0 +1,134 @@
+---
+title: perform
+description: Express imperative branching and target selection in a synchronous action
+---
+
+`perform` expresses the imperative logic of one synchronous action: calculate local
+values, branch, and choose which stores, events, or effects to update or trigger.
+Dependencies stay explicit in `source`, `clock`, and `target`.
+
+Use [`sample`](/en/api/effector/sample) for a straightforward connection from a clock
+or source to a target, optionally with a transformation or filter. Use `perform`
+when one task is clearer as a function with early returns and several selected
+target calls, rather than several connected `sample` calls. A single assignment
+does not need a `perform` wrapper.
+
+:::info{title="since"}
+[effector 23.5.0](https://changelog.effector.dev/#effector-23-5-0)
+:::
+
+## Validate and submit a form
+
+This action trims a name, rejects empty input, and otherwise clears the error,
+normalizes the input, and starts saving:
+
+```ts
+import {createEffect, createStore, perform} from 'effector'
+
+const $name = createStore('')
+const $error = createStore('')
+const saveNameFx = createEffect(async (name: string) => {
+  const response = await fetch('/api/name', {method: 'POST', body: name})
+  if (!response.ok) throw new Error('Could not save name')
+  return name
+})
+
+const submit = perform({
+  source: {$name, saving: saveNameFx.pending},
+  target: {$name, $error, saveNameFx},
+  action: (target, {name, saving}) => {
+    if (saving) return
+
+    const trimmed = name.trim()
+    if (!trimmed) {
+      target.$error('Enter a name')
+      return
+    }
+
+    target.$error.reinit()
+    if (trimmed !== name) target.$name(trimmed)
+    target.saveNameFx(trimmed)
+  },
+})
+
+submit()
+```
+
+- **`source` reads state.** Its values are the second argument of `action`.
+  A leading `$` is stripped from object keys, so `{$name}` becomes `{name}`.
+- **`target` declares writes and calls.** Its units become callbacks in the first
+  argument. Keys stay unchanged: `$name` becomes `target.$name`.
+  A store callback accepts its new value; `.reinit()` restores its default state.
+- **Read and write are separate.** `$name` appears in both `source` and `target`
+  because this action both reads and updates it. Declaring a store only in `target`
+  does not provide its current value.
+- **Without `clock`, `perform` returns a callable event.** Here `submit()` runs
+  the action. For an event with a payload, annotate the last `action` parameter;
+  for example, `(target, source, payload: string) => { ... }`.
+
+Only called targets are triggered. Calls collect payloads; Effector propagates
+them after `action` finishes, not at the line where each callback is called.
+Source values do not change during the action. Target callbacks return nothing,
+including effect callbacks: `target.saveNameFx(...)` does not return a promise.
+
+## React to an external clock
+
+Continue the form example by handling a successful save. Always record the saved
+name, but clear the form only if the user has not entered a different name while
+the request was running:
+
+```ts
+const $savedName = createStore('')
+
+perform({
+  clock: saveNameFx.doneData,
+  source: {$name},
+  target: {$name, $error, $savedName},
+  action: (target, {name}, savedName) => {
+    target.$savedName(savedName)
+    if (name.trim() !== savedName) return
+
+    target.$name.reinit()
+    target.$error.reinit()
+  },
+})
+```
+
+With `clock`, `perform` returns nothing. The clock payload is the last argument of
+`action`, with its type inferred from the clock. Here the effect runs asynchronously,
+but each action is synchronous: submission and successful completion are separate
+steps connected through `saveNameFx.doneData`.
+
+## Configuration
+
+`perform` accepts one configuration object:
+
+- **`target`** — a required writable store, callable event, effect, or object of
+  these units. The first `action` argument mirrors this shape, replacing units
+  with callbacks. For a single unit, this argument is a single callback.
+- **`source`** — a store or object of stores to read. Its value or values are passed
+  as the second argument of `action`. A leading `$` is removed only from source
+  object keys, not target keys.
+- **`clock`** — a unit or array of units that triggers the action. If omitted,
+  a new callable event is returned. Specify `clock` inside the configuration,
+  not as a separate argument.
+- **`action`** — a required synchronous function:
+  `(target, payload) => void`, or `(target, source, payload) => void` with `source`.
+  Keep calculations pure; route side effects through target callbacks instead of
+  directly calling units or performing I/O.
+- **`batch`** — `true` by default; controls batching as in [`sample`](/en/api/effector/sample).
+- **`name`, `sid`** — optional metadata for the returned event.
+
+## Restrictions
+
+- Call each target at most once per action. Repeated calls log a warning and only
+  the last payload is used, including calls through different keys for the same unit.
+- Do not use `async` actions or save target callbacks for later. A call after
+  `action` finishes throws. Start asynchronous work through an effect in `target`.
+- If `action` throws, none of its collected target calls are applied.
+
+## Coming from effector-action
+
+`perform` follows the synchronous [`createAction`](https://github.com/AlexeyDuybo/effector-action)
+model, using `action` instead of `fn`. There is no `update` field, reducer setter,
+callback return value, separate clock argument, or `createAsyncAction` equivalent.

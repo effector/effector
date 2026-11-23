@@ -1,0 +1,77 @@
+---
+title: VueEffector
+description: Плагин effector-vue для Options API во Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { VueEffector } from "effector-vue/options-vue3";
+```
+
+:::info{title="since"}
+`effector-vue/options-vue3` появился в [effector-vue 23.1.0](https://changelog.effector.dev/#effector-vue-23-1-0)
+:::
+
+Плагин `effector-vue` для Options API во Vue 3. Он создаёт миксин, который читает опцию `effector` компонента. Помогает перевести большую кодовую базу с Vue 2.
+
+# Методы (#methods)
+
+## `VueEffector(app)` (#methods-VueEffector-Vue-options)
+
+### Аргументы (#methods-VueEffector-Vue-options-arguments)
+
+1. `app` (_instance Vue_): экземпляр приложения Vue
+
+### Возвращает (#methods-VueEffector-Vue-options-returns)
+
+(_`void`_)
+
+### Примеры (#methods-VueEffector-Vue-options-examples)
+
+#### Установка плагина
+
+```js
+import { createApp } from "vue";
+import { VueEffector } from "effector-vue/options-vue3";
+
+import App from "./App.vue";
+
+const app = createApp(App);
+
+app.use(VueEffector);
+```
+
+#### Опция effector
+
+```html
+<template>
+  <div>
+    <span v-if="createPending">loading...</span>
+    <p>{{ user.name }}</p>
+    <button @click="create">Create</button>
+  </div>
+</template>
+```
+
+```js
+import { $user, create, createFx } from 'model'
+
+export default {
+  name: 'VueComponent',
+  effector: () => ({
+    user: $user,
+    createDone: createFx.done,
+    createPending: createFx.pending,
+  }),
+  watch: {
+    createDone() {
+      // do something after the effect is done
+    }
+  },
+  methods: {
+    create, // template binding
+    createFx,
+  },
+}
+```

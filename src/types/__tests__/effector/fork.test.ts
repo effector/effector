@@ -129,10 +129,7 @@ describe('custom serialize for stores', () => {
           Type 'string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined' is not assignable to type 'number'.
             Type 'undefined' is not assignable to type 'number'.
       No overload matches this call.
-        Overload 1 of 4, '(iterable?: Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]> | null | undefined): Map<...>', gave the following error.
-          Argument of type 'Json' is not assignable to parameter of type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]> | null | undefined'.
-            Type 'string' is not assignable to type 'Iterable<readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined]>'.
-        Overload 2 of 4, '(entries?: readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined): Map<...>', gave the following error.
+        The last overload gave the following error.
           Argument of type 'Json' is not assignable to parameter of type 'readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[] | null | undefined'.
             Type 'string' is not assignable to type 'readonly (readonly [string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined, string | number | boolean | Json[] | { [k: string]: Json; } | null | undefined])[]'.
       "
@@ -158,18 +155,17 @@ describe('fork values', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 9 '[foo, 1],'
+        lack of expected error at test line 8 'values: new Map(['
         No overload matches this call.
-          Overload 1 of 4, '(iterable?: Iterable<readonly [StoreWritable<number>, number]> | null | undefined): Map<StoreWritable<number>, number>', gave the following error.
-            Argument of type '([StoreWritable<number>, number] | [StoreWritable<string>, string])[]' is not assignable to parameter of type 'Iterable<readonly [StoreWritable<number>, number]>'.
-              The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-                Type 'IteratorResult<[StoreWritable<number>, number] | [StoreWritable<string>, string], undefined>' is not assignable to type 'IteratorResult<readonly [StoreWritable<number>, number], any>'.
-                  Type 'IteratorYieldResult<[StoreWritable<number>, number] | [StoreWritable<string>, string]>' is not assignable to type 'IteratorResult<readonly [StoreWritable<number>, number], any>'.
-                    Type 'IteratorYieldResult<[StoreWritable<number>, number] | [StoreWritable<string>, string]>' is not assignable to type 'IteratorYieldResult<readonly [StoreWritable<number>, number]>'.
-                      Type '[StoreWritable<number>, number] | [StoreWritable<string>, string]' is not assignable to type 'readonly [StoreWritable<number>, number]'.
-                        Type '[StoreWritable<string>, string]' is not assignable to type 'readonly [StoreWritable<number>, number]'.
-                          Type at position 0 in source is not compatible with type at position 0 in target.
-                            The types of '____._' are incompatible between these types.
-                              Type 'string' is not assignable to type 'number'.
+          The last overload gave the following error.
+            Type 'StoreWritable<number>' is not assignable to type 'StoreWritable<string>'.
+              The types of '____._' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
+        Unmarked error at test line 9 '[foo, 1],'
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -255,14 +251,7 @@ describe('fork values', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         No overload matches this call.
-          Overload 1 of 2, '(config?: { values?: SerializedState | LegacyMap | StorePair<any>[] | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
-            Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'SerializedState | LegacyMap | StorePair<any>[] | undefined'.
-              Type '([StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }])[]' is not assignable to type 'StorePair<any>[]'.
-                Type '[StoreWritable<string>, string] | [Store<number>, number] | [StoreWritable<{ nested: { value: number; }; }>, { nested: { value: number; }; }]' is not assignable to type 'StorePair<any>'.
-                  Type '[Store<number>, number]' is not assignable to type '[StoreWritable<any>, any]'.
-                    Type at position 0 in source is not compatible with type at position 0 in target.
-                      Type 'Store<number>' is missing the following properties from type 'StoreWritable<any>': ____, on, off, reset, and 2 more.
-          Overload 2 of 2, '(domain: Domain, config?: { values?: [StoreWritable<any>, any][] | SerializedState | LegacyMap | undefined; handlers?: Handlers | undefined; } | undefined): Scope', gave the following error.
+          The last overload gave the following error.
             Object literal may only specify known properties, and 'values' does not exist in type 'Domain'.
         "
       `)

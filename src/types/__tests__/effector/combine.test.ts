@@ -450,10 +450,10 @@ describe('support optional parameters of explicit generic type', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 9 'bar: $bar,'
+      lack of expected error at test line 7 'const result = combine<I>({'
       No overload matches this call.
-        Overload 1 of 18, '(shape: { foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }): Store<I>', gave the following error.
-          Object literal may only specify known properties, and 'baz' does not exist in type '{ foo?: string | number | Store<string | number> | undefined; bar: number | Store<number>; }'.
-        Overload 2 of 18, '(shape: I): Store<{ foo?: string | number | undefined; bar: number; }>', gave the following error.
+        The last overload gave the following error.
           Type 'StoreWritable<number>' is not assignable to type 'number'.
       "
     `)

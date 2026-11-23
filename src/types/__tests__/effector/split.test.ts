@@ -2482,7 +2482,8 @@ describe('array cases', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      no errors
+      lack of expected error at test line 2 'source,'
+      lack of expected error at test line 8 'a: arrayCase,'
       "
     `)
   })

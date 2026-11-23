@@ -49,14 +49,15 @@ const { content, tabs } = initTabs(html);
     margin-bottom: 10px;
   }
 
-  li {
+   ul[role="tablist"] li.tab {
     cursor: pointer;
     list-style: none;
-    margin: -2px;
+    margin: 0px 0px -2px 0;
   }
 
   .tab > button[role="tab"] {
     border-radius: 2px;
+    background-color: transparent;
   }
 
   .tab:has(> [aria-selected="true"]) {

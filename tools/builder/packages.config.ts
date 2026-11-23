@@ -60,9 +60,9 @@ const keywords = [
 ]
 
 const version = {
-  effector: '23.4.4',
+  effector: '23.5.0',
   'effector-react': '23.3.0',
-  'effector-vue': '23.1.1',
+  'effector-vue': '23.3.0',
   'effector-solid': '0.23.0',
   forest: '0.21.2',
 }
@@ -252,10 +252,10 @@ export default {
     'jsnext:main': 'effector-vue.mjs',
     typings: 'index.d.ts',
     peerDependencies: {
-      vue: '*',
+      vue: '2 || >=3.3.0',
       effector: '^23.0.0',
-      '@vue/reactivity': '^3.0.2',
-      '@vue/runtime-core': '^3.0.2',
+      '@vue/reactivity': '^3.3.0',
+      '@vue/runtime-core': '^3.3.0',
     },
     files: [
       ...getFiles('effector-vue'),

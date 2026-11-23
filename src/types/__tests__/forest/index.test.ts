@@ -32,17 +32,10 @@ describe('text', () => {
     }
     expect(dropInconsistentLine(typecheck)).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 6 'text: store.map(data => data),'
+      lack of expected error at test line 5 'h('div', {'
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 5 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
-          Type 'Store<{ value: string; } | null>' is not assignable to type 'DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined'.
-            Type 'Store<{ value: string; } | null>' is not assignable to type 'AttributeStoreInput'.
-              Types of property 'map' are incompatible.
-                Type '<T>(fn: (state: { value: string; } | null) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: string | number | boolean | null) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
-                  Types of parameters 'fn' and 'fn' are incompatible.
-                    Types of parameters 'state' and 'state' are incompatible.
-                      Type '{ value: string; } | null' is not assignable to type 'string | number | boolean | null'.
-                        Type '{ value: string; }' is not assignable to type 'string | number | boolean | null'.
-        Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
+        The last overload gave the following error.
           Object literal may only specify known properties, and 'text' does not exist in type '() => void'.
       "
     `)
@@ -91,10 +84,9 @@ describe('dom tag typecheck', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 'h('damn', () => {})'
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: DOMProperty | AttributeStoreInput | (DOMProperty | AttributeStoreInput)[] | undefined; ... 5 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
-          Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
-        Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
+        The last overload gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
       "
     `)
@@ -145,8 +137,10 @@ describe('remap', () => {
       const bar2: Store<string> = bar
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 3 'const foo1: Store<number> = foo'
         Type 'Store<string>' is not assignable to type 'Store<number>'.
           Type 'string' is not assignable to type 'number'.
+        Unmarked error at test line 6 'const bar2: Store<string> = bar'
         Type 'Store<number>' is not assignable to type 'Store<string>'.
           Type 'number' is not assignable to type 'string'.
         "

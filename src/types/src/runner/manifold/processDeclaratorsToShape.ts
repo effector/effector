@@ -7,6 +7,12 @@ function getDeclsReferencedByConfig(): string[] {
   const results: Ref<unknown, unknown>[] = []
   const grouping = ctx.config.grouping!
   const {pass, getHash, describeGroup, createTestLines, tags} = grouping
+  if (ctx.config.skipCases) {
+    results.push(...ctx.config.skipCases)
+  }
+  if (ctx.config.childFile) {
+    results.push(ctx.config.childFile)
+  }
   if (isRef(pass)) {
     results.push(pass)
   }
@@ -36,7 +42,15 @@ function getDeclsReferencedByConfig(): string[] {
   } else if (createTestLines && 'method' in createTestLines) {
     forIn(createTestLines.shape, value => {
       if (isRef(value)) results.push(value)
-      else results.push(value.field, value.when)
+      else {
+        results.push(value.field)
+        if (value.when) {
+          results.push(value.when)
+        }
+        if (value.markError) {
+          results.push(value.markError)
+        }
+      }
     })
     if (isRef(createTestLines.addExpectError)) {
       results.push(createTestLines.addExpectError)

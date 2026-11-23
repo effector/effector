@@ -1,0 +1,95 @@
+---
+title: createGate
+description: Создаёт гейт, через который модель получает данные из представления. Для Vue 3
+lang: ru
+pagefindWeight: 7
+---
+
+Создаёт [_Gate_](/ru/api/effector-vue/Gate), через который модель получает данные из представления. Для Vue 3. Если задан `defaultState`, [Gate.state](/ru/api/effector-vue/Gate#properties-state) создаётся с этим значением.
+
+:::info{title="since"}
+`createGate` появился в [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
+:::
+
+# Методы (#methods)
+
+## `createGate(config?: {defaultState?, domain?, name?})` (#methods-createGate-config)
+
+### Аргументы (#methods-createGate-config-arguments)
+
+`config` (_Object_): необязательный объект конфигурации
+
+- `defaultState?`: начальное состояние [Gate.state](/ru/api/effector-vue/Gate#properties-state)
+- `domain?` ([_Domain_](/ru/api/effector/Domain)): домен, в котором создаются юниты гейта (событие [Gate.open](/ru/api/effector-vue/Gate#properties-open), стор [Gate.state](/ru/api/effector-vue/Gate#properties-state) и другие)
+- `name?` (_string_): имя созданного Vue-компонента
+
+### Возвращает (#methods-createGate-config-returns)
+
+[_Gate_](/ru/api/effector-vue/Gate)
+
+### Примеры (#methods-createGate-config-examples)
+
+#### Базовый пример (#methods-createGate-config-examples-basic)
+
+```ts
+// model.ts
+import { createGate } from "effector-vue/composition";
+
+export const ListGate = createGate<string>({
+  name: "Gate with required props",
+});
+
+ListGate.state.watch((state) => {
+  console.log("current state", state);
+});
+// => current state null
+```
+
+```vue
+<!-- ListItem.vue -->
+<script setup lang="ts">
+import { useGate } from "effector-vue/composition";
+
+import { ListGate } from "./model";
+
+const props = defineProps<{ id: string }>();
+
+useGate(ListGate, () => props.id);
+</script>
+
+<template>
+  <div>{{ id }}</div>
+</template>
+```
+
+```vue
+<!-- App.vue -->
+<script setup lang="ts">
+import { ref } from "vue";
+
+import ListItem from "./ListItem.vue";
+
+const id = ref("1");
+</script>
+
+<template>
+  <ListItem :id="id" />
+</template>
+```
+
+```ts
+// main.ts
+import { createApp } from "vue";
+
+import App from "./App.vue";
+
+const app = createApp(App);
+
+app.mount("#app");
+// => current state 1
+
+app.unmount();
+// => current state null
+```
+
+Гейт открывается при монтировании с пропсами, которые есть в этот момент, и закрывается при размонтировании. В [useGate](/ru/api/effector-vue/useGate) описан порядок `open` и `set`, поведение в `<KeepAlive>` и на сервере.

@@ -158,7 +158,7 @@ export const translations = {
   },
   Landing: {
     Stats: {
-      title: { text: { en: "Effector at a Glance", ru: "effector в цифрах" } },
+      title: { text: { en: "Effector at a Glance", ru: "effector в цифрах", uz: "Effector raqamlarda" } },
       size: { text: { en: "gzipped size", ru: "размер gzip", uz: "gzip hajmi" } },
       contributors: { text: { en: "contributors", ru: "соавторы", uz: "hammualliflar" } },
       stars: { text: { en: "stars", ru: "звёзды", uz: "yulduzchalar" } },

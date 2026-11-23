@@ -1,0 +1,79 @@
+---
+title: VueEffector
+description: effector-vue plugin for the Options API of Vue 3
+redirectFrom:
+  - /api/effector-vue/VueEffector
+  - /docs/api/effector-vue/vue-effector
+pagefindWeight: 7
+---
+
+```ts
+import { VueEffector } from "effector-vue/options-vue3";
+```
+
+:::info{title="since"}
+`effector-vue/options-vue3` introduced in [effector-vue 23.1.0](https://changelog.effector.dev/#effector-vue-23-1-0)
+:::
+
+`effector-vue` plugin for the Options API of Vue 3. It creates a mixin that reads the `effector` option of a component. Helps to migrate a large codebase from Vue 2.
+
+# Methods (#methods)
+
+## `VueEffector(app)` (#methods-VueEffector-Vue-options)
+
+### Arguments (#methods-VueEffector-Vue-options-arguments)
+
+1. `app` (_instance Vue_): Vue instance
+
+### Returns (#methods-VueEffector-Vue-options-returns)
+
+(_`void`_)
+
+### Examples (#methods-VueEffector-Vue-options-examples)
+
+#### Installation plugin
+
+```js
+import { createApp } from "vue";
+import { VueEffector } from "effector-vue/options-vue3";
+
+import App from "./App.vue";
+
+const app = createApp(App);
+
+app.use(VueEffector);
+```
+
+#### Effector options
+
+```html
+<template>
+  <div>
+    <span v-if="createPending">loading...</span>
+    <p>{{ user.name }}</p>
+    <button @click="create">Create</button>
+  </div>
+</template>
+```
+
+```js
+import { $user, create, createFx } from 'model'
+
+export default {
+  name: 'VueComponent',
+  effector: () => ({
+    user: $user,
+    createDone: createFx.done,
+    createPending: createFx.pending,
+  }),
+  watch: {
+    createDone() {
+      // do something after the effect is done
+    }
+  },
+  methods: {
+    create, // template binding
+    createFx,
+  },
+}
+```

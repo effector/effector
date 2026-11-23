@@ -14,7 +14,7 @@ it('support watchers for event', () => {
   event()
   event(1)
 
-  expect(fn).toBeCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
         Array [
           3,
@@ -26,7 +26,7 @@ it('support watchers for event', () => {
   watcher()
 
   event(4)
-  expect(fn).toBeCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
 })
 
 it('support watchers for storages', () => {
@@ -40,7 +40,7 @@ it('support watchers for storages', () => {
   event(3)
   event(1)
 
-  expect(fn).toBeCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
         Array [
           "none",
@@ -52,7 +52,7 @@ it('support watchers for storages', () => {
   watcher()
 
   event(4)
-  expect(fn).toBeCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
 })
 
 it('support event watchers for storages', () => {
@@ -121,7 +121,7 @@ it('support watchers for mapped storages', () => {
 
   event(3)
 
-  expect(fn).toBeCalledTimes(2)
+  expect(fn).toHaveBeenCalledTimes(2)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
         Array [
           "/none",
@@ -132,7 +132,7 @@ it('support watchers for mapped storages', () => {
   watcher()
 
   event(4)
-  expect(fn).toBeCalledTimes(2)
+  expect(fn).toHaveBeenCalledTimes(2)
 })
 
 test('watch validation', () => {

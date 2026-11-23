@@ -18,11 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
+        with: {node-version: 24}
       - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-24-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn test
@@ -34,11 +34,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
+        with: {node-version: 24}
       - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-24-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn build
@@ -82,11 +82,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
+        with: {node-version: 24}
       - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-24-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn coverage
@@ -102,11 +102,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
+        with: {node-version: 24}
       - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-24-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v4
@@ -126,11 +126,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 20}
+        with: {node-version: 24}
       - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: node-20-modules-${{ hashFiles('**/yarn.lock') }}
+          key: node-24-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v4

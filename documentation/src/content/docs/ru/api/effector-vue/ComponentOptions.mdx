@@ -1,0 +1,56 @@
+---
+title: ComponentOptions
+description: Опция effector компонента Vue 2, которая привязывает к нему сторы
+lang: ru
+pagefindWeight: 7
+---
+
+# ComponentOptions (Vue2) (#ComponentOptions)
+
+## `effector` (#ComponentOptions-effector)
+
+### Возвращает (#ComponentOptions-effector-returns)
+
+(_`Function | Object | Store`_): `Store`, объект сторов или функция, которая вызывается с экземпляром компонента в `this`.
+
+Событие или эффект в объекте превращается в `Store<number>`, который считает его вызовы, поэтому `watch` компонента может на него реагировать.
+
+### Примеры (#ComponentOptions-effector-examples)
+
+#### Базовый пример (#ComponentOptions-effector-examples-basic)
+
+```js
+import Vue from "vue";
+import { createStore } from "effector";
+
+const counter = createStore(0);
+
+new Vue({
+  effector() {
+    // вызывается с экземпляром компонента в `this`
+    return { counter }; // создаст `counter` в шаблоне
+  },
+});
+```
+
+#### Объект (#ComponentOptions-effector-examples-object)
+
+```js
+import { counter } from "./stores";
+
+new Vue({
+  effector: {
+    counter, // создаст `counter` в шаблоне
+  },
+});
+```
+
+#### Стор напрямую (#ComponentOptions-effector-examples-direct)
+
+```js
+import { counter } from "./stores";
+
+new Vue({
+  effector: counter, // создаст `state` в шаблоне
+});
+```

@@ -1,5 +1,3 @@
-const nameCache = {}
-
 export const minifyConfig = ({
   beautify,
   inline = true,
@@ -105,7 +103,9 @@ export const minifyConfig = ({
   keep_fnames: false,
   ie8: false,
   module: true,
-  nameCache,
+  // has to be per build: a shared cache leaks mangled names between the
+  // packages built in parallel and produces duplicate top level identifiers
+  nameCache: {},
   safari10: false,
   toplevel: true,
   warnings: true,

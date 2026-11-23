@@ -1,6 +1,6 @@
 import type {Cmd, Node, StateRef} from './index.h'
 import type {CommonUnit, DataCarrier, Store} from './unit.h'
-import {combine} from './combine'
+import {combine, combineSource} from './combine'
 import {mov, userFnCall, read, calc} from './step'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg} from './caller'
@@ -99,6 +99,7 @@ export const createSampling = (
   targetMayBeStore: boolean,
   filterRequired: boolean,
   sid?: string | undefined,
+  caller: (...args: any[]) => any = sample,
 ) => {
   const errorTitle = generateErrorTitle(method, metadata)
   const isUpward = !!target
@@ -110,7 +111,7 @@ export const createSampling = (
   if (isVoid(source)) {
     sourceIsClock = true
   } else if (!is.unit(source)) {
-    source = combine(source)
+    source = batch ? combine(source) : combineSource(source, batch)
   }
   if (isVoid(clock)) {
     /** still undefined! */
@@ -238,7 +239,7 @@ export const createSampling = (
   own(source, [jointNode])
   own(jointNode, syncNodes)
   Object.assign(jointNode.meta, metadata, {joint: true, stateRef: clockState})
-  setUnitTrace(jointNode, getUnitTrace(sample))
+  setUnitTrace(jointNode, getUnitTrace(caller))
   return target
 }
 

@@ -51,24 +51,54 @@ describe('unit source', () => {
     test('unit -> unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , target:abn, filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , target:abn, filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , target:abn, filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:abNull    , target:abn, filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:nullableAB, target:abn, filter:Boolean                           })
+        sample({
+          source: ab,
+          //@ts-expect-error
+          target: abn,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          //@ts-expect-error
+          target: abn,
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          //@ts-expect-error
+          target: abn,
+          filter: Boolean,
+        })
+        sample({
+          source: abNull,
+          //@ts-expect-error
+          target: abn,
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: nullableAB,
+          //@ts-expect-error
+          target: abn,
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -91,21 +121,45 @@ describe('unit source', () => {
     test('unit -> unit wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , target:aStr, filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , target:aStr, filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , target:aStr, filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:aStr, filter:Boolean           })
+        sample({
+          source: ab,
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          //@ts-expect-error
+          target: aStr,
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          //@ts-expect-error
+          target: aStr,
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
         "
       `)
     })
@@ -139,24 +193,59 @@ describe('unit source', () => {
     test('unit + clock -> unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:abn, filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:abn, filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:abn, filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:abNull    , clock:anyt, target:abn, filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:abn, filter:Boolean                           })
+        sample({
+          source: ab,
+          clock: anyt,
+          //@ts-expect-error
+          target: abn,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          //@ts-expect-error
+          target: abn,
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          //@ts-expect-error
+          target: abn,
+          filter: Boolean,
+        })
+        sample({
+          source: abNull,
+          clock: anyt,
+          //@ts-expect-error
+          target: abn,
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          //@ts-expect-error
+          target: abn,
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -180,21 +269,49 @@ describe('unit source', () => {
     test('unit + clock -> unit wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:aStr, filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:aStr, filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:aStr, filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:aStr, filter:Boolean           })
+        sample({
+          source: ab,
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
         "
       `)
     })
@@ -228,24 +345,59 @@ describe('unit source', () => {
     test('unit + [clock] -> unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:abn, filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:abn, filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:abn, filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:abNull    , clock:[anyt], target:abn, filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:abn, filter:Boolean                           })
+        sample({
+          source: ab,
+          clock: [anyt],
+          //@ts-expect-error
+          target: abn,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          //@ts-expect-error
+          target: abn,
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          //@ts-expect-error
+          target: abn,
+          filter: Boolean,
+        })
+        sample({
+          source: abNull,
+          clock: [anyt],
+          //@ts-expect-error
+          target: abn,
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          //@ts-expect-error
+          target: abn,
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
         "
       `)
     })
@@ -269,21 +421,49 @@ describe('unit source', () => {
     test('unit + [clock] -> unit wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:aStr, filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:aStr, filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:aStr, filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:aStr, filter:Boolean           })
+        sample({
+          source: ab,
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: { a: string; }; }; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
         "
       `)
     })
@@ -322,59 +502,289 @@ describe('unit source', () => {
     test('unit -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , target:[abn]           , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,anyt]      , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,voidt]     , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,anyt,voidt], filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn]           , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,anyt]      , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,voidt]     , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,anyt,voidt], filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , target:[abn,anyt,voidt], filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:abNull    , target:[abn]           , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:nullableAB, target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:[abn,anyt,voidt], filter:Boolean                           })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: abNull,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
         "
       `)
     })
@@ -409,45 +819,237 @@ describe('unit source', () => {
     test('unit -> array wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,ab]        , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,ab]        , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , target:[aStr,anyt,voidt], filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, target:[aStr,anyt,voidt], filter:Boolean           })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
         "
       `)
     })
@@ -494,59 +1096,309 @@ describe('unit source', () => {
     test('unit + clock -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn]           , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,voidt]     , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn]           , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,anyt]      , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,voidt]     , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:abNull    , clock:anyt, target:[abn]           , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , clock:anyt, target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , clock:anyt, target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , clock:anyt, target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[abn,anyt,voidt], filter:Boolean                           })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: abNull,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
         "
       `)
     })
@@ -585,45 +1437,253 @@ describe('unit source', () => {
     test('unit + clock -> array wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,ab]        , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:anyt, target:[aStr,anyt,voidt], filter:Boolean           })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
         "
       `)
     })
@@ -670,59 +1730,309 @@ describe('unit source', () => {
     test('unit + [clock] -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn]           , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,voidt]     , filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0                })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn]           , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,voidt]     , filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:$filter                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:abNull    , clock:[anyt], target:[abn]           , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , clock:[anyt], target:[abn,anyt]      , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , clock:[anyt], target:[abn,voidt]     , filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:abNull    , clock:[anyt], target:[abn,anyt,voidt], filter:(val): val is AB => val.a !== null})
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[abn]           , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[abn,anyt]      , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[abn,voidt]     , filter:Boolean                           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[abn,anyt,voidt], filter:Boolean                           })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: abNull,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: abNull,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val): val is AB => val.a !== null,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<AB>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
         "
       `)
     })
@@ -761,45 +2071,253 @@ describe('unit source', () => {
     test('unit + [clock] -> array wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:ab        , clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[aStr,ab]        , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[aStr,anyt]      , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[aStr,voidt]     , filter:Boolean           })
-        //@ts-expect-error
-        sample({source:nullableAB, clock:[anyt], target:[aStr,anyt,voidt], filter:Boolean           })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: ab,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
+        sample({
+          source: nullableAB,
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: Boolean,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: AB; targetType: void | { a: string; }; }[]; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type 'AB'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'AB'.
         "
       `)
     })
@@ -828,29 +2346,121 @@ describe('object source', () => {
     test('object -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn]           , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn]           , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, target:[abn,anyt,voidt], filter:$filter           })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
         "
       `)
     })
@@ -877,27 +2487,123 @@ describe('object source', () => {
     test('object -> array wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,ab]        , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,ab]        , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, target:[aStr,anyt,voidt], filter:$filter           })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
         "
       `)
     })
@@ -928,29 +2634,129 @@ describe('object source', () => {
     test('object + clock -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn]           , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn]           , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[abn,anyt,voidt], filter:$filter           })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
         "
       `)
     })
@@ -981,27 +2787,131 @@ describe('object source', () => {
     test('object + clock -> array wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,ab]        , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:[aStr,anyt,voidt], filter:$filter           })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
         "
       `)
     })
@@ -1032,29 +2942,129 @@ describe('object source', () => {
     test('object + [clock] -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn]           , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn]           , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[abn,anyt,voidt], filter:$filter           })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            abn,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | ABN; }[]; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
         "
       `)
     })
@@ -1085,27 +3095,131 @@ describe('object source', () => {
     test('object + [clock] -> array wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,voidt]     , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,ab]        , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,anyt]      , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,voidt]     , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:[aStr,anyt,voidt], filter:$filter           })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            ab,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            aStr,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: void | { a: string; }; }[]; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type '{ readonly a: number; readonly b: string; }'.
         "
       `)
     })
@@ -1132,27 +3246,51 @@ describe('object source', () => {
     test('object -> unit same (should fail)', () => {
       //prettier-ignore
       {
+        sample({
+          source: {a,b},
+          //@ts-expect-error
+          target: abn,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          //@ts-expect-error
+          target: abn,
+          filter: $filter,
+        })
         //@ts-expect-error
-        sample({source:{a,b}, target:abn , filter:(val) => val.a > 0})
+        sample({source:{a}  , target:ab, filter:(val) => val.a > 0})
+        sample({
+          source: {a},
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
         //@ts-expect-error
-        sample({source:{a,b}, target:abn , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a}  , target:ab  , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a}  , target:aStr, filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a}  , target:ab  , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a}  , target:aStr, filter:$filter           })
+        sample({source:{a}  , target:ab, filter:$filter           })
+        sample({
+          source: {a},
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
         "
       `)
     })
@@ -1174,10 +3312,18 @@ describe('object source', () => {
     test('object -> unit wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}     , target:aStr, filter:(val) => val.a > 0                             })
-        //@ts-expect-error
-        sample({source:{a,b}     , target:aStr, filter:$filter                                        })
+        sample({
+          source: {a,b},
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
         //@ts-expect-error
         sample({source:{a:aOpt,b}, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0})
         //@ts-expect-error
@@ -1185,10 +3331,18 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
         "
       `)
     })
@@ -1219,27 +3373,55 @@ describe('object source', () => {
     test('object + clock -> unit same (should fail)', () => {
       //prettier-ignore
       {
+        sample({
+          source: {a,b},
+          clock: anyt,
+          //@ts-expect-error
+          target: abn,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          //@ts-expect-error
+          target: abn,
+          filter: $filter,
+        })
         //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:abn , filter:(val) => val.a > 0})
+        sample({source:{a}  , clock:anyt, target:ab, filter:(val) => val.a > 0})
+        sample({
+          source: {a},
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
         //@ts-expect-error
-        sample({source:{a,b}, clock:anyt, target:abn , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a}  , clock:anyt, target:ab  , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a}  , clock:anyt, target:aStr, filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a}  , clock:anyt, target:ab  , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a}  , clock:anyt, target:aStr, filter:$filter           })
+        sample({source:{a}  , clock:anyt, target:ab, filter:$filter           })
+        sample({
+          source: {a},
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
         "
       `)
     })
@@ -1263,10 +3445,20 @@ describe('object source', () => {
     test('object + clock -> unit wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}     , clock:anyt, target:aStr, filter:(val) => val.a > 0                               })
-        //@ts-expect-error
-        sample({source:{a,b}     , clock:anyt, target:aStr, filter:$filter                                          })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: anyt,
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
         //@ts-expect-error
         sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0  })
         //@ts-expect-error
@@ -1276,11 +3468,21 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
         "
       `)
     })
@@ -1311,27 +3513,55 @@ describe('object source', () => {
     test('object + [clock] -> unit same (should fail)', () => {
       //prettier-ignore
       {
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          //@ts-expect-error
+          target: abn,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          //@ts-expect-error
+          target: abn,
+          filter: $filter,
+        })
         //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:abn , filter:(val) => val.a > 0})
+        sample({source:{a}  , clock:[anyt], target:ab, filter:(val) => val.a > 0})
+        sample({
+          source: {a},
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
         //@ts-expect-error
-        sample({source:{a,b}, clock:[anyt], target:abn , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a}  , clock:[anyt], target:ab  , filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a}  , clock:[anyt], target:aStr, filter:(val) => val.a > 0})
-        //@ts-expect-error
-        sample({source:{a}  , clock:[anyt], target:ab  , filter:$filter           })
-        //@ts-expect-error
-        sample({source:{a}  , clock:[anyt], target:aStr, filter:$filter           })
+        sample({source:{a}  , clock:[anyt], target:ab, filter:$filter           })
+        sample({
+          source: {a},
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: ABN; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; }; targetType: { a: string; }; }; }'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<ABN>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'number' is not assignable to type 'string'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Property 'b' is missing in type '{ a: StoreWritable<number>; }' but required in type '{ a: StoreWritable<number>; b: Store<string>; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; }>'.
+          The types of '__.a' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
         "
       `)
     })
@@ -1355,10 +3585,20 @@ describe('object source', () => {
     test('object + [clock] -> unit wide (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:{a,b}     , clock:[anyt]     , target:aStr, filter:(val) => val.a > 0                               })
-        //@ts-expect-error
-        sample({source:{a,b}     , clock:[anyt]     , target:aStr, filter:$filter                                          })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: (val) => val.a > 0,
+        })
+        sample({
+          source: {a,b},
+          clock: [anyt],
+          //@ts-expect-error
+          target: aStr,
+          filter: $filter,
+        })
         //@ts-expect-error
         sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val) => typeof val.a === 'number' && val.a > 0  })
         //@ts-expect-error
@@ -1368,11 +3608,21 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number; b: string; }; targetType: { a: string; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: { a: number | null; b: string; }; targetType: { a: number; }; }; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: string; }>' is not assignable to type 'Unit<{ readonly a: number; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: string; }' but required in type '{ readonly a: number; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<{ readonly a: number | null; readonly b: string; }>'.
+          Types of property '__' are incompatible.
+            Property 'b' is missing in type '{ a: number; }' but required in type '{ readonly a: number | null; readonly b: string; }'.
         "
       `)
     })
@@ -1390,6 +3640,7 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 7 'sample({source:{a:aOpt,b}, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0, fn:(val) => ({a: val.a + 1, b: val.b})           })'
         'val.a' is possibly 'null'.
         "
       `)
@@ -1419,37 +3670,35 @@ describe('object source', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         'val.a' is possibly 'null'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
+        Type 'string' is not assignable to type '{ a: number; }'.
         'val.a' is possibly 'null'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
-        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; target: EventCallable<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock?: undefined; filter?: (((src: { a: number | null; b: string; }) => src is { a: number | null; b: string; }) & ((src: { ...; }) => src is { ...; })) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; target: EventCallable<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock?: undefined; filter?: ((src: { a: number | null; b: string; }) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }]'.
-            Type '{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; target: EventCallable<{ a: number; }>; filter: (val: { a: number | null; b: string; }) => val is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock?: undefined; filter?: ((src: { a: number | null; b: string; }) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }) => any'.
-                  Types of parameters 'val' and 'src' are incompatible.
-                    Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
-                      Types of property 'a' are incompatible.
-                        Type 'number | null' is not assignable to type 'number'.
-                          Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
+        Type 'string' is not assignable to type '{ a: number; }'.
+        Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
+        Type 'string' is not assignable to type '{ a: number; }'.
         "
       `)
     })
@@ -1471,7 +3720,9 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 9 'sample({source:{a:aOpt,b}, clock:anyt, target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val) => ({a: val.a + 1, b: val.b})           })'
         'val.a' is possibly 'null'.
+        Unmarked error at test line 10 'sample({source:{a:aOpt,b}, clock:numt, target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val) => ({a: val.a + 1, b: val.b})           })'
         'val.a' is possibly 'null'.
         "
       `)
@@ -1514,61 +3765,55 @@ describe('object source', () => {
         "
         'val.a' is possibly 'null'.
         'val.a' is possibly 'null'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: number) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type 'string' is not assignable to type '{ a: number; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
         Parameter 'n' implicitly has an 'any' type.
+        Type 'string' is not assignable to type '{ a: number; }'.
         'val.a' is possibly 'null'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
-        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
-        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<any>; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: (((src: { a: number | null; b: string; }, clk: any) => src is { ...; }) & ((src: { ...; }, clk: any) => src is { ...; })) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: EventCallable<any>; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: ((src: { a: number | null; b: string; }, clk: any) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }]'.
-            Type '{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: EventCallable<any>; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: ((src: { a: number | null; b: string; }, clk: any) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
-                  Types of parameters 'val' and 'src' are incompatible.
-                    Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
-                      Types of property 'a' are incompatible.
-                        Type 'number | null' is not assignable to type 'number'.
-                          Type 'null' is not assignable to type 'number'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<number>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<number>; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: (((src: { a: number | null; b: string; }, clk: number) => src is { ...; }) & ((src: { ...; }, clk: number) => src is { ...; })) | undefined; ... 4 more ...; name?: string | undefined; }] | [confi...'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<number>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: EventCallable<number>; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: ((src: { a: number | null; b: string; }, clk: number) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }]'.
-            Type '{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<number>; target: EventCallable<{ a: number; }>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: EventCallable<number>; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: ((src: { a: number | null; b: string; }, clk: number) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
-                  Types of parameters 'val' and 'src' are incompatible.
-                    Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
-                      Types of property 'a' are incompatible.
-                        Type 'number | null' is not assignable to type 'number'.
-                          Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
+        Type 'string' is not assignable to type '{ a: number; }'.
+        Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
+        Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type 'string' is not assignable to type '{ a: number; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
         Parameter 'n' implicitly has an 'any' type.
+        Type 'string' is not assignable to type '{ a: number; }'.
         "
       `)
     })
@@ -1590,7 +3835,9 @@ describe('object source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 9 'sample({source:{a:aOpt,b}, clock:[anyt]     , target:aNum, filter:(val): val is AB => typeof val.a === 'number' && val.a > 0  , fn:(val) => ({a: val.a + 1, b: val.b})           })'
         'val.a' is possibly 'null'.
+        Unmarked error at test line 10 'sample({source:{a:aOpt,b}, clock:[numt,$num], target:aNum, filter:(val,n): val is AB => typeof val.a === 'number' && val.a > n, fn:(val) => ({a: val.a + 1, b: val.b})           })'
         'val.a' is possibly 'null'.
         "
       `)
@@ -1633,61 +3880,55 @@ describe('object source', () => {
         "
         'val.a' is possibly 'null'.
         'val.a' is possibly 'null'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: number) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }, clk: number) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type 'string' is not assignable to type '{ a: number; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
         Parameter 'n' implicitly has an 'any' type.
+        Type 'string' is not assignable to type '{ a: number; }'.
         'val.a' is possibly 'null'.
-        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '((src: { a: number | null; b: string; }, clk: any) => any) & ((val: AB) => { a: number; b: string; })'.
-          Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
-            Types of parameters 'val' and 'src' are incompatible.
-              Type '{ a: number | null; b: string; }' is not assignable to type 'AB'.
-                Types of property 'a' are incompatible.
-                  Type 'number | null' is not assignable to type 'number'.
-                    Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
-        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
-        Property 'c' does not exist on type '{ a: number | null; b: string; }'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>[]; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<any>[]; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: (((src: { a: number | null; b: string; }, clk: any) => src is { ...; }) & ((src: { ...; }, clk: any) => src is { ...; })) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>[]; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: EventCallable<any>[]; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: ((src: { a: number | null; b: string; }, clk: any) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }]'.
-            Type '{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: EventCallable<any>[]; target: EventCallable<{ a: number; }>; filter: (val: { ...; }) => val is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: EventCallable<any>[]; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; filter?: ((src: { a: number | null; b: string; }, clk: any) => boolean) | undefined; ... 4 more ...; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: any) => any'.
-                  Types of parameters 'val' and 'src' are incompatible.
-                    Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
-                      Types of property 'a' are incompatible.
-                        Type 'number | null' is not assignable to type 'number'.
-                          Type 'null' is not assignable to type 'number'.
-        Argument of type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: (StoreWritable<number> | EventCallable<number>)[]; target: EventCallable<...>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (StoreWritable<number> | EventCallable<number>)[]; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; ... 5 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: (StoreWritable<number> | EventCallable<number>)[]; target: EventCallable<...>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (StoreWritable<number> | EventCallable<number>)[]; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; ... 5 more ...; name?: string | undefined; }]'.
-            Type '{ source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; clock: (StoreWritable<number> | EventCallable<number>)[]; target: EventCallable<...>; filter: (val: { ...; }, n: number) => val is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (StoreWritable<number> | EventCallable<number>)[]; source: { a: StoreWritable<number | null>; b: StoreWritable<string>; }; ... 5 more ...; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: string; }' is not assignable to type '(src: { a: number | null; b: string; }, clk: number) => any'.
-                  Types of parameters 'val' and 'src' are incompatible.
-                    Type '{ a: number | null; b: string; }' is not assignable to type 'ABN'.
-                      Types of property 'a' are incompatible.
-                        Type 'number | null' is not assignable to type 'number'.
-                          Type 'null' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type '(val: AB) => { a: number; b: string; }' is not assignable to type '(src: { readonly a: number | null; readonly b: string; }, clk: any) => any'.
+          Types of parameters 'val' and 'src' are incompatible.
+            Type '{ readonly a: number | null; readonly b: string; }' is not assignable to type 'AB'.
+              Types of property 'a' are incompatible.
+                Type 'number | null' is not assignable to type 'number'.
+                  Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
+        Type 'string' is not assignable to type '{ a: number; }'.
+        Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
+        Property 'c' does not exist on type '{ readonly a: number | null; readonly b: string; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: any) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Object literal may only specify known properties, and 'source' does not exist in type '{ fn: (src: { readonly a: number | null; readonly b: string; }, clk: number) => any; error: \\"fn parameters should match clock/source types\\"; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: string; targetType: { a: number; }; }; }'.
+        Type 'string' is not assignable to type '{ a: number; }'.
+        Type 'EventCallable<{ a: number; }>' is not assignable to type 'Unit<string>'.
+          Types of property '__' are incompatible.
+            Type '{ a: number; }' is not assignable to type 'string'.
         Parameter 'val' implicitly has an 'any' type.
         Parameter 'n' implicitly has an 'any' type.
+        Type 'string' is not assignable to type '{ a: number; }'.
         "
       `)
     })
@@ -1709,47 +3950,144 @@ describe('tuple source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        no errors
         "
       `)
     })
     test('tuple -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum]           , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum,anyt]      , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum,voidt]     , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum,anyt,voidt], filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum]           , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum,anyt]      , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum,voidt]     , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], target:[lNumNum,anyt,voidt], filter:$filter            })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
         "
       `)
     })
@@ -1773,53 +4111,152 @@ describe('tuple source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        no errors
         "
       `)
     })
     test('tuple + clock -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum]           , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum,anyt]      , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum,voidt]     , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum]           , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum,anyt]      , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum,voidt]     , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], clock:anyt, target:[lNumNum,anyt,voidt], filter:$filter            })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
         "
       `)
     })
@@ -1843,53 +4280,152 @@ describe('tuple source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, string]; }[]; }'.
+        no errors
         "
       `)
     })
     test('tuple + [clock] -> array same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum]           , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum,anyt]      , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum,voidt]     , filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum]           , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum,anyt]      , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum,voidt]     , filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b], clock:[anyt], target:[lNumNum,anyt,voidt], filter:$filter            })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          target: [
+            //@ts-expect-error
+            lNumNum,
+            anyt,
+            //@ts-expect-error
+            voidt,
+          ],
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }[]; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: void | [number, number]; }[]; }'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<void>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type 'void' is not assignable to type 'readonly [number, string]'.
         "
       `)
     })
@@ -1917,47 +4453,100 @@ describe('tuple source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
+        no errors
         "
       `)
     })
     test('tuple -> unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:[a,b]         , target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b] as const, target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b]         , target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b] as const, target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a]           , target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a] as const  , target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a]           , target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a] as const  , target:lNumNum, filter:$filter            })
+        sample({
+          source: [a,b],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b] as const,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a,b] as const,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a] as const,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a] as const,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
         "
       `)
     })
@@ -1993,52 +4582,108 @@ describe('tuple source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
+        no errors
         "
       `)
     })
     test('tuple + clock -> unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:[a,b]         , clock:anyt, target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b] as const, clock:anyt, target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b]         , clock:anyt, target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b] as const, clock:anyt, target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a]           , clock:anyt, target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a] as const  , clock:anyt, target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a]           , clock:anyt, target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a] as const  , clock:anyt, target:lNumNum, filter:$filter            })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b] as const,
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a,b] as const,
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a],
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a] as const,
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a],
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a] as const,
+          clock: anyt,
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
         "
       `)
     })
@@ -2074,52 +4719,108 @@ describe('tuple source', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, string]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number]; }; }'.
+        no errors
         "
       `)
     })
     test('tuple + [clock] -> unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({source:[a,b]         , clock:[anyt], target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b] as const, clock:[anyt], target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a,b]         , clock:[anyt], target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a,b] as const, clock:[anyt], target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a]           , clock:[anyt], target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a] as const  , clock:[anyt], target:lNumNum, filter:(val) => val[0] > 0})
-        //@ts-expect-error
-        sample({source:[a]           , clock:[anyt], target:lNumNum, filter:$filter            })
-        //@ts-expect-error
-        sample({source:[a] as const  , clock:[anyt], target:lNumNum, filter:$filter            })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b] as const,
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a,b],
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a,b] as const,
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a],
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a] as const,
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: (val) => val[0] > 0,
+        })
+        sample({
+          source: [a],
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
+        sample({
+          source: [a] as const,
+          clock: [anyt],
+          //@ts-expect-error
+          target: lNumNum,
+          filter: $filter,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Operator '>' cannot be applied to types 'string | number' and 'number'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: (string | number)[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number, string]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: number[]; targetType: [number, number]; }; }'.
-        Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"source should extend target type\\"; targets: { sourceType: readonly [number]; targetType: [number, number]; }; }'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number, string]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number, string]'.
+              Type at position 1 in source is not compatible with type at position 1 in target.
+                Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
+        Type 'EventCallable<[number, number]>' is not assignable to type 'Unit<readonly [number]>'.
+          Types of property '__' are incompatible.
+            Type '[number, number]' is not assignable to type 'readonly [number]'.
+              Source has 2 element(s) but target allows only 1.
         "
       `)
     })
@@ -2144,24 +4845,80 @@ describe('no source', () => {
       {
         //@ts-expect-error
         sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:() => 1                         })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: (clk) => clk !== null,
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
         //@ts-expect-error
         sample({clock:nullableAB, target:$ab, filter:$filter                         })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: $filter,
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        lack of expected error at test line 4 'sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           })'
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        Unmarked error at test line 12 'clock: nullableAB,'
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
         'clk' is possibly 'null'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB | null>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        'clk' is possibly 'null'.
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB | null>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        Unmarked error at test line 33 'clock: nullableAB,'
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'number'.
+              Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<AB | null>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
         "
       `)
     })
@@ -2170,20 +4927,16 @@ describe('no source', () => {
     test('clock, fn -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})                   })
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})               })
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})                   })
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: AB) => ({a:val.a, b:val.b})               })
+        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})        })
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 6 'sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })'
         'val' is possibly 'null'.
+        Unmarked error at test line 6 'sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })'
         'val' is possibly 'null'.
         "
       `)
@@ -2191,196 +4944,245 @@ describe('no source', () => {
     test('clock, fn -> unit same (should fail)', () => {
       //prettier-ignore
       {
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.a, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.a, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          target: $ab,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                   })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: () => ({a:0, b:1}),
+        })
         //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: ABN) => ({a:val.a, b:val.b})              })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                              })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.a, b:val.b})              })
-        //@ts-expect-error
-        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                              })
+        sample({clock:nullableAB, target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                   })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: () => ({a:0, b:1}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 6 'target: strt,'
+        Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: number; b: string; })'.
+          Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: string; }'.
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
+        Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
+        lack of expected error at test line 37 'target: strt,'
+        Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: any; b: string; })'.
+          Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
         'clk' is possibly 'null'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
-        'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
-        'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: any; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: any; b: string; }'.
         'clk' is possibly 'null'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
-        Property 'c' does not exist on type 'ABN'.
+        Type '{ a: any; b: string; }' is not assignable to type 'number'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB | null' is not assignable to type 'ABN'.
-                Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Property 'c' does not exist on type 'AB'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: number; b: number; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: any; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: any; b: string; }'.
+        Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type 'number'.
+        Property 'c' does not exist on type 'AB'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: any; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: any; b: string; }'.
+        Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        Property 'c' does not exist on type 'AB'.
+        lack of expected error at test line 108 'target: strt,'
+        Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: number; b: string; })'.
+          Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: number; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        lack of expected error at test line 123 'target: strt,'
+        Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: any; b: string; })'.
+          Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        Type 'StoreWritable<AB>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
         Parameter 'clk' implicitly has an 'any' type.
-        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: number; b: number; })'.
-          Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+        Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: number; }'.
+        Unmarked error at test line 134 'filter: (clk): clk is AB => clk !== null,'
+        Parameter 'clk' implicitly has an 'any' type.
+        Type '{ a: number; b: number; }' is not assignable to type 'number'.
+        Type 'StoreWritable<AB>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: number; }'.
+        Type '{ a: number; b: number; }' is not assignable to type 'number'.
         "
       `)
     })
@@ -2403,24 +5205,84 @@ describe('no source', () => {
       {
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: (clk) => clk !== null,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+        })
         //@ts-expect-error
         sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: $filter,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        lack of expected error at test line 4 'sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           })'
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        Unmarked error at test line 12 'clock: [ab,nullableAB],'
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
         'clk' is possibly 'null'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"clock should extend target type\\"; targets: { clockType: AB | null; targetType: AB; }; }'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB | null>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        'clk' is possibly 'null'.
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'AB'.
+              Type 'null' is not assignable to type 'AB'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB | null>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        Unmarked error at test line 33 'clock: [ab,nullableAB],'
+        Type 'EventCallable<AB>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'AB' is not assignable to type 'number'.
+        Unmarked error at test line 33 'clock: [ab,nullableAB],'
+        Type 'EventCallable<AB | null>' is not assignable to type 'Unit<number>'.
+          Types of property '__' are incompatible.
+            Type 'AB | null' is not assignable to type 'number'.
+              Type 'null' is not assignable to type 'number'.
+        Type 'EventCallable<number>' is not assignable to type 'UnitTargetable<AB>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<AB>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type 'AB'.
         "
       `)
     })
@@ -2429,20 +5291,16 @@ describe('no source', () => {
     test('[clock], fn -> unit same (should pass)', () => {
       //prettier-ignore
       {
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})                   })
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})               })
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})                   })
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: AB) => ({a:val.a, b:val.b})               })
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})        })
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 6 'sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })'
         'val' is possibly 'null'.
+        Unmarked error at test line 6 'sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.a, b:val.b})        })'
         'val' is possibly 'null'.
         "
       `)
@@ -2450,196 +5308,245 @@ describe('no source', () => {
     test('[clock], fn -> unit same (should fail)', () => {
       //prettier-ignore
       {
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.a, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.a, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          target: $ab,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
         //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
+        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                   })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: (clk): clk is AB => clk !== null,
+          //@ts-expect-error
+          fn: () => ({a:0, b:1}),
+        })
         //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:(val: ABN) => ({a:val.a, b:val.b})              })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:(clk): clk is AB => clk !== null, fn:() => ({a:0, b:1})                              })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:(val: ABN) => ({a:val.a, b:val.b})              })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                              })
+        sample({clock:[ab,nullableAB], target:$ab, filter:Boolean                         , fn:() => ({a:0, b:1})                   })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          target: strt,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: () => ({a:0, b:1}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        lack of expected error at test line 6 'target: strt,'
+        Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: number; b: string; })'.
+          Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: string; }'.
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
+        Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
+        lack of expected error at test line 37 'target: strt,'
+        Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: any; b: string; })'.
+          Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
         'clk' is possibly 'null'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
-        'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: AB | null) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
-        'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: any; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: any; b: string; }'.
         'clk' is possibly 'null'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB) => boolean; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: () => number; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
-        Property 'c' does not exist on type 'ABN'.
+        Type '{ a: any; b: string; }' is not assignable to type 'number'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB | null' is not assignable to type 'ABN'.
-                Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Property 'c' does not exist on type 'AB'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type 'number'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: (((clk: AB | null) => clk is AB | null) & ((clk: AB | null) => clk is AB | null)) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; target: StoreWritable<AB>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { ...; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target: StoreWritable<...>; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: any; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: any; b: string; }'.
+        Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: string; }'.
+        Type '{ a: number; b: string; }' is not assignable to type 'number'.
+        Property 'c' does not exist on type 'AB'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: any; b: string; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: any; b: string; }'.
+        Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        Property 'c' does not exist on type 'AB'.
+        lack of expected error at test line 108 'target: strt,'
+        Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: number; b: string; })'.
+          Type '(val: AB | null) => { a: number; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: number; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        lack of expected error at test line 123 'target: strt,'
+        Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '((clk: AB) => number) & ((val: AB | null) => { a: any; b: string; })'.
+          Type '(val: AB | null) => { a: any; b: string; }' is not assignable to type '(clk: AB) => number'.
+            Type '{ a: any; b: string; }' is not assignable to type 'number'.
+        'val' is possibly 'null'.
+        Property 'c' does not exist on type 'AB'.
+        'val' is possibly 'null'.
+        Type 'StoreWritable<AB>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
         Parameter 'clk' implicitly has an 'any' type.
-        Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: number; b: number; })'.
-          Type '(val: ABN) => { a: number; b: number; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn result should extend target type\\"; targets: { fnResult: { a: number; b: number; }; targetType: AB; }; }'.
+        Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: number; }'.
+        Unmarked error at test line 134 'filter: (clk): clk is AB => clk !== null,'
+        Parameter 'clk' implicitly has an 'any' type.
+        Type '{ a: number; b: number; }' is not assignable to type 'number'.
+        Type 'StoreWritable<AB>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          The types of '__.b' are incompatible between these types.
+            Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
+        Type 'EventCallable<number>' is not assignable to type 'Unit<{ a: number; b: number; }>'.
+          Types of property '__' are incompatible.
+            Type 'number' is not assignable to type '{ a: number; b: number; }'.
+        Type '{ a: number; b: number; }' is not assignable to type 'number'.
         "
       `)
     })
@@ -2649,7 +5556,6 @@ describe('no source', () => {
       //prettier-ignore
       {
         sample({clock:nullableAB, filter:(clk) => clk !== null           })
-        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null})
         sample({clock:nullableAB, filter:$filter                         })
         sample({clock:nullableAB, filter:Boolean                         })
         sample({clock:nullableAB, filter:(clk): clk is AB => clk !== null})
@@ -2662,32 +5568,14 @@ describe('no source', () => {
     })
     test('clock -> new unit same (should fail)', () => {
       //prettier-ignore
-      {
+      sample({
+        clock: nullableAB,
         //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0    })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0})
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:() => 1               })
-      }
+        filter: (clk) => clk.a > 0,
+      })
       expect(typecheck).toMatchInlineSnapshot(`
         "
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => clk is AB | null; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => clk is AB | null; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: () => number; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; filter: () => number; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -2696,14 +5584,9 @@ describe('no source', () => {
     test('clock, fn -> new unit same (should pass)', () => {
       //prettier-ignore
       {
-        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:nullableAB, filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:nullableAB, filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:nullableAB, filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})                   })
-        sample({clock:nullableAB, filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})               })
+        sample({clock:nullableAB, filter:(clk) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:nullableAB, filter:$filter              , fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:nullableAB, filter:Boolean              , fn:(val) => ({a:val.a, b:val.b})        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2714,166 +5597,52 @@ describe('no source', () => {
     test('clock, fn -> new unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:nullableAB, filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: nullableAB,
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: nullableAB,
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
-        'clk' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [con...'.
-          Type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [con...'.
-          Type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { a: number; b: string; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
         'clk' is possibly 'null'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
-        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        'clk' is possibly 'null'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: EventCallable<AB | null>; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: EventCallable<AB | null>; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
-        Property 'c' does not exist on type 'ABN'.
-        'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB | null' is not assignable to type 'ABN'.
-                Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Property 'c' does not exist on type 'AB'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
         "
       `)
     })
@@ -2883,7 +5652,6 @@ describe('no source', () => {
       //prettier-ignore
       {
         sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           })
-        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null})
         sample({clock:[ab,nullableAB], filter:$filter                         })
         sample({clock:[ab,nullableAB], filter:Boolean                         })
         sample({clock:[ab,nullableAB], filter:(clk): clk is AB => clk !== null})
@@ -2896,32 +5664,14 @@ describe('no source', () => {
     })
     test('[clock] -> new unit same (should fail)', () => {
       //prettier-ignore
-      {
+      sample({
+        clock: [ab,nullableAB],
         //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0    })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:() => 1               })
-      }
+        filter: (clk) => clk.a > 0,
+      })
       expect(typecheck).toMatchInlineSnapshot(`
         "
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => clk is AB | null; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => clk is AB | null; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter: (clk: AB | null) => boolean; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
         "
       `)
     })
@@ -2930,14 +5680,9 @@ describe('no source', () => {
     test('[clock], fn -> new unit same (should pass)', () => {
       //prettier-ignore
       {
-        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val) => ({a:val.a, b:val.b})                   })
-        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val: AB) => ({a:val.a, b:val.b})               })
+        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null, fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:[ab,nullableAB], filter:$filter              , fn:(val) => ({a:1, b: val ? val.b : ''})})
+        sample({clock:[ab,nullableAB], filter:Boolean              , fn:(val) => ({a:val.a, b:val.b})        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -2948,166 +5693,52 @@ describe('no source', () => {
     test('[clock], fn -> new unit same (should fail)', () => {
       //prettier-ignore
       {
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val) => ({a:1, b: val ? val.b : ''})           })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val: AB | null) => ({a:1, b: val ? val.b : ''})})
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk !== null           , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB | null) => clk !== null, fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk) => clk.a > 0              , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:(clk: AB) => clk.a > 0          , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:() => 1                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:$filter                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val) => ({a:val.c, b:val.b})                   })
-        //@ts-expect-error
-        sample({clock:[ab,nullableAB], filter:Boolean                         , fn:(val: ABN) => ({a:val.c, b:''})                 })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          fn: (val) => ({a:1, b: val ? val.b : ''}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          filter: (clk) => clk !== null,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          //@ts-expect-error
+          filter: (clk) => clk.a > 0,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          filter: $filter,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
+        sample({
+          clock: [ab,nullableAB],
+          filter: Boolean,
+          //@ts-expect-error
+          fn: (val) => ({a:val.c, b:val.b}),
+        })
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
         'clk' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
-        'clk' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: number; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((val: AB | null) => { ...; }) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
         'clk' is possibly 'null'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'filter' are incompatible.
-                Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                  Types of parameters 'clk' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'AB'.
-                      Type 'null' is not assignable to type 'AB'.
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: AB | null) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              The types returned by 'filter(...)' are incompatible between these types.
-                Type 'number' is not assignable to type 'boolean'.
-        'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB | null) => clk is AB; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB | null) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-              Types of property 'fn' are incompatible.
-                Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-                  Types of parameters 'val' and 'clk' are incompatible.
-                    Type 'AB | null' is not assignable to type 'ABN'.
-                      Type 'null' is not assignable to type 'ABN'.
-        'clk' is possibly 'null'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: (clk: AB) => boolean; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                Types of property 'filter' are incompatible.
-                  Type '(clk: AB) => boolean' is not assignable to type '(clk: AB | null) => boolean'.
-                    Types of parameters 'clk' and 'clk' are incompatible.
-                      Type 'AB | null' is not assignable to type 'AB'.
-                        Type 'null' is not assignable to type 'AB'.
-        Property 'c' does not exist on type 'ABN'.
-        Argument of type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to parameter of type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => clk is AB | null) | undefined; ... 4 more ...; name?: string | undefined; } & { ...; }] | [config: ...]'.
-          Type '[{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }]' is not assignable to type '[config: { clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }]'.
-            Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; } & { ...; }'.
-              Type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; filter: () => number; fn: (val: ABN) => { a: any; b: string; }; }' is not assignable to type '{ clock: (EventCallable<AB> | EventCallable<AB | null>)[]; source?: undefined; filter?: ((clk: AB | null) => boolean) | undefined; fn?: ((clk: AB | null) => any) | undefined; target?: undefined; greedy?: boolean | undefined; batch?: boolean | undefined; name?: string | undefined; }'.
-                The types returned by 'filter(...)' are incompatible between these types.
-                  Type 'number' is not assignable to type 'boolean'.
-        Property 'c' does not exist on type 'ABN'.
-        'val' is possibly 'null'.
-        Property 'c' does not exist on type 'AB'.
-        'val' is possibly 'null'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB | null) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB | null) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB | null' is not assignable to type 'ABN'.
-                Type 'null' is not assignable to type 'ABN'.
-        Property 'c' does not exist on type 'ABN'.
-        Property 'c' does not exist on type 'AB'.
-        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '((clk: AB) => any) & ((val: ABN) => { a: any; b: string; })'.
-          Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
-            Types of parameters 'val' and 'clk' are incompatible.
-              Type 'AB' is not assignable to type 'ABN'.
-                Types of property 'b' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
-        Property 'c' does not exist on type 'ABN'.
         "
       `)
     })

@@ -1,6 +1,8 @@
 import {join} from 'path'
 import {readFile} from 'fs/promises'
-import {format} from 'prettier'
+// prettier 3 loads its esm internals through a dynamic import, which jest
+// cannot do inside a cjs test environment
+import {format} from '@prettier/sync'
 import {transformAsync} from '@babel/core'
 // @ts-expect-error no types
 import tsPreset from '@babel/preset-typescript'
@@ -15,7 +17,7 @@ export function formatCode(code: string) {
     singleQuote: true,
     trailingComma: 'all',
     bracketSpacing: false,
-    jsxBracketSameLine: true,
+    bracketSameLine: true,
     arrowParens: 'avoid',
     parser: 'babel',
   })
@@ -57,7 +59,7 @@ export const configSetup = (format: 'es' | 'cjs', lang: 'ts' | 'js') =>
 export async function compile(sourceCode: string, config: any) {
   try {
     const result = await transformAsync(sourceCode, config)
-    return formatCode(result?.code ?? '') as string
+    return formatCode(result?.code ?? '')
   } catch (error) {
     console.error(error)
     return `error during compilation: ${(error as Error).message}`

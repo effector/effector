@@ -105,7 +105,7 @@ describe('units without sids support', () => {
     const fn = jest.fn()
     const scope = fork({handlers: [[fooFx, fn]]})
     await allSettled(fooFx, {scope})
-    expect(fn).toBeCalled()
+    expect(fn).toHaveBeenCalled()
   })
   test('mixed sid and no-sid case should work for tests', async () => {
     //@ts-expect-error
@@ -548,8 +548,8 @@ describe('fork handlers support', () => {
 
     await Promise.all([allSettled(fx1, {scope}), allSettled(fx2, {scope})])
 
-    expect(h1).toBeCalledTimes(1)
-    expect(h2).toBeCalledTimes(1)
+    expect(h1).toHaveBeenCalledTimes(1)
+    expect(h2).toHaveBeenCalledTimes(1)
   })
 })
 

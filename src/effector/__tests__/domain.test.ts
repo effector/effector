@@ -296,7 +296,7 @@ describe('pass domain into creator', () => {
 
     const $store = createStore(0, {domain})
 
-    expect(fn).toBeCalledWith($store)
+    expect(fn).toHaveBeenCalledWith($store)
   })
   test('createStore correctly passed into hook', () => {
     const fn = jest.fn()
@@ -309,7 +309,7 @@ describe('pass domain into creator', () => {
     run(2)
 
     expect(fn).toHaveBeenCalledTimes(1)
-    expect(fn).toBeCalledWith(2)
+    expect(fn).toHaveBeenCalledWith(2)
   })
   test('createEvent correctly passed into hook', () => {
     const fn = jest.fn()

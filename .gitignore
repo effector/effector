@@ -46,3 +46,4 @@ tools/builder.js
 src/types/jsonOutput.json
 
 **/.serverless/**
+**/.cursor/hooks/state/**

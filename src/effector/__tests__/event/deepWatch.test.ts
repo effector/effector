@@ -24,5 +24,5 @@ it('can use deep stack calls', () => {
 
   a('payload')
   expect(fn).toHaveBeenCalledTimes(1)
-  expect(fn).toBeCalledWith('payload')
+  expect(fn).toHaveBeenCalledWith('payload')
 })

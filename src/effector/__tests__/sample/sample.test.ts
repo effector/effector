@@ -854,3 +854,41 @@ describe('greedy deprecation', () => {
     )
   })
 })
+
+test('source shape respects batch option', () => {
+  const appStarted = createEvent()
+  const $list = createStore<string[]>([])
+
+  const initOne = createEvent()
+  const initTwo = createEvent()
+  const firstName = createEvent<string>()
+  const secondName = createEvent<string>()
+
+  sample({
+    clock: initOne,
+    fn: () => 'hello',
+    target: firstName,
+  })
+  sample({
+    clock: initTwo,
+    fn: () => 'dudes',
+    target: secondName,
+  })
+
+  sample({
+    clock: appStarted,
+    target: [initOne, initTwo],
+  })
+
+  sample({
+    clock: [firstName, secondName],
+    source: {list: $list},
+    fn: ({list}, name) => [...list, name],
+    target: $list,
+    batch: false,
+  })
+
+  appStarted()
+
+  expect($list.getState()).toEqual(['hello', 'dudes'])
+})

@@ -15,27 +15,45 @@ test('clock param name in the function', () => {
   const allow: StoreWritable<string> = createStore('no')
 
   const result1 = sample({
-    //@ts-expect-error
     source: trigger,
+    //@ts-expect-error
     filter: allow,
   })
   const result2 = sample({
-    //@ts-expect-error
     source: trigger,
     clock: trigger,
+    //@ts-expect-error
     filter: allow,
   })
   const result3 = sample({
-    //@ts-expect-error
     clock: trigger,
+    //@ts-expect-error
     filter: allow,
   })
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Object literal may only specify known properties, and 'source' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
-    Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"filter unit should has boolean type\\"; got: string; }'.
+    Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+      Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+        Types of property 'map' are incompatible.
+          Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+            Types of parameters 'fn' and 'fn' are incompatible.
+              Types of parameters 'state' and 'state' are incompatible.
+                Type 'string' is not assignable to type 'boolean'.
+    Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+      Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+        Types of property 'map' are incompatible.
+          Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+            Types of parameters 'fn' and 'fn' are incompatible.
+              Types of parameters 'state' and 'state' are incompatible.
+                Type 'string' is not assignable to type 'boolean'.
+    Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | (() => boolean)'.
+      Type 'StoreWritable<string>' is not assignable to type 'Store<boolean>'.
+        Types of property 'map' are incompatible.
+          Type '<T>(fn: (state: string) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>' is not assignable to type '<T>(fn: (state: boolean) => T, config?: { skipVoid?: boolean | undefined; } | undefined) => Store<T>'.
+            Types of parameters 'fn' and 'fn' are incompatible.
+              Types of parameters 'state' and 'state' are incompatible.
+                Type 'string' is not assignable to type 'boolean'.
     "
   `)
 })
@@ -46,7 +64,7 @@ test('custom typeguards: target array support (1)', () => {
   }
   const $store = createStore<string | number>(0)
   const $flag = createStore(false)
-  const trigger = createEvent<{a: number}>()
+  const trigger = createEvent<number>()
 
   const targetA = createEffect<{field: number | string; data: number}, void>()
   const targetB = createEvent<{field: number | string; data: string}>()
@@ -77,10 +95,22 @@ test('custom typeguards: target array support (1)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: string | number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
-        Types of property 'data' are incompatible.
-          Type 'number' is not assignable to type '{ a: number; }'.
+    Unmarked error at test line 25 'targetVoid,'
+    Type 'EventCallable<void>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Type 'void' is not assignable to type '{ field: string | number; data: number; }'.
+    Unmarked error at test line 27 'targetB,'
+    Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      The types of '__.data' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 28 'targetC,'
+    Type 'EventCallable<{ field: unknown; data: number; }>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'unknown' is not assignable to type 'string | number'.
+    Unmarked error at test line 30 'targetE,'
+    Type 'EventCallable<{ field: any; }>' is not assignable to type 'Unit<{ field: string | number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Property 'data' is missing in type '{ field: any; }' but required in type '{ field: string | number; data: number; }'.
     "
   `)
 })
@@ -91,7 +121,7 @@ test('custom typeguards: target array support (2)', () => {
   }
   const $store = createStore<string | number>(0)
   const $flag = createStore(false)
-  const trigger = createEvent<{a: number}>()
+  const trigger = createEvent<number>()
 
   const targetA = createEffect<{field: number | string; data: number}, void>()
   const targetB = createEvent<{field: number | string; data: string}>()
@@ -123,10 +153,32 @@ test('custom typeguards: target array support (2)', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    A type predicate's type must be assignable to its parameter's type.
-      Type '{ field: number; data: number; }' is not assignable to type '{ field: string | number | boolean; data: { a: number; }; }'.
-        Types of property 'data' are incompatible.
-          Type 'number' is not assignable to type '{ a: number; }'.
+    Unmarked error at test line 26 'targetVoid,'
+    Type 'EventCallable<void>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Type 'void' is not assignable to type '{ field: number; data: number; }'.
+    Unmarked error at test line 27 'targetA,'
+    Type 'Effect<{ field: string | number; data: number; }, void, Error>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'string | number' is not assignable to type 'number'.
+          Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 28 'targetB,'
+    Type 'EventCallable<{ field: string | number; data: string; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'string | number' is not assignable to type 'number'.
+          Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 29 'targetC,'
+    Type 'EventCallable<{ field: unknown; data: number; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'unknown' is not assignable to type 'number'.
+    Unmarked error at test line 30 'targetD,'
+    Type 'EventCallable<{ field: string; data: number; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      The types of '__.field' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
+    Unmarked error at test line 31 'targetE,'
+    Type 'EventCallable<{ field: any; }>' is not assignable to type 'Unit<{ field: number; data: number; }>'.
+      Types of property '__' are incompatible.
+        Property 'data' is missing in type '{ field: any; }' but required in type '{ field: number; data: number; }'.
     "
   `)
 })
@@ -355,6 +407,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 5 'fn: ({a}) => a,'
         Property 'a' does not exist on type 'AN | null'.
         "
       `)
@@ -410,6 +463,7 @@ describe('difference in behavior between typed and untyped filters/functions com
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 5 'fn: ({a}) => a,'
         Property 'a' does not exist on type 'AN | null'.
         "
       `)

@@ -1,0 +1,46 @@
+---
+import type { MarkdownHeading } from "astro";
+import TableOfContents from "../RightSidebar/TableOfContents";
+
+interface Props {
+  headings: MarkdownHeading[];
+  lang: string;
+}
+
+const { headings, lang } = Astro.props;
+---
+
+<div class="mobile-toc">
+  <TableOfContents
+    lang={lang}
+    headings={headings}
+    collapsed={true}
+    client:load
+  />
+</div>
+
+<style>
+  .mobile-toc {
+    position: fixed;
+    top: var(--theme-navbar-height);
+    left: 0;
+    right: 0;
+    z-index: 105;
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--theme-bg);
+  }
+
+  @media (max-width: 767px) {
+    .mobile-toc {
+      padding: 0;
+      border-bottom: 1px solid var(--theme-divider);
+    }
+  }
+
+  /* Hide when left sidebar is visible (≥768px) */
+  @media (min-width: 768px) {
+    .mobile-toc {
+      display: none;
+    }
+  }
+</style>

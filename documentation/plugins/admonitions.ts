@@ -6,7 +6,7 @@ import type { TextDirective } from "mdast-util-directive";
 
 // TODO: Add svg icons
 
-export function admonitions({ types = ["tip", "info", "warning"] } = {}) {
+export function admonitions({ types = ["tip", "info", "warning", "error"] } = {}) {
   return (tree: Root, file: VFile) => {
     return map(tree, (node) => {
       if (

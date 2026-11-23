@@ -1,20 +1,30 @@
 import {generateFile} from './runner/manifold/generateFile'
 
+import sampleInlineEffect from './generator/sampleInlineEffect.generator'
 import sampleClockArray from './generator/sampleClockArray.generator'
 import sampleArrayTargetCombinable from './generator/sampleArrayTargetCombinable.generator'
-import sampleArrayTargetPlain from './generator/sampleArrayTargetPlain.generator'
+import sampleArrayTarget from './generator/sampleArrayTarget.generator'
 import sampleReturn from './generator/sampleReturn.generator'
 import sampleFilterGenerator from './generator/sampleFilter.generator'
 import guardGenerator from './generator/guard.generator'
+import sampleFn from './generator/sampleFn.generator'
+import sampleArrayForms from './generator/sampleArrayForms.generator'
+import sampleDiscriminatedFn from './generator/sampleDiscriminatedFn.generator'
+import sampleTypeGuards from './generator/sampleTypeGuards.generator'
 
 generateFile({
   //prettier-ignore
   cases: [
-    sampleArrayTargetPlain,
+    sampleInlineEffect,
+    sampleArrayTarget,
     sampleArrayTargetCombinable,
     sampleReturn,
     sampleFilterGenerator,
     guardGenerator,
     sampleClockArray,
+    sampleFn,
+    sampleArrayForms,
+    sampleDiscriminatedFn,
+    sampleTypeGuards,
   ],
 })

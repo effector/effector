@@ -213,7 +213,7 @@ describe('serialize: custom', () => {
     allSettled(up, {scope: scopeB})
     expect(scopeB.getState($a)).toEqual(7)
 
-    expect(parser).toBeCalledTimes(0)
+    expect(parser).toHaveBeenCalledTimes(0)
   })
 })
 
@@ -686,6 +686,6 @@ describe('serialize: missing sids', () => {
 
     const result = serialize(scope)
     expect(result).toMatchObject({})
-    expect(console.error).toBeCalledTimes(0)
+    expect(console.error).toHaveBeenCalledTimes(0)
   })
 })

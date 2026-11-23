@@ -113,10 +113,13 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 4 'const withFilterStore: Unit<string | null> = guard<string | null>({'
       Type 'Target' is not assignable to type 'Unit<string | null>'.
         Type 'Tuple<any>' is not assignable to type 'Unit<string | null>'.
+      Unmarked error at test line 9 'const withFilterFn: Unit<string | null> = guard<string | null>({'
       Type 'Target' is not assignable to type 'Unit<string | null>'.
         Type 'Tuple<any>' is not assignable to type 'Unit<string | null>'.
+      Unmarked error at test line 14 'const withFilterBoolean: Unit<string> = guard<string | null>({'
       Type 'Target' is not assignable to type 'Unit<string>'.
         Type 'Tuple<any>' is not assignable to type 'Unit<string>'.
       "
@@ -154,6 +157,7 @@ describe('explicit generics', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 'const result: Unit<string> = guard<string | null, string>({'
       Type 'Target' is not assignable to type 'Unit<string>'.
         Type 'Tuple<any>' is not assignable to type 'Unit<string>'.
       "
@@ -218,7 +222,7 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         Type 'Target' is not assignable to type 'Event<string>'.
-          Type 'UnitTargetable<any>' is missing the following properties from type 'Event<string>': map, filter, filterMap, watch, and 5 more.
+          Type 'Tuple<any>' is not assignable to type 'Event<string>'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'StoreWritable<string>' is not assignable to type 'Store<boolean> | ((source: number) => boolean)'.

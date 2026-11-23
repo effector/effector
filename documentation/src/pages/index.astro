@@ -13,9 +13,9 @@ const features = [
   {
     emoji: "☄️",
     kind: "major",
-    title: "Effector Spacewatch",
+    title: "Effector Atlas",
     description:
-      "Experience the power of effector v23.0, featuring refined typings, universal hooks support.",
+      "Experience the power of effector v23.4, featuring refined typings, universal hooks support.",
   },
   {
     emoji: "🛡️",
@@ -54,18 +54,23 @@ const features = [
       "Simple API surface with helpful community. Easy to write tests. Easy to setup server rendering.",
   },
 ] as { emoji: string; kind?: "minor" | "major"; title: string; description: string }[];
+
+const lang = "en" as const;
 ---
 
-<Landing title="Welcome" lang={SITE.defaultLanguage} dir="ltr" description={SITE.description}>
+<Landing title="Welcome" lang={lang} dir="ltr" description={SITE.description}>
   <Hero subtitle="Write business logic with ease">
     Meet the new standard for modern TypeScript development.
     <br />
     Type safe, reactive, framework agnostic.
 
-    <a slot="links" class="primary" href="/en/introduction/get-started">
+    <div slot="links" class="started-links">
+      <a class="primary" href={`/${lang}/introduction/get-started`}>
       <span>Getting started</span>
       <IconChevron />
     </a>
+    </div>
+
   </Hero>
   <FeaturesGrid>
     {
@@ -79,3 +84,18 @@ const features = [
   <Stats />
   <Companies />
 </Landing>
+
+<style>
+  .started-links{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  :global(.hero .links) {
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+title: createComponent
+description: Создаёт компонент Vue 2 с привязанными сторами и типами для TypeScript
+lang: ru
+pagefindWeight: 7
+---
+
+```ts
+import { createComponent } from "effector-vue";
+```
+
+:::info{title="since"}
+`createComponent` появился в [effector-vue 20.3.0](https://changelog.effector.dev/#effector-vue-20-3-0)
+:::
+
+Создаёт компонент Vue 2 с привязанными к нему сторами. Сторы типизированы в `this`, это помогает при работе с TypeScript.
+
+# Методы (#methods)
+
+## `createComponent(options, store?)` (#methods-createComponent-options-store)
+
+### Аргументы (#methods-createComponent-options-store-arguments)
+
+1. `options` (_Object_): опции компонента (хуки, методы, вычисляемые свойства)
+2. `store` (_Object_): объект сторов, передаётся компоненту как опция [`effector`](/ru/api/effector-vue/ComponentOptions)
+
+### Возвращает (#methods-createComponent-options-store-returns)
+
+(_`vue component`_)
+
+### Пример (#methods-createComponent-options-store-example)
+
+```html
+<template> {{ $counter }} </template>
+```
+
+```ts
+// component.vue
+import { createStore, createApi } from "effector";
+import { createComponent } from "effector-vue";
+
+const $counter = createStore(0);
+const { update } = createApi($counter, {
+  update: (_, value: number) => value,
+});
+
+export default createComponent(
+  {
+    name: "Counter",
+
+    methods: {
+      update,
+      handleClick() {
+        const value = this.$counter + 1; // this.$counter имеет тип number
+        this.update(value);
+      },
+    },
+  },
+  { $counter },
+);
+```

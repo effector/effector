@@ -1,4 +1,6 @@
-import Vue, {VueConstructor, ComponentOptions} from 'vue'
+import type Vue from 'vue'
+import type {VueConstructor, ComponentOptions} from 'vue'
+import * as VueModule from 'vue'
 import {
   createEvent,
   restore,
@@ -10,6 +12,16 @@ import {
   sample,
   Unit,
 } from 'effector'
+
+/**
+ * Vue 3 has no default export, so a default import of it makes this entry
+ * unloadable from a Vue 3 app: bundlers fail with "default is not exported by
+ * vue". Read the default off the module namespace instead; the extra binding
+ * keeps bundlers from folding that read back into a default import. The Vue 2
+ * API itself is only touched when the mixin or createComponent runs.
+ */
+const VueModuleRuntime: any = VueModule
+const Vue2 = (VueModuleRuntime.default ?? VueModuleRuntime) as VueConstructor
 
 export const VueEffector = (vue: VueConstructor, options: Object) => {
   vue.mixin(effectorMixin)
@@ -65,7 +77,7 @@ const effectorMixin: ComponentOptions<Vue> = {
       const store = combine(state)
       for (const key in store.defaultState) {
         // @ts-ignore
-        Vue.util.defineReactive(this, key, store.defaultState[key])
+        Vue2.util.defineReactive(this, key, store.defaultState[key])
       }
 
       store.watch(value => {
@@ -99,7 +111,7 @@ const effectorMixin: ComponentOptions<Vue> = {
 }
 
 export function createComponent<S>(options: any, store?: S) {
-  return Vue.extend(
+  return Vue2.extend(
     Object.assign(
       {},
       options,

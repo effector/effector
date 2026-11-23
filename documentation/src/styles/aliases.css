@@ -1,0 +1,100 @@
+:root {
+  --theme-landing-logos-bg: hsl(var(--color-gray-50));
+
+  /* ========================================
+     SPACING SEMANTIC TOKENS
+     Use these in your application
+     ======================================== */
+  --spacing-page-gutter: var(--space-4); /* 16px - page horizontal padding */
+  --spacing-section-gap: var(--space-16); /* 64px - between major sections */
+  --spacing-component-gap: var(--space-8); /* 32px - between components */
+  --spacing-element-gap: var(--space-4); /* 16px - between elements */
+  --spacing-text-gap: var(--space-3); /* 12px - between text elements */
+  --spacing-admonition-gap: var(--space-4);
+  --spacing-content-gap: var(--space-6);
+
+  /* ========================================
+     TYPOGRAPHY SEMANTIC TOKENS
+     Use these for consistent typography
+     ======================================== */
+  /* Body text */
+  --text-admonition: var(--font-size-base);
+  --text-body: var(--font-size-md); /* 14px - primary body text */
+  --text-body-sm: var(--font-size-xs); /* 12px - small body text */
+  --text-caption: var(--font-size-xs); /* 12px - captions and labels */
+  --text-sidebar-content: var(--font-size-base);
+  --text-sidebar-translation-slug: var(--font-size-xs);
+
+  /* Code */
+  --text-code: var(--font-size-sm); /* 13px - code blocks */
+
+  /* Headings */
+  --text-h1: var(--font-size-3xl); /* 28px */
+  --text-h2: var(--font-size-2xl); /* 24px */
+  --text-h3: var(--font-size-xl); /* 20px */
+  --text-h4: var(--font-size-lg); /* 18px */
+  --text-h5: var(--font-size-md); /* 16px */
+  --text-h6: var(--font-size-base); /* 14px */
+
+  /* ========================================
+     FONT WEIGHT SEMANTIC TOKENS
+     ======================================== */
+
+  --weight-body: var(--font-weight-regular); /* 400 - body text */
+  --weight-heading: var(--font-weight-semibold); /* 600 - headings */
+  --weight-emphasis: var(--font-weight-medium); /* 500 - emphasized text */
+  --weight-strong: var(--font-weight-bold); /* 700 - strong text */
+
+  /* ========================================
+     LINE HEIGHT SEMANTIC TOKENS
+     ======================================== */
+
+  --leading-body: var(--line-height-snug);
+  --leading-content: var(--line-height-relaxed);
+  --leading-heading: var(--line-height-tight); /* 1.25 - headings */
+  --leading-code: var(--line-height-normal); /* 1.5 - code */
+  --leading-nav: var(--line-height-snug); /* 1.375 - navigation */
+
+  /* ========================================
+     LETTER SPACING SEMANTIC TOKENS
+     ======================================== */
+
+  --tracking-heading: var(--letter-spacing-tight); /* -0.025em - headings */
+  --tracking-body: var(--letter-spacing-normal); /* 0em - body text */
+  --tracking-caps: var(--letter-spacing-wide); /* 0.025em - uppercase text */
+
+  /* ========================================
+     BORDER RADIUS SEMANTIC TOKENS
+     ======================================== */
+
+  --rounded-button: var(--radius-base); /* 6px - buttons */
+  --rounded-input: var(--radius-base); /* 6px - inputs */
+  --rounded-card: var(--radius-md); /* 8px - cards */
+  --rounded-code: var(--radius-base); /* 6px - code blocks */
+
+  /* ========================================
+     TRANSITION SEMANTIC TOKENS
+     ======================================== */
+
+  --animate-color: color var(--transition-fast); /* color transitions */
+  --animate-background: background-color var(--transition-fast); /* background transitions */
+  --animate-transform: transform var(--transition-base); /* transform transitions */
+  --animate-all: all var(--transition-base); /* all properties */
+
+  /* ========================================
+     TYPOGRAPHY FAMILIES
+     ======================================== */
+
+  --font-body: var(--font-family-sans); /* Body text font */
+  --font-mono: var(--font-family-mono); /* Monospace font for code */
+}
+
+/* ========================================
+   RESPONSIVE SPACING ADJUSTMENTS
+   ======================================== */
+
+@media (min-width: 768px) {
+  :root {
+    --spacing-page-gutter: var(--space-8); /* 32px - increased on tablets+ */
+  }
+}

@@ -1,6 +1,6 @@
 import {printArray} from '../text'
 import {assert} from './assert'
-import {CtxConfig, Declarator, ExecutionPlan} from './types'
+import {BoolDecl, CtxConfig, Declarator, ExecutionPlan} from './types'
 import {isDeclarator} from './isRef'
 
 type ValueCtx = {
@@ -249,6 +249,9 @@ function addFieldToValues(values: ValueCtx[], key: string, def: Declarator) {
       break
     }
   }
+  if (currCfg.cfg.skipCases?.includes(def as BoolDecl)) {
+    values = values.filter(e => e.value[def.name] === false)
+  }
   return values
 }
 
@@ -376,7 +379,23 @@ function selectNNoReorder<T>(items: readonly T[], n: number): T[][] {
         ),
     )
   }
-  return result
+  const tags = result.map(subset =>
+    subset
+      .map(e => items.indexOf(e))
+      .sort((a, b) => a - b)
+      .join(`_`),
+  )
+  const uniqueTags = new Set<string>()
+  const toRemove: number[] = []
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i]
+    if (uniqueTags.has(tag)) {
+      toRemove.push(i)
+    } else {
+      uniqueTags.add(tag)
+    }
+  }
+  return result.filter((_, idx) => !toRemove.includes(idx))
 }
 function selectN<T>(items: readonly T[], n: number): T[][] {
   if (n === 0) return [[]]

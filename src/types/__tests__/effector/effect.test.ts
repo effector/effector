@@ -137,10 +137,9 @@ describe('single generic', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
+          Unmarked error at test line 2 'handler: async (_: string) => 0,'
           No overload matches this call.
-            Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
-              Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-            Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
+            The last overload gave the following error.
               Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
                 Type 'Promise<number>' is not assignable to type 'number'.
           "
@@ -152,10 +151,9 @@ describe('single generic', () => {
         })
         expect(typecheck).toMatchInlineSnapshot(`
           "
+          Unmarked error at test line 2 'handler: (_: string) => 0,'
           No overload matches this call.
-            Overload 1 of 7, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
-              Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
-            Overload 2 of 7, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
+            The last overload gave the following error.
               Type '(_: string) => number' is not assignable to type 'AsyncFn'.
                 Type 'number' is not assignable to type 'Promise<number>'.
           "
@@ -180,10 +178,9 @@ describe('single generic', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 2 'async handler(_: string) {'
         No overload matches this call.
-          Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
-            Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-          Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; domain?: Domain | undefined; }): Effect<string, number, Error>', gave the following error.
+          The last overload gave the following error.
             Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
               Type 'Promise<string>' is not assignable to type 'number'.
         "
@@ -197,6 +194,7 @@ describe('single generic', () => {
       })
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 1 'const foo: Effect<string, number> = createEffect<string>({'
         Type 'string' does not satisfy the constraint 'Function'.
         "
       `)
@@ -207,6 +205,7 @@ describe('single generic', () => {
       const foo: Effect<string, number> = createEffect<SyncFn>()
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 1 'const foo: Effect<string, number> = createEffect<SyncFn>()'
         Expected 1-2 arguments, but got 0.
         "
       `)
@@ -215,6 +214,7 @@ describe('single generic', () => {
       const foo = createEffect<string>()
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 1 'const foo = createEffect<string>()'
         Expected 1-2 arguments, but got 0.
         "
       `)
@@ -402,6 +402,7 @@ describe('void params', () => {
     effect()
     expect(typecheck).toMatchInlineSnapshot(`
       "
+      Unmarked error at test line 3 'effect()'
       Expected 1 arguments, but got 0.
       "
     `)
@@ -512,6 +513,7 @@ describe('optional params', () => {
       effect()
       expect(typecheck).toMatchInlineSnapshot(`
         "
+        Unmarked error at test line 4 'effect()'
         Expected 1 arguments, but got 0.
         "
       `)
