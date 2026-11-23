@@ -871,7 +871,6 @@ type SplitConfig<
     cases: { [K in keyof Cases as K extends InferMatchKeys<Match, Source> | '__' ? K : never]: Cases[K] };
   };
 
-
 type InferMatchKeys<Match, Source> =
   Match extends Unit<infer Keys>
     ? Keys extends PropertyKey ? Keys : never

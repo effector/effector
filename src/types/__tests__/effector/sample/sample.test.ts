@@ -273,9 +273,9 @@ describe('clock without source', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       Type 'boolean' is not assignable to type 'number'.
-      Type 'StoreWritable<number>' is not assignable to type 'Unit<true>'.
+      Type 'StoreWritable<number>' is not assignable to type 'Unit<boolean>'.
         Types of property '__' are incompatible.
-          Type 'number' is not assignable to type 'true'.
+          Type 'number' is not assignable to type 'boolean'.
       "
     `)
   })

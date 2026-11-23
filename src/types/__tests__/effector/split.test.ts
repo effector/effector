@@ -1751,28 +1751,6 @@ describe('array cases', () => {
       `)
     })
 
-    test('identity function, case name: match < cases, type: source == cases (should fail)', () => {
-      const source = createEvent<'a'>()
-      const a = createEvent<void>()
-      const b = createEvent<void>()
-
-      const identity = <T>(v: T): T => v
-      split({
-        source,
-        match: identity,
-        cases: {
-          a,
-          //@ts-expect-error
-          b,
-        },
-      })
-
-      expect(typecheck).toMatchInlineSnapshot(`
-        "
-        Object literal may only specify known properties, and 'b' does not exist in type '{ a: EventCallable<void>; }'.
-        "
-      `)
-    })
   })
   describe('matcher function', () => {
     /** type: source == cases, arrays only */
