@@ -1317,86 +1317,22 @@ type SampleImpl<
   FNAltArg,
   FLUnitOrBool,
   RawConfig
-> = ValidateSampleConfig<RawConfig> extends ['bad', infer ConfigWithError]
+> = (RawConfig extends SampleConfigShape ? ['good', unknown] : ValidateSampleConfig<RawConfig>) extends ['bad', infer ConfigWithError]
   ? [error: ConfigWithError]
   // no target
   : unknown extends Target
-    // no target, no source
-    ? unknown extends Source
-      // no target, no source, has clock
-      ? SampleFilterDef<
-          ModeSelector<
-            'clock |        | filter | fn |       ',
-            'clock |        | filter |    |       ',
-            'clock |        |        | fn |       ',
-            'clock |        |        |    |       ',
-            RawConfig
-          >,
-          Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig, Target
-        >
-        // no target, has source
-      : unknown extends Clock
-        // no target, has source, no clock
-        ? SampleFilterDef<
-            ModeSelector<
-              '      | source | filter | fn |       ',
-              '      | source | filter |    |       ',
-              '      | source |        | fn |       ',
-              '      | source |        |    |       ',
-              RawConfig
-            >,
-            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig, Target
-          >
-        // no target, has source, has clock
-        : SampleFilterDef<
-            ModeSelector<
-              'clock | source | filter | fn |       ',
-              'clock | source | filter |    |       ',
-              'clock | source |        | fn |       ',
-              'clock | source |        |    |       ',
-              RawConfig
-            >,
-            Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig, Target
-          >
+    // Select the mode before instantiating the config machinery, rather than
+    // repeating the entire generic graph in each source/clock branch.
+    ? SampleFilterDef<
+        `${unknown extends Source ? 'clock |       ' : unknown extends Clock ? '      | source' : 'clock | source'} | ${ModeSelector<'filter | fn', 'filter |   ', '       | fn', '       |   ', RawConfig>} |       `,
+        Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, RawConfig, Target
+      >
     // has target
     : Target extends UnitsTarget | ReadonlyArray<UnitTargetable<any>>
-        // has target, no source
-      ? unknown extends Source
-        // has target, no source, has clock
-        ? SampleFilterTargetDef<
-            ModeSelector<
-              'clock |        | filter | fn | target',
-              'clock |        | filter |    | target',
-              'clock |        |        | fn | target',
-              'clock |        |        |    | target',
-              RawConfig
-            >,
-            Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
-          >
-          // has target, has source
-        : unknown extends Clock
-          // has target, has source, no clock
-          ? SampleFilterTargetDef<
-              ModeSelector<
-                '      | source | filter | fn | target',
-                '      | source | filter |    | target',
-                '      | source |        | fn | target',
-                '      | source |        |    | target',
-                RawConfig
-              >,
-              Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
-            >
-          // has target, has source, has clock
-          : SampleFilterTargetDef<
-              ModeSelector<
-                'clock | source | filter | fn | target',
-                'clock | source | filter |    | target',
-                'clock | source |        | fn | target',
-                'clock | source |        |    | target',
-                RawConfig
-              >,
-              Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
-            >
+      ? SampleFilterTargetDef<
+          `${unknown extends Source ? 'clock |       ' : unknown extends Clock ? '      | source' : 'clock | source'} | ${ModeSelector<'filter | fn', 'filter |   ', '       | fn', '       |   ', RawConfig>} | target`,
+          Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
+        >
       : [config: Omit<RawConfig, 'target'> & {
           target: Target extends RoTuple<Unit<any>>
             ? {[K in keyof Target]: ReplaceDerivedUnitWithWritable<Target[K]>}
@@ -1810,6 +1746,14 @@ type Mode_Src_Flt_NoFn_Trg = `${string} | source | filter |    | target`;
 type Mode_NoTrg = `${string} |       `;
 type Mode_Flt = `${string} | filter | ${string}`;
 type Mode_Flt_Fn = `${string} | filter | fn | ${string}`;
+
+type SampleConfigShape = {
+  fn?: (...args: never[]) => any
+  clock?: Unit<any> | RoTuple<Unit<any>>
+  source?: Unit<any> | RoTuple<Store<any>> | Record<string, Store<any>>
+  target?: Unit<any> | RoTuple<Unit<any>>
+  filter?: Store<boolean> | ((...args: any[]) => boolean)
+}
 
 type TargetConfigCheck<
   Mode extends Mode_Trg,
