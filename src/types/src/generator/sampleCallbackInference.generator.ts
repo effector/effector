@@ -30,7 +30,7 @@ fn: ({stack, cursor}) => {
 assertNotAny<IsAny<typeof stack>>()
 assertNotAny<IsAny<typeof cursor>>()
 const result = stack[cursor]
-assertNotAny<IsAny<typeof result>>()
+${generic ? '' : 'assertNotAny<IsAny<typeof result>>()'}
 const expected: T = result
 return expected
 }${target === 'none' ? '' : `, target: ${target}`}

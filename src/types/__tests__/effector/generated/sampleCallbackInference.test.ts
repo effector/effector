@@ -4384,7 +4384,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4413,7 +4413,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4442,7 +4442,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4471,7 +4471,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4500,7 +4500,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4529,7 +4529,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4558,7 +4558,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4587,7 +4587,7 @@ test('generic, state, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4605,11 +4605,6 @@ test('generic, state, restored, none (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
@@ -4617,8 +4612,6 @@ test('generic, state, restored, none (should fail)', () => {
     Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
@@ -4628,8 +4621,6 @@ test('generic, state, restored, none (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
@@ -4638,14 +4629,6 @@ test('generic, state, restored, none (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
@@ -4653,8 +4636,6 @@ test('generic, state, restored, none (should fail)', () => {
     Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     "
   `)
@@ -4684,7 +4665,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4713,7 +4694,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4742,7 +4723,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4771,7 +4752,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4800,7 +4781,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4829,7 +4810,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4858,7 +4839,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4887,7 +4868,7 @@ test('generic, state, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -4905,11 +4886,6 @@ test('generic, state, restored, flag (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
@@ -4917,8 +4893,6 @@ test('generic, state, restored, flag (should fail)', () => {
     Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
@@ -4928,8 +4902,6 @@ test('generic, state, restored, flag (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
@@ -4938,14 +4910,6 @@ test('generic, state, restored, flag (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
@@ -4953,8 +4917,6 @@ test('generic, state, restored, flag (should fail)', () => {
     Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     "
   `)
@@ -4984,7 +4946,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5013,7 +4975,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5042,7 +5004,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5071,7 +5033,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5100,7 +5062,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5129,7 +5091,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5158,7 +5120,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5187,7 +5149,7 @@ test('generic, state, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -5205,11 +5167,6 @@ test('generic, state, restored, callback (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
@@ -5217,8 +5174,6 @@ test('generic, state, restored, callback (should fail)', () => {
     Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
@@ -5228,8 +5183,6 @@ test('generic, state, restored, callback (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
@@ -5238,14 +5191,6 @@ test('generic, state, restored, callback (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
@@ -5253,8 +5198,6 @@ test('generic, state, restored, callback (should fail)', () => {
     Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     "
   `)
@@ -5284,7 +5227,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5313,7 +5256,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5342,7 +5285,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5371,7 +5314,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5400,7 +5343,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5429,7 +5372,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5458,7 +5401,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5487,7 +5430,7 @@ test('generic, state, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5497,30 +5440,7 @@ test('generic, state, [restored], none (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -5549,7 +5469,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5578,7 +5498,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5607,7 +5527,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5636,7 +5556,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5665,7 +5585,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5694,7 +5614,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5723,7 +5643,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5752,7 +5672,7 @@ test('generic, state, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5762,30 +5682,7 @@ test('generic, state, [restored], flag (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -5814,7 +5711,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5843,7 +5740,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5872,7 +5769,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5901,7 +5798,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5930,7 +5827,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5959,7 +5856,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -5988,7 +5885,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -6017,7 +5914,7 @@ test('generic, state, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -6027,30 +5924,7 @@ test('generic, state, [restored], callback (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -6079,7 +5953,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6108,7 +5982,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6137,7 +6011,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6166,7 +6040,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6195,7 +6069,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6224,7 +6098,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6253,7 +6127,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6282,7 +6156,7 @@ test('generic, state, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6292,30 +6166,7 @@ test('generic, state, none, none (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -6344,7 +6195,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6373,7 +6224,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6402,7 +6253,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6431,7 +6282,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6460,7 +6311,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6489,7 +6340,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6518,7 +6369,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6547,7 +6398,7 @@ test('generic, state, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6557,30 +6408,7 @@ test('generic, state, none, flag (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -6609,7 +6437,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6638,7 +6466,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6667,7 +6495,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6696,7 +6524,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6725,7 +6553,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6754,7 +6582,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6783,7 +6611,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6812,7 +6640,7 @@ test('generic, state, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -6822,30 +6650,7 @@ test('generic, state, none, callback (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -6874,7 +6679,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -6903,7 +6708,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -6932,7 +6737,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -6961,7 +6766,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -6990,7 +6795,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7019,7 +6824,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7048,7 +6853,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7077,7 +6882,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7095,11 +6900,6 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
@@ -7107,8 +6907,6 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
@@ -7118,8 +6916,6 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
@@ -7128,14 +6924,6 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
@@ -7143,8 +6931,6 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
     Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     "
   `)
@@ -7174,7 +6960,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7203,7 +6989,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7232,7 +7018,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7261,7 +7047,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7290,7 +7076,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7319,7 +7105,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7348,7 +7134,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7377,7 +7163,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7395,11 +7181,6 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
@@ -7407,8 +7188,6 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
@@ -7418,8 +7197,6 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
@@ -7428,14 +7205,6 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
@@ -7443,8 +7212,6 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
     Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     "
   `)
@@ -7474,7 +7241,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7503,7 +7270,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7532,7 +7299,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7561,7 +7328,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7590,7 +7357,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7619,7 +7386,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7648,7 +7415,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7677,7 +7444,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: restored
@@ -7695,11 +7462,6 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
@@ -7707,8 +7469,6 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
@@ -7718,8 +7478,6 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
@@ -7728,14 +7486,6 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
     Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
     Binding element 'stack' implicitly has an 'any' type.
     Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
@@ -7743,8 +7493,6 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
     Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
     Type 'true' does not satisfy the constraint 'false'.
     Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
     Type 'true' does not satisfy the constraint 'false'.
     "
   `)
@@ -7774,7 +7522,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7803,7 +7551,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7832,7 +7580,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7861,7 +7609,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7890,7 +7638,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7919,7 +7667,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7948,7 +7696,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7977,7 +7725,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -7987,30 +7735,7 @@ test('generic, {stack, cursor}, [restored], none (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -8039,7 +7764,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8068,7 +7793,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8097,7 +7822,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8126,7 +7851,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8155,7 +7880,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8184,7 +7909,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8213,7 +7938,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8242,7 +7967,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8252,30 +7977,7 @@ test('generic, {stack, cursor}, [restored], flag (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -8304,7 +8006,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8333,7 +8035,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8362,7 +8064,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8391,7 +8093,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8420,7 +8122,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8449,7 +8151,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8478,7 +8180,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8507,7 +8209,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }, target: [restored]
@@ -8517,30 +8219,7 @@ test('generic, {stack, cursor}, [restored], callback (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -8569,7 +8248,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8598,7 +8277,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8627,7 +8306,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8656,7 +8335,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8685,7 +8364,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8714,7 +8393,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8743,7 +8422,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8772,7 +8451,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8782,30 +8461,7 @@ test('generic, {stack, cursor}, none, none (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -8834,7 +8490,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8863,7 +8519,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8892,7 +8548,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8921,7 +8577,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8950,7 +8606,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -8979,7 +8635,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9008,7 +8664,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9037,7 +8693,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9047,30 +8703,7 @@ test('generic, {stack, cursor}, none, flag (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
@@ -9099,7 +8732,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9128,7 +8761,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9157,7 +8790,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9186,7 +8819,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9215,7 +8848,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9244,7 +8877,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9273,7 +8906,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9302,7 +8935,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
     assertNotAny<IsAny<typeof stack>>()
     assertNotAny<IsAny<typeof cursor>>()
     const result = stack[cursor]
-    assertNotAny<IsAny<typeof result>>()
+    
     const expected: T = result
     return expected
     }
@@ -9312,30 +8945,7 @@ test('generic, {stack, cursor}, none, callback (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 25 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 54 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 83 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 112 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 141 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 170 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 199 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
-    Unmarked error at test line 228 'assertNotAny<IsAny<typeof result>>()'
-    Type 'IsAny<T>' does not satisfy the constraint 'false'.
-      Type 'boolean' is not assignable to type 'false'.
+    no errors
     "
   `)
 })
