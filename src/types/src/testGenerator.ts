@@ -1,5 +1,6 @@
 import {generateFile} from './runner/manifold/generateFile'
 
+import sampleTargetRequirements from './generator/sampleTargetRequirements.generator'
 import sampleCallbackInference from './generator/sampleCallbackInference.generator'
 import sampleInlineEffect from './generator/sampleInlineEffect.generator'
 import sampleClockArray from './generator/sampleClockArray.generator'
@@ -16,6 +17,7 @@ import sampleTypeGuards from './generator/sampleTypeGuards.generator'
 generateFile({
   //prettier-ignore
   cases: [
+    sampleTargetRequirements,
     sampleCallbackInference,
     sampleInlineEffect,
     sampleArrayTarget,

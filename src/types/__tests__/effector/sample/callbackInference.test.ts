@@ -1,4 +1,4 @@
-import {createEvent, createStore, sample, EventCallable} from 'effector'
+import {createEvent, createStore, sample, Event, EventCallable} from 'effector'
 
 const typecheck = '{global}'
 type IsAny<T> = 0 extends 1 & T ? true : false
@@ -8,6 +8,24 @@ type Equal<A, B> =
     ? true
     : false
 const exact = <T extends true>() => {}
+
+test('extracted predicate preserves exact no-target return type', () => {
+  type Value = {value: number}
+  const source = createStore<Value | null>(null)
+  const clock = createEvent<void>()
+  const keep = (value: Value | null): value is Value => value !== null
+  const result = sample({source, filter: keep})
+  const withClock = sample({source, clock, filter: keep})
+  const withClocks = sample({source, clock: [clock], filter: keep})
+  exact<Equal<typeof result, Event<Value>>>()
+  exact<Equal<typeof withClock, Event<Value>>>()
+  exact<Equal<typeof withClocks, Event<Value>>>()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
 
 test('generic callback parameters and return unit remain exact', () => {
   function history<T>() {
