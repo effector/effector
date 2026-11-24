@@ -1856,7 +1856,7 @@ type SampleFilterTargetDef<
     ? boolean extends UnitValue<FLUnitOrBool>
       ? TargetConfigCheck<
           Mode, Target, Source, Clock, FN,
-          ToResultConfig<
+          ToTargetResultConfig<
             Mode,
             Clock,
             Source,
@@ -1874,7 +1874,7 @@ type SampleFilterTargetDef<
               ReturnType<FNAltArg>,
               'fnRet',
               Target,
-              ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FNAltArg, Target>,
+              ToTargetResultConfig<Mode, Clock, Source, FLUnitOrBool, FNAltArg, Target>,
               RawConfig,
               FNAltArg,
               'noSrc',
@@ -1887,7 +1887,7 @@ type SampleFilterTargetDef<
             NonNullable<TypeOfSource<Source>>,
             'src',
             Target,
-            ToResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
+            ToTargetResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
             RawConfig,
             'noFn',
             Source,
@@ -1899,7 +1899,7 @@ type SampleFilterTargetDef<
             NonNullable<TypeOfClock<Clock>>,
             'clk',
             Target,
-            ToResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
+            ToTargetResultConfig<Mode, Clock, Source, FLUnitOrBool, never, Target>,
             RawConfig,
             'noFn',
             'noSrc',
@@ -1921,7 +1921,7 @@ type SampleFilterTargetDef<
             SafeReturn<FNInf>,
             'fnRet',
             Target,
-            ToResultConfig<
+            ToTargetResultConfig<
               Mode,
               Clock,
               Source,
@@ -1957,7 +1957,7 @@ type SampleFilterTargetDef<
             InferredType<Source, Clock, FilterFun>,
             'src',
             Target,
-            ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+            ToTargetResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
             RawConfig,
             'noFn',
             'noSrc',
@@ -1969,7 +1969,7 @@ type SampleFilterTargetDef<
             InferredType<Source, Clock, FilterFun>,
             'clk',
             Target,
-            ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+            ToTargetResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
             RawConfig,
             'noFn',
             'noSrc',
@@ -1983,7 +1983,7 @@ type SampleFilterTargetDef<
             ReturnType<FN>,
             'fnRet',
             Target,
-            ToResultConfig<Mode, Clock, Source, FilterFun, FN, Target>,
+            ToTargetResultConfig<Mode, Clock, Source, FilterFun, FN, Target>,
             RawConfig,
             FN,
             'noSrc',
@@ -1999,7 +1999,7 @@ type SampleFilterTargetDef<
           TypeOfSource<Source>,
           'src',
           Target,
-          ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+          ToTargetResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
           RawConfig,
           'noFn',
           Source,
@@ -2011,7 +2011,7 @@ type SampleFilterTargetDef<
           TypeOfClock<Clock>,
           'clk',
           Target,
-          ToResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
+          ToTargetResultConfig<Mode, Clock, Source, FilterFun, never, Target>,
           RawConfig,
           'noFn',
           'noSrc',
@@ -2022,7 +2022,7 @@ type SampleFilterTargetDef<
   : Mode extends Mode_NoFlt
     ? TargetConfigCheck<
         Mode, Target, Source, Clock, FN,
-        ToResultConfig<Mode, Clock, Source, never, FN, Target>,
+        ToTargetResultConfig<Mode, Clock, Source, never, FN, Target>,
         RawConfig
       >
     : never
@@ -2096,62 +2096,70 @@ type RebuildClockSingle<
     >
     : never
 
-type ToResultConfig<
+// Config shape for each mode, split by target presence: type argument inference
+// walks every branch of a conditional, so a call site sees only the shapes its
+// mode family can produce, as a shallow decision tree rather than a long chain.
+type ToTargetResultConfig<
   Mode,
   Clock,
   Source,
   Filter,
   FN,
   Target,
-> = Mode extends 'clock | source | filter | fn | target'
-  ? {clock: Clock; source: Source; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock | source | filter |    | target'
-  ? {clock: Clock; source: Source; filter: Filter; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source | filter | fn | target'
-  ? {source: Source; clock?: never; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source | filter |    | target'
-  ? {source: Source; clock?: never; filter: Filter; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        | filter | fn | target'
-  ? {clock: Clock; source?: never; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        | filter |    | target'
-  ? {clock: Clock; source?: never; filter: Filter; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock | source |        | fn | target'
-  ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock | source |        |    | target'
-  ? {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source |        | fn | target'
-  ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source |        |    | target'
-  ? {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        |        | fn | target'
-  ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        |        |    | target'
-  ? {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock | source | filter | fn |       '
-  ? {clock: Clock; source: Source; filter?: Filter; fn?: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock | source | filter |    |       '
-  ? {clock: Clock; source: Source; filter: Filter; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source | filter | fn |       '
-  ? {source: Source; clock?: never; filter?: Filter; fn?: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source | filter |    |       '
-  ? {source: Source; clock?: never; filter: Filter; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        | filter | fn |       '
-  ? {clock: Clock; source?: never; filter?: Filter; fn?: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        | filter |    |       '
-  ? {clock: Clock; source?: never; filter: Filter; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock | source |        | fn |       '
-  ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock | source |        |    |       '
-  ? {clock: Clock; source: Source; filter?: never; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source |        | fn |       '
-  ? {source: Source; clock?: never; filter?: never; fn: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends '      | source |        |    |       '
-  ? {source: Source; clock?: never; filter?: never; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        |        | fn |       '
-  ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : Mode extends 'clock |        |        |    |       '
-  ? {clock: Clock; source?: never; filter?: never; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
-  : never
+> = Mode extends `clock${string}`
+    ? Mode extends `${string}source${string}`
+      ? Mode extends `${string}filter${string}`
+        ? Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source: Source; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source: Source; filter: Filter; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source: Source; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+      : Mode extends `${string}filter${string}`
+        ? Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source?: never; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source?: never; filter: Filter; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+    : Mode extends `${string}filter${string}`
+      ? Mode extends `${string}| fn |${string}`
+        ? {source: Source; clock?: never; filter?: Filter; fn?: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : {source: Source; clock?: never; filter: Filter; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+      : Mode extends `${string}| fn |${string}`
+        ? {source: Source; clock?: never; filter?: never; fn: FN; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : {source: Source; clock?: never; filter?: never; target: Target; greedy?: boolean; batch?: boolean; name?: string}
+
+type ToNoTargetResultConfig<
+  Mode,
+  Clock,
+  Source,
+  Filter,
+  FN,
+  Target,
+> = Mode extends `clock${string}`
+    ? Mode extends `${string}source${string}`
+      ? Mode extends `${string}filter${string}`
+        ? Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source: Source; filter?: Filter; fn?: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source: Source; filter: Filter; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source: Source; filter?: never; fn: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source: Source; filter?: never; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+      : Mode extends `${string}filter${string}`
+        ? Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source?: never; filter?: Filter; fn?: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source?: never; filter: Filter; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : Mode extends `${string}| fn |${string}`
+          ? {clock: Clock; source?: never; filter?: never; fn: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+          : {clock: Clock; source?: never; filter?: never; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+    : Mode extends `${string}filter${string}`
+      ? Mode extends `${string}| fn |${string}`
+        ? {source: Source; clock?: never; filter?: Filter; fn?: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : {source: Source; clock?: never; filter: Filter; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+      : Mode extends `${string}| fn |${string}`
+        ? {source: Source; clock?: never; filter?: never; fn: FN; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
+        : {source: Source; clock?: never; filter?: never; target?: Target; greedy?: boolean; batch?: boolean; name?: string}
 
 type IsFnRetSubtypeExtendsTarget<
   FnRetSubtype,
@@ -2542,9 +2550,9 @@ type SampleFilterDef<
 > =
   Mode extends Mode_Flt
   ? FLUnitOrBool extends Unit<any>
-    ? [config: ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FN, Target> & RawConfig]
+    ? [config: ToNoTargetResultConfig<Mode, Clock, Source, FLUnitOrBool, FN, Target> & RawConfig]
     : FLUnitOrBool extends BooleanConstructor
-      ? [config: ToResultConfig<Mode, Clock, Source, FLUnitOrBool, FNInf, Target> & RawConfig]
+      ? [config: ToNoTargetResultConfig<Mode, Clock, Source, FLUnitOrBool, FNInf, Target> & RawConfig]
       : FilterFun extends (
           Source extends Unit<any> | SourceRecord
           ? Clock extends Units
@@ -2564,7 +2572,7 @@ type SampleFilterDef<
                 ? (clk: FNInfClock) => any
                 : any
             )
-            ? [config: ToResultConfig<Mode, Clock, Source, FilterFun, FNInf, Target> & RawConfig]
+            ? [config: ToNoTargetResultConfig<Mode, Clock, Source, FilterFun, FNInf, Target> & RawConfig]
             : [message: Omit<RawConfig, 'fn'> & {
                 fn: Source extends Unit<any> | SourceRecord
                   ? Clock extends Units
@@ -2572,10 +2580,10 @@ type SampleFilterDef<
                     : (src: FNInfSource) => any
                   : (clk: FNInfClock) => any
               }]
-          : [config: ToResultConfig<Mode, Clock, Source, FilterFun, never, Target> & RawConfig]
-      : [config: ToResultConfig<Mode, Clock, Source, FilterFun, FN, Target> & RawConfig]
+          : [config: ToNoTargetResultConfig<Mode, Clock, Source, FilterFun, never, Target> & RawConfig]
+      : [config: ToNoTargetResultConfig<Mode, Clock, Source, FilterFun, FN, Target> & RawConfig]
   : Mode extends Mode_NoFlt
-  ? [config: ToResultConfig<Mode, Clock, Source, never, FN, Target> & RawConfig]
+  ? [config: ToNoTargetResultConfig<Mode, Clock, Source, never, FN, Target> & RawConfig]
   : never
 
 type DataSourceFunction<Source, Clock> =
