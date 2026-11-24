@@ -16,7 +16,8 @@ jest.mock('vue', () => require('vue-next'))
 
 /**
  * Hides `console.error` for the cases that expect a report from the
- * composable. Everywhere else the warnings of Vue stay visible.
+ * composable, a call outside of a component for one: it has no effect scope
+ * to stop in. Everywhere else the warnings of Vue stay visible.
  */
 function withSilencedWarnings<T>(fn: (warn: jest.SpyInstance) => T): T {
   const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
@@ -286,7 +287,7 @@ it('[v-model] works correct with composable with shape', async () => {
     name: $name,
   }
 
-  const user = useVModel($user)
+  const user = withSilencedWarnings(() => useVModel($user))
 
   user.name = 'Alan'
   await flushPromises()
@@ -304,7 +305,7 @@ it('[v-model] works correct with composable with $store', async () => {
   const $name = createStore('John')
   $name.on(nameChanged, (_, value) => value)
 
-  const name = useVModel($name)
+  const name = withSilencedWarnings(() => useVModel($name))
   name.value = 'Alan'
   await flushPromises()
   expect(name.value).toEqual('Alan')
@@ -389,7 +390,7 @@ describe('scope', () => {
     const $user = createStore({name: 'John'})
     const scope = fork()
 
-    const user = useVModel($user, {scope})
+    const user = withSilencedWarnings(() => useVModel($user, {scope}))
     user.value = {name: 'Alan'}
     await flushPromises()
 
@@ -424,7 +425,7 @@ describe('two waves of the sync', () => {
     const updates = jest.fn()
     $user.updates.watch(updates)
 
-    const user = useVModel($user)
+    const user = withSilencedWarnings(() => useVModel($user))
     updated()
     await flushPromises()
 
@@ -436,7 +437,7 @@ describe('two waves of the sync', () => {
     const started = createEvent()
     const $user = createStore({first: 'John', last: 'Doe'})
 
-    const user = useVModel($user)
+    const user = withSilencedWarnings(() => useVModel($user))
     started.watch(() => {
       user.value.first = 'Jane'
       user.value.last = 'Roe'
@@ -453,7 +454,7 @@ describe('two waves of the sync', () => {
     const started = createEvent()
     const $user = createStore({name: 'John'})
 
-    const user = useVModel($user)
+    const user = withSilencedWarnings(() => useVModel($user))
     started.watch(() => {
       user.value.name = 'Jane'
       user.value.name = 'John'
@@ -471,7 +472,7 @@ describe('two waves of the sync', () => {
     const $user = createStore({name: 'John'})
     $user.on(updated, () => ({name: 'Jane'}))
 
-    const user = useVModel($user)
+    const user = withSilencedWarnings(() => useVModel($user))
 
     updated()
     user.value = {name: 'Alan'}
@@ -497,7 +498,7 @@ describe('two waves of the sync', () => {
     test('does not hide a later update of the store', async () => {
       const {fill, reset, $pin} = createPin()
 
-      const pin = useVModel($pin)
+      const pin = withSilencedWarnings(() => useVModel($pin))
       pin.value = 'a'
       pin.value = ''
       fill('1234')
@@ -511,7 +512,7 @@ describe('two waves of the sync', () => {
     test('does not hide a later edit of the form', async () => {
       const {fill, $pin} = createPin()
 
-      const pin = useVModel($pin)
+      const pin = withSilencedWarnings(() => useVModel($pin))
       pin.value = 'a'
       pin.value = ''
       fill('1234')
@@ -579,7 +580,7 @@ describe('options', () => {
   test('deep: false tracks assignments of the whole value', async () => {
     const $user = createStore({name: 'John'})
 
-    const user = useVModel($user, {deep: false})
+    const user = withSilencedWarnings(() => useVModel($user, {deep: false}))
     user.value = {name: 'Alan'}
     await flushPromises()
 
@@ -594,7 +595,7 @@ describe('options', () => {
       .on(bump, ({n}) => ({n: n + 10}))
     sample({clock: go, target: bump})
 
-    const form = useVModel($counter)
+    const form = withSilencedWarnings(() => useVModel($counter))
 
     go()
     await nextTick()
@@ -612,7 +613,7 @@ describe('options', () => {
     const updates = jest.fn()
     $form.updates.watch(updates)
 
-    useVModel($form)
+    withSilencedWarnings(() => useVModel($form))
     received({name: 'Alan', error: new Error('boom')})
     await nextTick()
 
@@ -624,7 +625,7 @@ describe('options', () => {
     self.self = self
     const $form = createStore(self)
 
-    const form = useVModel($form)
+    const form = withSilencedWarnings(() => useVModel($form))
     form.value.name = 'Alan'
     await nextTick()
 
