@@ -1087,11 +1087,17 @@ describe('no source', () => {
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Unmarked error at test line 35 'clock: nullableAB,'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB' is not assignable to type 'ABN'.
+              Types of property 'b' are incompatible.
+                Type 'string' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
-        Unmarked error at test line 41 'clock: nullableAB,'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB' is not assignable to type 'ABN'.
+              Types of property 'b' are incompatible.
+                Type 'string' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
         'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
@@ -1228,11 +1234,17 @@ describe('no source', () => {
         'val' is possibly 'null'.
         Property 'c' does not exist on type 'AB'.
         'val' is possibly 'null'.
-        Unmarked error at test line 35 'clock: [ab,nullableAB],'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB' is not assignable to type 'ABN'.
+              Types of property 'b' are incompatible.
+                Type 'string' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
-        Unmarked error at test line 41 'clock: [ab,nullableAB],'
-        Object literal may only specify known properties, and 'clock' does not exist in type '{ error: \\"fn should match inferred type\\"; inferred: AB; fnArg: ABN; }'.
+        Type '(val: ABN) => { a: any; b: string; }' is not assignable to type '(clk: AB) => any'.
+          Types of parameters 'val' and 'clk' are incompatible.
+            Type 'AB' is not assignable to type 'ABN'.
+              Types of property 'b' are incompatible.
+                Type 'string' is not assignable to type 'number'.
         Property 'c' does not exist on type 'ABN'.
         'clk' is possibly 'null'.
         Property 'c' does not exist on type 'ABN'.
