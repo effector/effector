@@ -37,7 +37,7 @@ export function useStoreMap<State, Result>(
 ): ComputedRef<Result>
 export function useStoreMap<State, Result, Keys>(
   configOrStore: UseStoreMapConfig<State, Result, Keys> | Store<State>,
-  fnOrScope?: ((state: State) => Result) | Scope,
+  fnOrScope?: ((state: State) => Result) | Scope | null,
   opts?: ScopeOptions,
 ): ComputedRef<Result> {
   const shortForm = is.store(configOrStore)
@@ -46,7 +46,7 @@ export function useStoreMap<State, Result, Keys>(
   ) as UseStoreMapConfig<State, Result, Keys>
   const positionalScope = shortForm
     ? undefined
-    : (fnOrScope as Scope | undefined)
+    : (fnOrScope as Scope | null | undefined)
 
   if (!is.store(config.store)) throwError('useStoreMap expects a store')
   if (typeof config.fn !== 'function') {

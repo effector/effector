@@ -12,8 +12,11 @@ import {
 import {Domain, Store, EventCallable, Effect, Scope} from 'effector'
 
 export type ScopeOptions = {
-  /** Scope to read stores from and to bind events to. */
-  scope?: Scope
+  /**
+   * Scope to read stores from and to bind events to. `null` is the same as
+   * no scope, so the result of `useProvidedScope()` goes here as it is.
+   */
+  scope?: Scope | null
   /**
    * Throw when no scope is resolved instead of falling back to global mode.
    * Overrides the plugin value for this call, true or false.
@@ -81,9 +84,25 @@ export type UseStoreMapConfig<State, Result, Keys> = {
   defaultValue?: Result
 } & ScopeOptions
 
+/**
+ * With `defaultValue` the result has no `undefined` in it, as in
+ * effector-react: `fn` may return `undefined`, and `defaultValue` stands in.
+ * `Exclude` keeps a `defaultValue` that may be `undefined` from widening the
+ * result.
+ */
+export function useStoreMap<State, Result, Keys = unknown>(
+  config: {
+    store: Store<State>
+    keys?: MaybeRefOrGetter<Keys>
+    fn: (state: State, keys: Keys) => Result | undefined
+    updateFilter?: (update: Result, current: Result) => boolean
+    defaultValue: Exclude<Result, undefined>
+  } & ScopeOptions,
+  scope?: Scope | null,
+): ComputedRef<Result>
 export function useStoreMap<State, Result, Keys = unknown>(
   config: UseStoreMapConfig<State, Result, Keys>,
-  scope?: Scope,
+  scope?: Scope | null,
 ): ComputedRef<Result>
 export function useStoreMap<State, Result>(
   store: Store<State>,
