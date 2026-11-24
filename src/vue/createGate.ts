@@ -7,7 +7,7 @@ import {
 } from 'vue-next'
 import {launch, createStore, createEvent, sample} from 'effector'
 import {Gate, GateConfig} from './composition.h'
-import {deepCopy} from './lib/deepCopy'
+import {clone} from './lib/clone'
 import {unwrapProxy} from './lib/unwrapProxy'
 import {tryOnScopeDispose} from './lib/dispose'
 import {ScopeOptions} from './lib/get-scope'
@@ -39,9 +39,14 @@ export function useGate<Props>(
    */
   if (isServerRender()) return
 
+  /**
+   * `clone` is the copy `useVModel` makes: it keeps `Map`, `Set` and `File`,
+   * which `deepCopy` turned into plain objects (#975). Pinned by "the copy of
+   * the props" tests in useGate.test.ts.
+   */
   const withProps = (fn: (payload?: any) => any) => () => {
     if (props === undefined) return fn()
-    fn(deepCopy(unwrapProxy(toValue(props))))
+    fn(clone(unwrapProxy(toValue(props))))
   }
 
   let opened = false
@@ -62,7 +67,7 @@ export function useGate<Props>(
       () => toValue(props),
       value => {
         /** The same rule as for `open`, see `createGate` below. */
-        if (value !== undefined) gate.set(deepCopy(unwrapProxy(value)))
+        if (value !== undefined) gate.set(clone(unwrapProxy(value)))
       },
       /**
        * `Boolean(true)` survives the build. A bare `true` ships as `1`, and
