@@ -1,5 +1,9 @@
 import {existsSync, readFileSync} from 'fs'
 import {resolve} from 'path'
+import {createEvent, createStore} from 'effector'
+import {effectScope} from 'vue-next'
+
+jest.mock('vue', () => require('vue-next'))
 
 /**
  * The suite runs against the sources: babel maps `effector-vue` to `src/vue`,
@@ -46,5 +50,28 @@ const built = files.every(file => existsSync(file))
 
       expect(code).not.toContain('@vue/runtime-core')
     }
+  })
+
+  /**
+   * `pure_getters` of terser drops a property read whose result is unused.
+   * The selector of useStoreMap subscribes to the store by such a read, and
+   * without it the built composable keeps its first value.
+   */
+  test('useStoreMap follows the store', () => {
+    const {useStoreMap} = require(resolve(dir, 'composition.cjs.js'))
+    const rename = createEvent<string>()
+    const $user = createStore({name: 'alice'}).on(rename, (_, name) => ({name}))
+    const scope = effectScope()
+
+    const name = scope.run(() =>
+      useStoreMap({store: $user, fn: (user: {name: string}) => user.name}),
+    )
+
+    expect(name.value).toBe('alice')
+
+    rename('bob')
+
+    expect(name.value).toBe('bob')
+    scope.stop()
   })
 })
