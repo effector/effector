@@ -6,6 +6,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Fix generics support in `sample`
 - Add a few more native errors where possible
+- Improve `sample` types memory consumption during typecheck
 
 ## effector 23.5.1
 
