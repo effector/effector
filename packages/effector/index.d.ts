@@ -1397,11 +1397,10 @@ type SampleImpl<
               >,
               Target, Source, Clock, FLUnitOrBool, FilterFun, FN, FNInf, FNInfSource, FNInfClock, FNAltArg, RawConfig
             >
-      : [error: {
+      : [config: Omit<RawConfig, 'target'> & {
           target: Target extends RoTuple<Unit<any>>
             ? {[K in keyof Target]: ReplaceDerivedUnitWithWritable<Target[K]>}
             : ReplaceDerivedUnitWithWritable<Target>
-          error: 'derived units are not allowed in target'
         }]
 
 type ModeSelector<
@@ -1831,10 +1830,7 @@ type TargetConfigCheck<
         'noSrc',
         'noClk'
       >
-    : [error: {
-        fn: DataSourceFunction<Source, Clock>
-        error: 'fn parameters should match clock/source types'
-      }]
+    : [error: {[K in keyof Config]: K extends 'fn' ? DataSourceFunction<Source, Clock> : Config[K]}]
     // mode with source only or with both clock and source
   : Mode extends Mode_Src
   ? TargetOrError<
@@ -1922,10 +1918,7 @@ type SampleFilterTargetDef<
           >,
           RawConfig
         >
-      : [error: {
-        fn: DataSourceFunction<Source, Clock>
-        error: 'fn parameters should match clock/source types'
-      }]
+      : [config: Omit<RawConfig, 'filter'> & {filter: Store<boolean>}]
     : FLUnitOrBool extends BooleanConstructor
       ? Mode extends Mode_Flt_Fn_Trg
         ? FNAltArg extends (arg?: any, clk?: any) => any
@@ -2079,16 +2072,11 @@ type SampleFilterTargetDef<
       : never
 
   : Mode extends Mode_NoFlt
-    ? FN extends DataSourceFunction<Source, Clock>
-      ? TargetConfigCheck<
-          Mode, Target, Source, Clock, FN,
-          ToResultConfig<Mode, Clock, Source, never, FN, Target>,
-          RawConfig
-        >
-      : [error: {
-        fn: DataSourceFunction<Source, Clock>
-        error: 'fn parameters should match clock/source types'
-      }]
+    ? TargetConfigCheck<
+        Mode, Target, Source, Clock, FN,
+        ToResultConfig<Mode, Clock, Source, never, FN, Target>,
+        RawConfig
+      >
     : never
 
 type RebuildClockTargetLoop<
@@ -2557,26 +2545,24 @@ type TargetOrError<
                     : GetSourceExtendedByTarget<Source, Target>
                   error: 'source should extend target type'
                 }]
-              : [error: {
+              : [error: Omit<SourceConfig, 'target'> & {
                 target: Target extends readonly any[]
                   ? {
                     [K in keyof Target]: Unit<MatchingValue>
                   }
                   : Unit<MatchingValue>
-                error: 'source should extend target type'
               }]
             : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
               ? [error: {
                   clock: GetClockExtendedByTarget<Clock, Target>
                   error: 'clock should extend target type'
                 }]
-              : [error: {
+              : [error: Omit<SourceConfig, 'target'> & {
                 target: Target extends readonly any[]
                   ? {
                     [K in keyof Target]: Unit<MatchingValue>
                   }
                   : Unit<MatchingValue>
-                error: 'clock should extend target type'
               }]
 
 type SampleFilterDef<
@@ -2631,10 +2617,12 @@ type SampleFilterDef<
                 : any
             )
             ? [config: ToResultConfig<Mode, Clock, Source, FilterFun, FNInf, Target> & RawConfig]
-            : [message: {
-                error: 'fn should match inferred type'
-                inferred: (Source extends Unit<any> | SourceRecord ? FNInfSource : FNInfClock)
-                fnArg: FNInf extends (arg: infer Arg) => any ? Arg : never
+            : [message: Omit<RawConfig, 'fn'> & {
+                fn: Source extends Unit<any> | SourceRecord
+                  ? Clock extends Units
+                    ? (src: FNInfSource, clk: ClockType) => any
+                    : (src: FNInfSource) => any
+                  : (clk: FNInfClock) => any
               }]
           : [config: ToResultConfig<Mode, Clock, Source, FilterFun, never, Target> & RawConfig]
       : [config: ToResultConfig<Mode, Clock, Source, FilterFun, FN, Target> & RawConfig]
