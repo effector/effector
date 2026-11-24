@@ -98,6 +98,14 @@ function bindStore<T>(
       }
 
       /**
+       * A state this call has not written. A write the store refuses, by
+       * `updateFilter` or as an equal value, never comes back, and its entry
+       * would take a later state of the store for its echo. Pinned by the
+       * "a write the store refuses" tests in useVModel.test.ts.
+       */
+      pending.length = 0
+
+      /**
        * The watcher of the form is synchronous, so it runs inside this
        * assignment and has to tell the state of the store from an edit.
        * The flag covers exactly that assignment, unlike the pair of flags

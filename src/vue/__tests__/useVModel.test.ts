@@ -480,6 +480,48 @@ describe('two waves of the sync', () => {
     expect($user.getState()).toEqual({name: 'Alan'})
     expect(user.value).toEqual({name: 'Alan'})
   })
+
+  describe('a write the store refuses', () => {
+    function createPin() {
+      const fill = createEvent<string>()
+      const reset = createEvent()
+      const $pin = createStore('', {
+        updateFilter: next => /^[0-9]*$/.test(next),
+      })
+        .on(fill, (_, value) => value)
+        .reset(reset)
+
+      return {fill, reset, $pin}
+    }
+
+    test('does not hide a later update of the store', async () => {
+      const {fill, reset, $pin} = createPin()
+
+      const pin = useVModel($pin)
+      pin.value = 'a'
+      pin.value = ''
+      fill('1234')
+      reset()
+      await flushPromises()
+
+      expect($pin.getState()).toBe('')
+      expect(pin.value).toBe('')
+    })
+
+    test('does not hide a later edit of the form', async () => {
+      const {fill, $pin} = createPin()
+
+      const pin = useVModel($pin)
+      pin.value = 'a'
+      pin.value = ''
+      fill('1234')
+      pin.value = ''
+      await flushPromises()
+
+      expect($pin.getState()).toBe('')
+      expect(pin.value).toBe('')
+    })
+  })
 })
 
 describe('the copy of the state', () => {
