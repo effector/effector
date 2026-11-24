@@ -4597,46 +4597,7 @@ test('generic, state, restored, none (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 22 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 109 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 138 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
+    no errors
     "
   `)
 })
@@ -4878,46 +4839,7 @@ test('generic, state, restored, flag (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 22 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 109 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 138 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
+    no errors
     "
   `)
 })
@@ -5159,46 +5081,7 @@ test('generic, state, restored, callback (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 22 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 109 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 138 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
+    no errors
     "
   `)
 })
@@ -6892,46 +6775,7 @@ test('generic, {stack, cursor}, restored, none (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 22 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 109 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 138 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
+    no errors
     "
   `)
 })
@@ -7173,46 +7017,7 @@ test('generic, {stack, cursor}, restored, flag (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 22 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 109 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 138 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
+    no errors
     "
   `)
 })
@@ -7454,46 +7259,7 @@ test('generic, {stack, cursor}, restored, callback (should fail)', () => {
   }
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 21 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 22 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 23 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 79 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 80 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 81 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 108 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 109 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 110 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 137 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 138 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 139 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'stack' implicitly has an 'any' type.
-    Unmarked error at test line 224 'fn: ({stack, cursor}) => {'
-    Binding element 'cursor' implicitly has an 'any' type.
-    Unmarked error at test line 225 'assertNotAny<IsAny<typeof stack>>()'
-    Type 'true' does not satisfy the constraint 'false'.
-    Unmarked error at test line 226 'assertNotAny<IsAny<typeof cursor>>()'
-    Type 'true' does not satisfy the constraint 'false'.
+    no errors
     "
   `)
 })

@@ -2525,7 +2525,20 @@ type TargetOrError<
       : [Target] extends [TypeOfTargetSoft<MatchingValue, Target, Mode>]
         ? [config: ResultConfig & SourceConfig]
         : Mode extends 'fnRet'
-          ? [error: {
+          // A separate config branch preserves contextual arity before a generic
+          // target can be validated. A conditional fn property also changes
+          // contextual typing in unrelated predicate-filter branches.
+          ? ResultConfig extends {source: any; clock: readonly unknown[]}
+            ? [error: {
+                fn: FN extends (source: infer S, clock: infer C) => any
+                  ? (source: S, clock: C) => TypeOfTargetVal<MatchingValue, Target>
+                  : never
+                target: Target extends readonly any[]
+                  ? {[K in keyof Target]: Unit<RebuildTargetValueByFnReturn<UnitValue<Target[K]>, MatchingValue>>}
+                  : Unit<RebuildTargetValueByFnReturn<UnitValue<Target>, MatchingValue>>
+                error: 'fn result should extend target type'
+              }]
+            : [error: {
               fn: (...args: Parameters<FN extends ((...args: any) => any) ? FN : any>) => TypeOfTargetVal<MatchingValue, Target>
               target: Target extends readonly any[]
                 ? {
