@@ -46,6 +46,8 @@ The `options` argument introduced in [effector-vue 23.3.0](https://changelog.eff
 
 A writable `Ref` with a copy of the state, or an object of such copies for a shape of stores. Editing it writes the whole new value into the store; an update of the store replaces the copy.
 
+Since [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0) every mutation of the value writes the store at once, so three assigned fields are three updates of the store. For a bulk edit assign the whole value.
+
 ### Examples (#methods-useVModel-examples)
 
 #### Single Store (#methods-useVModel-examples-singleStore)
@@ -137,6 +139,8 @@ A call outside of a component, or a call that has to write into another scope, t
 ```ts
 const form = useVModel($form, { scope });
 ```
+
+Outside of a component run the call inside `effectScope()` and stop that scope when the form is gone. With no active effect scope nothing stops the binding, and the call reports it through `console.error`.
 
 #### Shallow binding (#methods-useVModel-examples-deep)
 

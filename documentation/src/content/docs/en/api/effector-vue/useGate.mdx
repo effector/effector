@@ -74,6 +74,8 @@ import { PageGate, loadPageFx } from "./model";
 sample({ clock: PageGate.open, target: loadPageFx }); // gets the props of the mount
 ```
 
+`undefined` is not passed to `set`. `useGate(Gate)` without props, a manual `Gate.open()` and a getter that returns `undefined` leave `Gate.state` as it is.
+
 ### Server-side rendering (#methods-useGate-Gate-props-ssr)
 
 During a server render the gate stays closed: nothing unmounts on the server, so a gate opened there would never be closed, and its state would be serialized into the client. Load the data of a page with `onServerPrefetch` instead and use the gate on the client. This matches `useGate` of effector-react.

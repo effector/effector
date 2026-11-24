@@ -177,11 +177,15 @@ export const Counter = () => {
 
 ```html
 <script setup>
-  import { useUnit } from "@effector-vue/composition";
+  import { useUnit } from "effector-vue/composition";
   import { $counter, incremented, decremented } from "./counter.js";
   const [counter, onIncremented, onDecremented] = useUnit([$counter, incremented, decremented]);
   // или
-  const { counter, onIncremented, onDecremented } = useUnit({ $counter, incremented, decremented });
+  const { counter, onIncremented, onDecremented } = useUnit({
+    counter: $counter,
+    onIncremented: incremented,
+    onDecremented: decremented,
+  });
   // или
   const counter = useUnit($counter);
   const onIncremented = useUnit(incremented);

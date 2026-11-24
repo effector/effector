@@ -72,6 +72,8 @@ import { PageGate, loadPageFx } from "./model";
 sample({ clock: PageGate.open, target: loadPageFx }); // получает пропсы монтирования
 ```
 
+`undefined` в `set` не передаётся. `useGate(Gate)` без пропсов, ручной вызов `Gate.open()` и геттер, который вернул `undefined`, не меняют `Gate.state`.
+
 ### Серверный рендеринг (#methods-useGate-Gate-props-ssr)
 
 При серверном рендере гейт остаётся закрытым: на сервере ничего не размонтируется, поэтому открытый там гейт никогда бы не закрылся, а его состояние сериализовалось бы на клиент. Данные страницы загружайте в `onServerPrefetch`, а гейт используйте на клиенте. Так же работает `useGate` из effector-react.

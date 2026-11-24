@@ -82,7 +82,7 @@ useStoreMap({
    - `keys` (`MaybeRefOrGetter<Keys>`): передаётся в `fn` вторым аргументом. Геттер и ref отслеживаются, и при их изменении селектор запускается снова. Обычное значение используется как есть
    - `fn`: функция-селектор, получает состояние стора и `keys` и возвращает часть стора
    - `updateFilter`: получает новый и текущий результат `fn` и решает, заменит ли новый текущий. По умолчанию `update !== current`
-   - `defaultValue` (`Result`): используется каждый раз, когда `fn` возвращает `undefined`
+   - `defaultValue` (`Result`): используется каждый раз, когда `fn` возвращает `undefined`. С ним в типе результата нет `undefined`
    - `scope` ([`Scope`](/ru/api/effector/Scope)) и `forceScope` (`boolean`): [опции скоупа](/ru/api/effector-vue/EffectorScopePlugin) вызова
 
 :::info{title="since"}

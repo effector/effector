@@ -84,7 +84,7 @@ useStoreMap({
    - `keys` (`MaybeRefOrGetter<Keys>`): Passed to `fn` as its second argument. A getter or a ref is tracked, so the selector runs again when it changes. A plain value is used as it is
    - `fn` (`(state: State, keys: Keys) => Result`): Selector function to receive part of source store
    - `updateFilter` (`(update: Result, current: Result) => boolean`): Decides whether a new result of `fn` replaces the current one. Defaults to `update !== current`
-   - `defaultValue` (`Result`): Used every time `fn` returns `undefined`
+   - `defaultValue` (`Result`): Used every time `fn` returns `undefined`. With it the type of the result has no `undefined`
    - `scope` ([`Scope`](/en/api/effector/Scope)) and `forceScope` (`boolean`): [Scope](/en/api/effector-vue/EffectorScopePlugin) options of the call
 
 :::info{title="since"}

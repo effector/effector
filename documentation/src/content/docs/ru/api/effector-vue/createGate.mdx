@@ -5,7 +5,7 @@ lang: ru
 pagefindWeight: 7
 ---
 
-Создаёт [_Gate_](/ru/api/effector-vue/Gate), через который модель получает данные из представления. Для Vue 3. Если задан `defaultState`, [Gate.state](/ru/api/effector-vue/Gate#properties-state) создаётся с этим значением.
+Создаёт [_Gate_](/ru/api/effector-vue/Gate), через который модель получает данные из представления. Для Vue 3. Если задан `defaultState`, [Gate.state](/ru/api/effector-vue/Gate#properties-state) создаётся с этим значением. Без него в `Gate.state` до первого открытия лежит `null`.
 
 :::info{title="since"}
 `createGate` появился в [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)
