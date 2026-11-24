@@ -1729,7 +1729,11 @@ export function sample<
   SourceNoConf extends Unit<any> | SourceRecord
     ? ClockNoConf extends Units
       ? [any, any, any] extends Args
-        ? [source: SourceNoConf, clock: ClockNoConf, fn: FNBothNoConf] & Args
+        // Avoid constructing two overlapping tuple method sets for valid calls.
+        // Keep the original intersection on failure to preserve diagnostics.
+        ? [source: SourceNoConf, clock: ClockNoConf, fn: FNBothNoConf] & (
+            Args extends [SourceNoConf, ClockNoConf, FNBothNoConf] ? unknown : Args
+          )
         : [any, any] extends Args
           ? [source: SourceNoConf, clock: ClockNoConf] & Args
           : never
