@@ -14,7 +14,13 @@ const declaration = revision === 'working'
   ? readFileSync('packages/effector/index.d.ts', 'utf8')
   : execFileSync('git', ['show', `${revision}:packages/effector/index.d.ts`], {encoding: 'utf8'})
 const mode = process.env.SAMPLE_MODE || 'mixed'
-const cases = Array.from({length: scale}, (_, i) => {
+const reportCase = i => `
+const clicked${i} = createEvent<{taskId: string}>()
+const requested${i} = createEvent<{sessionId: string; taskId: string}>()
+const retry${i} = createEvent<{sessionId: string | null; taskId: string}>()
+sample({clock: retry${i}, filter: (r): r is {sessionId: string; taskId: string} => r.sessionId !== null, target: requested${i}})
+`
+const cases = mode === 'report' ? Array.from({length: scale}, (_, i) => reportCase(i)).join('\n') : Array.from({length: scale}, (_, i) => {
   let callIndex = 0
   return `
 namespace Case${i} {
@@ -37,9 +43,9 @@ namespace Case${i} {
   sample({source: item})
   sample({clock: tick, filter: Boolean})
   sample(item, tick, (value, clk) => ({value, clk}))
-  function generic<T extends Item>(source: Store<T>, clock: Event<T>) {
+  ${mode === 'mixed' || mode === 'generic' ? `function generic<T extends Item>(source: Store<T>, clock: Event<T>) {
     return sample({source, clock, filter: value => value.name.length > 0, fn: value => value})
-  }
+  }` : ''}
 }
 `.split('\n').filter(line => {
   if (mode === 'mixed' || !line.trim().startsWith('sample(')) return true
@@ -54,7 +60,7 @@ try {
     strict: true, noEmit: true, target: 'ES2020', module: 'commonjs', types: [],
     skipLibCheck: false, incremental: false,
   }, files: ['workload.ts']}))
-  console.log(JSON.stringify({revision, mode, scale, calls: scale * (mode === 'mixed' ? 12 : mode === 'generic' ? 1 : 2), runs, node: process.version,
+  console.log(JSON.stringify({revision, mode, scale, calls: scale * (mode === 'mixed' ? 12 : 1), runs, node: process.version,
     compiler: execFileSync(process.execPath, [compiler, '--version'], {encoding: 'utf8'}).trim()}))
   for (let run = 1; run <= runs; run++) {
     const args = [process.execPath, compiler, '-p', join(directory, 'tsconfig.json'), '--extendedDiagnostics']
