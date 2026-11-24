@@ -60,7 +60,10 @@ export function useGate<Props>(
      */
     watch(
       () => toValue(props),
-      value => gate.set(deepCopy(unwrapProxy(value))),
+      value => {
+        /** The same rule as for `open`, see `createGate` below. */
+        if (value !== undefined) gate.set(deepCopy(unwrapProxy(value)))
+      },
       /**
        * `Boolean(true)` survives the build. A bare `true` ships as `1`, and
        * Vue 3.5 reads a numeric `deep` as the depth to traverse.
@@ -149,7 +152,17 @@ export function createGate<Props>(...args: [GateConfig<Props>]): Gate<Props> {
   GateComponent.state = state
   GateComponent.set = set
 
-  sample({clock: open, target: set})
+  /**
+   * `useGate(Gate)` and a manual `open()` carry no props, and the state store
+   * reports an `undefined` update through `console.error`. Such an open leaves
+   * the state as it is. effector-react never gets there: its hook defaults the
+   * props to `{}`. Pinned by the "undefined props" tests in useGate.test.ts.
+   */
+  sample({
+    clock: open,
+    filter: props => props !== undefined,
+    target: set,
+  })
 
   state.reset(close)
 

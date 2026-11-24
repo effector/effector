@@ -14,7 +14,7 @@ import {
   reactive,
   ref,
 } from 'vue-next'
-import {fork} from 'effector'
+import {allSettled, fork} from 'effector'
 
 import {mountSetup, withEffectScope} from './helpers'
 
@@ -189,6 +189,73 @@ describe('props', () => {
     props.id = 2
 
     expect(state).toEqual({id: 1})
+  })
+})
+
+describe('undefined props', () => {
+  let error: jest.SpyInstance
+
+  beforeEach(() => {
+    error = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    error.mockRestore()
+  })
+
+  test('keeps the default state on a mount without props', () => {
+    const Gate = createGate({defaultState: 'empty'})
+
+    mountSetup(() => useGate(Gate))
+
+    expect(Gate.status.getState()).toBe(true)
+    expect(Gate.state.getState()).toBe('empty')
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the default state on a manual open', () => {
+    const Gate = createGate({defaultState: 'empty'})
+
+    Gate.open()
+
+    expect(Gate.status.getState()).toBe(true)
+    expect(Gate.state.getState()).toBe('empty')
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the default state on an open in a scope without params', async () => {
+    const Gate = createGate({defaultState: 'empty'})
+    const scope = fork()
+
+    await allSettled(Gate.open, {scope})
+
+    expect(scope.getState(Gate.status)).toBe(true)
+    expect(scope.getState(Gate.state)).toBe('empty')
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the default state when a getter returns undefined on mount', () => {
+    const Gate = createGate<{id: number} | undefined>()
+    const props = ref<{id: number}>()
+
+    mountSetup(() => useGate(Gate, () => props.value))
+
+    expect(Gate.status.getState()).toBe(true)
+    expect(Gate.state.getState()).toBe(null)
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the last state when a getter starts to return undefined', async () => {
+    const Gate = createGate<{id: number} | undefined>()
+    const props = ref<{id: number} | undefined>({id: 1})
+
+    mountSetup(() => useGate(Gate, () => props.value))
+
+    props.value = undefined
+    await nextTick()
+
+    expect(Gate.state.getState()).toEqual({id: 1})
+    expect(error).not.toHaveBeenCalled()
   })
 })
 
