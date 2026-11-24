@@ -3,6 +3,29 @@ import {createStore, createEvent, sample} from 'effector'
 
 const typecheck = '{global}'
 
+type IsAny<T> = 0 extends (1 & T) ? true : false
+
+it('preserves positional callback inference and tuple spreads', () => {
+  const source = createStore({id: 1, name: 'item'})
+  const clock = createEvent<number>()
+  const args = [source, clock, (value: {id: number; name: string}, tick: number) => value.id + tick] as const
+  const spread = sample(...args)
+  const direct = sample(source, clock, (value, tick) => {
+    const sourceIsAny: IsAny<typeof value> = false
+    const clockIsAny: IsAny<typeof tick> = false
+    const name: string = value.name
+    const count: number = tick
+    return {name, count, sourceIsAny, clockIsAny}
+  })
+  const result: import('effector').Event<number> = spread
+  const mapped: import('effector').Event<{name: string; count: number; sourceIsAny: false; clockIsAny: false}> = direct
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    no errors
+    "
+  `)
+})
+
 it('supports store objects as a source (should pass)', () => {
   const a = createStore(1)
   const b = createStore('b')
