@@ -6,7 +6,9 @@ import {getMeta} from './getter'
 import { UnitTargetable } from 'effector'
 
 export const unit = (obj: unknown): obj is Unit<any> =>
-  (isFunction(obj) || isObject(obj)) && 'kind' in obj
+  (isFunction(obj) || isObject(obj)) &&
+  'kind' in obj &&
+  typeof (obj as {kind: unknown}).kind === 'string'
 
 const is = (type: Kind) => (obj: unknown) => unit(obj) && obj.kind === type
 
