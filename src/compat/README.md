@@ -16,3 +16,8 @@ These tests expects `.env` file with variables `BROWSERSTACK_USERNAME` and `BROW
 BROWSERSTACK_USERNAME=username
 BROWSERSTACK_ACCESS_KEY=key
 ```
+
+The BrowserStack suite also runs a small performance budget check on the same
+device matrix. It measures common graph update and graph creation paths and
+fails only when a device is far outside the expected budget, so compatibility
+and performance regressions are caught together.
