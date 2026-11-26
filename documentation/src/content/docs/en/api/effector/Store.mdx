@@ -176,6 +176,23 @@ incrementedBy(2);
 
 [Try it](https://share.effector.dev/O0JnDtIl)
 
+- **Detailed Description**
+
+The `reducer` runs on every `trigger` and its return value becomes the new store state. As with any store update, returning `undefined` skips the update and leaves the state unchanged. When the store is not configured with `skipVoid: false`, returning `undefined` also prints a warning, so use it intentionally to skip an update:
+
+```ts
+$store.on(trigger, (state, payload) => {
+  if (!isValid(payload)) return; // skip the update, keep the current state
+  return next(state, payload);
+});
+```
+
+To store `undefined` as an actual value instead of skipping, create the store with `skipVoid: false`:
+
+```ts
+const $store = createStore(0, { skipVoid: false });
+```
+
 - **Returns**
 
 Returns the [current store](/en/api/effector/Store).
