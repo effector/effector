@@ -54,7 +54,6 @@
      ======================================== */
 
   --theme-bg: var(--doc-bg-page);
-  --theme-bg-color: var(--doc-bg-page-color);
   --theme-bg-mobile-menu: var(--doc-bg-page-solid);
   --theme-bg-sidebar-tabs-bg: var(--doc-bg-sidebar);
   --theme-bg-sidebar-main-tabs: var(--doc-bg-sidebar-surface);
@@ -74,7 +73,6 @@
   --theme-text: var(--doc-fg-primary);
   --theme-text-light: var(--doc-fg-secondary);
   --theme-text-lighter: var(--doc-fg-muted);
-  --theme-text-dark: var(--doc-fg-primary);
 
   /* ========================================
      DIVIDERS AND BORDERS
@@ -89,8 +87,6 @@
      ======================================== */
 
   --theme-card: var(--doc-bg-surface-subtle);
-  --theme-card-hover: var(--doc-bg-surface-raised);
-  --theme-card-divider: var(--doc-border-subtle);
   --theme-search-card-bg: rgba(255, 255, 255, 0.09);
 
   /* ========================================
@@ -119,13 +115,6 @@
   --theme-navbar-bg: var(--doc-bg-sidebar-surface);
   --theme-nav-panel-bg: var(--doc-bg-sidebar-surface);
   --theme-nav-panel-active: var(--doc-bg-surface-raised);
-
-  /* ========================================
-     SELECTION
-     ======================================== */
-
-  --theme-selection-color: hsl(var(--color-gray-50));
-  --theme-selection-bg: hsla(var(--color-red-500), 0.3);
 
   /* ========================================
      SIDEBAR
