@@ -189,3 +189,31 @@ inspectGraph({
 const $some = createCustomSomething({});
 // logs "world"
 ```
+
+## Opt-in node capture (#inspect-graph-node-capture)
+
+`onNode` optionally receives the actual low-level `Node` for a declaration. The existing `fn` callback and declaration shape remain unchanged. Use this option for development graph visualization; it exposes live graph references and is not a serialized monitoring payload.
+
+```ts
+import { inspectGraph } from "effector/inspect";
+import type { Node } from "effector";
+
+const nodes = new Map<string, Node>();
+const stop = inspectGraph({
+  fn: () => {},
+  onNode: (node) => nodes.set(node.id, node),
+});
+
+// Create your application after subscribing.
+// Read node.next and node.family.owners / links when taking a snapshot.
+// Never mutate these references: they belong to the application.
+
+stop();
+nodes.clear();
+```
+
+Relations can be attached **after** a node's declaration, as with `sample`. Retain a reference and read its relationships when displaying a snapshot instead of treating the initial declaration as a final graph. `next` represents directed propagation; family `owners` and `links` describe ownership relationships and must be labelled separately. Regions are delivered to `fn`, but synthetic region declarations are not passed to `onNode`.
+
+The subscription does not replay earlier declarations or create additional graph nodes. Start capture before application initialization to include disconnected units. Calling either `stop()` or `stop.unsubscribe()` removes both callbacks; a consumer that retained references must release them separately. Without `onNode`, the default declaration subscription is unchanged.
+
+The [relationship graph example](https://github.com/effector/effector/tree/master/examples/graph-visualizer) combines capture with a searchable, scrollable SVG view and documents its bounded rendering and cleanup contract.

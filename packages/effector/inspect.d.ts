@@ -1,4 +1,4 @@
-import {Scope, Subscription, Show, ID} from 'effector'
+import {Scope, Subscription, Show, ID, Node} from 'effector'
 
 export type Message = {
   type: 'update' | 'error'
@@ -100,4 +100,6 @@ export type Declaration =
 
 export function inspectGraph(config: {
   fn: (declaration: Declaration) => void
+  /** Optional read-only access to declared graph nodes. Relations may change later. */
+  onNode?: (node: Node) => void
 }): Subscription

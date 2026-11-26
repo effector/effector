@@ -1,0 +1,11 @@
+{
+  "name": "effector-graph-visualizer-example",
+  "private": true,
+  "scripts": {
+    "build": "node build.cjs",
+    "start": "node serve.cjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.11"
+  }
+}
