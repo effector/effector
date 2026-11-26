@@ -11,7 +11,7 @@ import type {
 } from '../index.h'
 
 import {escapeTag} from '../bindings'
-import {currentTemplate} from '../template'
+import {currentTemplate} from '../engine/createTemplate'
 import {assertClosure} from '../assert'
 import {handler} from './handler'
 import {forIn} from '../forIn'

@@ -18,13 +18,14 @@ import {
   stopAsyncValue,
   updateAsyncValue,
 } from '../plan'
-import {createTemplate, spawn, currentTemplate} from '../template'
-import {mountChildTemplates, setInParentIndex} from '../mountChild'
-import {unmountLeafTree} from '../unmount'
+import {createTemplate, currentTemplate} from '../engine/createTemplate'
+import {spawn} from '../engine/spawn'
+import {mountChildTemplates, setInParentIndex} from '../engine/mountChild'
+import {unmountLeafTree} from '../engine/unmountLeafTree'
 import {assertClosure} from '../assert'
 import {mountFn} from '../mountFn'
 import {mutualSample} from '../mutualSample'
-import {changeChildLeafsVisible} from '../iterateChildLeafs'
+import {changeChildLeafsVisible} from '../engine/iterateChildLeafs'
 import {remap} from './remap'
 
 export function list<T, K extends keyof T>(config: {
@@ -74,7 +75,7 @@ export function list<T>(opts: any, maybeFn?: any) {
       const listItemTemplate = createTemplate<{
         itemUpdater: any
       }>({
-        name: 'list item',
+        name: 'listItem',
         state: {id: -1, store: null},
         draft,
         isSvgRoot: false,
@@ -176,8 +177,7 @@ export function list<T>(opts: any, maybeFn?: any) {
           const skipNode: boolean[] = Array(input.length).fill(false)
           const keys = input.map(getID)
           const resultRecords: ListItemType[] = []
-          for (let i = 0; i < records.length; i++) {
-            const record = records[i]
+          records.forEach(record => {
             const index = keys.indexOf(record.key)
             if (index !== -1) {
               resultRecords.push(record)
@@ -190,10 +190,9 @@ export function list<T>(opts: any, maybeFn?: any) {
               }
               stopAsyncValue(record.asyncValue)
             }
-          }
-          for (let i = 0; i < input.length; i++) {
-            if (skipNode[i]) continue
-            const value = input[i]
+          })
+          input.forEach((value, i) => {
+            if (skipNode[i]) return
             const id = keys[i]
             const group = createOpGroup(
               leaf.root.leafOps[leaf.fullID].group.queue,
@@ -213,7 +212,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               index: id as number,
               active: true,
               leafData: {
-                type: 'list item',
+                type: 'listItem',
                 block: listItemBlock,
                 listDraft: draft,
               },
@@ -290,7 +289,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 root: leaf.root,
               })
             }
-          }
+          })
           endMark('list update [' + source.shortName + ']')
           if (resultRecords.length === 0) {
             parentBlock.lastChild = null

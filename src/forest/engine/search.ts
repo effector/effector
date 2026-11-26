@@ -1,4 +1,4 @@
-import type {DOMElement} from './index.h'
+import type {DOMElement} from '../index.h'
 
 import type {
   ElementBlock,
@@ -6,7 +6,7 @@ import type {
   UsingBlock,
   Block,
   BlockBlock,
-} from './relation.h'
+} from '../relation.h'
 
 export function findParentDOMElement(
   block: Exclude<Block, UsingBlock | BlockBlock>,
