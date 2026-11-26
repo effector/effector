@@ -892,3 +892,20 @@ test('source shape respects batch option', () => {
 
   expect($list.getState()).toEqual(['hello', 'dudes'])
 })
+
+test('source shape supports a field named kind', () => {
+  const clock = createEvent()
+  const $kind = createStore(0)
+  const target = createEvent<{kind: number}>()
+  const fn = jest.fn()
+  target.watch(fn)
+
+  sample({
+    clock,
+    source: {kind: $kind},
+    target,
+  })
+
+  clock()
+  expect(argumentHistory(fn)).toEqual([{kind: 0}])
+})
