@@ -121,12 +121,7 @@ test('perf', async () => {
   }
 })
 
-async function runTestCase({
-  name,
-  fn,
-  warmTimes,
-  repeatTimes,
-}: {
+async function runTestCase({name, fn, warmTimes, repeatTimes}: {
   name: string
   fn(): void
   warmTimes: number
@@ -142,12 +137,13 @@ async function runTestCase({
     }
   })
   const filtered = percentile(results, avg(results), 0.95)
-  /** typical is 50-70ms */
+  const medianTime = median(filtered)
   console.log(
-    `${name}: avg ${avg(filtered).toFixed(2)} median ${median(filtered).toFixed(
-      2,
-    )}`,
+    `${name}: avg ${avg(filtered).toFixed(2)} median ${medianTime.toFixed(2)}`,
   )
+  if (medianTime > 100) {
+    throw new Error(`Performance budget exceeded for ${name}: ${medianTime.toFixed(2)}ms > 100ms`)
+  }
 
   function avg(list: number[]) {
     return list.reduce((acc, val) => acc + val, 0) / list.length
@@ -162,11 +158,8 @@ async function runTestCase({
   function median(values: number[]) {
     if (values.length === 0) return 0
     const sorted = [...values].sort((a, b) => a - b)
-
     const half = Math.floor(sorted.length / 2)
-
     if (sorted.length % 2) return sorted[half]
-
     return (sorted[half - 1] + sorted[half]) / 2
   }
   function measure(cb: () => void) {
@@ -180,8 +173,7 @@ async function runTestCase({
         })
         rs(results)
       })
-      //@ts-expect-error probably buffered is browser only feature
-      obs.observe({entryTypes: ['function'], buffered: true})
+      obs.observe({entryTypes: ['function']})
     })
     cb()
     req.finally(() => {
