@@ -98,7 +98,7 @@ export function processCreateGateConfig<State>(
 } {
   const universalConfig =
     args && isStructuredConfig(args[0]) ? args : [{and: args}]
-  const [[nameOrConfig, defaultStateOrConfig], metadata] =
+  const [[nameOrConfig, defaultStateOrConfig = {}], metadata] =
     processArgsToConfig(universalConfig)
 
   let domain
@@ -111,7 +111,7 @@ export function processCreateGateConfig<State>(
     if (isPluginConfig(defaultStateOrConfig)) {
       // maybeConfig = defaultStateOrConfig
     } else {
-      defaultState = defaultStateOrConfig || {}
+      defaultState = defaultStateOrConfig
     }
   } else if (isGateConfig(nameOrConfig)) {
     mainConfig = nameOrConfig
