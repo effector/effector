@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 23.3.1
+
+- Fix subscription bug in `useStoreMap` ([PR #1298](https://github.com/effector/effector/pull/1388))
+
 ## effector 23.5.2
 
 - Fix generics support in `sample`
