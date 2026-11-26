@@ -1,5 +1,5 @@
 import type {BrowserObject} from 'webdriverio'
-import {createEvent, createStore, restore, sample} from 'effector'
+import {attach, createEvent, createStore, restore, sample} from 'effector'
 import {block, h, list, node, rec, remap, spec, text, using} from 'forest'
 
 // let addGlobals: Function
@@ -101,6 +101,40 @@ it('support reactive style properties', async () => {
     <div style='justify-self: center'>content</div>
     "
   `)
+})
+
+describe('sample', () => {
+  test('event from outside into local effect #725', async () => {
+    const result = await execFunc(async () => {
+      const changeContent = createEvent<string>()
+      const $content = createStore('')
+      const contentChanged = createEvent<string>()
+      let counter = 0
+      $content.on(changeContent, (_, content) => content)
+      sample({
+        clock: changeContent,
+        source: $content,
+        target: contentChanged,
+      })
+      using(el, () => {
+        h('main', () => {
+          const fx = attach({
+            source: $content,
+            effect(_, __: string) {
+              counter += 1
+            },
+          })
+          sample({
+            clock: contentChanged,
+            target: fx,
+          })
+        })
+      })
+      changeContent('demo')
+      return counter
+    })
+    expect(result).toBe(1)
+  })
 })
 
 describe('node(event) + upward store update', () => {
