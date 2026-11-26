@@ -1824,6 +1824,9 @@ type InferredType<Source, Clock, FilterFN> =
       : never
     : never
 
+// Used as a fn result type, so callers wrap Target in NoInfer: otherwise
+// inference pairs this conditional with a conditional fn result (like zod's
+// `output<T>`) and takes Target from the caller's generic parameter.
 type TargetTypeSimple<Target> = Target extends Unit<infer TargetType>
   ? TargetType
   : Target extends RoTuple<Unit<infer TargetType>>
@@ -1937,10 +1940,10 @@ type SampleFilterTargetDef<
               (
                 Source extends Unit<any> | SourceRecord
                 ? Clock extends Units
-                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => TargetTypeSimple<Target>
-                  : (src: FNInfSource) => TargetTypeSimple<Target>
+                  ? (src: FNInfSource, clk: TypeOfClock<Clock>) => TargetTypeSimple<NoInfer<Target>>
+                  : (src: FNInfSource) => TargetTypeSimple<NoInfer<Target>>
                 : Clock extends Units
-                  ? (clk: FNInfClock) => TargetTypeSimple<Target>
+                  ? (clk: FNInfClock) => TargetTypeSimple<NoInfer<Target>>
                   : never
               ),
               Target
@@ -2507,6 +2510,7 @@ type TargetOrError<
                     [K in keyof Target]: Unit<MatchingValue>
                   }
                   : Unit<MatchingValue>
+                error: 'source should extend target type'
               }]
             : IsTargetWiderThanSource<MatchingValue, Target> extends 'yes'
               ? [error: {
@@ -2519,6 +2523,7 @@ type TargetOrError<
                     [K in keyof Target]: Unit<MatchingValue>
                   }
                   : Unit<MatchingValue>
+                error: 'clock should extend target type'
               }]
 
 type SampleFilterDef<
