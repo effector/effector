@@ -7,7 +7,7 @@ redirectFrom:
 pagefindWeight: 7
 ---
 
-Creates a [_Gate_](/en/api/effector-vue/Gate) to consume data from view, designed for Vue 3. If `defaultState` is defined, [Gate.state](/en/api/effector-vue/Gate#properties-state) will be created with passed value.
+Creates a [_Gate_](/en/api/effector-vue/Gate) to consume data from view, designed for Vue 3. If `defaultState` is defined, [Gate.state](/en/api/effector-vue/Gate#properties-state) will be created with passed value. Without it `Gate.state` holds `null` until the first open.
 
 :::info{title="since"}
 `createGate` introduced in [effector-vue 21.1.0](https://changelog.effector.dev/#effector-vue-21-1-0)

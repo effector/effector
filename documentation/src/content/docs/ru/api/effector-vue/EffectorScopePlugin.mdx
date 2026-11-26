@@ -5,7 +5,7 @@ lang: ru
 pagefindWeight: 7
 ---
 
-Плагин передаёт [скоуп](/ru/api/effector/Scope) всему приложению: хуки читают из него сторы и вызывают в нём события. Нужен для SSR.
+Плагин передаёт [скоуп](/ru/api/effector/Scope) всему приложению: хуки читают из него сторы и вызывают в нём события. Опция `effector` плагина [VueEffector](/ru/api/effector-vue/VueEffector) читает и пишет тот же скоуп. Нужен для SSR.
 
 :::info{title="since"}
 `EffectorScopePlugin` появился в [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0)
@@ -115,7 +115,7 @@ app.use(EffectorScopePlugin({ scope, forceScope: true }));
 
 В любой форме скоуп ищется в таком порядке:
 
-1. опция `scope` вызова;
+1. опция `scope` вызова, причём `null` значит то же, что её отсутствие, поэтому результат `useProvidedScope()` передаётся туда как есть;
 2. значение под ключом `EffectorScopeKey`, если у вызова есть контекст инъекции;
 3. устаревший строковый ключ, если доступен экземпляр компонента;
 4. глобальный режим, если не включён `forceScope`.

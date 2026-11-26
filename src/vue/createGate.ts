@@ -7,7 +7,7 @@ import {
 } from 'vue-next'
 import {launch, createStore, createEvent, sample} from 'effector'
 import {Gate, GateConfig} from './composition.h'
-import {deepCopy} from './lib/deepCopy'
+import {clone} from './lib/clone'
 import {unwrapProxy} from './lib/unwrapProxy'
 import {tryOnScopeDispose} from './lib/dispose'
 import {ScopeOptions} from './lib/get-scope'
@@ -39,9 +39,14 @@ export function useGate<Props>(
    */
   if (isServerRender()) return
 
+  /**
+   * `clone` is the copy `useVModel` makes: it keeps `Map`, `Set` and `File`,
+   * which `deepCopy` turned into plain objects (#975). Pinned by "the copy of
+   * the props" tests in useGate.test.ts.
+   */
   const withProps = (fn: (payload?: any) => any) => () => {
     if (props === undefined) return fn()
-    fn(deepCopy(unwrapProxy(toValue(props))))
+    fn(clone(unwrapProxy(toValue(props))))
   }
 
   let opened = false
@@ -60,7 +65,10 @@ export function useGate<Props>(
      */
     watch(
       () => toValue(props),
-      value => gate.set(deepCopy(unwrapProxy(value))),
+      value => {
+        /** The same rule as for `open`, see `createGate` below. */
+        if (value !== undefined) gate.set(clone(unwrapProxy(value)))
+      },
       /**
        * `Boolean(true)` survives the build. A bare `true` ships as `1`, and
        * Vue 3.5 reads a numeric `deep` as the depth to traverse.
@@ -149,7 +157,17 @@ export function createGate<Props>(...args: [GateConfig<Props>]): Gate<Props> {
   GateComponent.state = state
   GateComponent.set = set
 
-  sample({clock: open, target: set})
+  /**
+   * `useGate(Gate)` and a manual `open()` carry no props, and the state store
+   * reports an `undefined` update through `console.error`. Such an open leaves
+   * the state as it is. effector-react never gets there: its hook defaults the
+   * props to `{}`. Pinned by the "undefined props" tests in useGate.test.ts.
+   */
+  sample({
+    clock: open,
+    filter: props => props !== undefined,
+    target: set,
+  })
 
   state.reset(close)
 

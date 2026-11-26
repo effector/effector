@@ -5,6 +5,7 @@ import {
   useStore,
   useStoreMap,
   useUnit,
+  useVModel,
 } from 'effector-vue/composition'
 import {
   Scope,
@@ -180,6 +181,78 @@ describe('dispose', () => {
       expect.stringContaining('[effector-vue] useUnit:'),
     )
     expect(linksCount(scope)).toBe(1)
+    warn.mockRestore()
+  })
+
+  test('useVModel warns when there is no effect scope to dispose in', () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const $value = createStore('value')
+    const scope = fork()
+
+    withApp(
+      () => useVModel($value),
+      app => app.use(EffectorScopePlugin({scope})),
+    )
+
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('[effector-vue] useVModel:'),
+    )
+    expect(linksCount(scope)).toBe(1)
+    warn.mockRestore()
+  })
+
+  test('useVModel reports nothing in a component and stops with it', () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const $value = createStore('value')
+    const scope = fork()
+
+    const {unmount} = mountSetup(
+      () => useVModel($value),
+      [EffectorScopePlugin({scope})],
+    )
+
+    expect(linksCount(scope)).toBe(1)
+
+    unmount()
+
+    expect(linksCount(scope)).toBe(0)
+    expect(warn).not.toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
+  test('useVModel reports nothing in an effect scope and stops with it', () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const $value = createStore('value')
+    const scope = fork()
+
+    const {stop} = withEffectScope(
+      () => useVModel($value),
+      app => app.use(EffectorScopePlugin({scope})),
+    )
+
+    expect(linksCount(scope)).toBe(1)
+
+    stop()
+
+    expect(linksCount(scope)).toBe(0)
+    expect(warn).not.toHaveBeenCalled()
+    warn.mockRestore()
+  })
+
+  test('useVModel reports nothing where it does not subscribe', () => {
+    const warn = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const $value = createStore('value')
+    const scope = fork()
+
+    /** `live: false` is the server branch: nothing to dispose there. */
+    withApp(
+      () => useVModel($value),
+      app => app.use(EffectorScopePlugin({scope, live: false})),
+    )
+
+    expect(linksCount(scope)).toBe(0)
+    expect(warn).not.toHaveBeenCalled()
     warn.mockRestore()
   })
 

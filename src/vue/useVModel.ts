@@ -14,6 +14,7 @@ import {
 } from 'vue-next'
 
 import {clone} from './lib/clone'
+import {hasEffectScope} from './lib/dispose'
 import {isEqual} from './lib/isEqual'
 import {resolveScope} from './lib/get-scope'
 import {isServerRender} from './lib/ssr'
@@ -96,6 +97,14 @@ function bindStore<T>(
         pending.splice(0, index + 1)
         return
       }
+
+      /**
+       * A state this call has not written. A write the store refuses, by
+       * `updateFilter` or as an equal value, never comes back, and its entry
+       * would take a later state of the store for its echo. Pinned by the
+       * "a write the store refuses" tests in useVModel.test.ts.
+       */
+      pending.length = 0
 
       /**
        * The watcher of the form is synchronous, so it runs inside this
@@ -196,6 +205,18 @@ export const useVModel: UseVModel = <
     | UseVModelOptions
     | undefined
 
+  /** A server render has no input to write back and no way to unsubscribe. */
+  const live = !isServerRender()
+
+  /**
+   * With no effect scope around the call, the scope created below is never
+   * stopped. The call reports it the way the other composables do, and only
+   * where it subscribes. Pinned by the "useVModel" tests in lifecycle.test.ts.
+   * An EffectScope argument is the caller's to stop, pinned by 'a Vue
+   * EffectScope as the second argument still works' in useVModel.test.ts.
+   */
+  if (live && !legacyScope) hasEffectScope('useVModel')
+
   /**
    * The call runs inside an effect scope, so `onScopeDispose` always has one
    * to register on. In a component that scope is the one of the component,
@@ -206,8 +227,6 @@ export const useVModel: UseVModel = <
   return vueScope.run(() => {
     const scope = resolveScope('useVModel', opts)
     const deep = Boolean(opts?.deep ?? true)
-    /** A server render has no input to write back and no way to unsubscribe. */
-    const live = !isServerRender()
 
     if (is.store(vm)) {
       checkStore(vm)

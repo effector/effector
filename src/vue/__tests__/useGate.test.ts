@@ -10,11 +10,13 @@ import {
   createApp,
   defineComponent,
   h,
+  isReactive,
   nextTick,
   reactive,
   ref,
 } from 'vue-next'
-import {fork} from 'effector'
+import {allSettled, fork} from 'effector'
+import * as v8 from 'v8'
 
 import {mountSetup, withEffectScope} from './helpers'
 
@@ -189,6 +191,175 @@ describe('props', () => {
     props.id = 2
 
     expect(state).toEqual({id: 1})
+  })
+})
+
+describe('the copy of the props', () => {
+  /**
+   * The jsdom environment of jest has no `structuredClone`, and it is the copy
+   * through it that copies a Date and a File. Without the global the gate
+   * falls back to `deepCopy`, the branch the "props" tests above run through.
+   */
+  let stubbed = false
+
+  beforeAll(() => {
+    stubbed = typeof structuredClone !== 'function'
+    if (stubbed) {
+      ;(globalThis as any).structuredClone = (value: unknown) =>
+        v8.deserialize(v8.serialize(value))
+    }
+  })
+
+  afterAll(() => {
+    if (stubbed) delete (globalThis as any).structuredClone
+  })
+
+  const tagOf = (value: unknown) => Object.prototype.toString.call(value)
+
+  test('keeps a Map and a Set on open', () => {
+    const Gate = createGate<{tags: Set<string>; meta: Map<string, string>}>()
+
+    mountSetup(() =>
+      useGate(Gate, {
+        tags: new Set(['effector']),
+        meta: new Map([['author', 'John']]),
+      }),
+    )
+
+    const state = Gate.state.getState()
+    expect(tagOf(state.tags)).toBe('[object Set]')
+    expect([...state.tags]).toEqual(['effector'])
+    expect(tagOf(state.meta)).toBe('[object Map]')
+    expect([...state.meta]).toEqual([['author', 'John']])
+  })
+
+  /**
+   * `structuredClone` throws on a proxy nested in the props, and the whole
+   * copy goes through `deepCopy`.
+   */
+  test('keeps a Map and a Set that are reactive proxies', () => {
+    const Gate = createGate<{tags: Set<string>; meta: Map<string, string>}>()
+    const tags = reactive(new Set(['effector']))
+    const meta = reactive(new Map([['author', 'John']]))
+
+    mountSetup(() => useGate(Gate, () => ({tags, meta})))
+
+    const state = Gate.state.getState()
+    expect(tagOf(state.tags)).toBe('[object Set]')
+    expect([...state.tags]).toEqual(['effector'])
+    expect(tagOf(state.meta)).toBe('[object Map]')
+    expect([...state.meta]).toEqual([['author', 'John']])
+    expect(isReactive(state.meta)).toBe(false)
+
+    meta.set('editor', 'Jane')
+
+    expect([...state.meta]).toEqual([['author', 'John']])
+  })
+
+  test('keeps a Map and a Set on a change of the props', async () => {
+    const Gate = createGate<{tags: Set<string>; meta: Map<string, string>}>()
+    const props = ref({
+      tags: new Set(['effector']),
+      meta: new Map([['author', 'John']]),
+    })
+
+    mountSetup(() => useGate(Gate, props))
+
+    props.value = {
+      tags: new Set(['vue']),
+      meta: new Map([['author', 'Alan']]),
+    }
+    await nextTick()
+
+    const state = Gate.state.getState()
+    expect(tagOf(state.tags)).toBe('[object Set]')
+    expect([...state.tags]).toEqual(['vue'])
+    expect(tagOf(state.meta)).toBe('[object Map]')
+    expect([...state.meta]).toEqual([['author', 'Alan']])
+  })
+
+  test('puts a plain copy of a reactive object into the store', () => {
+    const Gate = createGate<{id: number; tags: Set<string>}>()
+    const props = reactive({id: 1, tags: new Set(['effector'])})
+
+    mountSetup(() => useGate(Gate, props))
+
+    const state = Gate.state.getState()
+    expect(isReactive(state)).toBe(false)
+    expect(state).not.toBe(props)
+    expect(state.id).toBe(1)
+    expect([...state.tags]).toEqual(['effector'])
+
+    props.id = 2
+
+    expect(state.id).toBe(1)
+  })
+})
+
+describe('undefined props', () => {
+  let error: jest.SpyInstance
+
+  beforeEach(() => {
+    error = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    error.mockRestore()
+  })
+
+  test('keeps the default state on a mount without props', () => {
+    const Gate = createGate({defaultState: 'empty'})
+
+    mountSetup(() => useGate(Gate))
+
+    expect(Gate.status.getState()).toBe(true)
+    expect(Gate.state.getState()).toBe('empty')
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the default state on a manual open', () => {
+    const Gate = createGate({defaultState: 'empty'})
+
+    Gate.open()
+
+    expect(Gate.status.getState()).toBe(true)
+    expect(Gate.state.getState()).toBe('empty')
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the default state on an open in a scope without params', async () => {
+    const Gate = createGate({defaultState: 'empty'})
+    const scope = fork()
+
+    await allSettled(Gate.open, {scope})
+
+    expect(scope.getState(Gate.status)).toBe(true)
+    expect(scope.getState(Gate.state)).toBe('empty')
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the default state when a getter returns undefined on mount', () => {
+    const Gate = createGate<{id: number} | undefined>()
+    const props = ref<{id: number}>()
+
+    mountSetup(() => useGate(Gate, () => props.value))
+
+    expect(Gate.status.getState()).toBe(true)
+    expect(Gate.state.getState()).toBe(null)
+    expect(error).not.toHaveBeenCalled()
+  })
+
+  test('keeps the last state when a getter starts to return undefined', async () => {
+    const Gate = createGate<{id: number} | undefined>()
+    const props = ref<{id: number} | undefined>({id: 1})
+
+    mountSetup(() => useGate(Gate, () => props.value))
+
+    props.value = undefined
+    await nextTick()
+
+    expect(Gate.state.getState()).toEqual({id: 1})
+    expect(error).not.toHaveBeenCalled()
   })
 })
 

@@ -4,7 +4,7 @@ description: Vue plugin that provides a scope to the composables of an applicati
 pagefindWeight: 7
 ---
 
-The plugin provides a [scope](/en/api/effector/Scope) to the whole application: the composables read stores from it and call events in it. Required for SSR.
+The plugin provides a [scope](/en/api/effector/Scope) to the whole application: the composables read stores from it and call events in it. The `effector` option of [VueEffector](/en/api/effector-vue/VueEffector) reads and writes the same scope. Required for SSR.
 
 :::info{title="since"}
 `EffectorScopePlugin` introduced in [effector-vue 23.0.0](https://changelog.effector.dev/#effector-vue-23-0-0)
@@ -114,7 +114,7 @@ Where the scope options go differs between the composables:
 
 Whatever the form, the scope is resolved in this order:
 
-1. the `scope` option of the call;
+1. the `scope` option of the call, where `null` is the same as no option, so the result of `useProvidedScope()` goes there as it is;
 2. the value provided under `EffectorScopeKey`, if the current call has an injection context;
 3. the legacy string key, when a component instance is available;
 4. global mode, unless `forceScope` is on.

@@ -26,7 +26,7 @@ _Gate_ (гейт) связывает компонент с моделью: по�
 Не меняйте значение `state`! Это [производный стор](/ru/explanation/glossary#derived-store), его состояние должно быть предсказуемым.
 :::
 
-`Store<Props>`: [производный стор](/ru/explanation/glossary#derived-store) с текущим состоянием гейта. Состояние приходит из второго аргумента [useGate](/ru/api/effector-vue/useGate).
+`Store<Props>`: [производный стор](/ru/explanation/glossary#derived-store) с текущим состоянием гейта. Состояние приходит из второго аргумента [useGate](/ru/api/effector-vue/useGate). До первого открытия в нём `null`, если не задан `defaultState`. Открытие без пропсов или с `undefined` состояние не меняет.
 
 ## `.open` (#properties-open)
 
@@ -34,7 +34,7 @@ _Gate_ (гейт) связывает компонент с моделью: по�
 Не вызывайте это событие вручную. Оно зависит от состояния гейта.
 :::
 
-[`Event<Props>`](/ru/api/effector/Event): событие, которое вызывается при монтировании гейта с текущими пропсами.
+[`EventCallable<Props>`](/ru/api/effector/Event): событие, которое вызывается при монтировании гейта с текущими пропсами.
 
 ## `.close` (#properties-close)
 
@@ -42,7 +42,7 @@ _Gate_ (гейт) связывает компонент с моделью: по�
 Не вызывайте это событие вручную. Оно зависит от состояния гейта.
 :::
 
-[`Event<Props>`](/ru/api/effector/Event): событие, которое вызывается при размонтировании гейта.
+[`EventCallable<Props>`](/ru/api/effector/Event): событие, которое вызывается при размонтировании гейта.
 
 ## `.status` (#properties-status)
 

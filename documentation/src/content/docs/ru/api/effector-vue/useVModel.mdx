@@ -44,6 +44,8 @@ useVModel<T extends Record<string, Store<any>>>(shape: T, options?: UseVModelOpt
 
 Записываемый `Ref` с копией состояния, а для объекта сторов объект таких копий. Правка записывает в стор всё новое значение целиком, а обновление стора заменяет копию.
 
+С [effector-vue 23.3.0](https://changelog.effector.dev/#effector-vue-23-3-0) каждая мутация значения сразу пишет в стор, поэтому три присвоенных поля дают три обновления стора. Чтобы изменить несколько полей разом, присвойте значение целиком.
+
 ### Примеры (#methods-useVModel-examples)
 
 #### Один стор (#methods-useVModel-examples-singleStore)
@@ -135,6 +137,8 @@ app.use(EffectorScopePlugin({ scope }));
 ```ts
 const form = useVModel($form, { scope });
 ```
+
+Вне компонента вызывайте хук внутри `effectScope()` и останавливайте этот scope, когда форма больше не нужна. Без активного effect scope привязку некому остановить, и вызов сообщает об этом через `console.error`.
 
 #### Неглубокая привязка (#methods-useVModel-examples-deep)
 

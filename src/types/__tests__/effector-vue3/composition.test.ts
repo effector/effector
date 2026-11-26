@@ -12,6 +12,7 @@ import {
 } from 'effector'
 import {
   computed,
+  ComputedRef,
   createApp,
   DeepReadonly,
   effectScope,
@@ -458,6 +459,33 @@ describe('scope', () => {
       "
     `)
   })
+
+  test('the scope of useProvidedScope goes into every composable', () => {
+    const $count = createStore(0)
+    const inc = createEvent()
+    const Gate = createGate<{id: number}>()
+
+    const setup = () => {
+      const scope = useProvidedScope()
+      useUnit($count, {scope})
+      useUnit(inc, {scope})
+      useUnit([$count, inc], {scope})
+      useUnit({count: $count, inc}, {scope})
+      useStore($count, {scope})
+      useStoreMap($count, count => count, {scope})
+      useStoreMap({store: $count, fn: count => count, scope})
+      useStoreMap({store: $count, fn: count => count}, scope)
+      useVModel($count, {scope})
+      useVModel({count: $count}, {scope})
+      useGate(Gate, {id: 1}, {scope})
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
 })
 
 describe('useStore', () => {
@@ -556,6 +584,66 @@ describe('useStoreMap', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       no errors
+      "
+    `)
+  })
+
+  test('defaultValue takes undefined out of the result', () => {
+    type User = {id: number; name: string}
+    const $users = createStore<User[]>([])
+
+    const setup = () => {
+      const name = useStoreMap({
+        store: $users,
+        keys: () => 1,
+        fn: (users, userId) => users.find(({id}) => id === userId)?.name,
+        defaultValue: 'unknown',
+      })
+      const value: string = name.value
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('an optional defaultValue does not widen the result', () => {
+    const $users = createStore<string[]>([])
+
+    const useCount = (fallback?: number): ComputedRef<number> =>
+      useStoreMap({
+        store: $users,
+        fn: users => users.length,
+        defaultValue: fallback,
+      })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      no errors
+      "
+    `)
+  })
+
+  test('without defaultValue the result keeps undefined', () => {
+    type User = {id: number; name: string}
+    const $users = createStore<User[]>([])
+
+    const setup = () => {
+      const name = useStoreMap({
+        store: $users,
+        keys: () => 1,
+        fn: (users, userId) => users.find(({id}) => id === userId)?.name,
+      })
+      const value: string = name.value
+    }
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Unmarked error at test line 10 'const value: string = name.value'
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
       "
     `)
   })

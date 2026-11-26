@@ -28,7 +28,7 @@ A gate opens on mount with the props it has at that moment and passes them to `.
 Do not modify `state` value! It is [derived store](/en/explanation/glossary#derived-store) and should be in predictable state.
 :::
 
-`Store<Props>`: [DerivedStore](/en/explanation/glossary#derived-store) with current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-vue/useGate).
+`Store<Props>`: [DerivedStore](/en/explanation/glossary#derived-store) with current state of the given gate. The state comes from the second argument of [useGate](/en/api/effector-vue/useGate). It holds `null` until the first open, unless `defaultState` is given. An open without props, or with `undefined`, leaves the state as it is.
 
 ## `.open` (#properties-open)
 
@@ -36,7 +36,7 @@ Do not modify `state` value! It is [derived store](/en/explanation/glossary#deri
 Do not manually call this event. It is an event that depends on a Gate state.
 :::
 
-[`Event<Props>`](/en/api/effector/Event): Event which will be called during gate mounting, with the current props
+[`EventCallable<Props>`](/en/api/effector/Event): Event which will be called during gate mounting, with the current props
 
 ## `.close` (#properties-close)
 
@@ -44,7 +44,7 @@ Do not manually call this event. It is an event that depends on a Gate state.
 Do not manually call this event. It is an event that depends on a Gate state.
 :::
 
-[`Event<Props>`](/en/api/effector/Event): Event which will be called during a gate unmounting.
+[`EventCallable<Props>`](/en/api/effector/Event): Event which will be called during a gate unmounting.
 
 ## `.status` (#properties-status)
 

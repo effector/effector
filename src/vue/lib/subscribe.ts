@@ -62,7 +62,7 @@ export function subscribeStores(
  * scope when the template asks for it instead of keeping a snapshot. Pinned
  * by the "server ref" test in ssr.test.ts.
  */
-function serverRef(store: Store<any>, scope?: Scope): Ref<any> {
+export function serverRef(store: Store<any>, scope?: Scope): Ref<any> {
   return customRef(() => ({
     get: () => stateReader(store, scope),
     set: () => {},

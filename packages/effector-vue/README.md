@@ -16,10 +16,10 @@ yarn add effector effector-vue
 
 ## Usage
 
-```js
+```ts
 import {createStore, createEvent} from 'effector'
 
-export const inputText = createEvent()
+export const inputText = createEvent<string>()
 
 export const $text = createStore('').on(inputText, (_, text) => text)
 
@@ -51,7 +51,7 @@ export const $size = $text.map(text => text.length)
 
 [Try it](https://playcode.io/1914159)
 
-[useUnit](https://effector.dev/docs/api/effector-react/useUnit) in docs
+[useUnit](https://effector.dev/en/api/effector-vue/useUnit) in docs
 [Units](https://effector.dev/docs/glossary#unit) in docs
 [createStore](https://effector.dev/docs/api/effector/createStore) in docs
 [createEvent](https://effector.dev/docs/api/effector/createEvent) in docs

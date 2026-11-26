@@ -17,12 +17,18 @@ const NO_EFFECT_SCOPE =
  * 3.3. The guard replaces that warning with one that names the composable.
  */
 export function tryOnScopeDispose(name: string, fn: () => void): boolean {
-  if (!getCurrentScope()) {
-    printError(`${name}: ${NO_EFFECT_SCOPE}`)
-    return false
-  }
+  if (!hasEffectScope(name)) return false
 
   onScopeDispose(fn)
 
   return true
+}
+
+/** Reports a composable called with no effect scope to dispose in. */
+export function hasEffectScope(name: string): boolean {
+  if (getCurrentScope()) return true
+
+  printError(`${name}: ${NO_EFFECT_SCOPE}`)
+
+  return false
 }
