@@ -78,9 +78,12 @@ export function useStoreMap<State, Result, Keys>(
    * The selector reads the state from the store itself, so it receives the
    * object effector holds and not the readonly wrapper `useUnit` puts on the
    * ref. Reading the ref is what makes an update of the store reach here.
+   * The read is a call: terser with `pure_getters` drops a bare `state.value`
+   * from the build. Pinned by 'useStoreMap follows the store' in
+   * bundle.test.ts.
    */
   const select = (): Result => {
-    state.value
+    toValue(state)
     const result = config.fn(stateReader(config.store, scope), keys.value)
 
     return (result !== undefined ? result : config.defaultValue) as Result
